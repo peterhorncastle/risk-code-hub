@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Rates &amp; ROE Analysis – Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root { --navy:#0d2240;--cyber:#1565c0;--cyber-dark:#0a3d7a;--cyber-light:#e8f0fe;--accent:#c8a84b;--teal:#0097a7;--purple:#6a1b9a;--light:#f0f4ff;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--red:#8b1a1a;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1565c0 55%,#6a1b9a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d0f8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .breadcrumb { font-size:0.8rem; color:#b8d0f8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+
+    .chart-wrap { background:#fff; border:1px solid var(--border); border-radius:10px; padding:28px; margin:24px 0 36px; }
+    .chart-wrap h3 { font-size:1rem; font-weight:700; color:var(--navy); margin-bottom:20px; }
+    .chart-container { position:relative; height:300px; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; margin:24px 0 36px; }
+    .stat-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; text-align:center; }
+    .stat-box .num { font-size:1.6rem; font-weight:800; color:var(--navy); }
+    .stat-box.up .num { color:var(--red); }
+    .stat-box.down .num { color:var(--green); }
+    .stat-box .label { font-size:0.74rem; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+    .phase-table { width:100%; border-collapse:collapse; margin:20px 0 30px; font-size:0.88rem; }
+    .phase-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .phase-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .phase-table tr:nth-child(even) td { background:#fafbfc; }
+    .badge { display:inline-block; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:10px; }
+    .badge-hard { background:#fce8e8; color:#8b1a1a; }
+    .badge-soft { background:#e8f5e9; color:#2a7a3a; }
+    .badge-stable { background:#e8f0fe; color:#0a3d7a; }
+
+    .sector-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:14px; margin:22px 0 34px; }
+    .sector-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; }
+    .sector-card h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:10px; }
+    .sector-bar { height:8px; border-radius:4px; background:var(--border); margin-bottom:6px; }
+    .sector-bar-fill { height:8px; border-radius:4px; background:var(--cyber); }
+    .sector-card .rol { font-size:1.1rem; font-weight:800; color:var(--cyber); }
+    .sector-card .rol-label { font-size:0.75rem; color:var(--muted); }
+
+    .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:22px 0 34px; }
+    @media(max-width:600px){.roe-grid{grid-template-columns:1fr;}}
+    .roe-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px; text-align:center; }
+    .roe-card h4 { font-size:0.82rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+    .roe-card .roe-num { font-size:2rem; font-weight:800; margin-bottom:6px; }
+    .roe-card.bull .roe-num { color:var(--green); }
+    .roe-card.base .roe-num { color:var(--cyber); }
+    .roe-card.bear .roe-num { color:var(--red); }
+    .roe-card p { font-size:0.78rem; color:var(--muted); line-height:1.5; }
+
+    .roe-table { width:100%; border-collapse:collapse; margin:20px 0 30px; font-size:0.88rem; }
+    .roe-table th { background:var(--cyber-dark); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .roe-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+    .roe-table tr:nth-child(even) td { background:#fafbfc; }
+    .pos { color:var(--green); font-weight:700; }
+    .neg { color:var(--red); font-weight:700; }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:20px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#b8d0f8; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Cyber Insurance</a> › Rates Analysis</div>
+  <div class="tag">Module 05 — Rates &amp; ROE Analysis</div>
+  <h1>Cyber Rates &amp; ROE Analysis</h1>
+  <p>The 2019–2022 ransomware hardening cycle produced the most dramatic rate increases of any Lloyd's class in the modern era — some accounts saw premiums triple or quadruple in 18 months. This module tracks the full pricing cycle from 2015 to 2026, current rate adequacy by sector, and return-on-equity scenarios under different loss assumptions.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-box up"><div class="num">+312%</div><div class="label">Peak cyber rate increase 2019–2022 (large accounts)</div></div>
+    <div class="stat-box down"><div class="num">−18%</div><div class="label">Avg rate movement 2023–2024 (stabilisation phase)</div></div>
+    <div class="stat-box"><div class="num">0.9–2.5%</div><div class="label">Current mid-market ROL range (2024)</div></div>
+    <div class="stat-box"><div class="num">~65–75%</div><div class="label">Market combined ratio (2023 est.)</div></div>
+    <div class="stat-box"><div class="num">130%+</div><div class="label">Peak combined ratio (2020–2021)</div></div>
+    <div class="stat-box"><div class="num">~50</div><div class="label">Active Lloyd's cyber syndicates (2024)</div></div>
+  </div>
+
+  <h2>Cyber Rate Index 2015–2026</h2>
+  <p>The chart below tracks the cyber market rate index (2015 = 100) for two representative risk segments: large enterprise accounts (revenue >$500m) which suffered the most severe hardening, and mid-market accounts (revenue £10–100m). The mid-market saw proportionally similar hardening but from a lower absolute base. Both lines reflect indicative market pricing from Lloyd's market data and broker benchmarks.</p>
+
+  <div class="chart-wrap">
+    <h3>Cyber Rate-on-Limit Index: 2015–2026 (2015 = 100)</h3>
+    <div class="chart-container">
+      <canvas id="rateChart"></canvas>
+    </div>
+  </div>
+
+  <h2>Market Phase Analysis: 2015–2026</h2>
+  <table class="phase-table">
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Rate Movement</th><th>Key Driver</th><th>Market Conditions</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2015–2018</td>
+        <td><span class="badge badge-soft">Soft</span></td>
+        <td>−5% to flat</td>
+        <td>Low losses; capacity growth; data breach losses manageable</td>
+        <td>Combined ratios 60–75%; heavy competition; new entrants</td>
+      </tr>
+      <tr>
+        <td>2018–2019</td>
+        <td><span class="badge badge-stable">Early Turn</span></td>
+        <td>Flat to +10%</td>
+        <td>NotPetya loss development; rising data breach frequency</td>
+        <td>Underwriters reassessing systemic exposure; sublimits introduced</td>
+      </tr>
+      <tr>
+        <td>2019–2020</td>
+        <td><span class="badge badge-hard">Hardening</span></td>
+        <td>+30% to +80%</td>
+        <td>RaaS industrialisation; Maze, Conti, REvil emergence; Travelex</td>
+        <td>Combined ratios approaching 100–110%; retentions imposed; sublimits tightened</td>
+      </tr>
+      <tr>
+        <td>2020–2021</td>
+        <td><span class="badge badge-hard">Hard</span></td>
+        <td>+80% to +200%+</td>
+        <td>Colonial Pipeline; JBS; healthcare wave; Kaseya MSP supply chain</td>
+        <td>Combined ratios 120–140%; capacity withdrawn; MFA mandated; some markets exit</td>
+      </tr>
+      <tr>
+        <td>2021–2022</td>
+        <td><span class="badge badge-hard">Peak Hard</span></td>
+        <td>+100% to +312% cumulative</td>
+        <td>Conti, REvil, LockBit at peak activity; ransomware-as-a-service professionalised</td>
+        <td>Loss ratios begin improving as rate increases bite; MFA requirement now standard</td>
+      </tr>
+      <tr>
+        <td>2022–2023</td>
+        <td><span class="badge badge-stable">Plateau</span></td>
+        <td>+10% to +25%</td>
+        <td>Law enforcement actions (Hive, Genesis Market); rate adequacy debate begins</td>
+        <td>Combined ratios return to 70–85%; market adequacy broadly achieved</td>
+      </tr>
+      <tr>
+        <td>2023–2024</td>
+        <td><span class="badge badge-soft">Softening</span></td>
+        <td>−5% to −20%</td>
+        <td>Capacity returning; new entrants; MGM/Change Healthcare as reality check</td>
+        <td>Competitive tension; rate reductions on best-controlled risks; healthcare resists</td>
+      </tr>
+      <tr>
+        <td>2025–2026</td>
+        <td><span class="badge badge-stable">Stabilising</span></td>
+        <td>Flat to −5%</td>
+        <td>AI-driven attack acceleration; CrowdStrike systemic risk concern; Change Healthcare tail</td>
+        <td>Uncertainty re AI threat landscape; underwriters cautious on further softening</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Rate Adequacy by Sector (2024)</h2>
+  <p>Rate adequacy varies significantly by sector. Healthcare remains the most stressed class — Change Healthcare ($1.5bn+ total loss), the 2021 HSE Ireland attack, and persistent NHS ransomware incidents have kept healthcare rates elevated and coverage conditions tight. Financial services has broadly achieved adequacy following heavy 2020–2022 hardening. Manufacturing and retail have seen the most aggressive softening from new capacity.</p>
+
+  <div class="sector-grid">
+    <div class="sector-card">
+      <h4>Healthcare / CH</h4>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:90%;background:#b71c1c;"></div></div>
+      <div class="rol">1.8–3.5%</div>
+      <div class="rol-label">ROL range (2024)</div>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Inadequate on some accounts; Change Healthcare tail still developing. Highest scrutiny sector.</p>
+    </div>
+    <div class="sector-card">
+      <h4>Financial Services</h4>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:75%;"></div></div>
+      <div class="rol">1.5–2.8%</div>
+      <div class="rol-label">ROL range (2024)</div>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Broadly adequate; strong security controls at larger banks offset high attacker interest.</p>
+    </div>
+    <div class="sector-card">
+      <h4>Critical Infrastructure</h4>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:85%;background:#6a1b9a;"></div></div>
+      <div class="rol">1.5–4.0%</div>
+      <div class="rol-label">ROL range (2024)</div>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Wide range; LMA 5565 exclusion applies; OT/ICS complexity adds uncertainty.</p>
+    </div>
+    <div class="sector-card">
+      <h4>Technology / SaaS (CZ)</h4>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:65%;background:var(--purple);"></div></div>
+      <div class="rol">1.2–2.5%</div>
+      <div class="rol-label">ROL range (2024)</div>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">E&O tail risk requires careful pricing; MSP/supply chain exposure commands loading.</p>
+    </div>
+    <div class="sector-card">
+      <h4>Professional Services</h4>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:55%;"></div></div>
+      <div class="rol">0.9–1.8%</div>
+      <div class="rol-label">ROL range (2024)</div>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Good controls common; data breaches manageable. Competitive pressure on rates.</p>
+    </div>
+    <div class="sector-card">
+      <h4>Manufacturing</h4>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:50%;background:var(--teal);"></div></div>
+      <div class="rol">1.0–2.0%</div>
+      <div class="rol-label">ROL range (2024)</div>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">OT cyber adds complexity; ransomware BI remains elevated risk. Softening from peak.</p>
+    </div>
+    <div class="sector-card">
+      <h4>Retail / Consumer</h4>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:45%;background:var(--teal);"></div></div>
+      <div class="rol">0.9–1.6%</div>
+      <div class="rol-label">ROL range (2024)</div>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Most competitive segment; PCI exposure manageable; high attacker frequency but lower severity.</p>
+    </div>
+    <div class="sector-card">
+      <h4>Education / Public Sector</h4>
+      <div class="sector-bar"><div class="sector-bar-fill" style="width:70%;background:#c45c00;"></div></div>
+      <div class="rol">1.2–2.5%</div>
+      <div class="rol-label">ROL range (2024)</div>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">High frequency, poor controls typical; limited budgets constrain limit purchase. Challenging segment.</p>
+    </div>
+  </div>
+
+  <h2>Loss Ratio Components</h2>
+  <div class="chart-wrap">
+    <h3>Cyber Market Combined Ratio by Component (Indicative, 2015–2024)</h3>
+    <div class="chart-container">
+      <canvas id="lossChart"></canvas>
+    </div>
+  </div>
+
+  <h2>Return on Equity Scenarios</h2>
+  <p>The ROE model below uses a £100m premium portfolio as the base. The key variables are the attritional loss ratio (frequency × severity of sub-£5m losses), the large loss ratio (single events above £5m), and the catastrophic loss assumption (systemic events like WannaCry-scale). Operating expense ratios are assumed at 30% (acquisition 18%, management 12%). Capital loading for Lloyd's cyber is approximately 40–45% of premium.</p>
+
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <h4>Bull Scenario</h4>
+      <div class="roe-num">22.4%</div>
+      <p>Low ransomware frequency; no systemic event; improved controls across portfolio reduce attritional losses. Equivalent to 2022–2023 market experience.</p>
+    </div>
+    <div class="roe-card base">
+      <h4>Base Scenario</h4>
+      <div class="roe-num">9.8%</div>
+      <p>Normalised loss environment; moderate RaaS activity; one £15m+ loss per year. Reflects current underwriter expectations for a well-priced 2024 portfolio.</p>
+    </div>
+    <div class="roe-card bear">
+      <h4>Bear Scenario</h4>
+      <div class="roe-num">−18.5%</div>
+      <p>High ransomware frequency + one systemic event (MOVEit-scale or larger). Healthcare losses spike; AI-enhanced attacks reduce response times. Reflects 2020–2021 experience.</p>
+    </div>
+  </div>
+
+  <table class="roe-table">
+    <thead>
+      <tr><th>Component</th><th>Bull (£m)</th><th>Base (£m)</th><th>Bear (£m)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Gross Written Premium</strong></td><td>100.0</td><td>100.0</td><td>100.0</td></tr>
+      <tr><td>Reinsurance Cost</td><td>(18.0)</td><td>(20.0)</td><td>(24.0)</td></tr>
+      <tr><td><strong>Net Earned Premium</strong></td><td>82.0</td><td>80.0</td><td>76.0</td></tr>
+      <tr><td>Attritional Losses (ransomware, breach response)</td><td class="neg">(24.6)</td><td class="neg">(36.0)</td><td class="neg">(53.2)</td></tr>
+      <tr><td>Large Loss Reserve (events £5m–£30m)</td><td class="neg">(8.2)</td><td class="neg">(12.0)</td><td class="neg">(22.8)</td></tr>
+      <tr><td>Systemic / Cat Reserve</td><td class="neg">(0)</td><td class="neg">(4.0)</td><td class="neg">(15.2)</td></tr>
+      <tr><td><strong>Net Loss Ratio</strong></td><td><strong>40%</strong></td><td><strong>65%</strong></td><td><strong>120%</strong></td></tr>
+      <tr><td>Acquisition Costs (18%)</td><td class="neg">(18.0)</td><td class="neg">(18.0)</td><td class="neg">(18.0)</td></tr>
+      <tr><td>Management Expenses (12%)</td><td class="neg">(12.0)</td><td class="neg">(12.0)</td><td class="neg">(12.0)</td></tr>
+      <tr><td><strong>Net Combined Ratio</strong></td><td class="pos"><strong>70%</strong></td><td class="pos"><strong>95%</strong></td><td class="neg"><strong>150%</strong></td></tr>
+      <tr><td>Underwriting Profit / (Loss)</td><td class="pos">+24.6</td><td class="pos">+4.0</td><td class="neg">(38.0)</td></tr>
+      <tr><td>Investment Income (2.5% on £45m capital)</td><td class="pos">+1.1</td><td class="pos">+1.1</td><td class="pos">+1.1</td></tr>
+      <tr><td><strong>Pre-Tax Profit / (Loss)</strong></td><td class="pos"><strong>+25.7</strong></td><td class="pos"><strong>+5.1</strong></td><td class="neg"><strong>(36.9)</strong></td></tr>
+      <tr><td>Capital Base (45% of GWP)</td><td>45.0</td><td>45.0</td><td>45.0</td></tr>
+      <tr><td style="font-size:1rem;"><strong>Return on Equity</strong></td><td class="pos" style="font-size:1rem;"><strong>+22.4%</strong></td><td class="pos" style="font-size:1rem;"><strong>+9.8%</strong></td><td class="neg" style="font-size:1rem;"><strong>−18.5%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn-box">
+    <h4>⚠️ Pricing Cycle Watch: AI-Accelerated Attack Threat (2025–2026)</h4>
+    <p>Generative AI tools are lowering the barrier to entry for sophisticated phishing, credential stuffing and social engineering attacks. The security community has identified AI-generated spear-phishing emails that defeat traditional training-based detection. BEC losses — already a sublimited exposure — may accelerate materially as AI makes targeted fraud indistinguishable from legitimate communication.</p>
+    <p>More concerning to systemic risk modellers is the potential for AI to accelerate vulnerability exploitation cycles: the time from CVE disclosure to widespread exploitation may compress from days to hours. This would significantly reduce the value of patch management as a risk control, destabilising current rate adequacy assumptions. Most underwriters are watching 2025 loss data closely before committing to further rate reductions.</p>
+  </div>
+
+  <div class="context-box">
+    <h3>The Capacity Pendulum: Why Cyber Hardening Was So Extreme</h3>
+    <p>The 2019–2022 cyber hardening cycle was the most dramatic in any modern Lloyd's class for a structural reason: cyber capacity is almost entirely provided by specialist paper, not by reinsurance-backed capacity that can easily be redeployed. When ransomware losses mounted in 2020, underwriters couldn't simply diversify; they had to either exit the class or radically reprice.</p>
+    <p>The absence of mature ILS structures for cyber meant there was no catastrophe bond capacity to absorb tail losses. Instead, every Lloyd's cyber syndicate simultaneously increased rates, imposed MFA conditions, and reduced capacity — creating a compounding hardening effect that far exceeded what any individual loss year would have justified in isolation.</p>
+    <p>The lesson for underwriters is that cyber's pricing cycle is more volatile than property catastrophe precisely because the correlation of losses across the portfolio is imperfectly modelled. A ransomware wave doesn't follow hurricane seasonality — it can hit any sector, any geography, any time — making it structurally difficult to price on a mean-reversion basis.</p>
+  </div>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Cyber Insurance (CY · CZ · CG · CH)</span> — Module 05: Rates &amp; ROE Analysis</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Rate data and ROE figures are indicative market estimates.</p>
+</footer>
+
+<script>
+// Rate Index Chart
+const rateCtx = document.getElementById('rateChart').getContext('2d');
+const years = ['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026e'];
+new Chart(rateCtx, {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [
+      {
+        label: 'Large Enterprise (>$500m revenue)',
+        data: [100, 95, 90, 92, 110, 175, 295, 410, 370, 330, 315, 308],
+        borderColor: '#1565c0',
+        backgroundColor: 'rgba(21,101,192,0.08)',
+        borderWidth: 2.5,
+        tension: 0.3,
+        pointRadius: 4,
+        fill: true
+      },
+      {
+        label: 'Mid-Market (£10–100m revenue)',
+        data: [100, 97, 93, 96, 112, 165, 260, 355, 310, 275, 265, 260],
+        borderColor: '#6a1b9a',
+        backgroundColor: 'rgba(106,27,154,0.06)',
+        borderWidth: 2,
+        tension: 0.3,
+        pointRadius: 4,
+        borderDash: [5,4],
+        fill: true
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} (index 2015=100)`
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: false,
+        min: 80,
+        title: { display: true, text: 'Rate Index (2015 = 100)', font: { size: 11 } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// Loss Ratio Stacked Bar
+const lossCtx = document.getElementById('lossChart').getContext('2d');
+new Chart(lossCtx, {
+  type: 'bar',
+  data: {
+    labels: ['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+    datasets: [
+      {
+        label: 'Attritional Loss Ratio',
+        data: [28, 30, 34, 36, 48, 62, 72, 48, 38, 35],
+        backgroundColor: 'rgba(21,101,192,0.75)',
+        stack: 'loss'
+      },
+      {
+        label: 'Large Loss Ratio',
+        data: [8, 10, 14, 12, 20, 35, 42, 22, 16, 18],
+        backgroundColor: 'rgba(106,27,154,0.7)',
+        stack: 'loss'
+      },
+      {
+        label: 'Expense Ratio',
+        data: [30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
+        backgroundColor: 'rgba(13,34,64,0.5)',
+        stack: 'loss'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y}%`
+        }
+      }
+    },
+    scales: {
+      y: {
+        title: { display: true, text: 'Combined Ratio %', font: { size: 11 } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      },
+      x: { grid: { display: false }, stacked: true }
+    }
+  }
+});
+</script>
+</body>
+</html>

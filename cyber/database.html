@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loss Database – Cyber Insurance – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--cyber:#1565c0;--accent:#c8a84b;--light:#f0f4ff;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--red:#8b1a1a;--green:#2a7a3a;--purple:#6a1b9a;--orange:#c45c00; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1565c0 55%,#6a1b9a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d0f8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:40px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .filter-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; align-items:center; }
+    .filter-bar input, .filter-bar select { padding:8px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.88rem; color:var(--text); background:#fff; }
+    .filter-bar input { flex:1; min-width:180px; }
+    .filter-bar label { font-size:0.85rem; color:var(--muted); font-weight:600; }
+    .db-stats { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+    .db-stat { background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px 18px; font-size:0.85rem; }
+    .db-stat strong { color:var(--navy); font-size:1.1rem; display:block; }
+    table { width:100%; border-collapse:collapse; font-size:0.84rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.07); }
+    thead th { background:var(--navy); color:#fff; padding:11px 12px; text-align:left; font-size:0.79rem; text-transform:uppercase; letter-spacing:0.8px; cursor:pointer; user-select:none; white-space:nowrap; }
+    thead th:hover { background:#1a3a6a; }
+    tbody tr { border-bottom:1px solid var(--border); transition:background 0.15s; }
+    tbody tr:hover { background:#f0f4ff; }
+    tbody td { padding:9px 12px; vertical-align:top; }
+    .loss-cell { font-weight:700; color:var(--cyber); white-space:nowrap; }
+    .att-tag { display:inline-block; font-size:0.71rem; padding:2px 7px; border-radius:10px; font-weight:600; white-space:nowrap; }
+    .att-ransomware { background:#fff0f0; color:var(--red); }
+    .att-breach { background:#e8f0fe; color:var(--cyber); }
+    .att-state { background:#f3e8ff; color:var(--purple); }
+    .att-fraud { background:#fff4e8; color:var(--orange); }
+    .att-supply { background:#e8fff0; color:var(--green); }
+    .att-outage { background:#f5f5f5; color:#444; }
+    .att-destructive { background:#fde8e8; color:#8b0000; }
+    .lesson { font-size:0.79rem; color:var(--muted); font-style:italic; line-height:1.5; }
+    .hidden { display:none; }
+    #no-results { display:none; padding:30px; text-align:center; color:var(--muted); }
+    .breadcrumb { font-size:0.8rem; color:#b8d0f8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:700px){ main{padding:24px 10px;} table{font-size:0.76rem;} thead th,tbody td{padding:7px 7px;} }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Cyber Insurance</a> › Loss Database</div>
+  <div class="tag">Module 03 — Searchable Loss Database</div>
+  <h1>Loss Database</h1>
+  <p>35 major cyber incidents 2013–2024 covering ransomware, data breaches, nation-state attacks, fraud and systemic failures. Filter by attack type, sector and minimum loss to identify patterns for underwriting analysis.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+  <div class="filter-bar">
+    <input type="text" id="searchInput" placeholder="Search by organisation, sector, attacker…" oninput="filterTable()">
+    <label>Attack Type:</label>
+    <select id="typeFilter" onchange="filterTable()">
+      <option value="">All Types</option>
+      <option value="Ransomware">Ransomware</option>
+      <option value="Data Breach">Data Breach</option>
+      <option value="Nation-State">Nation-State</option>
+      <option value="Fraud/BEC">Fraud/BEC</option>
+      <option value="Supply Chain">Supply Chain</option>
+      <option value="Outage/Failure">Outage/Failure</option>
+    </select>
+    <label>Sector:</label>
+    <select id="sectorFilter" onchange="filterTable()">
+      <option value="">All Sectors</option>
+      <option value="Healthcare">Healthcare</option>
+      <option value="Financial">Financial</option>
+      <option value="Retail">Retail</option>
+      <option value="Energy">Energy/CNI</option>
+      <option value="Technology">Technology</option>
+      <option value="Government">Government</option>
+      <option value="Transport">Transport/Logistics</option>
+    </select>
+    <label>Min Loss $m:</label>
+    <select id="lossFilter" onchange="filterTable()">
+      <option value="0">All</option>
+      <option value="50">$50m+</option>
+      <option value="100">$100m+</option>
+      <option value="500">$500m+</option>
+    </select>
+  </div>
+  <div class="db-stats">
+    <div class="db-stat"><strong id="stat-count">35</strong>incidents</div>
+    <div class="db-stat"><strong>2013–2024</strong>date range</div>
+    <div class="db-stat"><strong>$25bn+</strong>cumulative economic loss</div>
+    <div class="db-stat"><strong>CY/CZ/CG/CH</strong>Lloyd's codes</div>
+  </div>
+
+  <table id="lossTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Year ↕</th>
+        <th onclick="sortTable(1)">Organisation</th>
+        <th>Sector</th>
+        <th>Attack Type</th>
+        <th onclick="sortTable(4)">Loss / Cost ↕</th>
+        <th>Attacker</th>
+        <th>Key Lesson</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <tr data-type="Data Breach" data-sector="Retail" data-loss="200">
+        <td>2013</td><td><strong>Target Corporation</strong></td><td>Retail</td>
+        <td><span class="att-tag att-supply">Supply Chain</span></td>
+        <td class="loss-cell">~$200m total</td><td>Criminal (FIN7-linked)</td>
+        <td class="lesson">HVAC vendor credentials used as network entry; first landmark cyber insurance payout (~$90m). Supply chain = primary attack vector.</td>
+      </tr>
+      <tr data-type="Nation-State" data-sector="Technology" data-loss="100">
+        <td>2014</td><td><strong>Sony Pictures</strong></td><td>Technology/Media</td>
+        <td><span class="att-tag att-state">Nation-State</span></td>
+        <td class="loss-cell">$100m+ estimated</td><td>Lazarus Group (North Korea)</td>
+        <td class="lesson">Destructive wiper disguised as hack. War exclusion dispute. System restoration not covered by data breach policies — wording gap exposed.</td>
+      </tr>
+      <tr data-type="Data Breach" data-sector="Healthcare" data-loss="115">
+        <td>2015</td><td><strong>Anthem Health Insurance</strong></td><td>Healthcare</td>
+        <td><span class="att-tag att-breach">Data Breach</span></td>
+        <td class="loss-cell">$115m settlement</td><td>APT10 (China, attributed)</td>
+        <td class="lesson">78.8m medical records stolen via spear-phishing. Largest healthcare breach at the time. Drove healthcare sector cyber insurance buying.</td>
+      </tr>
+      <tr data-type="Data Breach" data-sector="Retail" data-loss="60">
+        <td>2015</td><td><strong>TalkTalk (UK)</strong></td><td>Telecoms/Retail</td>
+        <td><span class="att-tag att-breach">SQL Injection</span></td>
+        <td class="loss-cell">£60m total</td><td>Criminal (teenager)</td>
+        <td class="lesson">£400k ICO fine (pre-GDPR maximum). ~157k records stolen. CEO's TV appearances compounded reputational damage. Communications response plan essential.</td>
+      </tr>
+      <tr data-type="Fraud/BEC" data-sector="Financial" data-loss="81">
+        <td>2016</td><td><strong>Bangladesh Bank</strong></td><td>Financial Services</td>
+        <td><span class="att-tag att-fraud">SWIFT Fraud</span></td>
+        <td class="loss-cell">$81m stolen</td><td>Lazarus Group (North Korea)</td>
+        <td class="lesson">SWIFT terminal compromise; $81m of $951m stolen before errors noticed. Funds transfer fraud sublimits now standard in FS cyber policies.</td>
+      </tr>
+      <tr data-type="Nation-State" data-sector="Government" data-loss="100">
+        <td>2016</td><td><strong>US DNC / Clinton Campaign</strong></td><td>Government/Political</td>
+        <td><span class="att-tag att-state">Nation-State</span></td>
+        <td class="loss-cell">Unquantified</td><td>APT28/Fancy Bear (Russia)</td>
+        <td class="lesson">Spear-phishing compromise of email; leaked via WikiLeaks. Demonstrated political/reputational impact of cyber operations beyond financial loss.</td>
+      </tr>
+      <tr data-type="Nation-State" data-sector="Healthcare" data-loss="92">
+        <td>2017</td><td><strong>UK NHS (WannaCry)</strong></td><td>Healthcare</td>
+        <td><span class="att-tag att-ransomware">Ransomware (WannaCry)</span></td>
+        <td class="loss-cell">£92m (NHS alone)</td><td>Lazarus Group (North Korea)</td>
+        <td class="lesson">Unpatched Windows XP/SMB. 80 trusts hit; 19k appointments cancelled. Patching legacy systems and network segmentation highlighted as critical controls.</td>
+      </tr>
+      <tr data-type="Nation-State" data-sector="Transport" data-loss="300">
+        <td>2017</td><td><strong>Maersk (NotPetya)</strong></td><td>Transport/Logistics</td>
+        <td><span class="att-tag att-destructive">Wiper (NotPetya)</span></td>
+        <td class="loss-cell">$300m</td><td>Sandworm/GRU (Russia)</td>
+        <td class="lesson">All 45,000 PCs destroyed; 4,000 servers reinstalled in 10 days. War exclusion question. Notoriously caused by single unpatched Ukrainian accounting software update.</td>
+      </tr>
+      <tr data-type="Nation-State" data-sector="Healthcare" data-loss="1400">
+        <td>2017</td><td><strong>Merck (NotPetya)</strong></td><td>Healthcare/Pharma</td>
+        <td><span class="att-tag att-destructive">Wiper (NotPetya)</span></td>
+        <td class="loss-cell">$1.4bn</td><td>Sandworm/GRU (Russia)</td>
+        <td class="lesson">Largest single NotPetya loss. Insurer denied claim (war exclusion); NJ court ruled for Merck in 2023. War exclusion vs cyber attack definition debated for 6 years.</td>
+      </tr>
+      <tr data-type="Data Breach" data-sector="Financial" data-loss="700">
+        <td>2017</td><td><strong>Equifax</strong></td><td>Financial Services</td>
+        <td><span class="att-tag att-breach">Web Vulnerability</span></td>
+        <td class="loss-cell">$700m settlement</td><td>APT10 (China, attributed)</td>
+        <td class="lesson">Unpatched Apache Struts. 147m SSNs stolen. Largest consumer data settlement in US history. Patch management became a binary underwriting question.</td>
+      </tr>
+      <tr data-type="Data Breach" data-sector="Retail" data-loss="124">
+        <td>2018</td><td><strong>Marriott International</strong></td><td>Hospitality</td>
+        <td><span class="att-tag att-breach">Data Breach</span></td>
+        <td class="loss-cell">£18.4m GDPR fine</td><td>APT40 (China, attributed)</td>
+        <td class="lesson">500m guest records; breach inherited from Starwood acquisition 4 years earlier. Cyber due diligence in M&amp;A became critical post-Marriott. Breach pre-dated GDPR but ICO fined post-GDPR.</td>
+      </tr>
+      <tr data-type="Data Breach" data-sector="Financial" data-loss="190">
+        <td>2019</td><td><strong>Capital One</strong></td><td>Financial Services</td>
+        <td><span class="att-tag att-breach">Cloud Misconfiguration</span></td>
+        <td class="loss-cell">$190m settlement</td><td>Former AWS employee</td>
+        <td class="lesson">SSRF exploit of misconfigured AWS WAF. 106m records. Cloud security misconfiguration now a top-5 cyber underwriting question. Insider/ex-employee threat highlighted.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Financial" data-loss="30">
+        <td>2019–20</td><td><strong>Travelex</strong></td><td>Financial Services</td>
+        <td><span class="att-tag att-ransomware">REvil Ransomware</span></td>
+        <td class="loss-cell">£30m+ / administration</td><td>REvil (Sodinokibi)</td>
+        <td class="lesson">Pulse Secure VPN zero-day; weeks offline. Paid $2.3m ransom. Disruption contributed to administration in 2020. Big-game hunting transition confirmed.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Technology" data-loss="70">
+        <td>2020</td><td><strong>Cognizant</strong></td><td>Technology/IT Services</td>
+        <td><span class="att-tag att-ransomware">Maze Ransomware</span></td>
+        <td class="loss-cell">$50–70m</td><td>Maze Group</td>
+        <td class="lesson">First major attack on a global IT services firm. Maze pioneered "double extortion" — encrypt AND threaten to publish. BI for IT service companies highlighted.</td>
+      </tr>
+      <tr data-type="Supply Chain" data-sector="Technology" data-loss="100">
+        <td>2020</td><td><strong>SolarWinds (US Government)</strong></td><td>Government/Technology</td>
+        <td><span class="att-tag att-supply">Software Supply Chain</span></td>
+        <td class="loss-cell">$100m+ (govt. only)</td><td>APT29/SVR (Russia)</td>
+        <td class="lesson">18,000 customers; 9-month dwell time undetected. Software supply chain risk now a standalone underwriting question. SBOM requirements emerging.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Healthcare" data-loss="67">
+        <td>2020</td><td><strong>University of California SF</strong></td><td>Healthcare/Education</td>
+        <td><span class="att-tag att-ransomware">Netwalker Ransomware</span></td>
+        <td class="loss-cell">$1.14m ransom paid</td><td>Netwalker</td>
+        <td class="lesson">UCSF paid ransom to recover COVID-19 research data. Research institutions identified as high-value ransomware targets due to valuable IP and research data.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Energy" data-loss="50">
+        <td>2021</td><td><strong>Colonial Pipeline</strong></td><td>Energy/CNI</td>
+        <td><span class="att-tag att-ransomware">DarkSide Ransomware</span></td>
+        <td class="loss-cell">$4.4m ransom + $50m+ BI</td><td>DarkSide (Criminal RaaS)</td>
+        <td class="lesson">Legacy VPN with no MFA. MFA became binary cyber insurance condition market-wide. OT/ICS cyber exposure highlighted. FBI recovered $2.3m of ransom.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Healthcare" data-loss="600">
+        <td>2021</td><td><strong>Ireland HSE</strong></td><td>Healthcare/Government</td>
+        <td><span class="att-tag att-ransomware">Conti Ransomware</span></td>
+        <td class="loss-cell">€600m+ remediation</td><td>Conti Group</td>
+        <td class="lesson">National healthcare system offline for weeks. Refused to pay ransom; Conti released decryptor anyway (political pressure). Largest public sector cyber loss in EU history at time.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Financial" data-loss="11">
+        <td>2021</td><td><strong>JBS Foods</strong></td><td>Food/Agriculture</td>
+        <td><span class="att-tag att-ransomware">REvil Ransomware</span></td>
+        <td class="loss-cell">$11m ransom paid</td><td>REvil</td>
+        <td class="lesson">Largest global meat processor offline for days; US beef supply disrupted. Food supply chain cyber risk emerged as critical national infrastructure concern.</td>
+      </tr>
+      <tr data-type="Supply Chain" data-sector="Technology" data-loss="70">
+        <td>2021</td><td><strong>Kaseya VSA</strong></td><td>Technology/MSP</td>
+        <td><span class="att-tag att-supply">MSP Supply Chain</span></td>
+        <td class="loss-cell">1,000+ orgs affected</td><td>REvil</td>
+        <td class="lesson">Zero-day in MSP tool; $70m ransom demand. MSP/software supply chain exclusions/sublimits introduced by many underwriters. Technology company BI risk highlighted.</td>
+      </tr>
+      <tr data-type="Data Breach" data-sector="Healthcare" data-loss="35">
+        <td>2022</td><td><strong>Medibank (Australia)</strong></td><td>Healthcare</td>
+        <td><span class="att-tag att-breach">Data Exfiltration</span></td>
+        <td class="loss-cell">AUD $46m+ costs</td><td>REvil-linked affiliate</td>
+        <td class="lesson">9.7m records including sensitive mental health data; refused ransom; data published. Australian Privacy Act penalties increased post-Medibank. Most significant Australian cyber loss.</td>
+      </tr>
+      <tr data-type="Nation-State" data-sector="Energy" data-loss="300">
+        <td>2022</td><td><strong>Viasat KA-SAT</strong></td><td>Energy/CNI/Satellite</td>
+        <td><span class="att-tag att-state">Nation-State Wiper</span></td>
+        <td class="loss-cell">€290m+ estimated</td><td>Sandworm/GRU (Russia)</td>
+        <td class="lesson">Wiped satellite modems across Europe 1hr before Russia invaded Ukraine. Caused wind turbine outages in Germany. First confirmed cyber attack timed with military action.</td>
+      </tr>
+      <tr data-type="Data Breach" data-sector="Financial" data-loss="200">
+        <td>2022</td><td><strong>Uber (second breach)</strong></td><td>Technology/Transport</td>
+        <td><span class="att-tag att-fraud">Social Engineering</span></td>
+        <td class="loss-cell">$200m+ (reputational)</td><td>Lapsus$ Group</td>
+        <td class="lesson">MFA fatigue attack — attacker spammed employee with MFA push notifications until one was approved. Phishing-resistant MFA (hardware keys, FIDO2) now recommended over push MFA.</td>
+      </tr>
+      <tr data-type="Supply Chain" data-sector="Technology" data-loss="1000">
+        <td>2023</td><td><strong>MOVEit Transfer (Cl0p)</strong></td><td>Multi-Sector</td>
+        <td><span class="att-tag att-supply">Zero-Day / Supply Chain</span></td>
+        <td class="loss-cell">$1bn+ est. (2,500+ orgs)</td><td>Cl0p Ransomware Group</td>
+        <td class="lesson">SQL injection zero-day; data exfiltration without encryption. Largest cyber accumulation event post-war-exclusions. File transfer software patching now explicit UW condition.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Retail" data-loss="100">
+        <td>2023</td><td><strong>MGM Resorts International</strong></td><td>Hospitality/Gaming</td>
+        <td><span class="att-tag att-fraud">Social Engineering</span></td>
+        <td class="loss-cell">~$100m BI</td><td>Scattered Spider / ALPHV</td>
+        <td class="lesson">Help desk social engineering via LinkedIn employee impersonation; bypassed MFA with a reset. Identity verification procedures for help desk credential resets now an UW requirement.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Retail" data-loss="15">
+        <td>2023</td><td><strong>Caesars Entertainment</strong></td><td>Hospitality/Gaming</td>
+        <td><span class="att-tag att-ransomware">ALPHV/BlackCat</span></td>
+        <td class="loss-cell">$15m ransom paid</td><td>Scattered Spider / ALPHV</td>
+        <td class="lesson">Paid $15m to avoid data leak; occurred same week as MGM attack. Ransom payment decision (pay vs don't pay) depends on data sensitivity and alternative recovery options.</td>
+      </tr>
+      <tr data-type="Data Breach" data-sector="Financial" data-loss="100">
+        <td>2023</td><td><strong>ICBC (US Treasury operations)</strong></td><td>Financial Services</td>
+        <td><span class="att-tag att-ransomware">LockBit Ransomware</span></td>
+        <td class="loss-cell">$9m ransom reported</td><td>LockBit</td>
+        <td class="lesson">ICBC US broker-dealer offline for days; forced to settle US Treasury trades via USB drive. Financial market infrastructure cyber risk highlighted. LockBit takedown followed Feb 2024.</td>
+      </tr>
+      <tr data-type="Data Breach" data-sector="Healthcare" data-loss="50">
+        <td>2023</td><td><strong>HCA Healthcare</strong></td><td>Healthcare</td>
+        <td><span class="att-tag att-breach">Data Exfiltration</span></td>
+        <td class="loss-cell">$50m+ estimated</td><td>Criminal</td>
+        <td class="lesson">11 million patient records including appointment data stolen from external storage. Healthcare data exfiltration without ransomware becoming more common.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Healthcare" data-loss="1500">
+        <td>2024</td><td><strong>Change Healthcare (UnitedHealth)</strong></td><td>Healthcare</td>
+        <td><span class="att-tag att-ransomware">ALPHV/BlackCat</span></td>
+        <td class="loss-cell">$1.5bn+ (UHG total)</td><td>ALPHV/BlackCat → RansomHub</td>
+        <td class="lesson">No MFA on Citrix; $22m ransom; 9-day outage of 40% US medical claims processing. Largest single cyber insurance loss. Healthcare concentration risk. ALPHV exit-scammed affiliates; data published by RansomHub anyway.</td>
+      </tr>
+      <tr data-type="Outage/Failure" data-sector="Technology" data-loss="5400">
+        <td>2024</td><td><strong>CrowdStrike Falcon Update</strong></td><td>Multi-Sector (Technology)</td>
+        <td><span class="att-tag att-outage">IT Failure (Non-Malicious)</span></td>
+        <td class="loss-cell">$5.4bn economic (est.)</td><td>N/A — Software defect</td>
+        <td class="lesson">8.5m Windows BSOD; not a cyber attack. Dependent system failure extensions triggered in cyber policies. Coverage gap vs property BI for non-malicious outages. Delta ~$500m loss.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Financial" data-loss="27">
+        <td>2024</td><td><strong>LoanDepot</strong></td><td>Financial Services</td>
+        <td><span class="att-tag att-ransomware">ALPHV/BlackCat</span></td>
+        <td class="loss-cell">$27m settlement</td><td>ALPHV/BlackCat</td>
+        <td class="lesson">16.9m customer records; mortgage loan services disrupted. Mortgage servicer cyber risk growing as digital origination increases. $27m settlement includes credit monitoring.</td>
+      </tr>
+      <tr data-type="Ransomware" data-sector="Healthcare" data-loss="40">
+        <td>2024</td><td><strong>NHS Synnovis (UK)</strong></td><td>Healthcare</td>
+        <td><span class="att-tag att-ransomware">Qilin Ransomware</span></td>
+        <td class="loss-cell">£40m+ estimated</td><td>Qilin (Russia-linked)</td>
+        <td class="lesson">Blood transfusion and test services disrupted across London NHS trusts. 3,396 appointments cancelled. Russian-linked group attacking UK CNI. CH (healthcare cyber) risk in UK public sector.</td>
+      </tr>
+      <tr data-type="Fraud/BEC" data-sector="Financial" data-loss="25">
+        <td>2024</td><td><strong>Arup (UK engineering)</strong></td><td>Professional Services</td>
+        <td><span class="att-tag att-fraud">Deepfake BEC</span></td>
+        <td class="loss-cell">HKD $200m ($25m) lost</td><td>Criminal</td>
+        <td class="lesson">Finance employee attended a deepfake video call of "CFO and colleagues"; transferred $25m. AI-generated deepfake voice/video scams now a primary emerging attack vector. Verification procedures critical.</td>
+      </tr>
+      <tr data-type="Supply Chain" data-sector="Technology" data-loss="500">
+        <td>2024</td><td><strong>Snowflake Customer Attacks</strong></td><td>Multi-Sector (Cloud)</td>
+        <td><span class="att-tag att-supply">Credential Theft / No MFA</span></td>
+        <td class="loss-cell">$500m+ across victims</td><td>UNC5537 / Scattered Spider</td>
+        <td class="lesson">165 Snowflake customers breached via stolen credentials with no MFA on Snowflake accounts. AT&amp;T (110m records), Ticketmaster, Santander. Cloud SaaS MFA enforcement now a hard UW condition.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="no-results">No incidents match your filters. Try broadening your search.</div>
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Cyber Insurance (CY · CZ · CG · CH)</span> — Module 03: Loss Database</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Loss data and rates are indicative market estimates.</p>
+</footer>
+<script>
+  let sortAsc=[true,true,true,true,true];
+  function filterTable(){
+    const q=document.getElementById('searchInput').value.toLowerCase();
+    const type=document.getElementById('typeFilter').value;
+    const sector=document.getElementById('sectorFilter').value;
+    const minLoss=parseInt(document.getElementById('lossFilter').value)||0;
+    const rows=document.querySelectorAll('#tableBody tr');
+    let visible=0;
+    rows.forEach(r=>{
+      const text=r.textContent.toLowerCase();
+      const rowType=r.getAttribute('data-type')||'';
+      const rowSector=r.getAttribute('data-sector')||'';
+      const rowLoss=parseInt(r.getAttribute('data-loss'))||0;
+      const show=(!q||text.includes(q))&&(!type||rowType===type)&&(!sector||rowSector===sector)&&rowLoss>=minLoss;
+      r.classList.toggle('hidden',!show);
+      if(show) visible++;
+    });
+    document.getElementById('stat-count').textContent=visible;
+    document.getElementById('no-results').style.display=visible===0?'block':'none';
+  }
+  function sortTable(col){
+    const tbody=document.getElementById('tableBody');
+    const rows=Array.from(tbody.querySelectorAll('tr'));
+    rows.sort((a,b)=>{
+      const av=a.cells[col]?a.cells[col].textContent.trim():'';
+      const bv=b.cells[col]?b.cells[col].textContent.trim():'';
+      const an=parseFloat(av.replace(/[^0-9.]/g,''));
+      const bn=parseFloat(bv.replace(/[^0-9.]/g,''));
+      if(!isNaN(an)&&!isNaN(bn)) return sortAsc[col]?(an-bn):(bn-an);
+      return sortAsc[col]?av.localeCompare(bv):bv.localeCompare(av);
+    });
+    sortAsc[col]=!sortAsc[col];
+    rows.forEach(r=>tbody.appendChild(r));
+  }
+</script>
+</body>
+</html>

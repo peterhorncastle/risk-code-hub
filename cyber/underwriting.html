@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Underwriting Methodology – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--cyber:#1565c0;--cyber-dark:#0a3d7a;--cyber-light:#e8f0fe;--accent:#c8a84b;--teal:#0097a7;--purple:#6a1b9a;--light:#f0f4ff;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--red:#8b1a1a;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1565c0 55%,#6a1b9a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d0f8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--cyber-dark); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .breadcrumb { font-size:0.8rem; color:#b8d0f8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+
+    /* Coverage structure */
+    .cov-structure { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:20px 0 30px; }
+    @media(max-width:680px){.cov-structure{grid-template-columns:1fr;}}
+    .cov-col { background:#fff; border:1px solid var(--border); border-radius:10px; padding:24px; }
+    .cov-col h4 { font-size:0.88rem; font-weight:700; color:var(--navy); text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--accent); }
+    .cov-item { display:flex; gap:10px; padding:8px 0; border-bottom:1px dashed var(--border); font-size:0.85rem; }
+    .cov-item:last-child { border-bottom:none; }
+    .cov-item .label { font-weight:600; color:var(--navy); min-width:160px; }
+    .cov-item .desc { color:var(--muted); line-height:1.5; }
+
+    /* Code variant cards */
+    .variant-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; margin:20px 0 30px; }
+    .variant-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-top:4px solid var(--cyber); }
+    .variant-card.cz { border-top-color:var(--purple); }
+    .variant-card.cg { border-top-color:var(--teal); }
+    .variant-card.ch { border-top-color:#b71c1c; }
+    .variant-card .code-badge { display:inline-block; background:var(--cyber); color:#fff; font-size:0.7rem; font-weight:700; letter-spacing:2px; padding:3px 8px; border-radius:4px; margin-bottom:10px; }
+    .variant-card.cz .code-badge { background:var(--purple); }
+    .variant-card.cg .code-badge { background:var(--teal); }
+    .variant-card.ch .code-badge { background:#b71c1c; }
+    .variant-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .variant-card ul { padding-left:16px; font-size:0.82rem; color:var(--muted); line-height:1.8; }
+
+    /* Rating factors */
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:20px 0 30px; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; }
+    .factor-card .icon { font-size:1.4rem; margin-bottom:8px; }
+    .factor-card h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .factor-card p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.5; }
+    .factor-card .impact { display:inline-block; margin-top:8px; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:10px; }
+    .impact-high { background:#fce8e8; color:#8b1a1a; }
+    .impact-med { background:#fff3cd; color:#7a4500; }
+    .impact-low { background:#e8f5e9; color:#2a7a3a; }
+
+    /* Scoring framework */
+    .score-table { width:100%; border-collapse:collapse; margin:20px 0 30px; font-size:0.88rem; }
+    .score-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .score-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .score-table tr:nth-child(even) td { background:#fafbfc; }
+    .score-green { color:#2a7a3a; font-weight:700; }
+    .score-amber { color:#b8630a; font-weight:700; }
+    .score-red { color:#8b1a1a; font-weight:700; }
+    .score-na { color:var(--muted); font-style:italic; }
+
+    /* Formula box */
+    .formula-box { background:var(--navy); color:#fff; border-radius:10px; padding:28px 32px; margin:24px 0; font-family:monospace; }
+    .formula-box h4 { color:var(--accent); font-size:0.88rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; font-family:'Segoe UI',Arial,sans-serif; }
+    .formula-line { font-size:0.92rem; color:#e8f0fe; margin:6px 0; }
+    .formula-line.result { color:var(--accent); font-size:1rem; margin-top:14px; padding-top:14px; border-top:1px solid #1e4080; }
+    .formula-line span { color:#81d4fa; }
+    .formula-line em { color:#ce93d8; font-style:normal; }
+
+    /* Worked examples */
+    .example-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin:24px 0 36px; }
+    @media(max-width:720px){.example-grid{grid-template-columns:1fr;}}
+    .example-card { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    .example-header { background:var(--cyber-dark); color:#fff; padding:16px 20px; }
+    .example-header h4 { font-size:0.92rem; font-weight:700; }
+    .example-header p { font-size:0.78rem; color:#b8d0f8; margin-top:4px; }
+    .example-body { padding:20px; }
+    .example-row { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px dashed var(--border); font-size:0.84rem; }
+    .example-row:last-child { border-bottom:none; }
+    .example-row .item { color:var(--muted); }
+    .example-row .val { font-weight:600; color:var(--navy); }
+    .example-row.total .item { color:var(--navy); font-weight:700; font-size:0.9rem; }
+    .example-row.total .val { color:var(--cyber); font-size:1.05rem; }
+    .example-section { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--cyber); font-weight:700; padding:10px 0 4px; }
+
+    /* Sublimits table */
+    .sublimit-table { width:100%; border-collapse:collapse; margin:20px 0 30px; font-size:0.88rem; }
+    .sublimit-table th { background:var(--cyber-dark); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .sublimit-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .sublimit-table tr:nth-child(even) td { background:#fafbfc; }
+
+    /* Warn / context boxes */
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:20px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#b8d0f8; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Cyber Insurance</a> › Underwriting</div>
+  <div class="tag">Module 04 — Underwriting Methodology</div>
+  <h1>Cyber Underwriting Methodology</h1>
+  <p>Coverage structures for CY, CZ, CG and CH; the security control scoring framework; cyber rating factors and rate-on-limit methodology; sublimit architecture; and worked premium examples for a mid-market manufacturer and a large US healthcare system.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+
+  <h2>CY Standalone Cyber — Coverage Structure</h2>
+  <p>A standalone CY policy is divided into two broad buckets: first-party (the insured's own losses) and third-party (liability to others). The split matters for underwriting — first-party is dominated by ransomware and BI; third-party by privacy class actions and regulatory defence. Most large accounts have both; smaller SME packages (CG) may have combined sub-limits rather than distinct towers.</p>
+
+  <div class="cov-structure">
+    <div class="cov-col">
+      <h4>First-Party Coverages</h4>
+      <div class="cov-item"><span class="label">Cyber Business Interruption</span><span class="desc">Net profit loss and continuing expenses during a network outage caused by a covered cyber event. Waiting period typically 8–12 hours (vs. 72 hrs in older forms). Often the single largest loss component.</span></div>
+      <div class="cov-item"><span class="label">System Damage &amp; Restoration</span><span class="desc">Costs to restore, repair or replace hardware, software and data corrupted or destroyed by a cyber attack. Includes specialist forensic IT vendors.</span></div>
+      <div class="cov-item"><span class="label">Ransomware / Extortion</span><span class="desc">Ransom payment (where legally permissible), ransom negotiation specialist fees, decryption key costs. Many policies now require pre-approval before payment.</span></div>
+      <div class="cov-item"><span class="label">Breach Response Costs</span><span class="desc">Forensic investigation, legal advice, notification of affected individuals, credit/identity monitoring services, crisis PR management. Beazley BBR panel is market benchmark.</span></div>
+      <div class="cov-item"><span class="label">Cyber Crime / BEC</span><span class="desc">Funds transfer fraud, invoice redirection fraud, telephonic social engineering. Typically sublimited (10–25% of limit); separate crime policy advisable above sub.</span></div>
+      <div class="cov-item"><span class="label">Contingent BI (Dependent Systems)</span><span class="desc">BI from outage at a named or unnamed third-party supplier (cloud provider, SaaS platform). Unnamed contingent BI often restricted post-CrowdStrike.</span></div>
+    </div>
+    <div class="cov-col">
+      <h4>Third-Party Coverages</h4>
+      <div class="cov-item"><span class="label">Network Security Liability</span><span class="desc">Third-party claims for transmission of malware or virus, DDoS attacks launched from insured's network, or failure to prevent unauthorized access to third-party systems.</span></div>
+      <div class="cov-item"><span class="label">Privacy Liability</span><span class="desc">Claims from individuals whose personal data was compromised. Includes GDPR data subject claims, US state privacy class actions, Canadian PIPEDA breaches.</span></div>
+      <div class="cov-item"><span class="label">Regulatory Defence &amp; Fines</span><span class="desc">Legal costs defending regulatory investigations (ICO, FTC, HHS/OCR, state AGs). Fines/penalties covered where insurable by applicable law — varies significantly by jurisdiction.</span></div>
+      <div class="cov-item"><span class="label">Media Liability (Cyber)</span><span class="desc">Defamation, IP infringement in digital media content. Often included in cyber form for tech companies; excluded for traditional publishers who carry standalone media PI.</span></div>
+      <div class="cov-item"><span class="label">PCI-DSS Fines &amp; Assessments</span><span class="desc">Card brand penalties and forensic audit costs following a payment card data breach. Coverage for PCI fines is contested — many policies now exclude or sublimit.</span></div>
+      <div class="cov-item"><span class="label">Tech E&amp;O (CZ only)</span><span class="desc">Claims arising from failure of technology product or service to perform as intended. Third-party financial loss from software errors, IT service failures, cloud downtime.</span></div>
+    </div>
+  </div>
+
+  <h2>Code Variant Structures: CY / CZ / CG / CH</h2>
+  <div class="variant-grid">
+    <div class="variant-card">
+      <div class="code-badge">CY</div>
+      <h4>Standalone Cyber</h4>
+      <ul>
+        <li>Full first + third-party structure</li>
+        <li>Limit: £500k to £500m+</li>
+        <li>MFA mandatory condition for most accounts</li>
+        <li>LMA 5564/5565 exclusion must attach</li>
+        <li>Separate sublimits for BEC, contingent BI</li>
+        <li>Suitable: mid-market to large enterprise across all sectors</li>
+      </ul>
+    </div>
+    <div class="variant-card cz">
+      <div class="code-badge">CZ</div>
+      <h4>Technology PI / E&amp;O + Cyber</h4>
+      <ul>
+        <li>Tech E&amp;O tower: errors/failures causing client loss</li>
+        <li>Cyber coverage blended into same policy</li>
+        <li>IP infringement, professional negligence included</li>
+        <li>Limit: £1m to £50m typical</li>
+        <li>Retroactive date critical — "claims made" basis</li>
+        <li>Suitable: SaaS, MSPs, IT consultants, software firms</li>
+      </ul>
+    </div>
+    <div class="variant-card cg">
+      <div class="code-badge">CG</div>
+      <h4>Commercial Lines Cyber</h4>
+      <ul>
+        <li>Packaged or standalone for SMEs</li>
+        <li>Combined sublimits rather than separate towers</li>
+        <li>Limit: £25k to £2m typical</li>
+        <li>Simplified application (15–25 questions)</li>
+        <li>Often sold as endorsement to property/liability</li>
+        <li>Suitable: small businesses, sole traders, micro-firms</li>
+      </ul>
+    </div>
+    <div class="variant-card ch">
+      <div class="code-badge">CH</div>
+      <h4>Healthcare / Critical Infrastructure</h4>
+      <ul>
+        <li>Clinical disruption BI (patient diversion costs)</li>
+        <li>OT/ICS/SCADA attack vectors included</li>
+        <li>HIPAA/HITECH regulatory section</li>
+        <li>Medical device compromise coverage</li>
+        <li>Limit: £10m to £500m+</li>
+        <li>Suitable: NHS trusts, hospital groups, CNI operators</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Sublimit Architecture</h2>
+  <p>Most CY policies operate on a policy limit with sub-limits for specified high-frequency or high-severity perils. The architecture below is illustrative of a mid-market account with a £10m policy limit. Healthcare and large enterprise accounts often negotiate full-limit ransomware; BEC sub-limits are rarely moved above 25%.</p>
+
+  <table class="sublimit-table">
+    <thead>
+      <tr><th>Coverage Section</th><th>Sub-Limit (£10m Policy)</th><th>Trigger</th><th>Key Conditions</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Cyber BI + System Damage</strong></td><td>Full limit (£10m)</td><td>Cyber attack causing network outage</td><td>8–12 hour waiting period; forensic IT vendor approval</td></tr>
+      <tr><td><strong>Ransomware / Extortion</strong></td><td>£10m (full) or £5m (50% sub)</td><td>Credible extortion demand + advice from specialist firm</td><td>Pre-payment notification; sanctions screening of recipient</td></tr>
+      <tr><td><strong>Data Breach Response</strong></td><td>£2.5m–£5m</td><td>Unauthorized access to personal data triggering notification obligation</td><td>Use of approved panel vendors; notification within regulatory deadline</td></tr>
+      <tr><td><strong>Network Security &amp; Privacy Liability</strong></td><td>Full limit (£10m)</td><td>Third-party claim alleging data breach or network failure</td><td>Claims-made basis; retroactive date applies</td></tr>
+      <tr><td><strong>Regulatory Defence &amp; Fines</strong></td><td>£2.5m (defence) / £1m (fines)</td><td>Regulatory investigation or fine following a covered event</td><td>Fine coverage where insurable by law; excludes GDPR fines in some policy forms</td></tr>
+      <tr><td><strong>BEC / Funds Transfer Fraud</strong></td><td>£500k–£1m (5–10%)</td><td>Fraudulent instruction inducing unauthorised payment transfer</td><td>Verification procedure warranty; often requires dual-approval controls</td></tr>
+      <tr><td><strong>Contingent BI (Unnamed)</strong></td><td>£1m–£2m (10–20%)</td><td>Outage at cloud/SaaS provider not named in policy</td><td>Post-CrowdStrike: heavily restricted; many underwriters now excluding unnamed</td></tr>
+      <tr><td><strong>Reputational Harm BI</strong></td><td>£500k (if included)</td><td>Revenue loss from media coverage of a covered data breach</td><td>Rare; written by specialist cyber underwriters only; 30-day indemnity period</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Rating Factors &amp; Underwriting Drivers</h2>
+  <div class="factor-grid">
+    <div class="factor-card">
+      <div class="icon">🔐</div>
+      <h4>Multi-Factor Authentication (MFA)</h4>
+      <p>Presence of MFA on email, remote access (VPN/RDP) and privileged accounts. Post-Colonial Pipeline (2021), MFA is a binary condition for most underwriters. No MFA = no cover or significant premium loading.</p>
+      <span class="impact impact-high">High Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🛡️</div>
+      <h4>Endpoint Detection &amp; Response (EDR/XDR)</h4>
+      <p>Active EDR/XDR deployment across ≥90% of endpoints. EDR is now considered table stakes; absence is a major risk indicator. XDR integration (network + cloud telemetry) commands a rate credit.</p>
+      <span class="impact impact-high">High Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">💾</div>
+      <h4>Backup Architecture</h4>
+      <p>3-2-1 rule: 3 copies, 2 different media, 1 offsite. Immutable or air-gapped backups significantly reduce ransomware BI exposure. Backups tested quarterly receive credit; untested backups are discounted.</p>
+      <span class="impact impact-high">High Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🔧</div>
+      <h4>Patch Management</h4>
+      <p>Time-to-patch for critical vulnerabilities; presence of unpatched internet-facing systems. CVSS 9.0+ patches should be applied within 72 hours. Outstanding critical patches = hard loading or exclusion.</p>
+      <span class="impact impact-high">High Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🏭</div>
+      <h4>Industry Sector</h4>
+      <p>Healthcare, financial services and critical infrastructure attract highest base rates. Ransomware groups specifically target sectors with low downtime tolerance and high willingness-to-pay.</p>
+      <span class="impact impact-high">High Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">📊</div>
+      <h4>Revenue / Limit Ratio</h4>
+      <p>Cyber limit as % of revenue drives adequacy assessment. A £500m revenue company with a £1m limit is over-exposed from an insurer perspective; insurers prefer limits ≥1% of annual revenue for larger risks.</p>
+      <span class="impact impact-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🗄️</div>
+      <h4>Data Volume &amp; Sensitivity</h4>
+      <p>PII records count, presence of payment card data, health records, financial data. Higher sensitivity data = greater breach response cost, regulatory exposure and class action risk.</p>
+      <span class="impact impact-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🌐</div>
+      <h4>Internet-Facing Attack Surface</h4>
+      <p>Number of internet-exposed ports/services, RDP exposure, legacy VPN use, open SMTP relays. External attack surface scanning tools (Bitsight, SecurityScorecard) used as proxy for this.</p>
+      <span class="impact impact-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">📋</div>
+      <h4>Incident Response Planning</h4>
+      <p>Presence of a tested IR plan, named IR retainer, tabletop exercise within 12 months. Accounts with a pre-approved IR firm on retainer typically claim faster and with lower ultimate loss.</p>
+      <span class="impact impact-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🔒</div>
+      <h4>Privileged Access Management</h4>
+      <p>PAM solutions controlling admin account usage, just-in-time privilege, session recording. Absence of PAM in large enterprises is a material risk factor for lateral movement post-initial compromise.</p>
+      <span class="impact impact-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">📡</div>
+      <h4>Network Segmentation</h4>
+      <p>Degree of network segmentation limiting lateral movement. Flat networks dramatically increase ransomware blast radius — assessed via architecture diagrams or network questionnaire.</p>
+      <span class="impact impact-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">📜</div>
+      <h4>Prior Losses / Claims History</h4>
+      <p>5-year cyber claims history including near-misses. Repeated ransomware claims indicate systemic security gaps. One prior claim with remediation evidence treated differently to recurring losses.</p>
+      <span class="impact impact-low">Lower Impact</span>
+    </div>
+  </div>
+
+  <h2>Security Control Scoring Framework</h2>
+  <p>Most CY underwriters use a structured questionnaire scoring system to translate security controls into a risk quality score, which then feeds into the rate. The framework below reflects market practice across Beazley, CFC, Coalition and TMK. Responses are validated against external scanning data where available.</p>
+
+  <table class="score-table">
+    <thead>
+      <tr><th>Control</th><th>Green (Credit)</th><th>Amber (Neutral)</th><th>Red (Loading / Decline)</th><th>Weight</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>MFA — Email &amp; Remote Access</strong></td>
+        <td class="score-green">Deployed on all email + VPN/RDP + admin accounts</td>
+        <td class="score-amber">Email + VPN only; admin accounts lack MFA</td>
+        <td class="score-red">No MFA on email or remote access</td>
+        <td>25%</td>
+      </tr>
+      <tr>
+        <td><strong>EDR / AV Coverage</strong></td>
+        <td class="score-green">EDR ≥90% endpoints; XDR preferred; managed SOC</td>
+        <td class="score-amber">EDR 70–89% endpoints; traditional AV only on some</td>
+        <td class="score-red">EDR &lt;70%; traditional AV only; no SOC</td>
+        <td>20%</td>
+      </tr>
+      <tr>
+        <td><strong>Backup &amp; Recovery</strong></td>
+        <td class="score-green">3-2-1 with immutable/air-gapped; tested quarterly</td>
+        <td class="score-amber">Offsite backups; tested annually; no immutability</td>
+        <td class="score-red">Local-only backups; untested; no offsite copy</td>
+        <td>20%</td>
+      </tr>
+      <tr>
+        <td><strong>Patch Management</strong></td>
+        <td class="score-green">Critical patches &lt;72hrs; automated scanning</td>
+        <td class="score-amber">Critical patches &lt;30 days; manual process</td>
+        <td class="score-red">Outstanding critical CVEs &gt;90 days; no formal process</td>
+        <td>15%</td>
+      </tr>
+      <tr>
+        <td><strong>Privileged Access (PAM)</strong></td>
+        <td class="score-green">PAM solution deployed; just-in-time; session logs</td>
+        <td class="score-amber">Shared admin accounts but password vaulting in place</td>
+        <td class="score-red">Shared admin credentials; no vaulting; no monitoring</td>
+        <td>10%</td>
+      </tr>
+      <tr>
+        <td><strong>Email Security</strong></td>
+        <td class="score-green">DMARC enforce; anti-phishing; user training &lt;12mo</td>
+        <td class="score-amber">SPF/DKIM set; no DMARC enforce; annual training</td>
+        <td class="score-red">No DMARC; no anti-phishing filter; no user training</td>
+        <td>5%</td>
+      </tr>
+      <tr>
+        <td><strong>Network Segmentation</strong></td>
+        <td class="score-green">Segmented by function; OT/IT separated; micro-segmentation</td>
+        <td class="score-amber">VLAN segmentation; OT/IT partially separated</td>
+        <td class="score-red">Flat network; no segmentation; OT/IT combined</td>
+        <td>5%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Rate-on-Limit (ROL) Methodology</h2>
+  <p>Cyber is rated on a rate-on-line (ROL) basis — the premium expressed as a percentage of the policy limit — unlike property (which uses rate per £100 TIV) or liability (rate per £1m revenue). This reflects the fact that a cyber BI loss can exhaust the full policy limit regardless of asset values. ROL is then adjusted by sector, security score, limit adequacy and market conditions.</p>
+
+  <div class="formula-box">
+    <h4>Cyber Premium Calculation</h4>
+    <div class="formula-line"><span>Base ROL</span> = f( Sector Risk Class, Revenue Band, Limit Size )</div>
+    <div class="formula-line"><span>Adjusted ROL</span> = Base ROL × <em>Security Score Modifier</em> × <em>Limit Adequacy Factor</em> × <em>Market Cycle Factor</em></div>
+    <div class="formula-line"><span>Annual Premium</span> = Policy Limit × Adjusted ROL</div>
+    <div class="formula-line result"><span>Example:</span> £10m limit × 1.80% ROL = <em>£180,000 annual premium</em></div>
+  </div>
+
+  <p>The Security Score Modifier ranges from approximately 0.65× (excellent controls, all Green) to 2.5× (poor controls, multiple Red flags). A typical mid-market risk with mixed controls sits at 1.0–1.2×. The Limit Adequacy Factor penalises accounts where the limit is very low relative to revenue, or rewards accounts that purchase meaningful limits relative to their cyber BI exposure.</p>
+
+  <h2>Worked Premium Examples</h2>
+  <div class="example-grid">
+
+    <div class="example-card">
+      <div class="example-header">
+        <h4>Example A: Mid-Market UK Manufacturer</h4>
+        <p>£120m revenue · 1,800 employees · OT environment · some legacy systems</p>
+      </div>
+      <div class="example-body">
+        <div class="example-section">Risk Profile</div>
+        <div class="example-row"><span class="item">Sector</span><span class="val">Manufacturing (medium risk)</span></div>
+        <div class="example-row"><span class="item">Revenue</span><span class="val">£120m</span></div>
+        <div class="example-row"><span class="item">Policy Limit Purchased</span><span class="val">£5m</span></div>
+        <div class="example-row"><span class="item">MFA Status</span><span class="val">✅ Email + VPN</span></div>
+        <div class="example-row"><span class="item">EDR Status</span><span class="val">⚠️ ~75% coverage</span></div>
+        <div class="example-row"><span class="item">Backup Quality</span><span class="val">⚠️ Offsite, not tested</span></div>
+        <div class="example-row"><span class="item">OT Segmentation</span><span class="val">❌ Partially flat network</span></div>
+        <div class="example-row"><span class="item">Prior Claims (5yr)</span><span class="val">Nil</span></div>
+        <div class="example-section">Premium Calculation</div>
+        <div class="example-row"><span class="item">Base ROL (manufacturing)</span><span class="val">1.20%</span></div>
+        <div class="example-row"><span class="item">Security Score Modifier</span><span class="val">1.25× (mixed controls)</span></div>
+        <div class="example-row"><span class="item">Limit Adequacy Factor</span><span class="val">1.05× (£5m / £120m rev)</span></div>
+        <div class="example-row"><span class="item">Market Cycle Factor</span><span class="val">1.00× (stable 2024)</span></div>
+        <div class="example-row"><span class="item">Adjusted ROL</span><span class="val">1.58%</span></div>
+        <div class="example-row total"><span class="item">Annual Premium</span><span class="val">£79,000</span></div>
+        <div class="example-section">Conditions Imposed</div>
+        <div class="example-row"><span class="item">BEC Sublimit</span><span class="val">£250,000</span></div>
+        <div class="example-row"><span class="item">Contingent BI Sublimit</span><span class="val">£500,000 (unnamed)</span></div>
+        <div class="example-row"><span class="item">Warranty</span><span class="val">EDR to 90% within 6 months</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <h4>Example B: Large US Healthcare System</h4>
+        <p>$2.8bn revenue · 18 hospitals · 42,000 staff · EPIC EHR platform</p>
+      </div>
+      <div class="example-body">
+        <div class="example-section">Risk Profile</div>
+        <div class="example-row"><span class="item">Sector</span><span class="val">Healthcare (highest risk)</span></div>
+        <div class="example-row"><span class="item">Revenue</span><span class="val">$2.8bn</span></div>
+        <div class="example-row"><span class="item">Policy Limit Purchased</span><span class="val">$100m (xs $10m SIR)</span></div>
+        <div class="example-row"><span class="item">MFA Status</span><span class="val">✅ All access points</span></div>
+        <div class="example-row"><span class="item">EDR Status</span><span class="val">✅ 95%+ with managed SOC</span></div>
+        <div class="example-row"><span class="item">Backup Quality</span><span class="val">✅ Immutable + tested quarterly</span></div>
+        <div class="example-row"><span class="item">PAM</span><span class="val">✅ CyberArk deployed</span></div>
+        <div class="example-row"><span class="item">Prior Claims (5yr)</span><span class="val">1 ransomware (2021, $8m loss)</span></div>
+        <div class="example-section">Premium Calculation</div>
+        <div class="example-row"><span class="item">Base ROL (healthcare)</span><span class="val">2.20%</span></div>
+        <div class="example-row"><span class="item">Security Score Modifier</span><span class="val">0.75× (strong controls)</span></div>
+        <div class="example-row"><span class="item">Prior Loss Loading</span><span class="val">+0.20% (1 prior, remediated)</span></div>
+        <div class="example-row"><span class="item">High Limit Discount</span><span class="val">−0.15% ($100m limit)</span></div>
+        <div class="example-row"><span class="item">Adjusted ROL</span><span class="val">1.70%</span></div>
+        <div class="example-row total"><span class="item">Annual Premium</span><span class="val">$1,700,000</span></div>
+        <div class="example-section">Programme Structure</div>
+        <div class="example-row"><span class="item">Self-Insured Retention</span><span class="val">$10m (all loss types)</span></div>
+        <div class="example-row"><span class="item">Ransomware</span><span class="val">Full $100m limit</span></div>
+        <div class="example-row"><span class="item">Clinical Disruption BI</span><span class="val">$50m sublimit; 12hr WP</span></div>
+        <div class="example-row"><span class="item">BEC / Fraud</span><span class="val">$5m sublimit</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠️ Underwriting Alert: Aggregation &amp; Contingent BI Post-CrowdStrike (July 2024)</h4>
+    <p>The CrowdStrike Falcon sensor update outage of July 2024 triggered contingent BI claims across thousands of policies simultaneously — airlines, hospitals, banks and logistics all claimed under unnamed dependent systems coverage from the same root cause event.</p>
+    <p>Following CrowdStrike, many Lloyd's syndicates have materially tightened unnamed contingent BI: sub-limits reduced from 20–25% of policy limit to 5–10%, or excluded entirely with named-only cover available by endorsement. Underwriters now actively assess the insured's exposure to systemic third-party dependencies (AWS, Azure, Microsoft 365, Salesforce, CrowdStrike itself) as part of the application process.</p>
+  </div>
+
+  <div class="context-box">
+    <h3>The "Single Risk Minimum Security Standards" — Lloyd's Market Requirements</h3>
+    <p>Since 2022, Lloyd's has required managing agents to implement minimum security control standards before binding CY coverage above certain thresholds. The practical effect is that market-standard application forms now include binding warranties on MFA, EDR and backup quality for accounts above £/$/€1m in limit.</p>
+    <p>A warranty is not merely a rating factor — it is a condition precedent to cover. If MFA was warranted as "deployed" but was in fact absent at the time of a ransomware attack, the insurer may have grounds to decline the claim entirely. Brokers and insureds must treat underwriting questionnaire responses as legal representations, not aspirational statements.</p>
+    <p>The Beazley Breach Response (BBR) panel approach represents the gold standard in claims management: pre-approved forensic firms, legal counsel, and notification vendors are engaged immediately on a claim, keeping response costs efficient and reducing notification timeline liability. Policyholders who deviate from panel vendors typically face higher costs that may not be fully reimbursed.</p>
+  </div>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Cyber Insurance (CY · CZ · CG · CH)</span> — Module 04: Underwriting Methodology</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Premium examples are illustrative market estimates.</p>
+</footer>
+</body>
+</html>

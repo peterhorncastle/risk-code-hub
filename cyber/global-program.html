@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Global Programmes – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--cyber:#1565c0;--cyber-dark:#0a3d7a;--cyber-light:#e8f0fe;--accent:#c8a84b;--teal:#0097a7;--purple:#6a1b9a;--light:#f0f4ff;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--red:#8b1a1a;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1565c0 55%,#6a1b9a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d0f8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--cyber-dark); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .breadcrumb { font-size:0.8rem; color:#b8d0f8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+
+    /* Limit tower */
+    .tower { display:flex; flex-direction:column; gap:4px; margin:22px 0 36px; max-width:600px; }
+    .tower-layer { padding:14px 22px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; }
+    .tower-layer .info { font-size:0.85rem; font-weight:600; color:#fff; }
+    .tower-layer .amount { font-size:0.9rem; font-weight:800; color:rgba(255,255,255,0.9); }
+    .tl-master { background:#0d2240; }
+    .tl-lloyds { background:#1565c0; }
+    .tl-local { background:#6a1b9a; }
+    .tl-xs { background:#0097a7; }
+    .tl-sir { background:#c45c00; }
+
+    /* Jurisdiction cards */
+    .juris-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; margin:22px 0 34px; }
+    .juris-card { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    .juris-header { padding:14px 18px; display:flex; align-items:center; gap:12px; }
+    .juris-header .flag { font-size:1.6rem; }
+    .juris-header h4 { font-size:0.92rem; font-weight:700; color:#fff; }
+    .juris-header p { font-size:0.74rem; color:rgba(255,255,255,0.75); margin:0; }
+    .jh-us { background:#1565c0; }
+    .jh-uk { background:#0d2240; }
+    .jh-eu { background:#6a1b9a; }
+    .jh-au { background:#0097a7; }
+    .jh-sg { background:#b71c1c; }
+    .jh-ae { background:#2a7a3a; }
+    .juris-body { padding:16px 18px; }
+    .juris-row { display:flex; gap:8px; padding:5px 0; border-bottom:1px dashed var(--border); font-size:0.82rem; }
+    .juris-row:last-child { border-bottom:none; }
+    .juris-row .jlabel { color:var(--muted); min-width:110px; }
+    .juris-row .jval { color:var(--navy); font-weight:600; }
+
+    /* Regulation table */
+    .reg-table { width:100%; border-collapse:collapse; margin:20px 0 30px; font-size:0.88rem; }
+    .reg-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .reg-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .reg-table tr:nth-child(even) td { background:#fafbfc; }
+
+    /* Systemic risk / war exclusion */
+    .clause-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0 30px; }
+    @media(max-width:640px){.clause-grid{grid-template-columns:1fr;}}
+    .clause-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px; border-top:4px solid var(--navy); }
+    .clause-card.lma5565 { border-top-color:var(--red); }
+    .clause-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .clause-card p { font-size:0.82rem; color:var(--muted); line-height:1.5; margin:0; }
+    .clause-card .tag-pill { display:inline-block; font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:10px; background:var(--cyber-light); color:var(--cyber); margin-bottom:8px; }
+
+    /* ILS section */
+    .ils-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; margin:20px 0 30px; }
+    .ils-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; }
+    .ils-card h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .ils-card p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:20px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#b8d0f8; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Cyber Insurance</a> › Global Programmes</div>
+  <div class="tag">Module 07 — Global Programme Structuring</div>
+  <h1>Cyber Global Programme Structuring</h1>
+  <p>Multinational companies face a patchwork of cyber notification laws, data sovereignty requirements and local admitted insurance obligations. This module covers programme structures for global cyber placements, key jurisdiction profiles, the Lloyd's mandatory systemic risk exclusions (LMA 5564/5565), cyber aggregation management, and emerging ILS/parametric structures for systemic cyber risk.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programmes</a>
+</nav>
+<main>
+
+  <h2>Cyber Programme Architecture</h2>
+  <p>A global cyber programme for a large multinational typically layers a Lloyd's/London market master policy with local admitted policies or DIC/DIL (difference-in-conditions / difference-in-limits) wraps in jurisdictions with admitted requirements. Unlike property programmes, cyber has relatively few hard local admitted requirements globally — but where they exist (Brazil, China, Argentina), they must be addressed carefully.</p>
+
+  <div class="tower">
+    <div class="tower-layer tl-master">
+      <span class="info">Lloyd's / London Market Master Policy (CY)</span>
+      <span class="amount">$200m xs $50m SIR</span>
+    </div>
+    <div class="tower-layer tl-lloyds">
+      <span class="info">Lloyd's Lead Line (25–30% of limit)</span>
+      <span class="amount">$50m xs $50m SIR</span>
+    </div>
+    <div class="tower-layer tl-xs">
+      <span class="info">Excess Layer — London + Bermuda Market</span>
+      <span class="amount">$100m xs $100m</span>
+    </div>
+    <div class="tower-layer tl-local">
+      <span class="info">Local Admitted Policies (where required) — DIC/DIL wrap</span>
+      <span class="amount">Local limits (e.g. $5m–$25m per country)</span>
+    </div>
+    <div class="tower-layer tl-sir">
+      <span class="info">Self-Insured Retention / Captive</span>
+      <span class="amount">$50m SIR (all perils)</span>
+    </div>
+  </div>
+
+  <h2>Key Jurisdiction Profiles</h2>
+  <div class="juris-grid">
+    <div class="juris-card">
+      <div class="juris-header jh-us">
+        <span class="flag">🇺🇸</span>
+        <div><h4>United States</h4><p>Largest cyber market globally</p></div>
+      </div>
+      <div class="juris-body">
+        <div class="juris-row"><span class="jlabel">Regulation</span><span class="jval">50-state patchwork + SEC rules</span></div>
+        <div class="juris-row"><span class="jlabel">Key Laws</span><span class="jval">HIPAA, CCPA/CPRA, NY SHIELD, SEC cybersecurity disclosure (2023)</span></div>
+        <div class="juris-row"><span class="jlabel">Notification</span><span class="jval">30–72 hrs (varies by state); SEC: 4 business days (material incidents)</span></div>
+        <div class="juris-row"><span class="jlabel">Admitted?</span><span class="jval">Surplus lines broadly acceptable; no hard admitted requirement for cyber</span></div>
+        <div class="juris-row"><span class="jlabel">Key Risk</span><span class="jval">Class action exposure; PCI-DSS; healthcare (HIPAA) penalties up to $1.9m/yr</span></div>
+        <div class="juris-row"><span class="jlabel">Ransom Payments</span><span class="jval">Legal; OFAC sanctions screening required; state prohibitions under discussion</span></div>
+      </div>
+    </div>
+
+    <div class="juris-card">
+      <div class="juris-header jh-uk">
+        <span class="flag">🇬🇧</span>
+        <div><h4>United Kingdom</h4><p>World-leading Lloyd's market; post-Brexit GDPR</p></div>
+      </div>
+      <div class="juris-body">
+        <div class="juris-row"><span class="jlabel">Regulation</span><span class="jval">UK GDPR, DPA 2018, NIS Regulations 2018, NIS2 (incoming)</span></div>
+        <div class="juris-row"><span class="jlabel">Key Laws</span><span class="jval">UK GDPR: fines up to £17.5m or 4% global turnover. ICO enforcement active.</span></div>
+        <div class="juris-row"><span class="jlabel">Notification</span><span class="jval">72 hours to ICO; without undue delay to individuals</span></div>
+        <div class="juris-row"><span class="jlabel">Admitted?</span><span class="jval">Lloyd's policies directly admitted; no local fronting required</span></div>
+        <div class="juris-row"><span class="jlabel">Key Risk</span><span class="jval">ICO enforcement (BA £20m fine 2020); ransomware on NHS; BEC on financial services</span></div>
+        <div class="juris-row"><span class="jlabel">Ransom Payments</span><span class="jval">Legal; OFAC equivalent (OFSI) sanctions screening required</span></div>
+      </div>
+    </div>
+
+    <div class="juris-card">
+      <div class="juris-header jh-eu">
+        <span class="flag">🇪🇺</span>
+        <div><h4>European Union</h4><p>GDPR + NIS2; fragmented national enforcement</p></div>
+      </div>
+      <div class="juris-body">
+        <div class="juris-row"><span class="jlabel">Regulation</span><span class="jval">GDPR, NIS2 Directive (Oct 2024), DORA (financial services, Jan 2025)</span></div>
+        <div class="juris-row"><span class="jlabel">Key Laws</span><span class="jval">GDPR: 72hr notification, €20m / 4% global turnover fines. NIS2 expands scope significantly.</span></div>
+        <div class="juris-row"><span class="jlabel">Notification</span><span class="jval">72 hours (GDPR); NIS2: 24-hr early warning + 72-hr detailed report</span></div>
+        <div class="juris-row"><span class="jlabel">Admitted?</span><span class="jval">Most EU states: non-admitted Lloyd's policies generally acceptable; Germany/France: local fronting sometimes required</span></div>
+        <div class="juris-row"><span class="jlabel">Key Risk</span><span class="jval">GDPR fine coverage debated (Luxembourg: insurable; France: not insurable for fines); NIS2 personal liability for management</span></div>
+        <div class="juris-row"><span class="jlabel">Ransom Payments</span><span class="jval">Legal in most states; DORA imposes ICT risk management obligations on financial entities</span></div>
+      </div>
+    </div>
+
+    <div class="juris-card">
+      <div class="juris-header jh-au">
+        <span class="flag">🇦🇺</span>
+        <div><h4>Australia</h4><p>Active regulatory environment; growing market</p></div>
+      </div>
+      <div class="juris-body">
+        <div class="juris-row"><span class="jlabel">Regulation</span><span class="jval">Privacy Act 1988 (NDB Scheme), SOCI Act 2018 (critical infrastructure)</span></div>
+        <div class="juris-row"><span class="jlabel">Key Laws</span><span class="jval">Notifiable Data Breaches: 30 days to report to OAIC. Fines up to A$50m for serious/repeated breaches.</span></div>
+        <div class="juris-row"><span class="jlabel">Notification</span><span class="jval">30 days to OAIC; "as soon as practicable" to affected individuals</span></div>
+        <div class="juris-row"><span class="jlabel">Admitted?</span><span class="jval">Admitted requirement for some classes; Lloyd's has Australian licence; local fronting via Lloyds Australia</span></div>
+        <div class="juris-row"><span class="jlabel">Key Risk</span><span class="jval">Medibank (2022): 9.7m records; Latitude Financial (2023): 14m records; government CNI focus</span></div>
+        <div class="juris-row"><span class="jlabel">Ransom Payments</span><span class="jval">Legal; Cyber Security Act 2024 requires reporting ransom payments to ASD</span></div>
+      </div>
+    </div>
+
+    <div class="juris-card">
+      <div class="juris-header jh-sg">
+        <span class="flag">🇸🇬</span>
+        <div><h4>Singapore / Asia-Pacific</h4><p>Regional hub; PDPA enforcement active</p></div>
+      </div>
+      <div class="juris-body">
+        <div class="juris-row"><span class="jlabel">Regulation</span><span class="jval">PDPA 2012 (amended 2021), MAS Technology Risk Management Guidelines</span></div>
+        <div class="juris-row"><span class="jlabel">Key Laws</span><span class="jval">PDPA: mandatory breach notification; fines up to S$1m (increasing). MAS TRM: financial sector specific.</span></div>
+        <div class="juris-row"><span class="jlabel">Notification</span><span class="jval">3 calendar days to PDPC; 30 days if affects ≥500 individuals</span></div>
+        <div class="juris-row"><span class="jlabel">Admitted?</span><span class="jval">Singapore admitted market via MAS-licensed insurers; Lloyd's limited access. Local fronting generally required.</span></div>
+        <div class="juris-row"><span class="jlabel">Key Risk</span><span class="jval">SingHealth breach (2018, 1.5m records); financial services ransomware; regional supply chain exposure</span></div>
+        <div class="juris-row"><span class="jlabel">Ransom Payments</span><span class="jval">Legal; no mandatory reporting requirement (unlike Australia post-2024)</span></div>
+      </div>
+    </div>
+
+    <div class="juris-card">
+      <div class="juris-header jh-ae">
+        <span class="flag">🇦🇪</span>
+        <div><h4>UAE / Middle East</h4><p>Emerging market; DIFC and ADGM frameworks</p></div>
+      </div>
+      <div class="juris-body">
+        <div class="juris-row"><span class="jlabel">Regulation</span><span class="jval">UAE Personal Data Protection Law (2021), DIFC/ADGM data regulations, NCA cybersecurity</span></div>
+        <div class="juris-row"><span class="jlabel">Key Laws</span><span class="jval">UAE PDPL: 72hr notification for significant breaches. Fines up to AED 20m. DIFC: more mature regulatory framework.</span></div>
+        <div class="juris-row"><span class="jlabel">Notification</span><span class="jval">72 hours to UAE Data Office (significant breaches); DIFC/ADGM have separate notification regimes</span></div>
+        <div class="juris-row"><span class="jlabel">Admitted?</span><span class="jval">Local admitted coverage strongly preferred; Lloyd's limited; local fronting via Al Wathba, Oman Insurance etc.</span></div>
+        <div class="juris-row"><span class="jlabel">Key Risk</span><span class="jval">Oil & gas OT/ICS exposure; nation-state activity (Shamoon); government / CNI target profile</span></div>
+        <div class="juris-row"><span class="jlabel">Ransom Payments</span><span class="jval">Generally legal; no specific prohibition; sanctions screening still required (OFAC US nexus)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Key Cyber Regulations at a Glance</h2>
+  <table class="reg-table">
+    <thead>
+      <tr><th>Regulation</th><th>Jurisdiction</th><th>Scope</th><th>Max Fine</th><th>Notification Timeline</th><th>Coverage Impact</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>GDPR</strong></td><td>EU + UK (UK GDPR)</td><td>Any entity handling EU/UK personal data</td><td>€20m / 4% global turnover</td><td>72 hours to DPA; without delay to individuals</td><td>Regulatory defence costs widely covered; fines debated by jurisdiction</td></tr>
+      <tr><td><strong>HIPAA/HITECH</strong></td><td>USA</td><td>Covered entities + business associates handling PHI</td><td>$1.9m/yr per category</td><td>60 days to HHS; 60 days to individuals; media notice if >500</td><td>Core CH code coverage; regulatory defence + fines (where insurable)</td></tr>
+      <tr><td><strong>CCPA/CPRA</strong></td><td>California, USA</td><td>For-profit businesses meeting revenue/data thresholds</td><td>$7,500/intentional violation; $100–750/consumer (private right of action)</td><td>Expedient notification; no fixed timeline</td><td>Privacy liability section; class action exposure significant</td></tr>
+      <tr><td><strong>NIS2 Directive</strong></td><td>EU Member States</td><td>Essential + important entities (energy, health, transport, digital)</td><td>€10m / 2% global turnover (essential entities)</td><td>24hr early warning; 72hr full report to CSIRT</td><td>Regulatory defence section; management personal liability new post-NIS2</td></tr>
+      <tr><td><strong>DORA</strong></td><td>EU Financial Sector</td><td>Banks, insurers, investment firms + ICT suppliers</td><td>Supervisory fines; ICT supplier blacklisting</td><td>4hr initial report; 72hr intermediate; 1 month final (major incidents)</td><td>Emerging impact on CZ (Tech E&O) for ICT service providers to EU financial firms</td></tr>
+      <tr><td><strong>SEC Cyber Rules</strong></td><td>USA (public companies)</td><td>SEC-registered public companies</td><td>SEC enforcement; D&O / securities litigation exposure</td><td>4 business days (material incidents); annual disclosure of governance</td><td>D&O + CY interaction; board-level cyber governance now insurance-relevant</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Lloyd's Systemic Risk Exclusions: LMA 5564 &amp; LMA 5565</h2>
+  <p>Following concern that a single nation-state cyber attack could simultaneously trigger thousands of policies — creating unquantifiable market-wide accumulation — Lloyd's mandated that all standalone cyber policies include one of two war/systemic exclusion clauses effective 31 March 2023. The choice between LMA 5564 and LMA 5565 affects the scope of what is excluded and has been the subject of significant coverage dispute analysis.</p>
+
+  <div class="clause-grid">
+    <div class="clause-card">
+      <div class="tag-pill">LMA 5564</div>
+      <h4>Cyber War Exclusion</h4>
+      <p>Excludes losses from <em>cyber operations</em> that form part of a <strong>war</strong> between "major powers" (defined as a subset of nation-states with significant cyber capability). The exclusion is narrower: it requires an active state of war between specified states. Criminal ransomware — even if state-sponsored — may not trigger this exclusion.</p>
+      <p style="margin-top:10px;">Wider coverage for policyholders; preferred by risk managers. The attribution debate — was an attack truly part of "war"? — is partially answered by the high threshold of "major power war."</p>
+    </div>
+    <div class="clause-card lma5565">
+      <div class="tag-pill">LMA 5565</div>
+      <h4>Cyber Infrastructure Attack Exclusion</h4>
+      <p>Excludes losses from <em>cyber operations</em> that: (i) form part of a war between any states, OR (ii) are directed at <strong>critical national infrastructure</strong> (power, water, financial systems, transport, health). The exclusion is broader and applies even without a formal state of war if CNI is targeted.</p>
+      <p style="margin-top:10px;">More problematic for healthcare (CH) and CNI operators since an attack targeting their sector could trigger the exclusion even if the policyholder is a collateral victim, not a direct target.</p>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠️ Attribution Problem: Is NotPetya Covered? The Merck Precedent</h4>
+    <p>NotPetya (2017) was attributed to Russian GRU military intelligence. Merck filed a $1.4bn property claim; insurers invoked war exclusions. A New Jersey Superior Court ruled in Merck's favour in January 2023: the war exclusion in the property policy (written before the cyber era) required a "physical" hostile or warlike action and did not contemplate state-sponsored cyber operations.</p>
+    <p>LMA 5564 and LMA 5565 were written specifically to address this gap — they are cyber-specific and designed to exclude state-sponsored cyber attacks from cyber policies. Whether a future attack on the scale of NotPetya would be excluded under these new clauses (rather than the old property war exclusions) remains untested. The breadth of "state-sponsored" and whether a criminal group acting with state tolerance qualifies is the key open question — and will likely drive major coverage litigation in the next decade.</p>
+  </div>
+
+  <h2>Aggregation Management: The Systemic Risk Problem</h2>
+  <p>Systemic cyber risk — a single event triggering simultaneous losses across thousands of policies — is the existential challenge of cyber underwriting. Lloyd's requires managing agents to run realistic disaster scenarios (RDS) for cyber accumulation, stress-testing their portfolio against events including: mass ransomware campaign; cloud provider outage; DNS infrastructure attack; financial system cyber attack; coordinated critical infrastructure attack.</p>
+
+  <p>The key aggregation vectors identified post-2020:</p>
+
+  <table class="reg-table">
+    <thead>
+      <tr><th>Aggregation Vector</th><th>Example Event</th><th>Policies Potentially Triggered</th><th>Underwriting Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Cloud Provider Outage</strong></td><td>AWS/Azure availability zone failure caused by cyber attack</td><td>Thousands of policyholders using that cloud</td><td>Unnamed contingent BI sublimits; named-only cloud coverage available by endorsement</td></tr>
+      <tr><td><strong>Software Supply Chain</strong></td><td>SolarWinds (2020), Kaseya (2021), MOVEit (2023)</td><td>Hundreds of policyholders sharing a compromised platform</td><td>Increased scrutiny of named software dependencies; systemic clauses</td></tr>
+      <tr><td><strong>Managed Service Provider</strong></td><td>MSP compromised → all SME clients encrypted simultaneously</td><td>50–500 clients per MSP</td><td>CZ underwriting tightened; MSP questionnaires expanded; liability caps in MSP contracts</td></tr>
+      <tr><td><strong>Security Tool Failure</strong></td><td>CrowdStrike Falcon sensor update crash (July 2024)</td><td>Estimated 8.5m Windows devices; thousands of claims</td><td>Technology vendor outage exclusions; unnamed contingent BI sublimit reductions</td></tr>
+      <tr><td><strong>Nation-State Attack on CNI</strong></td><td>NotPetya (2017), Ukraine power grid (2015–2016)</td><td>All policies in affected country/sector</td><td>LMA 5564/5565 exclusions; CNI-specific exclusions; RDS modelling</td></tr>
+    </tbody>
+  </table>
+
+  <h2>ILS and Parametric Cyber Structures</h2>
+  <p>Traditional insurance-linked securities (cat bonds) have been slow to enter the cyber market because cyber lacks the actuarially defined modelling that underpins property cat ILS. However, parametric and index-based structures are emerging to provide capital market capacity for systemic cyber risk — the tail that traditional reinsurance is most reluctant to price.</p>
+
+  <div class="ils-grid">
+    <div class="ils-card">
+      <h4>Parametric Cyber Triggers</h4>
+      <p>Payment triggered by a defined index (e.g. number of organisations reporting ransomware above a threshold in a 30-day window, measured by a named third-party data provider). Removes attribution and adjustment disputes. Basis risk: payout may not correlate with insured's specific loss.</p>
+    </div>
+    <div class="ils-card">
+      <h4>Industry Loss Warranties (ILWs)</h4>
+      <p>Pay when total industry loss from a specified cyber event exceeds a trigger (e.g. $5bn total industry loss from a single ransomware campaign). Modelled on catastrophe ILW structure. Cyber ILWs trading in limited volume in Bermuda market; pricing highly uncertain.</p>
+    </div>
+    <div class="ils-card">
+      <h4>Cyber Cat Bonds</h4>
+      <p>Early-stage; Beazley issued the first cyber catastrophe bond ($45m, 2023) using a modelled loss trigger. Represents proof-of-concept for capital market participation in cyber tail risk. Premium savings vs. traditional reinsurance; requires sophisticated investors comfortable with cyber model uncertainty.</p>
+    </div>
+    <div class="ils-card">
+      <h4>Cyber Sidecars</h4>
+      <p>Third-party capital participates alongside a cyber underwriter's portfolio on a quota-share basis. Provides capacity but requires investors to accept cyber's non-modelled tail — attractive yield premium compensates for model uncertainty. Growing in Bermuda alongside cat-linked reinsurance sidecars.</p>
+    </div>
+  </div>
+
+  <div class="context-box">
+    <h3>Case Study: Global Manufacturer — Programme Restructure Post-MOVEit</h3>
+    <p>A €5bn revenue European industrial conglomerate with operations in 22 countries had a £75m standalone CY policy at Lloyd's when MOVEit was exploited in May 2023. Their HR software vendor used MOVEit for file transfer; 280,000 employee records were exfiltrated. The claim was covered under their data breach response section but the incident drove a programme review.</p>
+    <p><strong>Before:</strong> Single Lloyd's policy with £75m limit, unnamed contingent BI at 20% sub-limit, no local policies, SIR of £1m.</p>
+    <p><strong>After restructure:</strong> £50m SIR (self-insurance layer using captive), £150m Lloyd's master policy (CY), local admitted policies in Germany, France, Brazil and China (DIC/DIL structure), unnamed contingent BI reduced to 5% with named cloud endorsement for AWS and Microsoft 365, formal third-party vendor cyber risk assessment programme required as policy condition.</p>
+    <p>The restructure increased total premium from £1.8m to £2.4m (+33%) but doubled the limit from £75m to £200m effective coverage, dramatically improved local regulatory compliance, and eliminated the most problematic accumulation exposures. The SIR increase to £50m was offset by captive dividend income and improved pricing on the excess layers.</p>
+  </div>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Cyber Insurance (CY · CZ · CG · CH)</span> — Module 07: Global Programme Structuring</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Regulatory details are indicative; legal advice should be sought for specific situations.</p>
+</footer>
+</body>
+</html>

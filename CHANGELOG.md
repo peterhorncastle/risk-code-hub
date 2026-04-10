@@ -1,5 +1,19 @@
 # Risk Code Hub — Changelog
 
+## v1.6 — April 2026
+**Session: 10 April 2026**
+- Cyber hub complete (Lloyd's codes CY, CZ, CG, CH)
+- 7 modules built: index, history, timeline, database, underwriting, rates-analysis, risk-mitigation, global-program
+- Loss database: 35 incidents 2013–2024 — Change Healthcare ($1.5bn+), CrowdStrike outage ($5.4bn economic), NotPetya/Maersk ($300m+), NotPetya/Merck ($1.4bn), MOVEit/Clop (3,500+ orgs), Colonial Pipeline ($4.4m ransom), MGM Resorts ($100m), Kaseya/REvil (1,500+ MSP clients)
+- History: 7 era blocks from Y2K/Tech PI (1995–2000) through Beazley first standalone product, retail/healthcare breach era, Target/Sony/nation-state attacks, WannaCry/NotPetya systemic risk discovery, RaaS crisis/hardening 2019–2022, to stabilisation/AI/Change Healthcare 2022–present
+- Timeline: 18+ events with colour-coded dots (red=major loss, purple=nation-state, blue=criminal RaaS)
+- Underwriting: CY/CZ/CG/CH coverage structures, sublimit architecture table, 12 rating factor cards, security control scoring framework (7 controls × Green/Amber/Red), ROL methodology with formula, two worked examples (UK manufacturer £79k; US healthcare system $1.7m)
+- Rates analysis: Chart.js rate index 2015–2026 (large enterprise vs mid-market), 8 market phase table, sector ROL grid (8 sectors), stacked bar combined ratio chart, ROE scenarios (Bull 22.4%, Base 9.8%, Bear −18.5%)
+- Risk mitigation: 9 security control tier cards, MFA type breakdown (FIDO2/TOTP/Push/SMS/Passkeys), backup 3-2-1 diagram with assessment table, 7-stage IR lifecycle, security scoring summary matrix
+- Global programmes: 6 jurisdiction profiles (USA, UK, EU, Australia, Singapore, UAE), regulations table (GDPR/HIPAA/CCPA/NIS2/DORA/SEC), LMA 5564/5565 systemic war exclusion analysis, aggregation vectors table, ILS/parametric structures, global manufacturer case study
+- Updated hub-index.json: cyber status "complete"
+- Updated build-tracker.html: cyber complete; next hub TBD
+
 ## v1.5 — April 2026
 **Session: 10 April 2026**
 - Downstream / Onshore Energy hub complete (Lloyd's codes EA, EB, EF, PG)

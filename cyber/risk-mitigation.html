@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Risk Mitigation – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--cyber:#1565c0;--cyber-dark:#0a3d7a;--cyber-light:#e8f0fe;--accent:#c8a84b;--teal:#0097a7;--purple:#6a1b9a;--light:#f0f4ff;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--red:#8b1a1a;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1565c0 55%,#6a1b9a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d0f8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--cyber-dark); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .breadcrumb { font-size:0.8rem; color:#b8d0f8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+
+    /* Control tier cards */
+    .tier-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; margin:22px 0 34px; }
+    .tier-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px; }
+    .tier-card .tier-badge { display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:1px; padding:3px 10px; border-radius:12px; margin-bottom:10px; }
+    .tier1 .tier-badge { background:#fce8e8; color:#8b1a1a; }
+    .tier2 .tier-badge { background:#fff3cd; color:#7a4500; }
+    .tier3 .tier-badge { background:#e8f0fe; color:#0a3d7a; }
+    .tier-card h4 { font-size:0.92rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .tier-card p { font-size:0.82rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    /* MFA breakdown */
+    .mfa-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:20px 0 30px; }
+    @media(max-width:600px){.mfa-grid{grid-template-columns:1fr;}}
+    .mfa-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; }
+    .mfa-card h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:8px; padding-bottom:8px; border-bottom:2px solid var(--accent); }
+    .mfa-card p { font-size:0.8rem; color:var(--muted); line-height:1.5; margin:0; }
+    .mfa-card .strength { display:inline-block; margin-top:10px; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:10px; }
+    .str-high { background:#e8f5e9; color:#2a7a3a; }
+    .str-med { background:#fff3cd; color:#7a4500; }
+    .str-low { background:#fce8e8; color:#8b1a1a; }
+
+    /* Backup architecture */
+    .backup-diagram { display:flex; gap:0; margin:22px 0 30px; flex-wrap:wrap; }
+    .backup-layer { flex:1; min-width:150px; background:#fff; border:1px solid var(--border); padding:20px; text-align:center; position:relative; }
+    .backup-layer:first-child { border-radius:10px 0 0 10px; }
+    .backup-layer:last-child { border-radius:0 10px 10px 0; }
+    .backup-layer .num { font-size:2rem; font-weight:800; color:var(--cyber); }
+    .backup-layer h4 { font-size:0.85rem; font-weight:700; color:var(--navy); margin:6px 0; }
+    .backup-layer p { font-size:0.78rem; color:var(--muted); line-height:1.4; margin:0; }
+    .backup-layer.immutable { border-top:4px solid var(--green); }
+
+    /* Control assessment table */
+    .ctrl-table { width:100%; border-collapse:collapse; margin:20px 0 30px; font-size:0.87rem; }
+    .ctrl-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .ctrl-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .ctrl-table tr:nth-child(even) td { background:#fafbfc; }
+    .dot-green { color:var(--green); font-weight:700; font-size:1.1rem; }
+    .dot-amber { color:#b8630a; font-weight:700; font-size:1.1rem; }
+    .dot-red { color:var(--red); font-weight:700; font-size:1.1rem; }
+
+    /* IR lifecycle */
+    .ir-steps { display:flex; gap:0; margin:22px 0 30px; overflow-x:auto; }
+    .ir-step { flex:1; min-width:100px; padding:16px 12px; text-align:center; position:relative; }
+    .ir-step:nth-child(odd) { background:#fff; border:1px solid var(--border); }
+    .ir-step:nth-child(even) { background:var(--cyber-light); border:1px solid var(--cyber); }
+    .ir-step:first-child { border-radius:10px 0 0 10px; }
+    .ir-step:last-child { border-radius:0 10px 10px 0; }
+    .ir-step .icon { font-size:1.4rem; margin-bottom:6px; }
+    .ir-step h4 { font-size:0.78rem; font-weight:700; color:var(--navy); margin-bottom:4px; }
+    .ir-step p { font-size:0.7rem; color:var(--muted); margin:0; line-height:1.4; }
+
+    /* Security scoring summary */
+    .score-summary { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:22px 0 34px; }
+    .score-block { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-left:6px solid var(--cyber); }
+    .score-block.amber-b { border-left-color:#f5a000; }
+    .score-block.red-b { border-left-color:var(--red); }
+    .score-block h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .score-block p { font-size:0.8rem; color:var(--muted); line-height:1.5; margin:0; }
+    .score-block .outcome { font-size:0.78rem; font-weight:700; margin-top:8px; }
+    .outcome-green { color:var(--green); }
+    .outcome-amber { color:#b8630a; }
+    .outcome-red { color:var(--red); }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:20px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#b8d0f8; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Cyber Insurance</a> › Risk Mitigation</div>
+  <div class="tag">Module 06 — Risk Mitigation</div>
+  <h1>Cyber Risk Mitigation</h1>
+  <p>The underwriter's framework for assessing an insured's security controls: MFA types and their relative strength, EDR/XDR deployment, backup architecture (3-2-1 rule), patch management cadence, privileged access management, and incident response planning. The quality of these controls directly drives rate, limit availability and coverage conditions.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+
+  <h2>The Three Tiers of Cyber Security Controls</h2>
+  <p>Cyber underwriters broadly organise security controls into three tiers based on their demonstrated impact on ransomware and breach outcomes. Tier 1 controls are binary — their absence is typically a decline or major loading condition. Tier 2 controls inform rate. Tier 3 controls command credits but their absence alone rarely blocks coverage.</p>
+
+  <div class="tier-grid">
+    <div class="tier-card tier1">
+      <div class="tier-badge">Tier 1 — Critical</div>
+      <h4>Multi-Factor Authentication</h4>
+      <p>Required on email, VPN/remote access, and privileged accounts. Absence = no cover or 2–3× rate loading. Phishing-resistant MFA (FIDO2) is gold standard post-2023.</p>
+    </div>
+    <div class="tier-card tier1">
+      <div class="tier-badge">Tier 1 — Critical</div>
+      <h4>EDR on Endpoints</h4>
+      <p>Active endpoint detection covering ≥90% of devices. Must be monitored (SOC or managed service). Unmonitored AV-only endpoints treated as equivalent to no EDR by most underwriters.</p>
+    </div>
+    <div class="tier-card tier1">
+      <div class="tier-badge">Tier 1 — Critical</div>
+      <h4>Offline / Immutable Backups</h4>
+      <p>At least one backup copy that ransomware cannot reach or encrypt. Air-gapped or immutable (write-once) storage. Untested backups are treated with significant scepticism — recovery failures are common.</p>
+    </div>
+    <div class="tier-card tier2">
+      <div class="tier-badge">Tier 2 — Important</div>
+      <h4>Privileged Access Management</h4>
+      <p>PAM tools controlling admin credentials (CyberArk, BeyondTrust, Delinea). JIT (just-in-time) privilege is best practice. Shared admin passwords without vaulting = significant loading.</p>
+    </div>
+    <div class="tier-card tier2">
+      <div class="tier-badge">Tier 2 — Important</div>
+      <h4>Patch Management</h4>
+      <p>Formalised process with SLA: critical CVEs ≤72hrs, high CVEs ≤14 days. Internet-facing systems patched first. Asset inventory required — you can't patch what you don't know exists.</p>
+    </div>
+    <div class="tier-card tier2">
+      <div class="tier-badge">Tier 2 — Important</div>
+      <h4>Email Security (DMARC)</h4>
+      <p>DMARC in enforce mode prevents domain spoofing BEC attacks. SPF + DKIM are minimum. Anti-phishing training with simulated tests within 12 months expected. SMS phishing increasingly targeted.</p>
+    </div>
+    <div class="tier-card tier2">
+      <div class="tier-badge">Tier 2 — Important</div>
+      <h4>Network Segmentation</h4>
+      <p>VLAN or micro-segmentation limits ransomware blast radius. OT/IT separation critical for manufacturers (flat network = entire factory down). Zero-trust architecture commands meaningful rate credit.</p>
+    </div>
+    <div class="tier-card tier3">
+      <div class="tier-badge">Tier 3 — Best Practice</div>
+      <h4>Vulnerability Management / ASM</h4>
+      <p>External attack surface management (Bitsight, SecurityScorecard, Tenable). Continuous scanning vs. point-in-time. Underwriters use external scans to validate application responses.</p>
+    </div>
+    <div class="tier-card tier3">
+      <div class="tier-badge">Tier 3 — Best Practice</div>
+      <h4>Zero Trust Architecture</h4>
+      <p>"Never trust, always verify" — assumes breach. Identity-based access, no implicit trust from network location. SASE/SSE frameworks. Early adoption; commands premium credit of 10–20%.</p>
+    </div>
+  </div>
+
+  <h2>MFA: Type Matters</h2>
+  <p>Not all MFA is equal. The rise of adversary-in-the-middle (AiTM) phishing toolkits (Evilginx, Modlishka) and SIM-swapping attacks has rendered SMS OTP and push notification MFA increasingly vulnerable. Underwriters at leading Lloyd's syndicates are now distinguishing between MFA types when assessing risk quality — phishing-resistant FIDO2 hardware keys command a credit that SMS MFA does not.</p>
+
+  <div class="mfa-grid">
+    <div class="mfa-card">
+      <h4>FIDO2 / Hardware Keys</h4>
+      <p>Physical security keys (YubiKey, Google Titan). Cryptographic binding to the specific website prevents AiTM relay attacks. Cannot be phished. NIST 800-63B AAL3. Required by the most security-conscious underwriters for financial services accounts above £50m limit.</p>
+      <span class="strength str-high">Strongest — Rate Credit</span>
+    </div>
+    <div class="mfa-card">
+      <h4>Authenticator App (TOTP)</h4>
+      <p>Time-based one-time password (Google Authenticator, Microsoft Authenticator). Vulnerable to real-time phishing relay attacks but significantly better than SMS. Widely accepted as market-standard MFA by Lloyd's underwriters since 2021.</p>
+      <span class="strength str-high">Strong — Market Standard</span>
+    </div>
+    <div class="mfa-card">
+      <h4>Push Notification MFA</h4>
+      <p>Approval prompt sent to registered device (Duo, Okta Verify). Subject to "MFA fatigue" attacks — bombarding the user with approvals until they click accept. Microsoft's October 2022 breach used MFA fatigue. Now viewed cautiously without number matching enabled.</p>
+      <span class="strength str-med">Moderate — With Number Matching</span>
+    </div>
+    <div class="mfa-card">
+      <h4>SMS One-Time Password</h4>
+      <p>Code sent via text message. Vulnerable to SIM swapping, SS7 interception, and AiTM phishing. NIST deprecated SMS OTP in NIST SP 800-63B (2017). Still accepted by underwriters where higher-grade MFA cannot be deployed (e.g. field worker populations) but does not attract credit.</p>
+      <span class="strength str-low">Weak — No Credit</span>
+    </div>
+    <div class="mfa-card">
+      <h4>Passkeys (FIDO2 Platform)</h4>
+      <p>Device-bound passkeys (Touch ID, Windows Hello, Face ID). Phishing-resistant; no hardware key needed. Rapidly becoming the consumer-grade FIDO2 standard. Increasingly accepted for lower-limit risks. Not yet widely deployed in enterprise contexts (2024).</p>
+      <span class="strength str-high">Strong — Growing Acceptance</span>
+    </div>
+    <div class="mfa-card">
+      <h4>No MFA</h4>
+      <p>Single-factor authentication only. For email or remote access, this is a binary condition failure at most Lloyd's CY underwriters. For privileged accounts (domain admin, cloud root), absence of MFA is arguably the single highest-risk control gap in the market today.</p>
+      <span class="strength str-low">Unacceptable — Decline / Loading</span>
+    </div>
+  </div>
+
+  <h2>Backup Architecture: The 3-2-1 Rule</h2>
+  <p>The 3-2-1 backup rule has been the industry standard since before ransomware — but ransomware stress-tested it comprehensively. The key vulnerability: if the backup system is connected to the production network, ransomware can encrypt the backups along with everything else. Immutability (write-once storage) and air-gapping are the two approaches that reliably defeat ransomware backup destruction.</p>
+
+  <div class="backup-diagram">
+    <div class="backup-layer">
+      <div class="num">3</div>
+      <h4>Copies of Data</h4>
+      <p>Production + 2 backups. At least one must survive the worst-case attack scenario.</p>
+    </div>
+    <div class="backup-layer">
+      <div class="num">2</div>
+      <h4>Different Media Types</h4>
+      <p>Separate physical or logical media — not just two folders on the same SAN. Cloud + tape is ideal.</p>
+    </div>
+    <div class="backup-layer immutable">
+      <div class="num">1</div>
+      <h4>Offsite (Immutable)</h4>
+      <p>One copy must be unreachable by ransomware — air-gapped tape, immutable cloud storage (S3 Object Lock), or WORM media.</p>
+    </div>
+  </div>
+
+  <table class="ctrl-table">
+    <thead>
+      <tr><th>Backup Characteristic</th><th>Assessment</th><th>Underwriting Impact</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>3-2-1 rule met with immutable/air-gapped copy</strong></td><td class="dot-green">●</td><td>Ransomware BI exposure significantly reduced; full-limit ransomware available; rate credit.</td></tr>
+      <tr><td><strong>Offsite backup, not immutable (e.g. cloud synced)</strong></td><td class="dot-amber">●</td><td>Moderate protection; cloud-synced backups may be accessible to attacker via cloud credentials. Ransomware sub-limit considered.</td></tr>
+      <tr><td><strong>Local backup only (NAS/tape in same facility)</strong></td><td class="dot-amber">●</td><td>High BI risk — ransomware commonly destroys local backups. Sub-limit imposed; higher rate.</td></tr>
+      <tr><td><strong>Backups tested quarterly with RTO/RPO documented</strong></td><td class="dot-green">●</td><td>Demonstrates operational recovery capability. Reduces BI claim duration assumption.</td></tr>
+      <tr><td><strong>Backups never tested or tested >12 months ago</strong></td><td class="dot-red">●</td><td>Untested backups frequently fail in ransomware recovery. Claims frequently exceed initial estimates for this reason. Loading applied.</td></tr>
+      <tr><td><strong>No formal backup policy</strong></td><td class="dot-red">●</td><td>Material risk gap. Ransomware BI potentially unquantifiable. Either exclude or heavily sublimit.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Incident Response Planning</h2>
+  <p>An insured with a tested IR plan, a named IR retainer, and legal counsel on standby responds to a cyber incident materially faster than one that calls an underwriter for vendor recommendations. Speed of response directly correlates with ultimate loss size: each hour of uncontrolled ransomware spread increases both the recovery cost and the BI duration. The IR plan is also a legal necessity — GDPR requires notification within 72 hours of becoming aware of a breach.</p>
+
+  <div class="ir-steps">
+    <div class="ir-step">
+      <div class="icon">🔍</div>
+      <h4>Detection</h4>
+      <p>EDR alert / SIEM trigger / user report. MTTD (mean time to detect) target: &lt;1 hour</p>
+    </div>
+    <div class="ir-step">
+      <div class="icon">🚨</div>
+      <h4>Triage</h4>
+      <p>Confirm attack type and scope. Engage IR retainer. Notify insurer/broker.</p>
+    </div>
+    <div class="ir-step">
+      <div class="icon">🔒</div>
+      <h4>Containment</h4>
+      <p>Isolate affected systems. Preserve evidence. Stop lateral spread.</p>
+    </div>
+    <div class="ir-step">
+      <div class="icon">🧹</div>
+      <h4>Eradication</h4>
+      <p>Remove malware/attacker persistence. Identify and patch initial access vector.</p>
+    </div>
+    <div class="ir-step">
+      <div class="icon">🔄</div>
+      <h4>Recovery</h4>
+      <p>Restore from clean backups. Validate integrity. Phased return-to-service.</p>
+    </div>
+    <div class="ir-step">
+      <div class="icon">⚖️</div>
+      <h4>Legal / Notify</h4>
+      <p>Data breach assessment. GDPR 72-hr notification. Regulatory reporting. Class action defence prep.</p>
+    </div>
+    <div class="ir-step">
+      <div class="icon">📊</div>
+      <h4>Post-Incident</h4>
+      <p>Root cause analysis. Control gap remediation. Insurance claim submission. Lessons learned.</p>
+    </div>
+  </div>
+
+  <h2>Underwriter's Risk Quality Scoring Matrix</h2>
+  <p>The scoring matrix below represents the practical output of a CY underwriting submission assessment. Each control is assessed against evidence provided (questionnaire responses, external scan data, policy documentation, audit reports). The aggregate score determines the Security Score Modifier applied to the base rate.</p>
+
+  <div class="score-summary">
+    <div class="score-block">
+      <h4>All Tier 1 Controls Green + ≥3 Tier 2 Green</h4>
+      <p>MFA on all access, EDR ≥90% monitored, immutable backups, PAM deployed, DMARC enforced, patching SLA met.</p>
+      <span class="outcome outcome-green">▶ Modifier: 0.65–0.80× | Full limit available | Preferred terms</span>
+    </div>
+    <div class="score-block">
+      <h4>All Tier 1 Controls Green + Mixed Tier 2</h4>
+      <p>MFA, EDR and backups all confirmed. Some Tier 2 gaps (e.g. PAM absent, no DMARC enforce). Typical mid-market account.</p>
+      <span class="outcome outcome-green">▶ Modifier: 0.90–1.10× | Standard terms | Warranties on gaps</span>
+    </div>
+    <div class="score-block amber-b">
+      <h4>Tier 1 Partial — Some Gaps Present</h4>
+      <p>MFA present on email but not RDP/VPN. EDR 70–85%. Backups offsite but not immutable. Mixed evidence quality.</p>
+      <span class="outcome outcome-amber">▶ Modifier: 1.20–1.50× | Ransomware sublimit | Remediation condition</span>
+    </div>
+    <div class="score-block amber-b">
+      <h4>Tier 1 Critical Gap — One Control Missing</h4>
+      <p>No MFA on RDP, OR EDR &lt;70%, OR no offsite backup. All other controls otherwise reasonable.</p>
+      <span class="outcome outcome-amber">▶ Modifier: 1.50–2.00× | Heavy sublimits | Warranty or exclusion on gap</span>
+    </div>
+    <div class="score-block red-b">
+      <h4>Multiple Tier 1 Controls Missing</h4>
+      <p>No MFA and/or no EDR and/or local-only backups. Common in small businesses, education, healthcare legacy systems.</p>
+      <span class="outcome outcome-red">▶ Modifier: 2.00–2.50×+ | Consider decline | Strict sublimits if written</span>
+    </div>
+    <div class="score-block red-b">
+      <h4>No Controls + Prior Claims</h4>
+      <p>Multiple gaps compounded by ransomware history without evidence of remediation. Recurring claims pattern.</p>
+      <span class="outcome outcome-red">▶ Decline or referred to specialist distressed cyber market</span>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠️ OT/ICS Cyber Risk (CH Code) — Additional Considerations</h4>
+    <p>For healthcare (CH) and critical infrastructure accounts with operational technology environments, standard IT security controls are necessary but insufficient. OT/ICS environments (SCADA, DCS, PLCs, medical devices) have distinct risk characteristics: legacy systems that cannot be patched without manufacturer approval, air-gapping requirements that conflict with modern monitoring, and direct physical consequences from a cyber attack (patient harm, industrial incident).</p>
+    <p>OT-specific underwriting questions: Is the OT network fully segmented from IT? Is there a dedicated OT security monitoring solution (Claroty, Dragos, Nozomi)? Has a Purdue Model network architecture review been conducted? Are remote access sessions to OT systems MFA-protected? For healthcare: has a medical device cybersecurity inventory been completed under FDA guidance (post-2023 FDA Cybersecurity requirements)?</p>
+  </div>
+
+  <div class="context-box">
+    <h3>The IR Retainer: Why Pre-Approved Vendors Matter</h3>
+    <p>When a ransomware attack hits at 3am on a Sunday, the insured needs a forensic IR firm on the phone within minutes, not hours spent negotiating vendor agreements. Most leading cyber insurers operate a panel of pre-approved IR firms (Mandiant/Google, CrowdStrike Services, Coveware, Kivu Consulting, Sygnia) that policyholders can engage immediately on a claim without requiring separate underwriter approval.</p>
+    <p>Policyholders who deviate from the panel — typically because they've already hired a preferred vendor before notifying the insurer — frequently face two problems: higher costs that may not be fully reimbursable, and slower claims settlement while the insurer assesses the non-panel vendor's invoices. The underwriter's practical advice: engage the insurer or broker hotline as the first call, not the last.</p>
+    <p>Pre-placement IR retainers — where the policyholder contracts an IR firm before any incident — are increasingly valued by underwriters and can attract rate credits of 5–10%. They also dramatically reduce MTTD (mean time to detect) and MTTC (mean time to contain) because the retainer firm already has contextual knowledge of the insured's environment.</p>
+  </div>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Cyber Insurance (CY · CZ · CG · CH)</span> — Module 06: Risk Mitigation</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Security control assessments are indicative of market practice.</p>
+</footer>
+</body>
+</html>
