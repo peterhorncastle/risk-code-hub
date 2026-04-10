@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offshore Energy Loss Database – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--blue:#1a4a8a;--accent:#c8a84b;--light:#f4f7fc;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--teal:#0a5c52; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a1f3a 0%,#0d3d6b 60%,#0a5c52 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#b8cde4; margin-bottom:6px; } .breadcrumb a { color:var(--accent); text-decoration:none; } header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cde4; font-size:0.95rem; max-width:700px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1200px; margin:0 auto; padding:40px 30px; }
+    .controls { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:24px; align-items:center; }
+    .controls input { flex:1; min-width:200px; padding:10px 16px; border:1px solid var(--border); border-radius:8px; font-size:0.9rem; font-family:inherit; outline:none; }
+    .controls input:focus { border-color:var(--blue); }
+    .controls select { padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.88rem; font-family:inherit; background:#fff; cursor:pointer; outline:none; }
+    .controls select:focus { border-color:var(--blue); }
+    .db-stats { display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap; }
+    .db-stat { background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px 18px; font-size:0.85rem; }
+    .db-stat strong { color:var(--navy); font-size:1rem; display:block; }
+    .db-stat span { color:var(--muted); font-size:0.78rem; }
+    .table-wrap { overflow-x:auto; border-radius:10px; border:1px solid var(--border); background:#fff; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; min-width:900px; }
+    thead th { background:var(--navy); color:#fff; padding:12px 14px; text-align:left; font-size:0.8rem; letter-spacing:0.5px; cursor:pointer; white-space:nowrap; user-select:none; }
+    thead th:hover { background:#1a3a60; }
+    thead th .sort-icon { margin-left:5px; opacity:0.5; }
+    thead th.sorted .sort-icon { opacity:1; color:var(--accent); }
+    tbody tr { border-bottom:1px solid var(--border); transition:background 0.15s; }
+    tbody tr:hover { background:#f0f5ff; }
+    tbody tr:last-child { border-bottom:none; }
+    td { padding:11px 14px; vertical-align:top; line-height:1.4; }
+    td.incident { font-weight:600; color:var(--navy); max-width:220px; }
+    td.loss { font-weight:700; color:#8b1a1a; }
+    .badge { display:inline-block; font-size:0.70rem; font-weight:700; padding:3px 9px; border-radius:10px; text-transform:uppercase; letter-spacing:0.4px; white-space:nowrap; }
+    .badge-blowout { background:#fef0e0; color:#8b4000; }
+    .badge-fire { background:#fde8e8; color:#8b1a1a; }
+    .badge-hurricane { background:#e8eaf8; color:#2c35a0; }
+    .badge-structural { background:#e8f5ee; color:#0a5c52; }
+    .badge-collision { background:#f0eafa; color:#5c0a8b; }
+    .badge-sinking { background:#e0f0f8; color:#0a3a5c; }
+    .badge-explosion { background:#fff0e0; color:#8b5c00; }
+    .no-results { text-align:center; padding:40px; color:var(--muted); font-size:0.95rem; }
+    .count-label { font-size:0.82rem; color:var(--muted); margin-bottom:8px; }
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Upstream / Offshore Energy</a> › Module 03</div>
+  <div class="tag">Module 03 — Upstream / Offshore Energy Insurance</div>
+  <h1>Offshore Energy Loss Database</h1>
+  <p>Searchable and sortable database of 35 significant offshore energy losses — platforms, blowouts, rigs, hurricanes and construction incidents — with insured loss estimates, locations and causal analysis.</p>
+</header>
+<nav>
+  <a href="index.html">Home</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programs</a>
+</nav>
+<main>
+  <div class="db-stats">
+    <div class="db-stat"><strong id="total-count">35</strong><span>Total incidents</span></div>
+    <div class="db-stat"><strong>$30bn+</strong><span>Aggregate insured losses shown</span></div>
+    <div class="db-stat"><strong>1977–2024</strong><span>Date range</span></div>
+    <div class="db-stat"><strong>10</strong><span>Countries / basins</span></div>
+  </div>
+  <div class="controls">
+    <input type="text" id="search-box" placeholder="🔍  Search incident, operator, location…" oninput="filterTable()">
+    <select id="filter-type" onchange="filterTable()">
+      <option value="">All Incident Types</option>
+      <option value="blowout">Well Blowout / OEE</option>
+      <option value="fire">Fire / Explosion</option>
+      <option value="hurricane">Named Windstorm</option>
+      <option value="structural">Structural Failure</option>
+      <option value="collision">Collision</option>
+      <option value="sinking">Sinking</option>
+    </select>
+    <select id="filter-basin" onchange="filterTable()">
+      <option value="">All Basins</option>
+      <option value="North Sea">North Sea</option>
+      <option value="Gulf of Mexico">Gulf of Mexico</option>
+      <option value="Brazil">Brazil</option>
+      <option value="West Africa">West Africa</option>
+      <option value="Asia Pacific">Asia Pacific</option>
+      <option value="Middle East">Middle East</option>
+      <option value="Other">Other</option>
+    </select>
+    <select id="filter-era" onchange="filterTable()">
+      <option value="">All Years</option>
+      <option value="pre2000">Pre-2000</option>
+      <option value="2000s">2000–2009</option>
+      <option value="2010s">2010–2019</option>
+      <option value="2020s">2020–Present</option>
+    </select>
+  </div>
+  <div class="count-label" id="count-label">Showing 35 of 35 incidents</div>
+  <div class="table-wrap">
+    <table id="loss-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Year <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(1)">Incident <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(2)">Operator <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(3)">Asset Type <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(4)">Basin / Location <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(5)">Incident Type <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(6)">Insured Loss (est.) <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable(7)">Fatalities <span class="sort-icon">↕</span></th>
+          <th>Primary Cause</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <div class="no-results" id="no-results" style="display:none">No incidents match your filters. Try broadening your search.</div>
+  </div>
+</main>
+<footer>
+  <span>Risk Code Hub</span> — Module 03: Loss Database | Upstream / Offshore Energy &nbsp;|&nbsp; v1.0 April 2026
+</footer>
+<script>
+const incidents = [
+  {year:1977,incident:"Ekofisk Bravo Blowout",operator:"Phillips Petroleum",asset:"Fixed Platform",basin:"North Sea",type:"blowout",loss:"~$80m",fatalities:0,cause:"Completion error during maintenance workover; BOP misinstalled"},
+  {year:1980,incident:"Alexander Kielland Capsizing",operator:"Philips / Odeco",asset:"Semi-submersible",basin:"North Sea",type:"structural",loss:"~$200m",fatalities:123,cause:"Fatigue crack in hydrophone attachment brace caused column separation"},
+  {year:1982,incident:"Ocean Ranger Sinking",operator:"Mobil",asset:"Semi-submersible",basin:"North Sea",type:"sinking",loss:"~$150m",fatalities:84,cause:"Portlight broken by wave; ballast control room flooded; capsize in storm"},
+  {year:1988,incident:"Piper Alpha Explosion & Fire",operator:"Occidental Petroleum",asset:"Fixed Platform",basin:"North Sea",type:"fire",loss:"~$1.4bn",fatalities:167,cause:"Gas condensate leak ignited after permit-to-work failure; escalation to oil fires"},
+  {year:1988,incident:"Enchova Blowout",operator:"Petrobras",asset:"Fixed Platform",basin:"Brazil",type:"blowout",loss:"~$100m",fatalities:42,cause:"Well blowout during workover; gas ignition; evacuation casualties"},
+  {year:1990,incident:"Treasure Bay Platform Fire",operator:"Shell",asset:"Fixed Platform",basin:"Gulf of Mexico",type:"fire",loss:"~$60m",fatalities:0,cause:"Process equipment failure leading to gas release and ignition"},
+  {year:1991,incident:"Ranger I Blowout",operator:"Arco",asset:"Jack-up Rig",basin:"Gulf of Mexico",type:"blowout",loss:"~$75m",fatalities:0,cause:"Well control failure during drilling operations"},
+  {year:1993,incident:"Glomar Arctic IV Sinking",operator:"Global Marine",asset:"Drillship",basin:"North Sea",type:"sinking",loss:"~$120m",fatalities:0,cause:"Sank during severe storm while under tow off Scotland"},
+  {year:2001,incident:"P-36 FPSO Sinking",operator:"Petrobras",asset:"Semi-sub / FPSO",basin:"Brazil",type:"explosion",loss:"~$500m",fatalities:11,cause:"Emergency drain tank failure; two explosions; progressive flooding and capsize"},
+  {year:2001,incident:"Petrobras 19 Gas Explosion",operator:"Petrobras",asset:"Fixed Platform",basin:"Brazil",type:"fire",loss:"~$85m",fatalities:3,cause:"Gas release from riser; ignition; fire and explosion on production deck"},
+  {year:2003,incident:"Usumacinta Drilling Rig",operator:"Pemex",asset:"Jack-up Rig",basin:"Gulf of Mexico",type:"structural",loss:"~$90m",fatalities:0,cause:"Severe storm damage; partial collapse during hurricane transit"},
+  {year:2004,incident:"Hurricane Ivan — Typhoon Spar",operator:"Chevron",asset:"Spar Platform",basin:"Gulf of Mexico",type:"hurricane",loss:"~$500m",fatalities:0,cause:"Cat 5 hurricane direct strike; spar anchor lines snapped; platform damage"},
+  {year:2005,incident:"Hurricanes Katrina & Rita — Gulf of Mexico",operator:"Multiple operators",asset:"Multiple asset types",basin:"Gulf of Mexico",type:"hurricane",loss:"$9.3bn+",fatalities:1,cause:"Two major hurricanes destroyed 115 platforms; 558 pipeline segments damaged"},
+  {year:2005,incident:"Mumbai High North Platform Collision",operator:"ONGC",asset:"Fixed Platform",basin:"Middle East",type:"collision",loss:"~$350m",fatalities:22,cause:"MSV Samudra Suraksha collided with platform in cyclone-related emergency ops"},
+  {year:2007,incident:"Usumacinta / KAB-101 Jack-up Collision",operator:"Pemex",asset:"Jack-up Rig",basin:"Gulf of Mexico",type:"collision",loss:"~$200m",fatalities:21,cause:"Jack-up rig collided with wellhead platform in storm; gas release and fire"},
+  {year:2008,incident:"Bourbon Dolphin Capsizing",operator:"Bourbon",asset:"Anchor Handling Vessel",basin:"North Sea",type:"sinking",loss:"~$80m",fatalities:8,cause:"Vessel capsized during anchor-handling operation; overloaded in adverse conditions"},
+  {year:2009,incident:"Montara Wellhead Blowout",operator:"PTTEP Australasia",asset:"Wellhead Platform",basin:"Asia Pacific",type:"blowout",loss:"~$300m",fatalities:0,cause:"Cementation failure on H1 well; uncontrolled release for 74 days"},
+  {year:2010,incident:"Deepwater Horizon / Macondo Blowout",operator:"BP / Transocean",asset:"Semi-submersible Drillship",basin:"Gulf of Mexico",type:"blowout",loss:"$3.5–4.0bn",fatalities:11,cause:"Well barrier failures; BOP did not seal; 4.9m barrels spilled over 87 days"},
+  {year:2010,incident:"Frade Field Spill",operator:"Chevron",asset:"FPSO / Subsea",basin:"Brazil",type:"blowout",loss:"~$150m",fatalities:0,cause:"Unexpected reservoir fracturing during production; surface sheen detected"},
+  {year:2011,incident:"Kolskaya Semi-sub Sinking",operator:"Arktikmorneftegazrazvedka",asset:"Semi-submersible",basin:"Other",type:"sinking",loss:"~$200m",fatalities:53,cause:"Capsized while under tow in storm in Sea of Okhotsk; structural failure"},
+  {year:2011,incident:"Chevron Frade Blowout",operator:"Chevron",asset:"Subsea / FPSO",basin:"Brazil",type:"blowout",loss:"~$150m",fatalities:0,cause:"Unplanned reservoir fracturing in Frade field; oil at surface; regulatory action"},
+  {year:2012,incident:"Elgin G4 Well Blowout",operator:"Total",asset:"Fixed Platform",basin:"North Sea",type:"blowout",loss:"~$1.5bn",fatalities:0,cause:"Shallow gas migration up outer annulus; well integrity failure on ageing well"},
+  {year:2013,incident:"Hercules 265 Jack-up Blowout",operator:"Walter Oil & Gas",asset:"Jack-up Rig",basin:"Gulf of Mexico",type:"blowout",loss:"~$100m",fatalities:0,cause:"Well blowout; rig fire for 13 days before well self-bridged"},
+  {year:2014,incident:"Flotel Safe Boreas Fire",operator:"Various / Floatel",asset:"Accommodation Vessel",basin:"North Sea",type:"fire",loss:"~$60m",fatalities:0,cause:"Fire on accommodation vessel; damage to quarters; evacuation completed safely"},
+  {year:2015,incident:"Abkatun-A Platform Fire",operator:"Pemex",asset:"Fixed Platform",basin:"Gulf of Mexico",type:"fire",loss:"~$400m",fatalities:4,cause:"Gas explosion on production platform; ageing infrastructure; fire destroyed platform"},
+  {year:2016,incident:"Petrobras Cidade de São Mateus FPSO",operator:"Petrobras",asset:"FPSO",basin:"Brazil",type:"explosion",loss:"~$500m",fatalities:9,cause:"Gas explosion in engine room; fire onboard; nine killed in Santos Basin"},
+  {year:2017,incident:"Hurricanes Harvey / Irma / Maria",operator:"Multiple operators",asset:"Multiple asset types",basin:"Gulf of Mexico",type:"hurricane",loss:"~$2.5bn",fatalities:0,cause:"Three major Atlantic hurricanes caused GoM offshore infrastructure damage"},
+  {year:2018,incident:"Equinor Snorre A Gas Leak",operator:"Equinor",asset:"Semi-submersible",basin:"North Sea",type:"blowout",loss:"~$50m",fatalities:0,cause:"Uncontrolled gas release; platform evacuated; well integrity investigation followed"},
+  {year:2019,incident:"Yucatan Platform Fire — Pemex",operator:"Pemex",asset:"Fixed Platform",basin:"Gulf of Mexico",type:"fire",loss:"~$80m",fatalities:0,cause:"Fire on production platform in Campeche Bay; Pemex pattern of ageing asset losses"},
+  {year:2020,incident:"ONGC Mumbai High Riser Leak",operator:"ONGC",asset:"Fixed Platform",basin:"Middle East",type:"fire",loss:"~$70m",fatalities:0,cause:"Gas riser leak; fire on Mumbai High South platform; no fatalities"},
+  {year:2021,incident:"Hurricane Ida — GoM Offshore Infrastructure",operator:"Multiple operators",asset:"Multiple asset types",basin:"Gulf of Mexico",type:"hurricane",loss:"~$1.8bn",fatalities:0,cause:"Cat 4 strike through central GoM production zone; pipeline and platform damage"},
+  {year:2022,incident:"Pemex Ku-Maloob-Zaap Fire",operator:"Pemex",asset:"Fixed Platform",basin:"Gulf of Mexico",type:"fire",loss:"~$100m",fatalities:2,cause:"Underwater gas pipeline leak ignited on sea surface; dramatic fire on water"},
+  {year:2022,incident:"ENI Congo FPSO Nené Marine Blowout",operator:"ENI",asset:"FPSO",basin:"West Africa",type:"blowout",loss:"~$120m",fatalities:0,cause:"Well integrity failure; uncontrolled release; well killed with barite slug"},
+  {year:2023,incident:"Petrobras P-63 FPSO Incident",operator:"Petrobras",asset:"FPSO",basin:"Brazil",type:"fire",loss:"~$90m",fatalities:0,cause:"Fire onboard FPSO in Santos Basin; process safety management under review"},
+  {year:2024,incident:"Offshore GoM Pipeline Rupture",operator:"Multiple",asset:"Subsea Pipeline",basin:"Gulf of Mexico",type:"blowout",loss:"~$80m",fatalities:0,cause:"Subsea pipeline integrity failure; hydrocarbon release; recovery operations required"},
+];
+
+let sortCol = 0, sortAsc = false;
+
+function badgeHTML(type) {
+  const map = {
+    blowout:['badge-blowout','Well Blowout'],
+    fire:['badge-fire','Fire/Explosion'],
+    hurricane:['badge-hurricane','Named Windstorm'],
+    structural:['badge-structural','Structural'],
+    collision:['badge-collision','Collision'],
+    sinking:['badge-sinking','Sinking'],
+    explosion:['badge-explosion','Explosion'],
+  };
+  const [cls, label] = map[type] || ['badge-structural', type];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function getEra(year) {
+  if (year < 2000) return 'pre2000';
+  if (year < 2010) return '2000s';
+  if (year < 2020) return '2010s';
+  return '2020s';
+}
+
+function filterTable() {
+  const q = document.getElementById('search-box').value.toLowerCase();
+  const type = document.getElementById('filter-type').value;
+  const basin = document.getElementById('filter-basin').value;
+  const era = document.getElementById('filter-era').value;
+
+  const filtered = incidents.filter(r => {
+    const matchQ = !q || [r.incident,r.operator,r.asset,r.basin,r.cause,r.loss].join(' ').toLowerCase().includes(q);
+    const matchType = !type || r.type === type;
+    const matchBasin = !basin || r.basin === basin;
+    const matchEra = !era || getEra(r.year) === era;
+    return matchQ && matchType && matchBasin && matchEra;
+  });
+
+  renderTable(filtered);
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('table-body');
+  const noRes = document.getElementById('no-results');
+  if (data.length === 0) { tbody.innerHTML = ''; noRes.style.display = 'block'; }
+  else {
+    noRes.style.display = 'none';
+    tbody.innerHTML = data.map(r => `
+      <tr>
+        <td>${r.year}</td>
+        <td class="incident">${r.incident}</td>
+        <td>${r.operator}</td>
+        <td>${r.asset}</td>
+        <td>${r.basin}</td>
+        <td>${badgeHTML(r.type)}</td>
+        <td class="loss">${r.loss}</td>
+        <td>${r.fatalities > 0 ? `<strong style="color:#8b1a1a">${r.fatalities}</strong>` : '0'}</td>
+        <td style="font-size:0.82rem;color:var(--muted);max-width:220px">${r.cause}</td>
+      </tr>`).join('');
+  }
+  document.getElementById('count-label').textContent = `Showing ${data.length} of ${incidents.length} incidents`;
+  document.getElementById('total-count').textContent = data.length;
+}
+
+function sortTable(col) {
+  if (sortCol === col) sortAsc = !sortAsc; else { sortCol = col; sortAsc = true; }
+  document.querySelectorAll('thead th').forEach((th,i) => th.classList.toggle('sorted', i === col));
+  const keys = ['year','incident','operator','asset','basin','type','loss','fatalities','cause'];
+  const sorted = [...incidents].sort((a,b) => {
+    let va = a[keys[col]], vb = b[keys[col]];
+    if (typeof va === 'number') return sortAsc ? va-vb : vb-va;
+    return sortAsc ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+  });
+  renderTable(sorted);
+}
+
+renderTable(incidents);
+</script>
+</body>
+</html>

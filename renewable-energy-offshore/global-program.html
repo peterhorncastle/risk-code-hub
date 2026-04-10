@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offshore Wind Global Programmes – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--blue:#1a4a8a;--green:#2a8c4a;--green-dark:#1a6035;--green-light:#e8f5ee;--accent:#c8a84b;--light:#f2f9f5;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--red:#8b1a1a;--orange:#c45c00;--teal:#0a5c52; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1a4a8a 55%,#2a8c4a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cde4; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:960px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.5rem; color:var(--navy); margin:40px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.1rem; color:var(--blue); margin:28px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    ul { margin:10px 0 14px 22px; }
+    ul li { font-size:0.92rem; line-height:1.8; color:var(--text); }
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.88rem; }
+    th { background:var(--navy); color:#fff; padding:11px 14px; text-align:left; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tr:nth-child(even) td { background:#f0f8f4; }
+    .market-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; margin:24px 0 32px; }
+    .market-card { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    .market-header { padding:16px 20px; font-weight:700; font-size:0.95rem; color:#fff; }
+    .mh-uk { background:#0d2240; }
+    .mh-de { background:#1a4a8a; }
+    .mh-nl { background:#0a5c52; }
+    .mh-us { background:#7a3800; }
+    .mh-tw { background:#4a1a70; }
+    .mh-au { background:#1a5a40; }
+    .market-body { padding:16px 20px; }
+    .market-body p { font-size:0.84rem; margin-bottom:8px; color:var(--text); line-height:1.5; }
+    .tag-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+    .basin-tag { font-size:0.72rem; font-weight:700; padding:3px 9px; border-radius:10px; background:var(--light); border:1px solid var(--border); color:var(--muted); }
+    .basin-tag.amber { background:#fef0e0; border-color:#f0b060; color:#7a4000; }
+    .basin-tag.green { background:#e0f0ec; border-color:#60b080; color:var(--teal); }
+    .basin-tag.red { background:#fde8e8; border-color:#e08080; color:var(--red); }
+    .programme-diagram { background:#fff; border:2px solid var(--border); border-radius:12px; padding:30px; margin:24px 0; }
+    .programme-diagram h4 { color:var(--navy); font-size:1rem; font-weight:700; margin-bottom:20px; text-align:center; }
+    .tower-row { display:flex; gap:16px; align-items:flex-end; justify-content:center; flex-wrap:wrap; margin-bottom:16px; }
+    .tower-block { text-align:center; min-width:140px; }
+    .tower-block .layer { padding:12px 8px; font-size:0.75rem; font-weight:600; color:#fff; border-radius:4px; margin-bottom:4px; display:flex; align-items:center; justify-content:center; flex-direction:column; }
+    .layer-xs3 { background:#4a1a70; }
+    .layer-xs2 { background:#0d3d6b; }
+    .layer-xs1 { background:#1a4a8a; }
+    .layer-rp { background:var(--accent); color:var(--navy); }
+    .layer-deduct { background:var(--orange); }
+    .tower-label { font-size:0.78rem; color:var(--muted); margin-top:8px; font-weight:600; }
+    .programme-legend { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; justify-content:center; }
+    .legend-item { display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--text); }
+    .legend-dot { width:12px; height:12px; border-radius:3px; flex-shrink:0; }
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:20px 0 30px; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px; }
+    .card h4 { font-size:0.95rem; font-weight:700; color:var(--navy); margin-bottom:10px; }
+    .card p { font-size:0.85rem; color:var(--muted); margin:0; line-height:1.6; }
+    .card.green { border-top:4px solid var(--green); }
+    .card.blue { border-top:4px solid var(--blue); }
+    .card.gold { border-top:4px solid var(--accent); }
+    .card.orange { border-top:4px solid var(--orange); }
+    .card.red { border-top:4px solid var(--red); }
+    .highlight-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .highlight-box h3 { color:var(--accent); margin:0 0 14px; font-size:1.1rem; }
+    .highlight-box p { color:#b8cde4; margin-bottom:10px; font-size:0.92rem; line-height:1.7; }
+    .warning-box { background:#fff8e8; border:1px solid #f0b060; border-left:5px solid var(--orange); border-radius:8px; padding:22px; margin:16px 0; }
+    .warning-box h4 { color:#7a4000; font-size:0.95rem; margin-bottom:10px; }
+    .warning-box p { font-size:0.87rem; color:var(--text); margin-bottom:8px; }
+    .info-box { background:#fff; border:1px solid var(--border); border-left:5px solid var(--green); border-radius:8px; padding:22px; margin:16px 0; }
+    .info-box h4 { color:var(--navy); font-size:0.95rem; margin-bottom:10px; }
+    .info-box p, .info-box ul li { font-size:0.87rem; color:var(--text); margin-bottom:6px; }
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; margin:24px 0; }
+    .stat-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; text-align:center; }
+    .stat-box .num { font-size:1.8rem; font-weight:800; color:var(--navy); }
+    .stat-box .label { font-size:0.78rem; color:var(--muted); margin-top:4px; line-height:1.4; }
+    .breadcrumb { font-size:0.8rem; color:#b8cde4; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    .checklist { list-style:none; margin:12px 0; padding:0; }
+    .checklist li { font-size:0.88rem; padding:7px 0; border-bottom:1px solid var(--border); color:var(--text); line-height:1.5; }
+    .checklist li:before { content:"✓ "; color:var(--green); font-weight:700; }
+    .serial-box { background:#fde8e8; border:1px solid #e08080; border-left:5px solid var(--red); border-radius:8px; padding:22px; margin:24px 0; }
+    .serial-box h4 { color:var(--red); font-size:0.95rem; margin-bottom:10px; }
+    .serial-box p, .serial-box ul li { font-size:0.87rem; color:var(--text); margin-bottom:6px; }
+    .complete-box { background:linear-gradient(135deg,#0d2240,#2a8c4a); color:#fff; border-radius:12px; padding:32px; margin:40px 0; text-align:center; }
+    .complete-box h3 { font-size:1.4rem; color:var(--accent); margin-bottom:12px; }
+    .complete-box p { color:#b8cde4; font-size:0.95rem; max-width:600px; margin:0 auto 20px; line-height:1.7; }
+    .module-nav { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+    .module-btn { display:inline-block; padding:10px 20px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); border-radius:8px; color:#fff; text-decoration:none; font-size:0.85rem; font-weight:600; transition:all 0.2s; }
+    .module-btn:hover { background:rgba(255,255,255,0.2); }
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;} }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Renewable Energy – Offshore</a> › Module 07</div>
+  <div class="tag">Module 07 — Renewable Energy Offshore (R1 / R3)</div>
+  <h1>International Programme Structures</h1>
+  <p>How Lloyd's offshore wind coverage is placed globally — market structures by jurisdiction, regulatory fronting requirements, limit towers for large portfolio programmes, captive integration for major utilities, and the unique serial defect aggregation challenges that shape programme design.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programmes</a>
+</nav>
+
+<main>
+
+  <!-- Market overview stats -->
+  <div class="stats-row">
+    <div class="stat-box"><div class="num">$6bn+</div><div class="label">Est. global offshore wind insurance premium (2025)</div></div>
+    <div class="stat-box"><div class="num">~50%</div><div class="label">Lloyd's market share of global offshore wind insurance premium</div></div>
+    <div class="stat-box"><div class="num">8</div><div class="label">Major offshore wind regulatory jurisdictions — each with distinct requirements</div></div>
+    <div class="stat-box"><div class="num">£2–4bn</div><div class="label">Typical TIV for a large 1GW+ offshore wind farm</div></div>
+  </div>
+
+  <!-- Section 1: Programme Architecture -->
+  <h2>Programme Architecture</h2>
+  <p>Unlike upstream oil and gas, where global IOC programmes with multiple assets are standard, offshore wind insurance programmes are often structured around single projects during construction (R3) and then transition to operational portfolio programmes (R1) as an operator's installed capacity grows. Utilities such as Ørsted, RWE, Vattenfall, and SSE now operate fleets of 10–30 wind farms and place enterprise-level portfolio programmes covering all assets.</p>
+
+  <div class="card-grid">
+    <div class="card green">
+      <h4>🌱 Single Project — Construction (R3)</h4>
+      <p>The most common structure for new-build projects: a bespoke DSU/contract works programme for a single offshore wind farm. Lead underwriter appointed at financial close; coverage tracks project milestones (monopile installation, WTG installation, commissioning). TIV may peak at £1.5–4bn depending on project scale.</p>
+    </div>
+    <div class="card blue">
+      <h4>⚡ Portfolio Operational Programme (R1)</h4>
+      <p>For utilities with 5+ operational wind farms, a portfolio programme consolidates all assets under a single master policy. Premium is calculated on total installed TIV. Serial defect aggregation and clash exposure across the portfolio are the defining underwriting challenges. Ørsted, RWE, and Vattenfall all operate portfolio programmes.</p>
+    </div>
+    <div class="card gold">
+      <h4>🔄 Wrap Programme (R1 + R3)</h4>
+      <p>A combined programme covering both operational farms (R1) and construction projects (R3) within a single policy structure — increasingly common for large utilities with concurrent builds. Provides consistency of coverage terms but requires careful delineation of construction vs operational triggers and deductibles.</p>
+    </div>
+    <div class="card orange">
+      <h4>🏢 Captive Integration</h4>
+      <p>Ørsted, RWE, and Equinor all have captive insurance vehicles. The captive retains the first layer of risk (typically £50–150m per loss), reducing commercial market premiums. Lloyd's provides the excess layer. Captive integration is most efficient for operators with 3GW+ installed capacity where risk diversification within the portfolio is sufficient.</p>
+    </div>
+  </div>
+
+  <h3>Typical Portfolio Operational Programme — Limit Tower</h3>
+  <div class="programme-diagram">
+    <h4>Illustrative R1 Portfolio Limit Tower — 5GW Installed Utility (TIV £8bn, blended)</h4>
+    <div class="tower-row">
+
+      <div class="tower-block">
+        <div class="layer layer-xs3" style="height:52px;">Cat XS Layer<br>£750m xs £750m<br>Lloyd's / Bermuda / ILS</div>
+        <div class="layer layer-xs2" style="height:60px;">2nd XS Layer<br>£500m xs £250m<br>Lloyd's Syndicates</div>
+        <div class="layer layer-xs1" style="height:68px;">Primary XS Layer<br>£250m xs £100m<br>Lloyd's Lead + Co.</div>
+        <div class="layer layer-rp" style="height:44px;">Captive Layer<br>£100m xs £25m deductible</div>
+        <div class="layer layer-deduct" style="height:36px;">Insured Deductible: £25m</div>
+        <div class="tower-label">Physical Damage (per event)</div>
+      </div>
+
+      <div class="tower-block">
+        <div class="layer layer-xs2" style="height:52px;">XS ALOR<br>£150m xs £150m<br>Lloyd's / Market</div>
+        <div class="layer layer-xs1" style="height:68px;">Primary ALOR<br>£150m xs £10m<br>Lloyd's Lead</div>
+        <div class="layer layer-deduct" style="height:36px;">Waiting period: 45 days</div>
+        <div class="tower-label">ALOR (per wind farm)</div>
+      </div>
+
+      <div class="tower-block">
+        <div class="layer layer-xs3" style="height:52px;">Serial XS<br>£200m xs £300m<br>Lloyd's / Bermuda</div>
+        <div class="layer layer-xs1" style="height:68px;">Serial Primary<br>£300m xs £50m<br>Lloyd's Lead</div>
+        <div class="layer layer-deduct" style="height:36px;">Serial deductible: £50m agg.</div>
+        <div class="tower-label">Serial Defect (aggregate)</div>
+      </div>
+
+      <div class="tower-block">
+        <div class="layer layer-xs1" style="height:68px;">TPL Excess<br>£250m xs £50m<br>Lloyd's / Market</div>
+        <div class="layer layer-xs2" style="height:52px;">Primary TPL<br>£50m xs £2m<br>Lloyd's Lead</div>
+        <div class="layer layer-deduct" style="height:36px;">TPL deductible: £2m</div>
+        <div class="tower-label">Third-Party Liability</div>
+      </div>
+
+    </div>
+    <div class="programme-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#4a1a70;"></div>Cat XS / ILS Layer</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0d3d6b;"></div>Lloyd's XS Syndicates</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1a4a8a;"></div>Lloyd's Primary Lead</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent);"></div>Captive Retention</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--orange);"></div>Insured Deductible</div>
+    </div>
+  </div>
+
+  <h3>Lloyd's Role Within the Tower</h3>
+  <table>
+    <thead>
+      <tr><th>Position</th><th>Lloyd's Role</th><th>Typical Share</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Lead Underwriter</strong></td><td>Sets terms, rate, conditions; leads slip; technical relationship manager</td><td>25–40% of primary layer</td><td>Specialist syndicates: Brit (2987), Chaucer (1084), Ascot (1414), Beazley (623). Requires detailed engineering assessment of turbine OEM and foundation design.</td></tr>
+      <tr><td><strong>Following Market</strong></td><td>Subscribes at lead's terms; provides capacity depth on large TIV risks</td><td>5–15% per syndicate</td><td>20–30 syndicates may participate in a major offshore wind programme. Co-insurers managed via broker (Marsh, Aon, WTW, BGC).</td></tr>
+      <tr><td><strong>XS Capacity</strong></td><td>Excess layers above primary; catastrophe and aggregate serial covers</td><td>Variable</td><td>ILS market (catastrophe bonds, sidecars) increasingly relevant for top XS layers. Bermuda market (AIG, Chubb, Zurich) competes in mid-excess.</td></tr>
+      <tr><td><strong>Local Fronting</strong></td><td>Issues locally admitted policy (e.g., US, Taiwan, Japan); Lloyd's acts as reinsurer</td><td>100% of local policy</td><td>Required in US (Jones Act / state surplus lines), Taiwan, Japan, South Korea, Brazil. Fronting insurer must meet local solvency requirements.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Section 2: Serial Defect Aggregation Challenge -->
+  <h2>Serial Defect Aggregation — The Portfolio Programme Challenge</h2>
+  <p>Serial defect exposure is unique to offshore wind and fundamentally shapes how global programmes are structured. When a component manufactured to a common design specification fails across multiple turbines simultaneously, the aggregate loss across a portfolio can be catastrophic — as demonstrated by the Siemens Gamesa SG 8.0-167 blade bearing failure (2021–2024).</p>
+
+  <div class="serial-box">
+    <h4>⚠ The Serial Defect Aggregation Problem</h4>
+    <p>A single defective turbine model deployed across 10 wind farms in a portfolio programme creates a correlated exposure that can breach primary limits simultaneously at each site. Consider: 10 × 100-turbine farms using the SG 8.0-167 — a systemic blade bearing failure affects all 1,000 turbines, triggering ALOR at every farm concurrently. Aggregate losses can reach £1–3bn across a single portfolio before any policy layer responds.</p>
+    <ul style="margin:10px 0 0 20px;">
+      <li>Per-turbine sub-limits (typically £5–15m/turbine) limit individual recovery but do not cap aggregate exposure across a fleet</li>
+      <li>Serial defect clauses typically require a minimum number of affected units (often 3–5 turbines) before serial loss provisions trigger</li>
+      <li>Some policies apply a blanket serial defect exclusion — requiring separate wrap cover to be negotiated and separately rated</li>
+      <li>Underwriters increasingly require OEM diversification across a portfolio to limit correlated serial exposure</li>
+    </ul>
+  </div>
+
+  <h3>Serial Defect — Programme Structure Responses</h3>
+  <table>
+    <thead>
+      <tr><th>Approach</th><th>Description</th><th>Pros</th><th>Cons</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Per-turbine sub-limit</strong></td><td>Maximum recovery per turbine capped (e.g., £10m/unit for blade, £20m for gearbox)</td><td>Controls aggregate accumulation for underwriter; reduces moral hazard</td><td>May leave insured under-indemnified if replacement cost exceeds sub-limit</td></tr>
+      <tr><td><strong>Aggregate serial deductible</strong></td><td>Insured retains first £X of aggregate serial losses before policy responds (e.g., £50m aggregate)</td><td>Aligns incentives; insured motivated to inspect and remediate early</td><td>High retention may make cover uneconomic for smaller operators</td></tr>
+      <tr><td><strong>OEM blanket exclusion</strong></td><td>Any loss caused by design defect in the original turbine is excluded; only manufacturing defects in specific components covered</td><td>Protects market from systemic OEM failures</td><td>Reduces coverage value materially; insured must rely on OEM warranty</td></tr>
+      <tr><td><strong>Separate serial defect wrap</strong></td><td>Standalone policy (or endorsement) covering serial losses above a threshold with specific aggregate limit and deductible</td><td>Provides dedicated coverage with transparent pricing; cleaner claims handling</td><td>Additional premium cost; separate negotiation required at renewal</td></tr>
+      <tr><td><strong>OEM warranty backstop</strong></td><td>Coverage contingent on insured first pursuing OEM warranty; insurer pays only if warranty claim is disputed or OEM insolvent</td><td>Reduces moral hazard; keeps cost manageable</td><td>Claims resolution delayed by warranty dispute timeline (2–4 years typical)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Section 3: Key Markets by Jurisdiction -->
+  <h2>Key Offshore Wind Markets — Regulatory &amp; Insurance Profiles</h2>
+  <p>Each major offshore wind market has a distinct regulatory framework, Lloyd's access status, and insurance market convention. The table below summarises the key underwriting considerations by jurisdiction for both R1 (operational) and R3 (construction) risks.</p>
+
+  <div class="market-grid">
+
+    <div class="market-card">
+      <div class="market-header mh-uk">🇬🇧 United Kingdom</div>
+      <div class="market-body">
+        <p><strong>Lloyd's codes:</strong> R1, R3</p>
+        <p><strong>Key operators:</strong> Ørsted, SSE Renewables, RWE, Vattenfall, bp, TotalEnergies</p>
+        <p><strong>Risk profile:</strong> World's largest installed offshore wind capacity (~15GW, 2025); North Sea metocean; ageing Round 1–2 assets (Scroby Sands, North Hoyle, Horns Rev); Round 4–5 gigawatt-scale projects in development; cable corridor congestion</p>
+        <p><strong>Regulatory:</strong> FCA-admitted (Lloyd's fully admitted in UK); no fronting required. MHI Vestas, Siemens Gamesa, GE Vernova as primary OEMs. OFTO model for cable corridors.</p>
+        <p><strong>Programme notes:</strong> Lloyd's leads the UK offshore wind market globally. OFTO (Offshore Transmission Owner) regime separates cable corridor ownership from generation asset — cable corridors may be insured separately under OFTO's own programme. CfD (Contract for Difference) mechanism affects ALOR structuring as revenue is effectively fixed.</p>
+        <div class="tag-row">
+          <span class="basin-tag green">Lloyd's Lead</span>
+          <span class="basin-tag green">No Fronting</span>
+          <span class="basin-tag amber">Largest Market</span>
+          <span class="basin-tag amber">OFTO Cable Split</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-header mh-de">🇩🇪 Germany / North Sea</div>
+      <div class="market-body">
+        <p><strong>Lloyd's codes:</strong> R1, R3</p>
+        <p><strong>Key operators:</strong> RWE, EnBW, Vattenfall, Equinor, bp</p>
+        <p><strong>Risk profile:</strong> German Bight (North Sea) dominant zone; dense cable corridor network managed by TenneT/Amprion; cluster approach (Borkum, Helgoland, Sylt areas); Siemens Gamesa and Vestas OEM concentration</p>
+        <p><strong>Regulatory:</strong> German Insurance Contract Act (VVG); Lloyd's is admitted via Freedom of Services (EEA legacy arrangements). BSH (Federal Maritime and Hydrographic Agency) technical approval. TenneT cable corridor — offshore transmission infrastructure is separate insurance risk. BNetzA (Federal Network Agency) oversees grid connection.</p>
+        <p><strong>Programme notes:</strong> German offshore wind has highest cable corridor density in Europe — inter-array cable and export cable losses are a significant loss driver. TenneT operates as monopoly offshore grid operator; cable corridor insurance is a separate TenneT procurement. German GDV (insurance association) provisions may apply to certain construction contracts.</p>
+        <div class="tag-row">
+          <span class="basin-tag green">Lloyd's Admitted</span>
+          <span class="basin-tag amber">TenneT Cable</span>
+          <span class="basin-tag amber">OEM Concentration</span>
+          <span class="basin-tag">BSH Approval</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-header mh-nl">🇳🇱 Netherlands / Belgium</div>
+      <div class="market-body">
+        <p><strong>Lloyd's codes:</strong> R1, R3</p>
+        <p><strong>Key operators:</strong> Ørsted, Shell, Eneco, RWE, Northland Power, OceanWind (Parkwind)</p>
+        <p><strong>Risk profile:</strong> Shallow North Sea (15–40m water depth); Hollandse Kust wind zones dominate Dutch market; Belgian offshore zone (Princess Elisabeth, Rentel); sand shifting seabed — scour protection critical; SDE++ subsidy mechanism in Netherlands</p>
+        <p><strong>Regulatory:</strong> Dutch De Nederlandsche Bank (DNB) — Lloyd's admitted. Belgian FSMA. Hollandse Kust projects tendered as zero-subsidy (merchant risk) — ALOR structures must account for spot power price volatility rather than CfD fixed revenue.</p>
+        <p><strong>Programme notes:</strong> The Netherlands and Belgium are at the forefront of subsidy-free offshore wind — ALOR policies must be carefully designed where revenue depends on spot electricity prices rather than fixed government contracts. Scour monitoring and seabed movement are key operational considerations given the shallow, sandy seabed.</p>
+        <div class="tag-row">
+          <span class="basin-tag green">Lloyd's Admitted</span>
+          <span class="basin-tag amber">Merchant Price Risk</span>
+          <span class="basin-tag amber">Scour Exposure</span>
+          <span class="basin-tag">Zero-Subsidy Trend</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-header mh-us">🇺🇸 United States (East Coast)</div>
+      <div class="market-body">
+        <p><strong>Lloyd's codes:</strong> R1, R3</p>
+        <p><strong>Key operators:</strong> Ørsted, Equinor (Empire Wind), Avangrid, Dominion Energy, bp/Equinor, Vineyard Wind (Avangrid/CIP)</p>
+        <p><strong>Risk profile:</strong> Atlantic OCS (Outer Continental Shelf); hurricane windstorm risk (Cat 3–5 along East Coast); Jones Act compliance for vessel operations; immature regulatory/supply chain environment; severe cost inflation (2022–2024 PPA renegotiations)</p>
+        <p><strong>Regulatory:</strong> BOEM (Bureau of Ocean Energy Management) — federal permitting. US state PUC/PPA agreements. <strong>Jones Act:</strong> US-flagged installation vessels mandated for cable laying and some installation work. Lloyd's is non-admitted in most US states — surplus lines placement required (Lloyd's via NILS or admitted fronting carrier). State insurance commissioners impose premium taxes on surplus lines.</p>
+        <p><strong>Programme notes:</strong> The Jones Act requirement significantly inflates construction costs ($50–150m per project vs European equivalent). Jones Act-compliant WTIV (Wind Turbine Installation Vessel) availability is extremely limited (1–2 vessels 2024–2026). Vineyard Wind and other projects have faced cancellation or major renegotiation — DSU/delay exposures very material during this period.</p>
+        <div class="tag-row">
+          <span class="basin-tag red">Surplus Lines Only</span>
+          <span class="basin-tag red">Hurricane Exposure</span>
+          <span class="basin-tag red">Jones Act Cost</span>
+          <span class="basin-tag amber">WTIV Scarcity</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-header mh-tw">🇹🇼 Taiwan</div>
+      <div class="market-body">
+        <p><strong>Lloyd's codes:</strong> R1, R3</p>
+        <p><strong>Key operators:</strong> Ørsted (Greater Changhua), Vestas/JERA (Formosa), Copenhagen Infrastructure Partners, Northland Power, MacQuarie</p>
+        <p><strong>Risk profile:</strong> Taiwan Strait (one of world's most active typhoon tracks — average 3–5 direct typhoon hits per decade); seismically active region (Taiwan sits on Pacific Ring of Fire); extreme metocean conditions; rapid market growth (5.5GW target by 2025)</p>
+        <p><strong>Regulatory:</strong> Financial Supervisory Commission (FSC) — <strong>fronting required</strong>: Lloyd's must operate via local Taiwanese admitted insurer (Fubon, Cathay Century, or Taiwan Fire &amp; Marine) with Lloyd's providing reinsurance behind the local front. Local content requirements apply. Bureau of Energy oversees project approvals.</p>
+        <p><strong>Programme notes:</strong> Taiwan is the most complex offshore wind market for Lloyd's due to typhoon exposure (wind speeds up to 65m/s), seismic risk, and fronting requirements. Turbine foundation design must meet DNV-ST-0126 with typhoon-specific load cases. Premium rates for R3 construction in Taiwan are 50–100% higher than equivalent North Sea projects.</p>
+        <div class="tag-row">
+          <span class="basin-tag red">Fronting Required</span>
+          <span class="basin-tag red">Typhoon / Seismic</span>
+          <span class="basin-tag red">Highest-Rated Market</span>
+          <span class="basin-tag amber">Rapid Growth</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="market-card">
+      <div class="market-header mh-au">🇦🇺 Australia</div>
+      <div class="market-body">
+        <p><strong>Lloyd's codes:</strong> R1, R3</p>
+        <p><strong>Key operators:</strong> Star of the South (CIP/Cbus), Macquarie/BlueFloat, Equinor (SunZia — US, not AU), AGL Energy</p>
+        <p><strong>Risk profile:</strong> Emerging market — no operational offshore wind as of 2025; Bass Strait (Southern Ocean swell — significant metocean challenge); tropical cyclone risk in northern zones; long cable export distances to grid</p>
+        <p><strong>Regulatory:</strong> APRA (Australian Prudential Regulation Authority); Lloyd's admitted in Australia (Lloyd's Australian Operations). Offshore Electricity Infrastructure Act 2021 — federal framework for offshore wind licensing. State-by-state grid connection complexity. AEMO oversees grid integration.</p>
+        <p><strong>Programme notes:</strong> Australia is a watch market for 2025–2030 as the first projects reach Final Investment Decision. Bass Strait has some of the most challenging metocean conditions for fixed-foundation wind globally — comparable to the Northern North Sea. Early project pipeline is predominantly floating wind in deeper waters, which will require specialist R3 expertise and separate floating structure coverages (mooring, dynamic cable).</p>
+        <div class="tag-row">
+          <span class="basin-tag green">Lloyd's Admitted</span>
+          <span class="basin-tag amber">Emerging Market</span>
+          <span class="basin-tag amber">Floating Wind Likely</span>
+          <span class="basin-tag amber">Bass Strait Metocean</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Section 4: Jones Act deep dive -->
+  <h2>The Jones Act — US Market Underwriting Implications</h2>
+  <p>The Merchant Marine Act of 1920 (the "Jones Act") requires that goods transported between US ports be carried on US-built, US-owned, and US-crewed vessels. Its application to offshore wind construction creates some of the most significant cost and risk challenges in the global offshore wind insurance market.</p>
+
+  <div class="warning-box">
+    <h4>⚠ Jones Act Impact on R3 Construction Cover</h4>
+    <p>European WTIVs (Wind Turbine Installation Vessels) — which carry most of the world's installation capacity — are not Jones Act-compliant. They can operate in US waters only under specific exemptions (e.g., US-flagged feeder barges must be used for component transport). The practical result is that US offshore wind installation relies on a very small number of Jones Act-compliant vessels, driving significant schedule risk:</p>
+    <ul style="margin:10px 0 0 18px;">
+      <li>If the sole WTIV suffers a breakdown during an installation weather window, the entire project can lose an entire installation season (6–9 months delay)</li>
+      <li>DSU/delay cover for US offshore wind construction must account for installation vessel unavailability as a primary delay trigger</li>
+      <li>Vessel hire rates for Jones Act WTIVs are 2–3× European equivalents; any damage to the vessel is a critical path event</li>
+      <li>Underwriters are requiring separate delay-in-installation (DII) endorsements for US projects that explicitly address vessel unavailability scenarios</li>
+    </ul>
+  </div>
+
+  <h3>Jones Act — Underwriting Checklist for US R3 Risks</h3>
+  <ul class="checklist">
+    <li>Confirm installation vessel name and Jones Act compliance status</li>
+    <li>Confirm vessel availability window and contingency vessel arrangements</li>
+    <li>Review WTIV contract: Who bears delay risk if vessel is damaged or unavailable?</li>
+    <li>Check DSU policy wording: Does it trigger on vessel unavailability as well as physical damage to works?</li>
+    <li>Confirm marine warranty surveyor (MWS) appointment for installation operations</li>
+    <li>Review hurricane contingency plan and vessel withdrawal procedures during Atlantic season (June–November)</li>
+    <li>Confirm cable-lay vessel (CLV) Jones Act status for inter-array and export cable installation</li>
+    <li>Check state-level surplus lines tax position and broker surplus lines licence</li>
+  </ul>
+
+  <!-- Section 5: Construction Programme Design -->
+  <h2>R3 Construction Programme Design</h2>
+  <p>Construction programmes for major offshore wind farms are among the most complex insurance placements in the London market, typically placed 12–18 months before the first major marine installation operation commences, and remain live until the farm achieves Commercial Operation Date (COD) and transitions to R1 operational cover.</p>
+
+  <h3>Standard R3 Programme Sections</h3>
+  <table>
+    <thead>
+      <tr><th>Section</th><th>Coverage</th><th>Basis of Limit</th><th>Typical Deductible</th><th>Key Conditions</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>S1 — Contract Works</strong></td><td>Physical damage to all works (turbines, foundations, cables, substation) during construction</td><td>Peak TIV (as-installed replacement cost at peak risk)</td><td>£1–5m per loss; higher for transit/marine operations</td><td>MWS approval; agreed installation procedures; named vessel endorsement</td></tr>
+      <tr><td><strong>S2 — DSU (Delay in Start-Up)</strong></td><td>Revenue loss flowing from physical damage causing delay to COD</td><td>P50 revenue × delay period; typically 12–24 month indemnity</td><td>Deductible period: 30–90 days from scheduled COD</td><td>Must be triggered by insured physical damage; schedule delays alone not covered</td></tr>
+      <tr><td><strong>S3 — Marine Plant</strong></td><td>Loss/damage to installation vessels and equipment while engaged on the project</td><td>AHV/WTIV insured value</td><td>£500k–£2m per vessel</td><td>Typically owner's marine hull policy; project policy may provide top-up or gap cover</td></tr>
+      <tr><td><strong>S4 — Third-Party Liability</strong></td><td>Bodily injury / property damage to third parties arising from construction operations</td><td>Per occurrence limit £100–500m</td><td>£2–5m per occurrence</td><td>Includes collision with shipping; cable damage to third-party infrastructure</td></tr>
+      <tr><td><strong>S5 — Employers' Liability</strong></td><td>Injury to employees and contractors during construction operations</td><td>Statutory minimum + excess; typically £25m+</td><td>£500k–£1m</td><td>Offshore OIR-B2 conditions for UK projects; RIDDOR compliance</td></tr>
+    </tbody>
+  </table>
+
+  <h3>R3 to R1 Handover — Transition Points</h3>
+  <div class="info-box">
+    <h4>Construction-to-Operational Transition Protocol</h4>
+    <p>The transition from R3 (construction) to R1 (operational) cover is a critical risk management moment that must be carefully managed to avoid coverage gaps:</p>
+    <ul>
+      <li><strong>Provisional acceptance:</strong> Individual turbines accepted by the developer from the EPC contractor at commissioning — usually triggers transfer of risk from contractor's insurer to developer's R1 programme, on a turbine-by-turbine basis</li>
+      <li><strong>COD (Commercial Operation Date):</strong> The point at which the entire farm achieves full operational status and the R3 DSU indemnity period terminates; R1 ALOR coverage begins</li>
+      <li><strong>Defects liability period (DLP):</strong> A period (typically 12–24 months post-COD) during which the EPC contractor retains responsibility for defects — warranty claims during the DLP should be channelled to the contractor's professional indemnity/warranty programme, not the R1 policy</li>
+      <li><strong>OEM warranty period:</strong> Manufacturer's warranty on turbines (typically 5 years) runs concurrently with R1 cover — the policy must clearly address the interaction between warranty recovery and insurance indemnity</li>
+    </ul>
+  </div>
+
+  <!-- Section 6: Captive & Alternative Risk Transfer -->
+  <h2>Captive Structures &amp; Alternative Risk Transfer</h2>
+  <p>As the offshore wind market matures, the largest utilities are increasingly using captive insurance and alternative risk transfer (ART) mechanisms to manage their growing asset portfolios. This trend is directly reducing commercial market premium volume, but increasing the sophistication of risks placed at Lloyd's (which is now typically writing excess layers with higher risk-adjusted returns).</p>
+
+  <div class="card-grid">
+    <div class="card green">
+      <h4>🏦 Wholly Owned Captive</h4>
+      <p>Ørsted, RWE, and Vattenfall all operate captives. The captive retains attritional losses (blade erosion repairs, minor cable damage) up to a threshold (£25–100m), with Lloyd's providing excess of loss above. Captives are typically domiciled in Guernsey, Dublin, or Luxembourg for European operators.</p>
+    </div>
+    <div class="card blue">
+      <h4>📊 ILS / Catastrophe Bond</h4>
+      <p>Insurance-Linked Securities (cat bonds) are increasingly used for upper catastrophe layers — particularly typhoon exposure in Asia-Pacific (Taiwan) and hurricane in the US. A cat bond transfers parametric or indemnity risk to capital markets investors, providing multi-year capacity at defined trigger levels.</p>
+    </div>
+    <div class="card gold">
+      <h4>🤝 Industry Mutuals</h4>
+      <p>Renewables-focused mutuals (e.g., Renewables Insurance Ltd — a captive/mutual hybrid) are emerging as operators collaborate to pool serial defect risk. Mutual pooling is particularly attractive for managing ALOR aggregation from a common OEM defect where no single operator has sufficient diversification.</p>
+    </div>
+    <div class="card red">
+      <h4>⚡ Multi-Year Programme Structures</h4>
+      <p>Some utilities negotiate 3–5 year R1 programmes with Lloyd's syndicates, providing rate stability and administration efficiency. Multi-year structures require careful premium adjustment mechanisms (indexed to installed TIV growth) and claim review clauses if loss ratios breach agreed thresholds.</p>
+    </div>
+  </div>
+
+  <!-- Section 7: Info requirements for a global programme -->
+  <h2>Information Requirements — Global Programme Placement</h2>
+  <p>A global or portfolio offshore wind programme placement requires a comprehensive submission package. The table below summarises the information requirements for a new programme placement or major renewal.</p>
+
+  <h3>Portfolio R1 Programme — Underwriting Submission Requirements</h3>
+  <table>
+    <thead>
+      <tr><th>Category</th><th>Information Required</th><th>Timing</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Asset Schedule</strong></td><td>Full asset register: farm name, location (lat/long), installed capacity (MW), TIV (£), turbine OEM and model, foundation type, commissioning year, water depth</td><td>With submission (minimum 120 days pre-renewal)</td></tr>
+      <tr><td><strong>OEM &amp; Component Data</strong></td><td>OEM breakdown by turbine count and TIV; gearbox/bearing manufacturer; blade supplier; WTG controller; CMS (condition monitoring system) details; warranty status per OEM</td><td>With submission</td></tr>
+      <tr><td><strong>Loss History</strong></td><td>5-year loss history: date, peril, turbine/component, repair cost, downtime hours, ALOR claim if applicable; serial event details with OEM warranty claim status</td><td>With submission; updated quarterly for active claims</td></tr>
+      <tr><td><strong>O&amp;M Data</strong></td><td>Annual O&amp;M budget (£/MWh); scheduled major maintenance programme; blade inspection records (LEE status); CMS alert history; offshore access vessel schedule</td><td>With submission</td></tr>
+      <tr><td><strong>Technical Certifications</strong></td><td>DNV/BV type certification per turbine model; foundation design certification (IEC 61400-3-1); site-specific assessment reports where applicable</td><td>With submission; updated for any design modifications</td></tr>
+      <tr><td><strong>ALOR Calculation</strong></td><td>P50 annual revenue per farm (£); applicable CfD/PPA contract terms; ALOR sum insured calculation; basis of revenue (CfD strike price, PPA rate, or merchant)</td><td>With submission</td></tr>
+      <tr><td><strong>Construction Pipeline</strong></td><td>Details of any R3 assets under construction or planned — OEM, WTIV, installation schedule, EPC contract structure, financial close date</td><td>With submission if wrap programme; separate for standalone R3</td></tr>
+      <tr><td><strong>Captive/Reinsurance Structure</strong></td><td>Captive retention details; existing reinsurance programme; any prior insurance market limits; regulatory capital structure</td><td>With submission</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Highlight summary -->
+  <div class="highlight-box">
+    <h3>Key Programme Design Principles — Offshore Wind</h3>
+    <p>Offshore wind global programmes differ fundamentally from upstream oil and gas in four critical dimensions that underwriters must understand and address in programme design:</p>
+    <p><strong>1. Serial defect aggregation</strong> — No other class of insurance has equivalent correlated exposure from a common component defect. Programme design must explicitly address serial event triggers, per-turbine sub-limits, and aggregate serial deductibles.</p>
+    <p><strong>2. ALOR revenue basis</strong> — The basis of ALOR (CfD, PPA, merchant) fundamentally affects both sum insured calculation and claims adjustment. Lloyd's underwriters must understand the revenue support mechanism for each farm in a portfolio.</p>
+    <p><strong>3. LEE (Leading Edge Erosion) management</strong> — Blade erosion is the dominant attritional driver for operational programmes. Premium adequacy at R1 is highly sensitive to LEE inspection frequency and repair programme quality.</p>
+    <p><strong>4. Jurisdictional complexity</strong> — Taiwan, US, Brazil, and Japan all require fronting arrangements and have unique regulatory overlays. Programme design must be built with local counsel and local fronting partners from the outset, not retrofitted at placement.</p>
+  </div>
+
+  <!-- Hub Complete Box -->
+  <div class="complete-box">
+    <h3>Renewable Energy – Offshore Hub Complete</h3>
+    <p>All seven modules of the Renewable Energy – Offshore hub (Lloyd's codes R1 / R3) are now complete. This hub covers the full underwriting lifecycle from market history and loss database through to global programme structuring.</p>
+    <div class="module-nav">
+      <a href="index.html" class="module-btn">Overview</a>
+      <a href="history.html" class="module-btn">History</a>
+      <a href="timeline.html" class="module-btn">Timeline</a>
+      <a href="database.html" class="module-btn">Loss Database</a>
+      <a href="underwriting.html" class="module-btn">Underwriting</a>
+      <a href="rates-analysis.html" class="module-btn">Rates Analysis</a>
+      <a href="risk-mitigation.html" class="module-btn">Risk Mitigation</a>
+      <a href="../index.html" class="module-btn">← Risk Code Hub Home</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — <span>Renewable Energy – Offshore</span> | Lloyd's Codes R1 · R3 | Module 07 of 7</p>
+  <p style="margin-top:6px;">Built for Lloyd's market intelligence purposes. Data accurate to April 2026.</p>
+</footer>
+
+</body>
+</html>

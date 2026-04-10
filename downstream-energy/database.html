@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loss Database – Downstream Energy – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--orange:#c45c00;--orange-dark:#8b3800;--accent:#c8a84b;--light:#fffbf5;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--red:#8b1a1a;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#c45c00 60%,#8b3800 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#f0cca0; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:40px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .filter-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; align-items:center; }
+    .filter-bar input, .filter-bar select { padding:8px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.88rem; color:var(--text); background:#fff; }
+    .filter-bar input { flex:1; min-width:180px; }
+    .filter-bar label { font-size:0.85rem; color:var(--muted); font-weight:600; }
+    .db-stats { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+    .db-stat { background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px 18px; font-size:0.85rem; }
+    .db-stat strong { color:var(--navy); font-size:1.1rem; display:block; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.07); }
+    thead th { background:var(--navy); color:#fff; padding:11px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.8px; cursor:pointer; user-select:none; white-space:nowrap; }
+    thead th:hover { background:#1a3a6a; }
+    tbody tr { border-bottom:1px solid var(--border); transition:background 0.15s; }
+    tbody tr:hover { background:#fffbf0; }
+    tbody td { padding:10px 14px; vertical-align:top; }
+    .loss-cell { font-weight:700; color:var(--orange-dark); white-space:nowrap; }
+    .cause-tag { display:inline-block; font-size:0.72rem; padding:2px 8px; border-radius:10px; font-weight:600; white-space:nowrap; }
+    .cause-fire { background:#fff0f0; color:var(--red); }
+    .cause-explosion { background:#ffe8cc; color:var(--orange-dark); }
+    .cause-natcat { background:#e8f0ff; color:#1a3a8a; }
+    .cause-mb { background:#f0f0f0; color:#444; }
+    .cause-pipeline { background:#f0e8ff; color:#5a1a8a; }
+    .cause-attack { background:#ffe0e0; color:#8b0000; }
+    .cause-other { background:#e8ffe8; color:var(--green); }
+    .lesson { font-size:0.8rem; color:var(--muted); font-style:italic; line-height:1.5; }
+    .hidden { display:none; }
+    .breadcrumb { font-size:0.8rem; color:#f0cca0; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    #no-results { display:none; padding:30px; text-align:center; color:var(--muted); font-size:0.95rem; }
+    @media(max-width:700px){ main{padding:24px 10px;} table{font-size:0.78rem;} thead th,tbody td{padding:8px 8px;} }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Downstream Energy</a> › Loss Database</div>
+  <div class="tag">Module 03 — Searchable Loss Database</div>
+  <h1>Loss Database</h1>
+  <p>35 major downstream and onshore energy losses from 1989–2024. Search, filter and sort by year, cause, territory and loss quantum to identify patterns and precedents for underwriting decisions.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <div class="filter-bar">
+    <input type="text" id="searchInput" placeholder="Search by location, cause, insured…" oninput="filterTable()">
+    <label>Cause:</label>
+    <select id="causeFilter" onchange="filterTable()">
+      <option value="">All Causes</option>
+      <option value="Fire">Fire</option>
+      <option value="Explosion/VCE">Explosion/VCE</option>
+      <option value="Nat-CAT">Nat-CAT</option>
+      <option value="Machinery Breakdown">Machinery Breakdown</option>
+      <option value="Pipeline">Pipeline</option>
+      <option value="Attack">Attack/Sabotage</option>
+    </select>
+    <label>Territory:</label>
+    <select id="territoryFilter" onchange="filterTable()">
+      <option value="">All Territories</option>
+      <option value="USA">USA</option>
+      <option value="Europe">Europe</option>
+      <option value="Middle East">Middle East</option>
+      <option value="Asia">Asia</option>
+      <option value="LatAm">LatAm</option>
+      <option value="Africa">Africa</option>
+    </select>
+    <label>Min Loss $m:</label>
+    <select id="lossFilter" onchange="filterTable()">
+      <option value="0">All</option>
+      <option value="100">$100m+</option>
+      <option value="500">$500m+</option>
+      <option value="1000">$1bn+</option>
+    </select>
+  </div>
+
+  <div class="db-stats">
+    <div class="db-stat"><strong id="stat-count">35</strong>incidents</div>
+    <div class="db-stat"><strong>1989–2024</strong>date range</div>
+    <div class="db-stat"><strong>$30bn+</strong>cumulative insured losses</div>
+    <div class="db-stat"><strong>EA/EB/EF/PG</strong>Lloyd's codes covered</div>
+  </div>
+
+  <table id="lossTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Year ↕</th>
+        <th onclick="sortTable(1)">Location</th>
+        <th onclick="sortTable(2)">Facility / Insured</th>
+        <th onclick="sortTable(3)">Cause</th>
+        <th onclick="sortTable(4)">Insured Loss ↕</th>
+        <th>Territory</th>
+        <th>BI Impact</th>
+        <th>Key Lesson</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <tr data-cause="Explosion/VCE" data-territory="Europe" data-loss="450">
+        <td>1989</td><td>Pasadena, TX, USA</td><td>Phillips 66 Polyethylene Plant</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~$750m</td><td>USA</td><td>12+ months</td>
+        <td class="lesson">23 deaths; hose connection failure during maintenance; led to US OSHA PSM regulations (29 CFR 1910.119)</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="Europe" data-loss="200">
+        <td>1992</td><td>La Mède, France</td><td>Total La Mède Refinery</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~$250m</td><td>Europe</td><td>6 months</td>
+        <td class="lesson">Crude unit fire from pump seal failure; reinforced need for double mechanical seal policy on hot hydrocarbon services</td>
+      </tr>
+      <tr data-cause="Explosion/VCE" data-territory="USA" data-loss="300">
+        <td>1994</td><td>Port Neches, TX, USA</td><td>Texaco Port Neches Refinery</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~$300m</td><td>USA</td><td>9 months</td>
+        <td class="lesson">Isobutane alkylation unit explosion; reinforced HF alkylation alternative debate</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="Europe" data-loss="150">
+        <td>1997</td><td>Milford Haven, Wales, UK</td><td>Texaco Pembroke Refinery</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~$160m</td><td>Europe</td><td>4 months</td>
+        <td class="lesson">Lightning strike ignition of atmospheric tank; led to revised tank grounding/bonding standards across UK refineries</td>
+      </tr>
+      <tr data-cause="Nat-CAT" data-territory="USA" data-loss="400">
+        <td>1998</td><td>Texas Gulf Coast, USA</td><td>Multiple refineries/petrochemicals</td>
+        <td><span class="cause-tag cause-natcat">Nat-CAT</span></td>
+        <td class="loss-cell">~$1.2bn</td><td>USA</td><td>2–6 months</td>
+        <td class="lesson">Hurricane Georges; first major Gulf Coast energy Nat-CAT event; demonstrated accumulation risk pre-Katrina</td>
+      </tr>
+      <tr data-cause="Explosion/VCE" data-territory="Europe" data-loss="3000">
+        <td>2001</td><td>Toulouse, France</td><td>AZF (Grande Paroisse) Ammonium Nitrate Plant</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~€3bn (total)</td><td>Europe</td><td>Permanent loss</td>
+        <td class="lesson">300 tonnes AN detonated; 31 deaths, 2,500 injured; triggered SEVESO III directive and new industrial buffer zone rules across EU</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="USA" data-loss="200">
+        <td>2002</td><td>Motiva Enterprises, Delaware, USA</td><td>Motiva (Shell/Saudi Aramco) Delaware Refinery</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~$200m</td><td>USA</td><td>8 months</td>
+        <td class="lesson">Sulfuric acid alkylation unit fire; 1 fatality; acid inventory management standards revised across US refining</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="Europe" data-loss="120">
+        <td>2003</td><td>South Killingholme, UK</td><td>ConocoPhillips Humber Refinery</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~£120m</td><td>Europe</td><td>5 months</td>
+        <td class="lesson">Hydrocracker fire during startup after planned maintenance; importance of startup risk protocols highlighted</td>
+      </tr>
+      <tr data-cause="Explosion/VCE" data-territory="USA" data-loss="1500">
+        <td>2005</td><td>Texas City, TX, USA</td><td>BP Texas City Refinery</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~$1.5bn</td><td>USA</td><td>18 months</td>
+        <td class="lesson">15 deaths; raffinate splitter overfill; Baker Panel recommendations became global PSM standard; US refinery rates +25–40%</td>
+      </tr>
+      <tr data-cause="Explosion/VCE" data-territory="Europe" data-loss="900">
+        <td>2005</td><td>Buncefield, UK</td><td>HOSL Fuel Storage Terminal</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~£900m</td><td>Europe</td><td>Terminal decommissioned</td>
+        <td class="lesson">Overflow protection failure; IOP systems became universal underwriting requirement; UK fuel storage rates +30–50%</td>
+      </tr>
+      <tr data-cause="Nat-CAT" data-territory="USA" data-loss="10000">
+        <td>2005</td><td>Gulf Coast, USA</td><td>Multiple – Katrina &amp; Rita</td>
+        <td><span class="cause-tag cause-natcat">Nat-CAT</span></td>
+        <td class="loss-cell">~$10bn (energy)</td><td>USA</td><td>Up to 30+ days</td>
+        <td class="lesson">Largest energy Nat-CAT ever; Gulf Coast loadings +200–400%; mandatory cat modelling; accumulation limits introduced</td>
+      </tr>
+      <tr data-cause="Machinery Breakdown" data-territory="USA" data-loss="100">
+        <td>2010</td><td>Anacortes, WA, USA</td><td>Tesoro Anacortes Refinery</td>
+        <td><span class="cause-tag cause-mb">Machinery Breakdown</span></td>
+        <td class="loss-cell">~$100m</td><td>USA</td><td>6 months</td>
+        <td class="lesson">7 deaths; HTHA degradation of heat exchanger; new API 941 inspection protocols; Nelson Curves adopted as UW requirement</td>
+      </tr>
+      <tr data-cause="Explosion/VCE" data-territory="Europe" data-loss="300">
+        <td>2011</td><td>Grangemouth, Scotland, UK</td><td>Ineos Grangemouth Refinery &amp; Chemical Complex</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~£200m</td><td>Europe</td><td>4 months</td>
+        <td class="lesson">Cracker unit fire; Scotland's only refinery demonstrates single-point regional supply dependency</td>
+      </tr>
+      <tr data-cause="Explosion/VCE" data-territory="LatAm" data-loss="1500">
+        <td>2012</td><td>Amuay, Venezuela</td><td>PDVSA Amuay Refinery</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~$1.5bn</td><td>LatAm</td><td>12+ months</td>
+        <td class="lesson">48 deaths; chronic underinvestment under state ownership; PSM audit requirements tightened on NOC-operated risks</td>
+      </tr>
+      <tr data-cause="Explosion/VCE" data-territory="USA" data-loss="200">
+        <td>2013</td><td>Geismar, LA, USA</td><td>Williams Olefins Plant</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~$200m</td><td>USA</td><td>8 months</td>
+        <td class="lesson">Reboiler overpressure; 2 deaths; blocked-in liquid overpressure scenario; PSV sizing reviews became UW condition</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="Asia" data-loss="120">
+        <td>2013</td><td>Jamnagar, India</td><td>Reliance Industries Jamnagar Refinery</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~$120m</td><td>Asia</td><td>3 months</td>
+        <td class="lesson">Hydrocracker fire during maintenance; world's largest refinery complex demonstrates even best-managed assets face process risk</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="Middle East" data-loss="300">
+        <td>2014</td><td>Kuwait, Kuwait</td><td>Kuwait National Petroleum Co. (KNPC)</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~$300m</td><td>Middle East</td><td>6 months</td>
+        <td class="lesson">Mina Al Ahmadi refinery fire; crude unit damage; NOC governance and maintenance programme quality remains key UW factor</td>
+      </tr>
+      <tr data-cause="Explosion/VCE" data-territory="USA" data-loss="300">
+        <td>2015</td><td>Torrance, CA, USA</td><td>ExxonMobil Torrance Refinery</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~$300m</td><td>USA</td><td>14 months</td>
+        <td class="lesson">FCC/ESP explosion; 14-month partial outage; California market gasoline price increase; BI was dominant loss component</td>
+      </tr>
+      <tr data-cause="Pipeline" data-territory="USA" data-loss="150">
+        <td>2016</td><td>Moss Point, MS, USA</td><td>Enterprise Products NGL Pipeline</td>
+        <td><span class="cause-tag cause-pipeline">Pipeline</span></td>
+        <td class="loss-cell">~$150m</td><td>USA</td><td>3 months</td>
+        <td class="lesson">Internal corrosion at low point; water ingress; ILI (inline inspection) frequency for wet-service NGL pipelines revised</td>
+      </tr>
+      <tr data-cause="Nat-CAT" data-territory="USA" data-loss="8000">
+        <td>2017</td><td>Houston, TX, USA</td><td>Multiple – Hurricane Harvey</td>
+        <td><span class="cause-tag cause-natcat">Nat-CAT</span></td>
+        <td class="loss-cell">~$7–9bn (energy)</td><td>USA</td><td>Widespread — weeks to months</td>
+        <td class="lesson">Catastrophic flooding of world's largest petrochemical complex; flood sub-limits, 72-hr deductibles, flood elevation certs introduced</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="USA" data-loss="100">
+        <td>2017</td><td>Superior, WI, USA</td><td>Husky Energy Superior Refinery</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~$700m</td><td>USA</td><td>2+ years</td>
+        <td class="lesson">Asphalt blowout during FCCU startup; community evacuation; HF/asphalt unit siting near residential areas reviewed</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="Africa" data-loss="200">
+        <td>2018</td><td>Lagos, Nigeria</td><td>Nigerian National Petroleum Corp (NNPC) pipeline</td>
+        <td><span class="cause-tag cause-pipeline">Pipeline</span></td>
+        <td class="loss-cell">~$200m</td><td>Africa</td><td>6 months</td>
+        <td class="lesson">Third-party interference (illegal tapping); sub-Saharan pipeline theft and community encroachment risk highlighted</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="USA" data-loss="500">
+        <td>2019</td><td>Philadelphia, PA, USA</td><td>Philadelphia Energy Solutions Refinery</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~$500m</td><td>USA</td><td>Permanent — site closed</td>
+        <td class="lesson">HF alkylation fire; corrosion at pipe elbow; financial health of insured as proxy for maintenance quality; HF sub-limits introduced</td>
+      </tr>
+      <tr data-cause="Attack" data-territory="Middle East" data-loss="1000">
+        <td>2019</td><td>Abqaiq &amp; Khurais, Saudi Arabia</td><td>Saudi Aramco</td>
+        <td><span class="cause-tag cause-attack">Attack/Sabotage</span></td>
+        <td class="loss-cell">~$1bn+</td><td>Middle East</td><td>10 days</td>
+        <td class="lesson">Drone/cruise missile attack; war vs terrorism exclusion grey zone; drone/UAV exclusions added to many energy policies</td>
+      </tr>
+      <tr data-cause="Explosion/VCE" data-territory="Asia" data-loss="1000">
+        <td>2020</td><td>Beirut, Lebanon</td><td>Beirut Port Ammonium Nitrate</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~$3bn+ (total)</td><td>Middle East</td><td>Long-term economic</td>
+        <td class="lesson">2,750 tonnes AN stored unsafely for 6 years; 218 deaths; triggered global port and chemical storage accumulation reviews by underwriters</td>
+      </tr>
+      <tr data-cause="Attack" data-territory="USA" data-loss="50">
+        <td>2021</td><td>Eastern USA</td><td>Colonial Pipeline</td>
+        <td><span class="cause-tag cause-attack">Attack/Sabotage</span></td>
+        <td class="loss-cell">~$50m direct</td><td>USA</td><td>6 days</td>
+        <td class="lesson">Ransomware; $4.4m Bitcoin ransom; cyber exclusions tightened in EF pipeline policies; OT/IT security now assessed at renewal</td>
+      </tr>
+      <tr data-cause="Machinery Breakdown" data-territory="USA" data-loss="150">
+        <td>2021</td><td>Port Arthur, TX, USA</td><td>Motiva Enterprises Port Arthur Refinery</td>
+        <td><span class="cause-tag cause-mb">Machinery Breakdown</span></td>
+        <td class="loss-cell">~$150m</td><td>USA</td><td>5 months</td>
+        <td class="lesson">Crude distillation unit fire following power fluctuation during winter storm Uri (Feb 2021); cascading failure from grid outage during freeze event</td>
+      </tr>
+      <tr data-cause="Nat-CAT" data-territory="USA" data-loss="2000">
+        <td>2021</td><td>Gulf Coast, USA</td><td>Multiple – Winter Storm Uri</td>
+        <td><span class="cause-tag cause-natcat">Nat-CAT</span></td>
+        <td class="loss-cell">~$2bn+ (energy)</td><td>USA</td><td>2–8 weeks</td>
+        <td class="lesson">Texas power grid failure; freeze-down of multiple refineries and chemical plants; winterisation standards now a key UW questionnaire item for Gulf Coast risks</td>
+      </tr>
+      <tr data-cause="Explosion/VCE" data-territory="USA" data-loss="400">
+        <td>2022</td><td>Freeport, TX, USA</td><td>Freeport LNG Terminal</td>
+        <td><span class="cause-tag cause-explosion">Explosion/VCE</span></td>
+        <td class="loss-cell">~$400m</td><td>USA</td><td>9 months</td>
+        <td class="lesson">LNG pipe over-pressurisation; 9-month regulatory shutdown; LNG export terminal BI enormously amplified by European energy crisis context</td>
+      </tr>
+      <tr data-cause="Pipeline" data-territory="Europe" data-loss="300">
+        <td>2022</td><td>Baltic Sea, Germany/Denmark</td><td>Nord Stream 1 &amp; 2 Pipelines</td>
+        <td><span class="cause-tag cause-attack">Attack/Sabotage</span></td>
+        <td class="loss-cell">~€1.5bn repair est.</td><td>Europe</td><td>Pipelines decommissioned</td>
+        <td class="lesson">Confirmed sabotage; first large-scale pipeline sabotage event; insurers debated war/terrorism applicability; state-sponsored exclusions reviewed</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="Asia" data-loss="300">
+        <td>2023</td><td>Dangote Refinery, Nigeria</td><td>Dangote Industries</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~$200m est.</td><td>Africa</td><td>Delayed commissioning</td>
+        <td class="lesson">Commissioning-phase fire at Africa's largest refinery during construction; EAR risk underscores importance of phased commissioning testing protocols</td>
+      </tr>
+      <tr data-cause="Nat-CAT" data-territory="USA" data-loss="500">
+        <td>2023</td><td>East Palestine, OH, USA</td><td>Norfolk Southern Railway</td>
+        <td><span class="cause-tag cause-other">Other/Pollution</span></td>
+        <td class="loss-cell">~$800m+ (total)</td><td>USA</td><td>Community impact</td>
+        <td class="lesson">Vinyl chloride release from derailment; liability-dominated; raised pipeline vs rail debate for hazardous chemicals; class action $600m+ settled</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="USA" data-loss="200">
+        <td>2024</td><td>Deer Park / Houston, TX, USA</td><td>LyondellBasell Houston Refinery</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~$200m est.</td><td>USA</td><td>Permanent — accelerated closure</td>
+        <td class="lesson">Crude unit fire; refinery already announced for closure; energy transition creating class of underinvested facilities awaiting decommissioning</td>
+      </tr>
+      <tr data-cause="Machinery Breakdown" data-territory="Europe" data-loss="200">
+        <td>2024</td><td>Rotterdam, Netherlands</td><td>Shell Pernis Refinery</td>
+        <td><span class="cause-tag cause-mb">Machinery Breakdown</span></td>
+        <td class="loss-cell">~€180m est.</td><td>Europe</td><td>4 months</td>
+        <td class="lesson">Cracker unit unplanned outage from compressor failure; world's largest refinery complex; compressor inspection interval management critical for BI risk</td>
+      </tr>
+      <tr data-cause="Fire" data-territory="Middle East" data-loss="400">
+        <td>2024</td><td>Bandar Imam Khomeini, Iran</td><td>NIORDC Abadan Petrochemical Zone</td>
+        <td><span class="cause-tag cause-fire">Fire</span></td>
+        <td class="loss-cell">~$350m est.</td><td>Middle East</td><td>6 months</td>
+        <td class="lesson">Ethylene cracker fire; aging NOC infrastructure; sanctions-affected maintenance; reinforces need for NOC financial health and governance scoring</td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="no-results">No incidents match your filters. Try broadening your search.</div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — <span>Downstream / Onshore Energy (EA · EB · EF · PG)</span> — Module 03: Loss Database</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Loss data and rates are indicative market estimates.</p>
+</footer>
+
+<script>
+  let sortAsc = [true,true,true,true,true];
+  function filterTable(){
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const cause = document.getElementById('causeFilter').value;
+    const territory = document.getElementById('territoryFilter').value;
+    const minLoss = parseInt(document.getElementById('lossFilter').value)||0;
+    const rows = document.querySelectorAll('#tableBody tr');
+    let visible=0;
+    rows.forEach(r=>{
+      const text=r.textContent.toLowerCase();
+      const rowCause = r.getAttribute('data-cause')||'';
+      const rowTerr = r.getAttribute('data-territory')||'';
+      const rowLoss = parseInt(r.getAttribute('data-loss'))||0;
+      const matchQ = !q || text.includes(q);
+      const matchC = !cause || rowCause===cause;
+      const matchT = !territory || rowTerr===territory;
+      const matchL = rowLoss>=minLoss;
+      const show = matchQ && matchC && matchT && matchL;
+      r.classList.toggle('hidden',!show);
+      if(show) visible++;
+    });
+    document.getElementById('stat-count').textContent=visible;
+    document.getElementById('no-results').style.display=visible===0?'block':'none';
+  }
+  function sortTable(col){
+    const tbody=document.getElementById('tableBody');
+    const rows=Array.from(tbody.querySelectorAll('tr'));
+    rows.sort((a,b)=>{
+      const av=a.cells[col]?a.cells[col].textContent.trim():'';
+      const bv=b.cells[col]?b.cells[col].textContent.trim():'';
+      const an=parseFloat(av.replace(/[^0-9.]/g,''));
+      const bn=parseFloat(bv.replace(/[^0-9.]/g,''));
+      if(!isNaN(an)&&!isNaN(bn)) return sortAsc[col]?(an-bn):(bn-an);
+      return sortAsc[col]?av.localeCompare(bv):bv.localeCompare(av);
+    });
+    sortAsc[col]=!sortAsc[col];
+    rows.forEach(r=>tbody.appendChild(r));
+  }
+</script>
+</body>
+</html>

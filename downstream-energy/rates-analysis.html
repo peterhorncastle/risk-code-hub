@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rates &amp; ROE Analysis – Downstream Energy – Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root { --navy:#0d2240;--orange:#c45c00;--orange-dark:#8b3800;--accent:#c8a84b;--light:#fffbf5;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--red:#8b1a1a;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#c45c00 60%,#8b3800 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#f0cca0; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:960px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:40px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.1rem; color:var(--navy); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .chart-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:28px; margin:28px 0; }
+    .chart-box h3 { color:var(--navy); margin-bottom:18px; font-size:1rem; }
+    .chart-wrap { position:relative; height:320px; }
+    .phase-table { width:100%; border-collapse:collapse; margin:18px 0 28px; font-size:0.88rem; }
+    .phase-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.8px; }
+    .phase-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+    .phase-table tr:nth-child(even) td { background:#fafbfc; }
+    .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:24px 0; }
+    .roe-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:24px; text-align:center; }
+    .roe-card.bull { border-top:4px solid var(--green); }
+    .roe-card.base { border-top:4px solid var(--orange); }
+    .roe-card.bear { border-top:4px solid var(--red); }
+    .roe-card .scenario { font-size:0.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+    .roe-card.bull .scenario { color:var(--green); }
+    .roe-card.base .scenario { color:var(--orange); }
+    .roe-card.bear .scenario { color:var(--red); }
+    .roe-card .pct { font-size:2.2rem; font-weight:800; color:var(--navy); margin-bottom:6px; }
+    .roe-card.bear .pct { color:var(--red); }
+    .roe-card p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.5; }
+    table { width:100%; border-collapse:collapse; margin:18px 0 28px; font-size:0.88rem; }
+    th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.8px; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); }
+    tr:nth-child(even) td { background:#fafbfc; }
+    .adequacy-row { display:flex; gap:6px; align-items:center; }
+    .adequacy-bar { height:12px; border-radius:6px; display:inline-block; }
+    .breadcrumb { font-size:0.8rem; color:#f0cca0; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;} .roe-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Downstream Energy</a> › Rates Analysis</div>
+  <div class="tag">Module 05 — Rates &amp; ROE Analysis</div>
+  <h1>Rates &amp; ROE Analysis</h1>
+  <p>25-year downstream energy pricing cycle, rate adequacy by sub-class, market hardening triggers and three-scenario return on equity analysis for EA/EB, EF and PG portfolios.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <h2>25-Year Pricing Cycle: Downstream Energy (2000–2026)</h2>
+
+  <div class="chart-box">
+    <h3>EA/EB Rate on Line Index (2000 = 100) vs Market Events</h3>
+    <div class="chart-wrap">
+      <canvas id="rateChart"></canvas>
+    </div>
+  </div>
+
+  <h2>Market Cycle Phases</h2>
+  <table class="phase-table">
+    <thead><tr><th>Phase</th><th>Period</th><th>Avg Rate Change</th><th>Trigger Events</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Phase 1: Soft pre-9/11</strong></td><td>2000–2001</td><td>−5% to −10% p.a.</td><td>Excess capital; soft global reinsurance market; no major downstream losses</td></tr>
+      <tr><td><strong>Phase 2: Post 9/11 / AZF hard</strong></td><td>2001–2003</td><td>+30% to +60%</td><td>9/11 market shock; Toulouse AZF explosion (€3bn, 2001); post-September 11 capital withdrawal</td></tr>
+      <tr><td><strong>Phase 3: Gradual softening</strong></td><td>2003–2005</td><td>−5% to −15% p.a.</td><td>New capital entering market; no major downstream losses 2002–2004</td></tr>
+      <tr><td><strong>Phase 4: Texas City / Katrina hard</strong></td><td>2005–2007</td><td>+25% to +80% (Gulf Coast)</td><td>Texas City ($1.5bn); Buncefield (£900m); Katrina/Rita ($10bn energy); market capacity temporarily withdrawn</td></tr>
+      <tr><td><strong>Phase 5: Pre-Macondo soft</strong></td><td>2007–2010</td><td>−8% to −18% p.a.</td><td>Post-hardening competition; new capacity (ILS, Bermuda); benign downstream loss experience 2006–2009</td></tr>
+      <tr><td><strong>Phase 6: Macondo-driven hard</strong></td><td>2010–2012</td><td>+15% to +30% (energy overall)</td><td>Deepwater Horizon ($14bn+ total); energy market CR hit 120%+; downstream affected by sector-wide repricing</td></tr>
+      <tr><td><strong>Phase 7: Extended soft market</strong></td><td>2012–2017</td><td>−5% to −15% p.a.</td><td>Abundant reinsurance capital; low interest rates drove underwriting competition; Amuay loss absorbed</td></tr>
+      <tr><td><strong>Phase 8: Harvey-led hard</strong></td><td>2017–2021</td><td>+20% to +60% (Gulf Coast)</td><td>Harvey ($7–9bn energy); mandatory flood sub-limits; Gulf Coast loadings fundamental repricing; Husky Superior, PES Philadelphia</td></tr>
+      <tr><td><strong>Phase 9: Current market</strong></td><td>2021–2026</td><td>Flat to +10% (loss-free); +20–40% (loss-affected)</td><td>Post-Harvey stabilisation; Uri winter storm 2021; Freeport LNG 2022; inflationary rebuild cost increases; LNG boom creating new premium volume</td></tr>
+    </tbody>
+  </table>
+
+  <div class="chart-box">
+    <h3>Current Rate Adequacy Assessment by Sub-class (2026)</h3>
+    <div class="chart-wrap">
+      <canvas id="adequacyChart"></canvas>
+    </div>
+  </div>
+
+  <h2>Current Market Rates (Indicative 2026)</h2>
+  <table>
+    <thead><tr><th>Risk Type</th><th>Base Rate (% of MPL)</th><th>Trend vs 2024</th><th>Rate Adequacy</th></tr></thead>
+    <tbody>
+      <tr><td>Major IOC Refinery — loss-free, strong PSM</td><td>0.16–0.22% PD; 0.32–0.42% BI</td><td>Flat</td><td>
+        <div class="adequacy-row"><div class="adequacy-bar" style="width:80px;background:var(--green);"></div><span style="font-size:0.82rem;margin-left:8px;color:var(--green);font-weight:700;">Adequate</span></div></td></tr>
+      <tr><td>US Gulf Coast Refinery — Nat-CAT exposed</td><td>0.24–0.35% PD; 0.45–0.65% BI</td><td>Flat to +5%</td><td>
+        <div class="adequacy-row"><div class="adequacy-bar" style="width:75px;background:var(--green);"></div><span style="font-size:0.82rem;margin-left:8px;color:var(--green);font-weight:700;">Adequate (borderline post-Harvey)</span></div></td></tr>
+      <tr><td>NOC-operated refinery — emerging market</td><td>0.30–0.55% PD; 0.50–0.80% BI</td><td>+5–10%</td><td>
+        <div class="adequacy-row"><div class="adequacy-bar" style="width:65px;background:var(--orange);"></div><span style="font-size:0.82rem;margin-left:8px;color:var(--orange);font-weight:700;">Marginal</span></div></td></tr>
+      <tr><td>US Gulf Coast — loss-affected account</td><td>0.45–0.80%+ PD; negotiated</td><td>+20–40%</td><td>
+        <div class="adequacy-row"><div class="adequacy-bar" style="width:50px;background:var(--orange);"></div><span style="font-size:0.82rem;margin-left:8px;color:var(--orange);font-weight:700;">Marginal to inadequate</span></div></td></tr>
+      <tr><td>LNG Terminal — operational, Gulf Coast</td><td>0.18–0.28% PD; 0.15–0.22% BI</td><td>+5–15% (Freeport impact)</td><td>
+        <div class="adequacy-row"><div class="adequacy-bar" style="width:72px;background:var(--green);"></div><span style="font-size:0.82rem;margin-left:8px;color:var(--green);font-weight:700;">Adequate</span></div></td></tr>
+      <tr><td>Pipeline (EF) — new ILI-compliant</td><td>0.04–0.10% PD</td><td>Flat</td><td>
+        <div class="adequacy-row"><div class="adequacy-bar" style="width:80px;background:var(--green);"></div><span style="font-size:0.82rem;margin-left:8px;color:var(--green);font-weight:700;">Adequate</span></div></td></tr>
+      <tr><td>Power Generation CCGT — loss-free</td><td>0.12–0.20% PD; 0.25–0.40% BI</td><td>Flat to +5%</td><td>
+        <div class="adequacy-row"><div class="adequacy-bar" style="width:78px;background:var(--green);"></div><span style="font-size:0.82rem;margin-left:8px;color:var(--green);font-weight:700;">Adequate</span></div></td></tr>
+      <tr><td>Aging coal/gas plant — deferred maintenance</td><td>0.30–0.60%+ PD; high MB loading</td><td>+15–25%</td><td>
+        <div class="adequacy-row"><div class="adequacy-bar" style="width:45px;background:var(--red);"></div><span style="font-size:0.82rem;margin-left:8px;color:var(--red);font-weight:700;">Inadequate — declination common</span></div></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Return on Equity (ROE) — Three Scenarios</h2>
+  <p>ROE analysis for a hypothetical Lloyd's downstream energy syndicate portfolio (£300m gross premium, 35% downstream energy allocation = £105m). Capital requirement modelled at 40% of net premium (typical Lloyd's downstream energy CAR).</p>
+
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="scenario">Bull Scenario</div>
+      <div class="pct">19.4%</div>
+      <p>No cat losses; benign attritional; rates hold; investment income 3.2%. Loss ratio 48%, expense ratio 32%, CR 80%.</p>
+    </div>
+    <div class="roe-card base">
+      <div class="scenario">Base Scenario</div>
+      <div class="pct">8.1%</div>
+      <p>Single mid-tier attritional year; one Gulf Coast refinery loss $300m. Loss ratio 68%, expense ratio 32%, CR 100%.</p>
+    </div>
+    <div class="roe-card bear">
+      <div class="scenario">Bear Scenario</div>
+      <div class="pct">−21.6%</div>
+      <p>Major hurricane event (Harvey-type); 2 large single-risk losses; combined ratio 145%+. Capital erosion requires reinstatement premium.</p>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <h3>ROE Scenario Waterfall — Loss Component Breakdown (Base Scenario)</h3>
+    <div class="chart-wrap">
+      <canvas id="roeChart"></canvas>
+    </div>
+  </div>
+
+  <h2>Drivers of Current Market Dynamics (2024–2026)</h2>
+  <p>The downstream energy market in 2025–2026 is in a period of relative stability following the significant hardening triggered by Harvey (2017) and the subsequent series of mid-size losses (Husky Superior, PES Philadelphia, Freeport LNG, Colonial Pipeline cyber). The key dynamics shaping pricing are:</p>
+  <p><strong>Inflationary pressure on rebuild costs:</strong> Steel, piping, electrical equipment and construction labour costs increased 30–50% between 2020 and 2024. Many policies written at 2018–2020 TIVs are now underinsured. Underwriters are pushing for annual TIV indexation clauses on downstream risks.</p>
+  <p><strong>LNG boom creating new premium:</strong> Post-Ukraine energy crisis, European energy security spending has driven a wave of new LNG import terminal construction (UK, Germany, Netherlands, Italy) and US LNG export terminal expansions. This is creating significant new premium volume in EA/EB for LNG construction and operational risks.</p>
+  <p><strong>Energy transition bifurcation:</strong> Traditional refineries face stranded asset risk — insurers are increasingly cautious about long-term commitments to refinery risks scheduled for decommissioning. Deferred maintenance on "transition assets" is creating a deteriorating loss experience on aged conventional downstream risks.</p>
+  <p><strong>Cyber exclusions hardening:</strong> Post-Colonial Pipeline (2021) and Nord Stream sabotage (2022), the scope of cyber and sabotage exclusions has tightened significantly. Many EF pipeline policies now explicitly exclude cyber-triggered physical damage, creating coverage gaps that are increasingly debated at renewal.</p>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — <span>Downstream / Onshore Energy (EA · EB · EF · PG)</span> — Module 05: Rates &amp; ROE Analysis</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Loss data and rates are indicative market estimates.</p>
+</footer>
+
+<script>
+// Chart 1: Rate Index
+const ctx1 = document.getElementById('rateChart').getContext('2d');
+const years = ['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'];
+const eaRates = [100,95,148,172,158,145,195,210,195,178,160,182,188,175,162,155,148,140,175,198,218,205,200,197,194,190,188];
+const ebRates = [100,94,155,182,165,148,205,225,205,185,168,195,202,185,170,160,150,142,185,215,240,220,215,210,205,200,198];
+
+new Chart(ctx1, {
+  type:'line',
+  data:{
+    labels:years,
+    datasets:[
+      {label:'EA (Property Damage) Rate Index',data:eaRates,borderColor:'#c45c00',backgroundColor:'rgba(196,92,0,0.08)',borderWidth:2.5,pointRadius:3,tension:0.35,fill:false},
+      {label:'EB (Business Interruption) Rate Index',data:ebRates,borderColor:'#0d2240',backgroundColor:'rgba(13,34,64,0.06)',borderWidth:2.5,pointRadius:3,tension:0.35,borderDash:[6,3],fill:false}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'top',labels:{font:{size:12},usePointStyle:true}},
+      annotation:{annotations:{
+        line1:{type:'line',xMin:'2001',xMax:'2001',borderColor:'rgba(139,26,26,0.5)',borderWidth:1.5,borderDash:[4,4],label:{content:'AZF 2001',display:true,position:'start',font:{size:10}}},
+        line2:{type:'line',xMin:'2005',xMax:'2005',borderColor:'rgba(139,26,26,0.7)',borderWidth:2,borderDash:[4,4],label:{content:'Texas City + Katrina',display:true,position:'start',font:{size:10}}},
+        line3:{type:'line',xMin:'2017',xMax:'2017',borderColor:'rgba(139,26,26,0.7)',borderWidth:2,borderDash:[4,4],label:{content:'Harvey 2017',display:true,position:'start',font:{size:10}}}
+      }}
+    },
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:11}}},
+      y:{title:{display:true,text:'Rate Index (2000 = 100)',font:{size:11}},ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+// Chart 2: Rate Adequacy bar chart
+const ctx2 = document.getElementById('adequacyChart').getContext('2d');
+const adequacyLabels = ['IOC Refinery\n(loss-free)','Gulf Coast\nRefinery','NOC EM\nRefinery','LNG Terminal\n(Gulf Coast)','Pipeline\n(EF)','CCGT Power\n(PG)'];
+const adequacyScores = [82,72,58,75,85,79];
+const adequacyColors = adequacyScores.map(s => s>=75?'#2a7a3a':s>=60?'#c45c00':'#8b1a1a');
+
+new Chart(ctx2, {
+  type:'bar',
+  data:{
+    labels:['IOC Refinery','Gulf Coast Refinery','NOC/EM Refinery','LNG Terminal','Pipeline (EF)','CCGT Power (PG)'],
+    datasets:[{
+      label:'Rate Adequacy Score (0–100)',
+      data:adequacyScores,
+      backgroundColor:adequacyColors,
+      borderRadius:6,
+      borderWidth:0
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`Adequacy score: ${ctx.raw}/100`}}},
+    scales:{
+      x:{grid:{display:false},ticks:{font:{size:11}}},
+      y:{max:100,title:{display:true,text:'Rate Adequacy Score',font:{size:11}},ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+// Chart 3: ROE waterfall (base scenario)
+const ctx3 = document.getElementById('roeChart').getContext('2d');
+new Chart(ctx3, {
+  type:'bar',
+  data:{
+    labels:['Gross Premium','- Reinsurance','= Net Premium','- Attritional Loss','- Cat Loss','- Expenses','+ Investment Income','= Underwriting Profit','ROE %'],
+    datasets:[{
+      label:'£m',
+      data:[105,-42,63,-28,-15,-20,4,4,8.1],
+      backgroundColor:['#2a7a3a','#8b1a1a','#0d2240','#8b1a1a','#c45c00','#8b3800','#2a7a3a','#0d2240','#c8a84b'],
+      borderRadius:6,
+      borderWidth:0
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: £${ctx.raw}m`}}},
+    scales:{
+      x:{grid:{display:false},ticks:{font:{size:10}}},
+      y:{title:{display:true,text:'£m / %',font:{size:11}},ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+</script>
+</body>
+</html>

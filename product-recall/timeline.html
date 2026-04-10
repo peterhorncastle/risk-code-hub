@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>20-Year Timeline – Product Recall Insurance Training Hub</title>
+  <style>
+    :root { --navy:#0d2240;--blue:#1a4a8a;--accent:#c8a84b;--light:#f4f7fc;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--red:#c0392b;--green:#27ae60;--orange:#e67e22; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cde4; font-size:0.95rem; max-width:680px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:980px; margin:0 auto; padding:50px 30px; }
+
+    .filter-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:36px; }
+    .filter-btn { padding:7px 16px; border:2px solid var(--border); border-radius:20px; font-size:0.8rem; font-weight:600; cursor:pointer; background:#fff; color:var(--muted); transition:all 0.2s; }
+    .filter-btn:hover, .filter-btn.active { border-color:var(--blue); color:var(--navy); background:var(--light); }
+
+    .timeline { position:relative; padding-left:60px; }
+    .timeline::before { content:''; position:absolute; left:20px; top:0; bottom:0; width:3px; background:linear-gradient(to bottom,var(--blue),var(--accent)); border-radius:3px; }
+
+    .year-marker { position:relative; margin-bottom:8px; margin-top:36px; }
+    .year-marker::before { content:attr(data-year); position:absolute; left:-56px; width:36px; text-align:center; font-size:0.72rem; font-weight:800; color:var(--blue); background:var(--light); padding:3px 0; border-radius:4px; top:50%; transform:translateY(-50%); letter-spacing:1px; }
+
+    .event { background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px 24px; margin-bottom:14px; position:relative; transition:box-shadow 0.2s; }
+    .event:hover { box-shadow:0 4px 16px rgba(13,34,64,0.1); }
+    .event::before { content:''; position:absolute; left:-49px; top:22px; width:14px; height:14px; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px var(--blue); }
+    .event.cat-contamination::before { background:var(--red); box-shadow:0 0 0 2px var(--red); }
+    .event.cat-regulatory::before { background:var(--orange); box-shadow:0 0 0 2px var(--orange); }
+    .event.cat-supplychain::before { background:#8e44ad; box-shadow:0 0 0 2px #8e44ad; }
+    .event.cat-tamper::before { background:#2c3e50; box-shadow:0 0 0 2px #2c3e50; }
+    .event.cat-falseAlarm::before { background:var(--green); box-shadow:0 0 0 2px var(--green); }
+
+    .event-header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .event h3 { font-size:1rem; color:var(--navy); font-weight:700; }
+    .event-date { font-size:0.78rem; color:var(--muted); white-space:nowrap; }
+    .badges { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+    .badge { font-size:0.7rem; font-weight:700; padding:3px 9px; border-radius:10px; letter-spacing:0.5px; }
+    .badge-red { background:#fde8e6; color:var(--red); }
+    .badge-orange { background:#fef3e2; color:var(--orange); }
+    .badge-purple { background:#f3e8fd; color:#8e44ad; }
+    .badge-dark { background:#e8ecf0; color:#2c3e50; }
+    .badge-green { background:#e8f8ef; color:var(--green); }
+    .badge-blue { background:#e8f0fb; color:var(--blue); }
+
+    .event p { font-size:0.88rem; line-height:1.7; color:var(--text); margin-top:10px; }
+    .event .cost { margin-top:12px; font-size:0.85rem; }
+    .event .cost strong { color:var(--navy); }
+    .event .cost span { color:var(--muted); }
+    .event .source-link { margin-top:8px; font-size:0.8rem; }
+    .event .source-link a { color:var(--blue); }
+
+    .legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:30px; font-size:0.82rem; }
+    .legend-item { display:flex; align-items:center; gap:7px; }
+    .legend-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+
+    .mkt-impact { background:var(--navy); color:#fff; border-radius:10px; padding:24px; margin-top:18px; }
+    .mkt-impact h4 { color:var(--accent); margin-bottom:8px; font-size:0.9rem; }
+    .mkt-impact p { font-size:0.85rem; color:#b8cde4; line-height:1.6; }
+
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+  </style>
+</head>
+<body>
+<div style="background:#0d2240;padding:8px 40px;font-size:0.8rem;"><a href="../index.html" style="color:#c8a84b;text-decoration:none;font-weight:600;">← Risk Code Hub</a><span style="color:#4a6a9a;margin:0 10px;">|</span><span style="color:#7fa3c8;">Product Recall (PB)</span></div>
+
+<header>
+  <div class="tag">Module 02</div>
+  <h1>20-Year Event Timeline (2005–2025)</h1>
+  <p>The most significant food and beverage recall events globally over the past two decades, with causes, scale, costs, and implications for the insurance market.</p>
+</header>
+<nav>
+  <a href="index.html">Home</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Recall Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programs</a>
+</nav>
+
+<main>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div> Contamination Event</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div> Regulatory-Driven</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#8e44ad"></div> Supply Chain Origin</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2c3e50"></div> Malicious Tampering</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#27ae60"></div> False Alarm / Precautionary</div>
+  </div>
+
+  <div class="timeline">
+
+    <!-- 2005 -->
+    <div class="year-marker" data-year="2005"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Sudan Red Dye Contamination – UK/Europe</h3>
+        <div class="event-date">Feb 2005 &nbsp;|&nbsp; 🇬🇧 🇪🇺</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Contamination</span><span class="badge badge-blue">Regulatory</span></div>
+      <p>Illegal red dye Sudan-1 found in Worcester sauce (Crosse &amp; Blackwell/Premier Foods) contaminated over 500 products across UK and Europe. The UK's biggest food recall at the time. Over 474 product lines recalled from supermarkets across Britain and exported markets.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>~£100M+ across the supply chain in UK alone. Premier Foods took a direct charge of approximately £10M.</span></div>
+      <div class="source-link"><a href="https://www.food.gov.uk/news-alerts/alert/2005/fsa-2005-0021" target="_blank">Source: UK Food Standards Agency</a></div>
+    </div>
+
+    <!-- 2006 -->
+    <div class="year-marker" data-year="2006"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Peter Pan Peanut Butter – ConAgra (USA)</h3>
+        <div class="event-date">Feb 2007 &nbsp;|&nbsp; 🇺🇸</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Salmonella</span></div>
+      <p>ConAgra recalled approximately 100 million jars of Peter Pan and Great Value peanut butter following a Salmonella Tennessee outbreak linked to their Sylvester, Georgia plant. Over 628 people became ill across 47 states.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>~$100M including recall expenses, plant closure, litigation, and market share loss.</span></div>
+    </div>
+
+    <!-- 2007 -->
+    <div class="year-marker" data-year="2007"></div>
+    <div class="event cat-supplychain">
+      <div class="event-header">
+        <h3>Chinese Melamine Pet Food Scandal</h3>
+        <div class="event-date">March 2007 &nbsp;|&nbsp; 🌍 Global</div>
+      </div>
+      <div class="badges"><span class="badge badge-purple">Supply Chain</span><span class="badge badge-red">Contamination</span></div>
+      <p>Melamine-contaminated wheat gluten from China was used in hundreds of pet food products sold across North America, Europe, and Australasia. Menu Foods recalled over 60 million units. Over 14,000 pet deaths were reported, though official figures were much lower. The event was a landmark in supply chain contamination risk awareness.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>~$150M+ in recalls, litigation, and business interruption across affected manufacturers.</span></div>
+    </div>
+
+    <!-- 2008 -->
+    <div class="year-marker" data-year="2008"></div>
+    <div class="event cat-supplychain">
+      <div class="event-header">
+        <h3>Chinese Milk / Melamine Infant Formula Scandal – Sanlu Group</h3>
+        <div class="event-date">September 2008 &nbsp;|&nbsp; 🇨🇳 🌍 Global</div>
+      </div>
+      <div class="badges"><span class="badge badge-purple">Supply Chain</span><span class="badge badge-red">Adulteration</span></div>
+      <p>Melamine added to dilute milk to mimic protein content caused kidney stones and renal failure in an estimated 300,000 Chinese infants; six died. Sanlu Group was the primary manufacturer. Fonterra (NZ) held a 43% stake in Sanlu and faced major reputational damage. 22 dairy companies funded a 1.1 billion yuan compensation pool. Products were recalled globally across affected import markets.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>$2B+ total economic impact; $154M government compensation fund; Sanlu declared bankrupt.</span></div>
+      <div class="source-link"><a href="https://en.wikipedia.org/wiki/2008_Chinese_milk_scandal" target="_blank">Source: Wikipedia / Multiple news agencies</a></div>
+    </div>
+
+    <!-- 2009 -->
+    <div class="year-marker" data-year="2009"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Peanut Corporation of America – Salmonella Outbreak</h3>
+        <div class="event-date">January 2009 &nbsp;|&nbsp; 🇺🇸</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Salmonella</span></div>
+      <p>The largest peanut product recall in US history. PCA shipped salmonella-contaminated peanut paste and peanut butter to food manufacturers, triggering recalls of over 3,900 products. 714 people were sickened across 46 states; nine died. PCA CEO Stewart Parnell was later imprisoned. The recall became a landmark case for criminal liability in food safety.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>~$1B in industry-wide losses. PCA filed for Chapter 7 bankruptcy. Kellogg's alone lost ~$70M in revenue.</span></div>
+      <div class="source-link"><a href="https://en.wikipedia.org/wiki/2009_Peanut_Corporation_of_America_recall" target="_blank">Source: Wikipedia / CDC / NBC News</a></div>
+    </div>
+
+    <!-- 2010 -->
+    <div class="year-marker" data-year="2010"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Wright County Egg / Hillandale Farms – Egg Recall (USA)</h3>
+        <div class="event-date">August 2010 &nbsp;|&nbsp; 🇺🇸</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Salmonella Enteritidis</span></div>
+      <p>Approximately 500 million eggs were recalled by Wright County Egg and Hillandale Farms in one of the largest egg recalls in US history. The Salmonella Enteritidis outbreak caused an estimated 1,939+ illnesses. Investigation revealed systematic failures in biosecurity and hygiene at Iowa facilities.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>~$150M in direct recall costs and business interruption; litigation settlements ongoing for several years.</span></div>
+    </div>
+
+    <!-- 2011 -->
+    <div class="year-marker" data-year="2011"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Jensen Farms Cantaloupe – Listeria Monocytogenes (USA)</h3>
+        <div class="event-date">September 2011 &nbsp;|&nbsp; 🇺🇸</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Listeria</span></div>
+      <p>The deadliest food-borne illness outbreak in the US in nearly 90 years. Whole cantaloupes from Jensen Farms' Holly, Colorado packing facility were contaminated with Listeria. 33 deaths, 147 illnesses across 28 states. Jensen Farms filed for Chapter 11 bankruptcy in May 2012. Victims and families eventually settled with the farm, its food safety auditor, and an equipment company.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>Settlements totalled ~$4.5M; Jensen Farms went bankrupt. Total industry impact estimated ~$35M.</span></div>
+      <div class="source-link"><a href="https://archive.cdc.gov/www_cdc_gov/listeria/outbreaks/cantaloupes-jensen-farms/timeline.html" target="_blank">Source: CDC Archive</a></div>
+    </div>
+
+    <!-- 2013 -->
+    <div class="year-marker" data-year="2013"></div>
+    <div class="event cat-falseAlarm">
+      <div class="event-header">
+        <h3>Fonterra Whey Protein Concentrate – Botulism False Alarm (Global)</h3>
+        <div class="event-date">August 2013 &nbsp;|&nbsp; 🇳🇿 🌍 60 Countries</div>
+      </div>
+      <div class="badges"><span class="badge badge-green">False Alarm</span><span class="badge badge-purple">Supply Chain</span></div>
+      <p>Fonterra (New Zealand's largest dairy company) issued a global recall of 38 metric tons of whey protein concentrate after suspected Clostridium botulinum contamination. Products were recalled from 60 countries including China, Australia, Saudi Arabia, and Sri Lanka. The bacteria were subsequently identified as non-toxic Clostridium sporogenes — not botulism. The false alarm caused massive reputational and financial damage.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>Danone alone reported €370M (~$510M) in lost sales. Total industry impact estimated at $1B+. Fonterra stock fell significantly.</span></div>
+      <div class="source-link"><a href="https://en.wikipedia.org/wiki/2013_Fonterra_recall" target="_blank">Source: Wikipedia / NZ Government MPI</a></div>
+    </div>
+
+    <!-- 2015 -->
+    <div class="year-marker" data-year="2015"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Blue Bell Creameries – Listeria (USA)</h3>
+        <div class="event-date">March 2015 &nbsp;|&nbsp; 🇺🇸</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Listeria</span></div>
+      <p>Blue Bell, the third-largest ice cream manufacturer in the US, issued a full product recall of all its products across 23 states after Listeria contamination was linked to three deaths in a Kansas hospital. The company suspended all production and laid off approximately 1,450 employees. In 2020, Blue Bell pleaded guilty to two misdemeanour counts and was ordered to pay $17.25M in criminal penalties. <strong>Notably, Blue Bell's insurance carriers refused to pay the resulting damages, in a landmark insurance coverage dispute.</strong></p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>~$100M+ in total (recall, production stoppage, litigation, fines). $19.3M in criminal/civil penalties. Insurance: NOT PAID (dispute).</span></div>
+      <div class="source-link"><a href="https://www.foodsafetynews.com/2022/08/blue-bells-insurance-carriers-do-not-have-to-pay-for-the-2015-listeria-outbreak-damages/" target="_blank">Source: Food Safety News / US DOJ</a></div>
+    </div>
+
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Chipotle – E. coli / Norovirus / Salmonella Multi-Outbreak (USA)</h3>
+        <div class="event-date">October–December 2015 &nbsp;|&nbsp; 🇺🇸</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">E. coli / Norovirus</span></div>
+      <p>Chipotle Mexican Grill suffered a series of overlapping outbreaks involving E. coli O157:H7 (11 states, 55 cases), Norovirus (multiple incidents), and Salmonella (64 cases). Chipotle closed 43 stores temporarily and saw its stock price fall by over 40% in the following months. The brand suffered multi-year reputational damage and revenue decline.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>$750M–$1B+ in market capitalisation loss. Direct recall and response costs: ~$50M. Revenue fell ~20% year-on-year in early 2016.</span></div>
+    </div>
+
+    <!-- 2018 -->
+    <div class="year-marker" data-year="2018"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Romaine Lettuce – E. coli O157:H7 (USA/Canada)</h3>
+        <div class="event-date">April &amp; November 2018 &nbsp;|&nbsp; 🇺🇸 🇨🇦</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">E. coli O157:H7</span></div>
+      <p>Two major E. coli outbreaks linked to Romaine lettuce in 2018 resulted in the FDA issuing a blanket advisory for all romaine lettuce consumption across the US and Canada. The November outbreak (Yuma, Arizona origin) affected 210 people in 36 states and Canada; five died. The Salinas, California origin outbreak (November) affected 62 people. Entire romaine lettuce sectors were affected.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>$83.6M in direct industry losses: $57.9M to processors/shippers + $25.7M to grocery retailers. Broader economic impact estimated at ~$200M+.</span></div>
+      <div class="source-link"><a href="https://are.ucdavis.edu/department/news/2021/8/26/are-researchers-author-new-report-examining-economic-impacts-2018-e-coli-outbreak-romaine-lettuce-industry/" target="_blank">Source: UC Davis Agricultural &amp; Resource Economics</a></div>
+    </div>
+
+    <!-- 2019 -->
+    <div class="year-marker" data-year="2019"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Tyson Foods Ground Beef – Salmonella Newport (USA)</h3>
+        <div class="event-date">October 2019 &nbsp;|&nbsp; 🇺🇸</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Salmonella</span></div>
+      <p>Tyson Foods recalled approximately 36,000 pounds of ground beef products linked to a Salmonella Newport outbreak that caused 35 illnesses. A second recall in 2019 involved 8.9 million pounds from the Lakeside Book company's facility. Tyson recalled over 26,000 pounds in October 2019. Part of a broader increase in ground beef recalls in the US during 2019.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>~$30–50M in aggregate ground beef recalls during 2019 across multiple producers.</span></div>
+    </div>
+
+    <!-- 2020 -->
+    <div class="year-marker" data-year="2020"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Onions – Salmonella Newport (USA/Canada)</h3>
+        <div class="event-date">July–August 2020 &nbsp;|&nbsp; 🇺🇸 🇨🇦</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Salmonella Newport</span></div>
+      <p>Whole onions imported from Mexico by ProSource Produce were linked to 1,127 illnesses in 48 states and Canada. The recall cascaded across hundreds of products that contained the contaminated onions, including restaurant chains and retail products. One of the largest produce-related recalls in North American history.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>~$75M+ across the supply chain including growers, distributors, and food service operators.</span></div>
+    </div>
+
+    <!-- 2022 -->
+    <div class="year-marker" data-year="2022"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Abbott Laboratories – Infant Formula (Similac/Alimentum/EleCare)</h3>
+        <div class="event-date">February 2022 &nbsp;|&nbsp; 🇺🇸</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Cronobacter / Salmonella</span></div>
+      <p>Abbott recalled powdered infant formula brands (Similac, Alimentum, EleCare) from its Sturgis, Michigan facility following Cronobacter sakazakii and Salmonella contamination linked to four infant illnesses and two deaths. The closure of the Sturgis facility — which produced approximately 20% of US infant formula supply — triggered a national formula shortage crisis. Abbott entered into a consent decree with the FDA. A second recall was issued in June 2022 after storm water contamination during restart.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>~$325M+ in direct costs; significant revenue loss during 8-month plant closure. Abbott's share price fell ~12% on recall news. US Congressional investigation launched.</span></div>
+      <div class="source-link"><a href="https://www.fool.com/investing/2022/05/17/how-the-infant-formula-recall-will-impact-abbotts-revenue/" target="_blank">Source: Motley Fool / CBS News / FDA</a></div>
+    </div>
+
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>J.M. Smucker – Jif Peanut Butter – Salmonella</h3>
+        <div class="event-date">May 2022 &nbsp;|&nbsp; 🇺🇸</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Salmonella Senftenberg</span></div>
+      <p>J.M. Smucker recalled over 4.8 million cases of Jif peanut butter products (multiple sizes and varieties) after Salmonella Senftenberg was detected in products from its Lexington, Kentucky facility. 14 illnesses were confirmed across 12 states. The recall was one of the largest peanut butter recalls since ConAgra's 2007 Peter Pan recall.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>~$90M in recall expenses, business interruption, and revenue impact. Smucker estimated a $55M revenue hit in its Q1 FY2023 earnings.</span></div>
+    </div>
+
+    <!-- 2023 -->
+    <div class="year-marker" data-year="2023"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>WanaBana Cinnamon Apple Puree – Lead Contamination (USA/Global)</h3>
+        <div class="event-date">October 2023 &nbsp;|&nbsp; 🇺🇸 🌍</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Lead (Heavy Metal)</span><span class="badge badge-purple">Supply Chain</span></div>
+      <p>Three brands of cinnamon applesauce pouches (WanaBana, Schnucks, Weis) were found to contain extremely high levels of lead (up to 2,000 times the FDA's reference level) traced to intentional adulteration of cinnamon sourced from Ecuador. Over 500 children were affected. An Ecuadorian cinnamon supplier was identified as the source. Products had been distributed through major US retailers and dollar stores.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>Total economic impact estimated at $50M–$100M. Litigation ongoing. FDA and DOJ investigations ongoing as of 2025.</span></div>
+    </div>
+
+    <!-- 2024 -->
+    <div class="year-marker" data-year="2024"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Boar's Head Liverwurst – Listeria Monocytogenes (USA)</h3>
+        <div class="event-date">July–August 2024 &nbsp;|&nbsp; 🇺🇸</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Listeria</span></div>
+      <p>Boar's Head recalled approximately 7.2 million pounds of deli meats and liverwurst products after Listeria contamination was identified at its Jarratt, Virginia plant. The outbreak caused 59 illnesses and 10 deaths — one of the deadliest Listeria outbreaks in US history. Boar's Head faced a major brand crisis and significant USDA regulatory scrutiny of its inspection regime.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>Estimated $150M+ in recall costs, production closure, and litigation. Boar's Head permanently closed the Jarratt plant and closed all deli counter operations in some markets.</span></div>
+    </div>
+
+    <!-- 2025 -->
+    <div class="year-marker" data-year="2025"></div>
+    <div class="event cat-contamination">
+      <div class="event-header">
+        <h3>Baby Formula Multi-Brand Recall – Nestlé / Danone / Lactalis (Global)</h3>
+        <div class="event-date">December 2025 &nbsp;|&nbsp; 🌍 60+ Countries</div>
+      </div>
+      <div class="badges"><span class="badge badge-red">Contamination</span><span class="badge badge-purple">Multi-Brand</span></div>
+      <p>A coordinated recall of infant formula products by Nestlé (SMA brand), Danone (Aptamil brand), and Lactalis (Picot brand) across 60+ countries representing the largest coordinated food recall in recent history by financial impact. Contamination origin under investigation as of Q1 2026. The scale of the event — involving three of the world's largest infant formula producers simultaneously — raised immediate concerns about shared ingredient or packaging supply chain exposure.</p>
+      <div class="cost"><strong>Estimated Cost:</strong> <span>Estimated losses up to €1.43B (~$1.54B USD) across brands. Expected to be a major market-hardening event for infant nutrition product recall insurance in 2026.</span></div>
+      <div class="source-link"><a href="https://www.foodnavigator.com/Article/2026/03/02/global-formula-recalls-reshape-risk-and-supply-strategy/" target="_blank">Source: Food Navigator (March 2026)</a></div>
+    </div>
+
+    <div class="mkt-impact">
+      <h4>📊 Insurance Market Impact Note – 2025 Baby Formula Recalls</h4>
+      <p>The simultaneous recall across three global infant formula brands in late 2025 is expected to trigger a significant review of aggregation risk in the product recall insurance market. Underwriters writing multiple large food manufacturers on a single shared raw material or co-packing supply chain may face concentrated loss exposure. Expect capacity reductions in infant formula categories, rate increases of 30–50% for high-risk nutrition producers, and new aggregation sub-limits in Lloyd's market capacity in 2026.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer>Product Recall Insurance Training Hub &nbsp;|&nbsp; <span>Module 02 – Timeline</span> &nbsp;|&nbsp; Version 1.0 – March 2026</footer>
+</body>
+</html>

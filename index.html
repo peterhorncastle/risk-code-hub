@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Code Hub | Lloyd's Market Intelligence Platform</title>
+  <meta name="description" content="Comprehensive underwriting intelligence for every Lloyd's insurance risk code. Search by class, product, or risk code to access detailed modules on history, underwriting, rates and risk mitigation.">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
+  <style>
+    :root {
+      --navy: #1F4E79;
+      --blue: #2E75B6;
+      --blue-light: #D6E4F0;
+      --gold: #C9A84C;
+      --gold-light: #FEF9EC;
+      --dark: #1A1A2E;
+      --mid: #444444;
+      --light: #F4F7FB;
+      --white: #FFFFFF;
+      --success: #1B6B3A;
+      --success-bg: #E8F5EE;
+      --card-border: #E1EBF5;
+      --shadow: 0 4px 20px rgba(31,78,121,0.10);
+      --shadow-hover: 0 8px 32px rgba(31,78,121,0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--gold);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900; color: var(--navy);
+    }
+    .logo-text { font-size: 1.15rem; font-weight: 700; color: var(--white); letter-spacing: 0.5px; }
+    .logo-sub { font-size: 0.72rem; color: rgba(255,255,255,0.70); letter-spacing: 1px; text-transform: uppercase; }
+    nav { display: flex; gap: 1.5rem; }
+    nav a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    nav a:hover { color: var(--white); }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(160deg, var(--navy) 0%, #163860 60%, #0d2d50 100%);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 60%, rgba(46,117,182,0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 30%, rgba(201,168,76,0.10) 0%, transparent 50%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.40);
+      color: var(--gold);
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 0.35rem 1rem; border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: 2.8rem; font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero-sub {
+      font-size: 1.05rem; color: rgba(255,255,255,0.72);
+      margin-bottom: 2.5rem; line-height: 1.6;
+    }
+
+    /* ── Search box ── */
+    .search-container { max-width: 640px; margin: 0 auto; }
+    .search-label {
+      display: block; font-size: 0.88rem; font-weight: 600;
+      color: rgba(255,255,255,0.65); letter-spacing: 0.5px;
+      margin-bottom: 0.75rem; text-align: left;
+    }
+    .search-box {
+      position: relative;
+      display: flex;
+      background: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .search-icon {
+      position: absolute; left: 1.1rem; top: 50%; transform: translateY(-50%);
+      color: var(--blue); font-size: 1.1rem; pointer-events: none; z-index: 2;
+    }
+    #search-input {
+      flex: 1;
+      border: none; outline: none;
+      font-size: 1.05rem; color: var(--dark);
+      padding: 1.1rem 1rem 1.1rem 3rem;
+      background: transparent;
+      font-family: inherit;
+    }
+    #search-input::placeholder { color: #9BAFC4; }
+    #search-btn {
+      background: var(--gold);
+      color: var(--navy);
+      border: none; cursor: pointer;
+      font-size: 0.95rem; font-weight: 700;
+      padding: 0 1.6rem;
+      transition: background 0.2s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    #search-btn:hover { background: #d4af54; }
+
+    .search-hints {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-top: 1rem; justify-content: flex-start;
+    }
+    .hint-chip {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.20);
+      color: rgba(255,255,255,0.75);
+      font-size: 0.78rem; padding: 0.3rem 0.75rem;
+      border-radius: 20px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .hint-chip:hover {
+      background: rgba(255,255,255,0.20);
+      color: var(--white);
+    }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1rem 2rem;
+      display: flex; gap: 2.5rem; justify-content: center; align-items: center;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--navy); }
+    .stat-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--mid); }
+    .stat-divider { width: 1px; height: 36px; background: var(--card-border); }
+
+    /* ── Main layout ── */
+    .main { max-width: 1200px; margin: 0 auto; padding: 2.5rem 2rem; }
+
+    /* ── Search results ── */
+    #search-results { margin-bottom: 2rem; display: none; }
+    .results-header {
+      font-size: 0.9rem; color: var(--mid); margin-bottom: 1rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .clear-search {
+      background: none; border: 1px solid var(--card-border);
+      color: var(--mid); cursor: pointer; font-size: 0.8rem;
+      padding: 0.3rem 0.75rem; border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .clear-search:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ── Cards ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .hub-card {
+      background: var(--white);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.22s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .hub-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--blue);
+      transform: scaleX(0);
+      transition: transform 0.22s;
+      transform-origin: left;
+    }
+    .hub-card:hover { box-shadow: var(--shadow-hover); border-color: var(--blue-light); transform: translateY(-2px); }
+    .hub-card:hover::before { transform: scaleX(1); }
+
+    .hub-card.complete { border-color: #A3D9B7; }
+    .hub-card.complete::before { background: var(--success); transform: scaleX(1); }
+
+    .card-group {
+      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--blue); margin-bottom: 0.5rem;
+    }
+    .card-title { font-size: 1.02rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; line-height: 1.3; }
+    .card-desc { font-size: 0.82rem; color: var(--mid); line-height: 1.5; margin-bottom: 1rem; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; }
+    .card-codes {
+      display: flex; flex-wrap: wrap; gap: 0.3rem;
+    }
+    .code-pill {
+      background: var(--blue-light); color: var(--navy);
+      font-size: 0.70rem; font-weight: 700; font-family: 'Courier New', monospace;
+      padding: 0.15rem 0.45rem; border-radius: 4px;
+    }
+    .status-badge {
+      font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.6rem;
+      border-radius: 10px; white-space: nowrap;
+    }
+    .status-complete { background: var(--success-bg); color: var(--success); }
+    .status-planned { background: #EFF3FA; color: #4A6FA5; }
+    .status-building { background: #FEF9EC; color: #946C00; }
+
+    /* ── Category groups ── */
+    .group-section { margin-bottom: 2.5rem; }
+    .group-header {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--blue-light);
+    }
+    .group-dot {
+      width: 10px; height: 10px;
+      background: var(--gold); border-radius: 50%; flex-shrink: 0;
+    }
+    .group-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; color: var(--navy); }
+    .group-count { font-size: 0.75rem; color: var(--mid); margin-left: auto; }
+
+    /* ── No results ── */
+    .no-results {
+      text-align: center; padding: 3rem 1rem;
+      color: var(--mid);
+    }
+    .no-results h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--navy); }
+    .no-results p { font-size: 0.88rem; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.82rem;
+      margin-top: 3rem;
+    }
+    footer strong { color: rgba(255,255,255,0.9); }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.9rem; }
+      .hero { padding: 3rem 1rem 2.5rem; }
+      nav { display: none; }
+      .stats-bar { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">RC</div>
+    <div>
+      <div class="logo-text">Risk Code Hub</div>
+      <div class="logo-sub">Lloyd's Market Intelligence</div>
+    </div>
+  </div>
+  <nav>
+    <a href="#browse">Browse All</a>
+    <a href="build-tracker.html">📋 Build Tracker</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<!-- ── Hero / Search ── -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-badge">Lloyd's Market Intelligence Platform</span>
+    <h1>What insurance market<br>do you <span>work in?</span></h1>
+    <p class="hero-sub">Search by class name, Lloyd's risk code, or keywords.<br>
+    Each hub covers history, underwriting methodology, rates, risk mitigation and global programme structuring.</p>
+
+    <div class="search-container">
+      <label class="search-label" for="search-input">SEARCH BY CLASS, CODE OR KEYWORD</label>
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="e.g. offshore wind, cyber, PB, marine hull, D&O…" autocomplete="off">
+        <button id="search-btn" onclick="performSearch()">Search</button>
+      </div>
+      <div class="search-hints">
+        <span class="hint-chip" onclick="setSearch('offshore wind')">Offshore Wind</span>
+        <span class="hint-chip" onclick="setSearch('cyber')">Cyber</span>
+        <span class="hint-chip" onclick="setSearch('product recall')">Product Recall</span>
+        <span class="hint-chip" onclick="setSearch('D&O')">D&amp;O</span>
+        <span class="hint-chip" onclick="setSearch('marine cargo')">Marine Cargo</span>
+        <span class="hint-chip" onclick="setSearch('property')">Property</span>
+        <span class="hint-chip" onclick="setSearch('energy')">Energy</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stats bar ── -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-value" id="total-hubs">45</div>
+    <div class="stat-label">Insurance Hubs</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-value" id="complete-count">1</div>
+    <div class="stat-label">Complete</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-value">195+</div>
+    <div class="stat-label">Lloyd's Risk Codes</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-value">7</div>
+    <div class="stat-label">Modules Per Hub</div>
+  </div>
+</div>
+
+<main class="main" id="browse">
+
+  <!-- ── Search results (shown when searching) ── -->
+  <section id="search-results">
+    <div class="results-header">
+      <span id="results-label"></span>
+      <button class="clear-search" onclick="clearSearch()">✕ Clear search</button>
+    </div>
+    <div class="cards-grid" id="results-grid"></div>
+  </section>
+
+  <!-- ── Browse by category (shown by default) ── -->
+  <div id="browse-section"></div>
+
+</main>
+
+<footer id="about">
+  <p><strong>Risk Code Hub</strong> — Lloyd's Market Intelligence Platform</p>
+  <p style="margin-top:0.5rem;">Built for Lloyd's underwriters and brokers. Covers all active Lloyd's risk codes across ~60 insurance class hubs.</p>
+  <p style="margin-top:0.5rem;">Version 1.0 — April 2026 &nbsp;|&nbsp; Product Recall hub complete. Energy & Renewables next.</p>
+</footer>
+
+<script>
+// ── Load hub index ───────────────────────────────────────────────────────────
+let hubs = [];
+let fuse;
+
+async function loadHubs() {
+  try {
+    const resp = await fetch('hub-index.json');
+    hubs = await resp.json();
+    initFuse();
+    renderBrowse();
+    updateStats();
+  } catch (e) {
+    console.error('Could not load hub-index.json', e);
+  }
+}
+
+function initFuse() {
+  fuse = new Fuse(hubs, {
+    keys: [
+      { name: 'name', weight: 3 },
+      { name: 'risk_codes', weight: 3 },
+      { name: 'keywords', weight: 2 },
+      { name: 'description', weight: 1 },
+      { name: 'group', weight: 0.5 },
+    ],
+    threshold: 0.38,
+    includeScore: true,
+    minMatchCharLength: 2,
+  });
+}
+
+function updateStats() {
+  document.getElementById('total-hubs').textContent = hubs.length;
+  document.getElementById('complete-count').textContent = hubs.filter(h => h.status === 'complete').length;
+}
+
+// ── Render browse view ───────────────────────────────────────────────────────
+function renderBrowse() {
+  const groups = {};
+  hubs.forEach(h => {
+    if (!groups[h.group]) groups[h.group] = [];
+    groups[h.group].push(h);
+  });
+
+  const section = document.getElementById('browse-section');
+  section.innerHTML = '';
+
+  Object.entries(groups).forEach(([groupName, groupHubs]) => {
+    const div = document.createElement('div');
+    div.className = 'group-section';
+    div.innerHTML = `
+      <div class="group-header">
+        <div class="group-dot"></div>
+        <span class="group-title">${groupName}</span>
+        <span class="group-count">${groupHubs.length} hub${groupHubs.length !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="cards-grid">
+        ${groupHubs.map(h => renderCard(h)).join('')}
+      </div>
+    `;
+    section.appendChild(div);
+  });
+}
+
+function renderCard(hub) {
+  const isComplete = hub.status === 'complete';
+  const statusLabel = isComplete ? '✅ Complete' : hub.status === 'building' ? '🔨 Building' : '📋 Planned';
+  const statusClass = isComplete ? 'status-complete' : hub.status === 'building' ? 'status-building' : 'status-planned';
+  const codes = hub.risk_codes.slice(0, 5).map(c => `<span class="code-pill">${c}</span>`).join('');
+  const extraCodes = hub.risk_codes.length > 5 ? `<span class="code-pill">+${hub.risk_codes.length - 5}</span>` : '';
+
+  const href = isComplete ? hub.url : '#';
+  const clickHandler = isComplete ? '' : `onclick="return false;" title="Coming soon"`;
+
+  return `
+    <a href="${href}" class="hub-card ${isComplete ? 'complete' : ''}" ${clickHandler} style="${isComplete ? '' : 'cursor:default;opacity:0.85;'}">
+      <div class="card-group">${hub.group}</div>
+      <div class="card-title">${hub.name}</div>
+      <div class="card-desc">${hub.description.substring(0, 110)}${hub.description.length > 110 ? '…' : ''}</div>
+      <div class="card-footer">
+        <div class="card-codes">${codes}${extraCodes}</div>
+        <span class="status-badge ${statusClass}">${statusLabel}</span>
+      </div>
+    </a>
+  `;
+}
+
+// ── Search ───────────────────────────────────────────────────────────────────
+function setSearch(term) {
+  document.getElementById('search-input').value = term;
+  performSearch();
+}
+
+function performSearch() {
+  const query = document.getElementById('search-input').value.trim();
+  if (!query || !fuse) return;
+
+  const results = fuse.search(query);
+  const searchSection = document.getElementById('search-results');
+  const browseSection = document.getElementById('browse-section');
+  const resultsGrid = document.getElementById('results-grid');
+  const resultsLabel = document.getElementById('results-label');
+
+  browseSection.style.display = 'none';
+  searchSection.style.display = 'block';
+
+  if (results.length === 0) {
+    resultsLabel.textContent = `No hubs found for "${query}"`;
+    resultsGrid.innerHTML = `
+      <div class="no-results" style="grid-column:1/-1">
+        <h3>No matches found</h3>
+        <p>Try searching for a risk code (e.g. PB, CY), a class name, or an industry term.</p>
+      </div>
+    `;
+    return;
+  }
+
+  resultsLabel.textContent = `${results.length} hub${results.length !== 1 ? 's' : ''} found for "${query}"`;
+  resultsGrid.innerHTML = results.map(r => renderCard(r.item)).join('');
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').style.display = 'none';
+  document.getElementById('browse-section').style.display = 'block';
+}
+
+// ── Keyboard search ──────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadHubs();
+
+  document.getElementById('search-input').addEventListener('keyup', e => {
+    if (e.key === 'Enter') performSearch();
+    if (e.key === 'Escape') clearSearch();
+    if (document.getElementById('search-input').value === '') clearSearch();
+  });
+});
+</script>
+</body>
+</html>

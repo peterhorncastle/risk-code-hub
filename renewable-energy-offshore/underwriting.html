@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offshore Wind Underwriting – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--blue:#1a4a8a;--green:#2a8c4a;--green-dark:#1a6035;--green-light:#e8f5ee;--accent:#c8a84b;--light:#f2f9f5;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--teal:#0a7a5c;--orange:#c45c00;--red:#8b1a1a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a1f3a 0%,#0d3d6b 55%,#1a6035 100%); color:#fff; padding:40px; }
+    header .breadcrumb { font-size:0.8rem; color:#b8cde4; margin-bottom:6px; }
+    header .breadcrumb a { color:var(--accent); text-decoration:none; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cde4; font-size:0.95rem; max-width:700px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:960px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.5rem; color:var(--navy); margin:40px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.1rem; color:var(--green-dark); margin:28px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.88rem; }
+    th { background:var(--navy); color:#fff; padding:11px 14px; text-align:left; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tr:nth-child(even) td { background:#f8fbff; }
+
+    .section-tag { display:inline-block; background:var(--green-dark); color:#fff; font-size:0.72rem; font-weight:700; letter-spacing:1px; padding:3px 10px; border-radius:12px; text-transform:uppercase; margin-bottom:10px; }
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:20px 0 30px; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:8px; padding:20px; }
+    .factor-card.high { border-left-color:var(--red); }
+    .factor-card.med { border-left-color:var(--orange); }
+    .factor-card.low { border-left-color:var(--green); }
+    .factor-card h4 { font-size:0.93rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .factor-card p { font-size:0.84rem; color:var(--muted); margin:0; line-height:1.6; }
+    .factor-card .impact { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-top:10px; padding:3px 8px; border-radius:10px; display:inline-block; }
+    .impact-high { background:#fde8e8; color:var(--red); }
+    .impact-med { background:#fef0e0; color:var(--orange); }
+    .impact-low { background:var(--green-light); color:var(--green-dark); }
+
+    .highlight-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .highlight-box h3 { color:var(--accent); margin:0 0 14px; }
+    .highlight-box p { color:#b8cde4; margin-bottom:10px; }
+
+    .worked-example { background:#fff; border:2px solid var(--accent); border-radius:12px; padding:32px; margin:30px 0; }
+    .worked-example h3 { color:var(--navy); margin:0 0 20px; font-size:1.2rem; }
+    .we-row { display:flex; justify-content:space-between; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--border); gap:20px; flex-wrap:wrap; }
+    .we-row:last-child { border-bottom:none; font-weight:700; color:var(--navy); font-size:1.05rem; }
+    .we-label { flex:1; font-size:0.9rem; color:var(--text); }
+    .we-val { font-size:0.9rem; color:var(--navy); font-weight:600; text-align:right; }
+    .we-note { font-size:0.78rem; color:var(--muted); flex-basis:100%; margin-top:3px; }
+    .we-section { display:inline-block; background:var(--green-dark); color:#fff; font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:8px; margin-right:8px; }
+
+    .warning-box { background:#fde8e8; border:1px solid #e5b8b8; border-radius:8px; padding:20px; margin:20px 0; }
+    .warning-box h4 { color:var(--red); font-size:0.95rem; margin-bottom:8px; }
+    .warning-box p { font-size:0.87rem; color:var(--red); margin:0; line-height:1.65; }
+
+    .info-req { background:var(--light); border:1px solid var(--border); border-radius:8px; padding:22px 24px; margin:16px 0; }
+    .info-req h4 { color:var(--navy); font-size:0.95rem; margin-bottom:12px; }
+    .info-req ul { padding-left:20px; }
+    .info-req li { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.5; }
+
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Renewable Energy – Offshore</a> › Module 04</div>
+  <div class="tag">Module 04 — Renewable Energy Offshore Insurance</div>
+  <h1>Underwriting Methodology</h1>
+  <p>Rating factors, coverage structures, serial defect interaction, ALOR/DSU methodology, information requirements, and a worked pricing example for a 500MW North Sea operational wind farm (R1) and a 400MW construction project (R3).</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+
+  <!-- R1 Operational -->
+  <h2>R1 — Operational Offshore Wind: Coverage &amp; Rating</h2>
+  <div class="section-tag">R1 — Operational</div>
+  <p>The R1 policy covers an operational offshore wind farm on an all-risks basis. The primary coverage sections are physical damage to the asset, advanced loss of revenue (ALOR) linked to physical damage, and third-party liability. The key underwriting challenges unique to this class are serial defect risk, technology obsolescence, and the interaction between manufacturer warranties and the primary policy.</p>
+
+  <table>
+    <thead><tr><th>Coverage Section</th><th>What Is Covered</th><th>Typical Limit Basis</th><th>Key Exclusions / Conditions</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Physical Damage — Turbines</strong></td><td>All-risks damage to nacelle, gearbox, generator, blades, hub, tower. Includes storm, lightning, mechanical breakdown, blade erosion where sudden and accidental</td><td>Replacement cost of turbine unit; aggregate TIV = sum of all unit values</td><td>Wear &amp; tear; gradual erosion excluded (LEE cover often sub-limited or excluded); serial defect subject to series loss clause</td></tr>
+      <tr><td><strong>Physical Damage — Foundations</strong></td><td>Monopile, jacket, or gravity-base foundation damage. Includes scour protection damage, J-tube damage, sacrificial anode loss</td><td>Replacement / reinstatement cost per foundation</td><td>Corrosion excluded; design defect subject to LEG/DE clauses</td></tr>
+      <tr><td><strong>Physical Damage — Cables</strong></td><td>Inter-array cables, export cable, J-tube interfaces. Covers mechanical damage, third-party strikes, installation vessel anchor strikes</td><td>Reinstatement cost of cable length; often subject to per-event cable sub-limit</td><td>Gradual deterioration excluded; fisherman / vessel strike covered if sudden</td></tr>
+      <tr><td><strong>Physical Damage — Offshore Substation</strong></td><td>Offshore transformer, switchgear, protection systems, accommodation topside, helideck</td><td>Replacement cost; often separately sub-limited at 10–20% of total TIV</td><td>Electrical breakdown sub-limited; transformer failure subject to survey warranty</td></tr>
+      <tr><td><strong>ALOR (Advanced Loss of Revenue)</strong></td><td>Lost electricity generation revenue during indemnity period following insured physical damage event</td><td>P50 annual revenue × indemnity months; typical indemnity 12–24 months</td><td>Must be consequent on insured physical damage; regulatory-ordered shutdown exclusion (unless separately bought back); market price risk excluded</td></tr>
+      <tr><td><strong>Third-Party Liability</strong></td><td>Bodily injury and property damage to third parties arising from wind farm operations</td><td>Per-occurrence limit; £100m–£500m typical for large operational farms</td><td>Professional indemnity excluded; environmental clean-up often subject to separate Environmental Liability policy</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Key Rating Factors — R1 Operational</h3>
+  <div class="factor-grid">
+    <div class="factor-card high"><h4>🔧 Turbine Technology &amp; Manufacturer</h4><p>New turbine platforms with limited operational track record carry higher uncertainty. Manufacturer financial stability (relevant to warranty response) and loss history on the specific turbine model are critical inputs. Post-Siemens Gamesa crisis, SG 8.0 / SG 14 platform risks attract loading.</p><span class="impact impact-high">High Impact</span></div>
+    <div class="factor-card high"><h4>⚡ Serial Defect Exposure</h4><p>Number of identical turbines, homogeneity of the fleet, and whether the same turbine model has had notified quality issues. Underwriters now require disclosure of any outstanding manufacturer technical bulletins (TBs) or campaign field modifications (CFMs) at inception.</p><span class="impact impact-high">High Impact</span></div>
+    <div class="factor-card high"><h4>🌊 Metocean Environment</h4><p>Significant wave height (Hs), 50-year and 100-year return period wind speeds, tidal current velocity, and sea temperature (affects corrosion and material fatigue). North Sea and Irish Sea are more severe than German Bight nearshore locations. Tropical cyclone exposure (Taiwan, Australia) requires specific loading.</p><span class="impact impact-high">High Impact</span></div>
+    <div class="factor-card med"><h4>📏 Water Depth &amp; Distance to Shore</h4><p>Greater water depth increases foundation complexity and repair logistics cost. Distance to shore affects crew transfer vessel access time and impacts ALOR repair duration assumptions. Floating wind is rated significantly differently from fixed-bottom due to mooring and dynamic cable risk.</p><span class="impact impact-med">Medium Impact</span></div>
+    <div class="factor-card med"><h4>🔌 Cable Configuration</h4><p>Number of cable strings, redundancy (looped vs. radial inter-array), cable age, burial depth, and proximity to shipping lanes, fishing grounds, and anchor zones. Cable faults are the most frequent loss category — cable design and maintenance regime are key underwriting factors.</p><span class="impact impact-med">Medium Impact</span></div>
+    <div class="factor-card med"><h4>🏭 O&amp;M Operator Quality</h4><p>Whether O&amp;M is performed by the turbine manufacturer (OEM) or an independent operator. OEM O&amp;M typically includes extended warranty components, reducing insurance exposure. Independent O&amp;M operators vary widely in technical capability — survey and capability assessment required.</p><span class="impact impact-med">Medium Impact</span></div>
+    <div class="factor-card low"><h4>📅 Asset Age &amp; Condition</h4><p>Younger assets (under 5 years) carry technology/teething-period risk; older assets (over 15 years) carry fatigue, corrosion, and obsolescence risk. Life extension studies required for assets beyond original design life (typically 20–25 years).</p><span class="impact impact-low">Lower Impact</span></div>
+    <div class="factor-card low"><h4>🏛 Revenue Mechanism (CfD / ROC / PPA)</h4><p>Affects ALOR sum insured calculation. CfD contracts provide fixed price certainty; merchant / PPA revenue is market-price dependent. Underwriters calculate ALOR SI as P50 annual revenue × indemnity period — the revenue basis must be verified against the actual offtake contract.</p><span class="impact impact-low">Lower Impact</span></div>
+  </div>
+
+  <!-- R3 Construction -->
+  <h2>R3 — Construction Offshore Wind: Coverage &amp; Rating</h2>
+  <div class="section-tag">R3 — Construction</div>
+  <p>The R3 policy (Marine Contractors' All Risks for offshore renewable construction) covers all works, plant, and equipment during the construction and installation phase — from first component arriving at the offshore site through to practical completion and handover. The most complex construction insurance product in the Lloyd's specialty market, requiring understanding of marine operations, civil engineering, mechanical/electrical plant, and project finance.</p>
+
+  <table>
+    <thead><tr><th>Coverage Section</th><th>What Is Covered</th><th>Key Rating Considerations</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Contract Works (All Risks)</strong></td><td>Physical loss or damage to the offshore works — foundations (monopiles, jackets, gravity bases), turbines, cables, substation — during installation and pre-commissioning</td><td>TIV = peak contract value at risk offshore (before handover). Sequential installation means exposure builds through project. Rate typically 0.5%–1.5% of contract value.</td></tr>
+      <tr><td><strong>Marine Plant &amp; Equipment</strong></td><td>Contractor's owned installation equipment — jack-up vessels, crane barges, cable-lay vessels, survey vessels, tugs, barges. Also covers third-party chartered vessels under BIMCO SUPPLYTIME</td><td>Vessel values, age, flag state, classification, and operational area. Jack-up leg penetration and environmental windspeed limits are key risk controls.</td></tr>
+      <tr><td><strong>Delay in Start-Up (DSU)</strong></td><td>Revenue loss caused by a delay in commissioning attributable to insured physical damage during construction. Covers lost revenue from the planned commissioning date through actual commissioning</td><td>DSU SI = daily revenue × maximum delay period (typically 12–24 months). Only triggered by insured physical damage — economic delays, permitting delays excluded.</td></tr>
+      <tr><td><strong>Third-Party Liability (Construction)</strong></td><td>Bodily injury and property damage to third parties (fishing vessels, shipping, coastguards) arising from construction operations</td><td>Marine operations create significant third-party exposure. SIMOPS with operating vessels in busy shipping lanes creates elevated risk.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning-box">
+    <h4>⚠ Serial Defect — The Coverage Battleground</h4>
+    <p>The most contested coverage question in offshore wind underwriting: when the same defect affects multiple turbines, is it one event or many? Most Lloyd's policies use a Series Loss Clause limiting recovery to a defined number of turbines (typically the greater of 1 turbine or 3% of the fleet) per series. The definition of "series" — whether by root cause, manufacturer lot, or commissioning sequence — is heavily negotiated. Post-Siemens Gamesa 2021, many underwriters have moved to blanket serial defect exclusions with separate facultative placements available at additional premium.</p>
+  </div>
+
+  <!-- Information Requirements -->
+  <h3>Information Requirements at Inception</h3>
+  <div class="info-req">
+    <h4>R1 — Operational (Minimum Submission Requirements)</h4>
+    <ul>
+      <li>Project details: site name, location, water depth, distance to shore, commissioning date</li>
+      <li>Turbine specification: manufacturer, model, unit rating (MW), number of turbines, hub height, rotor diameter</li>
+      <li>Foundation type: monopile, jacket, tripod, gravity base, floating</li>
+      <li>TIV schedule: per-turbine values, cable values, substation value, total TIV</li>
+      <li>Annual P50 revenue figure and offtake contract basis (CfD price, PPA rate, merchant)</li>
+      <li>O&amp;M contractor: OEM or independent; scope of O&amp;M agreement; warranty remaining</li>
+      <li>Loss history: all claims and near-misses in past 5 years</li>
+      <li>Outstanding manufacturer technical bulletins or campaign field modifications</li>
+      <li>Most recent independent technical assessment / owners engineer report</li>
+      <li>Cable inspection and burial depth records (inter-array and export)</li>
+    </ul>
+  </div>
+  <div class="info-req">
+    <h4>R3 — Construction (Minimum Submission Requirements)</h4>
+    <ul>
+      <li>Project overview: developer, contractor, EPC/EPCI structure, planned start and completion dates</li>
+      <li>Contract value and TIV build schedule (peak offshore exposure)</li>
+      <li>Installation vessel(s): name, flag, class, age, owner, charter terms (BIMCO form), deck crane capacity</li>
+      <li>Wind turbine generator specification and DNV/BV certification status</li>
+      <li>Foundation design: pile diameter, wall thickness, penetration depth, scour protection design</li>
+      <li>Cable installation method: plough, jetting, or pre-trenched; burial depth specification</li>
+      <li>Offshore substation: voltage rating, transformer supplier, cooling system</li>
+      <li>Metocean design criteria: Hs50, Hs100, 50-yr wind speed, current profile</li>
+      <li>Environmental window assumptions: planned operational metocean limits per operation type</li>
+      <li>Marine warranty surveyor (MWS) — appointed? Which firm?</li>
+      <li>DSU sum insured: P50 daily revenue × indemnity period</li>
+    </ul>
+  </div>
+
+  <!-- Worked Example -->
+  <h2>Worked Example — R1 Operational: 500MW North Sea Wind Farm</h2>
+  <div class="worked-example">
+    <h3>Illustrative Risk: 500MW Operational Offshore Wind Farm, UK North Sea</h3>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px;">67 × Siemens Gamesa SG 7.0-154 turbines | Water depth 22–35m | Distance to shore 45km | Commissioned 2021 | Vestas O&amp;M contract | CfD strike price £89/MWh</p>
+
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">Asset</span> TIV — Turbines (67 × £14m per unit)</span>
+      <span class="we-val">£938m</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">Asset</span> TIV — Foundations &amp; Scour Protection</span>
+      <span class="we-val">£235m</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">Asset</span> TIV — Inter-Array Cables (220km total)</span>
+      <span class="we-val">£110m</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">Asset</span> TIV — Export Cable (45km to shore)</span>
+      <span class="we-val">£85m</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">Asset</span> TIV — Offshore Substation</span>
+      <span class="we-val">£130m</span>
+    </div>
+    <div class="we-row" style="border-bottom:2px solid var(--accent);font-weight:700;">
+      <span class="we-label">Total TIV</span>
+      <span class="we-val">£1,498m</span>
+    </div>
+
+    <div class="we-row" style="margin-top:10px;">
+      <span class="we-label"><span class="we-section">R1 PD</span> Physical Damage Premium — Turbines &amp; Foundations @ 0.215% of £1,173m</span>
+      <span class="we-val">£2,522k</span>
+      <span class="we-note">Rate reflects: established turbine model, OEM O&amp;M, loss-free history, limited serial defect exposure; North Sea metocean loading of +8%</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">R1 PD</span> Physical Damage Premium — Cables @ 0.18% of £195m</span>
+      <span class="we-val">£351k</span>
+      <span class="we-note">Cable rate reflects burial depth, proximity to fishing grounds; fisherman strike buyback included</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">R1 PD</span> Physical Damage Premium — Offshore Substation @ 0.28% of £130m</span>
+      <span class="we-val">£364k</span>
+      <span class="we-note">Substation loading for transformer age (3 years), cooling system type, 45km distance to shore (repair logistics)</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">ALOR</span> Advanced Loss of Revenue — 12 month indemnity</span>
+      <span class="we-val">£430k</span>
+      <span class="we-note">SI = P50 annual revenue £95m (500MW × 38% CF × 8,760hrs × £57/MWh). Rate: 0.45% of £95m ALOR SI. Waiting period: 14 days.</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">TPL</span> Third-Party Liability — £200m limit per occurrence</span>
+      <span class="we-val">£90k</span>
+      <span class="we-note">Operational TPL; low activity risk vs. construction phase; marine operations limited</span>
+    </div>
+    <div class="we-row" style="border-top:2px solid var(--navy);margin-top:6px;padding-top:14px;font-size:1.05rem;">
+      <span class="we-label">TOTAL ANNUAL PREMIUM (R1 Operational)</span>
+      <span class="we-val" style="color:var(--green-dark);">£3,757k</span>
+    </div>
+    <div style="margin-top:12px;font-size:0.78rem;color:var(--muted);">Deductible: £500k each and every occurrence (physical damage); ALOR waiting period 14 days. Serial loss clause: limited to 3 turbines per series (any root cause). Subject to marine warranty surveyor sign-off on cable burial depth records.</div>
+  </div>
+
+  <h2>Worked Example — R3 Construction: 400MW Offshore Wind Farm</h2>
+  <div class="worked-example">
+    <h3>Illustrative Risk: 400MW Offshore Wind Construction, UK North Sea</h3>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px;">54 × Vestas V236-15.0 MW turbines | Water depth 28–42m | Distance to shore 60km | Construction period 30 months | Jack-up installation vessel: Voltaire WTIV | P50 revenue: £112m/yr (CfD £78/MWh)</p>
+
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">R3</span> Contract Works — Turbines &amp; BOP (peak offshore exposure)</span>
+      <span class="we-val">£1,800m</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">R3</span> Contract Works — Foundations, Scour, Cables, Substation</span>
+      <span class="we-val">£600m</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">R3</span> Marine Plant — WTIV &amp; support vessels (contractor's risk)</span>
+      <span class="we-val">£350m</span>
+    </div>
+    <div class="we-row" style="border-bottom:2px solid var(--accent);font-weight:700;">
+      <span class="we-label">Total Construction TIV (Peak)</span>
+      <span class="we-val">£2,750m</span>
+    </div>
+
+    <div class="we-row" style="margin-top:10px;">
+      <span class="we-label"><span class="we-section">R3</span> Contract Works Premium @ 0.55% of £2,400m</span>
+      <span class="we-val">£13,200k</span>
+      <span class="we-note">First-of-kind 15MW turbine loading (+15%); experienced EPC contractor credit (−8%); Scottish North Sea metocean (+10%). Net: 0.55% effective.</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">R3</span> Marine Plant (WTIV &amp; Support) @ 0.42% of £350m</span>
+      <span class="we-val">£1,470k</span>
+      <span class="we-note">Voltaire — modern Class A WTIV, 5-yr-old, BV class in good standing. Favourable rate reflects quality.</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">DSU</span> Delay in Start-Up — 18 month indemnity</span>
+      <span class="we-val">£2,800k</span>
+      <span class="we-note">SI = P50 daily revenue £307k × 18 months = £166m. Rate: 1.68% of £166m DSU SI. Loading for first-of-kind turbine model (limited installation track record).</span>
+    </div>
+    <div class="we-row">
+      <span class="we-label"><span class="we-section">TPL</span> Third-Party Liability — £250m limit, construction phase</span>
+      <span class="we-val">£250k</span>
+      <span class="we-note">Elevated rate vs. operational TPL due to marine installation activity, fishing exclusion zone enforcement, shipping lane proximity.</span>
+    </div>
+    <div class="we-row" style="border-top:2px solid var(--navy);margin-top:6px;padding-top:14px;font-size:1.05rem;">
+      <span class="we-label">TOTAL CONSTRUCTION PROJECT PREMIUM (R3)</span>
+      <span class="we-val" style="color:var(--green-dark);">£17,720k</span>
+    </div>
+    <div style="margin-top:12px;font-size:0.78rem;color:var(--muted);">Deductible: £2m each and every occurrence (contract works); DSU trigger: insured physical damage only; no economic delay coverage. Marine warranty surveyor: Wood Group (MWS appointed). Serial defect excluded from R3 — buy-back available at additional premium.</div>
+  </div>
+
+  <div class="highlight-box">
+    <h3>The ALOR / DSU Calculation — A Common Underwriting Error</h3>
+    <p>The most frequent underwriting error on offshore wind is setting the ALOR or DSU sum insured incorrectly. The SI must reflect the P50 annual revenue multiplied by the indemnity period in months — not TIV, not nameplate capacity, and not the CfD strike price in isolation.</p>
+    <p>Example: A 500MW farm with 38% capacity factor, generating at £57/MWh under a CfD, earns approximately £95m per year. An 18-month ALOR indemnity period gives an ALOR SI of £142.5m. Many submissions understate this figure — often because the broker uses nameplate capacity × strike price without applying the capacity factor.</p>
+    <p>Underwriters should always verify: (GWP of project × capacity factor × 8,760 hours × CfD/PPA price) × (indemnity months / 12) = correct ALOR SI. Any significant discrepancy between the submitted SI and this calculation should be queried before binding.</p>
+  </div>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Renewable Energy – Offshore</span> | Lloyd's Codes R1 · R3 | Module 04 of 7</p>
+  <p style="margin-top:6px;">All premiums and TIVs are illustrative only. Data accurate to April 2026.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build Tracker | Risk Code Hub</title>
+  <style>
+    :root {
+      --navy: #1F4E79;
+      --blue: #2E75B6;
+      --blue-light: #D6E4F0;
+      --gold: #C9A84C;
+      --dark: #1A1A2E;
+      --mid: #555;
+      --light: #F4F7FB;
+      --white: #FFFFFF;
+      --success: #1B6B3A;
+      --success-bg: #E8F5EE;
+      --success-border: #A3D9B7;
+      --card-border: #E1EBF5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--light); color: var(--dark); }
+
+    header {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      padding: 0 2rem; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+    }
+    .logo { font-size: 1rem; font-weight: 700; color: white; }
+    .logo span { color: var(--gold); }
+    nav a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.88rem; margin-left: 1.5rem; }
+    nav a:hover { color: white; }
+
+    .page-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--card-border);
+      padding: 2rem 2rem 1.5rem;
+      max-width: 900px; margin: 0 auto;
+    }
+    .page-header h1 { font-size: 1.6rem; color: var(--navy); margin-bottom: 0.4rem; }
+    .page-header p { font-size: 0.88rem; color: var(--mid); line-height: 1.6; }
+
+    .progress-bar-wrap {
+      background: var(--white);
+      border-bottom: 3px solid var(--blue-light);
+      padding: 1rem 2rem;
+      max-width: 900px; margin: 0 auto;
+      display: flex; align-items: center; gap: 1.2rem;
+    }
+    .progress-bar-track {
+      flex: 1; height: 10px; background: var(--blue-light);
+      border-radius: 10px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; background: linear-gradient(90deg, var(--success), #28a35a);
+      border-radius: 10px; transition: width 0.4s;
+    }
+    .progress-label { font-size: 0.82rem; font-weight: 700; color: var(--navy); white-space: nowrap; }
+
+    main { max-width: 900px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+
+    .group-label {
+      font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--blue);
+      margin: 2rem 0 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--blue-light);
+    }
+
+    .hub-row {
+      background: var(--white);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.6rem;
+      display: flex; align-items: flex-start; gap: 1rem;
+      transition: box-shadow 0.18s;
+    }
+    .hub-row:hover { box-shadow: 0 3px 14px rgba(31,78,121,0.10); }
+    .hub-row.complete {
+      border-color: var(--success-border);
+      background: var(--success-bg);
+    }
+    .hub-row.next {
+      border-color: var(--gold);
+      background: #FFFDF4;
+      box-shadow: 0 0 0 2px rgba(201,168,76,0.25);
+    }
+
+    .hub-num {
+      font-size: 0.78rem; font-weight: 800; color: var(--blue);
+      min-width: 28px; padding-top: 2px;
+      text-align: right;
+    }
+    .hub-row.complete .hub-num { color: var(--success); }
+
+    .hub-check {
+      width: 20px; height: 20px; flex-shrink: 0;
+      border: 2px solid var(--card-border);
+      border-radius: 5px; background: var(--white);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      margin-top: 2px; transition: all 0.18s;
+    }
+    .hub-check:hover { border-color: var(--blue); }
+    .hub-row.complete .hub-check {
+      background: var(--success); border-color: var(--success);
+      color: white; font-size: 12px;
+    }
+
+    .hub-info { flex: 1; }
+    .hub-title { font-size: 0.98rem; font-weight: 700; color: var(--navy); margin-bottom: 0.25rem; }
+    .hub-row.complete .hub-title { color: var(--success); text-decoration: line-through; text-decoration-color: rgba(27,107,58,0.4); }
+    .hub-row.next .hub-title { color: #7A5200; }
+
+    .hub-codes { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.4rem; }
+    .code-pill {
+      background: var(--blue-light); color: var(--navy);
+      font-size: 0.68rem; font-weight: 700; font-family: 'Courier New', monospace;
+      padding: 0.12rem 0.4rem; border-radius: 4px;
+    }
+    .hub-row.complete .code-pill { background: rgba(27,107,58,0.12); color: var(--success); }
+    .hub-row.next .code-pill { background: rgba(201,168,76,0.18); color: #7A5200; }
+
+    .hub-prompt {
+      font-size: 0.78rem; color: var(--mid);
+      background: var(--light); border: 1px dashed #C5D5E8;
+      border-radius: 6px; padding: 0.35rem 0.65rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      cursor: pointer; transition: all 0.18s;
+      max-width: 520px;
+    }
+    .hub-prompt:hover { background: var(--blue-light); border-color: var(--blue); }
+    .hub-prompt .prompt-icon { font-size: 0.9rem; flex-shrink: 0; }
+    .hub-prompt code { font-family: 'Courier New', monospace; font-size: 0.76rem; color: var(--navy); }
+    .hub-row.complete .hub-prompt { opacity: 0.45; pointer-events: none; }
+
+    .copy-tip { font-size: 0.68rem; color: #A0AFBF; margin-left: auto; white-space: nowrap; flex-shrink: 0; }
+
+    .hub-status {
+      font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.65rem;
+      border-radius: 12px; white-space: nowrap; align-self: flex-start; margin-top: 2px;
+    }
+    .status-complete { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+    .status-next { background: #FEF9EC; color: #946C00; border: 1px solid rgba(201,168,76,0.5); }
+    .status-planned { background: #F0F4FA; color: #4A6FA5; border: 1px solid var(--card-border); }
+
+    .copied-toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      background: var(--navy); color: white;
+      padding: 0.6rem 1.5rem; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 600;
+      opacity: 0; transition: opacity 0.3s;
+      pointer-events: none; z-index: 999;
+    }
+    .copied-toast.show { opacity: 1; }
+
+    footer {
+      text-align: center; color: var(--mid); font-size: 0.78rem;
+      padding: 1.5rem; border-top: 1px solid var(--card-border);
+      max-width: 900px; margin: 0 auto;
+    }
+
+    @media (max-width: 600px) {
+      .hub-prompt { max-width: 100%; }
+      .copy-tip { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Risk Code <span>Hub</span> — Build Tracker</div>
+  <nav>
+    <a href="index.html">← Back to Hub</a>
+  </nav>
+</header>
+
+<div class="page-header">
+  <h1>Daily Build Tracker</h1>
+  <p>Work through the hubs below in order, one per session. Click the prompt box to copy the exact phrase to paste into Claude to begin each session. Tick each hub off when complete.</p>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <span class="progress-label" id="progress-label">0 / 0 complete</span>
+</div>
+
+<main id="tracker-main"></main>
+
+<div class="copied-toast" id="toast">Prompt copied to clipboard ✓</div>
+
+<footer>
+  Risk Code Hub Build Tracker — updated automatically as hubs are completed. Last updated: April 2026.
+</footer>
+
+<script>
+// ── Hub build sequence ────────────────────────────────────────────────────────
+// Each hub: { title, codes, group, prompt, status }
+// status: "complete" | "next" | "planned"
+
+const buildQueue = [
+  // ── ENERGY & RENEWABLES ────────────────────────────────────────────────────
+  { group: "ENERGY & RENEWABLES",
+    title: "Product Recall", codes: ["PB"], status: "complete",
+    prompt: "Build the Product Recall hub" },
+  { group: "ENERGY & RENEWABLES",
+    title: "Upstream / Offshore Energy", codes: ["EC","EM","EN","EG","EH","EY","EZ"], status: "complete",
+    prompt: "Build the Upstream Offshore Energy hub (codes EC, EM, EN, EG, EH, EY, EZ)" },
+  { group: "ENERGY & RENEWABLES",
+    title: "Renewable Energy – Offshore", codes: ["R1","R3"], status: "complete",
+    prompt: "Build the Renewable Energy Offshore hub (codes R1, R3)" },
+  { group: "ENERGY & RENEWABLES",
+    title: "Renewable Energy – Onshore", codes: ["R2","R4"], status: "complete",
+    prompt: "Build the Renewable Energy Onshore hub (codes R2, R4)" },
+  { group: "ENERGY & RENEWABLES",
+    title: "Downstream / Onshore Energy", codes: ["EA","EB","EF","PG"], status: "complete",
+    prompt: "Build the Downstream Onshore Energy hub (codes EA, EB, EF, PG)" },
+  { group: "ENERGY & RENEWABLES",
+    title: "Environmental Liability", codes: ["EP"], status: "planned",
+    prompt: "Build the Environmental Liability hub (code EP)" },
+
+  // ── CYBER ─────────────────────────────────────────────────────────────────
+  { group: "CYBER",
+    title: "Cyber", codes: ["CY","CZ","CG","CH"], status: "next",
+    prompt: "Build the Cyber hub (codes CY, CZ, CG, CH)" },
+
+  // ── FINANCIAL LINES – D&O ─────────────────────────────────────────────────
+  { group: "FINANCIAL LINES – D&O",
+    title: "Directors & Officers (D&O)", codes: ["D1","D2","D3","D4","D5","DA","DB","DD"], status: "planned",
+    prompt: "Build the Directors and Officers D&O hub (codes D1, D2, D3, D4, D5, DA, DB, DD)" },
+  { group: "FINANCIAL LINES – D&O",
+    title: "Employment Practices Liability (EPLI)", codes: ["D6","D7"], status: "planned",
+    prompt: "Build the Employment Practices Liability EPLI hub (codes D6, D7)" },
+  { group: "FINANCIAL LINES – D&O",
+    title: "Transactional Liability (W&I / Tax)", codes: ["D8","D9","TA","TB","CD","CE"], status: "planned",
+    prompt: "Build the Transactional Liability hub covering W&I and Tax (codes D8, D9, TA, TB, CD, CE)" },
+
+  // ── PROFESSIONAL INDEMNITY ────────────────────────────────────────────────
+  { group: "PROFESSIONAL INDEMNITY / E&O",
+    title: "PI E&O – Legal Professions", codes: ["E2","E3"], status: "planned",
+    prompt: "Build the Professional Indemnity E&O Legal Professions hub (codes E2, E3)" },
+  { group: "PROFESSIONAL INDEMNITY / E&O",
+    title: "PI E&O – Accountants", codes: ["E4","E5"], status: "planned",
+    prompt: "Build the Professional Indemnity E&O Accountants hub (codes E4, E5)" },
+  { group: "PROFESSIONAL INDEMNITY / E&O",
+    title: "PI E&O – Construction & Engineering", codes: ["E6","E7"], status: "planned",
+    prompt: "Build the Professional Indemnity E&O Construction and Engineering hub (codes E6, E7)" },
+  { group: "PROFESSIONAL INDEMNITY / E&O",
+    title: "PI E&O – Technology & Telecom", codes: ["F4","F5"], status: "planned",
+    prompt: "Build the Professional Indemnity E&O Technology and Telecom hub (codes F4, F5)" },
+  { group: "PROFESSIONAL INDEMNITY / E&O",
+    title: "PI E&O – Financial Institutions", codes: ["F2","F3"], status: "planned",
+    prompt: "Build the Professional Indemnity E&O Financial Institutions hub (codes F2, F3)" },
+  { group: "PROFESSIONAL INDEMNITY / E&O",
+    title: "PI E&O – Miscellaneous", codes: ["E8","E9","ED","EE"], status: "planned",
+    prompt: "Build the Professional Indemnity E&O Miscellaneous hub (codes E8, E9, ED, EE)" },
+
+  // ── CRIME & FINANCIAL LINES ───────────────────────────────────────────────
+  { group: "CRIME & FINANCIAL LINES",
+    title: "Crime / Fidelity – Financial Institutions", codes: ["BB"], status: "planned",
+    prompt: "Build the Crime and Fidelity Financial Institutions hub (code BB)" },
+  { group: "CRIME & FINANCIAL LINES",
+    title: "Crime / Fidelity – Commercial", codes: ["BC"], status: "planned",
+    prompt: "Build the Crime and Fidelity Commercial hub (code BC)" },
+  { group: "CRIME & FINANCIAL LINES",
+    title: "Mortgage, Title, Surety & Financial Guarantee", codes: ["FM","TT","SB","FG"], status: "planned",
+    prompt: "Build the Mortgage Title Surety and Financial Guarantee hub (codes FM, TT, SB, FG)" },
+
+  // ── PROPERTY ─────────────────────────────────────────────────────────────
+  { group: "PROPERTY",
+    title: "Commercial Property", codes: ["P2","P3","P4","P5","P6","P7","B2","B3","B4","B5"], status: "planned",
+    prompt: "Build the Commercial Property hub (codes P2, P3, P4, P5, P6, P7, B2, B3, B4, B5)" },
+  { group: "PROPERTY",
+    title: "Engineering & Construction", codes: ["CB","CC"], status: "planned",
+    prompt: "Build the Engineering and Construction hub (codes CB, CC)" },
+  { group: "PROPERTY",
+    title: "UK Household", codes: ["HP"], status: "planned",
+    prompt: "Build the UK Household Property hub (code HP)" },
+  { group: "PROPERTY",
+    title: "Difference in Conditions (DIC)", codes: ["DC"], status: "planned",
+    prompt: "Build the Difference in Conditions DIC hub (code DC)" },
+
+  // ── CASUALTY / GL ─────────────────────────────────────────────────────────
+  { group: "CASUALTY / GENERAL LIABILITY",
+    title: "General Liability – USA", codes: ["UA","UC","UR","US"], status: "planned",
+    prompt: "Build the General Liability USA hub (codes UA, UC, UR, US)" },
+  { group: "CASUALTY / GENERAL LIABILITY",
+    title: "General Liability – Non-USA", codes: ["N","NC","NR","NS"], status: "planned",
+    prompt: "Build the General Liability Non-USA hub (codes N, NC, NR, NS)" },
+  { group: "CASUALTY / GENERAL LIABILITY",
+    title: "Employers Liability – UK", codes: ["W3"], status: "planned",
+    prompt: "Build the UK Employers Liability hub (code W3)" },
+  { group: "CASUALTY / GENERAL LIABILITY",
+    title: "Workers Comp / EL – International", codes: ["W4"], status: "planned",
+    prompt: "Build the International Workers Compensation and Employers Liability hub (code W4)" },
+  { group: "CASUALTY / GENERAL LIABILITY",
+    title: "Workers Compensation – USA", codes: ["W5","W6"], status: "planned",
+    prompt: "Build the US Workers Compensation hub (codes W5, W6)" },
+
+  // ── MARINE ────────────────────────────────────────────────────────────────
+  { group: "MARINE",
+    title: "Marine Hull", codes: ["B","T","TS","TX"], status: "planned",
+    prompt: "Build the Marine Hull hub (codes B, T, TS, TX)" },
+  { group: "MARINE",
+    title: "Marine Hull War", codes: ["W","WB","AW","WX"], status: "planned",
+    prompt: "Build the Marine Hull War hub (codes W, WB, AW, WX)" },
+  { group: "MARINE",
+    title: "Marine Cargo", codes: ["V","Q","VL","VX"], status: "planned",
+    prompt: "Build the Marine Cargo hub (codes V, Q, VL, VX)" },
+  { group: "MARINE",
+    title: "Marine Liability", codes: ["G","GC","GX"], status: "planned",
+    prompt: "Build the Marine Liability hub (codes G, GC, GX)" },
+  { group: "MARINE",
+    title: "Yachts", codes: ["O"], status: "planned",
+    prompt: "Build the Yachts hub (code O)" },
+
+  // ── AVIATION ─────────────────────────────────────────────────────────────
+  { group: "AVIATION",
+    title: "Aviation Hull", codes: ["H2","H3"], status: "planned",
+    prompt: "Build the Aviation Hull hub (codes H2, H3)" },
+  { group: "AVIATION",
+    title: "Aviation Liability", codes: ["L2","L3","AO","AP"], status: "planned",
+    prompt: "Build the Aviation Liability hub (codes L2, L3, AO, AP)" },
+  { group: "AVIATION",
+    title: "Aviation War & Confiscation", codes: ["RX"], status: "planned",
+    prompt: "Build the Aviation War and Confiscation hub (code RX)" },
+
+  // ── ACCIDENT & HEALTH ─────────────────────────────────────────────────────
+  { group: "ACCIDENT & HEALTH",
+    title: "Personal Accident & Health", codes: ["KA","KB","KC","KG","KM","KP","KS","KT","KX"], status: "planned",
+    prompt: "Build the Personal Accident and Health hub (codes KA, KB, KC, KG, KM, KP, KS, KT, KX)" },
+  { group: "ACCIDENT & HEALTH",
+    title: "Medical Malpractice & Healthcare", codes: ["GH","GM","GN","GO","GQ","GT"], status: "planned",
+    prompt: "Build the Medical Malpractice and Healthcare hub (codes GH, GM, GN, GO, GQ, GT)" },
+  { group: "ACCIDENT & HEALTH",
+    title: "Temporary Life & Permanent Health", codes: ["TL"], status: "planned",
+    prompt: "Build the Temporary Life and Permanent Health hub (code TL)" },
+
+  // ── MOTOR ─────────────────────────────────────────────────────────────────
+  { group: "MOTOR",
+    title: "Motor – UK", codes: ["M2","M3","M4","M5","M6"], status: "planned",
+    prompt: "Build the UK Motor hub (codes M2, M3, M4, M5, M6)" },
+  { group: "MOTOR",
+    title: "Motor – International", codes: ["MF","MG","MH","MI","MP"], status: "planned",
+    prompt: "Build the International Motor hub (codes MF, MG, MH, MI, MP)" },
+
+  // ── POLITICAL RISK & CREDIT ───────────────────────────────────────────────
+  { group: "POLITICAL RISK & CREDIT",
+    title: "Political Risk", codes: ["PR"], status: "planned",
+    prompt: "Build the Political Risk hub (code PR)" },
+  { group: "POLITICAL RISK & CREDIT",
+    title: "Credit & Contract Frustration", codes: ["CR","CF","WT"], status: "planned",
+    prompt: "Build the Credit and Contract Frustration hub (codes CR, CF, WT)" },
+  { group: "POLITICAL RISK & CREDIT",
+    title: "Terrorism & Political Violence", codes: ["TO","TU","TW","RS","RW","WL"], status: "planned",
+    prompt: "Build the Terrorism and Political Violence hub (codes TO, TU, TW, RS, RW, WL)" },
+
+  // ── SPECIALTY LINES ───────────────────────────────────────────────────────
+  { group: "SPECIALTY LINES",
+    title: "Event Cancellation & Contingency", codes: ["PC","PA","PN","PU","PZ"], status: "planned",
+    prompt: "Build the Event Cancellation and Contingency hub (codes PC, PA, PN, PU, PZ)" },
+  { group: "SPECIALTY LINES",
+    title: "Agricultural Crop & Forestry", codes: ["HA","AG"], status: "planned",
+    prompt: "Build the Agricultural Crop and Forestry hub (codes HA, AG)" },
+  { group: "SPECIALTY LINES",
+    title: "Livestock & Bloodstock", codes: ["NB","NX"], status: "planned",
+    prompt: "Build the Livestock and Bloodstock hub (codes NB, NX)" },
+  { group: "SPECIALTY LINES",
+    title: "Fine Art, Specie & Jewellery", codes: ["FA","GS","JB","CT"], status: "planned",
+    prompt: "Build the Fine Art Specie and Jewellery hub (codes FA, GS, JB, CT)" },
+  { group: "SPECIALTY LINES",
+    title: "Space", codes: ["SC","SL","SO"], status: "planned",
+    prompt: "Build the Space hub (codes SC, SL, SO)" },
+  { group: "SPECIALTY LINES",
+    title: "Nuclear", codes: ["NP","NL","NV"], status: "planned",
+    prompt: "Build the Nuclear hub (codes NP, NL, NV)" },
+  { group: "SPECIALTY LINES",
+    title: "Film & Entertainment", codes: ["PF"], status: "planned",
+    prompt: "Build the Film and Entertainment hub (code PF)" },
+  { group: "SPECIALTY LINES",
+    title: "Extended Warranty", codes: ["WA"], status: "planned",
+    prompt: "Build the Extended Warranty hub (code WA)" },
+  { group: "SPECIALTY LINES",
+    title: "Legal Expenses", codes: ["LE"], status: "planned",
+    prompt: "Build the Legal Expenses hub (code LE)" },
+];
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function render() {
+  // Load saved state
+  const saved = JSON.parse(localStorage.getItem('rch-tracker') || '{}');
+
+  const total = buildQueue.length;
+  let doneCount = buildQueue.filter(h => h.status === 'complete' || saved[h.title]).length;
+  document.getElementById('progress-fill').style.width = `${(doneCount / total) * 100}%`;
+  document.getElementById('progress-label').textContent = `${doneCount} / ${total} complete`;
+
+  const main = document.getElementById('tracker-main');
+  main.innerHTML = '';
+
+  let currentGroup = '';
+  let globalIdx = 0;
+
+  buildQueue.forEach((hub, i) => {
+    globalIdx++;
+    const isDone = hub.status === 'complete' || saved[hub.title];
+    const isNext = !isDone && hub.status === 'next';
+
+    // Group header
+    if (hub.group !== currentGroup) {
+      currentGroup = hub.group;
+      const gLabel = document.createElement('div');
+      gLabel.className = 'group-label';
+      gLabel.textContent = currentGroup;
+      main.appendChild(gLabel);
+    }
+
+    const row = document.createElement('div');
+    row.className = `hub-row${isDone ? ' complete' : isNext ? ' next' : ''}`;
+
+    const statusClass = isDone ? 'status-complete' : isNext ? 'status-next' : 'status-planned';
+    const statusText = isDone ? '✅ Complete' : isNext ? '⭐ Up Next' : '📋 Planned';
+
+    const codes = hub.codes.map(c => `<span class="code-pill">${c}</span>`).join('');
+
+    row.innerHTML = `
+      <span class="hub-num">${globalIdx}</span>
+      <div class="hub-check" onclick="toggleDone(this, '${hub.title}')" title="Mark complete">${isDone ? '✓' : ''}</div>
+      <div class="hub-info">
+        <div class="hub-title">${hub.title}</div>
+        <div class="hub-codes">${codes}</div>
+        <div class="hub-prompt" onclick="copyPrompt('${hub.prompt.replace(/'/g, "\\'")}', this)" title="Click to copy">
+          <span class="prompt-icon">💬</span>
+          <code>${hub.prompt}</code>
+          <span class="copy-tip">click to copy</span>
+        </div>
+      </div>
+      <span class="hub-status ${statusClass}">${statusText}</span>
+    `;
+
+    main.appendChild(row);
+  });
+}
+
+function toggleDone(el, title) {
+  const saved = JSON.parse(localStorage.getItem('rch-tracker') || '{}');
+  if (saved[title]) {
+    delete saved[title];
+  } else {
+    saved[title] = true;
+  }
+  localStorage.setItem('rch-tracker', JSON.stringify(saved));
+  render();
+}
+
+function copyPrompt(text, el) {
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  });
+}
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub QA Checklist – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--blue:#1a4a8a;--accent:#c8a84b;--light:#f4f7fc;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--teal:#0a5c52;--orange:#c45c00;--red:#8b1a1a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%); color:#fff; padding:36px 40px; }
+    header h1 { font-size:1.8rem; font-weight:700; }
+    header p { margin-top:8px; color:#b8cde4; font-size:0.9rem; max-width:650px; line-height:1.6; }
+    .header-meta { margin-top:14px; font-size:0.78rem; color:var(--accent); letter-spacing:1px; text-transform:uppercase; }
+    nav-bar { display:block; background:#fff; border-bottom:2px solid var(--border); padding:12px 40px; font-size:0.82rem; color:var(--muted); }
+    nav-bar a { color:var(--blue); text-decoration:none; }
+    main { max-width:900px; margin:0 auto; padding:40px 30px 60px; }
+
+    /* Hub selector */
+    .hub-selector { background:#fff; border:1px solid var(--border); border-radius:10px; padding:24px; margin-bottom:32px; display:flex; gap:16px; align-items:flex-end; flex-wrap:wrap; }
+    .hub-selector label { font-size:0.85rem; font-weight:700; color:var(--navy); display:block; margin-bottom:6px; }
+    .hub-selector input { padding:9px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.88rem; width:260px; }
+    .hub-selector select { padding:9px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.88rem; }
+    .btn { padding:10px 22px; background:var(--navy); color:#fff; border:none; border-radius:6px; font-size:0.88rem; font-weight:700; cursor:pointer; }
+    .btn:hover { background:var(--blue); }
+    .btn-clear { background:transparent; color:var(--muted); border:1px solid var(--border); }
+    .btn-clear:hover { background:var(--light); color:var(--navy); }
+
+    /* Progress bar */
+    .progress-bar { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 24px; margin-bottom:28px; }
+    .progress-row { display:flex; align-items:center; gap:16px; }
+    .progress-track { flex:1; height:12px; background:var(--light); border-radius:8px; overflow:hidden; }
+    .progress-fill { height:100%; background:linear-gradient(90deg, var(--teal), #28a35a); border-radius:8px; transition:width 0.3s; }
+    .progress-label { font-size:0.9rem; font-weight:700; color:var(--navy); white-space:nowrap; min-width:80px; text-align:right; }
+    .progress-sub { font-size:0.78rem; color:var(--muted); margin-top:6px; }
+
+    /* Section headers */
+    h2 { font-size:1.15rem; color:var(--navy); margin:32px 0 12px; padding:10px 16px; background:#fff; border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:6px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; }
+    h2 .section-status { font-size:0.78rem; font-weight:600; padding:3px 10px; border-radius:10px; }
+    h2 .status-ok { background:#e0f0ec; color:var(--teal); }
+    h2 .status-fail { background:#fde8e8; color:var(--red); }
+    h2 .status-pending { background:var(--light); color:var(--muted); border:1px solid var(--border); }
+
+    /* Check items */
+    .check-group { background:#fff; border:1px solid var(--border); border-radius:8px; margin-bottom:20px; overflow:hidden; }
+    .check-item { display:flex; align-items:flex-start; gap:14px; padding:14px 18px; border-bottom:1px solid var(--border); transition:background 0.15s; }
+    .check-item:last-child { border-bottom:none; }
+    .check-item:hover { background:#f8fbff; }
+    .check-item input[type=checkbox] { width:18px; height:18px; margin-top:1px; flex-shrink:0; accent-color:var(--teal); cursor:pointer; }
+    .check-item input[type=checkbox]:checked + .check-content .check-title { text-decoration:line-through; color:var(--muted); }
+    .check-content { flex:1; }
+    .check-title { font-size:0.88rem; font-weight:600; color:var(--text); margin-bottom:3px; }
+    .check-desc { font-size:0.8rem; color:var(--muted); line-height:1.5; }
+    .check-severity { flex-shrink:0; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; padding:3px 8px; border-radius:8px; margin-top:2px; }
+    .sev-critical { background:#fde8e8; color:var(--red); }
+    .sev-major { background:#fef0e0; color:var(--orange); }
+    .sev-minor { background:#e8eef8; color:var(--blue); }
+
+    /* Issue log */
+    .issue-log { background:#fff; border:1px solid var(--border); border-radius:8px; margin-top:32px; }
+    .issue-log-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .issue-log-header h3 { font-size:0.95rem; font-weight:700; color:var(--navy); }
+    .issue-log textarea { width:100%; padding:16px 20px; border:none; font-family:'Segoe UI',Arial,sans-serif; font-size:0.85rem; color:var(--text); resize:vertical; min-height:100px; outline:none; }
+    .issue-log textarea::placeholder { color:var(--muted); }
+
+    /* Sign-off */
+    .sign-off { background:var(--navy); color:#fff; border-radius:10px; padding:28px; margin-top:32px; display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+    .sign-off-text { flex:1; }
+    .sign-off h3 { color:var(--accent); font-size:1rem; margin-bottom:6px; }
+    .sign-off p { color:#b8cde4; font-size:0.85rem; }
+    .sign-off-status { font-size:1.5rem; font-weight:800; }
+    .sign-off-status.pass { color:#4ecb71; }
+    .sign-off-status.fail { color:#e87070; }
+    .sign-off-status.pending { color:var(--accent); }
+
+    /* Save/export */
+    .action-bar { display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; }
+    .btn-export { background:var(--accent); color:var(--navy); }
+    .btn-export:hover { background:#b89438; }
+
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:20px; font-size:0.8rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+
+    /* Known bug callout */
+    .bug-callout { background:#fde8e8; border:1px solid #e5b8b8; border-radius:8px; padding:16px 20px; margin:16px 0; font-size:0.85rem; color:var(--red); }
+    .bug-callout strong { display:block; margin-bottom:4px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">Risk Code Hub — Build Quality</div>
+  <h1>Hub QA Checklist</h1>
+  <p>Run this checklist after every hub build before marking it complete. Covers structure, navigation, JavaScript, content quality, data accuracy, and accessibility basics.</p>
+  <div class="header-meta">Version 1.0 — April 2026 &nbsp;|&nbsp; Energy Offshore hub: QA findings documented below</div>
+</header>
+
+<nav-bar>
+  <a href="index.html">← Back to Risk Code Hub</a> &nbsp;|&nbsp; <a href="build-tracker.html">Build Tracker</a>
+</nav-bar>
+
+<main>
+
+  <!-- Hub selector -->
+  <div class="hub-selector">
+    <div>
+      <label>Hub Name</label>
+      <input type="text" id="hubName" placeholder="e.g. Upstream / Offshore Energy" value="">
+    </div>
+    <div>
+      <label>Lloyd's Codes</label>
+      <input type="text" id="hubCodes" placeholder="e.g. EC, EM, EN, EG, EH, EY, EZ" style="width:200px;">
+    </div>
+    <div>
+      <label>QA Date</label>
+      <input type="date" id="qaDate" style="width:160px;">
+    </div>
+    <button class="btn" onclick="saveSession()">Save Session</button>
+    <button class="btn btn-clear" onclick="clearAll()">Clear All</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar">
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 0</div>
+    </div>
+    <div class="progress-sub" id="progressSub">Tick each item as you verify it. All critical items must pass before sign-off.</div>
+  </div>
+
+  <!-- Known bug from energy-offshore QA -->
+  <div class="bug-callout">
+    <strong>⚠ Known Bug — Energy Offshore Hub (Fixed April 2026)</strong>
+    Chart.js v4 callbacks: <code>ctx.label</code> does not exist in dataset element callbacks (pointBackgroundColor, pointRadius). Use <code>ctx.chart.data.labels[ctx.dataIndex]</code> instead. This caused the entire rate cycle chart to fail to render. Fixed in rates-analysis.html. Apply this pattern to all future hubs using Chart.js point colour callbacks.
+  </div>
+
+  <!-- SECTION 1: Structure -->
+  <h2 onclick="toggleSection('s1')">📁 Section 1 — File Structure &amp; Navigation <span class="section-status status-pending" id="s1-status">Pending</span></h2>
+  <div class="check-group" id="s1">
+    <div class="check-item"><input type="checkbox" data-section="s1" onchange="update()"><div class="check-content"><div class="check-title">All 8 files present in hub folder</div><div class="check-desc">index.html, history.html, timeline.html, database.html, underwriting.html, rates-analysis.html, risk-mitigation.html, global-program.html</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s1" onchange="update()"><div class="check-content"><div class="check-title">All 8 nav links present in every file</div><div class="check-desc">Each page's &lt;nav&gt; must link to all 8 sibling pages. Missing links break user navigation.</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s1" onchange="update()"><div class="check-content"><div class="check-title">Active nav item correctly set on each page</div><div class="check-desc">The current page's nav link must have class="active". Check all 8 pages individually.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s1" onchange="update()"><div class="check-content"><div class="check-title">Breadcrumb present and links correct</div><div class="check-desc">All pages should have a breadcrumb: Risk Code Hub › [Hub Name] › Module XX. Links to ../index.html and index.html must resolve.</div></div><span class="check-severity sev-minor">Minor</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s1" onchange="update()"><div class="check-content"><div class="check-title">hub-index.json updated with correct status</div><div class="check-desc">On completion, set status: "complete". Check URL field matches actual folder path.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s1" onchange="update()"><div class="check-content"><div class="check-title">build-tracker.html updated</div><div class="check-desc">Completed hub marked complete; next hub set to "next" status.</div></div><span class="check-severity sev-minor">Minor</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s1" onchange="update()"><div class="check-content"><div class="check-title">CHANGELOG.md updated with new version</div><div class="check-desc">New version entry with date, hub name, and summary of modules built.</div></div><span class="check-severity sev-minor">Minor</span></div>
+  </div>
+
+  <!-- SECTION 2: Visual / Rendering -->
+  <h2 onclick="toggleSection('s2')">🎨 Section 2 — Visual Rendering <span class="section-status status-pending" id="s2-status">Pending</span></h2>
+  <div class="check-group" id="s2">
+    <div class="check-item"><input type="checkbox" data-section="s2" onchange="update()"><div class="check-content"><div class="check-title">Header renders correctly on all 8 pages</div><div class="check-desc">Dark gradient background, white text, coloured tag, correct module number and hub title.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s2" onchange="update()"><div class="check-content"><div class="check-title">No horizontal scroll on desktop (1024px width)</div><div class="check-desc">Tables and grids must not overflow. Check especially database.html and underwriting.html tables.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s2" onchange="update()"><div class="check-content"><div class="check-title">Mobile layout acceptable at 375px width</div><div class="check-desc">Key grids should stack vertically. Tables may scroll horizontally — this is acceptable if content is readable.</div></div><span class="check-severity sev-minor">Minor</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s2" onchange="update()"><div class="check-content"><div class="check-title">All card grids render without broken layout</div><div class="check-desc">Factor cards, basin cards, module cards — check none collapse to zero height or overlap.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s2" onchange="update()"><div class="check-content"><div class="check-title">Colour scheme consistent (navy/blue/gold/teal)</div><div class="check-desc">No accidental colour bleed from CSS variable errors. All impact badges (high/med/low) correctly coloured.</div></div><span class="check-severity sev-minor">Minor</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s2" onchange="update()"><div class="check-content"><div class="check-title">Footer present and correctly attributed on all pages</div><div class="check-desc">Should include: Risk Code Hub name, Lloyd's codes, module number, version/date. Data accuracy disclaimer.</div></div><span class="check-severity sev-minor">Minor</span></div>
+  </div>
+
+  <!-- SECTION 3: JavaScript -->
+  <h2 onclick="toggleSection('s3')">⚙️ Section 3 — JavaScript &amp; Interactivity <span class="section-status status-pending" id="s3-status">Pending</span></h2>
+  <div class="check-group" id="s3">
+    <div class="check-item"><input type="checkbox" data-section="s3" onchange="update()"><div class="check-content"><div class="check-title">No JS errors in browser console (F12) on any page</div><div class="check-desc">Open DevTools → Console on each page. Any red errors must be investigated and fixed before sign-off.</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s3" onchange="update()"><div class="check-content"><div class="check-title">Chart.js chart renders with visible data (rates-analysis.html)</div><div class="check-desc">The rate index line chart must show data points. If blank, check: (1) CDN loaded, (2) canvas ID matches JS, (3) no ctx.label in element callbacks — use ctx.chart.data.labels[ctx.dataIndex] instead.</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s3" onchange="update()"><div class="check-content"><div class="check-title">Chart tooltips work on hover</div><div class="check-desc">Hover over chart data points. Tooltip should show year, index value, and loss event annotation where applicable.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s3" onchange="update()"><div class="check-content"><div class="check-title">Database filters work correctly (database.html)</div><div class="check-desc">Test each filter dropdown (type, basin, era) and the search box. Row count should update. Clear button resets all.</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s3" onchange="update()"><div class="check-content"><div class="check-title">Database column sort works on all sortable columns</div><div class="check-desc">Click year, loss, and fatality column headers. Data should re-sort. Check sort direction toggles correctly.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s3" onchange="update()"><div class="check-content"><div class="check-title">No unescaped apostrophes in JS string literals</div><div class="check-desc">Any word like "Lloyd's", "O'Brien", or curly apostrophes (') inside single-quoted JS strings will cause a syntax error. Use Unicode escapes (\u2019) or double quotes instead.</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s3" onchange="update()"><div class="check-content"><div class="check-title">localStorage used for build-tracker checkboxes only</div><div class="check-desc">No other page should persist state to localStorage. If used elsewhere, confirm it degrades gracefully if localStorage is unavailable.</div></div><span class="check-severity sev-minor">Minor</span></div>
+  </div>
+
+  <!-- SECTION 4: Content Quality -->
+  <h2 onclick="toggleSection('s4')">📝 Section 4 — Content Quality <span class="section-status status-pending" id="s4-status">Pending</span></h2>
+  <div class="check-group" id="s4">
+    <div class="check-item"><input type="checkbox" data-section="s4" onchange="update()"><div class="check-content"><div class="check-title">Module 01 (History): Eras cover key periods with named events</div><div class="check-desc">Should span at least 60 years. Key market-shaping events named with approximate dates. Major underwriters or syndicates referenced.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s4" onchange="update()"><div class="check-content"><div class="check-title">Module 02 (Timeline): At least 10 entries spanning 20 years</div><div class="check-desc">Mix of loss events and market events. Colour-coded by event type. Stats panel includes loss figure and fatalities where relevant.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s4" onchange="update()"><div class="check-content"><div class="check-title">Module 03 (Database): At least 25 records; all loss figures in USD</div><div class="check-desc">All dollar amounts should be consistent (approximate insured, not economic). Source of data noted in page text. Filter and sort verified (Section 3).</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s4" onchange="update()"><div class="check-content"><div class="check-title">Module 04 (Underwriting): Worked example present with realistic figures</div><div class="check-desc">Rates, TIVs, and premiums must be in the right order of magnitude for the class. All coverage sections (S1–S4 for energy; equivalent for other lines) addressed.</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s4" onchange="update()"><div class="check-content"><div class="check-title">Module 05 (Rates): Rate chart covers at least 20 years; ROE cards complete</div><div class="check-desc">All three ROE scenarios (bull/base/bear) must have loss ratio, expense ratio, combined ratio, underwriting profit, and final ROE figure. Combined ratios must add up correctly.</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s4" onchange="update()"><div class="check-content"><div class="check-title">Module 05 (Rates): ROE arithmetic verified</div><div class="check-desc">Check: (1) Combined = loss ratio + expense ratio. (2) UW profit = GWP × (1 – combined/100). (3) ROE = (UW profit + investment income) / capital base × 100. All three scenarios.</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s4" onchange="update()"><div class="check-content"><div class="check-title">Module 06 (Risk Mitigation): Key regulatory standards named correctly</div><div class="check-desc">Regulatory bodies, standards, and certification names must be accurate (e.g. NORSOK D-010, not NORSEK; IWCF not IWFC; NSTA not NsTa).</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s4" onchange="update()"><div class="check-content"><div class="check-title">Module 07 (Global Programmes): Key basins covered with fronting status correct</div><div class="check-desc">Jurisdictions where Lloyd's cannot write direct (Brazil, Nigeria, Angola, Indonesia) must be flagged as requiring fronting. Do not mark direct-access markets as requiring fronts.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s4" onchange="update()"><div class="check-content"><div class="check-title">All Lloyd's risk codes for this hub listed correctly throughout</div><div class="check-desc">Check hub index page, footer, hub-index.json, and header tag. Codes must match the active Lloyd's risk code list exactly.</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s4" onchange="update()"><div class="check-content"><div class="check-title">No placeholder or "lorem ipsum" content anywhere</div><div class="check-desc">Search the folder for "TBD", "TODO", "lorem", "placeholder", "FIXME". None should appear in final files.</div></div><span class="check-severity sev-critical">Critical</span></div>
+  </div>
+
+  <!-- SECTION 5: Data accuracy spot-checks -->
+  <h2 onclick="toggleSection('s5')">🔢 Section 5 — Data Accuracy Spot-Checks <span class="section-status status-pending" id="s5-status">Pending</span></h2>
+  <div class="check-group" id="s5">
+    <div class="check-item"><input type="checkbox" data-section="s5" onchange="update()"><div class="check-content"><div class="check-title">Major loss figures are in the right order of magnitude</div><div class="check-desc">Cross-check 2–3 headline loss figures against a known reference (e.g. Macondo ~$4bn insured; Piper Alpha ~$1.4bn; 2005 hurricane ~$9bn). Figures should not be off by 10× or more.</div></div><span class="check-severity sev-critical">Critical</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s5" onchange="update()"><div class="check-content"><div class="check-title">Dates of key events are correct (year at minimum)</div><div class="check-desc">Piper Alpha: 1988. Macondo: 2010. Ivan: 2004. Katrina/Rita: 2005. If any year is wrong, update across all modules consistently.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s5" onchange="update()"><div class="check-content"><div class="check-title">Regulatory body names and jurisdictions are correct</div><div class="check-desc">E.g. BSEE (not BOEM) regulates drilling safety. NSTA (not OGA) is the current UKCS regulator (renamed 2022). PSA Norway (not NPD) regulates safety on NCS.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s5" onchange="update()"><div class="check-content"><div class="check-title">Underwriting rates and loss ratios are in plausible ranges</div><div class="check-desc">Offshore property rates: typically 0.1%–0.5% of TIV. OEE: 1%–4% of TIV. Liability: per-occurrence premium. Loss ratios: 50%–120% are plausible; >200% would require explanation.</div></div><span class="check-severity sev-major">Major</span></div>
+    <div class="check-item"><input type="checkbox" data-section="s5" onchange="update()"><div class="check-content"><div class="check-title">Worked example premium components add up correctly</div><div class="check-desc">Manually verify the total premium in the worked example equals the sum of all component premiums. Small rounding OK (&lt;1%); larger discrepancies must be fixed.</div></div><span class="check-severity sev-critical">Critical</span></div>
+  </div>
+
+  <!-- Issue log -->
+  <div class="issue-log">
+    <div class="issue-log-header">
+      <h3>📋 Issues Found — Notes</h3>
+      <span style="font-size:0.78rem;color:var(--muted);">Saved locally in your browser</span>
+    </div>
+    <textarea id="issueNotes" placeholder="Record any issues found during QA here. Include: file name, section, description of the problem, and fix applied or required.&#10;&#10;Example:&#10;rates-analysis.html | JS | ctx.label used in pointBackgroundColor — invalid in Chart.js v4. Fixed to use ctx.chart.data.labels[ctx.dataIndex]. [FIXED]&#10;index.html–rates-analysis.html | Structure | Breadcrumb missing from first 6 modules. [FIXED]" oninput="saveNotes()"></textarea>
+  </div>
+
+  <!-- Sign-off -->
+  <div class="sign-off">
+    <div class="sign-off-text">
+      <h3>QA Sign-Off</h3>
+      <p id="signoff-text">Complete all critical items to enable sign-off. Major items should be resolved or documented with a mitigation plan.</p>
+    </div>
+    <div class="sign-off-status" id="signoff-status">⏳ Pending</div>
+  </div>
+
+  <!-- Action bar -->
+  <div class="action-bar">
+    <button class="btn btn-export" onclick="exportReport()">Export QA Report (copy to clipboard)</button>
+    <button class="btn btn-clear" onclick="clearAll()">Reset Checklist</button>
+  </div>
+
+  <!-- GitHub Deploy Section -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:28px;margin-top:32px;border-top:4px solid #24292e;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <span style="font-size:1.4rem;">🚀</span>
+      <div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:2px;">Deploy to GitHub Pages</h3>
+        <p style="font-size:0.82rem;color:var(--muted);">Run these commands in your terminal after QA passes. Open PowerShell or Terminal in the <code style="background:#f0f3f8;padding:1px 6px;border-radius:4px;font-size:0.8rem;">risk-code-hub</code> folder.</p>
+      </div>
+    </div>
+
+    <div style="background:#1e2d3d;border-radius:8px;padding:20px 22px;font-family:monospace;font-size:0.85rem;line-height:2;color:#e0eaf5;margin-bottom:16px;">
+      <span style="color:#7fa3c8;"># Stage all changes</span><br>
+      <span style="color:#c8a84b;">git</span> add -A<br><br>
+      <span style="color:#7fa3c8;"># Commit — replace [version] and [hub name] with actuals</span><br>
+      <span style="color:#c8a84b;">git</span> commit -m <span style="color:#4ecb71;">"v[X.X] — [Hub Name] hub complete, QA passed"</span><br><br>
+      <span style="color:#7fa3c8;"># Push to GitHub — triggers GitHub Pages rebuild (~60s)</span><br>
+      <span style="color:#c8a84b;">git</span> push origin main
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.83rem;">
+      <div style="background:#f4f7fc;border-radius:6px;padding:12px 14px;">
+        <strong style="color:var(--navy);display:block;margin-bottom:4px;">After pushing:</strong>
+        Go to your repo on GitHub → <strong>Actions</strong> tab to watch the Pages build. Usually live within 60–90 seconds.
+      </div>
+      <div style="background:#f4f7fc;border-radius:6px;padding:12px 14px;">
+        <strong style="color:var(--navy);display:block;margin-bottom:4px;">Live URL:</strong>
+        <code style="font-size:0.8rem;color:var(--blue);">https://[username].github.io/risk-code-hub/</code><br>
+        New hub: append <code style="font-size:0.8rem;color:var(--blue);">[hub-folder]/</code>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>Risk Code Hub</span> — Hub QA Checklist | Version 1.0 — April 2026 | Use after every hub build
+</footer>
+
+<script>
+  // State key prefix
+  const KEY = 'rch-qa-';
+
+  // Set today's date
+  document.getElementById('qaDate').value = new Date().toISOString().split('T')[0];
+
+  // Load saved state
+  function loadState() {
+    document.getElementById('hubName').value = localStorage.getItem(KEY+'hub') || '';
+    document.getElementById('hubCodes').value = localStorage.getItem(KEY+'codes') || '';
+    const savedDate = localStorage.getItem(KEY+'date');
+    if (savedDate) document.getElementById('qaDate').value = savedDate;
+    document.getElementById('issueNotes').value = localStorage.getItem(KEY+'notes') || '';
+
+    document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+      cb.checked = localStorage.getItem(KEY+cb.closest('.check-item').querySelector('.check-title').textContent.trim().slice(0,30)) === '1';
+    });
+    update();
+  }
+
+  function saveSession() {
+    localStorage.setItem(KEY+'hub', document.getElementById('hubName').value);
+    localStorage.setItem(KEY+'codes', document.getElementById('hubCodes').value);
+    localStorage.setItem(KEY+'date', document.getElementById('qaDate').value);
+    alert('Session saved! Your progress is stored in this browser.');
+  }
+
+  function saveNotes() {
+    localStorage.setItem(KEY+'notes', document.getElementById('issueNotes').value);
+  }
+
+  function clearAll() {
+    if (!confirm('Clear all checkboxes and notes? This cannot be undone.')) return;
+    document.querySelectorAll('input[type=checkbox]').forEach(cb => { cb.checked = false; });
+    document.getElementById('issueNotes').value = '';
+    document.getElementById('hubName').value = '';
+    document.getElementById('hubCodes').value = '';
+    Object.keys(localStorage).filter(k => k.startsWith(KEY)).forEach(k => localStorage.removeItem(k));
+    update();
+  }
+
+  function update() {
+    const allBoxes = document.querySelectorAll('input[type=checkbox]');
+    const checkedBoxes = document.querySelectorAll('input[type=checkbox]:checked');
+    const total = allBoxes.length;
+    const done = checkedBoxes.length;
+
+    // Progress bar
+    const pct = total ? Math.round(done/total*100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = done + ' / ' + total;
+    document.getElementById('progressSub').textContent = pct + '% complete — ' + (total - done) + ' items remaining';
+
+    // Section statuses
+    ['s1','s2','s3','s4','s5'].forEach(sec => {
+      const boxes = document.querySelectorAll(`[data-section="${sec}"]`);
+      const checked = document.querySelectorAll(`[data-section="${sec}"]:checked`);
+      const el = document.getElementById(sec+'-status');
+      if (checked.length === 0) { el.className = 'section-status status-pending'; el.textContent = 'Pending'; }
+      else if (checked.length === boxes.length) { el.className = 'section-status status-ok'; el.textContent = '✓ Complete'; }
+      else { el.className = 'section-status status-fail'; el.textContent = checked.length + '/' + boxes.length; }
+    });
+
+    // Critical items check
+    const criticals = document.querySelectorAll('.sev-critical');
+    const critDone = Array.from(criticals).filter(c => c.closest('.check-item').querySelector('input').checked).length;
+    const allCritDone = critDone === criticals.length;
+
+    // Sign-off
+    const so = document.getElementById('signoff-status');
+    const soText = document.getElementById('signoff-text');
+    if (done === total && allCritDone) {
+      so.textContent = '✅ PASS'; so.className = 'sign-off-status pass';
+      soText.textContent = 'All items checked. Hub is ready to mark complete in build-tracker.html and hub-index.json.';
+    } else if (allCritDone && done >= total * 0.8) {
+      so.textContent = '⚠ CONDITIONAL'; so.className = 'sign-off-status pending';
+      soText.textContent = 'All critical items passed. ' + (total-done) + ' minor/major items outstanding — document in notes above.';
+    } else {
+      so.textContent = '❌ FAIL'; so.className = 'sign-off-status fail';
+      const remaining = criticals.length - critDone;
+      soText.textContent = remaining + ' critical item(s) still outstanding. Hub cannot be marked complete until all critical checks pass.';
+    }
+
+    // Persist checkbox states
+    allBoxes.forEach(cb => {
+      const key = KEY + cb.closest('.check-item').querySelector('.check-title').textContent.trim().slice(0,30);
+      localStorage.setItem(key, cb.checked ? '1' : '0');
+    });
+  }
+
+  function toggleSection(id) {
+    // Could collapse/expand — for now just a visual affordance
+  }
+
+  function exportReport() {
+    const hub = document.getElementById('hubName').value || '[Hub Name]';
+    const codes = document.getElementById('hubCodes').value || '[Codes]';
+    const date = document.getElementById('qaDate').value || '[Date]';
+    const notes = document.getElementById('issueNotes').value || 'None recorded.';
+    const allBoxes = document.querySelectorAll('input[type=checkbox]');
+    const done = document.querySelectorAll('input[type=checkbox]:checked').length;
+    const total = allBoxes.length;
+
+    let unchecked = [];
+    allBoxes.forEach(cb => {
+      if (!cb.checked) {
+        const title = cb.closest('.check-item').querySelector('.check-title').textContent.trim();
+        const sev = cb.closest('.check-item').querySelector('.check-severity').textContent.trim();
+        unchecked.push(`  [${sev}] ${title}`);
+      }
+    });
+
+    const report = `RISK CODE HUB — QA REPORT
+Hub: ${hub} | Codes: ${codes} | Date: ${date}
+Progress: ${done}/${total} items checked
+
+OUTSTANDING ITEMS:
+${unchecked.length ? unchecked.join('\n') : '  None — all items complete.'}
+
+ISSUES FOUND:
+${notes}
+`;
+    navigator.clipboard.writeText(report).then(() => alert('QA report copied to clipboard!'));
+  }
+
+  loadState();
+</script>
+</body>
+</html>

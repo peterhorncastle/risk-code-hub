@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offshore Energy Global Programmes – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--blue:#1a4a8a;--accent:#c8a84b;--light:#f4f7fc;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--teal:#0a5c52;--orange:#c45c00;--red:#8b1a1a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a1f3a 0%,#0d3d6b 60%,#0a5c52 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cde4; font-size:0.95rem; max-width:700px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:960px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.5rem; color:var(--navy); margin:40px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.1rem; color:var(--blue); margin:28px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.88rem; }
+    th { background:var(--navy); color:#fff; padding:11px 14px; text-align:left; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tr:nth-child(even) td { background:#f8fbff; }
+    .basin-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; margin:24px 0 32px; }
+    .basin-card { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    .basin-header { padding:16px 20px; font-weight:700; font-size:0.95rem; color:#fff; }
+    .basin-header.ukns { background:#0d3d6b; }
+    .basin-header.ncs { background:#0a5c52; }
+    .basin-header.gom { background:#7a3800; }
+    .basin-header.brazil { background:#1a4a8a; }
+    .basin-header.waf { background:#4a1a70; }
+    .basin-header.seasia { background:#1a5a40; }
+    .basin-header.aust { background:#4a3800; }
+    .basin-body { padding:16px 20px; }
+    .basin-body p { font-size:0.84rem; margin-bottom:8px; color:var(--text); }
+    .basin-body .tag-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+    .basin-tag { font-size:0.72rem; font-weight:700; padding:3px 9px; border-radius:10px; background:var(--light); border:1px solid var(--border); color:var(--muted); }
+    .basin-tag.amber { background:#fef0e0; border-color:#f0b060; color:#7a4000; }
+    .basin-tag.green { background:#e0f0ec; border-color:#60b080; color:var(--teal); }
+    .basin-tag.red { background:#fde8e8; border-color:#e08080; color:var(--red); }
+    .programme-diagram { background:#fff; border:2px solid var(--border); border-radius:12px; padding:30px; margin:24px 0; }
+    .programme-diagram h4 { color:var(--navy); font-size:1rem; font-weight:700; margin-bottom:20px; text-align:center; }
+    .tower-row { display:flex; gap:12px; align-items:flex-end; justify-content:center; flex-wrap:wrap; margin-bottom:16px; }
+    .tower-block { text-align:center; min-width:120px; }
+    .tower-block .layer { padding:12px 8px; font-size:0.78rem; font-weight:600; color:#fff; border-radius:4px; margin-bottom:4px; }
+    .layer-xs { background:#0a5c52; height:48px; display:flex; align-items:center; justify-content:center; }
+    .layer-primary { background:#1a4a8a; height:52px; display:flex; align-items:center; justify-content:center; }
+    .layer-xs2 { background:#0d3d6b; height:48px; display:flex; align-items:center; justify-content:center; }
+    .layer-xs3 { background:#4a1a70; height:44px; display:flex; align-items:center; justify-content:center; }
+    .layer-deduct { background:#c45c00; height:36px; display:flex; align-items:center; justify-content:center; }
+    .layer-rp { background:var(--accent); height:36px; display:flex; align-items:center; justify-content:center; color:var(--navy); }
+    .tower-label { font-size:0.78rem; color:var(--muted); margin-top:6px; }
+    .programme-legend { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; justify-content:center; }
+    .legend-item { display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--text); }
+    .legend-dot { width:12px; height:12px; border-radius:3px; }
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:20px 0 30px; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px; }
+    .card h4 { font-size:0.95rem; font-weight:700; color:var(--navy); margin-bottom:10px; }
+    .card p { font-size:0.85rem; color:var(--muted); margin:0; line-height:1.6; }
+    .card.teal { border-top:4px solid var(--teal); }
+    .card.blue { border-top:4px solid var(--blue); }
+    .card.gold { border-top:4px solid var(--accent); }
+    .card.orange { border-top:4px solid var(--orange); }
+    .card.purple { border-top:4px solid #6030a0; }
+    .highlight-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .highlight-box h3 { color:var(--accent); margin:0 0 14px; }
+    .highlight-box p { color:#b8cde4; margin-bottom:10px; }
+    .info-box { background:#fff; border:1px solid var(--border); border-left:5px solid var(--blue); border-radius:8px; padding:22px; margin:16px 0; }
+    .info-box h4 { color:var(--navy); font-size:0.95rem; margin-bottom:10px; }
+    .info-box p { font-size:0.87rem; color:var(--text); margin-bottom:8px; }
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; margin:24px 0; }
+    .stat-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; text-align:center; }
+    .stat-box .num { font-size:1.8rem; font-weight:800; color:var(--navy); }
+    .stat-box .label { font-size:0.78rem; color:var(--muted); margin-top:4px; }
+    .breadcrumb { font-size:0.8rem; color:#b8cde4; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    .complete-box { background:linear-gradient(135deg,#0a5c52,#0d3d6b); color:#fff; border-radius:12px; padding:32px; margin:40px 0; text-align:center; }
+    .complete-box h3 { font-size:1.4rem; color:var(--accent); margin-bottom:12px; }
+    .complete-box p { color:#b8cde4; font-size:0.95rem; max-width:600px; margin:0 auto 20px; line-height:1.7; }
+    .module-nav { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+    .module-btn { display:inline-block; padding:10px 20px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); border-radius:8px; color:#fff; text-decoration:none; font-size:0.85rem; font-weight:600; transition:all 0.2s; }
+    .module-btn:hover { background:rgba(255,255,255,0.2); }
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;} }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Upstream / Offshore Energy</a> › Module 07</div>
+  <div class="tag">Module 07 — Upstream / Offshore Energy Insurance</div>
+  <h1>International Programme Structures</h1>
+  <p>How Lloyd's offshore energy coverage is structured across international programmes — key basins, fronting requirements, limit towers, captive structures, and the regulatory landscape for global operators.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programmes</a>
+</nav>
+
+<main>
+
+  <!-- Market Overview Stats -->
+  <div class="stats-row">
+    <div class="stat-box"><div class="num">$35bn+</div><div class="label">Global offshore energy insurance premium market (2024 est.)</div></div>
+    <div class="stat-box"><div class="num">~40%</div><div class="label">Lloyd's market share of global offshore energy premium</div></div>
+    <div class="stat-box"><div class="num">7</div><div class="label">Key offshore basins globally — each with distinct risk and regulatory profile</div></div>
+    <div class="stat-box"><div class="num">$5bn+</div><div class="label">Typical single-location FPSO limit tower for a large West African deepwater asset</div></div>
+  </div>
+
+  <!-- Section 1: Programme Structure Overview -->
+  <h2>International Programme Architecture</h2>
+  <p>Offshore energy risks operated by international oil companies (IOCs) and national oil companies (NOCs) are typically placed as global or regional programmes at Lloyd's. Rather than placing each individual asset separately, a programme consolidates exposures across countries, basins, and asset types into a coherent insurance structure — providing economies of scale, consistent coverage, and a single policy interface for the insured's risk management team.</p>
+
+  <div class="card-grid">
+    <div class="card teal">
+      <h4>🌍 Global Programme</h4>
+      <p>A single master policy covering all of an operator's worldwide offshore assets. Premium is calculated on the global portfolio. Coverage is typically written at Lloyd's or the London market as the lead, with local admitted policies (fronted) issued where local regulations require local insurance.</p>
+    </div>
+    <div class="card blue">
+      <h4>🌐 Regional Programme</h4>
+      <p>Covers a defined geographic region — e.g., a European/North Sea programme or a West Africa deepwater programme. Common where an IOC has significantly different risk profiles across regions that warrant separate market treatment or different reinsurance structures.</p>
+    </div>
+    <div class="card gold">
+      <h4>🏢 Asset-Specific Placement</h4>
+      <p>Stand-alone policy for a single major asset — typically an FPSO, LNG platform, or major pipeline system where TIV justifies a dedicated lead underwriter relationship and bespoke limit tower. Common for ultra-deepwater assets with TIV exceeding $2bn.</p>
+    </div>
+    <div class="card orange">
+      <h4>🏭 Captive Integration</h4>
+      <p>Many majors (BP, Shell, TotalEnergies, Equinor) retain a significant proportion of their offshore exposure through wholly owned captive insurers, using the commercial market only for catastrophic excess layers. The captive sits as the primary insurer; Lloyd's provides excess capacity.</p>
+    </div>
+  </div>
+
+  <h3>Typical Programme Structure — Limit Tower</h3>
+  <div class="programme-diagram">
+    <h4>Illustrative Offshore Energy Limit Tower — Large FPSO Programme (TIV $2.5bn)</h4>
+    <div class="tower-row">
+      <div class="tower-block">
+        <div class="layer layer-xs3" style="height:56px;">3rd &amp; 4th XS Layer<br>$500m xs $1,000m<br>Lloyd's / Bermuda</div>
+        <div class="layer layer-xs2" style="height:64px;">2nd XS Layer<br>$500m xs $500m<br>Lloyd's Syndicates</div>
+        <div class="layer layer-primary" style="height:72px;">1st XS Layer<br>$500m xs $200m<br>Lloyd's Lead + Co.</div>
+        <div class="layer layer-rp" style="height:44px;">Captive / RP Layer<br>$200m xs $10m Deductible</div>
+        <div class="layer layer-deduct" style="height:36px;">Insured Deductible: $10m</div>
+        <div class="tower-label">Physical Damage (S1)</div>
+      </div>
+      <div class="tower-block">
+        <div class="layer layer-xs2" style="height:56px;">XS OEE Layer<br>$500m xs $500m<br>Lloyd's / Bermuda</div>
+        <div class="layer layer-primary" style="height:72px;">Primary OEE Layer<br>$500m xs $5m<br>Lloyd's Lead</div>
+        <div class="layer layer-deduct" style="height:36px;">Deductible: $5m</div>
+        <div class="tower-label">OEE / Control of Well (S2)</div>
+      </div>
+      <div class="tower-block">
+        <div class="layer layer-xs3" style="height:56px;">XS Liability<br>$250m xs $250m<br>Lloyd's / Mutual</div>
+        <div class="layer layer-primary" style="height:72px;">Primary Liability<br>$250m xs $1m<br>Lloyd's Lead</div>
+        <div class="layer layer-deduct" style="height:36px;">Deductible: $1m</div>
+        <div class="tower-label">3rd Party Liability (S4)</div>
+      </div>
+    </div>
+    <div class="programme-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#4a1a70;"></div>Upper XS / Bermuda</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0d3d6b;"></div>Lloyd's Syndicate Layer</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1a4a8a;"></div>Primary Lloyd's Lead</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent);"></div>Captive / Risk Retention</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c45c00;"></div>Insured Retention</div>
+    </div>
+  </div>
+
+  <h3>Lloyd's Role Within the Tower</h3>
+  <table>
+    <thead>
+      <tr><th>Tower Position</th><th>Lloyd's Role</th><th>Typical % Share</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Lead Underwriter</strong></td><td>Sets terms, rate, conditions; signs first-line slip; most influential position</td><td>20–35% of primary layer</td><td>Relationship position; requires deepest technical expertise; often specialist syndicates (e.g., Chaucer, Brit, Ascot)</td></tr>
+      <tr><td><strong>Following Market</strong></td><td>Subscribes at lead's terms; no negotiation rights</td><td>5–15% per syndicate</td><td>Capacity deployment; managed alongside lead through broker</td></tr>
+      <tr><td><strong>XS Layer Capacity</strong></td><td>Provides excess capacity above primary; may be led separately</td><td>Variable</td><td>Bermuda market (AIG, Chubb, Zurich Re, RenRe) competes here; Lloyd's competes on price and breadth of cover</td></tr>
+      <tr><td><strong>Captive Fronting</strong></td><td>Issues local admitted policy backed by Lloyd's; Lloyd's is the actual risk carrier</td><td>100% of local policy</td><td>Common in Brazil, Nigeria, Angola, Indonesia — local regulatory requirement</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Section 2: Key Basins -->
+  <h2>Key Offshore Basins — Risk &amp; Regulatory Profiles</h2>
+  <p>Each major offshore basin has a distinct combination of geological risk, metocean environment, regulatory framework, and insurance market requirements. Understanding these differences is fundamental to pricing and programme design.</p>
+
+  <div class="basin-grid">
+
+    <div class="basin-card">
+      <div class="basin-header ukns">🇬🇧 UK Continental Shelf (UKCS)</div>
+      <div class="basin-body">
+        <p><strong>Lloyd's codes:</strong> EN (property), EH (liability)</p>
+        <p><strong>Key operators:</strong> Harbour Energy, Equinor, Shell, bp, Ithaca, EnQuest</p>
+        <p><strong>Risk profile:</strong> Ageing infrastructure (many platforms &gt;25 years), high decommissioning liability, North Sea metocean (wave height up to 30m), well-regulated (NSTA/HSE)</p>
+        <p><strong>Regulatory:</strong> Safety Case Regulations; PFEER; OPOL mandatory ($250m); NSTA field development consents</p>
+        <p><strong>Programme notes:</strong> Lloyd's market lead for most UKCS risks. Full admitted programme — no fronting required (Lloyd's admitted UK). OPOL replaces first layer of pollution liability.</p>
+        <div class="tag-row">
+          <span class="basin-tag green">Lloyd's Lead</span>
+          <span class="basin-tag green">No Fronting</span>
+          <span class="basin-tag amber">Ageing Assets</span>
+          <span class="basin-tag amber">Decom Exposure</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="basin-card">
+      <div class="basin-header ncs">🇳🇴 Norwegian Continental Shelf (NCS)</div>
+      <div class="basin-body">
+        <p><strong>Lloyd's codes:</strong> EN (property), EH (liability)</p>
+        <p><strong>Key operators:</strong> Equinor (dominant), Aker BP, TotalEnergies, Vår Energi</p>
+        <p><strong>Risk profile:</strong> Highest safety standards globally (PSA Norway); NORSOK-compliant assets; newer infrastructure; deepwater frontier exploration in Barents Sea</p>
+        <p><strong>Regulatory:</strong> PSA Norway; NORSOK D-010 mandatory; government co-insurance (SDØE) on state equity; Norwegian Pollution Control Authority for spill response</p>
+        <p><strong>Programme notes:</strong> Norwegian State holds 67–78% equity in most fields via Equinor/SDØE. NCS rates historically lower than UKCS due to superior safety record. Lloyd's participates as following market — Norwegian insurance market (Gjensidige, IF P&amp;C) often leads locally.</p>
+        <div class="tag-row">
+          <span class="basin-tag green">Best-in-Class SMS</span>
+          <span class="basin-tag green">NORSOK Compliant</span>
+          <span class="basin-tag">Local Lead Often</span>
+          <span class="basin-tag">State Co-insured</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="basin-card">
+      <div class="basin-header gom">🇺🇸 Gulf of Mexico (GoM)</div>
+      <div class="basin-body">
+        <p><strong>Lloyd's codes:</strong> EM (property GoM), EY (OEE GoM)</p>
+        <p><strong>Key operators:</strong> Shell, bp, Chevron, BHP, Murphy Oil, Walter Oil &amp; Gas</p>
+        <p><strong>Risk profile:</strong> Hurricane wind zone (Category 4–5 risk); deepwater dominates (post-shallow-water decline); Macondo legacy — BSEE oversight; SEMS mandatory</p>
+        <p><strong>Regulatory:</strong> BSEE/BOEM; Drilling Safety Rule; Well Control Rule; SEMS; MWCC membership required for deepwater drilling permits</p>
+        <p><strong>Programme notes:</strong> GoM is the highest-rated offshore basin per dollar of TIV due to hurricane windstorm. Wind modelling (AIR/RMS) required by underwriters. Mandatory catastrophe deductible — typically 5–10% of TIV or $50m min. OEE limits for single wells often $250–500m for deepwater GoM. Lloyd's leads this market globally.</p>
+        <div class="tag-row">
+          <span class="basin-tag red">Hurricane Windstorm</span>
+          <span class="basin-tag red">Highest-Rated Basin</span>
+          <span class="basin-tag green">Lloyd's Lead</span>
+          <span class="basin-tag amber">CAT Deductible</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="basin-card">
+      <div class="basin-header brazil">🇧🇷 Brazil — Campos &amp; Santos Basins</div>
+      <div class="basin-body">
+        <p><strong>Lloyd's codes:</strong> EN (property), EH/EG (liability), EZ (OEE)</p>
+        <p><strong>Key operators:</strong> Petrobras (dominant), Shell, TotalEnergies, bp, Equinor</p>
+        <p><strong>Risk profile:</strong> Ultra-deepwater pre-salt (water depths to 2,200m); FPSO-dominated fleet; Petrobras self-insures heavily; riser and mooring exposure in deep water</p>
+        <p><strong>Regulatory:</strong> ANP (National Petroleum Agency); IBAMA for environmental licensing; <strong>SUSEP requires local admitted insurance</strong> — fronting by local Brazilian insurer (IRB, Sompo, Chubb) mandatory</p>
+        <p><strong>Programme notes:</strong> Lloyd's cannot write Brazilian risks directly — must front through local admitted insurer with Lloyd's providing reinsurance behind. Complex regulatory environment; ANP limits the use of offshore fronts. Petrobras typically self-retains $500m+ and uses Lloyd's for catastrophe excess only.</p>
+        <div class="tag-row">
+          <span class="basin-tag red">Fronting Required</span>
+          <span class="basin-tag amber">Ultra-Deepwater</span>
+          <span class="basin-tag amber">Complex Regulatory</span>
+          <span class="basin-tag">FPSO-Dominant</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="basin-card">
+      <div class="basin-header waf">🌍 West Africa — Nigeria, Angola, Ghana</div>
+      <div class="basin-body">
+        <p><strong>Lloyd's codes:</strong> EN (property), EG/EH (liability), EZ (OEE)</p>
+        <p><strong>Key operators:</strong> Shell, TotalEnergies, Eni, bp, Chevron, Equinor, Tullow</p>
+        <p><strong>Risk profile:</strong> Deepwater FPSOs (West Africa is world's largest FPSO concentration); piracy/theft risk in GoG (Gulf of Guinea); third-party government take (local content); political risk overlay</p>
+        <p><strong>Regulatory:</strong> <strong>Nigeria:</strong> NAICOM/NIA — mandatory local content (minimum 70% local) and Nigerian Re participation. <strong>Angola:</strong> ENSA (state reinsurer) participation required. <strong>Ghana:</strong> National Insurance Commission</p>
+        <p><strong>Programme notes:</strong> Local content regulations in Nigeria and Angola require a proportion of premium to be placed with local insurers — capacity is limited. Lloyd's participates as XS market above local layer, or via fronting arrangement. Piracy/theft (GoG) typically excluded from standard form; war/piracy cover arranged separately via London market.</p>
+        <div class="tag-row">
+          <span class="basin-tag red">Local Content Mandated</span>
+          <span class="basin-tag red">Piracy Risk</span>
+          <span class="basin-tag amber">Fronting Needed</span>
+          <span class="basin-tag green">FPSO Expertise</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="basin-card">
+      <div class="basin-header seasia">🌏 SE Asia — Malaysia, Indonesia, Vietnam, Brunei</div>
+      <div class="basin-body">
+        <p><strong>Lloyd's codes:</strong> EN (property), EG/EH (liability), EZ (OEE)</p>
+        <p><strong>Key operators:</strong> PETRONAS, Pertamina, Shell, TotalEnergies, ConocoPhillips</p>
+        <p><strong>Risk profile:</strong> Mix of ageing shallow-water (Malaysian shelf, Mahakam Delta) and newer deepwater (South China Sea); earthquake risk (Indonesia — Pacific Ring of Fire); typhoon/tropical cyclone (South China Sea, Philippines)</p>
+        <p><strong>Regulatory:</strong> Indonesia: OJK local admitted requirement; strong national oil company (Pertamina) control. Malaysia: BNM — Lloyd's has no direct access; fronting through Labuan Lloyd's platform possible. Singapore: Lloyd's has SG operations (LLMIA) — some SE Asia risks writable direct.</p>
+        <p><strong>Programme notes:</strong> Singapore is the regional hub for SE Asia offshore energy programmes. Lloyd's Singapore (LLMIA) can write regional risks with proper licensing. Indonesia and some Vietnam risks require local fronts. Earthquake zone risks require geo-hazard assessment — particularly for fixed platform structural exposure.</p>
+        <div class="tag-row">
+          <span class="basin-tag amber">Earthquake Zone</span>
+          <span class="basin-tag amber">Typhoon Risk</span>
+          <span class="basin-tag">Singapore Hub</span>
+          <span class="basin-tag red">Indonesia Fronting</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="basin-card">
+      <div class="basin-header aust">🇦🇺 Australia — NW Shelf &amp; Browse Basin</div>
+      <div class="basin-body">
+        <p><strong>Lloyd's codes:</strong> EN (property), EG/EH (liability), EZ (OEE)</p>
+        <p><strong>Key operators:</strong> Woodside, Shell (Prelude FLNG), Chevron (Gorgon/Wheatstone), Santos, Inpex (Ichthys)</p>
+        <p><strong>Risk profile:</strong> World's largest LNG operations; extreme cyclone risk (Category 4–5, e.g., Cyclone Veronica 2019 impacted Woodside); remote location — limited rescue and intervention capability</p>
+        <p><strong>Regulatory:</strong> NOPSEMA (National Offshore Petroleum Safety and Environmental Management Authority); Australian Petroleum Production and Exploration Association (APPEA) standards. Lloyd's is admitted in Australia — can write direct.</p>
+        <p><strong>Programme notes:</strong> LNG plant onshore/nearshore components often written under separate industrial all-risks or energy property policy; offshore upstream portion under energy codes. Cyclone modelling essential for NW Shelf. Large single-location TIVs (Prelude FLNG ~$12bn) require multi-market limit towers.</p>
+        <div class="tag-row">
+          <span class="basin-tag red">Cyclone Zone</span>
+          <span class="basin-tag">LNG Dominant</span>
+          <span class="basin-tag green">Lloyd's Direct</span>
+          <span class="basin-tag amber">Remote Location</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Section 3: Fronting -->
+  <h2>Fronting Requirements &amp; Lloyd's Global Licensing</h2>
+  <p>A fronting arrangement is necessary where local regulations require risks to be insured by a locally admitted insurer, but the actual risk-carrying capacity sits elsewhere (typically at Lloyd's). The fronting insurer issues the local policy, collects premium, and immediately reinsures the entire risk back to Lloyd's under a reinsurance agreement.</p>
+
+  <div class="info-box">
+    <h4>How Fronting Works in Offshore Energy</h4>
+    <p><strong>Step 1:</strong> Operator requires insurance in a country where Lloyd's has no admitted status (e.g., Brazil, Indonesia, Angola).</p>
+    <p><strong>Step 2:</strong> A locally admitted insurer (the "fronter") issues a local policy compliant with national insurance law.</p>
+    <p><strong>Step 3:</strong> The fronting insurer enters into a reinsurance treaty with Lloyd's syndicates, transferring 90–100% of the risk. Lloyd's syndicates are the true risk carriers.</p>
+    <p><strong>Step 4:</strong> Premium flows: Operator → Fronter (less local taxes and fronting fee of typically 1–3%) → Lloyd's via reinsurance.</p>
+    <p><strong>Step 5:</strong> Claims: paid by fronter, who is then reimbursed by Lloyd's. Fronter retains credit risk on Lloyd's — hence fronters require Lloyd's 'A' financial strength rating.</p>
+  </div>
+
+  <h3>Lloyd's Global Access Map — Offshore Energy</h3>
+  <table>
+    <thead>
+      <tr><th>Country / Basin</th><th>Lloyd's Access</th><th>Fronting Required?</th><th>Local Regulator</th><th>Key Fronting Partners</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>United Kingdom</td><td>Direct admitted</td><td>No</td><td>FCA / PRA</td><td>N/A</td></tr>
+      <tr><td>Norway</td><td>EEA passporting / direct</td><td>Generally no</td><td>Finanstilsynet</td><td>N/A (some local preference)</td></tr>
+      <tr><td>USA (GoM OCS)</td><td>Direct via Lloyd's US Trust Fund</td><td>No (federal OCS)</td><td>BSEE; state insurance depts</td><td>N/A for offshore OCS</td></tr>
+      <tr><td>Brazil</td><td>Cannot write direct</td><td>Yes — mandatory</td><td>SUSEP / ANP</td><td>IRB Brasil Re, Sompo Brazil, Chubb Brazil</td></tr>
+      <tr><td>Nigeria</td><td>Cannot write direct</td><td>Yes — local content rules</td><td>NAICOM</td><td>Leadway, AXA Mansard, African Alliance</td></tr>
+      <tr><td>Angola</td><td>Cannot write direct</td><td>Yes — ENSA participation</td><td>ARSEG</td><td>ENSA (state); Global Alliance Angola</td></tr>
+      <tr><td>Indonesia</td><td>Cannot write direct</td><td>Yes — OJK requirement</td><td>OJK</td><td>Asuransi Jasindo, Tugu Insurance</td></tr>
+      <tr><td>Malaysia</td><td>Labuan free zone (limited)</td><td>Often yes (mainland)</td><td>BNM</td><td>Labuan Re; Malaysian insurers</td></tr>
+      <tr><td>Australia</td><td>Direct admitted</td><td>No</td><td>APRA</td><td>N/A</td></tr>
+      <tr><td>Singapore</td><td>LLMIA — direct</td><td>No</td><td>MAS</td><td>N/A — Singapore is regional hub</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Section 4: Captives -->
+  <h2>Captive Insurance Structures in Offshore Energy</h2>
+  <p>The largest international oil companies operate sophisticated captive insurance structures, using the commercial market (including Lloyd's) primarily for catastrophic excess exposure. Understanding the captive layer is important when underwriting as a following or excess market.</p>
+
+  <div class="card-grid">
+    <div class="card teal">
+      <h4>Pure Captive</h4>
+      <p>Wholly owned subsidiary insurer of the parent company — typically domiciled in Guernsey, Isle of Man, Bermuda, or Cayman Islands. Covers only the parent's risks. Major operators: Shell, bp, Equinor, TotalEnergies each operate large captives retaining $500m–$1bn+ of offshore exposure.</p>
+    </div>
+    <div class="card blue">
+      <h4>Group Captive</h4>
+      <p>Jointly owned by multiple non-competing companies to share risk. Less common in offshore energy than in other lines, but some E&amp;P JV structures incorporate shared captive arrangements for the joint venture's portfolio, particularly in remote basins (e.g., deepwater West Africa JVs).</p>
+    </div>
+    <div class="card gold">
+      <h4>Protected Cell Company (PCC)</h4>
+      <p>Single corporate entity where each cell has separate assets and liabilities — allows smaller operators to access captive benefits without the capital requirement of a standalone captive. Guernsey PCCs popular for mid-size E&amp;P companies seeking to retain the working layer of their UKCS portfolio.</p>
+    </div>
+    <div class="card purple">
+      <h4>Fronted Captive Programme</h4>
+      <p>Captive issues the local policy (using a fronter where needed), then cedes the excess above its retention to Lloyd's or the commercial market. Provides the operator with tax-efficient premium flow, loss reserve control, and local regulatory compliance simultaneously.</p>
+    </div>
+  </div>
+
+  <h3>Captive Interaction with Lloyd's — Typical Programme Structure</h3>
+  <table>
+    <thead>
+      <tr><th>Layer</th><th>Who Bears the Risk</th><th>Amount</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Insured Retention</td><td>Operator balance sheet</td><td>$10m–$50m per event</td><td>Deductible; not insured</td></tr>
+      <tr><td>Captive Layer (Working)</td><td>Operator's captive insurer</td><td>$50m–$500m xs deductible</td><td>Tax-efficient premium; loss reserve building; captive in Guernsey/Bermuda</td></tr>
+      <tr><td>Primary Commercial Layer</td><td>Lloyd's lead + following</td><td>$500m xs captive layer</td><td>Lloyd's underwrites this layer; relationship-driven; Lloyd's sets market terms</td></tr>
+      <tr><td>XS Commercial Layers</td><td>Lloyd's, Bermuda, ILS</td><td>$500m+ per layer, multiple layers</td><td>Upper towers placed with broadest possible market; Bermuda (AIG, Chubb, Zurich Re) competes</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Section 5: Programme Design Considerations -->
+  <h2>Programme Design Considerations</h2>
+
+  <h3>Coverage Aggregation and Per-Occurrence Limits</h3>
+  <p>A critical programme design question is whether limits apply per-occurrence or in aggregate across all locations. Offshore energy programmes typically operate on a per-occurrence basis with separate limits for each coverage section (S1, S2, S3, S4) to avoid single large events exhausting all programme capacity.</p>
+
+  <table>
+    <thead>
+      <tr><th>Coverage Section</th><th>Typical Limit Basis</th><th>Aggregation Risk</th><th>Underwriter Concern</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>S1 – Physical Damage</strong></td><td>Per-occurrence, per-location sublimits for GoM windstorm</td><td>High in GoM (hurricane affects multiple platforms simultaneously)</td><td>PML aggregation across operator's portfolio if multi-location risk</td></tr>
+      <tr><td><strong>S2 – OEE/Control of Well</strong></td><td>Per-well, per-occurrence</td><td>Low (each well is an independent blowout event)</td><td>Single well limit adequacy for deepwater GoM; $250–500m min for deepwater</td></tr>
+      <tr><td><strong>S3 – Seepage &amp; Pollution</strong></td><td>Per-occurrence, often sub-limited vs. S1</td><td>Medium (a blowout or pipeline failure can cause extended pollution event)</td><td>Time element and cleanup cost modelling; OSCP adequacy</td></tr>
+      <tr><td><strong>S4 – Liability</strong></td><td>Per-occurrence; separate from property tower</td><td>Medium (a Macondo-type event involves liability and property simultaneously)</td><td>OPA 90 limits for GoM; liability not capped under UK law</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Deductible Structures in Global Programmes</h3>
+  <div class="card-grid">
+    <div class="card blue">
+      <h4>Straight Deductible</h4>
+      <p>Fixed monetary amount per occurrence (e.g., $10m per event). Most common for UKCS and non-GoM risks. Provides predictable cost to the insured; underwriters comfortable with clear threshold.</p>
+    </div>
+    <div class="card orange">
+      <h4>Percentage (TIV) Deductible</h4>
+      <p>GoM windstorm event: typically 5–10% of TIV per location. For a platform TIV of $500m, this is $25–50m insured retention. Prevents underwriters absorbing attritional windstorm damage to the vast number of small Gulf of Mexico structures.</p>
+    </div>
+    <div class="card teal">
+      <h4>Annual Aggregate Deductible</h4>
+      <p>Used on large portfolio programmes — the insured retains the first X million of losses in aggregate across the year before any insurance recovery. Encourages loss prevention; common in UKCS maintenance/inspection-class claims.</p>
+    </div>
+    <div class="card gold">
+      <h4>Franchise Deductible</h4>
+      <p>If loss exceeds the franchise threshold, the full loss (including the deductible amount) is recovered. Used occasionally in deepwater liability to distinguish between minor and significant pollution events.</p>
+    </div>
+  </div>
+
+  <h3>Reinsurance and ILS Participation</h3>
+  <p>The upper layers of large offshore energy limit towers are increasingly placed with Insurance-Linked Securities (ILS) funds — catastrophe bonds and collateralised reinsurance vehicles domiciled in Bermuda and Cayman. These ILS vehicles provide capacity at upper tower layers where traditional reinsurers reach capacity limits, particularly for GoM windstorm and deepwater blowout scenarios.</p>
+  <p>Lloyd's syndicates both access ILS capacity as reinsurance for their own books (outward reinsurance) and compete as risk carriers against ILS at upper tower layers. Understanding whether ILS is participating in the programme above Lloyd's affects aggregation and claims-paying certainty analysis.</p>
+
+  <!-- Hub Complete Summary -->
+  <div class="complete-box">
+    <h3>✅ Upstream / Offshore Energy Hub — Complete</h3>
+    <p>All seven modules of the Upstream / Offshore Energy hub (Lloyd's codes EC, EM, EN, EG, EH, EY, EZ) are now built. This hub covers the full underwriting lifecycle from market history and loss analysis through to global programme structuring — designed for Lloyd's market professionals working across the offshore energy class.</p>
+    <div class="module-nav">
+      <a href="index.html" class="module-btn">Hub Overview</a>
+      <a href="history.html" class="module-btn">01 History</a>
+      <a href="timeline.html" class="module-btn">02 Timeline</a>
+      <a href="database.html" class="module-btn">03 Loss Database</a>
+      <a href="underwriting.html" class="module-btn">04 Underwriting</a>
+      <a href="rates-analysis.html" class="module-btn">05 Rates Analysis</a>
+      <a href="risk-mitigation.html" class="module-btn">06 Risk Mitigation</a>
+      <a href="global-program.html" class="module-btn">07 Global Programmes</a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Upstream / Offshore Energy | Lloyd's Codes EC · EM · EN · EG · EH · EY · EZ | Module 07 of 7</p>
+  <p style="margin-top:6px;">Built for Lloyd's market intelligence purposes. <span>Data accurate to April 2026.</span> Programme structures and limits are illustrative only.</p>
+</footer>
+
+</body>
+</html>

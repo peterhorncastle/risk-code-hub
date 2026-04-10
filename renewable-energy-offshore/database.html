@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offshore Wind Loss Database – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--blue:#1a4a8a;--green:#2a8c4a;--green-dark:#1a6035;--green-light:#e8f5ee;--accent:#c8a84b;--light:#f2f9f5;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--teal:#0a7a5c;--orange:#c45c00;--red:#8b1a1a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a1f3a 0%,#0d3d6b 55%,#1a6035 100%); color:#fff; padding:40px; }
+    header .breadcrumb { font-size:0.8rem; color:#b8cde4; margin-bottom:6px; }
+    header .breadcrumb a { color:var(--accent); text-decoration:none; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cde4; font-size:0.95rem; max-width:700px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:40px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:0 0 20px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+
+    .controls { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px; align-items:flex-end; }
+    .ctrl-group label { display:block; font-size:0.75rem; font-weight:700; color:var(--muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px; }
+    .ctrl-group select, .ctrl-group input { padding:9px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.85rem; background:#fff; color:var(--text); }
+    .ctrl-group input { width:220px; }
+    .btn-clear { padding:9px 16px; background:#fff; border:1px solid var(--border); border-radius:6px; font-size:0.85rem; font-weight:600; cursor:pointer; color:var(--muted); }
+    .btn-clear:hover { background:var(--light); color:var(--navy); }
+
+    .db-stats { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:20px; }
+    .db-stat { background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px 18px; font-size:0.82rem; color:var(--muted); }
+    .db-stat strong { color:var(--navy); font-size:1.1rem; display:block; }
+
+    .table-wrap { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:0.84rem; min-width:780px; }
+    thead th { background:var(--navy); color:#fff; padding:12px 14px; text-align:left; white-space:nowrap; cursor:pointer; user-select:none; }
+    thead th:hover { background:#1a3a6a; }
+    thead th.sorted { background:var(--green-dark); }
+    thead th::after { content:' ↕'; opacity:0.4; font-size:0.7rem; }
+    thead th.asc::after { content:' ↑'; opacity:1; }
+    thead th.desc::after { content:' ↓'; opacity:1; }
+    tbody td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.4; }
+    tbody tr:nth-child(even) td { background:#f8fbff; }
+    tbody tr:hover td { background:#eef4ff; }
+    .no-results { padding:40px; text-align:center; color:var(--muted); font-size:0.9rem; }
+
+    .badge { display:inline-block; padding:3px 9px; border-radius:10px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; white-space:nowrap; }
+    .badge-serial  { background:#fde8e8; color:var(--red); }
+    .badge-blade   { background:#fef0e0; color:var(--orange); }
+    .badge-cable   { background:#e0f0ec; color:var(--teal); }
+    .badge-transformer { background:#e8eef8; color:var(--blue); }
+    .badge-gearbox { background:#f5ede0; color:#7a4000; }
+    .badge-storm   { background:#e8ecf5; color:#2a3f7a; }
+    .badge-construction { background:var(--green-light); color:var(--green-dark); }
+    .badge-foundation { background:#f0e8f8; color:#5a1a8a; }
+    .loss-val { color:var(--red); font-weight:700; }
+    .loss-na { color:var(--muted); }
+
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:40px; }
+    footer span { color:var(--accent); }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Renewable Energy – Offshore</a> › Module 03</div>
+  <div class="tag">Module 03 — Renewable Energy Offshore Insurance</div>
+  <h1>Claims Loss Database</h1>
+  <p>30+ offshore wind and marine renewable loss events from 2001–2024, covering serial defects, cable faults, blade failures, transformer losses, storm damage, and construction incidents. All loss figures are approximate insured market estimates in GBP.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+  <h2>Offshore Renewable Energy Loss Events</h2>
+
+  <div class="controls">
+    <div class="ctrl-group">
+      <label>Peril Type</label>
+      <select id="filterType" onchange="applyFilters()">
+        <option value="">All Perils</option>
+        <option value="serial">Serial Defect</option>
+        <option value="blade">Blade Failure</option>
+        <option value="cable">Cable Fault</option>
+        <option value="transformer">Transformer</option>
+        <option value="gearbox">Gearbox</option>
+        <option value="storm">Storm / Weather</option>
+        <option value="construction">Construction</option>
+        <option value="foundation">Foundation</option>
+      </select>
+    </div>
+    <div class="ctrl-group">
+      <label>Region</label>
+      <select id="filterRegion" onchange="applyFilters()">
+        <option value="">All Regions</option>
+        <option value="UK">UK / North Sea</option>
+        <option value="Germany">Germany / German Bight</option>
+        <option value="Denmark">Denmark / Scandinavia</option>
+        <option value="Netherlands">Netherlands</option>
+        <option value="USA">USA</option>
+        <option value="Global">Global / Multi-Market</option>
+      </select>
+    </div>
+    <div class="ctrl-group">
+      <label>Phase</label>
+      <select id="filterPhase" onchange="applyFilters()">
+        <option value="">All Phases</option>
+        <option value="Operational">Operational (R1)</option>
+        <option value="Construction">Construction (R3)</option>
+      </select>
+    </div>
+    <div class="ctrl-group">
+      <label>Search</label>
+      <input type="text" id="searchBox" placeholder="Project name, turbine, cause…" oninput="applyFilters()">
+    </div>
+    <button class="btn-clear" onclick="clearFilters()">Clear</button>
+  </div>
+
+  <div class="db-stats">
+    <div class="db-stat"><strong id="rowCount">0</strong>Events shown</div>
+    <div class="db-stat"><strong id="totalLoss">—</strong>Total est. insured loss</div>
+    <div class="db-stat"><strong id="serialCount">0</strong>Serial defect events</div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="lossTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Year</th>
+          <th onclick="sortTable(1)">Project / Event</th>
+          <th onclick="sortTable(2)">Region</th>
+          <th onclick="sortTable(3)">Phase</th>
+          <th onclick="sortTable(4)">Peril Type</th>
+          <th onclick="sortTable(5)">Est. Loss (£m)</th>
+          <th onclick="sortTable(6)">Description</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="no-results" id="noResults" style="display:none;">No events match your filters. <a href="#" onclick="clearFilters();return false;">Clear all filters</a></div>
+  </div>
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Renewable Energy – Offshore</span> | Lloyd's Codes R1 · R3 | Module 03 of 7</p>
+  <p style="margin-top:6px;">All loss figures are approximate insured market estimates in GBP. Some figures represent industry-wide totals across multiple insurers. Data accurate to April 2026.</p>
+</footer>
+<script>
+const events = [
+  { year:2001, project:'Vindeby Decommission Planning', region:'Denmark', phase:'Operational', type:'foundation', loss:null, desc:'Early corrosion studies on gravity-based foundations revealed accelerated degradation at 10 years — informing foundation design standards for subsequent projects.' },
+  { year:2004, project:'Horns Rev 1', region:'Denmark', phase:'Operational', type:'serial', loss:30, desc:'Serial gearbox and generator failures across all 80 Vestas V80 units. All 80 transformers removed to shore for refurbishment. First major serial defect event in offshore wind history.' },
+  { year:2006, project:'Barrow Offshore Wind', region:'UK', phase:'Operational', type:'cable', loss:4, desc:'Inter-array cable fault within first year of operation. Seabed movement in Barrow-in-Furness tidal environment caused cable damage at J-tube entry point.' },
+  { year:2007, project:'Burbo Bank (Phase 1)', region:'UK', phase:'Operational', type:'gearbox', loss:12, desc:'Widespread Vestas V80 gearbox failures (serial) linked to marine environment — inadequate sealing against salt air ingress. Manufacturer warranty partially responded; balance fell to operational policy.' },
+  { year:2008, project:'Egmond aan Zee', region:'Netherlands', phase:'Operational', type:'cable', loss:6, desc:'Export cable fault caused by vessel anchor strike during fishing operations. Third-party negligence claim pursued; cable repair required partial shutdown of 108MW array.' },
+  { year:2009, project:'Rhyl Flats', region:'UK', phase:'Operational', type:'cable', loss:5, desc:'Inter-array cable failure linked to inadequate cable burial depth in tidal scour environment. Production loss during repair covered under ALOR policy.' },
+  { year:2010, project:'Alpha Ventus', region:'Germany', phase:'Construction', type:'transformer', loss:8, desc:'Offshore substation transformer failure during commissioning. First major loss on a German offshore wind project; delay in start-up claim triggered.' },
+  { year:2011, project:'Sheringham Shoal', region:'UK', phase:'Construction', type:'construction', loss:15, desc:'Installation vessel incident during monopile installation — jack-up leg penetration incident causing deck tilt and crew evacuation. R3 claim; no fatalities.' },
+  { year:2012, project:'Multiple UK North Sea Projects', region:'UK', phase:'Operational', type:'storm', loss:18, desc:'Winter storm season caused aggregate blade tip damage and erosion across multiple UK Round 1/2 projects. Combined ALOR and repair claim across Lloyd\'s portfolio approximately £18m.' },
+  { year:2013, project:'London Array', region:'UK', phase:'Operational', type:'cable', loss:20, desc:'Inter-array cable fault in first operational year. Revenue loss during repair covered under ALOR (630MW × downtime × CfD equivalent price). Largest cable loss to date for a single event.' },
+  { year:2013, project:'Lincs Offshore Wind Farm', region:'UK', phase:'Construction', type:'construction', loss:10, desc:'Cable installation damage during commissioning phase. Incorrect cable bending radius during draw-in caused insulation damage requiring section replacement.' },
+  { year:2014, project:'Gwynt y Mor', region:'UK', phase:'Operational', type:'blade', loss:14, desc:'Serial blade cracking in LM Wind Power blades (LM 61.5P) across multiple turbines. Root cause: internal adhesive bond failure. Warranty claim and R1 serial loss claim interaction.' },
+  { year:2015, project:'Dudgeon Offshore Wind', region:'UK', phase:'Construction', type:'construction', loss:9, desc:'Monopile manufacturing defect discovered pre-installation; batch of foundations required remediation before offshore installation could proceed. Delay in start-up exposure.' },
+  { year:2016, project:'Anholt (Denmark)', region:'Denmark', phase:'Operational', type:'blade', loss:16, desc:'Leading edge erosion serial claims across Siemens SWT-3.6 blade fleet. Erosion accelerated by North Sea rain impact at tip speeds exceeding 80m/s. First significant LEE claim in the market.' },
+  { year:2016, project:'Rampion Wind Farm', region:'UK', phase:'Construction', type:'construction', loss:11, desc:'Installation vessel grounding incident during cable laying operations in shallow southern North Sea. R3 claim for vessel damage and cable re-routing.' },
+  { year:2017, project:'Race Bank', region:'UK', phase:'Operational', type:'storm', loss:8, desc:'Storm Doris (February 2017) caused blade damage on multiple turbines. Nacelle lid detachment on two units required crane vessel attendance. ALOR triggered during repair period.' },
+  { year:2017, project:'Beatrice (Cable)', region:'UK', phase:'Construction', type:'cable', loss:12, desc:'Export cable armour damage during offshore lay operation. Cable ship anchor fouled cable route during lay; cable required splicing and re-burial over 3km section.' },
+  { year:2018, project:'Beatrice Offshore Wind', region:'UK', phase:'Operational', type:'transformer', loss:50, desc:'Offshore substation transformer failure shortly after commissioning. Major substation loss requiring full unit replacement using specialist crane vessel. Largest single event offshore wind loss to date.' },
+  { year:2018, project:'Horns Rev 3', region:'Denmark', phase:'Construction', type:'cable', loss:7, desc:'Inter-array cable fault discovered during commissioning testing. Insulation damage linked to cable over-bending during installation in complex seabed topology.' },
+  { year:2019, project:'Hornsea 1', region:'UK', phase:'Construction', type:'cable', loss:22, desc:'Export cable installation damage during final stages of construction. Cable handling equipment malfunction caused kink in cable — repair required specialist vessel and extended schedule.' },
+  { year:2019, project:'Triton Knoll', region:'UK', phase:'Construction', type:'foundation', loss:13, desc:'Monopile installation incident — offshore jack-up rig experienced unplanned seabed penetration. Piling schedule disrupted; delay in start-up exposure materialised. No injuries.' },
+  { year:2020, project:'Gemini Wind Park', region:'Netherlands', phase:'Operational', type:'blade', loss:25, desc:'Serial blade failures across multiple units — leading edge erosion and internal delamination on LM Wind Power blades. Dutch offshore environment particularly aggressive for LEE. Serial defect claim interaction with manufacturer warranty.' },
+  { year:2020, project:'Moray East', region:'UK', phase:'Construction', type:'blade', loss:8, desc:'Blade damage during lifting operations — blade dropped during turbine installation by WTIV. Single-event loss; crane vessel and blade replacement claim under R3.' },
+  { year:2021, project:'East Anglia ONE', region:'UK', phase:'Operational', type:'cable', loss:28, desc:'Multiple serial inter-array cable faults over first operational year. Cable bending radius violations during installation identified as root cause. Repeated repair campaigns required.' },
+  { year:2021, project:'Siemens Gamesa SG 8.0-167 (Global)', region:'Global', phase:'Operational', type:'serial', loss:400, desc:'Global serial defect notification on SG 8.0-167 DD platform. Bearing failures, blade structural issues and gearbox problems across UK, Germany, Netherlands, Taiwan fleet. Largest serial defect event in offshore wind history. £400m+ estimated insured market impact in 2021 alone; total event loss continued into subsequent years.' },
+  { year:2022, project:'Hornsea 2', region:'UK', phase:'Operational', type:'blade', loss:30, desc:'Serial leading edge erosion claims across 165-turbine Hornsea 2 array. Blade coating failure accelerated at high tip speeds. Coating programme required significant crane vessel scheduling.' },
+  { year:2022, project:'Dogger Bank A', region:'UK', phase:'Construction', type:'cable', loss:18, desc:'Inter-array cable fault during construction phase. Fault occurred at turbine foundation interface (J-tube) — a recurring vulnerability. Schedule delay triggered DSU coverage review.' },
+  { year:2023, project:'Neart na Gaoithe (NnG)', region:'UK', phase:'Operational', type:'transformer', loss:35, desc:'Offshore substation transformer failure during first operational year. NnG (450MW, Scotland) suffered identical failure mode to Beatrice 2018 — market concerns about substation transformer design standards for Scottish offshore conditions.' },
+  { year:2023, project:'Multiple US East Coast Projects', region:'USA', phase:'Construction', type:'construction', loss:45, desc:'Combined delay and project restructuring costs across Vineyard Wind, Revolution Wind, South Fork Wind. Supply chain inflation and permit delays triggered DSU coverage disputes around what constitutes an insured delay trigger vs. economic delay.' },
+  { year:2024, project:'Vineyard Wind', region:'USA', phase:'Operational', type:'blade', loss:60, desc:'Siemens Gamesa SG 14-222 DD blade failure (blade section shed). BSEE ordered operations pause. First major US offshore wind operational insurance event. ALOR triggered; regulatory-ordered shutdown coverage debate initiated.' }
+];
+
+let sortCol = 0, sortDir = 1;
+
+function badgeClass(type) {
+  const map = { serial:'badge-serial', blade:'badge-blade', cable:'badge-cable', transformer:'badge-transformer', gearbox:'badge-gearbox', storm:'badge-storm', construction:'badge-construction', foundation:'badge-foundation' };
+  return map[type] || 'badge-serial';
+}
+function badgeLabel(type) {
+  const map = { serial:'Serial Defect', blade:'Blade Failure', cable:'Cable Fault', transformer:'Transformer', gearbox:'Gearbox', storm:'Storm', construction:'Construction', foundation:'Foundation' };
+  return map[type] || type;
+}
+
+function applyFilters() {
+  const type = document.getElementById('filterType').value;
+  const region = document.getElementById('filterRegion').value;
+  const phase = document.getElementById('filterPhase').value;
+  const search = document.getElementById('searchBox').value.toLowerCase();
+  const filtered = events.filter(e => {
+    if (type && e.type !== type) return false;
+    if (region && !e.region.includes(region)) return false;
+    if (phase && e.phase !== phase) return false;
+    if (search && !(e.project.toLowerCase().includes(search) || e.desc.toLowerCase().includes(search) || String(e.year).includes(search))) return false;
+    return true;
+  });
+  renderTable(filtered);
+}
+
+function clearFilters() {
+  document.getElementById('filterType').value = '';
+  document.getElementById('filterRegion').value = '';
+  document.getElementById('filterPhase').value = '';
+  document.getElementById('searchBox').value = '';
+  applyFilters();
+}
+
+function renderTable(data) {
+  const sorted = [...data].sort((a, b) => {
+    let va = [a.year, a.project, a.region, a.phase, a.type, a.loss || 0, a.desc][sortCol];
+    let vb = [b.year, b.project, b.region, b.phase, b.type, b.loss || 0, b.desc][sortCol];
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    return va < vb ? -sortDir : va > vb ? sortDir : 0;
+  });
+
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  sorted.forEach(e => {
+    const tr = document.createElement('tr');
+    const lossCell = e.loss ? `<span class="loss-val">£${e.loss}m</span>` : '<span class="loss-na">N/A</span>';
+    tr.innerHTML = `
+      <td><strong>${e.year}</strong></td>
+      <td>${e.project}</td>
+      <td>${e.region}</td>
+      <td>${e.phase}</td>
+      <td><span class="badge ${badgeClass(e.type)}">${badgeLabel(e.type)}</span></td>
+      <td>${lossCell}</td>
+      <td style="max-width:300px;font-size:0.8rem;color:var(--muted)">${e.desc}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const total = sorted.reduce((s, e) => s + (e.loss || 0), 0);
+  const serials = sorted.filter(e => e.type === 'serial').length;
+  document.getElementById('rowCount').textContent = sorted.length;
+  document.getElementById('totalLoss').textContent = total > 0 ? '\u00a3' + total.toLocaleString() + 'm' : '\u2014';
+  document.getElementById('serialCount').textContent = serials;
+  document.getElementById('noResults').style.display = sorted.length === 0 ? 'block' : 'none';
+  document.getElementById('lossTable').style.display = sorted.length === 0 ? 'none' : '';
+}
+
+function sortTable(col) {
+  if (sortCol === col) { sortDir *= -1; } else { sortCol = col; sortDir = 1; }
+  document.querySelectorAll('thead th').forEach((th, i) => {
+    th.classList.remove('sorted','asc','desc');
+    if (i === col) { th.classList.add('sorted', sortDir === 1 ? 'asc' : 'desc'); }
+  });
+  applyFilters();
+}
+
+applyFilters();
+</script>
+</body>
+</html>

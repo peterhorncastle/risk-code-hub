@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onshore Renewable Underwriting – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--blue:#1a4a8a;--green:#2a8c4a;--green-dark:#1a6035;--green-light:#e8f5ee;--accent:#c8a84b;--solar:#e8a020;--light:#f5fbf2;--text:#1e2d3d;--muted:#6b7c93;--border:#d1dce8;--red:#8b1a1a;--orange:#c45c00; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#2a8c4a 55%,#1a6035 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d4c8; font-size:0.95rem; max-width:700px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:960px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.5rem; color:var(--navy); margin:40px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.1rem; color:var(--blue); margin:28px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.88rem; }
+    th { background:var(--navy); color:#fff; padding:11px 14px; text-align:left; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tr:nth-child(even) td { background:#f0f9f4; }
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin:20px 0 30px; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-left:4px solid var(--green); }
+    .factor-card h4 { font-size:0.92rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .factor-card p { font-size:0.84rem; color:var(--muted); margin:0; line-height:1.5; }
+    .factor-card.solar { border-left-color:var(--solar); }
+    .factor-card.bess { border-left-color:var(--orange); }
+    .factor-card.red { border-left-color:var(--red); }
+    .worked-example { background:#fff; border:2px solid var(--accent); border-radius:12px; padding:32px; margin:30px 0; }
+    .worked-example h3 { color:var(--navy); margin:0 0 6px; font-size:1.15rem; }
+    .worked-example .subtitle { font-size:0.85rem; color:var(--muted); margin-bottom:20px; }
+    .we-table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.87rem; }
+    .we-table th { background:var(--navy); color:#fff; padding:9px 14px; text-align:left; }
+    .we-table td { padding:9px 14px; border-bottom:1px solid var(--border); }
+    .we-table tr:last-child td { border-bottom:none; background:var(--green-light); font-weight:700; }
+    .we-val { font-weight:700; color:var(--green-dark); }
+    .info-box { background:#fff; border:1px solid var(--border); border-left:5px solid var(--green); border-radius:8px; padding:22px; margin:16px 0; }
+    .info-box h4 { color:var(--navy); margin-bottom:10px; font-size:0.95rem; }
+    .info-box p, .info-box ul li { font-size:0.87rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .info-box ul { margin-left:18px; }
+    .bess-box { background:#fff8e8; border:1px solid #f0b060; border-left:5px solid var(--solar); border-radius:8px; padding:22px; margin:20px 0; }
+    .bess-box h4 { color:#7a4000; margin-bottom:10px; font-size:0.95rem; }
+    .bess-box p, .bess-box ul li { font-size:0.87rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .bess-box ul { margin-left:18px; }
+    .warning-box { background:#fde8e8; border:1px solid #e08080; border-left:5px solid var(--red); border-radius:8px; padding:22px; margin:16px 0; }
+    .warning-box h4 { color:var(--red); margin-bottom:10px; font-size:0.95rem; }
+    .warning-box p { font-size:0.87rem; color:var(--text); margin-bottom:8px; }
+    .checklist { list-style:none; margin:12px 0; padding:0; }
+    .checklist li { font-size:0.88rem; padding:7px 0; border-bottom:1px solid var(--border); line-height:1.5; }
+    .checklist li:before { content:"\2713 "; color:var(--green); font-weight:700; }
+    .breadcrumb { font-size:0.8rem; color:#b8d4c8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    footer { background:var(--navy); color:#7fa3c8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;} }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Renewable Energy – Onshore</a> › Module 04</div>
+  <div class="tag">Module 04 — Renewable Energy Onshore (R2 / R4)</div>
+  <h1>Underwriting Methodology</h1>
+  <p>Coverage structures, rating factors, and worked premium calculations for R2 (operational) and R4 (construction) onshore renewables — covering wind, solar PV, BESS, and biomass.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <!-- R2 Coverage Table -->
+  <h2>R2 — Operational Cover: Standard Sections</h2>
+
+  <table>
+    <thead>
+      <tr><th>Section</th><th>Coverage</th><th>Wind R2</th><th>Solar R2</th><th>BESS R2</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>PD — Physical Damage</strong></td><td>All-risks damage to plant and equipment on a replacement cost basis</td><td>Turbines, blades, nacelles, gearboxes, towers, foundations, substation, inter-array cables, grid connection</td><td>Modules, mounting/racking, trackers, inverters, combiners, transformers, substation, cables</td><td>Battery cells/modules, BMS, inverters, containers, thermal management, cabling, grid connection</td></tr>
+      <tr><td><strong>ALOR</strong></td><td>Advanced Loss of Revenue — revenue loss following PD triggering operational interruption</td><td>Yes — 12–24 month indemnity. Sum insured: P50 annual revenue × (months/12). Waiting period: 30–60 days.</td><td>Yes — 12 month typical. Based on annual P50 generation × contracted PPA/CfD rate. Waiting period: 45 days.</td><td>Yes — capacity payment or merchant revenue basis. Highly structured around grid services contract. 30-day waiting period typical.</td></tr>
+      <tr><td><strong>Machinery Breakdown</strong></td><td>Sudden and accidental breakdown of mechanical/electrical machinery</td><td>Gearbox, generator, main bearing — typically sub-limited (£5–10m/turbine)</td><td>Inverter, transformer failure — may be sub-limited (£500k–£1m/inverter)</td><td>BMS failure, power conversion system — sub-limited (£1–5m/unit)</td></tr>
+      <tr><td><strong>Third-Party Liability</strong></td><td>Bodily injury / property damage to third parties</td><td>Ice throw, blade fragment, structural collapse. Per occurrence: £25–250m.</td><td>Panel debris, fire spread to adjacent property. Per occurrence: £10–100m.</td><td>Thermal runaway blast / fire spread to adjacent assets. Per occurrence: £25–250m.</td></tr>
+      <tr><td><strong>Cyber / SCADA</strong></td><td>Physical damage and BI arising from cyber attack on control systems</td><td>Covered if SCADA attack causes physical damage (e.g., turbine overspeed). Sub-limited.</td><td>Covered if inverter control system attacked causing physical damage. Rare but growing exposure.</td><td>BESS BMS cyber attack — critical coverage given potential thermal runaway trigger. Often sub-limited.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- R4 Coverage Table -->
+  <h2>R4 — Construction Cover: Standard Sections</h2>
+
+  <table>
+    <thead>
+      <tr><th>Section</th><th>Coverage</th><th>Basis</th><th>Typical Deductible</th><th>Key Conditions</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>S1 — EAR / Contract Works</strong></td><td>Erection All Risk — physical damage to all works during construction</td><td>Peak TIV (all works at replacement cost, at peak risk)</td><td>£250k–£1m per loss</td><td>Named contractor endorsement; agreed installation procedures; hail deductible for solar construction</td></tr>
+      <tr><td><strong>S2 — DSU</strong></td><td>Delay in Start-Up — revenue loss from PD-triggered delay to COD</td><td>P50 annual revenue × delay months. Indemnity: 12–18 months.</td><td>30–90 days from scheduled COD</td><td>Triggered by insured PD only; schedule delays alone excluded. CfD/PPA rate used for revenue basis.</td></tr>
+      <tr><td><strong>S3 — Contractors\u2019 Plant</strong></td><td>Damage to plant and equipment belonging to the contractor</td><td>Declared value of major plant items (cranes, WTG erection equipment)</td><td>£100k–£500k per item</td><td>Often covered under contractor\u2019s own CARs policy with project named as additional insured</td></tr>
+      <tr><td><strong>S4 — Third-Party Liability</strong></td><td>Bodily injury / property damage to third parties during construction</td><td>Per occurrence limit: £25–250m</td><td>£1–2m per occurrence</td><td>Crane operations, panel transit, vehicle movement on public roads, cable trenching near utilities</td></tr>
+      <tr><td><strong>S5 — Employers\u2019 Liability</strong></td><td>Injury to employees and contractors on site</td><td>Statutory minimum plus excess; £25m+ typical</td><td>£500k–£1m</td><td>RIDDOR compliance for UK R4; H&amp;S plan required; near-miss reporting protocol</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Rating Factors -->
+  <h2>Rating Factors by Technology</h2>
+  <p>Onshore renewable rating factors vary significantly by technology sub-class. Each factor below can move the base rate materially — BESS chemistry alone is worth a 2–4× rate multiplier.</p>
+
+  <div class="factor-grid">
+    <div class="factor-card">
+      <h4>💨 Wind — OEM &amp; Turbine Model</h4>
+      <p>OEM loss history, turbine model, installed fleet size, and known serial defect exposure. GE 1.5MW (ageing fleet) +15–25% loading. First-of-kind turbine models +30–50%. Vestas and Siemens Gamesa modern platforms closest to base rate.</p>
+    </div>
+    <div class="factor-card">
+      <h4>💨 Wind — Turbine Age</h4>
+      <p>Age loading applies beyond 10 years. Bearing failure rates increase with age. 10–15 years: +10–15%. 15–20 years: +25–40%. 20+ years: individual engineering survey required. CMS installation can reduce age loading by 10–15%.</p>
+    </div>
+    <div class="factor-card">
+      <h4>💨 Wind — Lightning Exposure</h4>
+      <p>Ground flash density (GFD) at site drives lightning loading. High-GFD sites (e.g., Florida, central Europe, tropical): +20–35%. IEC 61400-24 lightning protection compliance reduces loading. Blade lightning receptor service records required.</p>
+    </div>
+    <div class="factor-card solar">
+      <h4>☀️ Solar — Hail Zone</h4>
+      <p>ANSI/SPRI hail zone classification for US sites. Zone 1–2 (low hail): base rate. Zone 3–4 (moderate): +30–50% + hail deductible. Zone 5 (Texas/Oklahoma): +80–120% + 3–5% TIV hail deductible + hail sub-limit. Dual-glass module specification: −20–30% hail loading.</p>
+    </div>
+    <div class="factor-card solar">
+      <h4>☀️ Solar — Module Technology</h4>
+      <p>Module type affects PID, fire, and hail risk profile. Monofacial crystalline silicon: standard. Bifacial mono-PERC (most common): hail loading unless dual-glass rear. Cadmium telluride (First Solar): different thermal performance; lower hail vulnerability. Thin film: lower fire risk.</p>
+    </div>
+    <div class="factor-card solar">
+      <h4>☀️ Solar — Tracker vs Fixed-Tilt</h4>
+      <p>Single-axis tracker systems (dominant in flat-terrain US solar) add mechanical complexity and storm/hail vulnerability (trackers at intermediate stow angle exposed to hail). Fixed-tilt systems simpler; lower O&amp;M risk. Tracker stow protocol for severe weather is an underwriting requirement.</p>
+    </div>
+    <div class="factor-card bess">
+      <h4>🔋 BESS — Battery Chemistry</h4>
+      <p>Chemistry is the primary BESS rating driver. NMC (nickel-manganese-cobalt): highest thermal runaway risk; base BESS rate ×2.0–4.0 vs NMC benchmark. LFP (lithium iron phosphate): lower thermal runaway risk; rate ×1.0 (benchmark). NaS (sodium-sulfur): high operating temperature; specialist assessment required.</p>
+    </div>
+    <div class="factor-card bess">
+      <h4>🔋 BESS — Thermal Management</h4>
+      <p>Active liquid cooling: preferred. Passive air cooling: +20–30% loading. Thermal management system must include remote temperature monitoring with automatic isolation. BMS quality (response time to thermal event) is critical — systems with sub-second thermal isolation trigger: base rate. &gt;5 second response: +30–50%.</p>
+    </div>
+    <div class="factor-card bess">
+      <h4>🔋 BESS — Fire Suppression &amp; Separation</h4>
+      <p>Active fire suppression (FM200, IG-541, or equivalent) within battery containers: required. Container-to-container separation ≥3m: required. Thermal barrier walls between container clusters: −15% loading where fitted. Open-air rack-mounted BESS (no containment): specialist assessment, typically +50–80%.</p>
+    </div>
+    <div class="factor-card red">
+      <h4>🌿 Biomass — Fuel Storage</h4>
+      <p>Wood pellet spontaneous combustion is primary attritional risk. CO monitoring in enclosed fuel stores: required. Temperature alarm system: required. Moisture content monitoring: required (&gt;10% moisture content = high risk). Outdoor vs indoor storage: outdoor lower risk. Annual fire survey required for risks &gt;£50m TIV.</p>
+    </div>
+    <div class="factor-card">
+      <h4>📍 Location — Windstorm / CAT</h4>
+      <p>Sites in hurricane zones (US Gulf/Atlantic coast): mandatory CAT deductible (5% TIV min). European windstorm zones (Pyrenees, Atlantic coast): additional windstorm loading. Wildfire proximity (US West, Australia): vegetation management plan required; defensible space of 30m minimum.</p>
+    </div>
+    <div class="factor-card">
+      <h4>📋 O&amp;M Quality</h4>
+      <p>In-house O&amp;M with manufacturer-trained technicians: base rate. Third-party ISP (Independent Service Provider): +5–10%. No formal O&amp;M contract: +20–30%. CMS data sharing with insurer: −10%. Annual inspection records provided: −5%. Condition-based maintenance programme: −10–15%.</p>
+    </div>
+  </div>
+
+  <!-- ALOR methodology -->
+  <h2>ALOR Methodology — Onshore Renewable</h2>
+  <div class="info-box">
+    <h4>ALOR Sum Insured Calculation</h4>
+    <p><strong>Formula: ALOR SI = P50 Annual Revenue × (Indemnity Period Months ÷ 12)</strong></p>
+    <p>The revenue basis depends on whether the asset operates under a subsidy mechanism:</p>
+    <ul>
+      <li><strong>CfD (Contract for Difference) — UK:</strong> Revenue = P50 generation (MWh) × CfD strike price (£/MWh). Highly predictable; low revenue risk. Indemnity period typically 12 months.</li>
+      <li><strong>PPA (Power Purchase Agreement) — US/EU:</strong> Revenue = P50 generation (MWh) × PPA contracted rate (£/MWh). Fixed price; revenue risk low during PPA term. Indemnity period 12–18 months.</li>
+      <li><strong>Merchant (no subsidy):</strong> Revenue = P50 generation (MWh) × forward power price (£/MWh) at time of policy. Volatile; sum insured may need annual review. Indemnity period 12 months (longer periods require basis clause).</li>
+      <li><strong>BESS grid services:</strong> Revenue = contracted capacity payment (£/MW/year) + energy arbitrage revenue. Highly bespoke; requires grid services contract review.</li>
+    </ul>
+    <p><strong>Waiting period:</strong> 30–60 days for wind; 45 days for solar; 30 days for BESS. Claims paid on days 31–(indemnity period end).</p>
+  </div>
+
+  <!-- BESS underwriting section -->
+  <div class="bess-box">
+    <h4>⚡ BESS Underwriting — Key Additional Requirements (post-Moss Landing)</h4>
+    <p>Following the Moss Landing catastrophe (2025), Lloyd's syndicates active in BESS have introduced additional mandatory requirements for all new and renewing BESS risks:</p>
+    <ul>
+      <li>Battery chemistry declaration — NMC, LFP, NaS, or other; rate applied accordingly</li>
+      <li>Thermal management system specification (active liquid cooling preferred; passive air cooling — additional survey)</li>
+      <li>Container-to-container physical separation ≥3m (or equivalent thermal barrier)</li>
+      <li>BMS auto-isolation response time &lt;1 second from thermal event detection</li>
+      <li>Remote 24/7 thermal monitoring with escalation protocol to emergency responders</li>
+      <li>First-responder pre-planning and dedicated BESS emergency response procedure</li>
+      <li>Maximum per-location BESS TIV: £200m (most syndicates); larger BESS require co-insurance tower</li>
+      <li>Grid connection protection: dedicated protection relay with anti-islanding; grid fault isolation time &lt;0.5 seconds</li>
+    </ul>
+  </div>
+
+  <!-- Info requirements -->
+  <h3>Information Requirements — R2 Renewal Submission</h3>
+  <ul class="checklist">
+    <li>Asset details: site name, location (lat/long), installed capacity (MW), TIV, commissioning date</li>
+    <li>Technology: OEM/manufacturer and model for turbines, modules, inverters, battery</li>
+    <li>5-year loss history including near-misses and warranty claims</li>
+    <li>O&amp;M contract details: provider, scope, response time SLA</li>
+    <li>Annual inspection and blade/module condition reports</li>
+    <li>CMS/SCADA data — alert history for wind; soiling and clipping data for solar; temperature logs for BESS</li>
+    <li>ALOR: P50 annual generation (MWh), revenue mechanism (CfD/PPA/merchant), contracted rate (£/MWh)</li>
+    <li>For BESS: battery chemistry, thermal management specification, BMS specification, fire suppression details</li>
+    <li>For solar (US): hail zone classification, module specification (dual-glass or monofacial), tracker stow protocol</li>
+  </ul>
+
+  <!-- Worked Example 1: Wind -->
+  <h2>Worked Example 1 — R2 Operational Onshore Wind Farm</h2>
+  <div class="worked-example">
+    <h3>Caledonian Wind Farm — 200MW Operational Onshore Wind (Scotland)</h3>
+    <div class="subtitle">Siemens Gamesa SG 5.0-145 turbines (40 units) | Commissioned 2022 | TIV £285m | CfD at £85/MWh</div>
+    <table class="we-table">
+      <thead>
+        <tr><th>Section</th><th>TIV / Basis</th><th>Rate</th><th>Premium</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PD — Turbines &amp; Towers (40 × SG 5.0)</td>
+          <td>£220m (replacement cost)</td>
+          <td>0.130%</td>
+          <td>£286,000</td>
+        </tr>
+        <tr>
+          <td>PD — Substation &amp; Grid Connection</td>
+          <td>£35m</td>
+          <td>0.120%</td>
+          <td>£42,000</td>
+        </tr>
+        <tr>
+          <td>PD — Inter-Array Cables</td>
+          <td>£30m</td>
+          <td>0.090%</td>
+          <td>£27,000</td>
+        </tr>
+        <tr>
+          <td>ALOR — 12-month indemnity</td>
+          <td>£42m SI (P50 gen 494GWh × £85/MWh)</td>
+          <td>0.070%</td>
+          <td>£29,400</td>
+        </tr>
+        <tr>
+          <td>Third-Party Liability — £25m occ.</td>
+          <td>£25m per occurrence</td>
+          <td>Fixed</td>
+          <td>£18,000</td>
+        </tr>
+        <tr>
+          <td><strong>Total Premium</strong></td>
+          <td><strong>TIV: £285m</strong></td>
+          <td><strong>Blended: 0.142%</strong></td>
+          <td><span class="we-val">£402,400</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.83rem;color:var(--muted);margin-top:12px;">Rate reflects: modern SG platform (+0% loading), Scotland low-GFD lightning zone (no loading), CMS fitted (−10%), in-house O&amp;M by Siemens Gamesa (base rate), no prior losses.</p>
+  </div>
+
+  <!-- Worked Example 2: Solar + BESS -->
+  <h2>Worked Example 2 — R4 Construction Solar PV + BESS (Co-located)</h2>
+  <div class="worked-example">
+    <h3>Sunridge Solar &amp; Storage — 300MW Solar + 150MW/600MWh BESS (Texas)</h3>
+    <div class="subtitle">LONGi bifacial monocrystalline modules, single-axis trackers | Tesla Megapack (LFP) | Construction 24 months | Peak TIV £480m</div>
+    <table class="we-table">
+      <thead>
+        <tr><th>Section</th><th>TIV / Basis</th><th>Rate</th><th>Premium</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>S1 — Solar EAR (modules, racking, trackers, inverters)</td>
+          <td>£310m peak (at commissioning)</td>
+          <td>0.280% (hail zone 5 loading)</td>
+          <td>£868,000</td>
+        </tr>
+        <tr>
+          <td>S1 — BESS EAR (Megapack units, inverters, grid conn.)</td>
+          <td>£120m peak</td>
+          <td>0.350% (LFP chemistry)</td>
+          <td>£420,000</td>
+        </tr>
+        <tr>
+          <td>S1 — Substation &amp; HV Cable Works</td>
+          <td>£50m</td>
+          <td>0.150%</td>
+          <td>£75,000</td>
+        </tr>
+        <tr>
+          <td>S2 — DSU (12-month indemnity from scheduled COD)</td>
+          <td>£38m SI (P50 gen 570GWh × $35/MWh PPA)</td>
+          <td>0.200%</td>
+          <td>£76,000</td>
+        </tr>
+        <tr>
+          <td>S4 — Third-Party Liability (£50m per occ.)</td>
+          <td>£50m per occurrence / £100m annual aggregate</td>
+          <td>Fixed</td>
+          <td>£35,000</td>
+        </tr>
+        <tr>
+          <td><strong>Total R4 Premium</strong></td>
+          <td><strong>Peak TIV: £480m</strong></td>
+          <td><strong>Blended: 0.308%</strong></td>
+          <td><span class="we-val">£1,474,000</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.83rem;color:var(--muted);margin-top:12px;">Hail deductible: 3% of solar TIV per storm event (£9.3m). BESS deductible: £750k per event. Rate reflects: Texas hail zone 5 (+80% solar loading), LFP chemistry (benchmark BESS rate), dual-glass rear not specified (standard bifacial loading), tracker system (standard rate), no prior construction losses on sponsor.</p>
+  </div>
+
+  <div class="warning-box">
+    <h4>⚠ US Solar — Hail Deductible Must Be Disclosed to Insured</h4>
+    <p>A 3% TIV hail deductible on a 300MW solar farm represents £9.3m of retention per storm event. This is a material deductible that must be clearly communicated and agreed with the insured at placement — not buried in policy conditions. Underwriters should confirm the insured has adequate financial reserves or a captive to fund the retention. Several disputes have arisen where solar farm owners were unaware of the quantum of their hail deductible until a total-loss hail event occurred.</p>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — <span>Renewable Energy – Onshore</span> | Lloyd's Codes R2 · R4 | Module 04 of 7</p>
+  <p style="margin-top:6px;">All premiums and TIVs are illustrative only. Data accurate to April 2026.</p>
+</footer>
+
+</body>
+</html>
