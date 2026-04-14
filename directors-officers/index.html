@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Directors &amp; Officers (D&amp;O) – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--do:#7b1fa2;--do-dark:#4a148c;--do-light:#f3e5f5;--burgundy:#880e4f;--accent:#c8a84b;--light:#faf5ff;--text:#1e2d3d;--muted:#6b7c93;--border:#ddd0ea;--green:#2a7a3a;--red:#8b1a1a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#4a148c 55%,#880e4f 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2.2rem; font-weight:700; }
+    header p { margin-top:10px; color:#e1d0f8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .breadcrumb { font-size:0.8rem; color:#c8b8e8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:14px; margin:28px 0 36px; }
+    .stat-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; text-align:center; border-top:3px solid var(--do); }
+    .stat-box .num { font-size:1.55rem; font-weight:800; color:var(--do-dark); }
+    .stat-box .label { font-size:0.74rem; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+    .code-table { width:100%; border-collapse:collapse; margin:20px 0 34px; font-size:0.88rem; }
+    .code-table th { background:var(--do-dark); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .code-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .code-table tr:nth-child(even) td { background:#fafbfc; }
+    .code-pill { display:inline-block; background:var(--do-light); color:var(--do-dark); font-size:0.72rem; font-weight:700; padding:3px 8px; border-radius:4px; letter-spacing:1px; }
+
+    /* Side A/B/C diagram */
+    .side-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:22px 0 34px; }
+    @media(max-width:640px){.side-grid{grid-template-columns:1fr;}}
+    .side-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px; text-align:center; }
+    .side-card .side-badge { display:inline-block; width:52px; height:52px; border-radius:50%; line-height:52px; font-size:1.1rem; font-weight:800; color:#fff; margin-bottom:12px; }
+    .sa .side-badge { background:#4a148c; }
+    .sb .side-badge { background:var(--do); }
+    .sc .side-badge { background:var(--burgundy); }
+    .side-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .side-card p { font-size:0.82rem; color:var(--muted); line-height:1.5; margin:0; }
+
+    /* Coverage cards */
+    .cov-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; margin:20px 0 34px; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-left:4px solid var(--do); }
+    .cov-card h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .cov-card p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    /* Risk drivers */
+    .driver-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:22px 0 36px; }
+    .driver-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; }
+    .driver-card .icon { font-size:1.3rem; margin-bottom:8px; }
+    .driver-card h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .driver-card p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.5; }
+    .trend-badge { display:inline-block; font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:10px; margin-top:8px; }
+    .trend-up { background:#fce8e8; color:var(--red); }
+    .trend-stable { background:#e8f0fe; color:#0a3d7a; }
+    .trend-new { background:#e8f5e9; color:var(--green); }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:20px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#d0c8e8; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#9a8ab8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Directors &amp; Officers</div>
+  <div class="tag">Financial Lines — D&amp;O</div>
+  <h1>Directors &amp; Officers Liability</h1>
+  <p>D&amp;O insurance protects the personal assets of company directors and officers against claims alleging wrongful acts in their management role. It is the most litigated class in the Lloyd's financial lines market — driven by US securities class actions, regulatory enforcement, M&amp;A disputes, and an accelerating wave of ESG and AI governance claims.</p>
+</header>
+<nav>
+  <a href="index.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="num">$20bn+</div><div class="label">Global D&amp;O GWP (2024 estimate)</div></div>
+    <div class="stat-box"><div class="num">$3.18bn</div><div class="label">Cendant Corp — largest ever securities settlement</div></div>
+    <div class="stat-box"><div class="num">~200</div><div class="label">US securities class actions filed per year (2022–2024)</div></div>
+    <div class="stat-box"><div class="num">40–60%</div><div class="label">US public D&amp;O rate reductions 2022–2024 from 2021 peak</div></div>
+    <div class="stat-box"><div class="num">Side A</div><div class="label">Only non-indemnifiable personal protection — most critical coverage</div></div>
+    <div class="stat-box"><div class="num">SOX 2002</div><div class="label">Sarbanes-Oxley — transformed D&amp;O governance obligations globally</div></div>
+  </div>
+
+  <h2>Lloyd's Risk Codes: D1 · D2 · D3 · D4 · D5 · DA · DB · DD</h2>
+  <table class="code-table">
+    <thead>
+      <tr><th>Code</th><th>Class</th><th>Scope</th><th>Typical Limit</th><th>Key Trigger</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="code-pill">D1</span></td><td><strong>Public Company D&amp;O — USA</strong></td><td>SEC-registered public companies; NYSE/NASDAQ listed</td><td>$10m–$500m+</td><td>Securities class action (Rule 10b-5, Section 11); SEC enforcement; derivative action</td></tr>
+      <tr><td><span class="code-pill">D2</span></td><td><strong>Public Company D&amp;O — Non-USA</strong></td><td>Non-US listed companies; UK, EU, Australia, Canada, Asia Pacific</td><td>£5m–£250m</td><td>Shareholder claims; regulatory enforcement; UK Companies Act; ASIC/FCA action</td></tr>
+      <tr><td><span class="code-pill">D3</span></td><td><strong>Private Company D&amp;O</strong></td><td>Privately-held companies; family businesses; pre-IPO firms; PE-backed entities</td><td>£1m–£50m</td><td>Employment disputes; creditor claims; tax authority; M&amp;A warranty breach; minority shareholder</td></tr>
+      <tr><td><span class="code-pill">D4</span></td><td><strong>Not-for-Profit D&amp;O</strong></td><td>Charities; housing associations; trade associations; NGOs; educational institutions</td><td>£500k–£25m</td><td>Trustee liability; regulatory breach (Charity Commission); wrongful trading; employment</td></tr>
+      <tr><td><span class="code-pill">D5</span></td><td><strong>Financial Institutions D&amp;O (FI D&amp;O)</strong></td><td>Banks, insurers, investment managers, brokers, private equity, hedge funds</td><td>£10m–£500m+</td><td>PRA/FCA enforcement; SMCR personal liability; financial crime; market abuse; mis-selling</td></tr>
+      <tr><td><span class="code-pill">DA</span></td><td><strong>D&amp;O Excess / Umbrella</strong></td><td>Excess layers attaching above primary D1–D5 or combined D&amp;O programme</td><td>Follows underlying</td><td>Attaches once primary and lower excess layers exhausted; typically London market placement</td></tr>
+      <tr><td><span class="code-pill">DB</span></td><td><strong>D&amp;O Binders / Delegated Authority</strong></td><td>Coverholders writing D3/D4 D&amp;O for SMEs and NFPs under Lloyd's binding authority</td><td>Per binding authority</td><td>As per underlying D3/D4 triggers; high volume low premium business</td></tr>
+      <tr><td><span class="code-pill">DD</span></td><td><strong>D&amp;O Run-off / Tail Coverage</strong></td><td>Run-off tail on claims-made policies; corporate transactions; entity dissolution; M&amp;A</td><td>Same as expiring</td><td>Claims arising post-policy expiry for acts during policy period; up to 6-year tail typical</td></tr>
+    </tbody>
+  </table>
+
+  <h2>The Side A / B / C Structure</h2>
+  <p>D&amp;O policies are structured in three funding buckets — Sides A, B and C — each responding to a different layer of corporate liability. Understanding which "side" responds to a given claim is fundamental to D&amp;O placement and claims management. Not all policies include all three Sides: smaller private company forms (D3) often combine A and B only, while Side C is typically reserved for public companies facing securities claims against the entity itself.</p>
+
+  <div class="side-grid">
+    <div class="side-card sa">
+      <div class="side-badge">A</div>
+      <h4>Side A — Non-Indemnifiable Loss</h4>
+      <p>Responds when the company cannot or will not indemnify its directors/officers. Classic triggers: company insolvency, legal prohibition on indemnification (e.g. criminal fine), or company refusal. Protects personal assets directly. Cannot be eroded by company bankruptcy. Side A DIC policies provide excess personal protection above the primary policy.</p>
+    </div>
+    <div class="side-card sb">
+      <div class="side-badge">B</div>
+      <h4>Side B — Company Reimbursement</h4>
+      <p>Reimburses the company for costs it has already paid to indemnify its directors and officers. The company steps in to pay defence costs and settlements on behalf of its executives, then the insurer reimburses the company. Available only when the company has the legal ability and financial capacity to indemnify — i.e. not in bankruptcy.</p>
+    </div>
+    <div class="side-card sc">
+      <div class="side-badge">C</div>
+      <h4>Side C — Entity Securities Coverage</h4>
+      <p>Covers the company entity itself (not just individuals) for securities claims — typically US securities class actions where both the company and its officers are named defendants. Side C is only available for D1 (US public) and some D2 policies. The entity and its directors share the same policy limit, creating a "burning" concern in large securities class actions.</p>
+    </div>
+  </div>
+
+  <h2>What D&amp;O Covers: Key Insuring Agreements</h2>
+  <div class="cov-grid">
+    <div class="cov-card">
+      <h4>Defence Costs</h4>
+      <p>Legal fees, expert witness costs, court costs and expenses to defend a covered claim. Often the largest component — major D&amp;O litigation can cost $20–50m+ to defend, regardless of outcome.</p>
+    </div>
+    <div class="cov-card">
+      <h4>Settlements &amp; Judgements</h4>
+      <p>Court-approved settlements or final judgements in covered civil claims. Excludes criminal fines/penalties (typically not insurable by law). FCPA/bribery penalties typically excluded.</p>
+    </div>
+    <div class="cov-card">
+      <h4>Regulatory Investigation Costs</h4>
+      <p>Costs to respond to formal regulatory investigations by SEC, FCA, ASIC, DOJ, SFO. Formal order of investigation required in most policies. Informal/preliminary enquiries often excluded.</p>
+    </div>
+    <div class="cov-card">
+      <h4>Employment Practice Claims</h4>
+      <p>Some D&amp;O policies (especially private company D3) include basic EPLI cover for wrongful dismissal, discrimination, harassment claims against officers in their capacity as managers.</p>
+    </div>
+    <div class="cov-card">
+      <h4>Derivative Action Defence</h4>
+      <p>Shareholders suing directors on behalf of the company alleging mismanagement, waste or breach of fiduciary duty. Common in Delaware (Caremark duties; Revlon duties in M&amp;A).</p>
+    </div>
+    <div class="cov-card">
+      <h4>Extradition / Bail Bond</h4>
+      <p>Costs associated with defending extradition proceedings and securing bail for directors facing criminal charges in foreign jurisdictions. Increasingly relevant in cross-border financial crime.</p>
+    </div>
+    <div class="cov-card">
+      <h4>Emergency Costs Advance</h4>
+      <p>Advancement of defence costs before formal adjudication of coverage — a critical feature. US courts generally allow advancement; UK/EU advancement is subject to company law restrictions.</p>
+    </div>
+    <div class="cov-card">
+      <h4>Crisis Management / PR</h4>
+      <p>Some broader policies include reputation management and crisis PR costs following a covered event. More common in private company and not-for-profit forms. Rarely included in large public company programmes.</p>
+    </div>
+  </div>
+
+  <h2>Key Risk Drivers (2024)</h2>
+  <div class="driver-grid">
+    <div class="driver-card">
+      <div class="icon">📉</div>
+      <h4>US Securities Class Actions</h4>
+      <p>Rule 10b-5 fraud-on-the-market claims following share price drops. ~200 filings/year. Average settlement $60–80m; largest exceed $1bn. Companies in healthcare, tech, and SPAC sectors most targeted.</p>
+      <span class="trend-badge trend-stable">Stable / Declining from peak</span>
+    </div>
+    <div class="driver-card">
+      <div class="icon">🏛️</div>
+      <h4>Regulatory Enforcement</h4>
+      <p>SEC, FCA, ASIC, PRA, DOJ. Post-GFC, enforcement against individuals (not just entities) has intensified. DOJ individual accountability policy (Yates Memo, 2015) drives personal D&amp;O claims.</p>
+      <span class="trend-badge trend-up">Increasing</span>
+    </div>
+    <div class="driver-card">
+      <div class="icon">🤝</div>
+      <h4>M&amp;A Transaction Litigation</h4>
+      <p>Nearly every public company M&amp;A deal in Delaware triggers shareholder litigation. "Deal tax" — appraisal claims, fiduciary duty claims, disclosure claims. MFW/Corwin doctrines shape defence strategies.</p>
+      <span class="trend-badge trend-stable">Stable</span>
+    </div>
+    <div class="driver-card">
+      <div class="icon">🌱</div>
+      <h4>ESG / Climate Disclosure</h4>
+      <p>SEC climate disclosure rules (2024), TCFD, EU CSRD. Directors now face personal liability for misleading ESG/climate statements. Greenwashing litigation accelerating in EU and Australia.</p>
+      <span class="trend-badge trend-up">Rapidly Increasing</span>
+    </div>
+    <div class="driver-card">
+      <div class="icon">🤖</div>
+      <h4>AI Governance Claims</h4>
+      <p>Boards and executives facing claims for inadequate AI oversight, algorithmic bias, and failure to disclose AI risks in securities filings. Emerging frontier — first wave of claims expected 2024–2026.</p>
+      <span class="trend-badge trend-new">Emerging</span>
+    </div>
+    <div class="driver-card">
+      <div class="icon">💰</div>
+      <h4>SPAC / IPO Liability</h4>
+      <p>SPAC sponsors faced unprecedented D&amp;O claims 2021–2023 — projections not met, sponsor conflicts of interest, underperformance post-merger. SEC increased scrutiny of SPAC disclosures.</p>
+      <span class="trend-badge trend-stable">Declining from peak</span>
+    </div>
+    <div class="driver-card">
+      <div class="icon">🏦</div>
+      <h4>Insolvency / Wrongful Trading</h4>
+      <p>Directors' personal liability for trading whilst insolvent (UK s.214 IA 1986) or fraudulent trading. Key D3/D4 driver. Peaks during economic downturns; post-COVID wave smaller than expected.</p>
+      <span class="trend-badge trend-stable">Cyclical</span>
+    </div>
+    <div class="driver-card">
+      <div class="icon">⚖️</div>
+      <h4>Crypto / Digital Assets</h4>
+      <p>FTX/SBF collapse (2022): massive D&amp;O exposure for SBF and Alameda directors. Crypto exchange failures triggering securities fraud claims. SEC enforcement against crypto executives expanding.</p>
+      <span class="trend-badge trend-up">Increasing</span>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠️ The "Burning Limit" Problem — Side C and the Entity</h4>
+    <p>When a US securities class action names both the company (Side C) and its directors (Sides A/B) as defendants, defence costs and settlements for all defendants come from the same policy limit. A $50m policy shared between 10 individual directors and the company entity can be exhausted by the entity's settlement costs before the individuals have funded their own defence.</p>
+    <p>The solution — a dedicated Side A-only "difference-in-conditions" (DIC) policy for directors' personal protection — has become standard practice for large public company D&amp;O programmes. Side A DIC sits above (or alongside) the primary programme and responds only for non-indemnifiable individual losses, providing ringfenced protection from entity claims burning through shared limits.</p>
+  </div>
+
+  <div class="context-box">
+    <h3>The "Wrongful Act" — What D&amp;O Actually Covers</h3>
+    <p>The D&amp;O policy is triggered by a "wrongful act" — typically defined as any actual or alleged breach of duty, neglect, error, misstatement, misleading statement, omission, or breach of trust by an insured person acting in their capacity as a director or officer. The definition is broad by design: it does not require an actual wrongful act, only an allegation of one.</p>
+    <p>What D&amp;O does <em>not</em> cover: deliberate fraud or dishonesty (once proven — not merely alleged), personal profit from fraudulent conduct, criminal fines, bodily injury or property damage (these go to other policies), and claims between insured persons (the "insured vs insured" exclusion). The fraud exclusion requires a final adjudication — a D&amp;O insurer cannot unilaterally refuse to defend by alleging fraud before a court has found it.</p>
+    <p>The claims-made basis is critical: coverage depends on the claim being first made and reported during the policy period (or extended reporting period). A director who leaves a company should ensure tail coverage or an extended reporting period is in place — their acts as a director during their tenure are only covered if claims arise and are reported while they (or the company) have active coverage.</p>
+  </div>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Directors &amp; Officers (D1 · D2 · D3 · D4 · D5 · DA · DB · DD)</span> — Hub Overview</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Legal coverage positions vary by policy form and jurisdiction.</p>
+</footer>
+</body>
+</html>

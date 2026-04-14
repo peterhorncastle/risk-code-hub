@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&amp;O Loss Database – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--do:#7b1fa2;--do-dark:#4a148c;--do-light:#f3e5f5;--burgundy:#880e4f;--accent:#c8a84b;--light:#faf5ff;--text:#1e2d3d;--muted:#6b7c93;--border:#ddd0ea;--green:#2a7a3a;--red:#8b1a1a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#4a148c 55%,#880e4f 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#e1d0f8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .breadcrumb { font-size:0.8rem; color:#c8b8e8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+
+    /* Filters */
+    .filter-bar { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 22px; margin:20px 0; display:flex; flex-wrap:wrap; gap:14px; align-items:center; }
+    .filter-bar label { font-size:0.8rem; font-weight:600; color:var(--navy); margin-right:4px; }
+    .filter-bar select { font-size:0.82rem; border:1px solid var(--border); border-radius:6px; padding:6px 10px; color:var(--text); background:#fafbff; }
+    .filter-bar button { font-size:0.8rem; font-weight:600; padding:7px 16px; border-radius:6px; border:1px solid var(--border); cursor:pointer; background:#f5f0ff; color:var(--do-dark); }
+    .filter-bar button:hover { background:var(--do-light); }
+    #result-count { font-size:0.82rem; color:var(--muted); margin-left:auto; }
+
+    /* Table */
+    .db-wrap { overflow-x:auto; margin:0 0 40px; }
+    table { width:100%; border-collapse:collapse; font-size:0.84rem; min-width:820px; }
+    thead th { background:var(--do-dark); color:#fff; padding:10px 12px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; cursor:pointer; user-select:none; white-space:nowrap; }
+    thead th:hover { background:var(--do); }
+    tbody td { padding:9px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tbody tr:nth-child(even) td { background:#fafbfc; }
+    tbody tr:hover td { background:#f3e5f5; }
+    tbody tr.hidden { display:none; }
+
+    .type-tag { display:inline-block; font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:8px; white-space:nowrap; }
+    .t-securities { background:#fce8e8; color:var(--red); }
+    .t-derivative { background:var(--do-light); color:var(--do-dark); }
+    .t-regulatory { background:#e0f7fa; color:#006064; }
+    .t-insolvency { background:#fff3cd; color:#7a4500; }
+    .t-conduct { background:#fce4ec; color:var(--burgundy); }
+    .t-sector { background:#e8f5e9; color:var(--green); }
+
+    footer { background:var(--navy); color:#9a8ab8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Directors &amp; Officers</a> › Loss Database</div>
+  <div class="tag">Module 03 — D&amp;O Claims Database</div>
+  <h1>D&amp;O Claims Database</h1>
+  <p>35 significant D&amp;O claims from 1995 to 2024. Filter by claim type, jurisdiction, and settlement size. All figures represent final settlements or estimated insurance recoveries — court judgements and ongoing litigation amounts may differ.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+
+  <h2>Searchable Claims Database</h2>
+
+  <div class="filter-bar">
+    <div><label>Claim Type:</label>
+      <select id="f-type">
+        <option value="all">All Types</option>
+        <option value="securities">Securities Class Action</option>
+        <option value="derivative">Derivative / Shareholder</option>
+        <option value="regulatory">Regulatory / Enforcement</option>
+        <option value="insolvency">Insolvency / Wrongful Trading</option>
+        <option value="conduct">Conduct / Misconduct</option>
+        <option value="sector">Sector Wave</option>
+      </select>
+    </div>
+    <div><label>Jurisdiction:</label>
+      <select id="f-juris">
+        <option value="all">All Jurisdictions</option>
+        <option value="us">USA</option>
+        <option value="uk">UK / Europe</option>
+        <option value="aus">Australia</option>
+        <option value="intl">International / Multi-Juris</option>
+      </select>
+    </div>
+    <div><label>Min Settlement:</label>
+      <select id="f-loss">
+        <option value="0">Any</option>
+        <option value="100">$100m+</option>
+        <option value="500">$500m+</option>
+        <option value="1000">$1bn+</option>
+      </select>
+    </div>
+    <button onclick="clearFilters()">Clear</button>
+    <span id="result-count"></span>
+  </div>
+
+  <div class="db-wrap">
+    <table id="db-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Year ↕</th>
+          <th onclick="sortTable(1)">Company</th>
+          <th onclick="sortTable(2)">Sector</th>
+          <th>Claim Type</th>
+          <th>Jurisdiction</th>
+          <th onclick="sortTable(5)">Settlement / Insurance $m ↕</th>
+          <th>Key Issue</th>
+        </tr>
+      </thead>
+      <tbody id="db-body">
+        <tr data-type="securities" data-juris="us" data-loss="3180">
+          <td>1998</td><td><strong>Cendant Corporation</strong></td><td>Diversified</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$3,180m</td><td>Revenue inflation by CUC International; $14bn market cap wiped; record settlement at time</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="6100">
+          <td>2002</td><td><strong>WorldCom / MCI</strong></td><td>Telecom</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$6,100m</td><td>$11bn accounting fraud; CFO Scott Sullivan convicted; includes $2.6bn from Citigroup; largest settlement at time</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="7200">
+          <td>2001</td><td><strong>Enron Corporation</strong></td><td>Energy</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$7,200m</td><td>Off-balance-sheet SPVs concealing $1bn+ debt; Lay/Skilling convicted; landmark D&amp;O event; direct insurance recovery ~$200m</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="2750">
+          <td>2004</td><td><strong>Tyco International</strong></td><td>Diversified</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$2,750m</td><td>CEO Kozlowski looted $400m+ in personal enrichment; securities fraud and theft; D&amp;O settlement $2.75bn</td>
+        </tr>
+        <tr data-type="regulatory" data-juris="us" data-loss="1575">
+          <td>2006</td><td><strong>Household International (HSBC)</strong></td><td>Financial</td>
+          <td><span class="type-tag t-regulatory">Regulatory</span></td><td>USA</td>
+          <td>$1,575m</td><td>Jaffe v. Household — predatory lending practices; largest individual securities class action settlement at time of payment</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="445">
+          <td>2006</td><td><strong>HealthSouth</strong></td><td>Healthcare</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$445m</td><td>CEO Richard Scrushy orchestrated $1.4bn Medicare fraud; CFO forced to falsify entries; DOJ prosecution</td>
+        </tr>
+        <tr data-type="sector" data-juris="us" data-loss="200">
+          <td>2006</td><td><strong>Options Backdating Wave (150+ firms)</strong></td><td>Technology / Mixed</td>
+          <td><span class="type-tag t-sector">Sector Wave</span></td><td>USA</td>
+          <td>$200m+</td><td>Broadcom ($150m), Comverse Technology, Monster Worldwide; SEC enforcement against executives for backdating stock option grants</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="275">
+          <td>2008</td><td><strong>Bear Stearns / JPMorgan</strong></td><td>Financial</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$275m</td><td>Misrepresentation of hedge fund quality and subprime exposure; acquired by JPMorgan for $10/share after $172/share year prior</td>
+        </tr>
+        <tr data-type="regulatory" data-juris="us" data-loss="153">
+          <td>2008</td><td><strong>Fannie Mae / OFHEO</strong></td><td>Financial / GSE</td>
+          <td><span class="type-tag t-regulatory">Regulatory</span></td><td>USA</td>
+          <td>$153m</td><td>OFHEO found accounting manipulation; CEO Franklin Raines and CFO J. Timothy Howard settled with OFHEO for $31.4m personally</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="90">
+          <td>2009</td><td><strong>Lehman Brothers</strong></td><td>Financial</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$90m</td><td>Repo 105 accounting manipulation concealed true leverage; D&amp;O recovery limited to available insurance; Dick Fuld personal claims ongoing</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="55">
+          <td>2010</td><td><strong>Countrywide / Bank of America</strong></td><td>Financial</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$55m</td><td>Mozilo sold $140m in stock while emailing colleagues about mortgage quality deterioration; SEC settled for $67.5m personally</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="175">
+          <td>2016</td><td><strong>BP (Deepwater Horizon Securities)</strong></td><td>Energy</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$175m</td><td>Shareholder securities class action alleging misrepresentation of safety culture; separate from $20bn property/liability settlement</td>
+        </tr>
+        <tr data-type="securities" data-juris="intl" data-loss="300">
+          <td>2016</td><td><strong>Volkswagen (Dieselgate)</strong></td><td>Automotive</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>UK / Europe / AUS</td>
+          <td>$300m+</td><td>Supervisory board D&amp;O claims in Germany; Australian shareholder class action; UK investor claims; defeat device emissions fraud</td>
+        </tr>
+        <tr data-type="conduct" data-juris="us" data-loss="120">
+          <td>2018</td><td><strong>CBS Corporation (#MeToo — Moonves)</strong></td><td>Media</td>
+          <td><span class="type-tag t-conduct">Conduct</span></td><td>USA</td>
+          <td>$120m</td><td>Board knew of Les Moonves misconduct; derivative settlement included $120m + governance reforms; Moonves forfeited $120m personal payout</td>
+        </tr>
+        <tr data-type="conduct" data-juris="us" data-loss="110">
+          <td>2018</td><td><strong>Wynn Resorts (#MeToo)</strong></td><td>Gaming</td>
+          <td><span class="type-tag t-conduct">Conduct</span></td><td>USA</td>
+          <td>$110m</td><td>Steve Wynn sexual misconduct; board accused of concealing for years; securities class action and derivative suits; Wynn resigned</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="193">
+          <td>2002</td><td><strong>Rite Aid</strong></td><td>Retail / Pharmacy</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$193m</td><td>Largest pharmacy chain D&amp;O claim; CEO Martin Grass convicted of conspiracy; $1.6bn accounting restatement</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="148">
+          <td>2007</td><td><strong>Dollar General</strong></td><td>Retail</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$148m</td><td>Accounting restatement of $162m over 4 years; CFO and other executives implicated; private equity buyout used to resolve</td>
+        </tr>
+        <tr data-type="securities" data-juris="aus" data-loss="200">
+          <td>2020</td><td><strong>AMP Limited (Australia)</strong></td><td>Financial</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>Australia</td>
+          <td>$200m</td><td>Royal Commission exposure of fees-for-no-service scandal; share price fell 30% in one day; largest Australian securities class action at time</td>
+        </tr>
+        <tr data-type="securities" data-juris="aus" data-loss="150">
+          <td>2020</td><td><strong>Commonwealth Bank of Australia</strong></td><td>Financial</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>Australia</td>
+          <td>$150m</td><td>AUSTRAC proceedings for 53,000 AML/CTF contraventions; directors failed to escalate risk; Australian securities class action</td>
+        </tr>
+        <tr data-type="sector" data-juris="us" data-loss="50">
+          <td>2020</td><td><strong>COVID Wave — Inovio Pharmaceuticals</strong></td><td>Healthcare / Pharma</td>
+          <td><span class="type-tag t-sector">Sector Wave</span></td><td>USA</td>
+          <td>$50m</td><td>Misrepresented COVID vaccine development timeline; one of 200+ COVID securities class actions filed 2020</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="115">
+          <td>2006</td><td><strong>AIG (General Re reinsurance fraud)</strong></td><td>Insurance</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$115m</td><td>Greenberg used sham General Re reinsurance transaction to inflate reserves; SEC and DOJ enforcement; AIG restated $3.9bn</td>
+        </tr>
+        <tr data-type="insolvency" data-juris="uk" data-loss="1200">
+          <td>2019</td><td><strong>Thomas Cook Group</strong></td><td>Travel / Retail</td>
+          <td><span class="type-tag t-insolvency">Insolvency</span></td><td>UK</td>
+          <td>$1,200m+</td><td>UK's largest corporate insolvency in decade; FRC investigated auditors; directors faced wrongful trading claims; 150,000 stranded tourists</td>
+        </tr>
+        <tr data-type="regulatory" data-juris="uk" data-loss="400">
+          <td>2013</td><td><strong>RBS Rights Issue (2008)</strong></td><td>Financial</td>
+          <td><span class="type-tag t-regulatory">Regulatory</span></td><td>UK</td>
+          <td>$400m+</td><td>UK shareholder class action against RBS directors for misleading 2008 rights issue prospectus; settled for £200m after years of litigation</td>
+        </tr>
+        <tr data-type="regulatory" data-juris="uk" data-loss="80">
+          <td>2018</td><td><strong>Carillion (UK)</strong></td><td>Construction</td>
+          <td><span class="type-tag t-insolvency">Insolvency</span></td><td>UK</td>
+          <td>$80m</td><td>UK's second-largest contractor collapsed; directors paid dividends and bonuses while aware of financial deterioration; Parliamentary inquiry</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="300">
+          <td>2021</td><td><strong>Luckin Coffee (China/US)</strong></td><td>F&amp;B / China</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA / China</td>
+          <td>$300m</td><td>Fabricated $310m in sales; NASDAQ-listed Chinese company; SEC settlement $180m; Chinese regulators imposed additional penalties</td>
+        </tr>
+        <tr data-type="sector" data-juris="us" data-loss="100">
+          <td>2022</td><td><strong>SPAC Wave — Churchill Capital Corp IV</strong></td><td>EV / Automotive</td>
+          <td><span class="type-tag t-sector">Sector Wave</span></td><td>USA</td>
+          <td>$100m+</td><td>Lucid Motors SPAC merger; shareholders alleged misrepresentation of production ramp-up timeline; representative of 50+ SPAC suits 2022</td>
+        </tr>
+        <tr data-type="regulatory" data-juris="us" data-loss="500">
+          <td>2023</td><td><strong>Silicon Valley Bank (SVB)</strong></td><td>Financial</td>
+          <td><span class="type-tag t-regulatory">Regulatory</span></td><td>USA</td>
+          <td>Ongoing</td><td>CEO Becker sold $3.6m in shares 11 days before collapse; misrepresented interest rate risk; FDIC pursuing directors; securities class action ongoing</td>
+        </tr>
+        <tr data-type="regulatory" data-juris="us" data-loss="1000">
+          <td>2022</td><td><strong>FTX / Sam Bankman-Fried</strong></td><td>Crypto / Financial</td>
+          <td><span class="type-tag t-regulatory">Regulatory</span></td><td>USA / Intl</td>
+          <td>Ongoing</td><td>$8bn customer fund misappropriation; SBF convicted; institutional investor D&amp;O claims vs FTX board, advisers and auditors ongoing</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="1000">
+          <td>2019</td><td><strong>Opioid Crisis — Purdue Pharma</strong></td><td>Pharma</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$6,000m+</td><td>Sackler family D&amp;O claims for fraudulent concealment of OxyContin addiction risk; bankruptcy reorganisation; personal payments by Sacklers ~$4.5bn</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="700">
+          <td>2023</td><td><strong>Theranos / Elizabeth Holmes</strong></td><td>Healthcare Tech</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>USA</td>
+          <td>$700m+</td><td>Holmes convicted of fraud (4 counts); raised $900m on fraudulent blood-testing technology claims; investor class action settled</td>
+        </tr>
+        <tr data-type="conduct" data-juris="us" data-loss="250">
+          <td>2023</td><td><strong>McDonald's (CEO Steve Easterbrook)</strong></td><td>Food &amp; Beverage</td>
+          <td><span class="type-tag t-conduct">Conduct</span></td><td>USA</td>
+          <td>$105m</td><td>Board sued CEO for lying about relationships with employees; clawback of $105m in severance; landmark clawback/D&amp;O case</td>
+        </tr>
+        <tr data-type="securities" data-juris="intl" data-loss="150">
+          <td>2020</td><td><strong>Wirecard AG</strong></td><td>Fintech</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>UK / Europe</td>
+          <td>$150m+</td><td>€1.9bn in cash that "didn't exist"; CEO Markus Braun arrested; auditors EY sued; German D&amp;O and international securities claims</td>
+        </tr>
+        <tr data-type="conduct" data-juris="uk" data-loss="450">
+          <td>2022</td><td><strong>BT Group (Italian Accounting Fraud)</strong></td><td>Telecom</td>
+          <td><span class="type-tag t-securities">Securities</span></td><td>UK</td>
+          <td>$450m+</td><td>Improper accounting in Italian business unit hidden from UK board for years; £530m writedown; UK shareholder class action settled</td>
+        </tr>
+        <tr data-type="regulatory" data-juris="aus" data-loss="120">
+          <td>2024</td><td><strong>Star Entertainment Group (Australia)</strong></td><td>Gaming</td>
+          <td><span class="type-tag t-regulatory">Regulatory</span></td><td>Australia</td>
+          <td>$120m+</td><td>AUSTRAC fines + regulatory review; board failures in AML compliance; NSW/VIC casino licence reviews; director personal claims ongoing</td>
+        </tr>
+        <tr data-type="securities" data-juris="us" data-loss="60">
+          <td>2024</td><td><strong>SolarWinds / CISA (Cyber D&amp;O)</strong></td><td>Technology</td>
+          <td><span class="type-tag t-regulatory">Regulatory</span></td><td>USA</td>
+          <td>Ongoing</td><td>SEC sued SolarWinds CISO Timothy Brown personally for fraud in cybersecurity disclosures pre-SUNBURST breach; landmark cyber D&amp;O case</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Directors &amp; Officers (D1 · D2 · D3 · D4 · D5 · DA · DB · DD)</span> — Module 03: Loss Database</p>
+  <p style="margin-top:6px;font-size:0.78rem;">Settlement figures are final where available; "Ongoing" = active litigation as of April 2026. All figures USD unless stated.</p>
+</footer>
+
+<script>
+function applyFilters() {
+  const type = document.getElementById('f-type').value;
+  const juris = document.getElementById('f-juris').value;
+  const loss = parseInt(document.getElementById('f-loss').value) || 0;
+  const rows = document.querySelectorAll('#db-body tr');
+  let count = 0;
+  rows.forEach(r => {
+    const rType = r.dataset.type || '';
+    const rJuris = r.dataset.juris || '';
+    const rLoss = parseInt(r.dataset.loss) || 0;
+    const ok = (type === 'all' || rType === type) &&
+               (juris === 'all' || rJuris === juris) &&
+               (rLoss >= loss);
+    r.classList.toggle('hidden', !ok);
+    if (ok) count++;
+  });
+  document.getElementById('result-count').textContent = count + ' records shown';
+}
+function clearFilters() {
+  document.getElementById('f-type').value = 'all';
+  document.getElementById('f-juris').value = 'all';
+  document.getElementById('f-loss').value = '0';
+  applyFilters();
+}
+['f-type','f-juris','f-loss'].forEach(id => {
+  document.getElementById(id).addEventListener('change', applyFilters);
+});
+let sortDir = {};
+function sortTable(col) {
+  const tbody = document.getElementById('db-body');
+  const rows = Array.from(tbody.querySelectorAll('tr:not(.hidden)'));
+  sortDir[col] = !sortDir[col];
+  rows.sort((a, b) => {
+    const av = a.cells[col]?.textContent.trim() || '';
+    const bv = b.cells[col]?.textContent.trim() || '';
+    const an = parseFloat(av.replace(/[^0-9.]/g,''));
+    const bn = parseFloat(bv.replace(/[^0-9.]/g,''));
+    if (!isNaN(an) && !isNaN(bn)) return sortDir[col] ? an - bn : bn - an;
+    return sortDir[col] ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+applyFilters();
+</script>
+</body>
+</html>

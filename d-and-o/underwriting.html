@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&amp;O Underwriting Methodology – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--do:#7b1a1a;--do-dark:#4e0d0d;--do-light:#fdf0f0;--accent:#c8a84b;--purple:#4a148c;--teal:#00695c;--light:#f8f4f4;--text:#1e2d3d;--muted:#6b7c93;--border:#e0d0d0;--green:#2a7a3a;--blue:#1565c0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#7b1a1a 55%,#4a148c 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#f0c8c8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--do-dark); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .breadcrumb { font-size:0.8rem; color:#f0c8c8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:20px 0 30px; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; }
+    .factor-card .icon { font-size:1.4rem; margin-bottom:8px; }
+    .factor-card h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .factor-card p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.5; }
+    .factor-card .impact { display:inline-block; margin-top:8px; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:10px; }
+    .imp-high { background:#fce8e8; color:#8b1a1a; }
+    .imp-med { background:#fff3cd; color:#7a4500; }
+    .imp-low { background:#e8f5e9; color:#2a7a3a; }
+
+    .cov-table { width:100%; border-collapse:collapse; margin:20px 0 30px; font-size:0.88rem; }
+    .cov-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .cov-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .cov-table tr:nth-child(even) td { background:#fafafa; }
+
+    .formula-box { background:var(--navy); color:#fff; border-radius:10px; padding:28px 32px; margin:24px 0; font-family:monospace; }
+    .formula-box h4 { color:var(--accent); font-size:0.88rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; font-family:'Segoe UI',Arial,sans-serif; }
+    .formula-line { font-size:0.92rem; color:#f0d0d0; margin:6px 0; }
+    .formula-line.result { color:var(--accent); font-size:1rem; margin-top:14px; padding-top:14px; border-top:1px solid #4e2020; }
+    .formula-line span { color:#81d4fa; }
+    .formula-line em { color:#ce93d8; font-style:normal; }
+
+    .example-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin:24px 0 36px; }
+    @media(max-width:720px){.example-grid{grid-template-columns:1fr;}}
+    .example-card { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    .example-header { background:var(--do-dark); color:#fff; padding:16px 20px; }
+    .example-header h4 { font-size:0.92rem; font-weight:700; }
+    .example-header p { font-size:0.78rem; color:#f0c0c0; margin-top:4px; }
+    .example-body { padding:20px; }
+    .example-row { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px dashed var(--border); font-size:0.84rem; }
+    .example-row:last-child { border-bottom:none; }
+    .example-row .item { color:var(--muted); }
+    .example-row .val { font-weight:600; color:var(--navy); }
+    .example-row.total .item { color:var(--navy); font-weight:700; font-size:0.9rem; }
+    .example-row.total .val { color:var(--do); font-size:1.05rem; }
+    .example-section { font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--do); font-weight:700; padding:10px 0 4px; }
+
+    .exclusions-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; margin:20px 0 30px; }
+    .excl-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; border-left:4px solid var(--do); }
+    .excl-card h4 { font-size:0.85rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .excl-card p { font-size:0.78rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:20px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#d0c0c0; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#9a8a8a; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Directors &amp; Officers</a> › Underwriting</div>
+  <div class="tag">Module 04 — Underwriting Methodology</div>
+  <h1>D&amp;O Underwriting Methodology</h1>
+  <p>D&amp;O underwriting assesses the probability that directors or officers will face covered claims — and the severity if they do. The key variables are jurisdiction (US-listed = highest), corporate governance quality, financial health, industry sector, and the specific structure of the coverage being purchased. Side A-only towers, public vs private, financial institutions and SPAC risks each require distinct underwriting approaches.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+
+  <h2>D&amp;O Rating Factors</h2>
+  <div class="factor-grid">
+    <div class="factor-card">
+      <div class="icon">🌐</div>
+      <h4>US Listing / Exchange Nexus</h4>
+      <p>Companies listed on NYSE, NASDAQ or with significant US investor base face the full weight of US securities class action exposure under Section 10(b)/Rule 10b-5. D1 (US public) risks price at 3–10× comparable D3 (non-US public) risks for the same revenue.</p>
+      <span class="impact imp-high">Highest Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">📊</div>
+      <h4>Market Capitalisation / Revenue</h4>
+      <p>Larger companies face larger securities claims (more shareholders = larger class, larger potential damages). Market-cap-based D&O limit adequacy benchmarks: 1–3% of market cap is a typical minimum for large-cap public companies.</p>
+      <span class="impact imp-high">Highest Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🏭</div>
+      <h4>Industry Sector</h4>
+      <p>Financial services (D5), healthcare, technology and emerging sectors (crypto, EV) attract highest base rates. Mining, energy and pharmaceutical companies face elevated disclosure liability due to complex reserve/trial data reporting obligations.</p>
+      <span class="impact imp-high">High Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">📋</div>
+      <h4>Corporate Governance Quality</h4>
+      <p>Board composition (% independent directors), audit committee quality, separation of CEO/Chair, existence of a lead independent director, say-on-pay approval rates. ISS and Glass Lewis governance scores are proxies used by underwriters.</p>
+      <span class="impact imp-high">High Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">💰</div>
+      <h4>Financial Health &amp; Leverage</h4>
+      <p>Companies in financial distress face dramatically elevated D&O exposure — creditor claims (D2/D4), SEC accounting investigations, and "storm warnings" securities claims. Loss history, earnings restatements, going-concern qualifications are red flags.</p>
+      <span class="impact imp-high">High Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">📈</div>
+      <h4>Share Price Volatility / Beta</h4>
+      <p>High beta stocks attract plaintiff law firms monitoring for price drops correlated with adverse news. A stock that falls 20%+ in a single day on disappointing earnings or regulatory news is typically reviewed for securities class action potential within 48 hours.</p>
+      <span class="impact imp-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🔍</div>
+      <h4>Prior Claims &amp; Litigation History</h4>
+      <p>5-year D&O claims history including SEC inquiries, derivative demands, EEOC charges and prior securities class actions. A company with recent class action experience is statistically more likely to face another. Specific prior acts are critical to evaluate.</p>
+      <span class="impact imp-high">High Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">📝</div>
+      <h4>Accounting Quality / Auditor</h4>
+      <p>Big 4 auditor vs. smaller firm; restatement history; material weaknesses in internal controls (SOX 404); complex accounting areas (revenue recognition, goodwill impairment, off-balance-sheet structures). Auditor changes without explanation are a red flag.</p>
+      <span class="impact imp-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🔄</div>
+      <h4>M&amp;A Activity / Transactions</h4>
+      <p>Mergers generate go-shop litigation (shareholders claim inadequate sale price). LBOs generate creditor claims. SPAC mergers bring forward projections liability. Spin-offs and restructurings create fiduciary duty exposure. Run-off coverage is always required at closing.</p>
+      <span class="impact imp-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🌿</div>
+      <h4>ESG &amp; Disclosure Profile</h4>
+      <p>Scope of voluntary ESG commitments, climate disclosure accuracy (TCFD/SEC climate rules), DEI programme disclosures. Companies making expansive ESG statements face "greenwashing" securities claims if performance falls short. Rising risk factor 2022–2026.</p>
+      <span class="impact imp-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">🔐</div>
+      <h4>Cyber Governance</h4>
+      <p>Post-SEC 2023 cyber rules: board cyber oversight, CISO governance structure, material incident disclosure history. Companies with prior cyber breaches that were not disclosed in SEC filings face securities fraud exposure. SolarWinds CISO prosecution set a landmark.</p>
+      <span class="impact imp-med">Medium Impact</span>
+    </div>
+    <div class="factor-card">
+      <div class="icon">⚖️</div>
+      <h4>Regulatory Investigation History</h4>
+      <p>Active SEC, DOJ, FCA, FINRA investigations dramatically increase D&O likelihood and severity. Known regulatory investigations must be disclosed on D&O applications; non-disclosure is grounds for rescission. Regulatory D&O claims are often larger than securities class actions.</p>
+      <span class="impact imp-high">High Impact</span>
+    </div>
+  </div>
+
+  <h2>D&amp;O Coverage Structure by Code</h2>
+  <table class="cov-table">
+    <thead><tr><th>Code</th><th>Side A</th><th>Side B</th><th>Side C (Entity)</th><th>EPL</th><th>Limit Range</th></tr></thead>
+    <tbody>
+      <tr><td><strong>D1</strong> US Public</td><td>✅ Full</td><td>✅ Full</td><td>✅ Securities entity cover</td><td>Optional DA add-on</td><td>$25m–$1bn+</td></tr>
+      <tr><td><strong>D2</strong> US Private/NFP</td><td>✅ Full</td><td>✅ Full</td><td>❌ No SEC exposure</td><td>Optional DA add-on</td><td>$1m–$100m</td></tr>
+      <tr><td><strong>D3</strong> Non-US Public</td><td>✅ Full</td><td>✅ Full</td><td>✅ Where applicable (LSE, ASX)</td><td>Optional DB add-on</td><td>$5m–$500m</td></tr>
+      <tr><td><strong>D4</strong> Non-US Private</td><td>✅ Full</td><td>✅ Full</td><td>❌ Not applicable</td><td>Optional DB add-on</td><td>€1m–€50m</td></tr>
+      <tr><td><strong>D5</strong> Financial Institutions</td><td>✅ Full + regulatory defence</td><td>✅ Full</td><td>✅ Where listed</td><td>Optional add-on</td><td>$25m–$500m+</td></tr>
+      <tr><td><strong>DA</strong> US EPL</td><td>N/A — entity coverage</td><td>N/A</td><td>N/A</td><td>✅ Standalone EPL</td><td>$1m–$50m</td></tr>
+      <tr><td><strong>DB</strong> Non-US EPL</td><td>N/A — entity coverage</td><td>N/A</td><td>N/A</td><td>✅ Standalone EPL</td><td>£500k–£10m</td></tr>
+      <tr><td><strong>DD</strong> Fiduciary</td><td>N/A — trustee coverage</td><td>N/A</td><td>N/A</td><td>N/A</td><td>$1m–$100m</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Key D&amp;O Policy Exclusions</h2>
+  <div class="exclusions-grid">
+    <div class="excl-card">
+      <h4>Insured vs. Insured</h4>
+      <p>Excludes claims by the company against its own directors/officers — prevents collusory insider claims. Critical exception: derivative suits brought by shareholders on behalf of the company are typically covered.</p>
+    </div>
+    <div class="excl-card">
+      <h4>Personal Profit / Illegal Remuneration</h4>
+      <p>Excludes claims arising from gaining a personal profit or advantage to which the insured was not legally entitled. Conduct exclusions: typically apply only after a final court adjudication — defence costs are paid pending determination.</p>
+    </div>
+    <div class="excl-card">
+      <h4>Fraud / Dishonesty</h4>
+      <p>Excludes claims arising from fraudulent, criminal or deliberately wrongful acts. Like personal profit, typically adjudicated — the insurer pays defence costs until conviction or final adverse finding.</p>
+    </div>
+    <div class="excl-card">
+      <h4>Bodily Injury / Property Damage</h4>
+      <p>D&O covers financial loss to claimants, not personal injury. BI/PD claims are excluded — covered under GL/products liability. Cyber BI to the company itself not covered under D&O (covered under CY).</p>
+    </div>
+    <div class="excl-card">
+      <h4>Prior / Pending Litigation</h4>
+      <p>Claims arising from litigation filed before the retroactive date, or matters known at inception. All pending claims and circumstances known at binding must be disclosed on the application.</p>
+    </div>
+    <div class="excl-card">
+      <h4>ERISA (in D1/D2 — covered under DD)</h4>
+      <p>ERISA breach of fiduciary duty claims are typically excluded from the main D&O policy and covered under a separate Fiduciary Liability (DD) policy. Avoid gap at inception by purchasing both simultaneously.</p>
+    </div>
+    <div class="excl-card">
+      <h4>Professional Services (in D1 — covered under Tech PI/CZ)</h4>
+      <p>Claims arising from performance of professional services for third parties excluded from D&O. Technology companies need CZ/Tech E&O alongside D1 to cover both D&O and professional liability exposures.</p>
+    </div>
+    <div class="excl-card">
+      <h4>Pollution / Environmental</h4>
+      <p>Environmental liability excluded from D&O. Note: shareholder securities claims alleging directors concealed environmental liabilities are D&O claims — the underlying environmental clean-up costs are excluded, but the securities fraud tail is covered.</p>
+    </div>
+  </div>
+
+  <h2>D&amp;O Premium Rating Methodology</h2>
+  <p>D&amp;O is rated on a rate-per-million-dollars-of-limit basis, adjusted for risk factors. Unlike property (rate per £100 TIV), D&amp;O pricing reflects the probability of a claim reaching or exceeding the attachment point. A $25m primary layer is priced very differently from an $25m excess of $100m layer — the primary layer is the most expensive per million of limit.</p>
+
+  <div class="formula-box">
+    <h4>D&amp;O Annual Premium — Indicative Structure</h4>
+    <div class="formula-line"><span>Base Rate</span> = f( Revenue / Market Cap, Jurisdiction, Sector )</div>
+    <div class="formula-line"><span>Risk-Adjusted Rate</span> = Base Rate × <em>Governance Modifier</em> × <em>Claims History Factor</em> × <em>Market Cycle Factor</em></div>
+    <div class="formula-line"><span>Layer Premium</span> = Limit (£m) × Risk-Adjusted Rate × <em>Layer Factor</em> (primary 1.0×; excess layers 0.3–0.7×)</div>
+    <div class="formula-line result"><span>Example:</span> $25m primary D1 US public co. × $150/m rate = <em>$3,750 per $1m = $93,750 annual</em></div>
+  </div>
+
+  <h2>Worked Premium Examples</h2>
+  <div class="example-grid">
+    <div class="example-card">
+      <div class="example-header">
+        <h4>Example A: UK FTSE 250 Industrial Company (D3)</h4>
+        <p>£800m market cap · LSE listed · No US nexus · Clean governance · Manufacturing sector</p>
+      </div>
+      <div class="example-body">
+        <div class="example-section">Risk Profile</div>
+        <div class="example-row"><span class="item">Code</span><span class="val">D3 (Non-US Public)</span></div>
+        <div class="example-row"><span class="item">Market Cap</span><span class="val">£800m</span></div>
+        <div class="example-row"><span class="item">Revenue</span><span class="val">£350m</span></div>
+        <div class="example-row"><span class="item">Listing</span><span class="val">LSE Main Market only</span></div>
+        <div class="example-row"><span class="item">Governance</span><span class="val">Strong (8/10 independent board; Big 4 auditor)</span></div>
+        <div class="example-row"><span class="item">Prior Claims</span><span class="val">Nil (5 years)</span></div>
+        <div class="example-section">Programme Structure</div>
+        <div class="example-row"><span class="item">Layer 1 (Primary)</span><span class="val">£15m xs £nil — D3 Side A + B</span></div>
+        <div class="example-row"><span class="item">Layer 2 (Excess)</span><span class="val">£10m xs £15m</span></div>
+        <div class="example-row"><span class="item">Total Limit</span><span class="val">£25m (3.1% of market cap)</span></div>
+        <div class="example-section">Premium Calculation</div>
+        <div class="example-row"><span class="item">Primary layer rate</span><span class="val">£280/£m limit</span></div>
+        <div class="example-row"><span class="item">Governance credit</span><span class="val">−10%</span></div>
+        <div class="example-row"><span class="item">Primary premium</span><span class="val">£15m × £252/m = £3,780</span></div>
+        <div class="example-row"><span class="item">Excess layer (50% of primary rate)</span><span class="val">£10m × £140/m = £1,400</span></div>
+        <div class="example-row total"><span class="item">Total Annual Premium</span><span class="val">£5,180</span></div>
+        <div class="example-section">Conditions</div>
+        <div class="example-row"><span class="item">Retroactive Date</span><span class="val">Full prior acts (clean retro)</span></div>
+        <div class="example-row"><span class="item">Run-off</span><span class="val">6 years at 200% of annual premium</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <h4>Example B: US NASDAQ-Listed Technology Company (D1)</h4>
+        <p>$4.2bn market cap · NASDAQ listed · SaaS platform · High beta stock · One prior inquiry</p>
+      </div>
+      <div class="example-body">
+        <div class="example-section">Risk Profile</div>
+        <div class="example-row"><span class="item">Code</span><span class="val">D1 (US Public)</span></div>
+        <div class="example-row"><span class="item">Market Cap</span><span class="val">$4.2bn</span></div>
+        <div class="example-row"><span class="item">Revenue</span><span class="val">$620m</span></div>
+        <div class="example-row"><span class="item">Listing</span><span class="val">NASDAQ (full US securities exposure)</span></div>
+        <div class="example-row"><span class="item">Governance</span><span class="val">Adequate (CEO also Chair; Big 4 auditor)</span></div>
+        <div class="example-row"><span class="item">Prior Claims</span><span class="val">1 SEC informal inquiry 2022 (resolved)</span></div>
+        <div class="example-section">Programme Structure</div>
+        <div class="example-row"><span class="item">Layer 1 (Primary)</span><span class="val">$25m xs $nil — Side A + B + C</span></div>
+        <div class="example-row"><span class="item">Layer 2 (First Excess)</span><span class="val">$25m xs $25m</span></div>
+        <div class="example-row"><span class="item">Side A DIC/XS</span><span class="val">$10m excess of primary programme</span></div>
+        <div class="example-row"><span class="item">Total Limit</span><span class="val">$60m ($50m ABC + $10m Side A DIC)</span></div>
+        <div class="example-section">Premium Calculation</div>
+        <div class="example-row"><span class="item">Primary D1 rate</span><span class="val">$9,500/£m limit (US exposure loading)</span></div>
+        <div class="example-row"><span class="item">Prior inquiry loading</span><span class="val">+15%</span></div>
+        <div class="example-row"><span class="item">Primary $25m layer</span><span class="val">$25m × $10,925/m = $273,125</span></div>
+        <div class="example-row"><span class="item">$25m xs $25m (45% rate)</span><span class="val">$25m × $4,916/m = $122,900</span></div>
+        <div class="example-row"><span class="item">Side A DIC ($10m)</span><span class="val">$10m × $1,500/m = $15,000</span></div>
+        <div class="example-row total"><span class="item">Total Annual Premium</span><span class="val">$411,025</span></div>
+        <div class="example-section">Conditions</div>
+        <div class="example-row"><span class="item">Retroactive Date</span><span class="val">Company inception date</span></div>
+        <div class="example-row"><span class="item">Warranty</span><span class="val">CEO/Chair separation within 24 months</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠️ SPAC Underwriting: A Distinct Risk Class</h4>
+    <p>SPACs (Special Purpose Acquisition Companies) require separate underwriting treatment from standard D1 IPO risks. A SPAC has two distinct risk phases: <strong>Phase 1</strong> — the blank-cheque IPO period, during which investor presentations about a "target" company create forward-looking statement liability; <strong>Phase 2</strong> — the de-SPAC merger period, during which the SPAC and target combine, generating merger-related securities litigation.</p>
+    <p>Post-2022, most Lloyd's D&O underwriters require: (i) formal SPAC questionnaires disclosing the target sector and projected financials; (ii) separate pricing for Phase 1 and Phase 2; (iii) specific run-off coverage for the SPAC shell post-merger; and (iv) underwriter consent for any de-SPAC transaction. SPAC D&O limits are typically lower (50–75% of equivalent IPO limits) and premiums are 25–50% higher per $m to reflect the known litigation pattern.</p>
+  </div>
+
+  <div class="context-box">
+    <h3>The Financial Institutions D&O (D5) Distinction</h3>
+    <p>D5 risks — banks, insurers, asset managers, broker-dealers — are fundamentally different from commercial D&O for three reasons. First, they are subject to regulatory capital requirements that create a formal regulatory enforcement apparatus (PRA, FCA, OCC, FDIC, Fed, SEC, FINRA) with far more investigative resources than the SEC's corporate finance division. Second, their financial statements are complex and opaque — derivative valuations, reserve adequacy, capital ratio calculations — creating fertile ground for accounting fraud claims. Third, systemic risk: the failure of a major bank triggers cascading losses across the financial system, attracting Congressional investigations and enormous DOJ/regulatory settlements that dwarf typical corporate D&O claims.</p>
+    <p>D5 underwriters pay particular attention to: regulatory capital ratios (is the bank adequately capitalised?), credit quality (NPL ratios, loan loss provisions), the complexity and quality of the audit function, the bank's regulatory examination history (CAMELS ratings for US banks), and specific conduct risk areas (LIBOR, FX, PPI, money laundering compliance). The FDIC's aggressive use of D&O claims against failed bank directors — often pursuing directors personally for negligence in credit decisions — distinguishes D5 from all other financial lines classes.</p>
+  </div>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Directors &amp; Officers (D1 · D2 · D3 · D4 · D5 · DA · DB · DD)</span> — Module 04: Underwriting</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Premium examples are illustrative.</p>
+</footer>
+</body>
+</html>

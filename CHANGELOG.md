@@ -1,5 +1,19 @@
 # Risk Code Hub — Changelog
 
+## v1.7 — April 2026
+**Session: 14 April 2026**
+- Directors & Officers (D&O) hub complete (Lloyd's codes D1, D2, D3, D4, D5, DA, DB, DD)
+- 8 modules built: index, history, timeline, database, underwriting, rates-analysis, risk-mitigation, global-program
+- Coverage structure: Side A (personal, non-indemnified, nil SIR always), Side B (company reimbursement), Side C (entity securities, listed only), EPL (DA/DB), Fiduciary (DD), Side A DIC/XS
+- Loss database: 35 claims 2001–2024 — Enron ($2.85bn), WorldCom ($6.13bn), Tyco ($2.92bn), AIG GFC ($450m), Lehman, WaMu FDIC, BP Deepwater Horizon ($175m), VW Dieselgate (€9bn shareholder), Theranos ($926m), Boeing ($237m derivative), FTX ($8bn+), SVB 2023, Cornell ERISA excessive fee class action
+- History: 7 era blocks from Securities Acts 1933/1934 and Cuthbert Heath first Lloyd's D&O policy (1934), through S&L crisis, PSLRA 1995, Enron/WorldCom/SOX 2002, GFC/Dodd-Frank 2010, to cyber D&O, SPAC boom 2020–2021, ESG/greenwashing claims, FTX and AI governance 2022–present
+- Timeline: 16 events 2001–2024 with colour-coded dots (major/fraud/regulatory/FI/ESG/SPAC)
+- Underwriting: 12 rating factor cards; D1–DD coverage structure table; 8 key exclusions (insured vs insured, personal profit, fraud, BI/PD, prior litigation, ERISA, professional services, pollution); ROL formula; two worked examples: UK FTSE 250 Industrial D3 (£5,180 total) and US NASDAQ Tech D1 ($411,025 total with Side A DIC); SPAC warning box; FI D&O (D5) context box
+- Rates analysis: Chart.js dual-line rate index 2012–2026 (D1 crimson / D3 purple / D2 blue, 2012=100); 8-phase market cycle table; settlement size distribution chart (7 buckets <$10m to $500m+); ROE scenarios: Bull 20.1%, Base 10.6%, Bear −14.8%; long-tail reserving context (3–4 year average time to settlement)
+- Risk mitigation: 8 governance best practice cards with rate credit indicators; 6-control governance scoring table (Green/Amber/Red); securities disclosure obligations grid; EPL 5-control mitigation table; ERISA/Fiduciary excessive fee best practices; "storm warnings" doctrine box
+- Global programmes: 6-layer programme tower (SIR → primary $25m → 3 excess layers → Side A DIC $50m); 6 jurisdiction profiles (USA, UK, EU, Australia, Canada, Asia-Pacific); M&A transaction table (6 event types: acquisition, IPO, SPAC, Chapter 11, spin-off); run-off gap warning; Rio Tinto cross-jurisdiction case study (LSE+ASX dual-listed, simultaneous SEC/DOJ/FCA/ASIC action)
+- Updated hub-index.json: d-and-o status "complete"; url "d-and-o/index.html"; expanded keywords
+
 ## v1.6 — April 2026
 **Session: 10 April 2026**
 - Cyber hub complete (Lloyd's codes CY, CZ, CG, CH)

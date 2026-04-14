@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&amp;O Rates &amp; ROE Analysis – Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root { --navy:#0d2240;--do:#7b1a1a;--do-dark:#4e0d0d;--do-light:#fdf0f0;--accent:#c8a84b;--purple:#4a148c;--teal:#00695c;--light:#f8f4f4;--text:#1e2d3d;--muted:#6b7c93;--border:#e0d0d0;--green:#2a7a3a;--blue:#1565c0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#7b1a1a 55%,#4a148c 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#f0c8c8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .breadcrumb { font-size:0.8rem; color:#f0c8c8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:14px; margin:24px 0 36px; }
+    .stat-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; text-align:center; }
+    .stat-box .num { font-size:1.55rem; font-weight:800; color:var(--do); }
+    .stat-box.up .num { color:#8b1a1a; }
+    .stat-box.down .num { color:var(--green); }
+    .stat-box .label { font-size:0.74rem; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+    .chart-wrap { background:#fff; border:1px solid var(--border); border-radius:10px; padding:28px; margin:24px 0 36px; }
+    .chart-wrap h3 { font-size:1rem; font-weight:700; color:var(--navy); margin-bottom:20px; }
+    .chart-container { position:relative; height:300px; }
+
+    .phase-table { width:100%; border-collapse:collapse; margin:20px 0 30px; font-size:0.88rem; }
+    .phase-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .phase-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .phase-table tr:nth-child(even) td { background:#fafafa; }
+    .badge-hard { display:inline-block; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:10px; background:#fce8e8; color:#8b1a1a; }
+    .badge-soft { display:inline-block; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:10px; background:#e8f5e9; color:#2a7a3a; }
+    .badge-stable { display:inline-block; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:10px; background:#e8f0fe; color:#0a3d7a; }
+
+    .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:22px 0 34px; }
+    @media(max-width:600px){.roe-grid{grid-template-columns:1fr;}}
+    .roe-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px; text-align:center; }
+    .roe-card h4 { font-size:0.82rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:10px; }
+    .roe-card .roe-num { font-size:2rem; font-weight:800; margin-bottom:6px; }
+    .roe-card.bull .roe-num { color:var(--green); }
+    .roe-card.base .roe-num { color:var(--blue); }
+    .roe-card.bear .roe-num { color:#c62828; }
+    .roe-card p { font-size:0.78rem; color:var(--muted); line-height:1.5; }
+
+    .roe-table { width:100%; border-collapse:collapse; margin:20px 0 30px; font-size:0.88rem; }
+    .roe-table th { background:var(--do-dark); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .roe-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+    .roe-table tr:nth-child(even) td { background:#fafafa; }
+    .pos { color:var(--green); font-weight:700; }
+    .neg { color:#c62828; font-weight:700; }
+
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#d0c0c0; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#9a8a8a; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Directors &amp; Officers</a> › Rates Analysis</div>
+  <div class="tag">Module 05 — Rates &amp; ROE Analysis</div>
+  <h1>D&amp;O Rates &amp; ROE Analysis</h1>
+  <p>D&amp;O rates for US public companies tripled between 2019 and 2021 — the most severe hardening in the class's history — driven by the SPAC explosion, COVID-related claims and ESG litigation. The 2022–2024 market has softened materially, particularly on non-US and private company risks, while US public company rates remain elevated by historical standards.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-box up"><div class="num">+320%</div><div class="label">Peak D1 US public rate increase 2017–2021 (cumulative)</div></div>
+    <div class="stat-box down"><div class="num">−25%</div><div class="label">Average US D1 rate change 2022–2024 (from peak)</div></div>
+    <div class="stat-box"><div class="num">~200</div><div class="label">US federal securities class actions filed per year (2022–2024)</div></div>
+    <div class="stat-box"><div class="num">$1.1bn</div><div class="label">Average annual D&O industry settlement payout (US, 2018–2022)</div></div>
+    <div class="stat-box"><div class="num">55–70%</div><div class="label">Current D1 US public combined ratio estimate (2023–2024)</div></div>
+    <div class="stat-box"><div class="num">~120%</div><div class="label">D1 combined ratio at peak losses (2019–2021)</div></div>
+  </div>
+
+  <h2>D&amp;O Rate Index 2012–2026</h2>
+  <p>The chart tracks rate indices for US public (D1), non-US public (D3) and US private (D2) risks, indexed to 2012 = 100. D1 experienced by far the most severe hardening — the SPAC wave and COVID securities litigation combined with an already-tightening market to produce cumulative rate increases of over 300% on some programmes from 2017 to 2021.</p>
+
+  <div class="chart-wrap">
+    <h3>D&amp;O Rate Index by Code Segment: 2012–2026 (2012 = 100)</h3>
+    <div class="chart-container">
+      <canvas id="rateChart"></canvas>
+    </div>
+  </div>
+
+  <h2>Market Phase Analysis: 2012–2026</h2>
+  <table class="phase-table">
+    <thead><tr><th>Period</th><th>Phase</th><th>Rate Movement</th><th>Key Driver</th><th>Market Conditions</th></tr></thead>
+    <tbody>
+      <tr><td>2012–2017</td><td><span class="badge-soft">Soft</span></td><td>−5% to flat</td><td>Low loss environment; abundant capacity; post-GFC stability</td><td>Combined ratios 65–80%; competitive market; new Lloyd's entrants</td></tr>
+      <tr><td>2017–2018</td><td><span class="badge-stable">Early Turn</span></td><td>Flat to +10%</td><td>Rising securities class action frequency; #MeToo EPL claims</td><td>Underwriters beginning to push back on large US public risks</td></tr>
+      <tr><td>2018–2019</td><td><span class="badge-hard">Hardening</span></td><td>+15% to +50%</td><td>Cyber D&O claims (Equifax), increased securities litigation frequency; SPAC early wave</td><td>Retentions increased; primary layer capacity constrained</td></tr>
+      <tr><td>2019–2020</td><td><span class="badge-hard">Hard</span></td><td>+50% to +150%</td><td>COVID securities litigation wave; SPAC explosion; Boeing; WeWork fallout</td><td>Combined ratios 100–120% in peak years; market hardening accelerates rapidly</td></tr>
+      <tr><td>2020–2021</td><td><span class="badge-hard">Peak Hard</span></td><td>+100% to +320% cumulative</td><td>SPAC peak (600+ launched 2021); ESG claims rising; FTX early warning signs</td><td>D1 primary rates tripled from 2017 levels; Lloyd's aggregate management focus</td></tr>
+      <tr><td>2021–2022</td><td><span class="badge-stable">Plateau</span></td><td>+10% to +25%</td><td>SPAC losses realising; rate adequacy debate; new capacity returning</td><td>Combined ratios improving to 80–90%; market still pricing for uncertainty</td></tr>
+      <tr><td>2022–2023</td><td><span class="badge-soft">Softening</span></td><td>−10% to −30%</td><td>D1 adequacy broadly achieved; capacity returning; SPAC pipeline draining</td><td>D2/D3/D4 soft; D1 declining from peak but still above 2017 levels</td></tr>
+      <tr><td>2023–2026</td><td><span class="badge-soft">Continued Soft</span></td><td>−5% to −20%</td><td>Competitive pressure; new Lloyd's financial lines capacity; SVB/FTX tail still developing</td><td>D1 ~150–200% above 2017 base (normalised but not back to prior lows); AI risk uncertainty</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Settlement Size Distribution</h2>
+  <div class="chart-wrap">
+    <h3>US D&O Securities Class Action Settlement Distribution (2018–2023 Avg)</h3>
+    <div class="chart-container">
+      <canvas id="settleChart"></canvas>
+    </div>
+  </div>
+
+  <h2>Return on Equity Scenarios</h2>
+  <p>The ROE model below uses a £100m D&O portfolio (mix of D1/D2/D3/D4/D5). D&O capital requirements at Lloyd's are approximately 35–40% of net premium (lower than cyber, reflecting more predictable frequency). The key variable is large loss severity — a single $300m+ securities fraud settlement can consume multiple years of underwriting profit for a mid-size portfolio.</p>
+
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <h4>Bull Scenario</h4>
+      <div class="roe-num">20.1%</div>
+      <p>Below-average securities class action frequency; no major corporate fraud; SPAC pipeline fully drained; AI claims in early stages only.</p>
+    </div>
+    <div class="roe-card base">
+      <h4>Base Scenario</h4>
+      <div class="roe-num">10.6%</div>
+      <p>Normalised US securities litigation (~200 filings/year); one large D5 FI claim; ESG claims developing but below $100m each. 2024 market conditions.</p>
+    </div>
+    <div class="roe-card bear">
+      <h4>Bear Scenario</h4>
+      <div class="roe-num">−14.8%</div>
+      <p>Recession triggers wave of insolvency/creditor D&O claims; major AI fraud revelation; FI crisis (SVB-scale × 3); SPAC litigation tail reopens.</p>
+    </div>
+  </div>
+
+  <table class="roe-table">
+    <thead><tr><th>Component</th><th>Bull (£m)</th><th>Base (£m)</th><th>Bear (£m)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Gross Written Premium</strong></td><td>100.0</td><td>100.0</td><td>100.0</td></tr>
+      <tr><td>Reinsurance Cost</td><td>(10.0)</td><td>(12.0)</td><td>(16.0)</td></tr>
+      <tr><td><strong>Net Earned Premium</strong></td><td>90.0</td><td>88.0</td><td>84.0</td></tr>
+      <tr><td>Attritional Losses (EPL, small D2/D4, derivative)</td><td class="neg">(18.0)</td><td class="neg">(26.4)</td><td class="neg">(42.0)</td></tr>
+      <tr><td>Large Loss Reserve (securities class actions $50m–$200m)</td><td class="neg">(9.0)</td><td class="neg">(18.0)</td><td class="neg">(33.6)</td></tr>
+      <tr><td>Catastrophic Reserve (fraud / FI collapse)</td><td class="neg">(0)</td><td class="neg">(5.3)</td><td class="neg">(16.8)</td></tr>
+      <tr><td><strong>Net Loss Ratio</strong></td><td><strong>30%</strong></td><td><strong>56.5%</strong></td><td><strong>110%</strong></td></tr>
+      <tr><td>Acquisition Costs (20%)</td><td class="neg">(20.0)</td><td class="neg">(20.0)</td><td class="neg">(20.0)</td></tr>
+      <tr><td>Management Expenses (12%)</td><td class="neg">(12.0)</td><td class="neg">(12.0)</td><td class="neg">(12.0)</td></tr>
+      <tr><td><strong>Net Combined Ratio</strong></td><td class="pos"><strong>62%</strong></td><td class="pos"><strong>88.5%</strong></td><td class="neg"><strong>142%</strong></td></tr>
+      <tr><td>Underwriting Profit / (Loss)</td><td class="pos">+34.2</td><td class="pos">+10.1</td><td class="neg">(35.6)</td></tr>
+      <tr><td>Investment Income (2.5% on £38m capital)</td><td class="pos">+0.95</td><td class="pos">+0.95</td><td class="pos">+0.95</td></tr>
+      <tr><td><strong>Pre-Tax Profit / (Loss)</strong></td><td class="pos"><strong>+35.15</strong></td><td class="pos"><strong>+11.05</strong></td><td class="neg"><strong>(34.65)</strong></td></tr>
+      <tr><td>Capital Base (38% of GWP)</td><td>38.0</td><td>38.0</td><td>38.0</td></tr>
+      <tr><td style="font-size:1rem;"><strong>Return on Equity</strong></td><td class="pos" style="font-size:1rem;"><strong>+20.1%</strong></td><td class="pos" style="font-size:1rem;"><strong>+10.6%</strong></td><td class="neg" style="font-size:1rem;"><strong>−14.8%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="context-box">
+    <h3>The Long Tail Problem: Why D&O Reserving Is So Difficult</h3>
+    <p>D&O claims are notoriously slow to develop. A securities class action filed in 2024 may not settle until 2028–2030. Regulatory investigations filed in 2022 may not produce final orders until 2026. The average time from filing to settlement for US securities class actions is approximately 3–4 years; for DOJ/SEC enforcement actions it can be 5–8 years. This means that a D&O underwriter's 2020 portfolio is still developing in 2025.</p>
+    <p>The long tail creates two structural problems. First, reserving: initial IBNR reserves set at policy expiry may be significantly understated — a phenomenon known as "reserve development." Lloyd's syndicates that wrote D1 business in 2019–2020 were still taking adverse development on those years in 2023–2024 as SPAC-related claims settled. Second, investment income: the long claims tail means premium funds are invested for longer, providing a timing benefit that partially offsets the reserving uncertainty.</p>
+    <p>The most sophisticated D&O underwriters maintain a "claims development triangle" showing settlement patterns by year of account, helping calibrate IBNR reserves against actual historical development. This is standard actuarial practice for long-tail casualty lines but requires years of data accumulation to be reliable — making it particularly difficult for new D&O entrants to price accurately.</p>
+  </div>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Directors &amp; Officers (D1 · D2 · D3 · D4 · D5 · DA · DB · DD)</span> — Module 05: Rates &amp; ROE</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Rate data is indicative market estimates.</p>
+</footer>
+<script>
+const rateCtx = document.getElementById('rateChart').getContext('2d');
+const years = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025e','2026e'];
+new Chart(rateCtx, {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'D1 US Public Company', data: [100,98,95,92,88,86,100,140,220,340,380,295,250,235,225], borderColor:'#7b1a1a', backgroundColor:'rgba(123,26,26,0.07)', borderWidth:2.5, tension:0.3, pointRadius:4, fill:true },
+      { label: 'D3 Non-US Public', data: [100,99,97,95,93,92,95,105,125,160,165,140,120,112,108], borderColor:'#4a148c', backgroundColor:'rgba(74,20,140,0.06)', borderWidth:2, tension:0.3, pointRadius:4, borderDash:[5,4], fill:true },
+      { label: 'D2 US Private / NFP', data: [100,100,98,97,95,94,96,108,130,165,170,148,125,115,110], borderColor:'#1565c0', backgroundColor:'rgba(21,101,192,0.05)', borderWidth:2, tension:0.3, pointRadius:4, borderDash:[3,3] }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{position:'bottom',labels:{font:{size:11}}}, tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y} (index 2012=100)`}} },
+    scales: { y:{beginAtZero:false,min:80,title:{display:true,text:'Rate Index (2012 = 100)',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}, x:{grid:{display:false}} }
+  }
+});
+const settleCtx = document.getElementById('settleChart').getContext('2d');
+new Chart(settleCtx, {
+  type: 'bar',
+  data: {
+    labels: ['< $10m','$10–25m','$25–50m','$50–100m','$100–250m','$250–500m','$500m+'],
+    datasets: [{
+      label: 'Number of Settlements',
+      data: [38, 42, 28, 18, 12, 5, 3],
+      backgroundColor: ['rgba(200,168,75,0.7)','rgba(123,26,26,0.6)','rgba(123,26,26,0.7)','rgba(123,26,26,0.8)','rgba(74,20,140,0.75)','rgba(74,20,140,0.85)','rgba(74,20,140,0.95)'],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y} settlements in this range (annual avg.)`}} },
+    scales: { y:{title:{display:true,text:'Annual Average (approx.)',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}, x:{grid:{display:false}} }
+  }
+});
+</script>
+</body>
+</html>

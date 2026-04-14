@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&amp;O Loss Database – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--do:#7b1a1a;--do-dark:#4e0d0d;--do-light:#fdf0f0;--accent:#c8a84b;--purple:#4a148c;--teal:#00695c;--light:#f8f4f4;--text:#1e2d3d;--muted:#6b7c93;--border:#e0d0d0;--green:#2a7a3a;--blue:#1565c0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#7b1a1a 55%,#4a148c 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#f0c8c8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:0 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .breadcrumb { font-size:0.8rem; color:#f0c8c8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+
+    .filter-bar { display:flex; gap:12px; flex-wrap:wrap; margin:24px 0 20px; align-items:flex-end; }
+    .filter-bar label { display:flex; flex-direction:column; gap:4px; font-size:0.78rem; font-weight:700; color:var(--navy); text-transform:uppercase; letter-spacing:1px; }
+    .filter-bar select { padding:8px 14px; border:1px solid var(--border); border-radius:6px; font-size:0.85rem; background:#fff; color:var(--navy); cursor:pointer; min-width:160px; }
+    .filter-bar button { padding:8px 18px; background:var(--do); color:#fff; border:none; border-radius:6px; font-size:0.85rem; font-weight:600; cursor:pointer; align-self:flex-end; }
+    #results-count { font-size:0.82rem; color:var(--muted); margin-bottom:14px; }
+
+    .db-table { width:100%; border-collapse:collapse; font-size:0.84rem; }
+    .db-table th { background:var(--navy); color:#fff; padding:10px 12px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; cursor:pointer; user-select:none; white-space:nowrap; }
+    .db-table th:hover { background:#1a3a60; }
+    .db-table td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .db-table tr:nth-child(even) td { background:#fafafa; }
+    .db-table tr:hover td { background:#f5eaea; }
+    .db-table tr.hidden { display:none; }
+
+    .type-tag { display:inline-block; font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:8px; white-space:nowrap; }
+    .t-fraud { background:#f3e5f5; color:var(--purple); }
+    .t-securities { background:#fce8e8; color:#c62828; }
+    .t-regulatory { background:#e3f0ff; color:var(--blue); }
+    .t-fi { background:#fff3e0; color:#e65100; }
+    .t-esg { background:#e8f5e9; color:var(--green); }
+    .t-epl { background:#e0f2f1; color:var(--teal); }
+    .t-spac { background:#fffde7; color:#7a5c00; }
+    .t-fiduciary { background:#f8f0ff; color:#6a0dad; }
+
+    .loss-high { color:#c62828; font-weight:700; }
+    .loss-med { color:#b8630a; font-weight:600; }
+    .loss-low { color:var(--muted); }
+
+    footer { background:var(--navy); color:#9a8a8a; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;} .db-table { font-size:0.76rem; }}
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Directors &amp; Officers</a> › Loss Database</div>
+  <div class="tag">Module 03 — Loss Database</div>
+  <h1>D&amp;O Claims Database</h1>
+  <p>35 major D&amp;O, EPL and Fiduciary liability claims from 2001 to 2024. Filter by claim type, sector, or minimum settlement value. Figures represent D&amp;O insurance settlements or total damages where insurance data is unavailable.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+
+  <h2>Searchable Claims Database</h2>
+  <div class="filter-bar">
+    <label>Claim Type
+      <select id="f-type">
+        <option value="">All Types</option>
+        <option value="securities">Securities Class Action</option>
+        <option value="fraud">Corporate Fraud</option>
+        <option value="regulatory">Regulatory Enforcement</option>
+        <option value="fi">Financial Institution D&O</option>
+        <option value="esg">ESG / Governance</option>
+        <option value="epl">Employment Practices (EPL)</option>
+        <option value="spac">SPAC / IPO</option>
+        <option value="fiduciary">Fiduciary Liability</option>
+      </select>
+    </label>
+    <label>Sector
+      <select id="f-sector">
+        <option value="">All Sectors</option>
+        <option value="energy">Energy</option>
+        <option value="financial">Financial Services</option>
+        <option value="technology">Technology</option>
+        <option value="healthcare">Healthcare</option>
+        <option value="industrial">Industrial / Manufacturing</option>
+        <option value="consumer">Consumer / Retail</option>
+        <option value="crypto">Crypto / Fintech</option>
+      </select>
+    </label>
+    <label>Min Settlement
+      <select id="f-loss">
+        <option value="0">Any Amount</option>
+        <option value="50">$50m+</option>
+        <option value="100">$100m+</option>
+        <option value="500">$500m+</option>
+      </select>
+    </label>
+    <button onclick="resetFilters()">Reset</button>
+  </div>
+  <div id="results-count"></div>
+
+  <table class="db-table" id="db">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Year ↕</th>
+        <th onclick="sortTable(1)">Company</th>
+        <th>Type</th>
+        <th onclick="sortTable(3)">Sector ↕</th>
+        <th>Settlement / Loss</th>
+        <th>Key Allegation</th>
+      </tr>
+    </thead>
+    <tbody id="db-body">
+      <tr data-type="fraud" data-sector="energy" data-loss="300"><td>2001</td><td><strong>Enron Corporation</strong></td><td><span class="type-tag t-fraud">Corporate Fraud</span></td><td>Energy</td><td class="loss-high">$300m+ D&O</td><td>Off-balance-sheet SPV accounting fraud; CEO Skilling, CFO Fastow convicted</td></tr>
+      <tr data-type="fraud" data-sector="technology" data-loss="50"><td>2002</td><td><strong>WorldCom / MCI</strong></td><td><span class="type-tag t-fraud">Corporate Fraud</span></td><td>Telecoms</td><td class="loss-med">~$50m D&O</td><td>$11bn accounting fraud; CEO Ebbers sentenced to 25 years; largest bankruptcy at time</td></tr>
+      <tr data-type="fraud" data-sector="industrial" data-loss="50"><td>2002</td><td><strong>Tyco International</strong></td><td><span class="type-tag t-fraud">Corporate Fraud</span></td><td>Industrial</td><td class="loss-med">~$50m D&O</td><td>CEO Kozlowski looted $600m; D&O insurers paid in settlement alongside $2.92bn restitution</td></tr>
+      <tr data-type="regulatory" data-sector="financial" data-loss="100"><td>2004</td><td><strong>Marsh &amp; McLennan</strong></td><td><span class="type-tag t-regulatory">Regulatory</span></td><td>Financial Services</td><td class="loss-med">$850m total settlement</td><td>Bid-rigging and contingent commissions; NY AG Spitzer investigation; CEO Greenberg resigned</td></tr>
+      <tr data-type="securities" data-sector="financial" data-loss="450"><td>2005–2009</td><td><strong>AIG Financial Products</strong></td><td><span class="type-tag t-fi">FI D&O</span></td><td>Financial Services</td><td class="loss-high">~$450m D&O</td><td>$182bn government bailout; securities fraud claims; Hank Greenberg accounting fraud probe</td></tr>
+      <tr data-type="securities" data-sector="technology" data-loss="50"><td>2006</td><td><strong>Broadcom / Brocade</strong></td><td><span class="type-tag t-securities">Securities</span></td><td>Technology</td><td class="loss-med">Multiple $25–100m settlements</td><td>Stock options backdating wave; 200+ companies investigated; CEO Reyes (Brocade) convicted</td></tr>
+      <tr data-type="fi" data-sector="financial" data-loss="200"><td>2007</td><td><strong>Countrywide Financial</strong></td><td><span class="type-tag t-fi">FI D&O</span></td><td>Financial Services</td><td class="loss-med">$600m+ (multiple)</td><td>Sub-prime mortgage mis-selling; CEO Angelo Mozilo SEC civil fraud settlement $67.5m</td></tr>
+      <tr data-type="fi" data-sector="financial" data-loss="50"><td>2008</td><td><strong>Bear Stearns</strong></td><td><span class="type-tag t-fi">FI D&O</span></td><td>Financial Services</td><td class="loss-med">$80m D&O settlement</td><td>Hedge fund collapse; securities fraud claims; JP Morgan acquisition at $2/share vs $170 peak</td></tr>
+      <tr data-type="fi" data-sector="financial" data-loss="100"><td>2008</td><td><strong>Lehman Brothers</strong></td><td><span class="type-tag t-fi">FI D&O</span></td><td>Financial Services</td><td class="loss-high">$90m D&O; total litigation $billions</td><td>$639bn bankruptcy; Repo 105 accounting manipulation; CEO Fuld congressional testimony</td></tr>
+      <tr data-type="fiduciary" data-sector="financial" data-loss="100"><td>2008</td><td><strong>Madoff Investment Securities</strong></td><td><span class="type-tag t-fiduciary">Fiduciary</span></td><td>Financial Services</td><td class="loss-high">$17bn restitution</td><td>$65bn Ponzi scheme; feeder fund directors failed due diligence; HSBC, JP Morgan settlements</td></tr>
+      <tr data-type="fi" data-sector="financial" data-loss="100"><td>2008</td><td><strong>Washington Mutual (WaMu)</strong></td><td><span class="type-tag t-fi">FI D&O</span></td><td>Financial Services</td><td class="loss-med">FDIC D&O settlement $64m</td><td>$307bn bank seizure; directors sold shares before collapse; FDIC pursued negligence claims</td></tr>
+      <tr data-type="securities" data-sector="energy" data-loss="100"><td>2010</td><td><strong>BP — Deepwater Horizon</strong></td><td><span class="type-tag t-securities">Securities</span></td><td>Energy</td><td class="loss-med">~$175m securities settlement</td><td>False safety statements pre-Macondo; executives misled investors on blowout preventer reliability</td></tr>
+      <tr data-type="regulatory" data-sector="financial" data-loss="500"><td>2012</td><td><strong>HSBC — Money Laundering</strong></td><td><span class="type-tag t-regulatory">Regulatory</span></td><td>Financial Services</td><td class="loss-high">$1.9bn DOJ settlement</td><td>Mexican drug cartel money laundering; compliance failures; DPA with senior management oversight conditions</td></tr>
+      <tr data-type="securities" data-sector="consumer" data-loss="100"><td>2013</td><td><strong>Target Corporation</strong></td><td><span class="type-tag t-securities">Securities</span></td><td>Consumer/Retail</td><td class="loss-med">~$39m derivative settlement</td><td>40m credit card records breached; board cyber oversight derivative lawsuit; established cyber D&O template</td></tr>
+      <tr data-type="regulatory" data-sector="financial" data-loss="500"><td>2014</td><td><strong>Bank of America — RMBS</strong></td><td><span class="type-tag t-regulatory">Regulatory</span></td><td>Financial Services</td><td class="loss-high">$16.65bn DOJ settlement</td><td>Mortgage-backed securities fraud pre-GFC; D&O component within broader corporate settlement</td></tr>
+      <tr data-type="epl" data-sector="technology" data-loss="100"><td>2015</td><td><strong>Twitter — Shareholder + EPL</strong></td><td><span class="type-tag t-epl">EPL</span></td><td>Technology</td><td class="loss-med">$100m+ EPL settlements (industry)</td><td>Gender and race discrimination class actions at major tech firms 2015–2020; systematic underpayment and promotion claims</td></tr>
+      <tr data-type="esg" data-sector="industrial" data-loss="500"><td>2015</td><td><strong>Volkswagen Dieselgate</strong></td><td><span class="type-tag t-esg">ESG / Governance</span></td><td>Industrial</td><td class="loss-high">€9bn shareholder settlement</td><td>Defeat device emissions fraud; share price fell 30% in 2 days; German/US securities claims; governance concealment</td></tr>
+      <tr data-type="fiduciary" data-sector="financial" data-loss="50"><td>2016</td><td><strong>Edison International (Tibble)</strong></td><td><span class="type-tag t-fiduciary">Fiduciary</span></td><td>Industrial</td><td class="loss-low">$14m settlement</td><td>ERISA excessive fee litigation; Supreme Court ruled fiduciaries have continuing duty to monitor investments</td></tr>
+      <tr data-type="fraud" data-sector="financial" data-loss="50"><td>2016</td><td><strong>Wells Fargo — Fake Accounts</strong></td><td><span class="type-tag t-regulatory">Regulatory</span></td><td>Financial Services</td><td class="loss-med">$3bn+ (regulatory + civil)</td><td>2m fake customer accounts opened without consent; CEO John Stumpf resigned; clawbacks of executive compensation</td></tr>
+      <tr data-type="securities" data-sector="financial" data-loss="100"><td>2017</td><td><strong>Equifax Data Breach</strong></td><td><span class="type-tag t-securities">Securities</span></td><td>Financial Services</td><td class="loss-med">~$149m D&O derivative</td><td>145m SSN exposed; executives sold shares before breach disclosed; SEC investigation; derivative claims settled 2021</td></tr>
+      <tr data-type="esg" data-sector="industrial" data-loss="100"><td>2018</td><td><strong>PG&amp;E — California Wildfires</strong></td><td><span class="type-tag t-esg">ESG / Governance</span></td><td>Energy/Utility</td><td class="loss-med">~$200m securities claims</td><td>2018 Camp Fire (85 dead); securities fraud class action; board failed wildfire safety disclosures; Chapter 11 2019</td></tr>
+      <tr data-type="fraud" data-sector="healthcare" data-loss="100"><td>2018</td><td><strong>Theranos / Elizabeth Holmes</strong></td><td><span class="type-tag t-fraud">Corporate Fraud</span></td><td>Healthcare</td><td class="loss-high">$926m total settlements</td><td>Blood-testing technology fraud; Holmes convicted; Board members (Shultz, Kissinger) avoided liability via BJR</td></tr>
+      <tr data-type="esg" data-sector="consumer" data-loss="50"><td>2019</td><td><strong>WeWork — IPO Collapse</strong></td><td><span class="type-tag t-esg">ESG / Governance</span></td><td>Consumer/Real Estate</td><td class="loss-med">$1.7bn Neumann settlement</td><td>Governance failures in S-1; CEO self-dealing; IPO withdrawn; SoftBank bailout; governance disclosure template case</td></tr>
+      <tr data-type="securities" data-sector="industrial" data-loss="100"><td>2019</td><td><strong>Boeing 737 MAX</strong></td><td><span class="type-tag t-securities">Securities</span></td><td>Industrial/Aviation</td><td class="loss-high">$237m derivative; $2.5bn DOJ</td><td>MCAS safety failures concealed from investors; 346 deaths; D&O derivative settled 2021; board safety oversight precedent</td></tr>
+      <tr data-type="fraud" data-sector="financial" data-loss="50"><td>2020</td><td><strong>Luckin Coffee</strong></td><td><span class="type-tag t-fraud">Corporate Fraud</span></td><td>Consumer/Retail</td><td class="loss-med">$180m SEC settlement</td><td>Chinese coffee chain fabricated RMB2.2bn in sales; NASDAQ-listed; D&O claims from US investor class</td></tr>
+      <tr data-type="securities" data-sector="technology" data-loss="50"><td>2020</td><td><strong>SolarWinds — Cyber Breach D&O</strong></td><td><span class="type-tag t-securities">Securities</span></td><td>Technology</td><td class="loss-med">SEC enforcement + D&O claims</td><td>Nation-state supply chain attack; CISO charged by SEC for misleading investors on security posture; cyber D&O landmark</td></tr>
+      <tr data-type="spac" data-sector="technology" data-loss="50"><td>2021</td><td><strong>Lordstown Motors (SPAC)</strong></td><td><span class="type-tag t-spac">SPAC</span></td><td>Technology/EV</td><td class="loss-med">~$50m+ D&O claims</td><td>EV truck manufacturer SPAC merger; fabricated pre-order numbers; SEC investigation; CEO and CFO resigned</td></tr>
+      <tr data-type="epl" data-sector="consumer" data-loss="50"><td>2021</td><td><strong>McDonald's — CEO Termination</strong></td><td><span class="type-tag t-epl">EPL</span></td><td>Consumer</td><td class="loss-med">$105m recoupment by company</td><td>CEO Steve Easterbrook dismissed for employee relationship; board initially paid $57m departure; clawback after further misconduct disclosed</td></tr>
+      <tr data-type="spac" data-sector="healthcare" data-loss="50"><td>2021</td><td><strong>Clover Health (SPAC)</strong></td><td><span class="type-tag t-spac">SPAC</span></td><td>Healthcare</td><td class="loss-med">Ongoing D&O claims</td><td>SPAC merger; Hindenburg Research short report; DOJ investigation; shares fell 45% after report</td></tr>
+      <tr data-type="fraud" data-sector="crypto" data-loss="500"><td>2022</td><td><strong>FTX / Sam Bankman-Fried</strong></td><td><span class="type-tag t-fraud">Corporate Fraud</span></td><td>Crypto</td><td class="loss-high">$8bn+ investor losses</td><td>Customer funds stolen; SBF convicted on 7 counts; 25-year sentence; D&O coverage minimal at collapse</td></tr>
+      <tr data-type="fi" data-sector="financial" data-loss="50"><td>2023</td><td><strong>Silicon Valley Bank (SVB)</strong></td><td><span class="type-tag t-fi">FI D&O</span></td><td>Financial Services</td><td class="loss-med">FDIC D&O claims ongoing</td><td>$209bn bank failure; interest rate risk concealment; CEO/CFO pre-collapse share sales; insider trading investigations</td></tr>
+      <tr data-type="regulatory" data-sector="technology" data-loss="100"><td>2023</td><td><strong>SolarWinds CISO — SEC Action</strong></td><td><span class="type-tag t-regulatory">Regulatory</span></td><td>Technology</td><td class="loss-med">SEC charges; first CISO prosecution</td><td>SEC charged SolarWinds CISO Timothy Brown personally for misleading investors post-2020 Sunburst attack; landmark cyber D&O case</td></tr>
+      <tr data-type="esg" data-sector="financial" data-loss="50"><td>2023</td><td><strong>Goldman Sachs ESG Fund</strong></td><td><span class="type-tag t-esg">ESG / Governance</span></td><td>Financial Services</td><td class="loss-med">$4m SEC settlement</td><td>SEC charged Goldman asset management arm with greenwashing — failing to follow ESG policies in funds marketed as ESG; first major fund-level ESG enforcement</td></tr>
+      <tr data-type="fiduciary" data-sector="financial" data-loss="50"><td>2023</td><td><strong>Cornell University 403(b) Plan</strong></td><td><span class="type-tag t-fiduciary">Fiduciary</span></td><td>Education</td><td class="loss-med">$225m class settlement (industry wave)</td><td>Excessive fee ERISA litigation against university 403(b) plans; Yale, MIT, Duke, Cornell settled collectively for hundreds of millions</td></tr>
+      <tr data-type="esg" data-sector="technology" data-loss="50"><td>2024</td><td><strong>AI Governance — Tech Companies</strong></td><td><span class="type-tag t-esg">ESG / Governance</span></td><td>Technology</td><td class="loss-low">Emerging (early stage)</td><td>Securities claims alleging AI capability overstated in investor communications; SEC scrutiny of AI disclosure accuracy; first cases filed 2023–2024</td></tr>
+    </tbody>
+  </table>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Directors &amp; Officers (D1 · D2 · D3 · D4 · D5 · DA · DB · DD)</span> — Module 03: Loss Database</p>
+  <p style="margin-top:6px;font-size:0.78rem;">For educational and training purposes. Loss figures are estimates from public sources.</p>
+</footer>
+<script>
+function applyFilters(){
+  const type=document.getElementById('f-type').value;
+  const sector=document.getElementById('f-sector').value;
+  const loss=parseInt(document.getElementById('f-loss').value)||0;
+  const rows=document.querySelectorAll('#db-body tr');
+  let visible=0;
+  rows.forEach(r=>{
+    const rType=r.dataset.type||'';
+    const rSector=r.dataset.sector||'';
+    const rLoss=parseInt(r.dataset.loss)||0;
+    const show=(!type||rType===type)&&(!sector||rSector===sector)&&(rLoss>=loss);
+    r.classList.toggle('hidden',!show);
+    if(show) visible++;
+  });
+  document.getElementById('results-count').textContent=`Showing ${visible} of ${rows.length} claims`;
+}
+function resetFilters(){
+  document.getElementById('f-type').value='';
+  document.getElementById('f-sector').value='';
+  document.getElementById('f-loss').value='0';
+  applyFilters();
+}
+['f-type','f-sector','f-loss'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+let sortDir={};
+function sortTable(col){
+  const tbody=document.getElementById('db-body');
+  const rows=Array.from(tbody.querySelectorAll('tr:not(.hidden)'));
+  const dir=(sortDir[col]=!sortDir[col]);
+  rows.sort((a,b)=>{
+    const av=a.cells[col].textContent.trim();
+    const bv=b.cells[col].textContent.trim();
+    return dir?(av>bv?1:-1):(av<bv?1:-1);
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+}
+applyFilters();
+</script>
+</body>
+</html>

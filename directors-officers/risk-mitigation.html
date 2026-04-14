@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&amp;O Risk Mitigation – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--do:#7b1fa2;--do-dark:#4a148c;--do-light:#f3e5f5;--burgundy:#880e4f;--accent:#c8a84b;--light:#faf5ff;--text:#1e2d3d;--muted:#6b7c93;--border:#ddd0ea;--green:#2a7a3a;--red:#8b1a1a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#4a148c 55%,#880e4f 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#e1d0f8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--do-dark); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .breadcrumb { font-size:0.8rem; color:#c8b8e8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+
+    /* Governance pillars */
+    .pillar-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(215px,1fr)); gap:14px; margin:22px 0 34px; }
+    .pillar-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-top:4px solid var(--do); }
+    .pillar-card.b { border-top-color:var(--do-dark); }
+    .pillar-card.c { border-top-color:var(--burgundy); }
+    .pillar-card.d { border-top-color:#0097a7; }
+    .pillar-card h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .pillar-card p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    /* Checklist table */
+    .check-table { width:100%; border-collapse:collapse; margin:20px 0 30px; font-size:0.88rem; }
+    .check-table th { background:var(--do-dark); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .check-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .check-table tr:nth-child(even) td { background:#fafbfc; }
+    .ck-yes { color:var(--green); font-weight:700; }
+    .ck-no { color:var(--red); font-weight:700; }
+    .ck-partial { color:#b8630a; font-weight:700; }
+
+    /* Risk score blocks */
+    .score-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:22px 0 34px; }
+    .score-block { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-left:6px solid var(--do); }
+    .score-block.amber { border-left-color:#f5a000; }
+    .score-block.red { border-left-color:var(--red); }
+    .score-block h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .score-block p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.5; }
+    .score-outcome { font-size:0.78rem; font-weight:700; margin-top:8px; }
+    .outcome-green { color:var(--green); }
+    .outcome-amber { color:#b8630a; }
+    .outcome-red { color:var(--red); }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:20px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:30px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#d0c8e8; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#9a8ab8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer span { color:var(--accent); }
+    @media(max-width:640px){header{padding:24px;} main{padding:30px 16px;}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Directors &amp; Officers</a> › Risk Mitigation</div>
+  <div class="tag">Module 06 — Risk Mitigation &amp; Governance</div>
+  <h1>D&amp;O Risk Mitigation &amp; Corporate Governance</h1>
+  <p>Strong corporate governance is the primary D&amp;O risk mitigation tool. Companies with independent boards, high-quality audit committees, robust disclosure controls, and proactive regulatory engagement face materially lower D&amp;O claims frequency and smaller settlements when claims do arise. The underwriter's governance assessment directly drives the risk modifier applied to base rates.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+<main>
+
+  <h2>The Four Pillars of D&amp;O Risk Mitigation</h2>
+
+  <div class="pillar-grid">
+    <div class="pillar-card">
+      <h4>Board Independence &amp; Composition</h4>
+      <p>Majority independent non-executive directors. Separation of CEO and Chairman roles. Diverse skill sets (financial, sector, legal, technology). Overboarded directors (serving on too many boards simultaneously) are a governance red flag. Board committees (Audit, Remuneration, Nomination, Risk) should have fully independent membership.</p>
+    </div>
+    <div class="pillar-card b">
+      <h4>Audit Committee Quality</h4>
+      <p>SOX requires at least one "audit committee financial expert." Big 4 auditor preferred for large public companies. Audit committee should have direct, private access to external auditors — management should not control the relationship. Auditor tenure, rotation, and independence from non-audit fees should be monitored. Restatements are the number one D&amp;O claim predictor.</p>
+    </div>
+    <div class="pillar-card c">
+      <h4>Disclosure Controls &amp; Procedures</h4>
+      <p>CEO/CFO must certify under SOX Section 302 that disclosure controls are effective. Material information flows to the CEO/CFO through a documented process. Forward-looking statements should be accompanied by meaningful safe harbour warnings. Earnings guidance should be based on reasonable internal projections — over-optimistic guidance that is then missed is a classic securities class action trigger.</p>
+    </div>
+    <div class="pillar-card d">
+      <h4>Regulatory &amp; Legal Engagement</h4>
+      <p>Proactive engagement with regulators reduces the risk of enforcement escalating. Companies should have internal compliance programmes, a Chief Compliance Officer with board access, and clear whistleblower channels. Self-reporting of potential violations is generally treated favourably by the SEC and FCA. Cooperation credit in enforcement proceedings can significantly reduce penalties.</p>
+    </div>
+  </div>
+
+  <h2>Governance Quality Assessment: The Underwriter's Checklist</h2>
+  <table class="check-table">
+    <thead>
+      <tr><th>Governance Control</th><th>Best Practice</th><th>Red Flag</th><th>Underwriting Impact</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Board Independence</strong></td>
+        <td class="ck-yes">✅ Majority independent NEDs; CEO ≠ Chairman</td>
+        <td class="ck-no">❌ CEO/Chairman combined; majority insiders; staggered board without rationale</td>
+        <td>Combined CEO/Chairman = +10–15% loading; majority insiders = refer to underwriter</td>
+      </tr>
+      <tr>
+        <td><strong>Audit Committee</strong></td>
+        <td class="ck-yes">✅ All independent; financial expert; Big 4 auditor; clean opinion</td>
+        <td class="ck-no">❌ Non-independent members; auditor change without explanation; going-concern warning</td>
+        <td>Going-concern = +50–100% loading or decline; auditor change = explanation required</td>
+      </tr>
+      <tr>
+        <td><strong>Financial Restatements</strong></td>
+        <td class="ck-yes">✅ No restatements in 5 years; clean audit trail</td>
+        <td class="ck-no">❌ Any material restatement in past 5 years</td>
+        <td>Recent restatement = +50–150% loading; major restatement = refer or decline</td>
+      </tr>
+      <tr>
+        <td><strong>Insider Trading Controls</strong></td>
+        <td class="ck-yes">✅ Formal trading window policy; 10b5-1 plans for executives; compliance pre-clearance</td>
+        <td class="ck-no">❌ Executives sold significant stock before bad news without pre-established plan</td>
+        <td>Director stock sales pre-bad news = securities class action trigger; major loading</td>
+      </tr>
+      <tr>
+        <td><strong>Litigation / Regulatory History</strong></td>
+        <td class="ck-yes">✅ No enforcement actions; no class action in 5 years; clear compliance record</td>
+        <td class="ck-no">❌ Active SEC/FCA investigation; recent securities class action filed; DOJ inquiry</td>
+        <td>Active investigation = decline or DIC-only; resolved with minor penalty = +20–40%</td>
+      </tr>
+      <tr>
+        <td><strong>ESG / Climate Disclosure</strong></td>
+        <td class="ck-yes">✅ TCFD-aligned disclosure; SEC climate rule compliance plan; modest, verifiable commitments</td>
+        <td class="ck-no">❌ Aggressive net-zero claims without evidence; no TCFD disclosure; greenwashing allegations</td>
+        <td>Greenwashing allegations = ESG D&amp;O loading; non-compliance with SEC climate rules = loading on D1</td>
+      </tr>
+      <tr>
+        <td><strong>Executive Compensation</strong></td>
+        <td class="ck-yes">✅ Performance-linked pay; clawback policy; compensation committee independent</td>
+        <td class="ck-no">❌ Excessive pay vs performance; no clawback; CEO pay ratio extreme outlier</td>
+        <td>Derivative suits on executive pay are common — no direct D&amp;O loading but governance signal</td>
+      </tr>
+      <tr>
+        <td><strong>AI / Technology Governance</strong></td>
+        <td class="ck-yes">✅ Board AI oversight committee or designated director; AI risk in 10-K/annual report; algorithmic audit</td>
+        <td class="ck-no">❌ No AI governance framework; undisclosed AI deployment in key processes; regulatory action on AI bias</td>
+        <td>Emerging risk — no standard loading yet but underwriters flagging AI-exposed sectors (fintech, healthcare AI)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>D&amp;O Risk Quality Profile: Green / Amber / Red</h2>
+  <div class="score-grid">
+    <div class="score-block">
+      <h4>Green — Preferred Account</h4>
+      <p>Majority independent board; CEO/Chairman split; Big 4 auditor; clean opinion; no restatements; no regulatory history; strong disclosure controls; clawback policy in place; TCFD disclosure; no prior D&amp;O claims.</p>
+      <span class="score-outcome outcome-green">▶ Modifier: 0.75–0.90× | Preferred terms | Full limit available</span>
+    </div>
+    <div class="score-block">
+      <h4>Green / Standard</h4>
+      <p>All governance basics met; minor concerns (one independent director short of majority; non-Big 4 auditor with clean opinion; one resolved minor regulatory matter). No structural red flags.</p>
+      <span class="score-outcome outcome-green">▶ Modifier: 0.95–1.05× | Standard terms | Full limit</span>
+    </div>
+    <div class="score-block amber">
+      <h4>Amber — Underwriter Review</h4>
+      <p>Non-independent audit committee member; recent auditor change; going-concern note in most recent accounts (if resolved); one prior D&amp;O claim (closed without payment or minor settlement); recent M&amp;A transaction; ongoing minor FCA information request.</p>
+      <span class="score-outcome outcome-amber">▶ Modifier: 1.15–1.50× | Additional information required | Limit may be reduced</span>
+    </div>
+    <div class="score-block amber">
+      <h4>Amber / Escalate</h4>
+      <p>Financial restatement in past 3 years; going-concern warning (active); combined CEO/Chairman role at large public company; securities class action filed but at early stage; pending SEC/FCA formal investigation (received Wells notice or EMRID).</p>
+      <span class="score-outcome outcome-amber">▶ Modifier: 1.50–2.00× | Escalate to class underwriter | Sublimits on Side C likely</span>
+    </div>
+    <div class="score-block red">
+      <h4>Red — Refer or Decline</h4>
+      <p>Active SEC enforcement action; pending securities class action (motion to dismiss stage or later); material restatement in past 12 months; DOJ investigation; multiple governance failures combined; going-concern warning on actively traded public company.</p>
+      <span class="score-outcome outcome-red">▶ Refer to Class Underwriter | Side A only / DIC possible | Heavy loading or decline</span>
+    </div>
+    <div class="score-block red">
+      <h4>Decline</h4>
+      <p>Settlement negotiations with SEC; criminal charges against named directors; recent large-loss settlement within 3 years; company in administration/liquidation (D3/D5 only — DD run-off product available); company in OFAC/sanctions list.</p>
+      <span class="score-outcome outcome-red">▶ Decline standard D&amp;O | Run-off (DD) may be available | Specialist distressed D&amp;O market</span>
+    </div>
+  </div>
+
+  <h2>Frontier Risk: ESG, AI and the Future of D&amp;O Claims</h2>
+  <p>The D&amp;O claims landscape is evolving rapidly beyond the classic securities class action framework. Three emerging risk categories are particularly significant for the 2024–2028 period:</p>
+
+  <h3>ESG and Climate Disclosure (D1 and D2)</h3>
+  <p>The SEC's March 2024 climate disclosure rules (partially stayed by the Eighth Circuit, as of mid-2024) require large accelerated filers to disclose material climate-related risks, governance, and Scope 1 and 2 emissions. Directors who approve material misstatements in climate disclosures face personal liability under Section 11 and Rule 10b-5. In Europe, the EU Corporate Sustainability Reporting Directive (CSRD) requires similar disclosures from large EU companies from 2024–2026. Directors are now in the unusual position of being personally liable for the accuracy of sustainability data that most companies are still working to measure reliably.</p>
+
+  <h3>AI Governance (All codes)</h3>
+  <p>As AI systems are deployed in consequential decision-making (lending decisions, hiring, medical diagnosis, trading), directors face an emerging duty to oversee AI risk. The FTC has signalled that deceptive claims about AI capabilities could trigger enforcement. The SEC has explicitly stated that disclosure of AI-related material risks is required. First-generation AI D&amp;O claims are expected to target companies that: (a) made aggressive AI capability claims to investors, (b) failed to disclose AI-related regulatory investigations, or (c) deployed AI systems that caused discriminatory harm with inadequate board oversight.</p>
+
+  <h3>Crypto and Digital Assets (D1, D5)</h3>
+  <p>The FTX collapse (2022) established that crypto exchange executives face full personal D&amp;O and criminal exposure. More broadly, the SEC's enforcement campaign against crypto companies (Coinbase, Binance, Ripple) is creating D&amp;O exposure for exchange and protocol executives. UK and EU crypto regulation (MiCA effective 2024) creates personal accountability obligations for crypto-asset service providers' senior management. D5 (financial institutions) underwriters need to assess banks and investment firms with significant digital asset operations carefully — a market dislocation in crypto could trigger rapid correlated D&amp;O claims across multiple FI policyholders.</p>
+
+  <div class="warn-box">
+    <h4>⚠️ The McDonald's Clawback Precedent — D&amp;O Covers Both Sides</h4>
+    <p>In 2023, McDonald's successfully clawed back $105m in severance from former CEO Steve Easterbrook after discovering he had lied to the company during an investigation into relationships with employees. The board sued Easterbrook and the derivative settlement established that companies can pursue former executives for fraudulent conduct in the severance negotiation.</p>
+    <p>This case has D&amp;O implications in both directions. From the executive's perspective: does the D&amp;O policy cover costs of defending a clawback action brought by the company? (Often no — the "insured vs insured" exclusion may apply.) From the company's perspective: should boards more actively pursue clawback of compensation from executives whose misconduct harmed the company? The McDonald's precedent suggests this is now an established tool — and one that D&amp;O underwriters should factor into their assessment of boards' willingness to hold executives accountable.</p>
+  </div>
+
+  <div class="context-box">
+    <h3>The "Caremark" Standard: When Does Board Inaction Become a Claim?</h3>
+    <p>The Delaware Supreme Court's Caremark decision (1996) and its evolution through Stone v. Ritter (2006) established the standard for director liability for failure of oversight. Under the Caremark standard, directors breach their duty of loyalty (not merely care) if they knowingly fail to implement a monitoring system or, having implemented one, consciously disregard red flags.</p>
+    <p>For many years, Caremark claims were extremely difficult to win — courts applied a high "bad faith" standard. But recent Delaware cases have relaxed this slightly: Boeing (737 MAX crashes, $237.5m settlement 2021) established that directors who ignored safety concerns raised by regulators could face Caremark liability. AmerisourceBergen (opioid distribution) similarly found that directors who failed to adequately oversee compliance with the Controlled Substances Act could face derivative liability.</p>
+    <p>The practical implication for D&amp;O underwriters: companies in high-regulatory-scrutiny sectors (healthcare, financial services, defense, cannabis, crypto) face elevated Caremark/derivative claim risk if their board minutes do not show active engagement with compliance and regulatory risk. Underwriters increasingly ask whether board risk committees have explicit charter responsibility for compliance monitoring — the answer is a meaningful governance signal.</p>
+  </div>
+
+</main>
+<footer>
+  <p>Risk Code Hub — <span>Directors &amp; Officers (D1 · D2 · D3 · D4 · D5 · DA · DB · DD)</span> — Module 06: Risk Mitigation</p>
+</footer>
+</body>
+</html>
