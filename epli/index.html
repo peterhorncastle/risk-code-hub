@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employment Practices Liability (EPLI) – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--epli:#0d5c4c;--epli-dark:#083c32;--epli-light:#f0faf8;--accent:#c8a84b;--purple:#4a148c;--crimson:#8b1a1a;--orange:#e65100;--light:#f4f8f6;--text:#1e2d3d;--muted:#6b7c93;--border:#c8ddd8;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#0d5c4c 55%,#1a6b3a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8e0d8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8e0d8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:14px; margin:28px 0 36px; }
+    .stat-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; text-align:center; }
+    .stat-box .num { font-size:1.55rem; font-weight:800; color:var(--epli); }
+    .stat-box .label { font-size:0.74rem; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+    .code-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.88rem; }
+    .code-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .code-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .code-table tr:nth-child(even) td { background:#f8fcfb; }
+    .code-pill { display:inline-block; background:var(--epli); color:#fff; font-size:0.72rem; font-weight:700; padding:3px 8px; border-radius:4px; letter-spacing:1px; }
+    .code-pill.purple { background:var(--purple); }
+    .code-pill.crimson { background:var(--crimson); }
+
+    .coverage-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; margin:22px 0 36px; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-top:4px solid var(--epli); }
+    .cov-card.wt { border-top-color:#c62828; }
+    .cov-card.disc { border-top-color:#1565c0; }
+    .cov-card.harass { border-top-color:var(--purple); }
+    .cov-card.retaliation { border-top-color:#e65100; }
+    .cov-card.tpep { border-top-color:#2a7a3a; }
+    .cov-card.wh { border-top-color:#7a5200; }
+    .cov-card h4 { font-size:0.92rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .cov-card p { font-size:0.82rem; color:var(--muted); margin:0; line-height:1.5; }
+    .cov-badge { display:inline-block; font-size:0.7rem; font-weight:800; padding:2px 8px; border-radius:4px; margin-bottom:8px; letter-spacing:1px; }
+    .cb-core { background:#e0f2f1; color:#0d5c4c; }
+    .cb-ext { background:#f3e5f5; color:var(--purple); }
+    .cb-warn { background:#fff3e0; color:#e65100; }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .warn-box ul { margin-left:1.2rem; font-size:0.88rem; color:var(--text); line-height:1.7; }
+
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:32px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#c8ddd8; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    .statute-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin:20px 0 30px; }
+    .statute-card { background:#fff; border:1px solid var(--border); border-radius:8px; padding:16px; }
+    .statute-card .year { font-size:0.75rem; font-weight:700; color:var(--epli); background:var(--epli-light); display:inline-block; padding:2px 8px; border-radius:4px; margin-bottom:8px; }
+    .statute-card h4 { font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .statute-card p { font-size:0.80rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    footer { background:var(--navy); color:#9ab8b0; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Financial Lines – D&O</div>
+  <div class="tag">Lloyd's Risk Codes D6 · D7</div>
+  <h1>Employment Practices Liability (EPLI)</h1>
+  <p>Standalone employment practices liability insurance covering wrongful termination, discrimination, harassment, retaliation and failure to promote claims against employers by employees, former employees and applicants. D6 covers US risks; D7 covers non-US risks worldwide.</p>
+</header>
+
+<nav>
+  <a href="index.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="num">$4.5bn+</div><div class="label">US EPLI GWP (est. 2024)</div></div>
+    <div class="stat-box"><div class="num">~80,000</div><div class="label">EEOC charges filed annually</div></div>
+    <div class="stat-box"><div class="num">$192.5m</div><div class="label">Coca-Cola racial discrimination settlement (2000)</div></div>
+    <div class="stat-box"><div class="num">67%</div><div class="label">EPLI claims from employers with &lt;100 employees</div></div>
+    <div class="stat-box"><div class="num">3–5 yrs</div><div class="label">Average EPLI claim time to resolution</div></div>
+    <div class="stat-box"><div class="num">California</div><div class="label">Highest-cost US state for EPLI (FEHA, CCPA, CFRA)</div></div>
+  </div>
+
+  <h2>Lloyd's Risk Codes</h2>
+  <table class="code-table">
+    <thead><tr><th>Code</th><th>Full Name</th><th>Geography</th><th>Key Characteristics</th><th>Typical Limits</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="code-pill">D6</span></td>
+        <td>Employment Practices Liability – USA</td>
+        <td>United States, Puerto Rico, US territories</td>
+        <td>Title VII / ADEA / ADA statutory framework; jury trials; punitive damages; EEOC charge process; California FEHA super-exposure; wage & hour a separate peril</td>
+        <td>$1m–$25m per claim / aggregate; defence outside limits common</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill purple">D7</span></td>
+        <td>Employment Practices Liability – Non-USA</td>
+        <td>UK, EU, Australia, Canada, rest of world</td>
+        <td>Unfair dismissal (no punitive damages generally); tribunal-based systems; statutory caps on awards; GDPR whistleblowing overlay; lower limits; broader HR wrongful acts definition</td>
+        <td>£1m–£10m (UK); lower elsewhere; defence within limits common in UK/EU</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Coverage Structure</h2>
+  <div class="coverage-grid">
+    <div class="cov-card wt">
+      <span class="cov-badge cb-core">Core Cover</span>
+      <h4>Wrongful Termination / Dismissal</h4>
+      <p>Unlawful discharge, constructive dismissal, breach of implied contract of employment. Largest single source of EPLI claims by volume.</p>
+    </div>
+    <div class="cov-card disc">
+      <span class="cov-badge cb-core">Core Cover</span>
+      <h4>Discrimination</h4>
+      <p>Race, sex, religion, national origin, age (ADEA 40+), disability (ADA), pregnancy, sexual orientation, gender identity. Both direct and disparate impact theories.</p>
+    </div>
+    <div class="cov-card harass">
+      <span class="cov-badge cb-core">Core Cover</span>
+      <h4>Sexual Harassment / Hostile Environment</h4>
+      <p>Quid pro quo and hostile work environment harassment. Faragher/Ellerth affirmative defence for employers with robust anti-harassment programmes.</p>
+    </div>
+    <div class="cov-card retaliation">
+      <span class="cov-badge cb-core">Core Cover</span>
+      <h4>Retaliation</h4>
+      <p>Adverse action against employees who report discrimination, file EEOC charges, take protected leave (FMLA), or engage in protected activity. Fastest-growing claim category.</p>
+    </div>
+    <div class="cov-card tpep">
+      <span class="cov-badge cb-ext">Optional Extension</span>
+      <h4>Third Party EPL</h4>
+      <p>Claims by customers, clients or vendors alleging discrimination or harassment by insured's employees. Common in retail, hospitality and financial services.</p>
+    </div>
+    <div class="cov-card wh">
+      <span class="cov-badge cb-warn">Sub-Limited / Excluded</span>
+      <h4>Wage & Hour Defence Costs</h4>
+      <p>Defence costs for FLSA / California Labor Code wage and hour class actions. Usually sub-limited ($100k–$500k defence only) or excluded. Never covers back-pay awards.</p>
+    </div>
+  </div>
+
+  <h2>US Legislative Framework (D6)</h2>
+  <div class="statute-grid">
+    <div class="statute-card">
+      <span class="year">1963</span>
+      <h4>Equal Pay Act</h4>
+      <p>Prohibits wage differentials based on sex for equal work in the same establishment.</p>
+    </div>
+    <div class="statute-card">
+      <span class="year">1964</span>
+      <h4>Title VII Civil Rights Act</h4>
+      <p>Prohibits employment discrimination based on race, colour, religion, sex, national origin. Created the EEOC. Foundation of all US EPL claims.</p>
+    </div>
+    <div class="statute-card">
+      <span class="year">1967</span>
+      <h4>ADEA</h4>
+      <p>Age Discrimination in Employment Act — protects employees aged 40 and over. Surge in claims during mass layoffs and restructurings.</p>
+    </div>
+    <div class="statute-card">
+      <span class="year">1978</span>
+      <h4>Pregnancy Discrimination Act</h4>
+      <p>Amends Title VII to prohibit discrimination on grounds of pregnancy, childbirth or related medical conditions.</p>
+    </div>
+    <div class="statute-card">
+      <span class="year">1990</span>
+      <h4>ADA</h4>
+      <p>Americans with Disabilities Act — prohibits discrimination against qualified individuals with disabilities; duty to provide reasonable accommodation.</p>
+    </div>
+    <div class="statute-card">
+      <span class="year">1991</span>
+      <h4>Civil Rights Act 1991</h4>
+      <p>Introduced compensatory and punitive damages; right to jury trial for intentional discrimination. Transformed EPLI from low-stakes to high-severity.</p>
+    </div>
+    <div class="statute-card">
+      <span class="year">1993</span>
+      <h4>FMLA</h4>
+      <p>Family and Medical Leave Act — 12 weeks unpaid protected leave. Retaliation for taking FMLA leave is a major claim driver post-COVID.</p>
+    </div>
+    <div class="statute-card">
+      <span class="year">2009</span>
+      <h4>Lilly Ledbetter Fair Pay Act</h4>
+      <p>Resets 180-day EEOC filing window with each discriminatory paycheck — dramatically extended window for equal pay claims.</p>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠ Claims-Made Policy: Retroactive Date & Reporting Obligations</h4>
+    <p>EPLI is written on a <strong>claims-made basis</strong>. Three critical structural points:</p>
+    <ul>
+      <li><strong>Retroactive date:</strong> EEOC charges filed before the retro date are excluded even if the insured learned of the charge during the policy period.</li>
+      <li><strong>EEOC charge = a "claim":</strong> Most policies define a claim to include an EEOC charge, state agency charge, or written demand. Failure to report promptly can void coverage.</li>
+      <li><strong>Run-off on RIF / M&A:</strong> Workforce reductions and M&A events dramatically increase EPLI exposure. Run-off (tail) cover for 2–3 years is advisable post-RIF.</li>
+    </ul>
+  </div>
+
+  <h2>Key Exclusions</h2>
+  <table class="code-table">
+    <thead><tr><th>Exclusion</th><th>Scope</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td>Wage & Hour Awards</td><td>FLSA / state wage payment obligations, back-pay damages, overtime awards</td><td>Defence costs only sometimes covered (sub-limited)</td></tr>
+      <tr><td>ERISA / Benefits Denial</td><td>Claims under ERISA benefit plans; coverage denial</td><td>Covered separately under Fiduciary Liability (DD)</td></tr>
+      <tr><td>Bodily Injury / Property Damage</td><td>Physical injury arising from employment acts</td><td>GL / WC respond; EPLI excludes</td></tr>
+      <tr><td>NLRA / Union Activity</td><td>Unfair labour practice charges, collective bargaining disputes</td><td>Not an insurable EPL peril</td></tr>
+      <tr><td>Workers Compensation</td><td>Statutory WC obligations</td><td>Separate compulsory line</td></tr>
+      <tr><td>Prior Claims / Prior Knowledge</td><td>Claims known or reported before inception</td><td>Standard claims-made exclusion</td></tr>
+      <tr><td>Criminal / Fraud</td><td>Intentional criminal acts proven by final adjudication</td><td>Coverage suspended pending adjudication; restored if not proven</td></tr>
+      <tr><td>Class Actions (some policies)</td><td>Wage & hour class actions often fully excluded</td><td>Key negotiation point especially for California-exposed risks</td></tr>
+    </tbody>
+  </table>
+
+  <div class="context-box">
+    <h3>Why EPLI Exists as a Standalone Class</h3>
+    <p>Prior to the Civil Rights Act 1991, most employment claims were low-severity: the EEOC could only seek reinstatement and back pay, with no jury trials and no punitive damages. Post-1991, compensatory and punitive damages became available, and jury awards escalated sharply. GL policies began explicitly excluding employment-related claims, creating a coverage gap that the EPLI market emerged to fill from the mid-1990s onwards.</p>
+    <p>Today, over 95% of US businesses with more than 15 employees (the Title VII threshold) face potential EPLI exposure. The #MeToo movement (2017–2019) caused the sharpest single-period rate increase in the class's history — some insurers saw 30–50% rate increases in financial services and entertainment. COVID-19 (2020) added retaliation and FMLA dimensions as mass furloughs triggered a new wave of wrongful termination claims.</p>
+  </div>
+
+</main>
+<footer>Risk Code Hub — Employment Practices Liability (D6/D7) | Lloyd's Market Intelligence Platform</footer>
+</body>
+</html>

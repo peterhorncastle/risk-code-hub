@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPLI Rates &amp; ROE Analysis – Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root { --navy:#0d2240;--epli:#0d5c4c;--epli-dark:#083c32;--epli-light:#f0faf8;--accent:#c8a84b;--purple:#4a148c;--crimson:#8b1a1a;--orange:#e65100;--blue:#1565c0;--light:#f4f8f6;--text:#1e2d3d;--muted:#6b7c93;--border:#c8ddd8;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#0d5c4c 55%,#1a6b3a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8e0d8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8e0d8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .chart-wrap { background:#fff; border:1px solid var(--border); border-radius:10px; padding:26px; margin:20px 0 36px; }
+    .chart-wrap h4 { font-size:0.95rem; color:var(--navy); margin-bottom:18px; font-weight:700; }
+
+    .cycle-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.86rem; }
+    .cycle-table th { background:var(--navy); color:#fff; padding:10px 13px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .cycle-table td { padding:10px 13px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .cycle-table tr:nth-child(even) td { background:#f8fcfb; }
+    .badge-hard { background:#fde8e8; color:var(--crimson); font-size:0.72rem; font-weight:700; padding:2px 9px; border-radius:4px; }
+    .badge-soft { background:#e0f2f1; color:var(--epli); font-size:0.72rem; font-weight:700; padding:2px 9px; border-radius:4px; }
+    .badge-stable { background:#fff3e0; color:#7a4500; font-size:0.72rem; font-weight:700; padding:2px 9px; border-radius:4px; }
+
+    .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:20px 0 36px; }
+    .roe-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px; text-align:center; }
+    .roe-card.bull { border-top:5px solid var(--green); }
+    .roe-card.base { border-top:5px solid var(--epli); }
+    .roe-card.bear { border-top:5px solid var(--crimson); }
+    .roe-val { font-size:2rem; font-weight:800; margin:10px 0; }
+    .roe-card.bull .roe-val { color:var(--green); }
+    .roe-card.base .roe-val { color:var(--epli); }
+    .roe-card.bear .roe-val { color:var(--crimson); }
+    .roe-label { font-size:0.82rem; color:var(--muted); }
+    .roe-detail { font-size:0.78rem; color:var(--muted); margin-top:6px; }
+
+    .pl-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.88rem; }
+    .pl-table th { background:var(--epli); color:#fff; padding:10px 13px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .pl-table td { padding:10px 13px; border-bottom:1px solid var(--border); }
+    .pl-table tr:nth-child(even) td { background:#f8fcfb; }
+    .pl-table tr.total td { font-weight:700; background:#e0f2f1; }
+    .neg { color:var(--crimson); }
+
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:32px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#c8ddd8; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    @media(max-width:640px){ .roe-grid{ grid-template-columns:1fr; } }
+    footer { background:var(--navy); color:#9ab8b0; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">EPLI</a></div>
+  <div class="tag">Module 05 — Rates &amp; ROE Analysis</div>
+  <h1>EPLI Rates &amp; ROE Analysis</h1>
+  <p>Market cycle analysis 2000–2026, sector rate index, loss ratio trends, and three-scenario ROE waterfall — Bull, Base, and Bear — for the US EPLI class (D6).</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <h2>EPLI Rate Index 2000–2026 (US D6)</h2>
+  <div class="chart-wrap">
+    <h4>Rate Index — US Large Employer D6 vs SME D6 (2000 = 100)</h4>
+    <canvas id="rateChart" height="90"></canvas>
+  </div>
+
+  <h2>Market Cycle Phases</h2>
+  <table class="cycle-table">
+    <thead><tr><th>Period</th><th>Market</th><th>Key Driver</th><th>Rate Movement</th></tr></thead>
+    <tbody>
+      <tr><td>1993–2000</td><td><span class="badge-soft">Soft / Emerging</span></td><td>Post-1991 Act market creation; limited actuarial data; early adopters only; minimal class action frequency</td><td>Declining / stable; pricing intuitive</td></tr>
+      <tr><td>2001–2004</td><td><span class="badge-hard">Hard</span></td><td>Enron/WorldCom wrongful dismissal wave; post-9/11 RIFs; Mitsubishi / Coca-Cola precedents raise awareness</td><td>+15–30% across market</td></tr>
+      <tr><td>2005–2007</td><td><span class="badge-soft">Softening</span></td><td>Competitive market entry; Morgan Stanley consent decree absorbed; class action frequency stabilising</td><td>−5–15% year-on-year</td></tr>
+      <tr><td>2008–2010</td><td><span class="badge-hard">Hard</span></td><td>GFC mass layoffs; ADEA surge; wrongful termination frequency spike in financial services, auto, retail</td><td>+20–40%; financial services +50%</td></tr>
+      <tr><td>2011–2016</td><td><span class="badge-stable">Stable</span></td><td>Wage & hour emergence; pay equity litigation develops; steady loss ratios; California PAGA expanding</td><td>Flat to +5% annually</td></tr>
+      <tr><td>2017–2019</td><td><span class="badge-hard">Hard — #MeToo</span></td><td>#MeToo harassment surge; Fox News, Weinstein, McDonald's; entertainment and media face +50% increases; new warranty requirements</td><td>+20–50%; entertainment sector +50–80%</td></tr>
+      <tr><td>2020–2021</td><td><span class="badge-hard">Hard</span></td><td>COVID-19 FMLA retaliation; mass furlough wrongful termination; pay equity class action wave (Google, Goldman)</td><td>+15–30%; healthcare and hospitality hardest</td></tr>
+      <tr><td>2022–2024</td><td><span class="badge-stable">Stabilising</span></td><td>Rate adequacy improving; loss ratios returning to target; AI hiring tool risk emerging; pay transparency laws adding new exposure</td><td>Flat to +10%; California still +15–20%</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Loss Severity Distribution (US EPLI, $m)</h2>
+  <div class="chart-wrap">
+    <h4>Settlement / Award Distribution — US EPLI Claims by Size Band</h4>
+    <canvas id="severityChart" height="70"></canvas>
+  </div>
+
+  <h2>ROE Scenarios</h2>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="roe-label">Bull Scenario</div>
+      <div class="roe-val">19.2%</div>
+      <div class="roe-detail">Net loss ratio: 35% | Combined: 67%</div>
+      <div class="roe-detail">Benign claim year; no #MeToo-style surge; strong HR controls market-wide</div>
+    </div>
+    <div class="roe-card base">
+      <div class="roe-label">Base Scenario</div>
+      <div class="roe-val">9.4%</div>
+      <div class="roe-detail">Net loss ratio: 58% | Combined: 90%</div>
+      <div class="roe-detail">Normalised claim frequency; modest rate adequacy; California class actions at average levels</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="roe-label">Bear Scenario</div>
+      <div class="roe-val" class="neg">−13.6%</div>
+      <div class="roe-detail">Net loss ratio: 105% | Combined: 137%</div>
+      <div class="roe-detail">Economic downturn RIF wave OR #MeToo-style cultural event; California PAGA cluster; large class action in portfolio</div>
+    </div>
+  </div>
+
+  <h2>Illustrative P&amp;L Waterfall (Base Scenario)</h2>
+  <table class="pl-table">
+    <thead><tr><th>P&amp;L Line</th><th>% of GWP</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Gross Written Premium</td><td>100.0%</td><td>D6 US EPLI portfolio</td></tr>
+      <tr><td>Ceded Reinsurance Premium</td><td>(18.0%)</td><td>Excess of loss reinsurance; some proportional on class action XL</td></tr>
+      <tr><td><strong>Net Earned Premium</strong></td><td><strong>82.0%</strong></td><td></td></tr>
+      <tr><td>Gross Incurred Claims</td><td>(65.0%)</td><td>IBNR heavy; 3–5 year development tail; defence costs outside limits distort</td></tr>
+      <tr><td>Reinsurance Recoveries</td><td>+9.5%</td><td>XL recoveries on class actions and large individual claims</td></tr>
+      <tr><td><strong>Net Loss Ratio</strong></td><td><strong>58.0%</strong></td><td></td></tr>
+      <tr><td>Acquisition Costs (broker commissions)</td><td>(18.0%)</td><td>Broker market; retail 15–22%; wholesale/Lloyd's 18–25%</td></tr>
+      <tr><td>Management Expenses</td><td>(14.0%)</td><td>Claims handling intensive due to EEOC charge management, legal fees</td></tr>
+      <tr><td><strong>Combined Ratio</strong></td><td><strong>90.0%</strong></td><td></td></tr>
+      <tr><td>Investment Income</td><td>+3.5%</td><td>Shorter tail than D&O; claim reserves earning less investment income</td></tr>
+      <tr class="total"><td>Pre-Tax Operating Profit</td><td>13.5%</td><td></td></tr>
+      <tr><td>Tax (25%)</td><td>(3.4%)</td><td></td></tr>
+      <tr class="total"><td>Net Profit After Tax</td><td>10.1%</td><td></td></tr>
+      <tr><td>Capital Base (% of GWP)</td><td>35.0%</td><td>EPLI shorter-tail than D&O → lower capital requirement</td></tr>
+      <tr class="total"><td><strong>ROE (Base)</strong></td><td><strong>9.4%</strong></td><td>Adequate but unexciting; California concentration risk is key swing factor</td></tr>
+    </tbody>
+  </table>
+
+  <div class="context-box">
+    <h3>EPLI Reserve Development: A Shorter Tail Than D&O</h3>
+    <p>Unlike D&O securities class actions which can take 4–7 years to settle, the majority of individual EPLI claims resolve within 18–36 months. EEOC charge-to-right-to-sue letter typically takes 6–18 months; subsequent litigation typically settles within 12–24 months of filing. This shorter tail means EPLI reserves are less sensitive to investment return assumptions — but also means less investment income opportunity compared to longer-tail lines.</p>
+    <p>The exception is class action EPLI, which mirrors D&O in its development pattern. The Goldman Sachs pay equity class action (filed 2010, settled 2022) ran for 12 years. Class action reserves should be treated as long-tail and held at conservative loss development assumptions. Underwriters who price class action exposure as short-tail will systematically under-reserve.</p>
+    <p>IBNR (Incurred But Not Reported) is a significant issue for EPLI. Employees who experience discrimination or harassment may not file an EEOC charge immediately — the Lilly Ledbetter Act means pay discrimination charges can be filed years after the original act, and the 180-day filing window resets with each paycheck. Late-reported EEOC charges on multi-year pay discrimination patterns require substantial IBNR allowances.</p>
+  </div>
+
+</main>
+
+<script>
+// Rate Index Chart
+const rateCtx = document.getElementById('rateChart').getContext('2d');
+new Chart(rateCtx, {
+  type: 'line',
+  data: {
+    labels: ['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'],
+    datasets: [
+      {
+        label: 'Large Employer D6 (250+ employees)',
+        data: [100,108,122,135,140,132,124,118,145,168,162,160,158,155,153,150,148,185,210,220,240,248,252,255,260,262,265],
+        borderColor: '#0d5c4c', backgroundColor: 'rgba(13,92,76,0.08)', tension: 0.35, borderWidth: 2.5, pointRadius: 3
+      },
+      {
+        label: 'SME D6 (15–249 employees)',
+        data: [100,105,115,125,128,122,116,112,132,150,145,142,140,138,136,134,132,162,185,195,210,218,222,225,228,230,232],
+        borderColor: '#c8a84b', backgroundColor: 'rgba(200,168,75,0.07)', tension: 0.35, borderWidth: 2.5, borderDash: [6,3], pointRadius: 3
+      },
+      {
+        label: 'D7 UK Non-US',
+        data: [100,102,106,110,112,108,105,104,110,118,115,113,112,112,111,110,109,125,138,142,148,152,155,157,160,162,164],
+        borderColor: '#4a148c', backgroundColor: 'rgba(74,20,140,0.06)', tension: 0.35, borderWidth: 2, borderDash: [4,4], pointRadius: 3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position:'bottom' }, tooltip: { mode:'index', intersect:false } },
+    scales: {
+      y: { title: { display:true, text:'Rate Index (2000=100)' }, beginAtZero:false, grid: { color:'rgba(0,0,0,0.05)' } },
+      x: { grid: { color:'rgba(0,0,0,0.04)' } }
+    }
+  }
+});
+
+// Severity Distribution Chart
+const sevCtx = document.getElementById('severityChart').getContext('2d');
+new Chart(sevCtx, {
+  type: 'bar',
+  data: {
+    labels: ['<$100k','$100k–$500k','$500k–$1m','$1m–$5m','$5m–$25m','$25m–$100m','$100m+'],
+    datasets: [{
+      label: 'Share of Claims by Count (%)',
+      data: [42, 28, 12, 9, 5, 2.5, 1.5],
+      backgroundColor: ['#b8d8d4','#8ec4bc','#5eaaa0','#0d5c4c','#c8a84b','#8b1a1a','#4a148c'],
+      borderRadius: 5
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display:false }, tooltip: { callbacks: { label: ctx => `${ctx.raw}% of claims` } } },
+    scales: {
+      y: { title: { display:true, text:'% of Claims by Count' }, beginAtZero:true, grid: { color:'rgba(0,0,0,0.05)' } },
+      x: { grid: { display:false } }
+    }
+  }
+});
+</script>
+<footer>Risk Code Hub — Employment Practices Liability (D6/D7) | Lloyd's Market Intelligence Platform</footer>
+</body>
+</html>

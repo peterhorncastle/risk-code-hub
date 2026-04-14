@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPLI Underwriting – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--epli:#0d5c4c;--epli-dark:#083c32;--epli-light:#f0faf8;--accent:#c8a84b;--purple:#4a148c;--crimson:#8b1a1a;--orange:#e65100;--blue:#1565c0;--light:#f4f8f6;--text:#1e2d3d;--muted:#6b7c93;--border:#c8ddd8;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#0d5c4c 55%,#1a6b3a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8e0d8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8e0d8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px; margin:20px 0 36px; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; position:relative; }
+    .factor-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:7px; }
+    .factor-card p { font-size:0.82rem; color:var(--muted); margin:0; line-height:1.5; }
+    .imp { font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; border-radius:4px; display:inline-block; margin-bottom:7px; }
+    .imp-high { background:#fde8e8; color:var(--crimson); }
+    .imp-med { background:#fff3e0; color:#7a4500; }
+    .imp-low { background:#e8f5ee; color:var(--green); }
+
+    .cov-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.86rem; }
+    .cov-table th { background:var(--navy); color:#fff; padding:10px 13px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .cov-table td { padding:10px 13px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .cov-table tr:nth-child(even) td { background:#f8fcfb; }
+    .tick { color:var(--green); font-weight:700; }
+    .cross { color:var(--crimson); font-weight:700; }
+    .cond { color:var(--orange); font-weight:700; }
+
+    .formula-box { background:var(--epli-light); border:2px solid var(--epli); border-radius:10px; padding:26px 30px; margin:26px 0; }
+    .formula-box h4 { color:var(--epli-dark); font-size:1rem; margin-bottom:14px; }
+    .formula { font-family:'Courier New',monospace; font-size:0.9rem; color:var(--navy); background:#fff; padding:14px 18px; border-radius:6px; margin-bottom:12px; border:1px solid var(--border); }
+    .formula-box p { font-size:0.84rem; color:var(--muted); margin:0; line-height:1.6; }
+
+    .example-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:28px 30px; margin:20px 0; }
+    .example-box h4 { font-size:1rem; font-weight:700; color:var(--navy); margin-bottom:16px; padding-bottom:10px; border-bottom:2px solid var(--epli-light); }
+    .ex-row { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid #f0f4f2; font-size:0.87rem; }
+    .ex-row:last-child { border-bottom:none; font-weight:700; color:var(--epli-dark); font-size:0.95rem; padding-top:10px; }
+    .ex-label { color:var(--muted); }
+    .ex-value { font-weight:600; color:var(--text); }
+    .ex-total { color:var(--epli); }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+    .warn-box ul { margin-left:1.2rem; font-size:0.88rem; line-height:1.8; }
+
+    .sector-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.86rem; }
+    .sector-table th { background:var(--epli); color:#fff; padding:10px 13px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .sector-table td { padding:10px 13px; border-bottom:1px solid var(--border); }
+    .sector-table tr:nth-child(even) td { background:#f8fcfb; }
+    .rate-high { color:var(--crimson); font-weight:700; }
+    .rate-mid { color:var(--orange); font-weight:700; }
+    .rate-low { color:var(--green); font-weight:700; }
+
+    footer { background:var(--navy); color:#9ab8b0; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">EPLI</a></div>
+  <div class="tag">Module 04 — Underwriting Methodology</div>
+  <h1>EPLI Underwriting Methodology</h1>
+  <p>Rating factors, coverage structure comparison (D6 vs D7), sector rate differentials, key exclusions and two worked examples — a US technology company (D6) and a UK financial services firm (D7).</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <h2>Rating Factors</h2>
+  <div class="factor-grid">
+
+    <div class="factor-card">
+      <span class="imp imp-high">Impact: High</span>
+      <h4>Employee Count &amp; Headcount Growth</h4>
+      <p>Primary exposure driver. More employees = more potential claimants. Rapid headcount growth (acquisitions, expansions) increases risk of inconsistent HR practices.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-high">Impact: High</span>
+      <h4>US State Mix — California Exposure</h4>
+      <p>California's FEHA offers broader protections than federal law; CFRA extends FMLA rights; PAGA enables representative actions by any employee. California employees may add 30–60% to premium versus national average.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-high">Impact: High</span>
+      <h4>Claims History (5 Years)</h4>
+      <p>Prior EEOC charges, employment tribunal claims, internal grievances, and settlement history. Frequency matters more than severity — repeat claim patterns indicate systemic culture issues.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-high">Impact: High</span>
+      <h4>Industry / Sector</h4>
+      <p>Financial services, technology, media/entertainment, and hospitality attract higher rates. Healthcare, manufacturing, and retail are mid-range. Professional services and education are lower risk.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-high">Impact: High</span>
+      <h4>HR Infrastructure Quality</h4>
+      <p>Dedicated HR function, written employment policies, employee handbook, documented onboarding/offboarding procedures. Absence of basic HR infrastructure is a significant red flag.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-high">Impact: High</span>
+      <h4>Anti-Harassment Training Programme</h4>
+      <p>Frequency, format (online vs in-person), manager-specific training, and documentation. Post-Faragher/Ellerth, absence of training removes the employer's affirmative defence. California mandates biennial training for employers of 5+.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-med">Impact: Medium</span>
+      <h4>Management Diversity</h4>
+      <p>Proportion of women and minorities in management and on the board. Homogeneous senior teams are a glass-ceiling risk indicator. Pay equity analysis results requested at £/$100m+ limit.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-med">Impact: Medium</span>
+      <h4>Termination Procedures</h4>
+      <p>Documented termination process, progressive discipline, performance improvement plans (PIPs), exit interview consistency. Undocumented terminations are the single biggest source of wrongful dismissal exposure.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-med">Impact: Medium</span>
+      <h4>Workforce Reduction History</h4>
+      <p>Prior RIFs (reductions in force) — whether statistical analysis of selection criteria was performed to test for ADEA / disparate impact exposure. Post-RIF EEOC charge rates are significantly elevated for 12–24 months.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-med">Impact: Medium</span>
+      <h4>Arbitration Agreements</h4>
+      <p>Mandatory arbitration clauses for employment claims reduce class action risk and lower severity. Post-#MeToo, some states (California, New York) restrict arbitration for harassment claims — check current enforceability.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-med">Impact: Medium</span>
+      <h4>Wage &amp; Hour Exposure</h4>
+      <p>California and New York employers with hourly or non-exempt workers face elevated FLSA/state wage & hour class action risk. Meal break, overtime and misclassification exposure drives sub-limit or exclusion decisions.</p>
+    </div>
+
+    <div class="factor-card">
+      <span class="imp imp-low">Impact: Lower</span>
+      <h4>AI Hiring Tools</h4>
+      <p>Emerging factor: use of automated resume screening or AI performance management tools without bias auditing is a growing EEOC risk. EEOC 2024 guidance makes employers liable for algorithmic disparate impact.</p>
+    </div>
+
+  </div>
+
+  <h2>D6 vs D7 Coverage Structure Comparison</h2>
+  <table class="cov-table">
+    <thead>
+      <tr>
+        <th>Coverage Element</th>
+        <th>D6 — USA</th>
+        <th>D7 — Non-USA (UK / EU / AUS)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Policy Basis</strong></td><td>Claims-made; EEOC charge = a claim</td><td>Claims-made; ET claim or written demand</td></tr>
+      <tr><td><strong>Defence Costs</strong></td><td>Outside limits (standard US market)</td><td>Within limits (standard UK/EU market)</td></tr>
+      <tr><td><strong>Wrongful Termination</strong></td><td><span class="tick">✔ Covered</span></td><td><span class="tick">✔ Covered</span> (unfair dismissal)</td></tr>
+      <tr><td><strong>Discrimination</strong></td><td><span class="tick">✔ Covered</span> — Title VII, ADEA, ADA, PDA</td><td><span class="tick">✔ Covered</span> — Equality Act / local equivalents</td></tr>
+      <tr><td><strong>Sexual Harassment</strong></td><td><span class="tick">✔ Covered</span></td><td><span class="tick">✔ Covered</span></td></tr>
+      <tr><td><strong>Retaliation</strong></td><td><span class="tick">✔ Covered</span></td><td><span class="tick">✔ Covered</span> — incl. protected disclosures (UK)</td></tr>
+      <tr><td><strong>Failure to Promote</strong></td><td><span class="tick">✔ Covered</span></td><td><span class="tick">✔ Covered</span></td></tr>
+      <tr><td><strong>Third Party EPL</strong></td><td><span class="cond">Optional extension</span></td><td><span class="cond">Optional, market varies</span></td></tr>
+      <tr><td><strong>Punitive Damages</strong></td><td><span class="cond">Covered where insurable by law</span></td><td><span class="cross">✘ Not applicable (UK/EU no punitive EPL damages)</span></td></tr>
+      <tr><td><strong>Wage &amp; Hour Back-Pay</strong></td><td><span class="cross">✘ Excluded</span></td><td><span class="cross">✘ Excluded</span></td></tr>
+      <tr><td><strong>Wage &amp; Hour Defence Costs</strong></td><td><span class="cond">Sub-limited ($100k–$500k, if covered)</span></td><td><span class="cross">✘ Generally excluded</span></td></tr>
+      <tr><td><strong>ERISA / Benefits Denial</strong></td><td><span class="cross">✘ Excluded — covered under DD (Fiduciary)</span></td><td><span class="cross">✘ Excluded</span></td></tr>
+      <tr><td><strong>Typical Limit Range</strong></td><td>$1m–$25m (SME to large corporate)</td><td>£500k–£10m (UK); lower elsewhere</td></tr>
+      <tr><td><strong>SIR / Retention</strong></td><td>$25k–$250k per claim typical</td><td>£5k–£50k per claim typical</td></tr>
+      <tr><td><strong>Run-off Period</strong></td><td>3–6 years recommended at RIF or M&A</td><td>3 years recommended</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Sector Rate Index (D6 US — Relative Premium per Employee)</h2>
+  <table class="sector-table">
+    <thead><tr><th>Sector</th><th>Relative Rate</th><th>Key Drivers</th><th>California Loading</th></tr></thead>
+    <tbody>
+      <tr><td>Financial Services</td><td class="rate-high">Very High (Index 175–220)</td><td>Glass ceiling, pay equity, hostile environment — Morgan Stanley, Goldman Sachs precedents</td><td>+35–50%</td></tr>
+      <tr><td>Media &amp; Entertainment</td><td class="rate-high">Very High (Index 180–230)</td><td>#MeToo precedents; power imbalance; non-disclosure agreements scrutinised; talent concentration risk</td><td>+40–55%</td></tr>
+      <tr><td>Technology</td><td class="rate-high">High (Index 155–195)</td><td>Pay equity wave; culture complaints; rapid hiring/firing cycles; AI hiring tool exposure</td><td>+40–60%</td></tr>
+      <tr><td>Hospitality &amp; Restaurants</td><td class="rate-mid">High (Index 145–180)</td><td>Front-line service interactions; tipping culture; franchise complexity; wage & hour exposure</td><td>+30–45%</td></tr>
+      <tr><td>Manufacturing</td><td class="rate-mid">Medium (Index 115–145)</td><td>Union complexity; factory floor harassment; production-line termination patterns</td><td>+25–35%</td></tr>
+      <tr><td>Retail</td><td class="rate-mid">Medium (Index 110–140)</td><td>Third party EPL; high turnover; wage & hour (California especially); Abercrombie & Fitch precedents</td><td>+30–45%</td></tr>
+      <tr><td>Healthcare</td><td class="rate-mid">Medium (Index 115–145)</td><td>Physician/nurse relations; credentialing disputes; FMLA retaliation; Novartis pharma precedent</td><td>+25–35%</td></tr>
+      <tr><td>Professional Services</td><td class="rate-low">Lower (Index 90–115)</td><td>Educated workforce; documented HR; lower third party exposure; arbitration common</td><td>+20–30%</td></tr>
+      <tr><td>Education / NFP</td><td class="rate-low">Lower (Index 85–110)</td><td>Established HR processes; union agreements; lower punitive risk; Title IX overlay</td><td>+15–25%</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Premium Formula &amp; Methodology</h2>
+  <div class="formula-box">
+    <h4>D6 US EPLI — Indicative Base Rate Formula</h4>
+    <div class="formula">Base Premium = (Employee Count × Rate Per Head) × Limit Factor × State Loading × Sector Multiplier × Claims Modifier</div>
+    <p><strong>Rate Per Head:</strong> Typically $80–$400 per employee per year depending on sector and state mix. Financial services and media at upper end; professional services at lower end.</p>
+    <p><strong>Limit Factor:</strong> Indexed to 1.00 at $1m limit. Additional limit factors: $2m = 1.70×; $5m = 2.90×; $10m = 4.50×; $25m = 8.00×. Excess layers priced separately.</p>
+    <p><strong>State Loading:</strong> California +30–60%; New York +20–35%; Illinois/New Jersey +10–20%; all other states base.</p>
+    <p><strong>Claims Modifier:</strong> No claims in 5 years = 0.85×; 1 claim = 1.20×; 2 claims = 1.60×; 3+ claims = 1.90–2.50× or decline.</p>
+  </div>
+
+  <h2>Worked Example A — US Technology Company (D6)</h2>
+  <div class="example-box">
+    <h4>InsurTech Corp: 850 employees, San Francisco HQ + New York office, NASDAQ-listed, no prior claims, strong HR</h4>
+    <div class="ex-row"><span class="ex-label">Employee count</span><span class="ex-value">850</span></div>
+    <div class="ex-row"><span class="ex-label">Base rate per head (technology sector)</span><span class="ex-value">$320/employee</span></div>
+    <div class="ex-row"><span class="ex-label">Base premium before loadings</span><span class="ex-value">$272,000</span></div>
+    <div class="ex-row"><span class="ex-label">California exposure loading (+45% on 70% of headcount)</span><span class="ex-value">+$85,680</span></div>
+    <div class="ex-row"><span class="ex-label">New York exposure loading (+25% on 20% of headcount)</span><span class="ex-value">+$13,600</span></div>
+    <div class="ex-row"><span class="ex-label">Limit factor — $5m primary limit (2.90×)</span><span class="ex-value">×2.90 applied to adjusted base</span></div>
+    <div class="ex-row"><span class="ex-label">Adjusted base after state loadings × limit factor</span><span class="ex-value">$1,075,784</span></div>
+    <div class="ex-row"><span class="ex-label">Claims modifier (0 claims in 5 years)</span><span class="ex-value">×0.85</span></div>
+    <div class="ex-row"><span class="ex-label">HR quality credit (documented policies, biennial training, dedicated CHRO)</span><span class="ex-value">−10%</span></div>
+    <div class="ex-row"><span class="ex-label">Wage &amp; hour defence costs sublimit ($250k, added)</span><span class="ex-value">+$18,000</span></div>
+    <div class="ex-row"><span class="ex-label">Third party EPL extension (included)</span><span class="ex-value">+$12,000</span></div>
+    <div class="ex-row"><span class="ex-label ex-total"><strong>Total Indicative Premium</strong></span><span class="ex-value ex-total"><strong>$838,000</strong></span></div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-top:14px;">Coverage: $5m limit / $1m retention. Claims-made. Defence outside limits. Wage &amp; hour defence sub-limited to $250k. Retro date: prior to inception.</p>
+  </div>
+
+  <h2>Worked Example B — UK Financial Services Firm (D7)</h2>
+  <div class="example-box">
+    <h4>Meridian Asset Management: 320 employees, London HQ, FCA regulated, 1 prior ET claim (settled £45k), no harassment history</h4>
+    <div class="ex-row"><span class="ex-label">Employee count</span><span class="ex-value">320</span></div>
+    <div class="ex-row"><span class="ex-label">Base rate per head (UK financial services D7)</span><span class="ex-value">£280/employee</span></div>
+    <div class="ex-row"><span class="ex-label">Base premium</span><span class="ex-value">£89,600</span></div>
+    <div class="ex-row"><span class="ex-label">Limit factor — £3m limit (2.40×)</span><span class="ex-value">×2.40</span></div>
+    <div class="ex-row"><span class="ex-label">Adjusted base</span><span class="ex-value">£215,040</span></div>
+    <div class="ex-row"><span class="ex-label">Claims modifier (1 prior ET claim in 5 years)</span><span class="ex-value">×1.20</span></div>
+    <div class="ex-row"><span class="ex-label">FCA regulatory context loading (senior manager accountability)</span><span class="ex-value">+£8,000</span></div>
+    <div class="ex-row"><span class="ex-label">HR quality credit (documented policies, annual ET training)</span><span class="ex-value">−8%</span></div>
+    <div class="ex-row"><span class="ex-label ex-total"><strong>Total Indicative Premium</strong></span><span class="ex-value ex-total"><strong>£229,200</strong></span></div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-top:14px;">Coverage: £3m limit / £15k retention. Claims-made. Defence within limits (UK standard). No wage &amp; hour cover. Retro date: day one of first EPLI policy (clean). Run-off available at 125% of expiring premium for 3 years.</p>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠ California — The Most Complex US State for EPLI</h4>
+    <p>California's employment law framework materially exceeds federal protections in every dimension relevant to EPLI:</p>
+    <ul>
+      <li><strong>FEHA:</strong> California Fair Employment and Housing Act — broader protected classes, lower employer threshold (5 employees vs Title VII's 15), unlimited compensatory damages</li>
+      <li><strong>CFRA / FMLA:</strong> California Family Rights Act extends leave to same-sex partners, in-laws and grandparents not covered by federal FMLA</li>
+      <li><strong>PAGA:</strong> Private Attorneys General Act — any employee can bring a representative action on behalf of all other aggrieved employees; PAGA penalties are not insurable</li>
+      <li><strong>Arbitration restrictions:</strong> AB 51 (partially enjoined) and SB 1480 restrict arbitration for FEHA claims — class action exposure is elevated</li>
+      <li><strong>Pay transparency:</strong> SB 1162 (2023) requires pay scale disclosure in job postings; pay data reporting to DFEH annually</li>
+      <li><strong>Biennial harassment training:</strong> SB 1343 mandates harassment training for all employees of 5+ every two years; supervisors require 2 hours, non-supervisors 1 hour</li>
+    </ul>
+  </div>
+
+</main>
+<footer>Risk Code Hub — Employment Practices Liability (D6/D7) | Lloyd's Market Intelligence Platform</footer>
+</body>
+</html>

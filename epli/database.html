@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPLI Claims Database – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--epli:#0d5c4c;--epli-dark:#083c32;--epli-light:#f0faf8;--accent:#c8a84b;--purple:#4a148c;--crimson:#8b1a1a;--orange:#e65100;--blue:#1565c0;--gold:#7a5200;--light:#f4f8f6;--text:#1e2d3d;--muted:#6b7c93;--border:#c8ddd8; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#0d5c4c 55%,#1a6b3a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8e0d8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8e0d8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:40px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:36px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+
+    .filter-bar { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 24px; margin-bottom:24px; display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; }
+    .filter-group { display:flex; flex-direction:column; gap:5px; min-width:160px; }
+    .filter-group label { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); }
+    .filter-group select { border:1px solid var(--border); border-radius:6px; padding:7px 10px; font-size:0.85rem; color:var(--text); background:#fff; cursor:pointer; }
+    .filter-group select:focus { outline:none; border-color:var(--epli); }
+    .filter-btn { background:var(--epli); color:#fff; border:none; border-radius:6px; padding:9px 20px; font-size:0.85rem; font-weight:700; cursor:pointer; align-self:flex-end; }
+    .filter-btn:hover { background:var(--epli-dark); }
+    .reset-btn { background:#fff; color:var(--muted); border:1px solid var(--border); border-radius:6px; padding:9px 16px; font-size:0.85rem; cursor:pointer; align-self:flex-end; }
+    #result-count { font-size:0.85rem; color:var(--muted); margin-bottom:12px; }
+
+    table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 12px rgba(13,92,76,0.07); font-size:0.84rem; }
+    thead tr { background:var(--navy); }
+    th { color:#fff; padding:11px 13px; text-align:left; font-size:0.76rem; text-transform:uppercase; letter-spacing:1px; cursor:pointer; white-space:nowrap; }
+    th:hover { background:#1a3a5c; }
+    td { padding:10px 13px; border-bottom:1px solid #e8f0ee; vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:nth-child(even) td { background:#f8fcfb; }
+    tr:hover td { background:#e8f5f2; }
+
+    .tag-type { display:inline-block; font-size:0.70rem; font-weight:700; padding:2px 8px; border-radius:4px; color:#fff; white-space:nowrap; }
+    .t-wrongful { background:#8b1a1a; }
+    .t-discrimination { background:#1565c0; }
+    .t-harassment { background:#4a148c; }
+    .t-retaliation { background:#e65100; }
+    .t-payequity { background:#0d5c4c; }
+    .t-classwh { background:#7a5200; }
+    .t-epl-intl { background:#00695c; }
+
+    .amt { font-weight:700; color:var(--crimson); }
+    .sector-badge { font-size:0.72rem; background:#e0f2f1; color:var(--epli-dark); padding:2px 8px; border-radius:4px; display:inline-block; }
+
+    footer { background:var(--navy); color:#9ab8b0; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">EPLI</a></div>
+  <div class="tag">Module 03 — Claims Database</div>
+  <h1>EPLI Claims Database</h1>
+  <p>35 significant US and non-US employment practices liability claims 1994–2024. Filter by claim type, sector, geography and settlement size. Data sourced from EEOC, court records and public filings.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+  <h2>Searchable Claims Database</h2>
+
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>Claim Type</label>
+      <select id="f-type">
+        <option value="">All Types</option>
+        <option value="t-wrongful">Wrongful Termination</option>
+        <option value="t-discrimination">Discrimination</option>
+        <option value="t-harassment">Harassment</option>
+        <option value="t-retaliation">Retaliation</option>
+        <option value="t-payequity">Pay Equity</option>
+        <option value="t-classwh">Wage &amp; Hour</option>
+        <option value="t-epl-intl">International EPL</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Sector</label>
+      <select id="f-sector">
+        <option value="">All Sectors</option>
+        <option value="Financial Services">Financial Services</option>
+        <option value="Technology">Technology</option>
+        <option value="Retail">Retail</option>
+        <option value="Food &amp; Beverage">Food &amp; Beverage</option>
+        <option value="Media &amp; Entertainment">Media &amp; Entertainment</option>
+        <option value="Manufacturing">Manufacturing</option>
+        <option value="Healthcare">Healthcare</option>
+        <option value="Energy">Energy</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Min. Settlement</label>
+      <select id="f-min">
+        <option value="0">Any Amount</option>
+        <option value="25">$25m+</option>
+        <option value="50">$50m+</option>
+        <option value="100">$100m+</option>
+        <option value="200">$200m+</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Geography</label>
+      <select id="f-geo">
+        <option value="">All</option>
+        <option value="US">US (D6)</option>
+        <option value="Non-US">Non-US (D7)</option>
+      </select>
+    </div>
+    <button class="filter-btn" onclick="applyFilters()">Apply Filters</button>
+    <button class="reset-btn" onclick="resetFilters()">Reset</button>
+  </div>
+
+  <div id="result-count"></div>
+
+  <table id="claims-table">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Year ↕</th>
+        <th onclick="sortTable(1)">Company</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th onclick="sortTable(4)">Settlement ↕</th>
+        <th>Geo</th>
+        <th>Summary</th>
+      </tr>
+    </thead>
+    <tbody id="claims-body"></tbody>
+  </table>
+</main>
+
+<footer>Risk Code Hub — Employment Practices Liability (D6/D7) | Lloyd's Market Intelligence Platform</footer>
+
+<script>
+const claims = [
+  { year:1994, company:"Denny's Restaurants", type:"t-discrimination", sector:"Retail", amount:54, geo:"US", summary:"Racial discrimination class action — denial of service and employment discrimination against Black employees and customers." },
+  { year:1996, company:"Texaco", type:"t-discrimination", sector:"Energy", amount:176, geo:"US", summary:"Racial discrimination class action after executives caught on tape making racist remarks. Largest race discrimination settlement at the time." },
+  { year:1998, company:"Mitsubishi Motors (Normal, IL)", type:"t-harassment", sector:"Manufacturing", amount:34, geo:"US", summary:"EEOC-initiated sexual harassment class action covering systematic harassment of female assembly workers; corporate retaliation against complainants." },
+  { year:1999, company:"Ford Motor Company", type:"t-harassment", sector:"Manufacturing", amount:17.5, geo:"US", summary:"Consent decree resolving EEOC sexual harassment and hostile environment charges across multiple Ford plants." },
+  { year:2000, company:"Coca-Cola", type:"t-discrimination", sector:"Food & Beverage", amount:192.5, geo:"US", summary:"Racial discrimination class action by Black employees. Largest civil rights settlement of its era. Independent task force monitored compliance for 4 years." },
+  { year:2000, company:"Boeing", type:"t-discrimination", sector:"Manufacturing", amount:72.5, geo:"US", summary:"Race discrimination class action by Black employees alleging systematic pay and promotion disparities." },
+  { year:2001, company:"Rent-A-Center", type:"t-discrimination", sector:"Retail", amount:47, geo:"US", summary:"Sex discrimination class action by female employees alleging discriminatory pay and promotion policies across nationwide operations." },
+  { year:2002, company:"Dial Corporation", type:"t-harassment", sector:"Manufacturing", amount:10, geo:"US", summary:"EEOC class action for systematic sexual harassment of female workers at Aurora, Illinois plant including graphic conduct and retaliation." },
+  { year:2004, company:"Morgan Stanley", type:"t-discrimination", sector:"Financial Services", amount:54, geo:"US", summary:"Sex discrimination class action by Allison Schieffelin and female bond saleswomen alleging glass ceiling in promotions and pay. Included consent decree and monitoring." },
+  { year:2004, company:"Abercrombie & Fitch", type:"t-discrimination", sector:"Retail", amount:40, geo:"US", summary:"Race and sex discrimination class action by Hispanic, Black, Asian and female employees alleging 'look policy' pushed minorities out of sales floor roles." },
+  { year:2005, company:"Winn-Dixie", type:"t-discrimination", sector:"Retail", amount:33, geo:"US", summary:"Race discrimination class action by Black employees in management track alleging promotion barriers." },
+  { year:2007, company:"Cargill", type:"t-wrongful", sector:"Food & Beverage", amount:3.4, geo:"US", summary:"Individual wrongful termination claim by senior executive; notable for jury punitive damage award exceeding compensatory damages 5:1." },
+  { year:2010, company:"Novartis Pharmaceuticals", type:"t-discrimination", sector:"Healthcare", amount:175, geo:"US", summary:"Sex discrimination class action by female sales representatives alleging pay gap, promotion barriers and pregnancy discrimination. Largest pharma EPLI settlement to date." },
+  { year:2012, company:"Sears Holdings", type:"t-classwh", sector:"Retail", amount:6.2, geo:"US", summary:"Wage and hour class action for unpaid off-the-clock work; FLSA and California Labor Code violations." },
+  { year:2013, company:"Bank of America / Merrill Lynch", type:"t-discrimination", sector:"Financial Services", amount:160, geo:"US", summary:"Race discrimination class action by Black financial advisors alleging systematic account distribution and teaming disparities. Includes injunctive relief and monitoring." },
+  { year:2015, company:"Walmart", type:"t-discrimination", sector:"Retail", amount:11.7, geo:"US", summary:"EEOC ADEA age discrimination settlement covering systematic exclusion of workers over 40 in reduction-in-force decisions." },
+  { year:2015, company:"Ernst & Young", type:"t-retaliation", sector:"Financial Services", amount:10.25, geo:"US", summary:"Retaliation class action by employees who reported concerns under SOX whistleblower provisions; constructive dismissal following reports." },
+  { year:2016, company:"Fox News (Roger Ailes)", type:"t-harassment", sector:"Media & Entertainment", amount:20, geo:"US", summary:"Sexual harassment settlements with multiple female employees following resignation of CEO Roger Ailes. Precursor to broader Fox News settlements." },
+  { year:2016, company:"Sterling Jewelers / Signet", type:"t-payequity", sector:"Retail", amount:175, geo:"US", summary:"Pay equity and sexual harassment class action by ~70,000 female employees alleging systematic compensation discrimination and harassment by male managers." },
+  { year:2017, company:"Fox News (Bill O'Reilly)", type:"t-harassment", sector:"Media & Entertainment", amount:32, geo:"US", summary:"O'Reilly settles multiple sexual harassment claims as #MeToo emerges. Fox News faces EPLI and D&O exposure for failure to act on known pattern." },
+  { year:2018, company:"Nike", type:"t-discrimination", sector:"Retail", amount:0, geo:"US", summary:"Wave of internal complaints by female employees triggers CEO pledge and head of HR departure. Class action filed 2018; illustrative of #MeToo's reach into sports apparel." },
+  { year:2018, company:"Google / Alphabet", type:"t-harassment", sector:"Technology", amount:0, geo:"US", summary:"Employee walkout over handling of sexual harassment claims against executives. $90m+ paid to departing executives despite misconduct findings prompted massive media and regulatory scrutiny." },
+  { year:2019, company:"McDonald's", type:"t-harassment", sector:"Food & Beverage", amount:0, geo:"US", summary:"Wave of EEOC harassment charges by restaurant workers; company implements mandatory anti-harassment training. CEO Easterbrook dismissed for policy violation." },
+  { year:2020, company:"McDonald's / Easterbrook", type:"t-wrongful", sector:"Food & Beverage", amount:105, geo:"US", summary:"McDonald's claws back $105m from former CEO after discovering he concealed additional consensual relationships. D&O/EPLI intersection claim." },
+  { year:2020, company:"Pinterest", type:"t-discrimination", sector:"Technology", amount:22.5, geo:"US", summary:"Race and sex discrimination claims by former COO Francoise Brougher and Black employees alleging hostile culture. Settlement and public accountability scrutiny." },
+  { year:2021, company:"Amazon", type:"t-retaliation", sector:"Retail", amount:62, geo:"US", summary:"Multiple EEOC and state agency retaliation claims by warehouse workers who raised COVID-19 safety concerns; includes settlements and consent orders." },
+  { year:2021, company:"Tesla", type:"t-harassment", sector:"Manufacturing", amount:137, geo:"US", summary:"EEOC class action for systemic racial harassment at Fremont factory. Ongoing jury awards included $137m to one plaintiff (subsequently reduced by trial judge)." },
+  { year:2022, company:"Google / Alphabet", type:"t-payequity", sector:"Technology", amount:118, geo:"US", summary:"Gender pay equity class action by ~15,500 female employees in California. Settlement includes independent pay equity audits and monitoring." },
+  { year:2022, company:"Uber Technologies", type:"t-discrimination", sector:"Technology", amount:9.5, geo:"US", summary:"EEOC and state agency race and sex discrimination claims; multiple individual settlements and consent decree for hiring practices." },
+  { year:2022, company:"Activision Blizzard", type:"t-harassment", sector:"Media & Entertainment", amount:54, geo:"US", summary:"DFEH and EEOC class actions for systemic sexual harassment and gender discrimination. Settlement includes $18m EEOC consent decree plus private settlements." },
+  { year:2022, company:"Goldman Sachs", type:"t-payequity", sector:"Financial Services", amount:215, geo:"US", summary:"Pay equity class action by female vice presidents and associates alleging systematic compensation and promotion disparities. One of the largest Wall Street EPLI settlements." },
+  { year:2023, company:"Twitter / X", type:"t-wrongful", sector:"Technology", amount:0, geo:"US", summary:"Mass wrongful termination claims following Musk acquisition; WARN Act violations alleged for insufficient redundancy notice. Multiple class actions filed." },
+  { year:2023, company:"Confederation of British Industry (CBI)", type:"t-harassment", sector:"Financial Services", amount:0, geo:"Non-US", summary:"UK: Wave of sexual misconduct allegations against CBI staff leads to resignation of director-general and near-collapse of the organisation. D7 reputational and legal exposure." },
+  { year:2023, company:"Aviva (UK)", type:"t-epl-intl", sector:"Financial Services", amount:0, geo:"Non-US", summary:"UK whistleblowing/retaliation claim following reports of conduct concerns; Employment Tribunal award of uncapped compensation under protected disclosure provisions." },
+  { year:2024, company:"SpaceX", type:"t-retaliation", sector:"Technology", amount:0, geo:"US", summary:"NLRB complaint for retaliation against employees who signed open letter criticising Elon Musk. Illustrates intersection of EPLI retaliation and NLRA protected activity." }
+];
+
+let sortAsc = true;
+let lastSortCol = 0;
+
+function renderTable(data) {
+  const body = document.getElementById('claims-body');
+  document.getElementById('result-count').textContent = `Showing ${data.length} of ${claims.length} claims`;
+  if (!data.length) { body.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px;">No claims match your filters.</td></tr>'; return; }
+  body.innerHTML = data.map(c => {
+    const typeLabel = { 't-wrongful':'Wrongful Term.','t-discrimination':'Discrimination','t-harassment':'Harassment','t-retaliation':'Retaliation','t-payequity':'Pay Equity','t-classwh':'Wage & Hour','t-epl-intl':'Intl EPL' }[c.type] || c.type;
+    const amtStr = c.amount > 0 ? `<span class="amt">$${c.amount}m</span>` : '<span style="color:var(--muted);font-size:0.78rem;">Undisclosed</span>';
+    return `<tr data-type="${c.type}" data-sector="${c.sector}" data-amount="${c.amount}" data-geo="${c.geo}">
+      <td>${c.year}</td>
+      <td><strong>${c.company}</strong></td>
+      <td><span class="tag-type ${c.type}">${typeLabel}</span></td>
+      <td><span class="sector-badge">${c.sector}</span></td>
+      <td>${amtStr}</td>
+      <td>${c.geo}</td>
+      <td style="font-size:0.82rem;color:var(--muted);line-height:1.5;">${c.summary}</td>
+    </tr>`;
+  }).join('');
+}
+
+function applyFilters() {
+  const type = document.getElementById('f-type').value;
+  const sector = document.getElementById('f-sector').value;
+  const min = parseFloat(document.getElementById('f-min').value) || 0;
+  const geo = document.getElementById('f-geo').value;
+  const filtered = claims.filter(c => {
+    if (type && c.type !== type) return false;
+    if (sector && c.sector !== sector) return false;
+    if (min && c.amount < min) return false;
+    if (geo && c.geo !== geo) return false;
+    return true;
+  });
+  renderTable(filtered);
+}
+
+function resetFilters() {
+  document.getElementById('f-type').value = '';
+  document.getElementById('f-sector').value = '';
+  document.getElementById('f-min').value = '0';
+  document.getElementById('f-geo').value = '';
+  renderTable(claims);
+}
+
+function sortTable(col) {
+  sortAsc = lastSortCol === col ? !sortAsc : true;
+  lastSortCol = col;
+  const sorted = [...claims].sort((a, b) => {
+    const vals = [a.year, a.company, '', '', a.amount][col];
+    const valb = [b.year, b.company, '', '', b.amount][col];
+    if (typeof vals === 'number') return sortAsc ? vals - valb : valb - vals;
+    return sortAsc ? String(vals).localeCompare(String(valb)) : String(valb).localeCompare(String(vals));
+  });
+  renderTable(sorted);
+}
+
+renderTable(claims);
+</script>
+</body>
+</html>

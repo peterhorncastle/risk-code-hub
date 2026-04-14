@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPLI Global Programmes – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--epli:#0d5c4c;--epli-dark:#083c32;--epli-light:#f0faf8;--accent:#c8a84b;--purple:#4a148c;--crimson:#8b1a1a;--orange:#e65100;--blue:#1565c0;--light:#f4f8f6;--text:#1e2d3d;--muted:#6b7c93;--border:#c8ddd8;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#0d5c4c 55%,#1a6b3a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8e0d8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8e0d8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .tower { display:flex; flex-direction:column; gap:6px; margin:28px auto; max-width:600px; }
+    .tower-layer { border-radius:8px; padding:16px 22px; text-align:center; }
+    .tl-label { font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; opacity:0.85; }
+    .tl-desc { font-size:0.92rem; font-weight:700; margin:4px 0; }
+    .tl-note { font-size:0.78rem; opacity:0.8; }
+    .l-sir { background:#e0f2f1; border:2px dashed var(--epli); color:var(--epli-dark); }
+    .l-primary { background:var(--epli); color:#fff; }
+    .l-xs1 { background:#0a4a3c; color:#fff; }
+    .l-xs2 { background:#083c32; color:#fff; }
+    .l-side { background:var(--navy); color:#fff; border:2px solid var(--accent); }
+
+    .juris-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:20px 0 36px; }
+    .juris-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:22px; border-top:4px solid var(--epli); }
+    .juris-card.uk { border-top-color:#1565c0; }
+    .juris-card.eu { border-top-color:#4a148c; }
+    .juris-card.aus { border-top-color:#e65100; }
+    .juris-card.can { border-top-color:#c62828; }
+    .juris-card.apac { border-top-color:#00695c; }
+    .juris-flag { font-size:1.3rem; margin-bottom:6px; }
+    .juris-card h4 { font-size:0.95rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .juris-item { display:flex; gap:8px; margin-bottom:5px; font-size:0.82rem; }
+    .juris-key { color:var(--muted); min-width:110px; flex-shrink:0; }
+    .juris-val { color:var(--text); font-weight:500; }
+
+    .jur-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.85rem; }
+    .jur-table th { background:var(--navy); color:#fff; padding:10px 13px; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; text-align:left; }
+    .jur-table td { padding:10px 13px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .jur-table tr:nth-child(even) td { background:#f8fcfb; }
+
+    .case-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:28px 30px; margin:20px 0 36px; border-left:5px solid var(--epli); }
+    .case-box h4 { font-size:1rem; font-weight:700; color:var(--navy); margin-bottom:14px; }
+    .case-row { display:grid; grid-template-columns:160px 1fr; gap:12px; padding:8px 0; border-bottom:1px solid #f0f4f2; font-size:0.86rem; }
+    .case-row:last-child { border-bottom:none; }
+    .case-key { color:var(--muted); font-weight:600; }
+    .case-val { color:var(--text); line-height:1.5; }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:8px; line-height:1.6; }
+    .warn-box ul { margin-left:1.2rem; font-size:0.88rem; line-height:1.8; }
+
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:32px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#c8ddd8; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#9ab8b0; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">EPLI</a></div>
+  <div class="tag">Module 07 — Global Programme Structuring</div>
+  <h1>EPLI Global Programmes</h1>
+  <p>Multinational EPLI programme architecture — US master policy with local D7 admitted extensions, jurisdiction-by-jurisdiction employment law profiles, structuring decisions for M&A and RIF events, and a cross-border case study.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programmes</a>
+</nav>
+
+<main>
+
+  <h2>Multinational Programme Architecture</h2>
+  <p>Large multinationals typically structure EPLI as a master policy (D6 for the US parent) with local D7 admitted or non-admitted extensions for international subsidiaries. The architecture reflects the severity asymmetry between the US (high severity, outside-limits defence, punitive damages) and the rest of the world (lower severity, within-limits defence, no punitive damages).</p>
+
+  <div class="tower">
+    <div class="tower-layer l-side">
+      <div class="tl-label">Optional DIC Layer</div>
+      <div class="tl-desc">Difference-in-Conditions Top-Up</div>
+      <div class="tl-note">Fills gaps where local admitted policy does not match master terms — critical in California and Australia where local law creates additional obligations</div>
+    </div>
+    <div class="tower-layer l-xs2">
+      <div class="tl-label">2nd Excess</div>
+      <div class="tl-desc">$10m xs $10m — Large Class Action Layer</div>
+      <div class="tl-note">Responds to pay equity / race discrimination class actions; California cluster risk; Goldman Sachs / Google-scale events</div>
+    </div>
+    <div class="tower-layer l-xs1">
+      <div class="tl-label">1st Excess</div>
+      <div class="tl-desc">$5m xs $5m — Class Action / Multi-Claimant Buffer</div>
+      <div class="tl-note">Key layer for multi-claimant harassment events and post-RIF ADEA clusters</div>
+    </div>
+    <div class="tower-layer l-primary">
+      <div class="tl-label">D6 Primary (Master Policy — USA)</div>
+      <div class="tl-desc">$5m per claim / $5m aggregate — US parent + subsidiaries</div>
+      <div class="tl-note">Claims-made; defence outside limits; covers all US employment practices wrongful acts; SIR $50k–$250k</div>
+    </div>
+    <div class="tower-layer" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+      <div style="background:#e0f0ff;border:1px solid var(--blue);border-radius:6px;padding:12px;text-align:center;">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:1px;">D7 Local Admitted Policies</div>
+        <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin:4px 0;">UK · EU · Canada · APAC</div>
+        <div style="font-size:0.75rem;color:var(--muted);">Defence within limits; lower limits; local law coverage; coordinated with master</div>
+      </div>
+      <div style="background:#f0faf8;border:1px solid var(--epli);border-radius:6px;padding:12px;text-align:center;">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--epli);text-transform:uppercase;letter-spacing:1px;">Self-Insured Retention</div>
+        <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin:4px 0;">$50k–$250k per claim</div>
+        <div style="font-size:0.75rem;color:var(--muted);">EEOC charges; small individual claims; managed at SIR level by in-house employment counsel</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Jurisdiction Profiles</h2>
+  <div class="juris-grid">
+    <div class="juris-card">
+      <div class="juris-flag">🇺🇸</div>
+      <h4>United States (D6)</h4>
+      <div class="juris-item"><span class="juris-key">Key Legislation</span><span class="juris-val">Title VII, ADEA, ADA, FMLA, FLSA; state: FEHA (CA), NYSHRL</span></div>
+      <div class="juris-item"><span class="juris-key">Tribunal / Forum</span><span class="juris-val">Federal District Court; state superior courts; EEOC charge prerequisite</span></div>
+      <div class="juris-item"><span class="juris-key">Damages</span><span class="juris-val">Back pay, front pay, compensatory, punitive (capped by employer size)</span></div>
+      <div class="juris-item"><span class="juris-key">Defence Costs</span><span class="juris-val">Outside policy limits (US standard)</span></div>
+      <div class="juris-item"><span class="juris-key">Typical Limit</span><span class="juris-val">$1m–$25m; class action tower to $20m+</span></div>
+      <div class="juris-item"><span class="juris-key">Key Risk</span><span class="juris-val">California FEHA/PAGA; wage & hour; class actions; retaliation surge</span></div>
+    </div>
+
+    <div class="juris-card uk">
+      <div class="juris-flag">🇬🇧</div>
+      <h4>United Kingdom (D7)</h4>
+      <div class="juris-item"><span class="juris-key">Key Legislation</span><span class="juris-val">Equality Act 2010; Employment Rights Act 1996; PIDA 1998 (whistleblowing)</span></div>
+      <div class="juris-item"><span class="juris-key">Tribunal / Forum</span><span class="juris-val">Employment Tribunal; EAT on appeal; no jury trials</span></div>
+      <div class="juris-item"><span class="juris-key">Damages</span><span class="juris-val">Unfair dismissal: statutory cap (~£115k 2024); discrimination: uncapped</span></div>
+      <div class="juris-item"><span class="juris-key">Defence Costs</span><span class="juris-val">Within limits (UK standard)</span></div>
+      <div class="juris-item"><span class="juris-key">Typical Limit</span><span class="juris-val">£500k–£5m; FCA-regulated firms higher</span></div>
+      <div class="juris-item"><span class="juris-key">Key Risk</span><span class="juris-val">Day-one unfair dismissal rights (proposed 2024 Bill); whistleblowing; discrimination uncapped</span></div>
+    </div>
+
+    <div class="juris-card eu">
+      <div class="juris-flag">🇪🇺</div>
+      <h4>European Union (D7)</h4>
+      <div class="juris-item"><span class="juris-key">Key Legislation</span><span class="juris-val">Equal Treatment Directive; EU Whistleblowing Directive 2019/1937; national labour codes</span></div>
+      <div class="juris-item"><span class="juris-key">Tribunal / Forum</span><span class="juris-val">National labour courts; codified employment law (Germany, France, Netherlands)</span></div>
+      <div class="juris-item"><span class="juris-key">Damages</span><span class="juris-val">Lower than US/UK; statutory formulae common (Germany: months × salary)</span></div>
+      <div class="juris-item"><span class="juris-key">Defence Costs</span><span class="juris-val">Within limits; lower frequency / severity than UK</span></div>
+      <div class="juris-item"><span class="juris-key">Typical Limit</span><span class="juris-val">€250k–€2m per entity; works council complication</span></div>
+      <div class="juris-item"><span class="juris-key">Key Risk</span><span class="juris-val">Works council consultation obligations; GDPR whistleblower channel requirements; collective dismissal rules</span></div>
+    </div>
+
+    <div class="juris-card aus">
+      <div class="juris-flag">🇦🇺</div>
+      <h4>Australia (D7)</h4>
+      <div class="juris-item"><span class="juris-key">Key Legislation</span><span class="juris-val">Fair Work Act 2009; Sex Discrimination Act (positive duty 2023); Work Health and Safety Acts</span></div>
+      <div class="juris-item"><span class="juris-key">Tribunal / Forum</span><span class="juris-val">Fair Work Commission; Federal Court; AHRC for discrimination</span></div>
+      <div class="juris-item"><span class="juris-key">Damages</span><span class="juris-val">Unfair dismissal: max 26 weeks' pay; discrimination: uncapped; civil penalties for WHS breaches</span></div>
+      <div class="juris-item"><span class="juris-key">Defence Costs</span><span class="juris-val">Within limits standard</span></div>
+      <div class="juris-item"><span class="juris-key">Typical Limit</span><span class="juris-val">AUD 1m–AUD 5m</span></div>
+      <div class="juris-item"><span class="juris-key">Key Risk</span><span class="juris-val">Positive duty to proactively eliminate harassment (from 2023); AHRC compliance powers; gig worker exposure</span></div>
+    </div>
+
+    <div class="juris-card can">
+      <div class="juris-flag">🇨🇦</div>
+      <h4>Canada (D7)</h4>
+      <div class="juris-item"><span class="juris-key">Key Legislation</span><span class="juris-val">Canadian Human Rights Act; Employment Equity Act; provincial human rights codes (Ontario OHRC)</span></div>
+      <div class="juris-item"><span class="juris-key">Tribunal / Forum</span><span class="juris-val">Human rights tribunals; labour boards; courts for wrongful dismissal</span></div>
+      <div class="juris-item"><span class="juris-key">Damages</span><span class="juris-val">Notice period very long (common law); "Wallace damages" for bad faith; human rights: uncapped</span></div>
+      <div class="juris-item"><span class="juris-key">Defence Costs</span><span class="juris-val">Within limits typical; notice period exposure significant</span></div>
+      <div class="juris-item"><span class="juris-key">Typical Limit</span><span class="juris-val">CAD 1m–CAD 5m</span></div>
+      <div class="juris-item"><span class="juris-key">Key Risk</span><span class="juris-val">Long common-law notice entitlements; Quebec civil law overlay; pay equity legislation in Ontario</span></div>
+    </div>
+
+    <div class="juris-card apac">
+      <div class="juris-flag">🌏</div>
+      <h4>Asia-Pacific (D7)</h4>
+      <div class="juris-item"><span class="juris-key">Key Legislation</span><span class="juris-val">Varies significantly: Japan Labour Standards Act; Singapore Employment Act; HK Employment Ordinance</span></div>
+      <div class="juris-item"><span class="juris-key">Tribunal / Forum</span><span class="juris-val">Labour tribunals; civil courts; lower litigation culture than West</span></div>
+      <div class="juris-item"><span class="juris-key">Damages</span><span class="juris-val">Generally low; Japan statutory dismissal payments; Singapore and HK lower severity</span></div>
+      <div class="juris-item"><span class="juris-key">Defence Costs</span><span class="juris-val">Within limits; lower frequency</span></div>
+      <div class="juris-item"><span class="juris-key">Typical Limit</span><span class="juris-val">$500k–$2m; Japan slightly higher</span></div>
+      <div class="juris-item"><span class="juris-key">Key Risk</span><span class="juris-val">Japan: difficult to dismiss employees; China: social insurance and severance obligations; expatriate claims</span></div>
+    </div>
+  </div>
+
+  <h2>Structuring Decisions — Key Employment Events</h2>
+  <table class="jur-table">
+    <thead><tr><th>Event</th><th>EPLI Risk</th><th>Structural Action Required</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Acquisition (Target Company)</strong></td>
+        <td>Pre-acquisition EEOC charges and undisclosed employment litigation in target; culture integration risk; successor liability for target's EPL acts</td>
+        <td>HR due diligence on target's EEOC charge history, active litigation, settlements; extend policy to cover acquired entity from closing; consider run-off for target's pre-closing acts</td>
+      </tr>
+      <tr>
+        <td><strong>RIF / Mass Layoff</strong></td>
+        <td>ADEA adverse impact; WARN Act violations; retaliation by recently protected employees; California PAGA exposure on final pay</td>
+        <td>Pre-RIF: statistical age-impact analysis; RFOA documentation; WARN Act compliance. Post-RIF: notify insurer; obtain run-off endorsement extending coverage tail for 24–36 months; expedite any pending EEOC charge resolutions</td>
+      </tr>
+      <tr>
+        <td><strong>Spin-off / Divestiture</strong></td>
+        <td>Which entity employs the affected workforce? Who owns pre-spin EPLI claims? Which policy responds?</td>
+        <td>Policy allocation agreement: parent run-off covers pre-spin acts; new entity obtains own EPLI from spin-off date. Key: ensure retroactive date continuity on new entity's policy.</td>
+      </tr>
+      <tr>
+        <td><strong>Chapter 11 / Insolvency</strong></td>
+        <td>Mass redundancy claims; rejection of employment contracts; ERISA plan termination claims (overlap with DD)</td>
+        <td>Run-off cover purchased pre-filing if financially viable; EPLI claims become unsecured creditor claims; bankruptcy trustee may pursue EPLI coverage on behalf of employee class</td>
+      </tr>
+      <tr>
+        <td><strong>IPO</strong></td>
+        <td>Heightened scrutiny; pay equity disclosure; glassdoor / social media culture review; EEOC charge history becomes publicly discoverable</td>
+        <td>Comprehensive HR audit pre-IPO; resolve open EEOC charges before S-1 filing; increase EPLI limits to reflect post-IPO market cap and heightened litigation risk</td>
+      </tr>
+      <tr>
+        <td><strong>C-Suite Change</strong></td>
+        <td>Incoming CEO/CHRO may discover pre-existing HR issues; board may investigate prior misconduct; clawback / Easterbrook-style exposure</td>
+        <td>Board should commission independent HR culture review on CEO change; ensure policy covers investigation costs for prior period misconduct discovered post-change</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Cross-Border Case Study — Global Technology Manufacturer</h2>
+  <div class="case-box">
+    <h4>TechScale Global Inc — Multinational EPLI Programme Restructure</h4>
+    <div class="case-row"><span class="case-key">Company Profile</span><span class="case-val">US-headquartered technology hardware manufacturer; 6,200 employees globally: 3,800 US (60% California), 850 UK, 600 Germany, 500 India, 250 Singapore, 200 other</span></div>
+    <div class="case-row"><span class="case-key">Trigger Event</span><span class="case-val">15% global RIF following acquisition; simultaneous EEOC class action filed (age discrimination in RIF selection) and UK Employment Tribunal cluster claim (6 employees, unfair dismissal)</span></div>
+    <div class="case-row"><span class="case-key">Pre-RIF Structure</span><span class="case-val">D6 master policy: $3m limit / $100k SIR. No D7 coverage. No RIF protocol. No adverse impact analysis performed before layoffs announced.</span></div>
+    <div class="case-row"><span class="case-key">D6 Loss (US)</span><span class="case-val">EEOC charge escalates to federal class action (ADEA + Title VII). 47 claimants; statistical evidence showed 40+ cohort was 2.3× more likely to be selected for RIF. Settlement: $8.4m including consent decree requiring statistical RIF analysis for 3 years. Policy limits eroded by $3m; $5.4m uninsured.</span></div>
+    <div class="case-row"><span class="case-key">D7 Loss (UK)</span><span class="case-val">6 Employment Tribunal unfair dismissal claims; employer had no D7 coverage. Total ET awards: £210,000. Paid uninsured. ACAS early conciliation was not used — wasted opportunity to resolve before ET filing.</span></div>
+    <div class="case-row"><span class="case-key">Germany (D7 gap)</span><span class="case-val">Works council consultation not properly conducted; Federal Labour Court ordered reinstatement of 8 employees. Reinstatement costs and back pay: €340,000. No D7 coverage — entirely uninsured.</span></div>
+    <div class="case-row"><span class="case-key">Post-Event Restructure</span><span class="case-val">New global programme: D6 $10m primary + $5m excess (US); D7 £3m UK admitted; D7 EU non-admitted extension (Germany, France, Netherlands); D7 APAC extension (Singapore, India). Total premium increase: +185% vs prior year. RIF protocol mandated by insurer as condition of renewal.</span></div>
+    <div class="case-row"><span class="case-key">Key Lesson</span><span class="case-val">D7 coverage is not optional for multinationals — UK/EU employment law claims are real and uninsured losses accumulate quickly. Works council consultation obligations in Germany are a structural risk that requires D7 local admitted coverage, not just a master non-admitted policy.</span></div>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠ UK Employment Rights Bill 2024 — Major D7 Exposure Change</h4>
+    <p>The UK Employment Rights Bill (introduced 2024, expected to take effect 2026) proposes the most significant expansion of UK employment rights in a generation. Key changes with direct D7 EPLI implications:</p>
+    <ul>
+      <li><strong>Day-one unfair dismissal rights:</strong> Removes the current two-year qualifying period. All employees will have unfair dismissal protection from day one of employment. This dramatically increases the volume of potential ET claims — currently most short-tenure dismissals are non-litigable.</li>
+      <li><strong>Flexible working as a day-one right:</strong> Employers must consider flexible working requests from day one; refusal grounds are narrower. Retaliation for requesting flexible work becomes an immediate EPLI risk.</li>
+      <li><strong>Enhanced whistleblowing protections:</strong> New categories of protected disclosures; worker (not just employee) protection extended.</li>
+      <li><strong>Zero-hours contract restrictions:</strong> Requirements to offer guaranteed hours to zero-hours workers meeting minimum usage thresholds — creates new claims exposure for non-compliance.</li>
+    </ul>
+    <p style="margin-top:10px;">D7 underwriters should begin building in a 25–40% exposure increase for UK risks when the Bill takes effect. Existing D7 policies should be reviewed for limit adequacy against post-Bill claim volumes.</p>
+  </div>
+
+  <div class="context-box">
+    <h3>Coordinating D6 and D7: The "One Programme" Approach</h3>
+    <p>The most efficient multinational EPLI structure is a single coordinated programme with the D6 US master policy acting as the lead insurer and D7 local policies aligned to the same terms, conditions, and retroactive date. Key coordination requirements:</p>
+    <p><strong>Consistent retroactive date:</strong> All local D7 policies must share the same retroactive date as the D6 master. Gaps in retro date continuity leave pre-date acts uninsured — a particular risk on acquisition where the acquired entity has pre-existing EP acts.</p>
+    <p><strong>DIC / DIL provisions:</strong> The master D6 policy should include a Difference-in-Conditions (DIC) or Difference-in-Limits (DIL) clause that fills gaps between local D7 admitted policy terms and master terms. This is critical in Australia, where the positive duty obligation may trigger claims not covered under a standard D7 form.</p>
+    <p><strong>Reporting and claims management:</strong> A single global claims manager (typically the D6 primary insurer) should coordinate EPLI claims across all jurisdictions. Cross-border claims — where an employee based in one country files against a manager in another — require rapid jurisdictional analysis of which policy responds and which tribunal has jurisdiction.</p>
+  </div>
+
+</main>
+<footer>Risk Code Hub — Employment Practices Liability (D6/D7) | Lloyd's Market Intelligence Platform</footer>
+</body>
+</html>

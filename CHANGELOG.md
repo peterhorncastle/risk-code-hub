@@ -1,5 +1,20 @@
 # Risk Code Hub — Changelog
 
+## v1.8 — April 2026
+**Session: 14 April 2026**
+- Employment Practices Liability (EPLI) hub complete (Lloyd's codes D6, D7)
+- 8 modules built: index, history, timeline, database, underwriting, rates-analysis, risk-mitigation, global-program
+- Coverage structure: wrongful termination, discrimination (Title VII/ADEA/ADA/FEHA), sexual harassment, retaliation (fastest-growing category), failure to promote, pay equity; third party EPL extension; wage & hour defence sublimit (typically sub-limited or excluded); claims-made basis
+- Loss database: 35 claims 1994–2024 — Coca-Cola racial discrimination ($192.5m), Texaco ($176m), Novartis Pharma ($175m), Goldman Sachs pay equity ($215m), Bank of America/Merrill Lynch ($160m), Google gender pay ($118m), Sterling Jewelers/Signet ($175m), McDonald's Easterbrook clawback ($105m), Tesla racial harassment ($137m before reduction), Activision Blizzard ($54m), Morgan Stanley ($54m)
+- History: 7 era blocks from Civil Rights Act 1964 and EPLI market creation post-Civil Rights Act 1991, through Anita Hill/Clarence Thomas hearings, Faragher/Ellerth (1998), GFC wrongful termination wave (2008–2010), wage & hour California era (2009–2016), #MeToo (2017–2019), COVID FMLA/retaliation surge (2020), to AI hiring tools and pay transparency laws (2024)
+- Timeline: 18 events 1986–2024 with colour-coded dots (statutory/SCOTUS/settlement/regulatory/cultural/international)
+- Underwriting: 12 rating factor cards; D6 vs D7 coverage structure comparison table; sector rate index (financial services/media Very High → professional services Lower); California FEHA/PAGA/SB 1343 warning box; two worked examples: US tech company D6 ($838k, 850 employees, San Francisco + NYC) and UK financial services D7 (£229k, 320 employees, FCA-regulated, 1 prior ET claim); Faragher/Ellerth affirmative defence checklist
+- Rates analysis: Chart.js rate index 2000–2026 (large employer D6 / SME D6 / D7 UK, 2000=100); 8-phase market cycle table; settlement severity distribution chart; ROE scenarios: Bull 19.2%, Base 9.4%, Bear −13.6%; IBNR and reserve development context (shorter tail than D&O; class action exception)
+- Risk mitigation: 9 HR control cards with rate credit indicators; Faragher/Ellerth 5-step affirmative defence process; EPLI risk quality scoring matrix (6 control areas × Green/Amber/Red); termination best practices 7-step checklist; retaliation warning box (fastest-growing EPLI claim type); #MeToo underwriting transformation context (executive conduct warranty, clawback coverage, culture attestation)
+- Global programmes: 4-layer programme tower (SIR → D6 primary $5m → D7 local admitted → DIC top-up); 6 jurisdiction profiles (USA/UK/EU/Australia/Canada/Asia-Pacific); employment event structuring table (acquisition/RIF/spin-off/Chapter 11/IPO/C-suite change); UK Employment Rights Bill 2024 warning (day-one unfair dismissal rights, +25–40% D7 exposure); TechScale Global cross-border case study (US ADEA class action + UK ET cluster + Germany works council)
+- Updated hub-index.json: EPLI status "complete"; expanded keywords
+- Updated index.html HUB_DATA and footer (v1.8)
+
 ## v1.7 — April 2026
 **Session: 14 April 2026**
 - Directors & Officers (D&O) hub complete (Lloyd's codes D1, D2, D3, D4, D5, DA, DB, DD)

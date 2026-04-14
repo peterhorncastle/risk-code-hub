@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPLI Risk Mitigation – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--epli:#0d5c4c;--epli-dark:#083c32;--epli-light:#f0faf8;--accent:#c8a84b;--purple:#4a148c;--crimson:#8b1a1a;--orange:#e65100;--blue:#1565c0;--light:#f4f8f6;--text:#1e2d3d;--muted:#6b7c93;--border:#c8ddd8;--green:#2a7a3a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#0d5c4c 55%,#1a6b3a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8e0d8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8e0d8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .control-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px; margin:20px 0 36px; }
+    .control-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-left:5px solid var(--epli); }
+    .control-card.high { border-left-color:var(--green); }
+    .control-card.med { border-left-color:var(--accent); }
+    .control-card.found { border-left-color:var(--navy); }
+    .credit-badge { font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; border-radius:4px; display:inline-block; margin-bottom:8px; }
+    .cr-high { background:#e8f5ee; color:var(--green); }
+    .cr-med { background:#fff8e8; color:var(--gold); }
+    .cr-found { background:#e3ecf8; color:var(--navy); }
+    .control-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:7px; }
+    .control-card p { font-size:0.82rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    .scoring-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.85rem; }
+    .scoring-table th { background:var(--navy); color:#fff; padding:10px 13px; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; text-align:left; }
+    .scoring-table td { padding:10px 13px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .scoring-table tr:nth-child(even) td { background:#f8fcfb; }
+    .s-green { background:#e8f5ee; color:#1a5c2a; font-weight:700; font-size:0.78rem; padding:3px 9px; border-radius:4px; display:inline-block; }
+    .s-amber { background:#fff3e0; color:#7a4500; font-weight:700; font-size:0.78rem; padding:3px 9px; border-radius:4px; display:inline-block; }
+    .s-red { background:#fde8e8; color:var(--crimson); font-weight:700; font-size:0.78rem; padding:3px 9px; border-radius:4px; display:inline-block; }
+
+    .process-steps { list-style:none; margin:20px 0 36px; }
+    .process-steps li { display:flex; gap:16px; padding:16px 0; border-bottom:1px solid var(--border); align-items:flex-start; }
+    .process-steps li:last-child { border-bottom:none; }
+    .step-num { background:var(--epli); color:#fff; font-size:0.8rem; font-weight:800; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+    .step-text h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:5px; }
+    .step-text p { font-size:0.84rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:8px; line-height:1.6; }
+    .warn-box ul { margin-left:1.2rem; font-size:0.88rem; line-height:1.8; }
+
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:32px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#c8ddd8; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#9ab8b0; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">EPLI</a></div>
+  <div class="tag">Module 06 — Risk Mitigation</div>
+  <h1>EPLI Risk Mitigation</h1>
+  <p>HR best practices, anti-harassment programme design, termination procedure controls, the Faragher/Ellerth affirmative defence, and the EPLI underwriting scoring framework.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <h2>Core HR Controls — Rate Credit Indicators</h2>
+  <div class="control-grid">
+
+    <div class="control-card high">
+      <span class="credit-badge cr-high">Rate Credit: High (up to −15%)</span>
+      <h4>Anti-Harassment Policy &amp; Training</h4>
+      <p>Written policy + biennial training (annual for managers). Documented completion records. Training must be interactive, not passive. California SB 1343 mandates for 5+ employees.</p>
+    </div>
+
+    <div class="control-card high">
+      <span class="credit-badge cr-high">Rate Credit: High (up to −12%)</span>
+      <h4>Documented Termination Process</h4>
+      <p>Progressive discipline policy, performance improvement plans (PIPs), documented performance reviews, signed acknowledgements. Undocumented terminations are the single biggest wrongful dismissal risk driver.</p>
+    </div>
+
+    <div class="control-card high">
+      <span class="credit-badge cr-high">Rate Credit: High (up to −12%)</span>
+      <h4>Complaint &amp; Investigation Procedure</h4>
+      <p>Multi-channel reporting (HR, hotline, ombudsman). Written investigation procedure. External investigator for senior-level complaints. Faragher/Ellerth requires prompt, corrective action to maintain affirmative defence.</p>
+    </div>
+
+    <div class="control-card med">
+      <span class="credit-badge cr-med">Rate Credit: Medium (up to −8%)</span>
+      <h4>Pay Equity Analysis</h4>
+      <p>Annual or biennial pay equity audit across gender and race/ethnicity. Results reviewed by board or compensation committee. Pay transparency policy (required in CA/NY/CO/IL). Remediates unexplained pay gaps proactively.</p>
+    </div>
+
+    <div class="control-card med">
+      <span class="credit-badge cr-med">Rate Credit: Medium (up to −8%)</span>
+      <h4>Dedicated HR Function</h4>
+      <p>CHRO or senior HR professional with direct board access. HR staff ratio proportionate to headcount. HR generalists embedded in business units for large employers.</p>
+    </div>
+
+    <div class="control-card med">
+      <span class="credit-badge cr-med">Rate Credit: Medium (up to −8%)</span>
+      <h4>RIF / Workforce Reduction Protocol</h4>
+      <p>Statistical adverse impact analysis before any RIF. ADEA "reasonable factors other than age" (RFOA) documentation. Outplacement services. WARN Act compliance review for mass layoffs.</p>
+    </div>
+
+    <div class="control-card found">
+      <span class="credit-badge cr-found">Foundational</span>
+      <h4>Employee Handbook</h4>
+      <p>Current (reviewed annually), signed acknowledgement at hire, covers all protected classes, at-will statement (where applicable), complaint procedures. Outdated handbook is an underwriting concern.</p>
+    </div>
+
+    <div class="control-card found">
+      <span class="credit-badge cr-found">Foundational</span>
+      <h4>Onboarding &amp; Offboarding Consistency</h4>
+      <p>Standardised hiring practices. Background check policy. Exit interview programme. Consistent offboarding reduces constructive dismissal and unequal treatment claims.</p>
+    </div>
+
+    <div class="control-card found">
+      <span class="credit-badge cr-found">Foundational</span>
+      <h4>Workplace Accommodation Process</h4>
+      <p>Documented ADA / FEHA interactive process for disability accommodation requests. FMLA eligibility determinations in writing. Accommodation denials documented with undue hardship analysis.</p>
+    </div>
+
+  </div>
+
+  <h2>Faragher / Ellerth Affirmative Defence — Checklist</h2>
+  <p>Employers who can prove both prongs of this Supreme Court affirmative defence can avoid or limit vicarious liability for supervisory sexual harassment where no tangible employment action occurred.</p>
+  <ul class="process-steps">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <h4>Prong 1A — Written Anti-Harassment Policy</h4>
+        <p>Policy must be clear, distributed to all employees (including via handbook), state zero-tolerance, define harassment broadly, and identify multiple reporting channels including bypass routes past the immediate supervisor.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <h4>Prong 1B — Training Programme</h4>
+        <p>Interactive training (not video-only) for all employees; enhanced manager training covering investigation obligations. Annual or biennial cadence with documented completion records per employee.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <h4>Prong 1C — Prompt Investigation</h4>
+        <p>All complaints investigated within a defined timeframe (typically 5–10 business days to begin). Written investigation report. Corrective action proportionate to findings. Written notice of outcome to complainant.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">4</div>
+      <div class="step-text">
+        <h4>Prong 2 — Employee Unreasonably Failed to Use Procedures</h4>
+        <p>This prong is the employee's burden but the employer must have made the complaint procedure genuinely accessible. Confidentiality protections and non-retaliation commitment must be credible — not just stated in the handbook.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">5</div>
+      <div class="step-text">
+        <h4>Critical Limitation — Tangible Employment Action</h4>
+        <p>If the supervisor's harassment resulted in a tangible employment action (termination, demotion, pay cut, transfer), the affirmative defence is unavailable. Employer is strictly liable. This makes supervisor conduct monitoring and prompt response to early harassment signals critically important.</p>
+      </div>
+    </li>
+  </ul>
+
+  <h2>EPLI Risk Quality Scoring Matrix</h2>
+  <table class="scoring-table">
+    <thead><tr><th>Control Area</th><th>Green — Low Risk</th><th>Amber — Moderate Risk</th><th>Red — High Risk</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Anti-Harassment Programme</strong></td>
+        <td><span class="s-green">Annual interactive training; documented; multiple reporting channels</span></td>
+        <td><span class="s-amber">Written policy exists; training ad hoc or online-only</span></td>
+        <td><span class="s-red">No formal policy; no training; single reporting channel</span></td>
+      </tr>
+      <tr>
+        <td><strong>Termination Documentation</strong></td>
+        <td><span class="s-green">PIP process; performance reviews; exit interviews; signed paperwork</span></td>
+        <td><span class="s-amber">Some documentation; inconsistent application; no PIP process</span></td>
+        <td><span class="s-red">At-will terminations without documentation; no performance records</span></td>
+      </tr>
+      <tr>
+        <td><strong>Claims History (5 yrs)</strong></td>
+        <td><span class="s-green">Zero EEOC charges; no ET claims; no material settlements</span></td>
+        <td><span class="s-amber">1–2 charges; resolved quickly; no pattern</span></td>
+        <td><span class="s-red">3+ charges; class action history; active litigation; pattern of type</span></td>
+      </tr>
+      <tr>
+        <td><strong>Pay Equity</strong></td>
+        <td><span class="s-green">Annual pay equity audit; pay transparency implemented; no unexplained gaps</span></td>
+        <td><span class="s-amber">Pay analysis conducted but not audited; some unexplained gaps</span></td>
+        <td><span class="s-red">No pay equity analysis; pay transparency law violations; litigation filed</span></td>
+      </tr>
+      <tr>
+        <td><strong>HR Infrastructure</strong></td>
+        <td><span class="s-green">Dedicated CHRO; HR staff ratio &gt;1:75; board HR committee</span></td>
+        <td><span class="s-amber">Part-time HR; outsourced; no board-level HR oversight</span></td>
+        <td><span class="s-red">No HR function; managers handle all employment decisions unilaterally</span></td>
+      </tr>
+      <tr>
+        <td><strong>California / High-Risk State Exposure</strong></td>
+        <td><span class="s-green">&lt;10% California headcount; California-specific policies implemented</span></td>
+        <td><span class="s-amber">10–40% California headcount; some California compliance gaps</span></td>
+        <td><span class="s-red">&gt;40% California headcount; non-compliant with FEHA / PAGA / SB 1343</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Termination Best Practices — The Underwriter's Checklist</h2>
+  <p>Wrongful termination is the largest single EPLI claim type by volume. The following checklist represents the underwriting minimum standard for documenting terminations defensibly:</p>
+  <table class="scoring-table">
+    <thead><tr><th>Step</th><th>Best Practice</th><th>EPLI Risk if Omitted</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Written performance improvement plan (PIP) prior to termination for performance issues</td><td>No documented basis → "pretext" inference → discrimination or retaliation claim</td></tr>
+      <tr><td>2</td><td>Consistent application of discipline policy across similarly situated employees</td><td>Inconsistency → comparator evidence for discrimination claim</td></tr>
+      <tr><td>3</td><td>HR review and sign-off on all terminations above entry level</td><td>Manager-only decisions → no institutional quality control on protected class exposure</td></tr>
+      <tr><td>4</td><td>Legal review for any employee who filed an EEOC charge, protected leave, or made a complaint in past 12 months</td><td>Temporal proximity to protected activity → presumption of retaliation</td></tr>
+      <tr><td>5</td><td>ADEA statistical analysis for any RIF involving 10+ employees</td><td>Adverse impact on 40+ cohort → class ADEA exposure without RFOA documentation</td></tr>
+      <tr><td>6</td><td>Written severance agreement with EEOC waiver (OWBPA compliant for 40+)</td><td>Invalid waiver → no release of ADEA claims; compensation paid for nothing</td></tr>
+      <tr><td>7</td><td>Final paycheck and benefits continuation notices per state law</td><td>California: immediate final pay required; failure = PAGA penalties</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn-box">
+    <h4>⚠ Retaliation — The Fastest-Growing EPLI Claim Type</h4>
+    <p>Retaliation claims now represent the largest single category of EEOC charges filed annually — exceeding race, sex, and disability discrimination individually. Protected activities that trigger anti-retaliation protection include:</p>
+    <ul>
+      <li>Filing or supporting an EEOC charge or employment tribunal claim</li>
+      <li>Complaining internally about discrimination, harassment or pay inequity</li>
+      <li>Taking protected FMLA / CFRA / ADA accommodation leave</li>
+      <li>Reporting SOX / Dodd-Frank financial misconduct (financial services employers)</li>
+      <li>Raising OSHA / safety complaints (COVID-era retaliation surge)</li>
+      <li>Exercising pay transparency rights (salary inquiry discussions)</li>
+      <li>Participating as a witness in an investigation (even internal HR investigation)</li>
+    </ul>
+    <p style="margin-top:12px;">Temporal proximity (adverse action within 90 days of protected activity) creates a rebuttable presumption of retaliation. Underwriters require evidence that managers receive specific training on retaliation risk and that employment decisions involving recently protected employees are routed through HR and legal.</p>
+  </div>
+
+  <div class="context-box">
+    <h3>The #MeToo Underwriting Transformation: What Changed After 2017</h3>
+    <p>Prior to 2017, most EPLI policies were renewed based on claims history and headcount with minimal qualitative assessment of workplace culture. After #MeToo, the Lloyd's market and US carriers introduced structural underwriting changes that remain in place today:</p>
+    <p><strong>Executive Conduct Warranty:</strong> Many policies now include a warranty by the insured that it is not aware of any material harassment complaints involving C-suite executives. A material breach of this warranty can void coverage for the specific claim — the Fox News pattern of senior executive misconduct knowledge making this particularly acute.</p>
+    <p><strong>Clawback Provisions:</strong> Following the McDonald's Easterbrook case, some markets offer D&O/EPLI combined policies with explicit clawback coverage for recoupment costs when companies seek to recover compensation from misbehaving executives.</p>
+    <p><strong>Culture Attestation:</strong> Large risks (500+ employees) are now commonly required to complete an annual HR culture attestation covering harassment training completion rates, complaint volumes and resolution times, turnover in management, and board-level oversight of HR practices.</p>
+  </div>
+
+</main>
+<footer>Risk Code Hub — Employment Practices Liability (D6/D7) | Lloyd's Market Intelligence Platform</footer>
+</body>
+</html>
