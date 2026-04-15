@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviation Insurance – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--avia:#1a4a7a;--avia-dark:#0d2d5a;--avia-light:#eef3fa;--accent:#c8a84b;--sky:#4a90d9;--red:#8b1a1a;--orange:#e65100;--green:#2a7a3a;--teal:#00695c;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1a4a7a 55%,#003070 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cce0; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8cce0; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:14px; margin:28px 0 36px; }
+    .stat-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; text-align:center; }
+    .stat-box .num { font-size:1.55rem; font-weight:800; color:var(--avia); }
+    .stat-box .label { font-size:0.74rem; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+    .code-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.88rem; }
+    .code-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .code-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .code-table tr:nth-child(even) td { background:#f8fafc; }
+    .code-pill { display:inline-block; background:var(--avia); color:#fff; font-size:0.72rem; font-weight:700; padding:3px 8px; border-radius:4px; letter-spacing:1px; }
+    .code-pill.sky { background:var(--sky); }
+    .code-pill.teal { background:var(--teal); }
+
+    .coverage-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; margin:22px 0 36px; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-top:4px solid var(--avia); }
+    .cov-card.hull { border-top-color:var(--avia); }
+    .cov-card.tpl { border-top-color:var(--sky); }
+    .cov-card.pax { border-top-color:var(--green); }
+    .cov-card.prod { border-top-color:var(--orange); }
+    .cov-card.apt { border-top-color:var(--teal); }
+    .cov-card.war { border-top-color:var(--red); }
+    .cov-card h4 { font-size:0.92rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .cov-card p { font-size:0.82rem; color:var(--muted); margin:0; line-height:1.5; }
+    .cov-badge { display:inline-block; font-size:0.7rem; font-weight:800; padding:2px 8px; border-radius:4px; margin-bottom:8px; letter-spacing:1px; }
+    .cb-hull { background:#e3ecf8; color:var(--avia-dark); }
+    .cb-liab { background:#e0f4f8; color:#005570; }
+    .cb-war { background:#fde8e8; color:var(--red); }
+
+    .convention-box { background:var(--avia-light); border:2px solid var(--avia); border-radius:10px; padding:26px 30px; margin:26px 0; }
+    .convention-box h4 { color:var(--avia-dark); font-size:1rem; margin-bottom:12px; }
+    .convention-box table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .convention-box th { background:var(--avia); color:#fff; padding:8px 12px; text-align:left; font-size:0.76rem; text-transform:uppercase; letter-spacing:1px; }
+    .convention-box td { padding:8px 12px; border-bottom:1px solid #d0dce8; }
+    .convention-box tr:last-child td { border-bottom:none; }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.95rem; }
+    .warn-box p { font-size:0.88rem; color:var(--text); margin-bottom:6px; line-height:1.6; }
+
+    .context-box { background:var(--navy); color:#fff; border-radius:10px; padding:32px; margin:32px 0; }
+    .context-box h3 { color:var(--accent); margin-bottom:14px; font-size:1.05rem; }
+    .context-box p { color:#b8cce0; font-size:0.92rem; line-height:1.7; margin-bottom:10px; }
+
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Aviation</div>
+  <div class="tag">Lloyd's Risk Codes H2 · H3 · L2 · L3 · AO · AP</div>
+  <h1>Aviation Insurance</h1>
+  <p>Airline and general aviation hull (all risks physical damage), combined single limit liability for passengers and third parties, aviation products liability for aerospace manufacturers, and airport owners &amp; operators liability. One of Lloyd's oldest and most technically specialised classes.</p>
+</header>
+
+<nav>
+  <a href="index.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="num">~$6bn</div><div class="label">Global aviation insurance GWP (est. 2024)</div></div>
+    <div class="stat-box"><div class="num">4.7bn</div><div class="label">Air passengers carried globally per year (2023)</div></div>
+    <div class="stat-box"><div class="num">$3.5bn+</div><div class="label">9/11 — largest single aviation loss in history</div></div>
+    <div class="stat-box"><div class="num">0.07</div><div class="label">Fatal accidents per million departures (2023 IATA)</div></div>
+    <div class="stat-box"><div class="num">SDR 128,821</div><div class="label">Montreal Convention per-passenger liability limit (first tier, unlimited above)</div></div>
+    <div class="stat-box"><div class="num">7 days</div><div class="label">Notice period for war risk premium cancellation (AVN52E)</div></div>
+  </div>
+
+  <h2>Lloyd's Risk Codes</h2>
+  <table class="code-table">
+    <thead><tr><th>Code</th><th>Full Name</th><th>Scope</th><th>Key Characteristics</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="code-pill">H2</span></td>
+        <td>Airline Hull — All Risks</td>
+        <td>Commercial airline jet and turboprop fleets; cargo carriers</td>
+        <td>Agreed value; all risks including in-flight, taxiing, ground; excludes war (separate market); fleet policies; typical hull value $30m–$250m+ per aircraft</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill">H3</span></td>
+        <td>General Aviation Hull</td>
+        <td>Business jets, turboprops, helicopters, piston aircraft, drones/UAS</td>
+        <td>Individual or small fleet policies; agreed value; lower values ($50k–$30m); broader range of operators; private/charter/air taxi/training operators</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill sky">L2</span></td>
+        <td>Aviation Liability — Airlines</td>
+        <td>Combined single limit (CSL) liability for commercial airlines</td>
+        <td>Passenger bodily injury/death (Montreal Convention); third party property damage; baggage; cargo; combined limits $750m–$2bn+ per occurrence for major airlines</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill sky">L3</span></td>
+        <td>Aviation Liability — General Aviation</td>
+        <td>Non-airline aircraft operators, charter, training, corporate</td>
+        <td>Lower combined limits ($5m–$100m); includes passenger and third party; critical for Part 135 charter operators and flight schools</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill teal">AO</span></td>
+        <td>Aviation Products Liability</td>
+        <td>Aerospace manufacturers — airframes, engines, avionics, components</td>
+        <td>Products/completed operations; grounding liability; fleet in service as exposure base; long-tail; Boeing 737 MAX a landmark defining event for the class</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill teal">AP</span></td>
+        <td>Airport Owners &amp; Operators Liability</td>
+        <td>Commercial airports, private airfields, FBOs, ground handlers</td>
+        <td>Third party bodily injury and property damage; hangarkeeper's liability; fuelling errors; ATC liability (separate where applicable); slip/trip in terminals</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Coverage Structure</h2>
+  <div class="coverage-grid">
+    <div class="cov-card hull">
+      <span class="cov-badge cb-hull">H2 / H3 — Hull</span>
+      <h4>Hull All Risks</h4>
+      <p>Physical damage to the aircraft and its equipment — in-flight, taxiing, ground damage, fire, lightning, ingestion. Agreed value (not indemnity). Deductible typically $250k–$1m for airliners.</p>
+    </div>
+    <div class="cov-card tpl">
+      <span class="cov-badge cb-liab">L2 / L3 — Liability</span>
+      <h4>Third Party Liability</h4>
+      <p>Bodily injury and property damage to persons and property on the ground. Combined single limit (CSL) per occurrence. Critical for collision with buildings, vehicles, or persons during takeoff/landing incidents.</p>
+    </div>
+    <div class="cov-card pax">
+      <span class="cov-badge cb-liab">L2 / L3 — Liability</span>
+      <h4>Passenger Liability</h4>
+      <p>Bodily injury and death to fare-paying passengers. Montreal Convention 1999 governs international carriage — unlimited liability for proven negligence above SDR 128,821. No-fault presumed liability below this threshold.</p>
+    </div>
+    <div class="cov-card prod">
+      <span class="cov-badge cb-liab">AO — Products</span>
+      <h4>Aviation Products Liability</h4>
+      <p>Manufacturer liability for defective aircraft, engines, avionics, and components. Includes grounding liability (loss of use of aircraft withdrawn from service following a defect). 737 MAX grounding is the modern benchmark loss.</p>
+    </div>
+    <div class="cov-card apt">
+      <span class="cov-badge cb-liab">AP — Airport</span>
+      <h4>Airport &amp; Ground Handler Liability</h4>
+      <p>Third party BI/PD arising from airport operations, fuelling, baggage handling, ground support equipment, snow removal errors. Hangarkeeper's legal liability covers damage to aircraft in the insured's care.</p>
+    </div>
+    <div class="cov-card war">
+      <span class="cov-badge cb-war">Separate Market</span>
+      <h4>Aviation War Risk</h4>
+      <p>Hull war, liability war and allied perils (terrorism, hijacking, confiscation, strikes, malicious damage). AVN52E excludes war from standard policy. Separate war market — cancellable on 7 days notice. Post-MH17 and post-9/11 a critical coverage gap if not bought.</p>
+    </div>
+  </div>
+
+  <h2>Montreal Convention 1999 — Liability Framework</h2>
+  <div class="convention-box">
+    <h4>Liability Limits for International Carriage (updated SDR values, 2024)</h4>
+    <table>
+      <thead><tr><th>Claim Type</th><th>Limit (SDR)</th><th>Approx. USD</th><th>Liability Basis</th></tr></thead>
+      <tbody>
+        <tr><td>Passenger death / bodily injury (Tier 1)</td><td>128,821 SDR per passenger</td><td>~$172,000</td><td>Strict liability — carrier cannot exculpate</td></tr>
+        <tr><td>Passenger death / bodily injury (Tier 2)</td><td>Unlimited above 128,821 SDR</td><td>Unlimited</td><td>Carrier liable unless it proves no negligence</td></tr>
+        <tr><td>Baggage loss / damage</td><td>1,288 SDR per passenger</td><td>~$1,720</td><td>Strict liability with limited defences</td></tr>
+        <tr><td>Cargo loss / damage</td><td>22 SDR per kilogram</td><td>~$29/kg</td><td>Strict liability; higher declared value option</td></tr>
+        <tr><td>Passenger delay</td><td>5,346 SDR per passenger</td><td>~$7,140</td><td>Carrier liable unless proves all reasonable measures taken</td></tr>
+        <tr><td>Third party (non-passenger) damage</td><td>No convention cap — domestic law governs</td><td>Unlimited</td><td>Negligence or strict liability depending on jurisdiction</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠ Aviation War Risk — 7-Day Cancellation Clause (AVN52E)</h4>
+    <p>Standard hull and liability policies incorporate the AVN52E war, hijacking and other perils exclusion clause. War risk coverage is bought separately in the specialist London war risk market. This coverage is <strong>cancellable by underwriters on 7 days notice</strong> — meaning in the event of conflict escalation (e.g. Red Sea, Ukraine/Russia), war risk cover can be withdrawn with minimal notice, leaving airlines and their lessors suddenly uninsured for hull war. Airlines operating in or over conflict zones must monitor war risk availability continuously.</p>
+  </div>
+
+  <div class="context-box">
+    <h3>Why Aviation Is Lloyd's Oldest Specialist Class</h3>
+    <p>Aviation insurance at Lloyd's predates the first commercial airline. Lloyd's underwrote its first aircraft policy in 1911 for Bleriot's cross-Channel flight. The class grew through the interwar era, the jet age, and the satellite age to become one of the most technically demanding in the market. Today a single major airline may have a fleet valued at $15bn+ and carry 100,000 passengers a day — requiring CSL liability limits of $1.5–2bn per occurrence on a single policy.</p>
+    <p>The class is characterised by low frequency but extreme severity. A single catastrophic accident involving a wide-body aircraft can generate hull + liability losses exceeding $1bn. The 9/11 attacks produced the single largest aviation loss in history ($3.5bn+), triggering a market restructuring that still shapes pricing today. The Boeing 737 MAX crisis (2018–2020) demonstrated that aviation products liability can exceed $20bn across grounding, third party claims, and compensation settlements.</p>
+    <p>Despite being a high-severity class, aviation has one of the best long-term safety records of any transport mode — IATA reports 0.07 fatal accidents per million departures in 2023, the safest year on record. This paradox (low frequency, catastrophic severity) makes aviation a challenging class to price and requires specialised capacity backed by deep technical expertise.</p>
+  </div>
+
+</main>
+<footer>Risk Code Hub — Aviation (H2/H3/L2/L3/AO/AP) | Lloyd's Market Intelligence Platform</footer>
+</body>
+</html>

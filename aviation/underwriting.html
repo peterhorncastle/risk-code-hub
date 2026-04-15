@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviation – Underwriting Methodology | Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--avia:#1a4a7a;--avia-dark:#0d2d5a;--avia-light:#eef3fa;--accent:#c8a84b;--sky:#4a90d9;--red:#8b1a1a;--orange:#e65100;--green:#2a7a3a;--teal:#00695c;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1a4a7a 55%,#003070 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cce0; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8cce0; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1060px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--avia-dark); margin:30px 0 12px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    /* Coverage structure table */
+    .cov-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.86rem; }
+    .cov-table th { background:var(--navy); color:#fff; padding:11px 14px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .cov-table td { padding:11px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.55; }
+    .cov-table tr:nth-child(even) td { background:#f8fafc; }
+    .code-pill { display:inline-block; background:var(--avia); color:#fff; font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:4px; letter-spacing:1px; margin-right:3px; }
+    .code-pill.sky { background:var(--sky); }
+    .code-pill.teal { background:var(--teal); }
+    .code-pill.orange { background:var(--orange); }
+    .code-pill.green { background:var(--green); }
+
+    /* Rating factor cards */
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:16px; margin:24px 0 40px; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-left:5px solid var(--avia); }
+    .factor-card.hull { border-left-color:var(--avia); }
+    .factor-card.liab { border-left-color:var(--sky); }
+    .factor-card.prod { border-left-color:var(--orange); }
+    .factor-card.apt { border-left-color:var(--teal); }
+    .factor-card.war { border-left-color:var(--red); }
+    .factor-card.shared { border-left-color:var(--accent); }
+    .factor-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+    .impact-badge { font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:10px; letter-spacing:0.5px; }
+    .imp-high { background:#fde8e8; color:var(--red); }
+    .imp-med { background:#fef3e2; color:#7a4500; }
+    .imp-low { background:#e6f4ea; color:var(--green); }
+    .factor-card p { font-size:0.82rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    /* Formula boxes */
+    .formula-box { background:var(--navy); color:#fff; border-radius:10px; padding:28px 32px; margin:26px 0; font-family:'Courier New',monospace; }
+    .formula-box .title { font-family:'Segoe UI',Arial,sans-serif; font-size:0.78rem; text-transform:uppercase; letter-spacing:2px; color:var(--accent); margin-bottom:14px; }
+    .formula-box .formula { font-size:1.1rem; color:#e8f0f8; line-height:1.8; }
+    .formula-box .formula span { color:var(--accent); font-weight:700; }
+    .formula-box .note { margin-top:12px; font-family:'Segoe UI',Arial,sans-serif; font-size:0.82rem; color:#7a9cbf; line-height:1.6; }
+
+    /* Worked examples */
+    .example-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin:26px 0 40px; }
+    @media(max-width:700px){ .example-grid { grid-template-columns:1fr; } }
+    .example-box { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    .example-header { background:var(--avia); color:#fff; padding:16px 20px; }
+    .example-header h4 { font-size:0.95rem; font-weight:700; }
+    .example-header p { font-size:0.8rem; color:#b8cce0; margin:4px 0 0; }
+    .example-body { padding:20px; }
+    .example-row { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid #eef1f5; font-size:0.85rem; }
+    .example-row:last-child { border-bottom:none; }
+    .example-row .lbl { color:var(--muted); }
+    .example-row .val { font-weight:600; color:var(--text); }
+    .example-total { background:var(--avia-light); padding:12px 20px; font-size:0.95rem; font-weight:700; color:var(--avia-dark); display:flex; justify-content:space-between; }
+
+    /* Info box */
+    .info-box { background:var(--avia-light); border:2px solid var(--avia); border-radius:10px; padding:24px 28px; margin:24px 0; }
+    .info-box h4 { color:var(--avia-dark); font-size:0.95rem; margin-bottom:10px; }
+    .info-box p { font-size:0.88rem; color:var(--text); margin-bottom:8px; line-height:1.6; }
+    .info-box p:last-child { margin:0; }
+
+    /* Warning box */
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.9rem; }
+    .warn-box p { font-size:0.87rem; color:var(--text); margin-bottom:0; line-height:1.6; }
+
+    /* Exclusions table */
+    .excl-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.86rem; }
+    .excl-table th { background:var(--red); color:#fff; padding:10px 14px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .excl-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .excl-table tr:nth-child(even) td { background:#fdf8f8; }
+
+    /* Scoring matrix */
+    .score-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.84rem; }
+    .score-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.76rem; text-transform:uppercase; letter-spacing:1px; }
+    .score-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .score-g { background:#e6f4ea; color:#1a5c28; font-weight:700; border-radius:4px; padding:3px 8px; font-size:0.78rem; }
+    .score-a { background:#fef3e2; color:#7a4500; font-weight:700; border-radius:4px; padding:3px 8px; font-size:0.78rem; }
+    .score-r { background:#fde8e8; color:var(--red); font-weight:700; border-radius:4px; padding:3px 8px; font-size:0.78rem; }
+
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Aviation</a> › Underwriting</div>
+  <div class="tag">Module 04 — Underwriting Methodology</div>
+  <h1>Aviation Underwriting</h1>
+  <p>Rating methodology for aviation hull (H2/H3), airline and GA liability (L2/L3), aerospace products (AO) and airport liability (AP). Covers fleet rating, CSL methodology, products exposure rating and worked premium calculations.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <h2>Coverage Structure by Lloyd's Code</h2>
+  <p>Aviation at Lloyd's is divided into six active risk codes covering the full spectrum from commercial airline hull through to aerospace products liability. Each code has a distinct rating approach, market, and coverage trigger.</p>
+
+  <table class="cov-table">
+    <thead>
+      <tr><th>Code</th><th>Class</th><th>Coverage Trigger</th><th>Basis</th><th>Key Exclusions (standard)</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="code-pill">H2</span></td>
+        <td><strong>Airline Hull — All Risks</strong></td>
+        <td>Physical damage to aircraft operated under AOC (airline operating certificate). Covers ground, taxi, flight, ingestion, crash, fire, theft.</td>
+        <td>Agreed value — insured/insurer agree hull value at inception. No depreciation argument on total loss.</td>
+        <td>Wear &amp; tear; mechanical breakdown (separate breakdown policy); war risk (separate AVN52H market); nuclear; unlawful seizure by crew/passengers</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill">H3</span></td>
+        <td><strong>General Aviation Hull</strong></td>
+        <td>Physical damage to non-AOC aircraft: corporate jets, helicopters, turboprops, piston GA, drones (UAV). Same all-risks basis as H2.</td>
+        <td>Agreed value or market value depending on aircraft age. AVAC (Agreed Value Aircraft Clause) standard.</td>
+        <td>As H2 plus: student pilot restriction; territory exclusion common; navigational limits clause (AVN1)</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill sky">L2</span></td>
+        <td><strong>Airline Liability — CSL</strong></td>
+        <td>Third-party bodily injury and property damage; passenger injury/death (Montreal Convention); cargo liability; mail liability; consequential losses to third parties from accidents.</td>
+        <td>Combined Single Limit (CSL) — one limit covers all third-party claims arising from one occurrence. Airlines buy $1.5bn–$2.5bn CSL standard.</td>
+        <td>War risk (AVN52H / government-backed pools); intentional acts by crew; nuclear; unlawful cargo; contractual liability beyond convention limits</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill sky">L3</span></td>
+        <td><strong>GA / Corporate Liability</strong></td>
+        <td>Same trigger as L2 but for non-airline operators. Passenger liability, third-party property damage, hangarkeepers liability, grounding liability.</td>
+        <td>CSL or split limits (passenger / property). GA operators typically $20m–$500m CSL depending on aircraft type.</td>
+        <td>As L2; charter operations often require endorsement; training exclusion standard for student pilots</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill orange">AO</span></td>
+        <td><strong>Aviation Products Liability</strong></td>
+        <td>Bodily injury / property damage arising from design, manufacture, assembly, installation or servicing of aircraft, engines, components or equipment supplied by aerospace manufacturers, MRO facilities, parts suppliers.</td>
+        <td>Claims-made basis. Products aggregate limit. Exposure rated on fleet-in-service, aircraft deliveries, part criticality (flight-critical vs ground-support).</td>
+        <td>Grounding losses sublimited; recall / withdrawal costs sublimited or excluded; war; nuclear; employers liability; property in care/custody/control</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill teal">AP</span></td>
+        <td><strong>Airport Owners &amp; Operators</strong></td>
+        <td>Third-party BI &amp; PD arising from airport operations: runway incursions, ground handling, refuelling, snow removal, ATC provision (if not government), terminal operations, fire service response failures.</td>
+        <td>Claims-made or occurrence. CSL or split limits. Premium based on annual passenger throughput and airport category (international / domestic / GA).</td>
+        <td>Aircraft operation exclusion (AP covers ground side only); war; air traffic control professional liability (separate policy); environmental pollution</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Hull Rating Methodology (H2 / H3)</h2>
+  <p>Aviation hull is rated on a <strong>rate on line (ROL)</strong> basis — a percentage applied to the agreed fleet value. The ROL reflects fleet composition, operator quality, route network, and loss history. Airlines buy on a <em>fleet basis</em>; GA insureds buy aircraft by aircraft.</p>
+
+  <div class="formula-box">
+    <div class="title">H2 / H3 Hull Premium Formula</div>
+    <div class="formula">
+      <span>Hull Premium</span> = (Total Fleet Agreed Value) × <span>ROL%</span><br><br>
+      Where: <span>ROL%</span> = Base Rate × Fleet Factor × Route Factor × Age Factor × Loss Loading<br><br>
+      <span>Base Rate range</span> = 0.25% – 1.50% of fleet value per annum (wide-body scheduled airlines at lower end; piston GA at upper end)
+    </div>
+    <div class="note">Example: A320 fleet of 40 aircraft, agreed value $80m per aircraft ($3.2bn total) at ROL 0.30% = $9.6m hull premium. Individual aircraft excesses typically $500k–$2m per occurrence for airline hull.</div>
+  </div>
+
+  <div class="factor-grid">
+    <div class="factor-card hull">
+      <h4>Fleet Composition &amp; Type <span class="impact-badge imp-high">High Impact</span></h4>
+      <p>Wide-body jets (777, 787, A350) trade at tighter ROLs than narrow-body (737/A320) due to better loss record per departure. Regional jets and turboprops attract higher rates; piston GA highest of all. Helicopter hull is rated separately with higher base rates (0.8%–3.0%) due to rotor system exposure.</p>
+    </div>
+    <div class="factor-card hull">
+      <h4>Fleet Age &amp; Ageing Aircraft <span class="impact-badge imp-high">High Impact</span></h4>
+      <p>Aircraft over 15 years attract age loading (+10–25%). Post-20 years: +25–50%. Ageing aircraft programmes (CPCP) and corrosion findings are key underwriting questions. Aircraft near end of life with heavy operator maintenance oversight may be rated more favourably than younger aircraft with weak MRO programmes.</p>
+    </div>
+    <div class="factor-card hull">
+      <h4>Operator Safety Record — Loss History <span class="impact-badge imp-high">High Impact</span></h4>
+      <p>3–5 year claims experience is primary modifying factor. Airlines with IOSA registration (IATA Operational Safety Audit) receive rate credit (typically 5–15%). Operators on the EU Air Safety List (banned from EU airspace) face significant load or declination. IOSHA certification viewed positively.</p>
+    </div>
+    <div class="factor-card hull">
+      <h4>Route Network &amp; Operating Environment <span class="impact-badge imp-med">Medium Impact</span></h4>
+      <p>Routes traversing conflict zones (Ukraine/Russia, Middle East, sub-Saharan Africa) incur war risk loading or require separate AVN52H war hull policy. High-altitude mountainous airports (Kathmandu, Lukla, Innsbruck) attract CFIT surcharge. Night operations at challenging airfields rated individually.</p>
+    </div>
+    <div class="factor-card hull">
+      <h4>Maintenance Programme &amp; MRO Quality <span class="impact-badge imp-med">Medium Impact</span></h4>
+      <p>EASA Part 145 or FAA 14 CFR Part 145 approved MRO is baseline expectation. Heavy maintenance intervals, corrosion protection programmes, and OEM service bulletin compliance all reviewed. Third-party MRO vs in-house is a factor — strong in-house programmes (Lufthansa Technik, Air France Industries standard) viewed positively.</p>
+    </div>
+    <div class="factor-card hull">
+      <h4>Deductibles &amp; Retention Structure <span class="impact-badge imp-low">Rate Credit</span></h4>
+      <p>Standard airline hull excess: $500k–$2m per occurrence. Large airlines often take $5m–$20m retention on hull to reduce premium. Higher retentions = meaningful rate credit. GA operators: $5,000–$50,000 depending on aircraft value. In-flight deductible vs all-risk deductible structure matters.</p>
+    </div>
+  </div>
+
+  <h2>Liability Rating Methodology (L2 / L3)</h2>
+  <p>Airline liability (L2) is rated on a <strong>per seat per departure basis</strong> modified for CSL level, route type, and operator quality. The rating produces an annual premium covering all third-party liability exposures arising from aircraft operations.</p>
+
+  <div class="formula-box">
+    <div class="title">L2 Airline Liability — Rating Formula</div>
+    <div class="formula">
+      <span>Liability Premium</span> = (Seat Departures × <span>Rate per Seat Departure</span>) × CSL Factor<br><br>
+      Where: <span>Seat Departures</span> = Fleet seats × Annual departures per aircraft<br>
+      <span>Rate per Seat Departure</span> = $0.015 – $0.08 (varies by operator, route, safety record)<br>
+      <span>CSL Factor</span> = scaling factor for limit purchased (1.0 at $1bn; 1.25 at $1.5bn; 1.5 at $2bn+)
+    </div>
+    <div class="note">Montreal Convention 1999 requires minimum passenger liability of ~SDR 128,821 per passenger (~$175,000 USD). Practical commercial pressures mean airlines carry $500m–$2.5bn CSL. Post-9/11: US domestic carriers typically $1.5bn CSL minimum; international carriers $2bn+.</div>
+  </div>
+
+  <div class="factor-grid">
+    <div class="factor-card liab">
+      <h4>CSL Limit Purchased <span class="impact-badge imp-high">High Impact</span></h4>
+      <p>Combined Single Limit drives premium significantly. A320 operator with 150-seat aircraft at $1bn CSL vs $2bn CSL sees ~35–45% premium increase for the additional $1bn of limit. Catastrophic events (full hull loss, passenger death + third-party ground damage) can exhaust $1bn limits — Lockerbie ultimately cost c.$1bn total.</p>
+    </div>
+    <div class="factor-card liab">
+      <h4>Passenger Load Factor &amp; Seat Configuration <span class="impact-badge imp-high">High Impact</span></h4>
+      <p>Higher seat counts = higher per-departure exposure. All-economy 737-800 with 189 seats vs business-class configuration (165 seats) rated differently. Seat departures is the primary exposure metric. A $200m wide-body accident with 300 passengers on board exhausts more limit than a regional jet with 50 passengers.</p>
+    </div>
+    <div class="factor-card liab">
+      <h4>Route Type — Domestic vs International <span class="impact-badge imp-med">Medium Impact</span></h4>
+      <p>US domestic routes attract US tort jurisdiction risk (higher jury awards). International routes subject to Montreal Convention (two-tier liability: strict to SDR 128,821; fault-based above). Middle Eastern and African routes attract additional country/political risk loading. European intra-EU routes: EC 785/2004 mandatory insurance applies.</p>
+    </div>
+    <div class="factor-card liab">
+      <h4>Cargo Liability <span class="impact-badge imp-low">Lower Impact</span></h4>
+      <p>Montreal Convention limits cargo liability to SDR 22 per kg (c.$30/kg). Most airlines carry cargo liability within CSL. Freighter operators and combi aircraft require careful review — DG (dangerous goods) carriage, hazmat, lithium battery cargo attracts specific underwriting questions. IATA DGR compliance is baseline.</p>
+    </div>
+    <div class="factor-card liab">
+      <h4>Grounding Liability <span class="impact-badge imp-med">Medium Impact</span></h4>
+      <p>737 MAX grounding (20 months, 2019–2020) created a new underwriting focus on systemic fleet grounding liability. L2 policies now routinely address grounding exposure — financial loss to airlines from regulatory grounding. Boeing AO policy absorbed the manufacturer's indemnity exposure. Sublimits of $100m–$250m per grounding event are standard on AO.</p>
+    </div>
+    <div class="factor-card liab">
+      <h4>War Risk — Separate Market (AVN52H) <span class="impact-badge imp-high">High Impact</span></h4>
+      <p>Standard L2/H2 policies exclude war risk per AVN48B/52D. War risk hull and liability placed separately with the London aviation war risk market (Pool and XL reinsurance). War risk premium quoted as ROL separately. 7-day cancellation clause (AVN52E) means war risk market can withdraw cover at short notice — airlines must maintain government backstop awareness.</p>
+    </div>
+  </div>
+
+  <h2>Aviation Products Liability Rating (AO)</h2>
+  <p>AO is the most technically complex aviation line. It covers aerospace manufacturers (Boeing, Airbus, Rolls-Royce, Pratt &amp; Whitney, Collins Aerospace, Safran) and MRO/maintenance organisations against claims arising from defective products incorporated into aircraft. Rated on a <strong>products exposure basis</strong>.</p>
+
+  <div class="formula-box">
+    <div class="title">AO Products Liability — Exposure Rating Approach</div>
+    <div class="formula">
+      <span>AO Premium</span> = (<span>Fleet-in-Service Exposure</span> + <span>Deliveries Exposure</span>) × Rate × Grounding Sublimit Factor<br><br>
+      <span>Fleet-in-Service</span>: Units in service × Aircraft value × risk factor (flight-critical = 1.5; avionics = 1.2; cabin = 0.5)<br>
+      <span>Deliveries</span>: Annual new aircraft deliveries × delivery value × new-product loading
+    </div>
+    <div class="note">737 MAX MCAS failure (2018–2019) is the defining modern AO loss. Boeing's total AO exposure from two crashes + grounding exceeded $20bn — illustrating why OEM AO limits of $5bn–$15bn are now considered baseline for large manufacturers. MRO organisations carry $100m–$2bn AO depending on scope of operations.</div>
+  </div>
+
+  <h2>Airport Liability Rating (AP)</h2>
+  <p>AP covers airports and ground handlers against third-party claims arising from airport operations — runway incursions, refuelling errors, jetway incidents, snow clearance failures, fire service response failures, and ground vehicle accidents on the airfield.</p>
+
+  <div class="info-box">
+    <h4>AP Rating Parameters</h4>
+    <p><strong>Annual passenger throughput:</strong> Primary exposure metric. International hub airports (Heathrow 80m pax/yr) vs regional airports (5m pax/yr) priced very differently. Rate per 1,000 passengers is a common starting metric.</p>
+    <p><strong>Cargo volume:</strong> Cargo operations (DHL, FedEx hubs) carry additional products-in-care exposure — damaged or lost cargo is an AP trigger at cargo handling facilities.</p>
+    <p><strong>Ground handling scope:</strong> Airports providing own ground handling (fuelling, pushback, baggage) carry broader AP exposure than airports that license third-party handlers. Third-party handlers should carry their own GL policy with AP insured as additional insured.</p>
+    <p><strong>CSL level:</strong> International airports: $1bn–$2bn CSL. Regional airports: $250m–$750m CSL. Major cargo hubs with dangerous goods handling: bespoke sublimit schedule.</p>
+  </div>
+
+  <h2>Key Exclusions — Aviation Policies</h2>
+  <table class="excl-table">
+    <thead>
+      <tr><th>Exclusion</th><th>Applies To</th><th>Market Treatment</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>War Risk (AVN48B)</strong></td><td>H2, H3, L2, L3</td><td>Placed separately with war risk market. Government pools available for airlines in some territories (EU, US ATSB post-9/11). 7-day cancellation under AVN52E.</td></tr>
+      <tr><td><strong>Nuclear / Radiation</strong></td><td>All codes</td><td>Absolute exclusion — uninsurable in commercial market worldwide.</td></tr>
+      <tr><td><strong>Wear, Tear, Mechanical Breakdown</strong></td><td>H2, H3</td><td>Engine breakdown covered separately (Aviation Engine Breakdown / Power Plant cover). The insured peril is the external event (impact, fire, ingestion), not internal degradation.</td></tr>
+      <tr><td><strong>Aircraft Products (in H2/L2)</strong></td><td>H2, L2</td><td>Hull damage caused by product defect triggers H2 for aircraft owner; manufacturer's defect liability is AO code. Cross-code coordination essential for 737 MAX-type events.</td></tr>
+      <tr><td><strong>Grounding Costs</strong></td><td>L2, AO</td><td>Business interruption from grounding typically sublimited in AO (e.g., $100m–$250m sublimit). Airlines' own BI loss from grounding is their own risk — separate BI/contingency policy needed.</td></tr>
+      <tr><td><strong>Contractual Liability (beyond convention)</strong></td><td>L2, L3</td><td>Airline indemnity agreements (ground handling agreements, fuel supply agreements) beyond statutory convention limits generally excluded. Requires endorsement.</td></tr>
+      <tr><td><strong>Cyber / Electronic Warfare</strong></td><td>All codes</td><td>Currently a grey area — AVN135 (Cyber War exclusion) included on many policies post-2020. GPS spoofing incidents (2024 Middle East/Baltic) highlighted gap. Standalone cyber aviation cover emerging.</td></tr>
+      <tr><td><strong>Deliberate Acts by Insured</strong></td><td>All codes</td><td>Standard public policy exclusion. Pilot suicide (Germanwings 2015) tested this — hull policy paid as crew member's deliberate act is not the insured airline's deliberate act. Liability policy also responded.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Underwriting Quality Scoring</h2>
+  <p>Underwriters assess aviation risks against a structured quality matrix before applying rate adjustments. The table below summarises the key control areas and typical underwriting response.</p>
+
+  <table class="score-table">
+    <thead>
+      <tr><th>Control Area</th><th>Green — Rate Credit</th><th>Amber — Standard</th><th>Red — Rate Load / Referral</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>IOSA / Safety Audit</strong></td>
+        <td><span class="score-g">IOSA Registered</span> — current audit, no major findings</td>
+        <td><span class="score-a">BARS / ARGUS</span> — GA safety programme, not IOSA</td>
+        <td><span class="score-r">None / Lapsed</span> — no third-party safety audit, or failed audit</td>
+      </tr>
+      <tr>
+        <td><strong>Loss History (5yr)</strong></td>
+        <td><span class="score-g">Zero losses</span> — or single attritional below $1m</td>
+        <td><span class="score-a">1–2 attritional</span> — no hull total loss; BI/minor structural only</td>
+        <td><span class="score-r">Total loss or major</span> — hull TL or liability claim >$50m in window</td>
+      </tr>
+      <tr>
+        <td><strong>Regulatory Status</strong></td>
+        <td><span class="score-g">Full compliance</span> — EASA / FAA certificated, no enforcement actions</td>
+        <td><span class="score-a">Minor findings</span> — corrective action plans in place and progressing</td>
+        <td><span class="score-r">EU Air Safety List</span> or FAA Order 8900.1 enforcement; suspended AOC</td>
+      </tr>
+      <tr>
+        <td><strong>Fleet Age</strong></td>
+        <td><span class="score-g">&lt;10 years</span> — modern generation aircraft, active OEM support</td>
+        <td><span class="score-a">10–18 years</span> — mid-life; strong CPCP programme in place</td>
+        <td><span class="score-r">&gt;18 years</span> — ageing aircraft, high corrosion findings, limited OEM support</td>
+      </tr>
+      <tr>
+        <td><strong>Crew Training Programme</strong></td>
+        <td><span class="score-g">Advanced UPRT</span> — Upset Prevention &amp; Recovery Training; full CRM programme; simulator recurrent every 6 months</td>
+        <td><span class="score-a">Standard EASA/FAA</span> — minimum regulatory requirement; annual recurrent</td>
+        <td><span class="score-r">Below minimum</span> — irregular training cycles, low simulator hours, crew fatigue findings</td>
+      </tr>
+      <tr>
+        <td><strong>Financial Strength</strong></td>
+        <td><span class="score-g">Investment grade</span> — strong balance sheet, sustainable business model</td>
+        <td><span class="score-a">Acceptable</span> — profitable but thin margins; standard aviation industry cycle risk</td>
+        <td><span class="score-r">Financial distress</span> — restructuring, Chapter 11 risk, maintenance deferral suspected</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Worked Examples</h2>
+  <div class="example-grid">
+    <div class="example-box">
+      <div class="example-header">
+        <h4>Example A — Mid-Haul European Airline (H2 + L2)</h4>
+        <p>IOSA-registered, 50 aircraft A320 family, 12yr avg age, 42,000 annual departures, $2bn CSL, based UK. Clean 5yr loss record.</p>
+      </div>
+      <div class="example-body">
+        <div class="example-row"><span class="lbl">Fleet agreed value (50 × $52m avg)</span><span class="val">$2,600m</span></div>
+        <div class="example-row"><span class="lbl">Hull ROL — base 0.38%, IOSA credit −10%, clean history credit −8%</span><span class="val">0.31%</span></div>
+        <div class="example-row"><span class="lbl">H2 Hull premium</span><span class="val">$8,060k</span></div>
+        <div class="example-row"><span class="lbl">Seat departures (150 seats × 42,000)</span><span class="val">6.3m</span></div>
+        <div class="example-row"><span class="lbl">Rate per seat departure</span><span class="val">$0.023</span></div>
+        <div class="example-row"><span class="lbl">CSL factor ($2bn = 1.40)</span><span class="val">×1.40</span></div>
+        <div class="example-row"><span class="lbl">L2 Liability premium</span><span class="val">$2,027k</span></div>
+        <div class="example-row"><span class="lbl">War risk (separate AVN52H market)</span><span class="val">~$650k</span></div>
+      </div>
+      <div class="example-total"><span>Total Aviation Package Premium</span><span>~$10.7m</span></div>
+    </div>
+    <div class="example-box">
+      <div class="example-header" style="background:var(--sky);">
+        <h4>Example B — Corporate Operator (H3 + L3)</h4>
+        <p>UK-based corporate aviation department. 3 Dassault Falcon 8X, 1 AW139 helicopter, 800 hrs/yr flying. No losses in 5 years. $100m CSL.</p>
+      </div>
+      <div class="example-body">
+        <div class="example-row"><span class="lbl">Falcon 8X fleet value (3 × $58m)</span><span class="val">$174m</span></div>
+        <div class="example-row"><span class="lbl">AW139 helicopter value</span><span class="val">$14m</span></div>
+        <div class="example-row"><span class="lbl">H3 Hull ROL — Falcon 0.55%, Helicopter 1.20%</span><span class="val">—</span></div>
+        <div class="example-row"><span class="lbl">Hull premium (jets $957k + heli $168k)</span><span class="val">$1,125k</span></div>
+        <div class="example-row"><span class="lbl">L3 Liability — $100m CSL</span><span class="val">—</span></div>
+        <div class="example-row"><span class="lbl">Base rate 800hrs × $850/hr liability factor</span><span class="val">$680k</span></div>
+        <div class="example-row"><span class="lbl">Clean record credit −12%</span><span class="val">−$82k</span></div>
+        <div class="example-row"><span class="lbl">War risk (Middle East routing)</span><span class="val">$95k</span></div>
+      </div>
+      <div class="example-total"><span>Total Corporate Aviation Package</span><span>~$1.82m</span></div>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠ Russia Aircraft Leasing Dispute — Underwriting Implications (2022–Present)</h4>
+    <p>Following 2022 sanctions, 400–500 Western-owned leased aircraft ($10bn+ hull value) were retained in Russia. Lessors filed claims with H2 hull insurers for total loss. Insurers argue aircraft are not lost — they exist but cannot be repossessed. The dispute (currently through English courts and international arbitration) is the largest unresolved aviation insurance claim in history and is reshaping how leased aircraft hull policies are worded. Underwriters now ask specifically about leasing structures, lessee jurisdiction, and sanctions exposure at renewal.</p>
+  </div>
+
+</main>
+<footer>Risk Code Hub · Aviation Insurance · Module 04: Underwriting Methodology · v1.9 — April 2026</footer>
+</body>
+</html>

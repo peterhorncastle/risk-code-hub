@@ -1,5 +1,21 @@
 # Risk Code Hub — Changelog
 
+## v1.9 — April 2026
+**Session: 15 April 2026**
+- Aviation hub complete (Lloyd's codes H2, H3, L2, L3, AO, AP) — combined into single hub at `aviation/`
+- 8 modules built: index, history, timeline, database, underwriting, rates-analysis, risk-mitigation, global-program
+- History module was already built in previous session; timeline, database also pre-existing; underwriting, rates-analysis, risk-mitigation, global-program built this session
+- Coverage structure: H2 airline hull (agreed value, all risks), H3 GA/corporate hull, L2 airline CSL liability (Montreal Convention, $1.5bn–$2.5bn CSL standard), L3 GA/corporate liability, AO aerospace products liability (claims-made, OEM exposure rating), AP airport owners & operators
+- Loss database: 35 major events 1974–2024 — Tenerife (1977, 583 killed), Lockerbie (1988, $500m), 9/11 (2001, $2.5bn), MH370 (2014, $630m), MH17 (2014, war risk), 737 MAX crashes (2018–2019, $1.2bn AO), Russia leasing dispute (2022, $8bn+ unresolved), Haneda collision (2024), Boeing door plug blowout (2024)
+- History: 7 era blocks from Lloyds of London first aviation policy 1911 through WWI/WWII, jet age, Chicago Convention, Montreal Convention 1999, 9/11 market collapse, 737 MAX/COVID reset, to Russia leasing dispute and GPS spoofing 2024
+- Timeline: 18+ events with colour-coded dots (crash/war/product/atm/leasing/cyber)
+- Underwriting: H2 hull ROL formula (0.25%–1.50% fleet value); L2 liability seat-departure methodology; AO products exposure rating; AP passenger throughput rating; 12 rating factor cards (hull/liability/products/airport); quality scoring matrix (6 control areas × Green/Amber/Red); two worked examples (IOSA European airline $10.7m and corporate Falcon 8X/helicopter $1.82m); key exclusions table (8 exclusions including war risk AVN48B, wear & tear, cyber/GPS spoofing)
+- Rates analysis: Chart.js H2 hull and L2 liability rate index 2000–2026 (2000=100); 8-phase market cycle table (1997 soft through 2022 Russia dispute); combined ratio Chart.js bar chart 2010–2026 (red=above 100%); sector ROL grid (8 operator types from 0.20% network airline to 3.50% EMS helicopter); ROE scenarios: Bull +18.4%, Base +9.8%, Bear −19.2% (on $500m GWP portfolio)
+- Risk mitigation: 9 control tier cards (SMS/CRM/MRO/FDM/FRMS/security/products QMS/airports/training) with underwriting rate credit indicators; IOSA 7-section breakdown with underwriting relevance; aviation risk quality scoring matrix; standards reference table (9 standards: ICAO, IOSA, IS-BAO, BARS, EASA 145, AS9100, MSG-3, ACI APEX, IATA DGR); GPS spoofing dark box (2024 state-sponsored attacks); mental health/Germanwings warning; top 7 actions for insureds
+- Global programmes: 7-layer tower (SIR → primary H2+L2 → 3 excess liability layers → war risk AVN52H → AO products); 6 jurisdiction profiles (USA, UK, EU, China, UAE/Gulf, Brazil/LatAm); limit scenarios table (7 scenarios from turbulence injuries $50m to 9/11-equivalent government backstop); war risk structuring section (AVN52E 7-day cancellation, government backstop history); special structuring table (6 transaction types: M&A, operating lease, S&LB, codeshare, ACMI wet lease, Chapter 11); Emirates illustrative case study ($85m–$120m estimated annual programme cost)
+- Updated hub-index.json: consolidated aviation-hull + aviation-liability into single "aviation" entry, status "complete", url "aviation/index.html", expanded keywords
+- Updated index.html HUB_DATA: aviation entry "complete" with correct url; footer updated to v1.9 — 9 hubs complete
+
 ## v1.8 — April 2026
 **Session: 14 April 2026**
 - Employment Practices Liability (EPLI) hub complete (Lloyd's codes D6, D7)

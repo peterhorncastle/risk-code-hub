@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviation Insurance — Searchable Loss Database | Risk Code Hub</title>
+<style>
+  :root{--avia:#1a4a7a;--avia-dark:#0d2d5a;--avia-light:#eef3fa;--accent:#c8a84b;--sky:#4a90d9;--teal:#00695c;--bg:#f5f7fa;--card:#fff;--text:#1a2332;--muted:#6b7a8d}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  header{background:linear-gradient(135deg,#0d2240 0%,#1a4a7a 55%,#003070 100%);color:#fff;padding:2rem}
+  header .breadcrumb{font-size:.8rem;opacity:.7;margin-bottom:.5rem}
+  header .breadcrumb a{color:#fff;text-decoration:none}
+  header h1{font-size:1.9rem;font-weight:700}
+  header p{opacity:.85;margin-top:.4rem;font-size:.95rem}
+  nav{background:var(--avia-dark);padding:.6rem 2rem;display:flex;gap:.25rem;flex-wrap:wrap}
+  nav a{color:rgba(255,255,255,.75);text-decoration:none;padding:.35rem .8rem;border-radius:4px;font-size:.82rem;transition:background .2s}
+  nav a:hover{background:rgba(255,255,255,.15);color:#fff}
+  nav a.active{background:var(--accent);color:#0d2240;font-weight:600}
+  .container{max-width:1200px;margin:0 auto;padding:2rem}
+  h2{font-size:1.45rem;color:var(--avia-dark);margin-bottom:1.2rem;padding-bottom:.5rem;border-bottom:3px solid var(--avia)}
+
+  /* Filter bar */
+  .filter-bar{background:var(--card);border-radius:8px;padding:1.2rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;flex-wrap:wrap;gap:.8rem;align-items:flex-end}
+  .filter-group{display:flex;flex-direction:column;gap:.3rem;min-width:160px}
+  .filter-group label{font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .filter-group select,.filter-group input{padding:.45rem .7rem;border:1.5px solid #dde3eb;border-radius:6px;font-size:.85rem;background:#fff;color:var(--text)}
+  .filter-group select:focus,.filter-group input:focus{outline:none;border-color:var(--avia)}
+  .btn-reset{padding:.45rem 1.1rem;background:var(--avia-light);color:var(--avia-dark);border:1.5px solid var(--avia);border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .2s;align-self:flex-end}
+  .btn-reset:hover{background:var(--avia);color:#fff}
+  #result-count{font-size:.85rem;color:var(--muted);align-self:flex-end;white-space:nowrap}
+
+  /* Table */
+  .table-wrap{overflow-x:auto;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+  table{width:100%;border-collapse:collapse;background:var(--card)}
+  thead th{background:var(--avia-dark);color:#fff;padding:.7rem .9rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;cursor:pointer;user-select:none}
+  thead th:hover{background:var(--avia)}
+  thead th.sort-asc::after{content:' ▲';font-size:.7rem}
+  thead th.sort-desc::after{content:' ▼';font-size:.7rem}
+  tbody tr{border-bottom:1px solid #e8ecf1;transition:background .15s}
+  tbody tr:hover{background:#f0f4fa}
+  tbody td{padding:.65rem .9rem;font-size:.84rem;vertical-align:top}
+  .year-cell{font-weight:700;color:var(--avia-dark);white-space:nowrap}
+  .name-cell{font-weight:600;color:var(--text);min-width:180px}
+  .desc-cell{color:#4b5563;min-width:240px;max-width:340px}
+  .loss-cell{font-weight:700;color:#dc2626;white-space:nowrap;text-align:right}
+  .code-cell{white-space:nowrap}
+
+  /* Type tags */
+  .tag{display:inline-block;font-size:.72rem;font-weight:700;padding:.15rem .5rem;border-radius:10px;margin:.1rem .1rem 0 0;color:#fff;text-transform:uppercase;letter-spacing:.03em}
+  .t-crash{background:#dc2626}
+  .t-war{background:#7c3aed}
+  .t-product{background:#be185d}
+  .t-atm{background:#d97706}
+  .t-weather{background:#0369a1}
+  .t-hijack{background:#374151}
+  .t-cyber{background:#374151}
+  .t-leasing{background:#047857}
+
+  /* Code tags */
+  .code-pill{display:inline-block;font-size:.72rem;font-weight:700;padding:.1rem .4rem;border-radius:4px;background:var(--avia-light);color:var(--avia-dark);margin:.1rem .1rem 0 0}
+  .code-h2{background:#dbeafe;color:#1e3a5f}
+  .code-h3{background:#e0f2fe;color:#0c4a6e}
+  .code-l2{background:#d1fae5;color:#064e3b}
+  .code-l3{background:#fce7f3;color:#831843}
+  .code-ao{background:#fef3c7;color:#78350f}
+  .code-ap{background:#ede9fe;color:#4c1d95}
+
+  .hidden{display:none!important}
+  footer{background:var(--avia-dark);color:rgba(255,255,255,.6);text-align:center;padding:1.2rem;font-size:.8rem;margin-top:2rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Aviation Insurance</a> › Loss Database</div>
+  <h1>✈ Aviation Insurance — Searchable Loss Database</h1>
+  <p>35 major aviation losses 1974–2024 — filter by type, Lloyd's code, year band, and minimum loss</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+</nav>
+<div class="container">
+  <h2>Aviation Loss Database</h2>
+
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>Loss Type</label>
+      <select id="f-type">
+        <option value="">All Types</option>
+        <option value="crash">Hull / Crash</option>
+        <option value="war">War / Terrorism</option>
+        <option value="product">Products Liability</option>
+        <option value="atm">ATM / Airport</option>
+        <option value="weather">Weather</option>
+        <option value="hijack">Hijack</option>
+        <option value="cyber">Cyber / Navigation</option>
+        <option value="leasing">Leasing / Confiscation</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Lloyd's Code</label>
+      <select id="f-code">
+        <option value="">All Codes</option>
+        <option value="H2">H2 — Airline Hull</option>
+        <option value="H3">H3 — GA Hull</option>
+        <option value="L2">L2 — Airline Liability</option>
+        <option value="L3">L3 — GA Liability</option>
+        <option value="AO">AO — Products</option>
+        <option value="AP">AP — Airport Ops</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Year Band</label>
+      <select id="f-year">
+        <option value="">All Years</option>
+        <option value="1970">1970–1979</option>
+        <option value="1980">1980–1989</option>
+        <option value="1990">1990–1999</option>
+        <option value="2000">2000–2009</option>
+        <option value="2010">2010–2019</option>
+        <option value="2020">2020–2024</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Min. Insured Loss</label>
+      <select id="f-min">
+        <option value="0">Any amount</option>
+        <option value="100">$100m+</option>
+        <option value="500">$500m+</option>
+        <option value="1000">$1bn+</option>
+        <option value="5000">$5bn+</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Search</label>
+      <input type="text" id="f-search" placeholder="Airline, aircraft, event…">
+    </div>
+    <button class="btn-reset" onclick="resetFilters()">Reset</button>
+    <span id="result-count"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="db-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Year</th>
+          <th onclick="sortTable(1)">Event</th>
+          <th>Type</th>
+          <th>Lloyd's Code(s)</th>
+          <th>Description</th>
+          <th onclick="sortTable(5)">Insured Loss (USD)</th>
+          <th>Fatalities</th>
+        </tr>
+      </thead>
+      <tbody id="db-body">
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer>Risk Code Hub — Aviation Insurance | Lloyd's Codes H2, H3, L2, L3, AO, AP | Version 1.9</footer>
+
+<script>
+const DATA = [
+  {year:1974,name:"Turkish Airlines DC-10 Paris",type:"product",codes:["H2","L2","AO"],desc:"Cargo door defect — explosive decompression. 346 killed. McDonnell Douglas product liability. First major AO claim >$50m.",loss:75,fatal:346},
+  {year:1977,name:"Tenerife Runway Collision",type:"atm",codes:["H2","L2"],desc:"Two Boeing 747s collided on runway — KLM and Pan Am. 583 killed. Worst aviation accident in history. CRM training mandated globally.",loss:300,fatal:583},
+  {year:1979,name:"AA Flight 191 — Chicago DC-10",type:"product",codes:["H2","L2","AO"],desc:"Engine mount failure on takeoff. 273 killed. Maintenance procedure as product defect. DC-10 grounded 37 days by FAA.",loss:120,fatal:273},
+  {year:1983,name:"KAL 007 Shot Down — Soviet Fighters",type:"war",codes:["H2","L2"],desc:"747 shot down by Soviet Su-15 after navigation error. 269 killed. War risk/hull coverage boundary clarified. State military action = war risk.",loss:80,fatal:269},
+  {year:1985,name:"JAL 123 — Japan — Largest Single-Aircraft Disaster",type:"crash",codes:["H2","L2"],desc:"Rear bulkhead failure caused loss of control. 520 killed — worst single-aircraft accident. Fatigue crack from improper repair.",loss:200,fatal:520},
+  {year:1985,name:"Air India 182 — Atlantic Bombing",type:"war",codes:["H2","L2"],desc:"Sikh extremist bomb destroyed 747 over Atlantic. 329 killed. Largest terrorist aviation attack before 9/11.",loss:120,fatal:329},
+  {year:1986,name:"Cerritos Midair Collision — GA/Airline",type:"atm",codes:["H2","H3","L2","L3"],desc:"Aeromexico DC-9 collided with Piper PA-28 over Cerritos, CA. 82 killed. ATC/transponder failure. Drove TCAS mandate.",loss:95,fatal:82},
+  {year:1988,name:"Pan Am 103 — Lockerbie Bombing",type:"war",codes:["H2","L2"],desc:"Libyan intelligence bomb destroyed 747 over Lockerbie. 270 killed. c.£500m total insured. Largest aviation loss to that date. Terrorism accumulation model established.",loss:500,fatal:270},
+  {year:1989,name:"Sioux City DC-10 — Hydraulics Failure",type:"crash",codes:["H2","L2"],desc:"Uncontained engine failure destroyed all hydraulics. 111 killed, 185 survived. Aircraft landed by extraordinary piloting. Engine disc as product liability claim.",loss:85,fatal:111},
+  {year:1992,name:"Faro Airfield Crash — Monarch",type:"crash",codes:["H2","L2"],desc:"Boeing 737-300 ground collision at Faro caused fire, 54 killed. Airport emergency response failures highlighted AP code exposure.",loss:45,fatal:54},
+  {year:1994,name:"China Airlines A300 — Nagoya",type:"crash",codes:["H2","L2"],desc:"Autothrottle/autopilot conflict; crew unable to recover. 264 killed. First major automation-related accident. Glass cockpit risk identified.",loss:180,fatal:264},
+  {year:1996,name:"TWA 800 — Atlantic Fuel Tank Explosion",type:"crash",codes:["H2","L2"],desc:"Centre wing fuel tank ignited on climbout from JFK. 230 killed. NTSB investigation: fuel tank flammability. New fuel inerting requirements.",loss:600,fatal:230},
+  {year:1996,name:"Charkhi Dadri Midair — India",type:"atm",codes:["H2","L2"],desc:"Saudi 747 and Kazakhstan Il-76 collided over India. 349 killed. ATC system deficiencies; no secondary radar coverage.",loss:200,fatal:349},
+  {year:1999,name:"Montreal Convention 1999 — Liability Shift",type:"crash",codes:["L2","L3"],desc:"Convention signed; unlimited passenger liability established. Entered force 2003. Airline CSL limit purchases doubled. Structural market event.",loss:0,fatal:0},
+  {year:2000,name:"Concorde Crash AF4590 — Paris",type:"crash",codes:["H2","L2","AP"],desc:"Runway debris (from Continental DC-10 tyre) struck wing, ruptured fuel tank. 113 killed. Hull c.£30m + third-party ground liability. End of supersonic era.",loss:250,fatal:113},
+  {year:2001,name:"9/11 Attacks — Four Aircraft",type:"war",codes:["H2","L2"],desc:"Two 747s, one 757, one 767 destroyed. 2,977 killed. Total aviation direct loss c.$2.5bn. War risk market collapses. Government backstops. AVN52E revised.",loss:2500,fatal:2977},
+  {year:2002,name:"China Airlines 611 — Fuselage Fatigue",type:"crash",codes:["H2","L2","AO"],desc:"747 disintegrated over Taiwan Strait due to improper repair of 1980 tail strike. 225 killed. Ageing aircraft structural integrity.",loss:180,fatal:225},
+  {year:2005,name:"Helios Airways 522 — Depressurisation",type:"crash",codes:["H2","L2"],desc:"737 depressurised on ground; crew incapacitated at altitude. 121 killed. Pressurisation checklist failure. Demonstrates human factors / CRM gap.",loss:95,fatal:121},
+  {year:2006,name:"Comair 5191 — Wrong Runway Takeoff",type:"atm",codes:["H2","L2"],desc:"CRJ200 took off from wrong, shorter runway at Lexington Blue Grass. 49 of 50 killed. ATC distraction; runway incursion controls.",loss:60,fatal:49},
+  {year:2009,name:"Air France AF447 — Atlantic Disappearance",type:"crash",codes:["H2","L2"],desc:"Pitot tubes iced; crew stalled A330 in response. 228 killed. $100m hull + $500m liability. Black box not found for 2 years. Piloting upset recovery training.",loss:600,fatal:228},
+  {year:2009,name:"Colgan Air 3407 — Buffalo Crash",type:"crash",codes:["H3","L3"],desc:"Turboprop stall approach crash — 50 killed. Crew fatigue and training standards. US regional airline oversight tightened. Drove FAA reauthorisation.",loss:40,fatal:50},
+  {year:2010,name:"Ethiopian Airlines 409 — Beirut",type:"crash",codes:["H2","L2"],desc:"737-800 lost control after takeoff in bad weather. 90 killed. Weather decision-making and weather radar use.",loss:75,fatal:90},
+  {year:2014,name:"MH370 Disappearance",type:"crash",codes:["H2","L2"],desc:"777 disappeared in Indian Ocean. 239 aboard. Presumed hull total loss after 7 years. ICAO GADSS aircraft tracking standards developed.",loss:630,fatal:239},
+  {year:2014,name:"MH17 Shot Down — Eastern Ukraine",type:"war",codes:["H2","L2"],desc:"777 destroyed by Russian Buk missile. 298 killed. War risk claim c.$150m hull. Conflict zone NOTAM procedures overhauled.",loss:150,fatal:298},
+  {year:2015,name:"Germanwings 4U9525 — Deliberate Crash",type:"crash",codes:["H2","L2"],desc:"Co-pilot deliberately crashed A320 into French Alps. 150 killed. Mental health screening gap. Two-crew cockpit rule mandated.",loss:300,fatal:150},
+  {year:2015,name:"Metrojet 9268 — Sinai Bombing",type:"war",codes:["H2","L2"],desc:"Russian Airbus A321 bombed by ISIS over Sinai. 224 killed. Airport ground security exposed. Egypt and Russian aviation suspended.",loss:130,fatal:224},
+  {year:2018,name:"Lion Air JT610 — 737 MAX MCAS",type:"product",codes:["H2","L2","AO"],desc:"First 737 MAX crash — MCAS software runaway. 189 killed. Boeing MCAS design flaw. Products liability trigger.",loss:500,fatal:189},
+  {year:2019,name:"Ethiopian Airlines ET302 — 737 MAX",type:"product",codes:["H2","L2","AO"],desc:"Second 737 MAX crash — MCAS again. 157 killed. Global MAX grounding. Boeing total liability $20bn+. AO market loss c.$1–2bn.",loss:1200,fatal:157},
+  {year:2020,name:"Ukranian Airlines PS752 — Iran Missile",type:"war",codes:["H2","L2"],desc:"737-800 shot down by Iranian military missile near Tehran. 176 killed. Accidental military shoot-down; war risk claim paid.",loss:140,fatal:176},
+  {year:2022,name:"Russia Aircraft Seizure — Leasing Dispute",type:"leasing",codes:["H2"],desc:"400–500 Western-owned leased aircraft retained by Russia following sanctions. $10bn+ hull value. $8bn+ claims filed. Largest unresolved aviation insurance dispute.",loss:8000,fatal:0},
+  {year:2022,name:"China Eastern MU5735 — Deliberate Dive",type:"crash",codes:["H2","L2"],desc:"737-800 entered near-vertical dive and crashed. 132 killed. Investigation inconclusive but deliberate input suspected. Mental health screening renewed.",loss:200,fatal:132},
+  {year:2023,name:"Nepal Airlines 691 — Pokhara Crash",type:"crash",codes:["H3","L3"],desc:"ATR 72 crashed on approach to Pokhara. 72 killed. Pilot error; incorrect engine shutdown. Highlighted ATR product safety record.",loss:30,fatal:72},
+  {year:2024,name:"Boeing 737 MAX 9 — Door Plug Blowout",type:"product",codes:["AO","H2"],desc:"Alaska Airlines door plug blew out at 16,000ft. No fatalities. FAA audit exposed manufacturing quality failures. Criminal plea deal. D&O claims filed against Boeing board.",loss:250,fatal:0},
+  {year:2024,name:"GPS Spoofing — Middle East / Baltic",type:"cyber",codes:["H2","L2"],desc:"Widespread GPS spoofing incidents affecting navigation across multiple regions. Near-misses reported. Attributed to state-sponsored electronic warfare. Avionics cyber underwriting clause needed.",loss:10,fatal:0},
+  {year:2024,name:"Japan Airlines JAL516 — Haneda Collision",type:"atm",codes:["H2","L2","AP"],desc:"A350 collided with Coast Guard aircraft on runway at Haneda. 5 Coast Guard crew killed; all 379 passengers survived A350 fire. Runway incursion/ground movement risk focus.",loss:150,fatal:5}
+];
+
+let sortCol=-1,sortAsc=true;
+
+function getDecade(y){if(y<1980)return"1970";if(y<1990)return"1980";if(y<2000)return"1990";if(y<2010)return"2000";if(y<2020)return"2010";return"2020";}
+
+function tagHTML(t){
+  const map={crash:"t-crash",war:"t-war",product:"t-product",atm:"t-atm",weather:"t-weather",hijack:"t-hijack",cyber:"t-cyber",leasing:"t-leasing"};
+  const label={crash:"Hull/Crash",war:"War/Terror",product:"Products",atm:"ATM/Airport",weather:"Weather",hijack:"Hijack",cyber:"Cyber/Nav",leasing:"Leasing"};
+  return`<span class="tag ${map[t]||''}">${label[t]||t}</span>`;
+}
+function codeHTML(codes){
+  return codes.map(c=>`<span class="code-pill code-${c.toLowerCase()}">${c}</span>`).join('');
+}
+function fmtLoss(v){if(v===0)return'N/A';if(v>=1000)return'$'+( v/1000).toFixed(1)+'bn';return'$'+v+'m';}
+
+function renderTable(data){
+  const tbody=document.getElementById('db-body');
+  tbody.innerHTML='';
+  data.forEach(r=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="year-cell">${r.year}</td><td class="name-cell">${r.name}</td><td>${tagHTML(r.type)}</td><td class="code-cell">${codeHTML(r.codes)}</td><td class="desc-cell">${r.desc}</td><td class="loss-cell">${fmtLoss(r.loss)}</td><td style="text-align:center;font-weight:600">${r.fatal===0?'—':r.fatal.toLocaleString()}</td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('result-count').textContent=data.length+' events shown';
+}
+
+function applyFilters(){
+  const type=document.getElementById('f-type').value;
+  const code=document.getElementById('f-code').value;
+  const year=document.getElementById('f-year').value;
+  const min=parseInt(document.getElementById('f-min').value)||0;
+  const search=document.getElementById('f-search').value.toLowerCase();
+  let data=DATA.filter(r=>{
+    if(type&&r.type!==type)return false;
+    if(code&&!r.codes.includes(code))return false;
+    if(year&&getDecade(r.year)!==year)return false;
+    if(r.loss<min)return false;
+    if(search&&!(r.name.toLowerCase().includes(search)||r.desc.toLowerCase().includes(search)))return false;
+    return true;
+  });
+  if(sortCol>=0){
+    data.sort((a,b)=>{
+      let va,vb;
+      if(sortCol===0){va=a.year;vb=b.year;}
+      else if(sortCol===1){va=a.name;vb=b.name;}
+      else if(sortCol===5){va=a.loss;vb=b.loss;}
+      else{va=0;vb=0;}
+      return sortAsc?(va>vb?1:-1):(va<vb?1:-1);
+    });
+  }
+  renderTable(data);
+}
+
+function sortTable(col){
+  if(sortCol===col){sortAsc=!sortAsc;}else{sortCol=col;sortAsc=true;}
+  document.querySelectorAll('thead th').forEach((th,i)=>{th.classList.remove('sort-asc','sort-desc');if(i===col)th.classList.add(sortAsc?'sort-asc':'sort-desc');});
+  applyFilters();
+}
+
+function resetFilters(){
+  document.getElementById('f-type').value='';
+  document.getElementById('f-code').value='';
+  document.getElementById('f-year').value='';
+  document.getElementById('f-min').value='0';
+  document.getElementById('f-search').value='';
+  sortCol=-1;sortAsc=true;
+  document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sort-asc','sort-desc'));
+  applyFilters();
+}
+
+['f-type','f-code','f-year','f-min'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+document.getElementById('f-search').addEventListener('input',applyFilters);
+applyFilters();
+</script>
+</body>
+</html>

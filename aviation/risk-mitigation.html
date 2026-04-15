@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviation – Risk Mitigation | Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--avia:#1a4a7a;--avia-dark:#0d2d5a;--avia-light:#eef3fa;--accent:#c8a84b;--sky:#4a90d9;--red:#8b1a1a;--orange:#e65100;--green:#2a7a3a;--teal:#00695c;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1a4a7a 55%,#003070 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cce0; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8cce0; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1060px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--avia-dark); margin:28px 0 12px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    /* Control cards */
+    .control-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:16px; margin:24px 0 40px; }
+    .ctrl-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-top:4px solid var(--avia); }
+    .ctrl-card.sms { border-top-color:var(--avia); }
+    .ctrl-card.crm { border-top-color:var(--sky); }
+    .ctrl-card.mro { border-top-color:var(--orange); }
+    .ctrl-card.tech { border-top-color:var(--teal); }
+    .ctrl-card.sec { border-top-color:var(--red); }
+    .ctrl-card.ao { border-top-color:var(--green); }
+    .ctrl-card.apt { border-top-color:var(--accent); }
+    .ctrl-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+    .credit-badge { font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:10px; letter-spacing:0.5px; }
+    .cred-high { background:#e6f4ea; color:var(--green); }
+    .cred-med { background:var(--avia-light); color:var(--avia-dark); }
+    .ctrl-card p { font-size:0.82rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    /* Process steps */
+    .process-wrap { margin:24px 0 36px; }
+    .process-step { display:flex; gap:20px; margin-bottom:20px; }
+    .step-num { min-width:36px; height:36px; background:var(--avia); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.88rem; flex-shrink:0; margin-top:3px; }
+    .step-content h4 { font-size:0.92rem; font-weight:700; color:var(--navy); margin-bottom:5px; }
+    .step-content p { font-size:0.85rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    /* Standards table */
+    .std-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.86rem; }
+    .std-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .std-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .std-table tr:nth-child(even) td { background:#f8fafc; }
+
+    /* Scoring matrix */
+    .score-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.84rem; }
+    .score-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.76rem; text-transform:uppercase; letter-spacing:1px; }
+    .score-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .score-g { background:#e6f4ea; color:#1a5c28; font-weight:700; border-radius:4px; padding:3px 8px; font-size:0.78rem; display:inline-block; }
+    .score-a { background:#fef3e2; color:#7a4500; font-weight:700; border-radius:4px; padding:3px 8px; font-size:0.78rem; display:inline-block; }
+    .score-r { background:#fde8e8; color:var(--red); font-weight:700; border-radius:4px; padding:3px 8px; font-size:0.78rem; display:inline-block; }
+
+    /* Info / warn boxes */
+    .info-box { background:var(--avia-light); border:2px solid var(--avia); border-radius:10px; padding:24px 28px; margin:24px 0; }
+    .info-box h4 { color:var(--avia-dark); font-size:0.95rem; margin-bottom:10px; }
+    .info-box p { font-size:0.88rem; color:var(--text); margin-bottom:8px; line-height:1.6; }
+    .info-box p:last-child { margin:0; }
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.9rem; }
+    .warn-box p { font-size:0.87rem; color:var(--text); margin-bottom:0; line-height:1.6; }
+    .dark-box { background:var(--navy); color:#fff; border-radius:10px; padding:28px 32px; margin:28px 0; }
+    .dark-box h3 { color:var(--accent); margin-bottom:12px; font-size:1.0rem; }
+    .dark-box p { color:#b8cce0; font-size:0.88rem; line-height:1.7; margin-bottom:8px; }
+    .dark-box p:last-child { margin:0; }
+
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Aviation</a> › Risk Mitigation</div>
+  <div class="tag">Module 06 — Risk Mitigation</div>
+  <h1>Aviation Risk Mitigation</h1>
+  <p>Safety Management Systems (SMS), crew resource management, maintenance best practices, technology standards, security controls and emerging risks (GPS spoofing, cyber avionics, UAV). Covers underwriting credit signals and how robust risk management translates to better insurance terms.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <h2>Aviation Safety Framework</h2>
+  <p>Modern aviation safety is built on a four-pillar architecture: the <strong>Safety Management System (SMS)</strong> as the organisational framework; <strong>Crew Resource Management (CRM)</strong> for human factors; <strong>Maintenance Reliability Programmes</strong> for airworthiness; and <strong>Technology Standards</strong> (TCAS, EGPWS, ACAS X) as last-resort defences. Together, these have reduced the fatal accident rate by over 95% since 1970 while passenger volumes increased 20-fold.</p>
+
+  <div class="control-grid">
+    <div class="ctrl-card sms">
+      <h4>Safety Management System (SMS) <span class="credit-badge cred-high">High Rate Credit</span></h4>
+      <p>ICAO Annex 19 mandates SMS for all airlines, MRO organisations, airports, and ATM providers. A mature SMS has four components: safety policy, safety risk management, safety assurance, and safety promotion. Underwriters now ask specifically for SMS documentation — operators with robust SMS demonstrate proactive hazard identification before accidents occur. IOSA registration is the external verification benchmark.</p>
+    </div>
+    <div class="ctrl-card crm">
+      <h4>Crew Resource Management (CRM) <span class="credit-badge cred-high">High Rate Credit</span></h4>
+      <p>CRM training addresses human factors — communication, situational awareness, decision-making, workload management. Post-Tenerife (1977), CRM has been the single biggest contributor to aviation safety improvement. Modern CRM includes LOFT (Line-Oriented Flight Training) scenarios and UPRT (Upset Prevention &amp; Recovery Training, mandated post-AF447). Strong CRM programmes with regular simulator recurrency (every 6 months) attract meaningful rate credit.</p>
+    </div>
+    <div class="ctrl-card mro">
+      <h4>Maintenance Reliability Programme <span class="credit-badge cred-high">High Rate Credit</span></h4>
+      <p>EASA Part 145 / FAA 14 CFR 145 approved maintenance is baseline. Beyond compliance, best-practice operators use MSG-3 (Maintenance Steering Group) methodology for task interval optimisation, Corrosion Prevention and Control Programmes (CPCP) for ageing aircraft, and reliability-centred maintenance (RCM) systems. In-house heavy maintenance capability (Lufthansa Technik, Singapore Airlines Engineering) viewed very positively vs sole reliance on third-party MRO.</p>
+    </div>
+    <div class="ctrl-card tech">
+      <h4>Safety Technology Systems <span class="credit-badge cred-med">Medium Rate Credit</span></h4>
+      <p>Minimum safety technology: TCAS II (Traffic Collision Avoidance System), EGPWS/TAWS (Enhanced Ground Proximity Warning System), FLIR (Forward-Looking Infra-Red for low-visibility), and dual INS/GPS navigation. Post-AF447: ADR (Air Data Reference) redundancy and angle-of-attack indicators. GADSS (Global Aeronautical Distress and Safety System) aircraft tracking — post-MH370 ICAO mandate for real-time position reporting every 15 minutes in distress conditions.</p>
+    </div>
+    <div class="ctrl-card sec">
+      <h4>Security — Airside &amp; Cabin <span class="credit-badge cred-med">Medium Rate Credit</span></h4>
+      <p>Post-9/11: hardened cockpit doors (ARINC 853), armed sky marshals on selected routes, airline security programmes (TSA-approved in US, DfT in UK). Ground-side: airside access control (biometrics, swipe-card with CCTV), staff screening, hold baggage reconciliation (PATSCAN/ETD). Cargo security: explosive detection, X-ray/CT scanning. Operators subject to ICAO AVSEC annexes 17 are assessed — compliance failures (Sharm el-Sheikh 2015 Metrojet bombing was an airside security failure) attract heavy load.</p>
+    </div>
+    <div class="ctrl-card ao">
+      <h4>Products Quality Management (AO) <span class="credit-badge cred-high">High Rate Credit</span></h4>
+      <p>For AO (aerospace products liability): AS9100 quality management system certification is baseline. Design organisations hold EASA DOA (Design Organisation Approval) or FAA ODA (Organisational Designation Authorisation). Key controls: design freeze procedures, engineering change management (ECO/ECP), flight-critical parts traceability, concession management for non-conformances. The 737 MAX MCAS disaster traced to inadequate design change review — full system safety assessment (FMEA/FTA) with independent review is now scrutinised by AO underwriters.</p>
+    </div>
+    <div class="ctrl-card apt">
+      <h4>Airport Ground Operations (AP) <span class="credit-badge cred-med">Medium Rate Credit</span></h4>
+      <p>AP risks managed through: ICAO Annex 14 aerodrome design standards; IATA AHM (Airport Handling Manual) compliance by ground handlers; ICAO runway incursion prevention (hot spot marking, stop bars, ASDE-X surface radar); refuelling quality controls (IATA Guidance Material for Aviation Fuel Quality Requirements); airport emergency plans (AEP) tested by full-scale exercises. ACI APEX (Airport Excellence) safety programme is the external audit benchmark for airports comparable to IOSA for airlines.</p>
+    </div>
+    <div class="ctrl-card tech">
+      <h4>Flight Data Monitoring (FDM/FOQA) <span class="credit-badge cred-high">High Rate Credit</span></h4>
+      <p>Flight Data Monitoring (FDM, called FOQA in the US) analyses parameters from flight data recorders to identify exceedances, unstabilised approaches, hard landings, and crew technique deviations — before accidents occur. EASA mandates FDM for commercial airlines with &gt;20-seat aircraft. Best-practice operators analyse FDM data weekly; debrief crews on findings; and use data to refine training programmes. Absence of FDM programme is a negative underwriting signal.</p>
+    </div>
+    <div class="ctrl-card crm">
+      <h4>Fatigue Risk Management System (FRMS) <span class="credit-badge cred-med">Medium Rate Credit</span></h4>
+      <p>ICAO and EASA now accept FRMS as an alternative to prescriptive Flight Time Limitations (FTL) regulations. FRMS uses bio-mathematical models (SAFTE, FAID) to predict crew fatigue levels and schedule patterns to minimise risk. Operators with approved FRMS typically manage crew fatigue better than those using minimum prescriptive FTL compliance. Post-Colgan Air (Buffalo 2009 — fatigue was a factor), US FAA implemented stringent Part 117 FTL regulations. European EASA OPS FTL regulations 965/2012 are the benchmark.</p>
+    </div>
+  </div>
+
+  <h2>IOSA — The Aviation Insurance Benchmark</h2>
+  <p>The <strong>IATA Operational Safety Audit (IOSA)</strong> is the global standard for airline operational safety assessment. First introduced in 2003, IOSA has become the primary external audit that aviation underwriters look for when assessing airline risks. IOSA registration is required for IATA membership and is used by code-share partners to assess each other's safety standards.</p>
+
+  <div class="process-wrap">
+    <div class="process-step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Organisation &amp; Management (ORG)</h4>
+        <p>Corporate governance, accountable manager, safety management system documentation, regulatory compliance monitoring. Underwriting relevance: management commitment to safety culture — "tone from the top" is measurable at IOSA.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Flight Operations (FLT)</h4>
+        <p>Operations manual standards, flight crew qualifications, CRM training, stabilised approach criteria, UPRT compliance, fuel policy, RVSM (Reduced Vertical Separation Minimum) compliance. This is the highest-risk IOSA section for aviation underwriters — crew qualification and training failures cause most fatal accidents.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Operational Control &amp; Dispatch (DSP)</h4>
+        <p>Flight planning, weight &amp; balance, MEL (Minimum Equipment List) management, NOTAMs briefing, weather decision-making standards. MH370 raised questions about flight dispatch tracking and oceanic monitoring — post-MH370 GADSS tracking standards now an IOSA check item.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Aircraft Engineering &amp; Maintenance (MNT)</h4>
+        <p>Maintenance control, airworthiness management, CPCP for ageing aircraft, stores &amp; parts control, tooling calibration, engineering manual currency. Key underwriting signal: deferred defect management — MEL items kept open beyond allowable intervals indicate maintenance culture deterioration.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Cabin Operations (CAB)</h4>
+        <p>Cabin crew qualifications, safety equipment, in-flight emergency procedures, restraint system checks, passenger briefing standards. Cabin safety failures (blocked exits, non-stowage during turbulence) produce passenger injury claims under L2 — separate from hull loss events.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h4>Ground Handling (GRH)</h4>
+        <p>Fuelling procedures, aircraft loading, pushback/towing, de-icing, ground damage prevention. Ground damage (aircraft hit by service vehicles, jetway contact, FOD ingestion) is a significant attritional hull exposure. IOSA GRH section directly relevant to H2 ground risk rating.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <h4>Cargo Operations (CGO) &amp; Security (SEC)</h4>
+        <p>DG acceptance/handling (IATA DGR compliance), lithium battery policy, ULD management, hold loading limits. Security: airside access control, cargo screening, personnel screening, bomb threat response. Post-Metrojet (Sinai 2015 — IED in hold), cargo and baggage security controls are underwriting-critical for routes to/from elevated security environments.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Emerging Risk: Cyber &amp; GPS Spoofing</h2>
+
+  <div class="dark-box">
+    <h3>GPS Spoofing — New Frontier in Aviation Risk (2024)</h3>
+    <p>GPS spoofing attacks in the Middle East and Baltic regions (2023–2024) have interfered with aircraft navigation systems, causing false position readings, autopilot anomalies, and near-misses. The attacks — attributed to state-sponsored electronic warfare (Russian near Baltic; Iranian near Gulf) — represent a new category of aviation risk that existing policies do not cleanly cover.</p>
+    <p><strong>Coverage gap:</strong> H2 hull policies exclude war risk; GPS spoofing by a state actor may trigger the AVN48B war exclusion. Standard all-risks hull responds to physical damage — a spoofing-induced controlled flight into terrain (CFIT) event would likely trigger H2 hull, but the legal battles over war vs all-risks coverage would be significant. L2 liability follows the hull coverage determination.</p>
+    <p><strong>Emerging response:</strong> The London market is developing aviation cyber underwriting clauses analogous to the LMA5564/5565 cyber war clauses used in property. IATA has published operational guidance on GPS spoofing detection and response. ICAO has raised the issue in AVSEC and ATC working groups. EGNOS (European satellite navigation system) is positioned as a more tamper-resistant alternative to GPS in European airspace.</p>
+    <p><strong>Underwriting signal:</strong> Operators with avionics capable of cross-checking GPS against IRS/DME-DME positioning are better protected. Modern FMS (Flight Management Systems) with multi-sensor fusion (GPS + IRS + radio navaid cross-check) provide resilience. This is now an emerging question in H2/H3 underwriting questionnaires.</p>
+  </div>
+
+  <h2>Aviation Risk Quality Scoring Matrix</h2>
+  <table class="score-table">
+    <thead>
+      <tr><th>Control Area</th><th>Green (Rate Credit)</th><th>Amber (Standard)</th><th>Red (Rate Load/Referral)</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>SMS Maturity</strong></td>
+        <td><span class="score-g">Proactive SMS</span> — hazard ID before accidents; Just Culture policy; voluntary reporting programme active</td>
+        <td><span class="score-a">Compliant SMS</span> — ICAO Annex 19 requirements met; reactive but improving</td>
+        <td><span class="score-r">Absent/Paper SMS</span> — documented but not implemented; enforcement action noted</td>
+      </tr>
+      <tr>
+        <td><strong>IOSA / Equivalent Audit</strong></td>
+        <td><span class="score-g">IOSA Registered</span> — current; no CATs (corrective action tasks) outstanding</td>
+        <td><span class="score-a">IS-BAO / BARS</span> — GA equivalents; last audit &lt;2 years</td>
+        <td><span class="score-r">No audit / lapsed</span> — or significant CATs unresolved</td>
+      </tr>
+      <tr>
+        <td><strong>Crew Training</strong></td>
+        <td><span class="score-g">UPRT approved</span> — full LOFT, biannual simulator, FRMS in place</td>
+        <td><span class="score-a">Standard recurrent</span> — annual check, meets EASA/FAA minimum FTL</td>
+        <td><span class="score-r">Below minimum</span> — irregular checks; fatigue incidents in history; training deferral</td>
+      </tr>
+      <tr>
+        <td><strong>FDM/FOQA Programme</strong></td>
+        <td><span class="score-g">Active weekly analysis</span> — crew feedback loop; integrated with training programme</td>
+        <td><span class="score-a">Monthly review</span> — exceedance monitoring; reports to safety manager</td>
+        <td><span class="score-r">Absent or inactive</span> — data not analysed; no crew debrief process</td>
+      </tr>
+      <tr>
+        <td><strong>Maintenance Culture</strong></td>
+        <td><span class="score-g">Zero deferred MELs</span> — MSG-3 programme; CPCP current; in-house heavy MRO capability</td>
+        <td><span class="score-a">Some open MELs</span> — within allowable intervals; approved MRO contractor used</td>
+        <td><span class="score-r">Chronic deferrals</span> — MEL items beyond interval; maintenance budget cuts; older aircraft no CPCP</td>
+      </tr>
+      <tr>
+        <td><strong>Security Programme</strong></td>
+        <td><span class="score-g">IATA AHM / AVSEC compliant</span> — hardened cockpit, crew vetting, cargo CT scanning; no findings</td>
+        <td><span class="score-a">Regulatory minimum</span> — DfT/TSA/EASA security programme in place; last audit pass</td>
+        <td><span class="score-r">Adverse findings</span> — failed AVSEC inspection; routes to high-threat airports without enhanced screening</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Aviation Safety Standards Reference</h2>
+  <table class="std-table">
+    <thead>
+      <tr><th>Standard / Programme</th><th>Issuing Body</th><th>Applies To</th><th>Underwriting Relevance</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>ICAO Annexes 1–18</strong></td><td>ICAO</td><td>All international aviation operations</td><td>Baseline regulatory compliance — operators not meeting SARPs attract heavy load or declination</td></tr>
+      <tr><td><strong>IOSA</strong></td><td>IATA</td><td>Airlines (required for IATA membership)</td><td>Primary audit benchmark; IOSA registration = rate credit (typically 5–15%)</td></tr>
+      <tr><td><strong>IS-BAO</strong></td><td>IBAC (Int'l Business Aviation Council)</td><td>Corporate / business aviation operators</td><td>Business aviation equivalent of IOSA; Stage III IS-BAO = positive signal for H3/L3</td></tr>
+      <tr><td><strong>BARS (Basic Aviation Risk Standard)</strong></td><td>Flight Safety Foundation</td><td>Charter and contract aviation — remote operations</td><td>Used in oil &amp; gas sector (offshore helicopter); BARS audit required by many energy company insureds</td></tr>
+      <tr><td><strong>EASA Part 145 / FAA 14 CFR 145</strong></td><td>EASA / FAA</td><td>MRO maintenance organisations</td><td>Maintenance approval baseline; unauthorised maintenance = potential AO/H2 claim trigger</td></tr>
+      <tr><td><strong>AS9100 Rev D</strong></td><td>IAQG (Int'l Aerospace Quality Group)</td><td>Aerospace manufacturers, MRO</td><td>Quality management system baseline for AO underwriting; AS9100 certification = rate credit</td></tr>
+      <tr><td><strong>MSG-3 Methodology</strong></td><td>ATA / MRBR</td><td>Airlines (scheduled maintenance)</td><td>Evidence-based maintenance intervals — MSG-3 operators demonstrably better than calendar-based programmes</td></tr>
+      <tr><td><strong>ACI APEX Safety</strong></td><td>ACI (Airports Council International)</td><td>Airport operators</td><td>AP underwriting benchmark — APEX certification demonstrates proactive airport safety management</td></tr>
+      <tr><td><strong>IATA DGR (Dangerous Goods Regulations)</strong></td><td>IATA</td><td>All cargo-carrying operators</td><td>Compliance essential for operators carrying lithium batteries, flammables, chemicals — non-compliance = AO/H2 exposure trigger</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn-box">
+    <h4>⚠ Deliberate Acts and Mental Health Screening Gap</h4>
+    <p>Germanwings Flight 9525 (2015) and suspected deliberate crash of China Eastern MU5735 (2022) highlight a persistent aviation safety gap: pilot mental health screening. Regulatory systems rely on self-disclosure and periodic medical examinations (Class 1 medical), which cannot detect all psychological conditions. Post-Germanwings, EASA and ICAO mandated two-person cockpit rules and strengthened psychological evaluation requirements, but pilots in financial distress, experiencing relationship breakdown, or with undisclosed mental health conditions remain a risk. Aviation underwriters now ask about mental health monitoring programmes, EAP (Employee Assistance Programmes) coverage, and third-party voluntary reporting mechanisms for pilot wellbeing concerns.</p>
+  </div>
+
+  <h2>Risk Mitigation Tips — What to Tell Airline Insureds</h2>
+  <div class="info-box">
+    <h4>Top 7 Actions to Reduce Aviation Insurance Costs</h4>
+    <p><strong>1. Achieve and maintain IOSA registration</strong> — the single highest-ROI action available to airlines. Typical premium saving 5–15% on airline hull and liability combined. Costs ~$50,000–$80,000 per audit cycle (2 years).</p>
+    <p><strong>2. Implement an active FDM/FOQA programme</strong> — demonstrate data-driven safety improvement. Provide FDM exceedance trend data to underwriters at renewal (in aggregated, de-identified form). Shows safety culture at work.</p>
+    <p><strong>3. Invest in UPRT training</strong> — post-AF447 ICAO amendment mandated UPRT but many operators only meet minimum simulator hours. Best-practice operators send pilots to dedicated UPRT centres (aerobatic/upset training) annually.</p>
+    <p><strong>4. Fleet modernisation</strong> — newer aircraft (under 10 years) attract lower hull ROLs, carry better safety technology, and avoid ageing aircraft surcharges. Publish fleet renewal plans to underwriters.</p>
+    <p><strong>5. Buy adequate CSL limit</strong> — post-Montreal Convention, US courts are willing to award per-passenger damages far exceeding SDR 128,821. $1.5bn CSL is now minimum for international scheduled operations. Inadequate limits create insured retention of catastrophic liability.</p>
+    <p><strong>6. Engage with war risk market proactively</strong> — review route network for conflict zone exposure (NOTAM Watch areas). Buy adequate war risk limits and understand the 7-day cancellation clause (AVN52E) implications for operations in elevated-risk regions.</p>
+    <p><strong>7. Document safety culture</strong> — safety promotion evidence (Just Culture policy, voluntary safety reporting scheme, safety meeting minutes, FOQA trend charts) all sent to underwriters demonstrate a proactive safety culture that reduces adverse selection loading.</p>
+  </div>
+
+</main>
+<footer>Risk Code Hub · Aviation Insurance · Module 06: Risk Mitigation · v1.9 — April 2026</footer>
+</body>
+</html>

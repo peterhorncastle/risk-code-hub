@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviation – Rates &amp; ROE Analysis | Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <style>
+    :root { --navy:#0d2240;--avia:#1a4a7a;--avia-dark:#0d2d5a;--avia-light:#eef3fa;--accent:#c8a84b;--sky:#4a90d9;--red:#8b1a1a;--orange:#e65100;--green:#2a7a3a;--teal:#00695c;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1a4a7a 55%,#003070 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cce0; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8cce0; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1060px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--avia-dark); margin:28px 0 12px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .chart-wrap { background:#fff; border:1px solid var(--border); border-radius:12px; padding:28px; margin:28px 0; }
+    .chart-wrap h3 { color:var(--navy); font-size:0.95rem; margin:0 0 20px; font-weight:700; }
+    .chart-container { position:relative; height:320px; }
+
+    /* Market cycle table */
+    .cycle-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.86rem; }
+    .cycle-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .cycle-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .cycle-table tr:nth-child(even) td { background:#f8fafc; }
+    .phase-soft { background:#fef3e2; color:#7a4500; font-weight:700; padding:2px 8px; border-radius:4px; font-size:0.78rem; }
+    .phase-hard { background:#fde8e8; color:var(--red); font-weight:700; padding:2px 8px; border-radius:4px; font-size:0.78rem; }
+    .phase-ok { background:#e6f4ea; color:var(--green); font-weight:700; padding:2px 8px; border-radius:4px; font-size:0.78rem; }
+
+    /* ROE scenarios */
+    .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin:26px 0 40px; }
+    @media(max-width:680px){ .roe-grid { grid-template-columns:1fr; } }
+    .roe-card { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    .roe-header { padding:18px 20px; color:#fff; }
+    .roe-header.bull { background:var(--green); }
+    .roe-header.base { background:var(--avia); }
+    .roe-header.bear { background:var(--red); }
+    .roe-header h4 { font-size:0.95rem; font-weight:700; }
+    .roe-header .pct { font-size:1.8rem; font-weight:800; margin-top:4px; }
+    .roe-body { padding:16px 20px; }
+    .roe-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #eef1f5; font-size:0.83rem; }
+    .roe-row:last-child { border-bottom:none; }
+    .roe-row .lbl { color:var(--muted); }
+    .roe-row .val { font-weight:600; }
+
+    /* Sector table */
+    .sector-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.85rem; }
+    .sector-table th { background:var(--avia); color:#fff; padding:10px 14px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .sector-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    .sector-table tr:nth-child(even) td { background:#f8fafc; }
+
+    .info-box { background:var(--avia-light); border:2px solid var(--avia); border-radius:10px; padding:24px 28px; margin:24px 0; }
+    .info-box h4 { color:var(--avia-dark); font-size:0.95rem; margin-bottom:10px; }
+    .info-box p { font-size:0.88rem; color:var(--text); margin-bottom:8px; line-height:1.6; }
+    .info-box p:last-child { margin:0; }
+
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.9rem; }
+    .warn-box p { font-size:0.87rem; color:var(--text); margin-bottom:0; line-height:1.6; }
+
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Aviation</a> › Rates &amp; ROE</div>
+  <div class="tag">Module 05 — Rates &amp; ROE Analysis</div>
+  <h1>Aviation Insurance — Market Rates &amp; Returns</h1>
+  <p>Pricing cycle analysis for H2/H3 hull and L2/L3 liability from 2000–2026, combined ratio trends, sector ROL grid, and three ROE scenarios modelled on a $500m GWP aviation portfolio.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+</nav>
+
+<main>
+
+  <h2>Rate Index 2000–2026 (H2 Hull &amp; L2 Airline Liability)</h2>
+  <p>Aviation insurance pricing is driven by catastrophic loss events — 9/11 in 2001 triggered the sharpest rate movement in the market's history. The chart below shows indexed ROL movements for H2 airline hull (navy) and L2 airline liability (sky blue), base year 2000 = 100.</p>
+
+  <div class="chart-wrap">
+    <h3>Aviation Rate Index 2000–2026 (2000 = 100)</h3>
+    <div class="chart-container">
+      <canvas id="rateChart"></canvas>
+    </div>
+  </div>
+
+  <h2>Market Cycle Phases</h2>
+  <table class="cycle-table">
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Driver</th><th>H2 Hull Movement</th><th>L2 Liability Movement</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1997–2001</strong></td>
+        <td><span class="phase-soft">Soft / Declining</span></td>
+        <td>Overcapacity post-Gulf War recovery; strong airline growth; no major losses. Rates compressed year-on-year.</td>
+        <td>−5% to −15% per year</td>
+        <td>−5% to −12% per year</td>
+      </tr>
+      <tr>
+        <td><strong>Q4 2001</strong></td>
+        <td><span class="phase-hard">Shock Hardening</span></td>
+        <td>9/11 attacks destroy four aircraft, kill 2,977. Total insured aviation loss c.$3.5bn. War risk market collapses overnight — government backstops required in US, UK, and EU within 48 hours.</td>
+        <td>+150–300% within 3 months</td>
+        <td>+100–200% within 3 months</td>
+      </tr>
+      <tr>
+        <td><strong>2002–2006</strong></td>
+        <td><span class="phase-hard">Hard Market</span></td>
+        <td>Post-9/11 hardening holds as new capital enters cautiously. SARS (2003) depresses airline traffic, reducing exposure but also premium volume. Bali and Madrid terrorist attacks sustain war risk premium levels.</td>
+        <td>Flat to +10% per year</td>
+        <td>Flat to +8% per year</td>
+      </tr>
+      <tr>
+        <td><strong>2007–2013</strong></td>
+        <td><span class="phase-soft">Gradual Softening</span></td>
+        <td>New capital enters aviation market. Improved safety record (2008–2009 relatively benign). Air France AF447 (2009, $600m) and other attritional losses do not arrest market softening due to strong competition.</td>
+        <td>−3% to −10% per year</td>
+        <td>−3% to −8% per year</td>
+      </tr>
+      <tr>
+        <td><strong>2014</strong></td>
+        <td><span class="phase-hard">Loss Shock</span></td>
+        <td>MH370 disappearance ($630m) + MH17 war risk ($150m) + AirAsia QZ8501 crash ($200m) — three major losses in one year. Premium volume inadequate. Hull rate corrections begin.</td>
+        <td>+15% to +30%</td>
+        <td>+10% to +20%</td>
+      </tr>
+      <tr>
+        <td><strong>2015–2018</strong></td>
+        <td><span class="phase-soft">Partial Softening</span></td>
+        <td>ILS capital enters aviation. 2015–2017 relatively benign loss year. Hull ROLs decline toward 0.25–0.35% for major airlines. Market described as "dangerously soft" by senior underwriters.</td>
+        <td>−5% to −12% per year</td>
+        <td>−3% to −8% per year</td>
+      </tr>
+      <tr>
+        <td><strong>2019–2020</strong></td>
+        <td><span class="phase-hard">Hard Reset</span></td>
+        <td>737 MAX grounding (2019) — two crashes, $1.7bn+ insured AO loss, 20-month grounding. COVID-19 pandemic (2020) grounds 80% of global fleet. Reduced premium volume + latent claims from parked aircraft + leasing disputes.</td>
+        <td>+20–50% for affected fleets; flat to +15% others</td>
+        <td>+15–30%</td>
+      </tr>
+      <tr>
+        <td><strong>2022–Present</strong></td>
+        <td><span class="phase-hard">Disputed / Elevated</span></td>
+        <td>Russia aircraft leasing dispute ($8bn+ in claims unresolved). Ukraine airspace closure. GPS spoofing emerging cyber risk. Haneda collision (2024). Market cautious on capacity — premium adequacy debates continue.</td>
+        <td>Flat to +10%; leasing-exposed fleets +20–35%</td>
+        <td>Flat to +8%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Sector ROL Grid — H2 Hull Rate on Line by Operator Type</h2>
+  <table class="sector-table">
+    <thead>
+      <tr><th>Operator Type</th><th>Typical Hull ROL Range</th><th>Typical L2/L3 CSL</th><th>Market Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Major network airline (IOSA, clean record)</strong></td><td>0.20% – 0.40%</td><td>$1.5bn – $2.5bn</td><td>Most competitive segment; top-tier syndicates lead; large line sizes available</td></tr>
+      <tr><td><strong>Regional airline (turboprop / regional jet)</strong></td><td>0.40% – 0.90%</td><td>$500m – $1.5bn</td><td>Higher frequency losses; lower fleet values moderate absolute premium; scrutiny on crew training</td></tr>
+      <tr><td><strong>Low-cost carrier (short-haul, high utilisation)</strong></td><td>0.28% – 0.55%</td><td>$1bn – $2bn</td><td>High departures = high exposure; LCC safety records broadly strong (Ryanair, easyJet excellent); Frontier, Spirit more variable</td></tr>
+      <tr><td><strong>Cargo airline / freighter operator</strong></td><td>0.30% – 0.65%</td><td>$500m – $1.5bn</td><td>Night operations, hazmat cargo, older aircraft; hull values high for freighter conversions; lithium battery fire risk focus post-2016</td></tr>
+      <tr><td><strong>Corporate jet (Gulfstream/Dassault/Bombardier)</strong></td><td>0.45% – 0.80%</td><td>$100m – $500m</td><td>High per-aircraft values; crew quality variable; pilot-owner exposure; NBAA IS-BAO audit positive signal</td></tr>
+      <tr><td><strong>Helicopter — offshore energy support</strong></td><td>1.00% – 2.50%</td><td>$100m – $500m</td><td>High loss frequency; North Sea, Gulf of Mexico, Brazil offshore operations scrutinised; ERA, CHC, Bristow experience relevant</td></tr>
+      <tr><td><strong>Helicopter — onshore / EMS / tourism</strong></td><td>1.20% – 3.50%</td><td>$25m – $250m</td><td>Tourism heli (Grand Canyon etc.) extreme scrutiny; EMS is distress-condition flying; high fatality-per-accident rate</td></tr>
+      <tr><td><strong>Aerospace OEM (AO products)</strong></td><td>0.05% – 0.35% of revenue</td><td>$500m – $15bn aggregate</td><td>Boeing/Airbus tier: $5bn–$15bn limits; tier-2 suppliers: $100m–$2bn; MRO: $100m–$500m; rate on revenue not hull value</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Combined Ratio Analysis — Aviation Portfolio</h2>
+  <div class="chart-wrap">
+    <h3>Estimated Aviation Combined Ratio 2010–2026 (Global Market Estimate)</h3>
+    <div class="chart-container">
+      <canvas id="crChart"></canvas>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>Key Combined Ratio Drivers in Aviation</h4>
+    <p><strong>Loss ratio volatility:</strong> Aviation is characterised by low frequency / very high severity. In a benign year (e.g., 2017), the global market loss ratio may be 40–55%. A single major event (9/11 2001, MH370 + MH17 2014) can push the annual loss ratio to 120–200%+. This binary-outcome profile means capital allocation and reserving discipline are critical.</p>
+    <p><strong>Expense ratio:</strong> Aviation is a specialist market with high acquisition costs (broking fees 10–15%, Lloyd's expenses ~25–30%). Total expense ratio typically 35–42%. The combined ratio must absorb both expenses and losses — ROEs only become attractive when loss ratios are in the 50–65% range.</p>
+    <p><strong>Long-tail liability:</strong> Unlike hull (relatively quick settlement), L2 liability claims from major accidents can take 5–10 years to settle. MH17 claims are still being litigated in Dutch and international courts (2026). Adequate IBNR reserving is essential — some aviation syndicates carry 3–5 year reserve tails.</p>
+  </div>
+
+  <h2>ROE Scenario Analysis — $500m GWP Aviation Portfolio</h2>
+  <p>Three scenarios modelled on a hypothetical $500m GWP aviation portfolio: 60% H2/H3 hull ($300m), 30% L2/L3 liability ($150m), 10% AO/AP ($50m). All figures illustrative.</p>
+
+  <div class="roe-grid">
+    <div class="roe-card">
+      <div class="roe-header bull">
+        <h4>🟢 Bull (Favourable)</h4>
+        <div class="pct">+18.4% ROE</div>
+      </div>
+      <div class="roe-body">
+        <div class="roe-row"><span class="lbl">GWP</span><span class="val">$500m</span></div>
+        <div class="roe-row"><span class="lbl">NEP (90% retention)</span><span class="val">$450m</span></div>
+        <div class="roe-row"><span class="lbl">Net Loss Ratio</span><span class="val">42%</span></div>
+        <div class="roe-row"><span class="lbl">Net Losses Incurred</span><span class="val">$189m</span></div>
+        <div class="roe-row"><span class="lbl">Expense Ratio</span><span class="val">38%</span></div>
+        <div class="roe-row"><span class="lbl">Net Expenses</span><span class="val">$171m</span></div>
+        <div class="roe-row"><span class="lbl">Underwriting Profit</span><span class="val">$90m</span></div>
+        <div class="roe-row"><span class="lbl">Investment Income</span><span class="val">$22m</span></div>
+        <div class="roe-row"><span class="lbl">Pre-tax Profit</span><span class="val">$112m</span></div>
+        <div class="roe-row"><span class="lbl">Capital Base (1:1)</span><span class="val">$450m</span></div>
+        <div class="roe-row"><span class="lbl">Combined Ratio</span><span class="val">80%</span></div>
+      </div>
+    </div>
+    <div class="roe-card">
+      <div class="roe-header base">
+        <h4>🔵 Base (Moderate)</h4>
+        <div class="pct">+9.8% ROE</div>
+      </div>
+      <div class="roe-body">
+        <div class="roe-row"><span class="lbl">GWP</span><span class="val">$500m</span></div>
+        <div class="roe-row"><span class="lbl">NEP (90% retention)</span><span class="val">$450m</span></div>
+        <div class="roe-row"><span class="lbl">Net Loss Ratio</span><span class="val">60%</span></div>
+        <div class="roe-row"><span class="lbl">Net Losses Incurred</span><span class="val">$270m</span></div>
+        <div class="roe-row"><span class="lbl">Expense Ratio</span><span class="val">38%</span></div>
+        <div class="roe-row"><span class="lbl">Net Expenses</span><span class="val">$171m</span></div>
+        <div class="roe-row"><span class="lbl">Underwriting Profit</span><span class="val">$9m</span></div>
+        <div class="roe-row"><span class="lbl">Investment Income</span><span class="val">$35m</span></div>
+        <div class="roe-row"><span class="lbl">Pre-tax Profit</span><span class="val">$44m</span></div>
+        <div class="roe-row"><span class="lbl">Capital Base (1:1)</span><span class="val">$450m</span></div>
+        <div class="roe-row"><span class="lbl">Combined Ratio</span><span class="val">98%</span></div>
+      </div>
+    </div>
+    <div class="roe-card">
+      <div class="roe-header bear">
+        <h4>🔴 Bear (Catastrophic)</h4>
+        <div class="pct">−19.2% ROE</div>
+      </div>
+      <div class="roe-body">
+        <div class="roe-row"><span class="lbl">GWP</span><span class="val">$500m</span></div>
+        <div class="roe-row"><span class="lbl">NEP (90% retention)</span><span class="val">$450m</span></div>
+        <div class="roe-row"><span class="lbl">Net Loss Ratio</span><span class="val">135%</span></div>
+        <div class="roe-row"><span class="lbl">Net Losses Incurred</span><span class="val">$608m</span></div>
+        <div class="roe-row"><span class="lbl">Expense Ratio</span><span class="val">38%</span></div>
+        <div class="roe-row"><span class="lbl">Net Expenses</span><span class="val">$171m</span></div>
+        <div class="roe-row"><span class="lbl">Underwriting Loss</span><span class="val">−$329m</span></div>
+        <div class="roe-row"><span class="lbl">Investment Income</span><span class="val">$15m</span></div>
+        <div class="roe-row"><span class="lbl">Pre-tax Loss</span><span class="val">−$314m</span></div>
+        <div class="roe-row"><span class="lbl">Capital Base</span><span class="val">$450m (eroded)</span></div>
+        <div class="roe-row"><span class="lbl">Combined Ratio</span><span class="val">173%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>Bear Scenario Context — What Does 135% Loss Ratio Look Like?</h4>
+    <p>A 135% net loss ratio on a $500m GWP portfolio is approximately the magnitude of a 9/11-equivalent event hitting the portfolio proportionally. In absolute terms, the London aviation market absorbed c.$3.5bn in total claims from 9/11 against a then-total GWP of approximately $5–6bn — producing a combined ratio well above 200% for the year. The 2022 Russia leasing dispute threatens a similar systemic loss outcome, with $8bn+ in claims against a global GWP of only $6bn. The bear scenario illustrates why aviation underwriters must maintain very significant capital buffers and purchase outward reinsurance aggressively.</p>
+    <p><strong>IBNR reserving note:</strong> Aviation liability losses develop slowly — a major crash in Year 1 may not be fully settled until Year 8–10. Reserve development risk is a significant feature of aviation P&amp;L. Syndicates writing aviation must carry substantial IBNR reserves, which depress short-term reported ROE even in good trading years.</p>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠ Russia Leasing Dispute — Systemic Threat to Aviation Market Returns</h4>
+    <p>The $8bn+ in H2 hull claims filed by aircraft lessors following Russia's retention of leased aircraft (2022) represents approximately 1.3× the global aviation market GWP. If claims are upheld in full, several syndicates and companies face solvency risk. The market disputes coverage on grounds that aircraft are not "lost" (they exist but cannot be retrieved). English courts and LCIA arbitrations are ongoing as of April 2026. A significant adverse ruling could produce the largest single-year aviation loss in market history — exceeding 9/11 in absolute dollar terms. Underwriters are now scrutinising leasing programme structures, jurisdiction of lessees, and sanctions exposure at every renewal.</p>
+  </div>
+
+</main>
+<footer>Risk Code Hub · Aviation Insurance · Module 05: Rates &amp; ROE Analysis · v1.9 — April 2026</footer>
+
+<script>
+// Rate Index Chart
+(function(){
+  const years=['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'];
+  const hull=  [100, 280, 310, 295, 280, 265, 250, 225, 205, 190, 178, 165, 152, 140, 175, 158, 140, 128, 118, 155, 165, 155, 168, 172, 175, 170, 165];
+  const liab=  [100, 240, 270, 255, 242, 228, 215, 195, 180, 168, 157, 146, 137, 128, 155, 140, 125, 115, 108, 138, 148, 140, 148, 150, 152, 148, 145];
+  const ctx=document.getElementById('rateChart').getContext('2d');
+  new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:years,
+      datasets:[
+        {label:'H2 Hull ROL Index',data:hull,borderColor:'#1a4a7a',backgroundColor:'rgba(26,74,122,0.06)',tension:0.3,pointRadius:3,borderWidth:2.5},
+        {label:'L2 Liability Index',data:liab,borderColor:'#4a90d9',backgroundColor:'rgba(74,144,217,0.06)',tension:0.3,pointRadius:3,borderWidth:2,borderDash:[5,3]}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top',labels:{font:{size:12}}},
+        tooltip:{mode:'index',intersect:false}
+      },
+      scales:{
+        y:{title:{display:true,text:'Rate Index (2000 = 100)'},min:80,max:320,grid:{color:'rgba(0,0,0,0.05)'}},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+})();
+
+// Combined Ratio Chart
+(function(){
+  const years=['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+  const cr=   [95,   88,   102,  85,   142,  90,   82,   78,   88,   145,  110,  105,  130,  98,   105,  102];
+  const ctx=document.getElementById('crChart').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:years,
+      datasets:[{
+        label:'Est. Combined Ratio %',
+        data:cr,
+        backgroundColor:cr.map(v=>v>100?'rgba(139,26,26,0.7)':'rgba(26,74,122,0.7)'),
+        borderColor:cr.map(v=>v>100?'#8b1a1a':'#1a4a7a'),
+        borderWidth:1
+      },{
+        label:'100% (Break-even)',
+        data:years.map(()=>100),
+        type:'line',
+        borderColor:'#c8a84b',
+        borderWidth:2,
+        borderDash:[6,4],
+        pointRadius:0,
+        fill:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:12}}},tooltip:{mode:'index',intersect:false}},
+      scales:{
+        y:{title:{display:true,text:'Combined Ratio %'},min:60,max:180,grid:{color:'rgba(0,0,0,0.05)'}},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

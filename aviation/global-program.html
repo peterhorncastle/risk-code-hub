@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviation – Global Programmes | Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--avia:#1a4a7a;--avia-dark:#0d2d5a;--avia-light:#eef3fa;--accent:#c8a84b;--sky:#4a90d9;--red:#8b1a1a;--orange:#e65100;--green:#2a7a3a;--teal:#00695c;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1a4a7a 55%,#003070 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cce0; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8cce0; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1060px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--avia-dark); margin:28px 0 12px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    /* Programme tower */
+    .tower { margin:28px 0 40px; display:flex; flex-direction:column; gap:6px; max-width:680px; }
+    .tower-layer { display:flex; align-items:stretch; border-radius:8px; overflow:hidden; border:1px solid var(--border); }
+    .layer-label { background:var(--navy); color:#fff; padding:14px 20px; font-size:0.82rem; font-weight:700; min-width:160px; display:flex; align-items:center; line-height:1.4; }
+    .layer-content { background:#fff; padding:12px 18px; flex:1; }
+    .layer-content strong { display:block; font-size:0.9rem; color:var(--navy); margin-bottom:3px; }
+    .layer-content span { font-size:0.82rem; color:var(--muted); line-height:1.5; }
+    .tower-layer.war-risk .layer-label { background:var(--red); }
+    .tower-layer.primary .layer-label { background:var(--avia); }
+    .tower-layer.excess1 .layer-label { background:var(--sky); }
+    .tower-layer.excess2 .layer-label { background:var(--teal); }
+    .tower-layer.excess3 .layer-label { background:var(--green); }
+    .tower-layer.aodic .layer-label { background:var(--orange); }
+    .tower-layer.sil .layer-label { background:var(--muted); }
+
+    /* Jurisdiction grid */
+    .juris-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:24px 0 40px; }
+    .juris-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-top:4px solid var(--avia); }
+    .juris-card h4 { font-size:0.92rem; font-weight:700; color:var(--navy); margin-bottom:10px; }
+    .juris-row { display:flex; gap:8px; margin-bottom:6px; font-size:0.82rem; }
+    .juris-label { color:var(--muted); min-width:110px; flex-shrink:0; }
+    .juris-val { color:var(--text); font-weight:600; flex:1; }
+
+    /* Limit scenario table */
+    .limit-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.86rem; }
+    .limit-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .limit-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .limit-table tr:nth-child(even) td { background:#f8fafc; }
+
+    /* Event table */
+    .event-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.86rem; }
+    .event-table th { background:var(--avia); color:#fff; padding:10px 14px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .event-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .event-table tr:nth-child(even) td { background:#f8fafc; }
+
+    /* Case study */
+    .case-box { background:var(--navy); color:#fff; border-radius:12px; padding:32px; margin:32px 0; }
+    .case-box .case-tag { font-size:0.72rem; text-transform:uppercase; letter-spacing:3px; color:var(--accent); margin-bottom:10px; }
+    .case-box h3 { color:#fff; font-size:1.1rem; margin-bottom:14px; }
+    .case-box p { color:#b8cce0; font-size:0.88rem; line-height:1.7; margin-bottom:10px; }
+    .case-box p:last-child { margin:0; }
+    .case-box .highlight { color:var(--accent); font-weight:700; }
+
+    .info-box { background:var(--avia-light); border:2px solid var(--avia); border-radius:10px; padding:24px 28px; margin:24px 0; }
+    .info-box h4 { color:var(--avia-dark); font-size:0.95rem; margin-bottom:10px; }
+    .info-box p { font-size:0.88rem; color:var(--text); margin-bottom:8px; line-height:1.6; }
+    .info-box p:last-child { margin:0; }
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:22px 24px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:8px; font-size:0.9rem; }
+    .warn-box p { font-size:0.87rem; color:var(--text); margin-bottom:0; line-height:1.6; }
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Aviation</a> › Global Programmes</div>
+  <div class="tag">Module 07 — Global Programme Structuring</div>
+  <h1>Aviation Global Programme Structuring</h1>
+  <p>Airline and aerospace programme architectures from mid-size regional carriers to major network airlines and aerospace OEMs. Covers CSL towers, war risk layering, multi-jurisdiction admitted requirements, AO products aggregates, and the $50m / $500m / $1bn+ claim scenarios.</p>
+</header>
+
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programmes</a>
+</nav>
+
+<main>
+
+  <h2>Aviation Programme Architecture Overview</h2>
+  <p>Aviation global programmes differ from most other commercial lines in three key ways: (1) <strong>Combined Single Limit (CSL)</strong> rather than split per-claimant/per-occurrence structures; (2) <strong>war risk placed separately</strong> with a distinct market on 7-day cancellable terms; and (3) <strong>mandatory admitted local policies</strong> in many jurisdictions under EU Regulation 785/2004 and ICAO Annex 6 operator certificate requirements. Understanding these structural features is essential before constructing a programme tower.</p>
+
+  <h2>Programme Tower — Major Network Airline (International, $2bn CSL)</h2>
+  <p>Illustrative structure for a major international airline with 120 aircraft ($9bn fleet value), operating to 80 countries including US, EU, Middle East, and Asia-Pacific.</p>
+
+  <div class="tower">
+    <div class="tower-layer sil">
+      <div class="layer-label">Self-Insured Retention</div>
+      <div class="layer-content">
+        <strong>$5m hull SIR + $2m liability SIR per occurrence</strong>
+        <span>Retained by airline. Hull SIR: attritional ground damage, minor structural repairs. Liability SIR: small baggage/personal injury claims. Captive insurer often used to hold SIR.</span>
+      </div>
+    </div>
+    <div class="tower-layer primary">
+      <div class="layer-label">Primary Aviation Layer</div>
+      <div class="layer-content">
+        <strong>H2 Hull $9bn agreed value + L2 CSL $500m xs $2m SIR</strong>
+        <span>Lead Lloyd's syndicate(s) + London market co-insurers. Hull all-risks physical damage. Liability covers passengers, third parties, cargo. Primary layer sets the terms — all excess layers follow form.</span>
+      </div>
+    </div>
+    <div class="tower-layer excess1">
+      <div class="layer-label">Excess Layer 1</div>
+      <div class="layer-content">
+        <strong>$500m xs $500m (liability only)</strong>
+        <span>London and international (Zurich, Munich Re, Hannover Re) market. Follows primary form. Activated in mid-size catastrophic events — full hull loss + significant passenger death + some third-party ground damage.</span>
+      </div>
+    </div>
+    <div class="tower-layer excess2">
+      <div class="layer-label">Excess Layer 2</div>
+      <div class="layer-content">
+        <strong>$500m xs $1bn</strong>
+        <span>Broader reinsurance market participation. Lockerbie (1988, c.$1bn total) would have reached into this layer. Post-9/11, airlines in this layer found capacity very tight — government backstops covered the gap.</span>
+      </div>
+    </div>
+    <div class="tower-layer excess3">
+      <div class="layer-label">Excess Layer 3</div>
+      <div class="layer-content">
+        <strong>$500m xs $1.5bn → Total CSL $2bn</strong>
+        <span>Top-of-tower capacity. Only the most severe multi-aircraft or ground impact events (9/11-equivalent) would exhaust a $2bn CSL. Some airlines buy $2.5bn CSL, particularly US domestic carriers facing US tort system exposure.</span>
+      </div>
+    </div>
+    <div class="tower-layer war-risk">
+      <div class="layer-label">War Risk (Separate Placement)</div>
+      <div class="layer-content">
+        <strong>AVN52H — Hull + Liability war risk. Typically $1.5bn–$2bn. 7-day cancellation.</strong>
+        <span>Placed with London aviation war risk market (specialist underwriters, Pool participants). Covers: war, terrorism, sabotage, confiscation, political interference. AVN52E cancellation clause — market can withdraw in 7 days in elevated conflict periods. MH17, Lockerbie, 9/11 — all war risk claims.</span>
+      </div>
+    </div>
+    <div class="tower-layer aodic">
+      <div class="layer-label">AO Products (if applicable)</div>
+      <div class="layer-content">
+        <strong>AO aggregate limit $500m–$2bn (fleet operators with MRO programmes)</strong>
+        <span>AO placed for operators running MRO facilities or with approved ground handling operations. Covers products defect liability. Grounding sublimit (e.g., $100m) standard. Boeing/Airbus tier buy $5bn–$15bn AO separately as OEMs.</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Jurisdiction Profiles — Key Markets for Admitted Insurance</h2>
+  <p>Unlike most commercial lines where freedom-of-services placement is broad, aviation has specific admitted insurance requirements driven by EU Regulation 785/2004 (minimum liability limits for all operators to/from EU) and ICAO Annex 6 operator certificate requirements. Fronting arrangements are required in many jurisdictions.</p>
+
+  <div class="juris-grid">
+    <div class="juris-card">
+      <h4>🇺🇸 United States</h4>
+      <div class="juris-row"><span class="juris-label">Regulator</span><span class="juris-val">FAA / DOT</span></div>
+      <div class="juris-row"><span class="juris-label">Min CSL (air carrier)</span><span class="juris-val">$300m (FAA order); commercial reality $1.5bn+</span></div>
+      <div class="juris-row"><span class="juris-label">Admitted required</span><span class="juris-val">Surplus lines placement accepted; Lloyd's eligible. FAA Form 139 for airports.</span></div>
+      <div class="juris-row"><span class="juris-label">Key issues</span><span class="juris-val">US tort jurisdiction — unlimited jury awards; ERISA for airline pensions; Amtrak/Rail interactions for airport rail links; state-level variations</span></div>
+    </div>
+    <div class="juris-card">
+      <h4>🇬🇧 United Kingdom</h4>
+      <div class="juris-row"><span class="juris-label">Regulator</span><span class="juris-val">CAA / DfT</span></div>
+      <div class="juris-row"><span class="juris-label">Min CSL</span><span class="juris-val">EU Reg 785/2004 (retained post-Brexit in UK law)</span></div>
+      <div class="juris-row"><span class="juris-label">Admitted required</span><span class="juris-val">Lloyd's and UK-authorised insurers only. Freedom of services for EEA carriers post-Brexit requires TEMPORARY permissions review.</span></div>
+      <div class="juris-row"><span class="juris-label">Key issues</span><span class="juris-val">Post-Brexit bilateral air services agreements; Heathrow slots as financial instruments (insurable value); ATOL bond requirements for tour operators</span></div>
+    </div>
+    <div class="juris-card">
+      <h4>🇪🇺 European Union</h4>
+      <div class="juris-row"><span class="juris-label">Regulator</span><span class="juris-val">EASA / National CAAs</span></div>
+      <div class="juris-row"><span class="juris-label">Min CSL</span><span class="juris-val">EU Reg 785/2004: varies by MTOW band — MTOW ≥500,000kg: min SDR 700m</span></div>
+      <div class="juris-row"><span class="juris-label">Admitted required</span><span class="juris-val">Solvency II authorised insurer required in relevant EU member state. Third-country branches (Lloyd's) face post-Brexit equivalence assessment.</span></div>
+      <div class="juris-row"><span class="juris-label">Key issues</span><span class="juris-val">EU Air Safety List bans operators; GDPR for passenger data (breach notification); environmental surcharges (CORSIA carbon offsetting)</span></div>
+    </div>
+    <div class="juris-card">
+      <h4>🇨🇳 China</h4>
+      <div class="juris-row"><span class="juris-label">Regulator</span><span class="juris-val">CAAC (Civil Aviation Administration of China)</span></div>
+      <div class="juris-row"><span class="juris-label">Min CSL</span><span class="juris-val">CAAC-set limits; domestic carriers must carry CAAC-approved policies</span></div>
+      <div class="juris-row"><span class="juris-label">Admitted required</span><span class="juris-val">Strongly preferred — PICC Aviation, China Re, CPIC lead domestic market. Lloyd's access via QFII/approved channels only.</span></div>
+      <div class="juris-row"><span class="juris-label">Key issues</span><span class="juris-val">737 MAX grounding extended; MU5735 (2022) investigation; CAAC increasingly assertive on local content requirements; Taiwan Strait airspace constraints</span></div>
+    </div>
+    <div class="juris-card">
+      <h4>🇦🇪 Middle East (UAE / Gulf)</h4>
+      <div class="juris-row"><span class="juris-label">Regulator</span><span class="juris-val">UAE GCAA / Saudi GACA / Qatar CAA</span></div>
+      <div class="juris-row"><span class="juris-label">Min CSL</span><span class="juris-val">ICAO Annex 6 minimum; major carriers (Emirates, Qatar) buy $2bn+ CSL</span></div>
+      <div class="juris-row"><span class="juris-label">Admitted required</span><span class="juris-val">Local admitted policy required in UAE (Lloyd's registered in DIFC). Saudi market requires SAMA-approved insurer.</span></div>
+      <div class="juris-row"><span class="juris-label">Key issues</span><span class="juris-val">GPS spoofing incidents (Iranian attribution); Yemen conflict zone overflight; laptop ban history (US/UK); Hajj season mass capacity risk (Jeddah)</span></div>
+    </div>
+    <div class="juris-card">
+      <h4>🇧🇷 Brazil / Latin America</h4>
+      <div class="juris-row"><span class="juris-label">Regulator</span><span class="juris-val">ANAC (Brazil); local CAAs elsewhere</span></div>
+      <div class="juris-row"><span class="juris-label">Min CSL</span><span class="juris-val">ICAO minimums; ANAC sets local requirements for domestic operators</span></div>
+      <div class="juris-row"><span class="juris-label">Admitted required</span><span class="juris-val">Brazil: IRB Brazil Re mandatory cession was abolished (2007) but local fronting still preferred. Columbia, Argentina, Peru: local fronting required.</span></div>
+      <div class="juris-row"><span class="juris-label">Key issues</span><span class="juris-val">Amazonian CFIT risk (challenging terrain, remote airports); Gol/TAM infrastructure constraints; currency repatriation; LATAM Airlines restructuring precedent</span></div>
+    </div>
+  </div>
+
+  <h2>Limit Selection by Claim Scenario</h2>
+  <table class="limit-table">
+    <thead>
+      <tr><th>Scenario</th><th>Illustrative Loss</th><th>Coverage Layer Activated</th><th>Minimum CSL Required</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Turbulence Passenger Injuries</strong></td>
+        <td>10 injuries, 2 severe spinal. Estimated $15m total.</td>
+        <td>Primary L2 layer (xs SIR). Hull not triggered.</td>
+        <td>$50m CSL adequate. Standard attritional L2 loss.</td>
+      </tr>
+      <tr>
+        <td><strong>Aircraft Ground Damage (Taxiway Collision)</strong></td>
+        <td>Two A321s collide on taxiway. Hull damage $40m total. 15 injuries, $5m liability.</td>
+        <td>H2 hull (both aircraft values). Primary L2 for injuries.</td>
+        <td>$100m CSL adequate. Routine mid-size loss event.</td>
+      </tr>
+      <tr>
+        <td><strong>Single Aircraft Hull Total Loss — No Fatalities</strong></td>
+        <td>737-800 landing gear collapse, runway excursion. Hull TL $60m. No fatalities. 40 minor injuries, $8m.</td>
+        <td>H2 hull TL. Primary L2 for injuries (minor). No excess layers triggered.</td>
+        <td>$100m CSL adequate. H2 hull programme absorbs TL.</td>
+      </tr>
+      <tr>
+        <td><strong>Regional Aircraft Crash — 50 Fatalities</strong></td>
+        <td>ATR-72 crash. 50 fatalities × $1.5m avg settlement (Montreal tier 2) = $75m liability. Hull $15m.</td>
+        <td>H3 hull TL. L3 primary layer. Approaches top of $100m limit.</td>
+        <td>$150m–$200m CSL recommended for regional operators. $100m technically adequate but runs close.</td>
+      </tr>
+      <tr>
+        <td><strong>Mid-Size Widebody Crash — 250 Fatalities</strong></td>
+        <td>A330 crash. 250 fatalities × $2.5m avg = $625m. Hull $200m. Third-party ground damage $50m total.</td>
+        <td>Hull TL (H2). L2 primary exhausted ($500m). Excess 1 activated ($500m xs $500m). $875m total.</td>
+        <td>$1bn CSL minimum. $1.5bn strongly recommended. AF447-scale event approaches $600–700m liability.</td>
+      </tr>
+      <tr>
+        <td><strong>Terrorism/Deliberate Crash — Densely Populated Area</strong></td>
+        <td>Full hull loss + 300 passenger deaths + 500 ground casualties (urban CFIT). $400m liability (pax) + $800m ground damage + $200m hull = $1.4bn.</td>
+        <td>War risk placement (terrorism trigger). H2 war hull. L2 war liability. War risk pool/government backstop may be needed at margins.</td>
+        <td>$2bn war risk CSL minimum. Illustrates why government reinsurance backstops exist post-9/11.</td>
+      </tr>
+      <tr>
+        <td><strong>9/11 Equivalent — Multiple Aircraft</strong></td>
+        <td>Four aircraft destroyed. 3,000 ground fatalities. $3.5bn+ total. Three airlines affected. War risk market exhausted.</td>
+        <td>War risk (primary) → government backstop (ATSB/Treasury in US; UK DfT; EU schemes). Aviation war risk market effectively insolvent without government support.</td>
+        <td>Government backstop required. No commercial programme survives intact. Post-9/11 lesson: government backstops must be pre-arranged.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>War Risk — Programme Structure</h2>
+  <p>War risk is the single biggest gap in standard aviation policies and the structuring element most often misunderstood by non-specialist brokers. The AVN52H war risk policy (hull + liability) sits alongside — not within — the main H2/L2 programme and is placed with a completely separate market. The 7-day cancellation clause (AVN52E) is the defining feature: the market can withdraw cover at 7 days' notice, leaving airlines exposed if a conflict escalates rapidly.</p>
+
+  <div class="info-box">
+    <h4>AVN52E — 7-Day Cancellation: How It Works in Practice</h4>
+    <p><strong>The clause:</strong> Underwriters can cancel war risk cover on 7 days' written notice, regardless of the policy period remaining. This exists because war risk loss events (military shoot-downs, terrorist attacks) can materialise without warning and accumulate catastrophically.</p>
+    <p><strong>2001 precedent:</strong> After 9/11, the war risk market cancelled immediately (some gave less than the required 7 days). US, UK, EU, and Australian governments stepped in within 24–48 hours to provide temporary government reinsurance backstops allowing airlines to continue operating. The US Air Transportation Stabilisation Board (ATSB) provided $100bn in government-backed war risk cover.</p>
+    <p><strong>2022 Ukraine:</strong> Following Russia's invasion of Ukraine, the war risk market dramatically reduced capacity for operators with Ukrainian, Russian, or Russian-routing exposure within days. Airlines operating into Ukrainian airspace had cover cancelled. The 7-day clause exposed airlines to a brief period of uninsured war risk exposure.</p>
+    <p><strong>Airline obligations:</strong> AOC (Airline Operating Certificate) holders must maintain continuous insurance. Airlines with routes near conflict zones need contingency plans for rapid war risk cover withdrawal — including route suspension, alternative routings, and government backstop activation procedures.</p>
+  </div>
+
+  <h2>Special Structuring: Corporate Aviation Multinational</h2>
+  <div class="event-table-wrapper">
+  <table class="event-table">
+    <thead>
+      <tr><th>Operator Event / Transaction</th><th>Aviation Insurance Implication</th><th>Programme Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Corporate M&amp;A — fleet acquisition</strong></td><td>Acquiring company's H3/L3 programme must cover merged fleet from closing date. Aircraft AV (agreed values) must be reviewed and updated.</td><td>Mid-term endorsement to add acquired aircraft. Review fleet composition change — different aircraft types may change ROL. Check operational certificates transfer.</td></tr>
+      <tr><td><strong>Aircraft lease — operating lease</strong></td><td>Leased aircraft: lessee insures hull + liability; lessor (finance company/bank) is additional insured on hull policy. H2 policy must name lessor. Loss payee clause (AVLA — Aviation Leasing Liability Agreement) is standard.</td><td>AVLA endorsement naming lessor as additional insured. Hull loss payee clause. Confirm agreed value = full aircraft value, not net of depreciation. War risk: lessor's leasing agreement may specify separate hull war risk.</td></tr>
+      <tr><td><strong>Fleet sale-and-leaseback</strong></td><td>Common airline financing structure. Airline sells aircraft to lessor and leases back. Insurance must immediately reflect new ownership structure.</td><td>Policy endorsement required at closing. Lessor takes interest from sale date. Airline retains operator's liability — lessor will be co-insured on hull and named as additional insured on L2.</td></tr>
+      <tr><td><strong>Codeshare / Alliance partnership</strong></td><td>Airlines in Star Alliance / oneworld / SkyTeam operate each other's passengers on same ticket. Liability may arise under multiple carriers' policies if delay/injury occurs on partner metal.</td><td>Review interline billing and passenger transfer liability. IATA IIA (Interline Indemnification Agreement) allocates liability between carriers. L2 policies should confirm interline exposure is covered.</td></tr>
+      <tr><td><strong>Wet lease (ACMI)</strong></td><td>Aircraft, crew, maintenance, insurance (ACMI) — lessor provides aircraft with crew. Dry lease: no crew. Insurance responsibility shifts depending on lease type. Wet lessor typically insures hull + liability; dry lessee insures all.</td><td>Clarify insurance responsibility at lease outset. Wet lease: lessee/ACMI operator's CAA will scrutinise policy. Dry lease: lessee must confirm policy covers aircraft type and route network.</td></tr>
+      <tr><td><strong>Airline restructuring / Chapter 11</strong></td><td>Financial distress raises maintenance deferral risk (reduced insurance quality) and claims payment risk. Insurer may face claims from estate disputes.</td><td>Review maintenance records and aircraft condition at renewal during financial stress. Directors &amp; Officers (D&O) exposure often associated — airline D&O claims spike post-bankruptcy. Consider priority of claims on hull losses.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Case Study: Emirates — Major Network Airline Programme</h2>
+  <div class="case-box">
+    <div class="case-tag">Case Study</div>
+    <h3>Emirates Airlines — Global Programme Architecture (Illustrative)</h3>
+    <p>Emirates is the world's largest international airline by passengers carried (58.5m in FY2024), operating a fleet of approximately 260 wide-body aircraft (A380, B777 family) to 140 destinations in 80 countries. Its insurance programme represents the top tier of global aviation insurance complexity.</p>
+    <p><strong>Fleet profile:</strong> ~260 aircraft (A380: 113, B777 variants: ~150). Average fleet value approximately $100m per aircraft (mixed new delivery / mid-life). <span class="highlight">Total agreed fleet value approximately $26bn.</span></p>
+    <p><strong>H2 Hull:</strong> Largest fleet hull value in the global market. Hull programme led by London market with significant participation from Munich Re, Zurich, and specialist aviation markets. ROL estimated at approximately 0.22–0.28% on a programme of this quality (IOSA registered, excellent safety record, modern fleet). <span class="highlight">Hull premium estimate $57m–$73m per annum.</span></p>
+    <p><strong>L2 Liability:</strong> CSL approximately $2.0bn–$2.5bn given US route network, transatlantic operations, and exposure to US tort jurisdiction. CSL premium reflects volume of seat departures (260 aircraft × 365 days × ~1.2 flights/aircraft = ~114,000 departures/yr × 400 seats avg = 45.5m seat departures). <span class="highlight">L2 premium estimate $22m–$35m per annum.</span></p>
+    <p><strong>War risk (AVN52H):</strong> Critical given route network — Dubai hub is geographically proximate to Iran, Yemen, and Iraq conflict zones. AVN52E cancellation clause exposure is significant. Emirates maintains relationship with the London war risk market and monitors NOTAM advisories continuously. War risk premium: estimated $6m–$12m per annum.</p>
+    <p><strong>Programme total:</strong> <span class="highlight">Estimated $85m–$120m total aviation programme cost per annum.</span> Exactly comparable to premium levels of a major Nat-CAT property risk programme for a large oil major — illustrating the scale of the global aviation insurance market relative to premium volume.</p>
+    <p><strong>Leasing exposure:</strong> Emirates' fleet is approximately 50% owned, 50% leased. Lessors (AerCap, Air Lease Corp, SMBC Aviation Capital) all named as additional insureds on the hull programme with AVLA endorsements. The Russia leasing dispute (2022) affected Emirates' lessor relationships — some lessors have UAE-registered aircraft operating in Emirates' fleet that have become subject to sanctions review.</p>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠ Russia Leasing Dispute — Programme Structuring Lesson</h4>
+    <p>The 2022 Russia aircraft retention dispute has produced the most important aviation programme structuring lesson in decades. Approximately 400–500 Western-owned aircraft worth $10bn+ were seized by Russian operators following sanctions. Lessors filed H2 hull claims totalling $8bn+. Aviation insurers are contesting coverage on the grounds that the aircraft are not physically "lost" — they exist but cannot be recovered. The dispute turns on the definition of "confiscation" and "requisition" under the war risk policy (AVN52H) vs the all-risks hull policy (H2). The lesson for programme structuring: (1) War risk and all-risks hull policies must both be reviewed for conflict zone aircraft exposure. (2) Lessor additional insured endorsements must be unambiguous. (3) Sanctions clauses in aviation policies are now heavily negotiated. (4) Operators with leasing portfolios exposed to sanctioned territories must review both insurance adequacy and sanctions compliance simultaneously.</p>
+  </div>
+
+</main>
+<footer>Risk Code Hub · Aviation Insurance · Module 07: Global Programmes · v1.9 — April 2026</footer>
+</body>
+</html>
