@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Methodology &amp; Sources | Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--accent:#c8a84b;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0;--green:#2a7a3a;--amber:#e65100;--red:#8b1a1a;--blue:#1a4a7a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#1a3a5c 55%,#0d2240 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cce0; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8cce0; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1040px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:#1a3a5c; margin:28px 0 12px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    /* Confidence badges */
+    .badge { display:inline-block; font-size:0.72rem; font-weight:700; padding:2px 9px; border-radius:10px; letter-spacing:0.5px; margin-right:4px; vertical-align:middle; }
+    .b-verified { background:#e6f4ea; color:#1a5c28; }
+    .b-estimate { background:#fef3e2; color:#7a4500; }
+    .b-illustrative { background:#e3ecf8; color:#1a3a5c; }
+    .b-gap { background:#fde8e8; color:var(--red); }
+
+    /* Legend */
+    .legend { display:flex; flex-wrap:wrap; gap:12px; background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 24px; margin:24px 0 36px; }
+    .legend-item { display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--text); }
+
+    /* Source tables */
+    .src-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.86rem; }
+    .src-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .src-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.55; }
+    .src-table tr:nth-child(even) td { background:#f8fafc; }
+    .src-table a { color:var(--blue); text-decoration:none; }
+    .src-table a:hover { text-decoration:underline; }
+
+    /* Gap disclosure */
+    .gap-card { background:#fff; border:1px solid var(--border); border-left:5px solid var(--amber); border-radius:8px; padding:18px 22px; margin:14px 0; }
+    .gap-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .gap-card p { font-size:0.84rem; color:var(--muted); margin:0; line-height:1.5; }
+    .gap-card .gap-label { font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:4px; background:#fef3e2; color:#7a4500; display:inline-block; margin-bottom:8px; }
+
+    /* Hub audit table */
+    .audit-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.84rem; }
+    .audit-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.77rem; text-transform:uppercase; letter-spacing:1px; }
+    .audit-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .audit-table tr:nth-child(even) td { background:#f8fafc; }
+    .conf-high { color:var(--green); font-weight:700; }
+    .conf-med { color:#7a4500; font-weight:700; }
+    .conf-low { color:var(--red); font-weight:700; }
+
+    /* Workflow box */
+    .workflow { counter-reset:step; margin:24px 0 40px; }
+    .wf-step { display:flex; gap:18px; margin-bottom:18px; align-items:flex-start; }
+    .wf-num { min-width:34px; height:34px; background:var(--navy); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; flex-shrink:0; margin-top:2px; }
+    .wf-body h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:4px; }
+    .wf-body p { font-size:0.84rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    /* Info / warn boxes */
+    .info-box { background:#eef3fa; border:2px solid var(--blue); border-radius:10px; padding:22px 26px; margin:22px 0; }
+    .info-box h4 { color:#1a3a5c; font-size:0.92rem; margin-bottom:8px; }
+    .info-box p { font-size:0.87rem; color:var(--text); margin-bottom:7px; line-height:1.6; }
+    .info-box p:last-child { margin:0; }
+    .warn-box { background:#fef3e2; border:1px solid #f5c842; border-left:5px solid #f5a000; border-radius:8px; padding:20px 22px; margin:22px 0; }
+    .warn-box h4 { color:#7a4500; margin-bottom:7px; font-size:0.9rem; }
+    .warn-box p { font-size:0.86rem; color:var(--text); margin:0; line-height:1.6; }
+
+    /* Token cost table */
+    .cost-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.86rem; }
+    .cost-table th { background:#1a3a5c; color:#fff; padding:10px 14px; text-align:left; font-size:0.77rem; text-transform:uppercase; letter-spacing:1px; }
+    .cost-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .cost-table tr:nth-child(even) td { background:#f8fafc; }
+    .cost-table tfoot td { background:var(--navy); color:#fff; font-weight:700; padding:12px 14px; }
+
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer a { color:var(--accent); text-decoration:none; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="index.html">Risk Code Hub</a> › Research Methodology</div>
+  <div class="tag">Audit &amp; Methodology</div>
+  <h1>Research Methodology &amp; Sources</h1>
+  <p>How content is researched and constructed for every hub in this platform — including data sources, confidence levels, known gaps, and the estimated vs. verified distinction. This page is the audit trail for the Risk Code Hub content.</p>
+</header>
+
+<nav>
+  <a href="index.html">← Hub Index</a>
+  <a href="methodology.html" class="active">Methodology</a>
+  <a href="CHANGELOG.md">Changelog</a>
+</nav>
+
+<main>
+
+  <h2>Confidence Classification System</h2>
+  <p>Every data point in the Risk Code Hub falls into one of four confidence categories. Future hub builds will tag individual claims, figures, and tables with these labels inline so you can assess the evidential weight of any specific assertion at a glance.</p>
+
+  <div class="legend">
+    <div class="legend-item"><span class="badge b-verified">VERIFIED</span> Named public source — NTSB report, ICAO document, company annual report, court judgment, regulator press release.</div>
+    <div class="legend-item"><span class="badge b-estimate">ESTIMATE</span> Professional market estimate — derived from comparable data, market convention, or Lloyd's market knowledge. Directionally reliable; not independently verified.</div>
+    <div class="legend-item"><span class="badge b-illustrative">ILLUSTRATIVE</span> Example constructed to demonstrate a principle — worked premium examples, hypothetical programme towers. Numbers are internally consistent but not real transactions.</div>
+    <div class="legend-item"><span class="badge b-gap">DATA GAP</span> Known unknown — no reliable source found. Figure omitted or explicitly flagged. Underwriters should not rely on these without independent verification.</div>
+  </div>
+
+  <h2>Primary Source Categories</h2>
+  <p>The Risk Code Hub draws on five broad categories of source. The table below lists the main sources used and their typical role in hub content.</p>
+
+  <table class="src-table">
+    <thead>
+      <tr><th>Category</th><th>Sources Used</th><th>Used For</th><th>Reliability</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Regulatory &amp; Statutory Bodies</strong></td>
+        <td>NTSB (US), AAIB (UK), BEA (France), ICAO (accident statistics, Annexes), EASA, FAA, IATA (safety data), FSF (Flight Safety Foundation), OSHA (US), FCA (UK), SEC (US), CAA (UK)</td>
+        <td>Accident reports, fatality counts, regulatory frameworks, compliance requirements, loss events</td>
+        <td><span class="badge b-verified">VERIFIED</span> — primary official records. Some accident costs are NTSB estimates, not final settlement figures.</td>
+      </tr>
+      <tr>
+        <td><strong>Industry Bodies &amp; Standards Organisations</strong></td>
+        <td>Lloyd's of London (market statistics, syndicate reports), IATA (airline economics, safety audits), API (oil & gas standards), IEC (electrical standards), IEA (energy data), CIGRE (electrical grids), ISDA (derivatives), FSOC (systemic risk), IPIECA (oil spill response)</td>
+        <td>Industry GWP estimates, loss industry statistics, technical standards references, sector exposure metrics</td>
+        <td><span class="badge b-verified">VERIFIED</span> for standards references; <span class="badge b-estimate">ESTIMATE</span> for market GWP — Lloyd's does not publish full class-by-class premium statistics publicly.</td>
+      </tr>
+      <tr>
+        <td><strong>Academic &amp; Research Institutions</strong></td>
+        <td>Swiss Re Institute (sigma reports — global insured losses by year), Munich Re (NatCat database), AIR Worldwide / RMS / Verisk (catastrophe model outputs — publicly disclosed), Lloyd's Market Association (LMA) technical papers, Cambridge Centre for Risk Studies (cyber systemic risk), Willis Towers Watson (insurance market reports)</td>
+        <td>Global insured loss figures by year/event, catastrophe model context, market cycle analysis</td>
+        <td><span class="badge b-verified">VERIFIED</span> for named sigma/Munich Re events. Swiss Re sigma is the most frequently cited source for insured loss figures globally.</td>
+      </tr>
+      <tr>
+        <td><strong>Legal Records &amp; Court Filings</strong></td>
+        <td>US federal court databases (PACER), UK Companies Court/High Court judgments, SEC enforcement actions, DOJ press releases, EEOC (employment cases), Dutch Safety Board (MH17), Australian ATSB, NTSB dockets</td>
+        <td>Settlement amounts, liability verdicts, enforcement fines, indemnity figures for named losses</td>
+        <td><span class="badge b-verified">VERIFIED</span> for settlements in public court record. Some settlement amounts are sealed — where amounts are publicly reported by multiple credible news sources, treated as verified.</td>
+      </tr>
+      <tr>
+        <td><strong>Specialist Insurance Media &amp; Publications</strong></td>
+        <td>Insurance Insider (now owned by S&P Global), The Insurer, Business Insurance, Best's Review (AM Best), Reactions magazine, Post Magazine (UK), Insurance Journal, Reinsurance News, Artemis (ILS/cat bond data), Insider Quarterly market reports</td>
+        <td>Market pricing commentary, rate change data, underwriter commentary, emerging loss development</td>
+        <td><span class="badge b-estimate">ESTIMATE</span> — trade press pricing data is typically market consensus from broker surveys, not audited. Used for directional rate cycle commentary, not as precise figures.</td>
+      </tr>
+      <tr>
+        <td><strong>AI Model Training Knowledge (Claude)</strong></td>
+        <td>Synthesis of the above categories, plus: company annual reports, broker market reports (Marsh, Aon, WTW, Gallagher), ratings agency reports (Moody's, S&P, AM Best), textbooks and insurance law references — all incorporated into Claude's training data up to <strong>May 2025</strong></td>
+        <td>Background explanations, market structure descriptions, coverage wordings, underwriting frameworks, risk factor descriptions</td>
+        <td><span class="badge b-estimate">ESTIMATE</span> where specific numbers are given; <span class="badge b-verified">VERIFIED</span> where well-documented public events are described. <strong>Knowledge cutoff: May 2025.</strong> Events after this date require manual update.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Per-Hub Confidence Audit</h2>
+  <p>The table below summarises, for each completed hub, the overall confidence level of the content across the four key module types. "Rates" and "ROE" sections are always estimated — no insurer publishes class-level combined ratios or ROEs publicly.</p>
+
+  <table class="audit-table">
+    <thead>
+      <tr><th>Hub</th><th>Loss Events / Database</th><th>History &amp; Timeline</th><th>Underwriting Methodology</th><th>Rates &amp; ROE Figures</th><th>Coverage Wordings</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Product Recall (PB)</strong></td>
+        <td><span class="conf-high">High</span> — FDA, USDA FSIS, EFSA/RASFF public recall databases; named events with public cost disclosures</td>
+        <td><span class="conf-high">High</span> — regulatory milestones well-documented; industry history based on published sources</td>
+        <td><span class="conf-med">Medium</span> — rating factors are standard industry practice; specific ROL ranges are market estimates</td>
+        <td><span class="conf-low">Low–Medium</span> — no public Lloyd's PB rate data. Ranges based on broker market commentary and known market pricing periods.</td>
+        <td><span class="conf-high">High</span> — standard Lloyd's PB policy wording; AXA XL, CFC, Miller GPR published summaries used</td>
+      </tr>
+      <tr>
+        <td><strong>Energy Offshore (EC/EM/EN)</strong></td>
+        <td><span class="conf-high">High</span> — Deepwater Horizon ($14bn), Piper Alpha ($3.4bn), Macondo well documented in public records, SEC filings, court documents</td>
+        <td><span class="conf-high">High</span> — major events well-documented; energy insurance market history from published Lloyd's and JLT/WTW reports</td>
+        <td><span class="conf-med">Medium</span> — COPE/OIL rating factors industry standard; specific rate ranges are market estimates from published broker surveys</td>
+        <td><span class="conf-low">Low–Medium</span> — as above; ROE scenarios are illustrative models</td>
+        <td><span class="conf-high">High</span> — JELC/JAEP/LSW energy wordings are published industry standards</td>
+      </tr>
+      <tr>
+        <td><strong>Renewable Energy (R1–R4)</strong></td>
+        <td><span class="conf-med">Medium</span> — fewer public loss disclosures than conventional energy; DONG/Hornsea/Vineyard data from press and company reports; some costs are estimates</td>
+        <td><span class="conf-high">High</span> — milestone installations and incidents well-reported in energy/renewables trade media</td>
+        <td><span class="conf-med">Medium</span> — emerging class; rating factors based on market convention as reported in specialist media (Insurance Insider, The Insurer)</td>
+        <td><span class="conf-low">Low</span> — nascent class with limited public rate data; ROE scenarios more speculative than mature classes</td>
+        <td><span class="conf-med">Medium</span> — wordings still evolving; based on publicly available endorsements and market papers</td>
+      </tr>
+      <tr>
+        <td><strong>Downstream Energy (EA/EB/EF/PG)</strong></td>
+        <td><span class="conf-high">High</span> — Texas City ($1.5bn), Buncefield, Harvey, Colonial Pipeline — all extensively documented in OSHA/EPA/CSB records and court proceedings</td>
+        <td><span class="conf-high">High</span></td>
+        <td><span class="conf-med">Medium</span></td>
+        <td><span class="conf-low">Low–Medium</span></td>
+        <td><span class="conf-high">High</span></td>
+      </tr>
+      <tr>
+        <td><strong>Cyber (CY/CZ/CG/CH)</strong></td>
+        <td><span class="conf-med">Medium</span> — Change Healthcare, Colonial Pipeline, NotPetya costs are public; many cyber settlements are confidential. Some cost figures are industry estimates (e.g., IBM/Ponemon Cost of Data Breach annual report)</td>
+        <td><span class="conf-high">High</span> — regulatory and legislative milestones (GDPR, NIS2, SEC rules) are public record</td>
+        <td><span class="conf-med">Medium</span> — cyber rating factors rapidly evolving; based on CFC, Beazley, Coalition published guidance and Insurance Insider market commentary</td>
+        <td><span class="conf-low">Low</span> — cyber ROL data particularly opaque; figures are directional estimates. Class is too young for credible long-run combined ratio data.</td>
+        <td><span class="conf-med">Medium</span> — LMA5564/5565 war clauses and CISA/Lloyd's cyber wording guidance used; market still not standardised</td>
+      </tr>
+      <tr>
+        <td><strong>D&amp;O (D1–D5/DA/DB/DD)</strong></td>
+        <td><span class="conf-high">High</span> — Enron, WorldCom, VW Dieselgate, FTX settlements are extensively reported in court records, SEC filings, DOJ releases</td>
+        <td><span class="conf-high">High</span> — SOX, Dodd-Frank, PSLRA legislative record is public</td>
+        <td><span class="conf-med">Medium</span></td>
+        <td><span class="conf-low">Low–Medium</span></td>
+        <td><span class="conf-high">High</span> — Side A/B/C structure is well-documented in published D&O market texts and broker guides</td>
+      </tr>
+      <tr>
+        <td><strong>EPLI (D6/D7)</strong></td>
+        <td><span class="conf-high">High</span> — EEOC public settlement database; major cases (Coca-Cola, Texaco, Goldman) are public court record</td>
+        <td><span class="conf-high">High</span> — EEOC statutory history, SCOTUS decisions (Faragher/Ellerth) are public record</td>
+        <td><span class="conf-med">Medium</span></td>
+        <td><span class="conf-low">Low–Medium</span></td>
+        <td><span class="conf-high">High</span></td>
+      </tr>
+      <tr>
+        <td><strong>Aviation (H2/H3/L2/L3/AO/AP)</strong></td>
+        <td><span class="conf-high">High</span> — NTSB/AAIB/BEA/ICAO official accident investigation reports for all named events; insured loss figures from Swiss Re sigma, Munich Re annual reports, and specialist press (Insurance Insider)</td>
+        <td><span class="conf-high">High</span> — accident history extensively documented; regulatory milestones (Montreal Convention, Chicago Convention) are public record</td>
+        <td><span class="conf-med">Medium</span> — seat-departure rating formula and ROL ranges are market estimates; IOSA/IS-BAO credit percentages are approximate market convention</td>
+        <td><span class="conf-low">Low–Medium</span> — aviation market ROL data is not published; ranges based on broker market reports and historic Insurance Insider pricing surveys. Russia leasing dispute costs are provisional pending court outcomes.</td>
+        <td><span class="conf-high">High</span> — AVN48B, AVN52H/E, Montreal Convention, EU Reg 785/2004 are published legal instruments</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Known Data Gaps &amp; Estimates Disclosed</h2>
+  <p>The following are the most significant instances across all hubs where specific figures are professional estimates rather than independently sourced data. These should be independently verified before using in client-facing underwriting submissions.</p>
+
+  <div class="gap-card">
+    <div class="gap-label">ALL HUBS — RATES &amp; ROE</div>
+    <h4>Market rate levels (ROL%, combined ratio, ROE scenarios)</h4>
+    <p>No insurer or Lloyd's syndicate publishes class-level ROL or combined ratio data publicly. All rate index values, ROL ranges, and combined ratio estimates in every hub are constructed from: (a) broker market surveys published in trade media (Insurance Insider, The Insurer, Willis Towers Watson market reports); (b) market cycle commentary from Lloyd's annual reports and syndicate results; (c) professional inference from named loss events and market cycle phases. The three ROE scenarios (Bull/Base/Bear) in every hub are internally consistent illustrative models — they should be treated as directional frameworks, not as Lloyd's market benchmarks. <strong>Treat all rate figures as ESTIMATE unless a specific named source is cited.</strong></p>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-label">RENEWABLE ENERGY</div>
+    <h4>Offshore and onshore wind loss costs</h4>
+    <p>Fewer major renewable energy losses have entered public record compared with conventional energy. Insured costs for wind farm losses (monopile failures, array cable damage, blade failures) are rarely disclosed publicly. Where specific cost figures appear in the Renewable Energy hub, these are drawn from trade press reports (reinsurance.com, Wind Power Monthly, The Insurer) and may be incomplete figures (partial losses, not full programme exhaustion). <strong>Treat renewable energy loss costs as ESTIMATE unless the specific report is cited.</strong></p>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-label">CYBER</div>
+    <h4>Cyber insured loss amounts</h4>
+    <p>The majority of cyber insurance settlements are confidential by agreement. Published figures (e.g., Change Healthcare ~$1.5bn, Colonial Pipeline $4.4m ransom) are drawn from public regulatory filings (SEC 8-K disclosures, HIPAA breach notifications, congressional testimony). Many cyber claims in the database represent total economic loss (including uninsured costs) rather than confirmed insured loss payments. The IBM/Ponemon annual Cost of a Data Breach Report is the most frequently cited industry benchmark, but it measures all-in costs, not insured claims. <strong>Insured vs. total economic loss distinction is not always clear in the database — review individual event notes.</strong></p>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-label">AVIATION</div>
+    <h4>Russia leasing dispute — claims and resolution</h4>
+    <p>The $8bn+ figure for Russia aircraft leasing claims represents the aggregate of claims filed by lessors as publicly reported in court filings and press releases (AerCap, Air Lease Corp, SMBC Aviation Capital). The ultimate insured recovery is entirely uncertain — insurers are contesting coverage; the matter is before English courts and international arbitration panels as of April 2026. <strong>Do not treat $8bn as an insured loss figure — it is the claims filed total, not amounts paid or likely to be paid.</strong></p>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-label">D&amp;O / EPLI</div>
+    <h4>Premium estimates for worked examples</h4>
+    <p>The worked example premium calculations in D&O and EPLI hubs are constructed using rate factors that represent market convention as reported in broker market reports (Marsh, WTW, Aon annual FINPRO/FINEX reports). Individual insured premiums vary significantly by underwriter, broker relationship, and specific risk characteristics. The examples are intended to illustrate relative magnitude and rating factor interactions — not to provide benchmark pricing for any specific risk.</p>
+  </div>
+
+  <h2>Knowledge Currency &amp; Cutoff</h2>
+
+  <div class="warn-box">
+    <h4>⚠ AI Knowledge Cutoff: May 2025</h4>
+    <p>All hub content is constructed using Claude's training data, which has a knowledge cutoff of <strong>May 2025</strong>. Events, regulatory changes, court decisions, rate movements, and loss developments after this date are not automatically captured. Each hub's "current" market commentary (e.g., "as of 2024–2025") was accurate at training cutoff. Items most likely to require updating on review: (1) Russia leasing dispute outcomes; (2) Boeing criminal plea/DOJ settlements post-2024; (3) Transactional Liability market after SVB/FTX waves; (4) Cyber rates post-2025 hardening/softening; (5) AI liability emerging D&O/E&O exposure; (6) Climate regulatory changes affecting Energy and Renewables.</p>
+  </div>
+
+  <div class="info-box">
+    <h4>How to Update Stale Content</h4>
+    <p><strong>Loss amounts:</strong> Cross-reference with Swiss Re sigma annual reports (published each spring) and Munich Re NatCatSERVICE for natural catastrophe events. Both publish annual insured loss league tables.</p>
+    <p><strong>Rate movements:</strong> Willis Towers Watson Insurance Marketplace Realities report (published twice yearly) covers rate changes by class. Insurance Insider quarterly market reports cover Lloyd's-specific pricing.</p>
+    <p><strong>Regulatory changes:</strong> ICAO, EASA, FCA, SEC, and Lloyd's Market Association publish their own regulatory update bulletins — no single aggregator covers all classes in the Risk Code Hub.</p>
+    <p><strong>Legal outcomes:</strong> For pending litigation (Russia leasing, Boeing criminal), monitor PACER (US federal courts) and the LCIA (London Court of International Arbitration) announcement feeds.</p>
+  </div>
+
+  <h2>Proposed Citation Workflow for Future Hubs</h2>
+  <p>From the next hub build onwards, citations can be embedded directly in the HTML using a standardised inline footnote pattern. Below is the proposed workflow and an estimate of the additional build cost.</p>
+
+  <div class="workflow">
+    <div class="wf-step">
+      <div class="wf-num">1</div>
+      <div class="wf-body">
+        <h4>Pre-build source list</h4>
+        <p>Before writing any module, compile a source list for the hub class — regulatory body, key academic/industry reports, named loss events with confirmed public sources. This is done once per hub, not per module, and costs approximately 2,000–4,000 tokens (one research pass).</p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">2</div>
+      <div class="wf-body">
+        <h4>Inline confidence tagging during write</h4>
+        <p>As each module is written, claims, figures, and tables are tagged with <code>[VERIFIED]</code>, <code>[EST]</code>, <code>[ILLUS]</code>, or <code>[GAP]</code> in the HTML using a standardised <code>&lt;cite&gt;</code> tag or badge element. Adds ~10–15% to module write length — roughly 500–800 tokens per module, 4,000–6,000 tokens per full hub.</p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">3</div>
+      <div class="wf-body">
+        <h4>References page build (references.html)</h4>
+        <p>A standardised <code>references.html</code> page (similar in format to this methodology page) is built for each hub, listing all named sources with URLs where available, organised by module. Estimated 300–500 lines of HTML — approximately 3,000–5,000 tokens per hub.</p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">4</div>
+      <div class="wf-body">
+        <h4>URL verification (optional — highest token cost)</h4>
+        <p>Live web-fetching of source URLs to verify they still resolve and to extract specific quotes or figures. Each WebFetch call costs approximately 2,000–5,000 tokens depending on page size. For 10–15 sources per hub, this adds 20,000–75,000 tokens — the largest single cost item and the one with the biggest quality/cost trade-off.</p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">5</div>
+      <div class="wf-body">
+        <h4>Nav link addition in all 8 modules</h4>
+        <p>Adding a "References" nav item to all 8 hub HTML files via Edit tool. Minimal token cost — 8 small edits, approximately 500–800 tokens total.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Token Cost Estimate — Citations Workflow</h2>
+
+  <table class="cost-table">
+    <thead>
+      <tr><th>Step</th><th>Tokens Added (Input + Output)</th><th>Quality Impact</th><th>Recommended?</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1 — Pre-build source list</strong></td>
+        <td>~2,000–4,000 tokens</td>
+        <td>High — sets the evidential foundation for the whole hub</td>
+        <td>✅ Yes — include by default</td>
+      </tr>
+      <tr>
+        <td><strong>2 — Inline confidence tagging</strong></td>
+        <td>~4,000–6,000 tokens per hub</td>
+        <td>High — makes every figure's evidential basis transparent</td>
+        <td>✅ Yes — include by default</td>
+      </tr>
+      <tr>
+        <td><strong>3 — References page (no URL fetch)</strong></td>
+        <td>~3,000–5,000 tokens per hub</td>
+        <td>High — provides audit trail without live verification cost</td>
+        <td>✅ Yes — include by default</td>
+      </tr>
+      <tr>
+        <td><strong>4a — URL verification (live WebFetch, 10 sources)</strong></td>
+        <td>~20,000–50,000 tokens per hub</td>
+        <td>Medium — confirms URLs resolve; occasionally surfaces updated figures</td>
+        <td>⚠ Optional — use for high-stakes hubs (e.g., liability-heavy classes)</td>
+      </tr>
+      <tr>
+        <td><strong>4b — Deep source research (WebSearch, 5+ queries)</strong></td>
+        <td>~15,000–40,000 tokens per hub</td>
+        <td>High for accuracy; lower for mature/well-documented classes</td>
+        <td>⚠ Optional — use when class is new to market or highly technical</td>
+      </tr>
+      <tr>
+        <td><strong>5 — Nav link edits (all 8 modules)</strong></td>
+        <td>~500–800 tokens</td>
+        <td>Low — admin step only</td>
+        <td>✅ Yes — trivial cost</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td><strong>TOTAL — Lightweight (Steps 1+2+3+5 only)</strong></td>
+        <td><strong>~10,000–16,000 tokens per hub</strong></td>
+        <td colspan="2">Approximately <strong>40–65% overhead</strong> on a standard hub build (~25,000 tokens baseline). Recommended default.</td>
+      </tr>
+      <tr>
+        <td><strong>TOTAL — Full citation (Steps 1–5)</strong></td>
+        <td><strong>~45,000–100,000 tokens per hub</strong></td>
+        <td colspan="2">Approximately <strong>2–4× the baseline hub cost</strong>. Recommended only for classes where accuracy is highest-stakes (large liability, regulatory classes).</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="info-box">
+    <h4>Recommendation: Lightweight by Default, Full for Priority Hubs</h4>
+    <p><strong>Default workflow (Steps 1+2+3+5):</strong> Every future hub gets a pre-build source list, inline confidence tags, a references.html page, and nav links. Total overhead approximately 10,000–16,000 additional tokens per hub. This gives full transparency on what is verified vs. estimated without live URL fetching.</p>
+    <p><strong>Full citation workflow (add Steps 4a or 4b):</strong> Reserve for hubs where underwriting decisions are directly informed by specific figures — e.g., Medical Malpractice (NPDB data), Political Risk (government-sourced political violence indices), or US Casualty (ISO loss cost filings). The live web research cost (20,000–50,000 tokens) is justified when the class is unfamiliar, data is dynamic, or the hub will be used in client-facing contexts.</p>
+    <p><strong>Cost in practice:</strong> At Claude Sonnet pricing (~$3 per million input tokens, ~$15 per million output tokens), the lightweight citation overhead adds approximately <strong>$0.08–$0.20 per hub</strong>. The full citation workflow adds approximately <strong>$0.50–$1.50 per hub</strong>. Both are negligible in absolute cost — the real constraint is context window length in long sessions, not API cost.</p>
+  </div>
+
+  <h2>How to Request Citations in a Hub Build</h2>
+  <p>To trigger the citation workflow for the next hub, simply add one of the following to your build request:</p>
+  <ul style="margin:16px 0 24px 24px; font-size:0.94rem; line-height:2;">
+    <li><strong>"lightweight citations"</strong> — Steps 1+2+3+5. Source list, inline confidence tags, references page. Recommended default.</li>
+    <li><strong>"full citations"</strong> — All steps including live URL verification and web research. Use for high-stakes or unfamiliar classes.</li>
+    <li><strong>"no citations"</strong> — Current behaviour (no change from existing hubs). Use when speed is priority.</li>
+  </ul>
+  <p>Example: <em>"Build the Transactional Liability hub with lightweight citations"</em> will trigger the source list + inline tags + references page as part of the standard build without the live URL verification cost.</p>
+
+</main>
+<footer>
+  Risk Code Hub — Research Methodology &amp; Sources · v1.9 — April 2026 ·
+  <a href="index.html">Return to Hub Index</a> ·
+  <a href="CHANGELOG.md">Changelog</a>
+</footer>
+</body>
+</html>
