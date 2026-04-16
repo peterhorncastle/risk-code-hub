@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk Mitigation | Environmental Liability (EP) | Risk Code Hub</title>
+<style>
+  :root{
+    --env:#2d6a4a; --env-dark:#1a3d1a; --earth:#7a4f2a; --water:#1a6a8a;
+    --hazard:#c0572a; --gold:#c9a84c; --light:#f2f7f4; --mid:#e4f0ea;
+    --dark:#111; --red:#c0392b; --amber:#e67e22; --green:#27ae60;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',sans-serif;background:#f0f5f2;color:#1a2a1a;line-height:1.6;}
+  header{background:linear-gradient(135deg,#0d2d10 0%,#1a4a2a 50%,#0d3020 100%);color:#fff;padding:2rem;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-40%;left:-10%;width:120%;height:200%;
+    background:radial-gradient(ellipse at 50% 50%,rgba(45,106,74,0.15) 0%,transparent 70%);pointer-events:none;}
+  .header-inner{max-width:1100px;margin:0 auto;position:relative;}
+  .breadcrumb{font-size:.8rem;opacity:.7;margin-bottom:.5rem;}
+  .breadcrumb a{color:#a8d4b8;text-decoration:none;}
+  header h1{font-size:1.9rem;font-weight:700;letter-spacing:-.5px;}
+  header p{opacity:.8;margin-top:.4rem;font-size:.95rem;}
+  .badge-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
+  .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    color:#fff;padding:.25rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;}
+  nav{background:#fff;border-bottom:2px solid var(--env);position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  nav ul{display:flex;list-style:none;max-width:1100px;margin:0 auto;overflow-x:auto;gap:0;}
+  nav li a{display:block;padding:.65rem 1rem;font-size:.82rem;font-weight:600;color:#555;
+    text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s;}
+  nav li a:hover,nav li a.active{color:var(--env);border-bottom-color:var(--env);}
+  main{max-width:1100px;margin:2rem auto;padding:0 1.5rem;}
+  section{background:#fff;border-radius:10px;padding:1.8rem;margin-bottom:1.8rem;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  h2{font-size:1.25rem;font-weight:700;color:var(--env-dark);margin-bottom:1rem;
+    padding-bottom:.5rem;border-bottom:2px solid var(--env);}
+  h3{font-size:1rem;font-weight:700;color:var(--env-dark);margin:1.2rem 0 .6rem;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem;}
+  .card{background:var(--light);border-radius:8px;padding:1.2rem;border-top:4px solid var(--env);}
+  .card.earth{border-top-color:var(--earth);}
+  .card.water{border-top-color:var(--water);}
+  .card.hazard{border-top-color:var(--hazard);}
+  .card.gold{border-top-color:var(--gold);}
+  .card h4{font-size:.9rem;font-weight:700;color:var(--env-dark);margin-bottom:.5rem;}
+  .card p,.card ul{font-size:.85rem;color:#444;}
+  .card ul{padding-left:1.1rem;}
+  .card li{margin-bottom:.25rem;}
+  .matrix-grid{display:grid;gap:.6rem;margin-top:1rem;}
+  .matrix-row{display:grid;grid-template-columns:180px 1fr 1fr 1fr;gap:.4rem;align-items:center;font-size:.82rem;}
+  .matrix-row strong{grid-column:1;}
+  .matrix-cell{padding:.5rem .7rem;border-radius:4px;text-align:center;font-weight:600;color:#fff;}
+  .matrix-cell.green{background:#27ae60;}
+  .matrix-cell.amber{background:#e67e22;}
+  .matrix-cell.red{background:#c0392b;}
+  .matrix-label{padding:.5rem .7rem;background:var(--light);border-radius:4px;font-weight:600;color:var(--env-dark);}
+  .info-box{border-left:4px solid var(--env);background:#eaf5ef;padding:1rem 1.2rem;border-radius:0 6px 6px 0;margin:1rem 0;}
+  .info-box.earth{border-left-color:var(--earth);background:#f7f0e8;}
+  .info-box.water{border-left-color:var(--water);background:#e8f3f8;}
+  .info-box.hazard{border-left-color:var(--hazard);background:#fdf0ea;}
+  .info-box h4{font-size:.9rem;font-weight:700;margin-bottom:.4rem;}
+  .info-box p,.info-box ul{font-size:.84rem;color:#333;}
+  .info-box ul{padding-left:1.1rem;}
+  .info-box li{margin-bottom:.3rem;}
+  .action-list{counter-reset:actioncounter;padding:1rem 0;}
+  .action-item{counter-increment:actioncounter;margin:.8rem 0;padding-left:2rem;position:relative;font-size:.84rem;color:#333;line-height:1.5;}
+  .action-item::before{content:counter(actioncounter);position:absolute;left:0;top:0;background:var(--env);color:#fff;width:1.6rem;height:1.6rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:1rem;}
+  th{background:var(--env-dark);color:#fff;padding:.6rem .8rem;text-align:left;font-weight:600;}
+  td{padding:.55rem .8rem;border-bottom:1px solid #d8ede0;vertical-align:top;}
+  tr:nth-child(even) td{background:#f5faf7;}
+  .c-ver{background:#d4edda;color:#155724;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-est{background:#fff3cd;color:#856404;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-illus{background:#cce5ff;color:#004085;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  footer{background:var(--env-dark);color:#a8c8b0;text-align:center;padding:1.2rem;font-size:.8rem;margin-top:2rem;}
+  footer a{color:#a8d4b8;text-decoration:none;}
+  @media(max-width:640px){header h1{font-size:1.4rem;}.matrix-row{grid-template-columns:150px 1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Environmental Liability (EP)</a> › Risk Mitigation</div>
+    <h1>Risk Mitigation</h1>
+    <p>Environmental management systems, site controls, PFAS strategies, and emergency response</p>
+    <div class="badge-row">
+      <span class="badge">ISO 14001</span>
+      <span class="badge">SPCC Plans</span>
+      <span class="badge">PFAS Controls</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="overview.html">Overview</a></li>
+    <li><a href="history.html">History</a></li>
+    <li><a href="timeline.html">Timeline</a></li>
+    <li><a href="database.html">Loss Database</a></li>
+    <li><a href="underwriting.html">Underwriting</a></li>
+    <li><a href="rates-analysis.html">Rates</a></li>
+    <li><a href="risk-mitigation.html" class="active">Risk Mitigation</a></li>
+    <li><a href="global-program.html">Global Programme</a></li>
+    <li><a href="references.html">References</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <section>
+    <h2>Phase I ESA Controls</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      A robust Phase I ESA — compliant with ASTM E1527-21 — is the foundation of risk assessment. Underwriting quality depends on thoroughness of historical research, regulatory database searches and site inspection.
+    </p>
+    <div class="info-box water">
+      <h4>Key Phase I Control Elements</h4>
+      <ul>
+        <li><strong>ASTM E1527-21 compliant:</strong> Follows 2021 standard, includes all required documentation</li>
+        <li><strong>Qualified Environmental Professional (EP):</strong> Licensed engineer or environmental consultant with EIL underwriting experience</li>
+        <li><strong>Historical research 100+ years:</strong> Sanborn maps, aerial photography, property deeds, prior industrial uses</li>
+        <li><strong>Regulatory database search:</strong> EPA CERCLIS, state environmental agency files, RCRA SQG/LQG registries, UST listings, vapor intrusion databases</li>
+        <li><strong>Site interviews:</strong> Current operators, environmental staff, maintenance personnel regarding spills, storage, past operations</li>
+        <li><strong>Aerial photograph review:</strong> Multi-date series showing site evolution, nearby facilities, vegetation patterns indicating possible impacts</li>
+        <li><strong>REC identification:</strong> Recognised Environmental Conditions documented with risk assessment of contamination likelihood</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Phase II ESA Controls</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Phase II is triggered whenever a REC is identified in Phase I, or planned redevelopment/excavation creates disturbance risk. Proper sampling and analysis design directly mitigates later loss surprises.
+    </p>
+    <div class="cards">
+      <div class="card water">
+        <h4>🔬 Sampling Design</h4>
+        <p>Systematic soil boring locations targeting areas of concern. Monitoring well installation for groundwater assessment. Vapor intrusion sampling if building planned. Chain of custody maintained.</p>
+      </div>
+      <div class="card earth">
+        <h4>🧪 Laboratory Analysis</h4>
+        <p>Standard analyte suites: VOCs (chlorinated solvents, BTEX), SVOCs (PAHs, pesticides), metals (lead, chromium, arsenic). PFAS analysis if suspected (AFFF use, food processing, industrial discharge).</p>
+      </div>
+      <div class="card hazard">
+        <h4>📊 Risk Assessment</h4>
+        <p>Comparison to EPA residential/commercial/industrial standards (RSLs). Exposure pathway analysis: direct contact, ingestion, inhalation. Remedial Action Levels (RALs) determined if cleanup required.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Environmental Management System (ISO 14001:2015)</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      ISO 14001 certification demonstrates systematic commitment to environmental compliance and risk management. Reduces EIL rating factors by 10–20%.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <h4>📋 ISO 14001 Certification</h4>
+        <p>Third-party audit against ISO 14001:2015 standard. Environmental aspects and impacts register. Legal compliance documentation. Objectives &amp; targets setting. Regular internal audits. Annual management review.</p>
+      </div>
+      <div class="card earth">
+        <h4>⚖️ Legal Compliance Register</h4>
+        <p>Maintained register of all applicable environmental laws &amp; regulations (federal, state, local). Updates tracked as regulations change. Audit programme to verify ongoing compliance (e.g. annual facility inspections).</p>
+      </div>
+      <div class="card water">
+        <h4>🚨 Emergency Response Plan</h4>
+        <p>Documented procedures for spill response, hazmat release, notification protocols. Trained emergency response team. Regular drills. Contact procedures for regulators, spill response contractors.</p>
+      </div>
+      <div class="card hazard">
+        <h4>💧 Spill Prevention & Response Kit</h4>
+        <p>Strategic placement of spill kits at high-risk areas (storage tanks, loading docks). Absorbent materials, containment booms, disposal procedures documented. Quarterly inventory checks.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Spill Prevention Controls (SPCC)</h2>
+    <div class="info-box hazard">
+      <h4>US EPA Spill Prevention, Control and Countermeasure (SPCC) Rule — 40 CFR Part 112</h4>
+      <p><strong>Applicability:</strong> Required for any facility with above-ground oil storage capacity ≥ 1,320 gallons (e.g. heating oil, lube oil, process oils). <span class="c-ver">VER</span></p>
+      <ul>
+        <li><strong>Written SPCC Plan:</strong> Prepared &amp; certified by Qualified Spill Professional. Includes facility schematic, storage locations, containment design.</li>
+        <li><strong>Secondary Containment:</strong> 110% of the largest single tank capacity. Impermeable dike, vault or berm. Regularly inspected for cracks/degradation.</li>
+        <li><strong>Regular Inspections:</strong> Weekly visual inspections for leaks, drips. Annual tank integrity certification. Records maintained 3+ years.</li>
+        <li><strong>Spill Kit Readiness:</strong> Absorbent materials, booms, sorbent pads staged near high-risk areas. Staff training annual.</li>
+        <li><strong>Regulatory Reporting:</strong> Any discharge &gt; reportable quantity (RQ) to waterway triggers 24-hour federal notification. State agency notification within 5 days.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Underground Storage Tanks (USTs)</h2>
+    <div class="info-box water">
+      <h4>EPA Subtitle I (40 CFR Part 280) — UST Compliance</h4>
+      <p><strong>Coverage:</strong> ~550,000 regulated USTs in USA, predominantly at gas stations &amp; fuel distributors. Strict compliance reduces EIL exposure. <span class="c-est">EST</span></p>
+      <ul>
+        <li><strong>Tank Integrity:</strong> Double-wall tanks (fiberglass or steel with secondary wall). Cathodic protection systems for steel tanks to prevent corrosion.</li>
+        <li><strong>Overfill Prevention:</strong> Automated shut-off valves or ball-float systems on tank openings.</li>
+        <li><strong>Leak Detection:</strong> Monthly inventory reconciliation. Annual tank tightness testing if no secondary containment. Monthly groundwater monitoring wells if installed.</li>
+        <li><strong>30-Day Regulatory Reporting:</strong> Any suspected leak must be reported to state within 30 days. Large spills (≥25 gallons) require immediate notification.</li>
+        <li><strong>Financial Assurance:</strong> Evidence of ability to pay cleanup costs ($1–10m) via insurance, surety bond, or state fund contribution. <span class="c-ver">VER</span></li>
+        <li><strong>Closure Requirements:</strong> When UST decommissioned, tank &amp; surrounding soil must be sampled. If contaminated, becomes remedial site.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>PFAS Control Strategies</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      PFAS (per- and polyfluoroalkyl substances) exclusions in EIL policies are now standard. Proactive PFAS reduction demonstrates risk mitigation and may preserve some coverage or improve terms.
+    </p>
+    <div class="cards">
+      <div class="card hazard">
+        <h4>🧯 AFFF Replacement Programmes</h4>
+        <p>Aqueous Film-Forming Foam (AFFF) used at airports, military bases, firefighter training grounds contains PFOA/PFOS. Replacement with fluorine-free foam alternatives eliminates new PFAS input. Urgent priority for facilities with legacy AFFF use.</p>
+      </div>
+      <div class="card">
+        <h4>💨 Discharge Monitoring &amp; Control</h4>
+        <p>Enhanced wastewater sampling for PFAS. Treatment upgrade (GAC, ion exchange) for high-use industrial discharges. Documentation of PFAS levels &amp; reduction trends demonstrates due diligence.</p>
+      </div>
+      <div class="card earth">
+        <h4>🏭 Product Reformulation</h4>
+        <p>Food packaging manufacturers, non-stick coating producers. Transition to PFAS-free alternatives (ceramic coatings, wax blends). Supply chain PFAS mapping to identify upstream sources.</p>
+      </div>
+      <div class="card water">
+        <h4>♻️ Supply Chain PFAS Mapping &amp; Take-Back</h4>
+        <p>Identify suppliers of PFAS-containing materials. Vendor agreements mandating PFAS-free alternatives. Product take-back schemes for old non-stick cookware, textiles containing PFAS.</p>
+      </div>
+    </div>
+    <div class="info-box">
+      <h4>⚠️ PFAS Exclusions in EIL Market (2024–2026)</h4>
+      <p>Most Lloyd's and admitted carriers now exclude PFAS contamination entirely, or sublimit to $1–5m per occurrence with significant rate loading (5–15%+). Proactive PFAS reduction may help preserve some third-party liability coverage if exposure is remote (e.g., manufacturing facility with minimal AFFF use). <span class="c-ver">VER</span></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Contaminated Site Controls</h2>
+    <div class="cards">
+      <div class="card earth">
+        <h4>🏛️ Institutional Controls (ICs)</h4>
+        <p>Deed restrictions limiting land use (e.g., "industrial/commercial only — no residential development"). Groundwater Use Restrictions (GURs) prohibiting potable groundwater extraction. Recorded on property deed; binds all future owners.</p>
+      </div>
+      <div class="card hazard">
+        <h4>🛡️ Engineering Controls</h4>
+        <p>Site caps (asphalt, concrete over contaminated soil). Vertical/horizontal barriers limiting contaminant migration. Pump-and-treat systems actively removing contamination from groundwater. Vapor intrusion mitigation (sub-slab depressurization).</p>
+      </div>
+      <div class="card water">
+        <h4>🌱 Monitored Natural Attenuation (MNA)</h4>
+        <p>Passive remedy allowing natural degradation of contaminants (some VOCs, PAHs biodegrade over time). Quarterly/annual groundwater monitoring to verify contaminant decline. Regulatory approval required; typically 10–30 year timeframe.</p>
+      </div>
+      <div class="card">
+        <h4>✅ Remediation Performance Benchmarks</h4>
+        <p>Quantified cleanup targets (e.g., "soil PCE &lt; 10 mg/kg within 2 years"). Regular progress monitoring. Milestone achievements documented for regulatory closure &amp; insurance reporting.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Quality Scoring Matrix (6 Risk Dimensions)</h2>
+    <div class="matrix-grid">
+      <div class="matrix-row">
+        <div class="matrix-label">ISO 14001 Certification</div>
+        <div class="matrix-cell green">Certified &amp; Current</div>
+        <div class="matrix-cell amber">In Progress</div>
+        <div class="matrix-cell red">Not Pursued</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-label">SPCC Plan</div>
+        <div class="matrix-cell green">Current &amp; Certified</div>
+        <div class="matrix-cell amber">Outdated (&gt;3yrs)</div>
+        <div class="matrix-cell red">None or Non-Compliant</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-label">UST Compliance</div>
+        <div class="matrix-cell green">Double-wall &amp; Monitored</div>
+        <div class="matrix-cell amber">Single-wall, Inspected</div>
+        <div class="matrix-cell red">Abandoned or Leaking</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-label">Phase I/II Currency</div>
+        <div class="matrix-cell green">Phase II &lt; 2yrs</div>
+        <div class="matrix-cell amber">Phase I &lt; 5yrs</div>
+        <div class="matrix-cell red">No ESA or &gt; 10yrs</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-label">PFAS Programme</div>
+        <div class="matrix-cell green">AFFF Replaced &amp; Monitored</div>
+        <div class="matrix-cell amber">PFAS Awareness</div>
+        <div class="matrix-cell red">Legacy AFFF, No Action</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-label">Emergency Response Plan</div>
+        <div class="matrix-cell green">Current &amp; Drilled</div>
+        <div class="matrix-cell amber">Documented, No Drills</div>
+        <div class="matrix-cell red">None or Outdated</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Top 10 Operator Risk Actions</h2>
+    <div class="action-list">
+      <div class="action-item"><strong>Conduct Phase I ESA (ASTM E1527-21)</strong> — If no Phase I completed in past 5 years, commission one immediately. Critical for insurance placement and underwriting terms.</div>
+      <div class="action-item"><strong>Phase II Investigation if REC Identified</strong> — Do not delay. Known contamination discovered post-claim is a major coverage denial trigger.</div>
+      <div class="action-item"><strong>Achieve ISO 14001:2015 Certification</strong> — Third-party audit typically costs $10–30k. Reduces EIL premiums 10–20% through demonstrated compliance framework.</div>
+      <div class="action-item"><strong>SPCC Plan Preparation &amp; Certification</strong> — Mandatory for facilities with ≥1,320 gallons above-ground oil. Annual review &amp; update. Budget $5–15k for professional preparation.</div>
+      <div class="action-item"><strong>Replace Legacy AFFF with Fluorine-Free Alternatives</strong> — Urgent for airports, fire training grounds, military. Eliminate PFAS input and reduce policy exclusion risk. Coordinate with fire safety protocols.</div>
+      <div class="action-item"><strong>UST Compliance Audit</strong> — If facility has USTs, verify double-wall construction, cathodic protection active, leak detection operational. Non-compliance can void EIL coverage.</div>
+      <div class="action-item"><strong>Implement Groundwater Monitoring Programme</strong> — Quarterly/annual sampling downgradient of potential contamination sources. Early warning system for emerging issues.</div>
+      <div class="action-item"><strong>Document Spill Response Procedures &amp; Train Staff</strong> — Written procedures, spill kit locations, emergency contact list. Annual training for ops staff. Demonstrate readiness to insurers.</div>
+      <div class="action-item"><strong>Maintain Regulatory Compliance Register</strong> — Track all applicable environmental permits, RCRA waste classification, PCB inventory, asbestos/lead surveys. Annual updates.</div>
+      <div class="action-item"><strong>Review &amp; Update Insurance Programme Annually</strong> — EIL market is fast-moving (PFAS exclusions, capacity constraints). Annual market check with broker ensures adequate coverage &amp; competitive rates.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Standards Reference Table (10 Key Standards)</h2>
+    <table>
+      <thead><tr><th>Standard / Regulation</th><th>Description</th><th>Applicability</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>ASTM E1527-21</strong></td>
+          <td>Phase I Environmental Site Assessment standard (2021 edition)</td>
+          <td>All properties undergoing transactions or insurance placement <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>ASTM E1903</strong></td>
+          <td>Phase II ESA — Environmental Site Assessment Practice</td>
+          <td>Triggered when REC identified or redevelopment planned <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>ASTM E2600</strong></td>
+          <td>Vapor Intrusion (VI) investigation &amp; assessment practice</td>
+          <td>Indoor facilities built above or adjacent to contaminated soil/groundwater <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>ISO 14001:2015</strong></td>
+          <td>Environmental Management System (EMS) standard</td>
+          <td>Large operators &amp; multinationals; provides 10–20% EIL rate discount <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>EPA SPCC (40 CFR 112)</strong></td>
+          <td>Spill Prevention, Control &amp; Countermeasure rule</td>
+          <td>Facilities with ≥1,320 gallons above-ground oil <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>EPA UST (40 CFR 280)</strong></td>
+          <td>Underground Storage Tank compliance &amp; leak detection</td>
+          <td>All regulated USTs; ~550,000 in USA <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>CERCLA (42 USC § 9601)</strong></td>
+          <td>Comprehensive Environmental Response, Compensation &amp; Liability Act</td>
+          <td>US federal law; basis for PLL liability &amp; NPL sites <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>RCRA (42 USC § 6901)</strong></td>
+          <td>Resource Conservation &amp; Recovery Act — hazardous waste &amp; USTs</td>
+          <td>Governs waste generation, transportation, disposal &amp; Subtitle I (USTs) <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>EU ELD (2004/35/CE)</strong></td>
+          <td>Environmental Liability Directive — European strict liability regime</td>
+          <td>EU member states &amp; UK; basis for European EIL exposure <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>EPA PFAS MCL (April 2024)</strong></td>
+          <td>PFAS Maximum Contaminant Level — drinking water standards</td>
+          <td>EPA set MCL for PFOA/PFOS at 4 ppt; ongoing PFAS litigation driver <span class="c-ver">VER</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub · Environmental Liability (EP) · Module 07 – Risk Mitigation · v2.2 · April 2026</p>
+  <p style="margin-top:.4rem;font-size:.75rem;"><a href="../index.html">← Hub Index</a></p>
+</footer>
+</body>
+</html>

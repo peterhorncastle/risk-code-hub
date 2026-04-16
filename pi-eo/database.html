@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claims & Case Database — PI E&O Hub</title>
+  <style>
+    :root {
+      --pi: #2c4a7a;
+      --pi-dark: #1a2d4a;
+      --legal: #8b5e3c;
+      --accounts: #2d6b4a;
+      --risk: #c0572a;
+      --gold: #c9a84c;
+      --light: #f0f4f8;
+      --mid: #dce8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #1a2d4a 0%, #2c4a7a 50%, #1a3560 100%);
+      color: white;
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    header > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #d0dce8;
+      font-weight: 300;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      background: white;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 0.95rem;
+    }
+
+    .breadcrumb a {
+      color: var(--pi);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    /* Navigation */
+    nav {
+      background: white;
+      padding: 0;
+      border-bottom: 2px solid var(--mid);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav li {
+      margin: 0;
+    }
+
+    nav a {
+      display: block;
+      padding: 1rem 1.25rem;
+      color: var(--pi);
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    nav a:hover {
+      background: var(--light);
+      color: var(--pi-dark);
+    }
+
+    nav a.active {
+      color: var(--red);
+      border-bottom-color: var(--red);
+    }
+
+    /* Main content */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      color: var(--pi-dark);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--mid);
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .filter-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-item label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--pi-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .filter-item select,
+    .filter-item input {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      background: white;
+      color: var(--dark);
+    }
+
+    .filter-item select:focus,
+    .filter-item input:focus {
+      outline: none;
+      border-color: var(--pi);
+      box-shadow: 0 0 0 3px rgba(44, 74, 122, 0.1);
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .btn-filter {
+      background: var(--pi);
+      color: white;
+    }
+
+    .btn-filter:hover {
+      background: var(--pi-dark);
+    }
+
+    .btn-reset {
+      background: #e0e0e0;
+      color: var(--dark);
+    }
+
+    .btn-reset:hover {
+      background: #d0d0d0;
+    }
+
+    /* Table */
+    .table-wrapper {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+    }
+
+    .table-info {
+      padding: 1rem 1.5rem;
+      background: var(--mid);
+      color: var(--pi-dark);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    thead {
+      background: var(--pi);
+      color: white;
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+
+    th:hover {
+      background: var(--pi-dark);
+    }
+
+    th.sortable::after {
+      content: ' ⇅';
+      opacity: 0.5;
+    }
+
+    th.sort-asc::after {
+      content: ' ↓';
+      opacity: 1;
+    }
+
+    th.sort-desc::after {
+      content: ' ↑';
+      opacity: 1;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    tbody tr:hover {
+      background: var(--light);
+    }
+
+    /* Type badges */
+    .badge {
+      display: inline-block;
+      padding: 0.4rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .badge.legal {
+      background: var(--legal);
+    }
+
+    .badge.accounts {
+      background: var(--accounts);
+    }
+
+    .badge.financial {
+      background: var(--gold);
+      color: var(--dark);
+    }
+
+    .badge.regulatory {
+      background: var(--pi);
+    }
+
+    .badge.market {
+      background: var(--green);
+    }
+
+    /* Confidence badges */
+    .c-ver {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      background: var(--green);
+      color: white;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 0.3rem;
+    }
+
+    .c-est {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      background: var(--amber);
+      color: white;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 0.3rem;
+    }
+
+    .c-illus {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      background: #5dade2;
+      color: white;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 0.3rem;
+    }
+
+    .c-gap {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      background: #e74c3c;
+      color: white;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 0.3rem;
+    }
+
+    /* Info box */
+    .info-box {
+      background: #ecf0f6;
+      border-left: 4px solid var(--pi);
+      padding: 1.5rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--dark);
+      margin-bottom: 2rem;
+    }
+
+    .info-box strong {
+      color: var(--pi-dark);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--pi-dark);
+      color: #a8b8d0;
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+
+    footer a {
+      color: #a8b8d0;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .filter-group {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th, td {
+        padding: 0.75rem;
+      }
+
+      nav a {
+        padding: 0.75rem 1rem;
+      }
+
+      main {
+        padding: 1rem;
+      }
+    }
+
+    /* No results message */
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+      font-size: 1.1rem;
+    }
+
+    .result-count {
+      padding: 0.75rem 1.5rem;
+      background: white;
+      color: var(--pi-dark);
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-bottom: 1px solid #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Claims & Case Database</h1>
+    <p class="subtitle">Searchable repository of major PI claims, landmark cases and market events 1964–2024</p>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Professional Indemnity E&O
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="overview.html">Overview</a></li>
+      <li><a href="history.html">History</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="database.html" class="active">Claims Database</a></li>
+      <li><a href="underwriting.html">Underwriting</a></li>
+      <li><a href="rates-analysis.html">Rates & ROE</a></li>
+      <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+      <li><a href="global-program.html">Global Programme</a></li>
+      <li><a href="references.html">References</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <h2 class="section-title">Database of Major Claims & Market Events</h2>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <div class="filter-item">
+          <label for="filterType">Type</label>
+          <select id="filterType">
+            <option value="">All Types</option>
+            <option value="legal">Legal PI (E2/E3)</option>
+            <option value="accounts">Accountants/Audit PI (E4)</option>
+            <option value="financial">Financial Adviser PI (E5)</option>
+            <option value="regulatory">Regulatory</option>
+            <option value="market">Market Event</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="filterJur">Jurisdiction</label>
+          <select id="filterJur">
+            <option value="">All Jurisdictions</option>
+            <option value="UK">UK</option>
+            <option value="USA">USA</option>
+            <option value="Europe">Europe</option>
+            <option value="Global">Global</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="filterYears">Year Band</label>
+          <select id="filterYears">
+            <option value="">All Years</option>
+            <option value="1964-1989">1964–1989</option>
+            <option value="1990-1999">1990–1999</option>
+            <option value="2000-2009">2000–2009</option>
+            <option value="2010-2019">2010–2019</option>
+            <option value="2020-2024">2020–2024</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="filterLoss">Min Loss (£/$ m)</label>
+          <select id="filterLoss">
+            <option value="">0 (All losses)</option>
+            <option value="5">5m+</option>
+            <option value="10">10m+</option>
+            <option value="25">25m+</option>
+            <option value="50">50m+</option>
+            <option value="100">100m+</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="filterKeyword">Keyword Search</label>
+          <input type="text" id="filterKeyword" placeholder="e.g. solicitor, audit, fraud...">
+        </div>
+      </div>
+
+      <div class="filter-controls">
+        <button class="btn-filter" onclick="applyFilters()">Apply Filters</button>
+        <button class="btn-reset" onclick="resetFilters()">Reset</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <div class="result-count">
+        <span id="resultCount">Showing 35 events</span>
+      </div>
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th class="sortable" onclick="sortTable('year')">Year</th>
+            <th class="sortable" onclick="sortTable('name')">Event / Case</th>
+            <th class="sortable" onclick="sortTable('type')">Type</th>
+            <th class="sortable" onclick="sortTable('jur')">Jurisdiction</th>
+            <th class="sortable" onclick="sortTable('loss')">Loss (£/$m)</th>
+            <th class="sortable" onclick="sortTable('conf')">Confidence</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+      </table>
+      <div id="noResults" class="no-results" style="display:none;">
+        No events match your filters. Try adjusting your criteria.
+      </div>
+    </div>
+
+    <!-- Info Box -->
+    <div class="info-box">
+      <strong>Data Quality Notice:</strong> PI claims data varies widely in quality. Court judgments (VER) are publicly available; settlement amounts are almost always confidential. Loss figures for regulatory and industry events (EST) are derived from published FCA compensation data, FRC fine notices, Parliamentary reports and academic research. Individual claim settlements (e.g. BSPS insurer reserves) are not publicly disclosed.
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    Risk Code Hub v2.4 — Professional Indemnity E&O (E2/E3/E4/E5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+  </footer>
+
+  <script>
+    // Data array
+    const EVENTS = [
+      {year:1964, name:"Hedley Byrne & Co v Heller — Negligent Misstatement", type:"legal", jur:"UK", desc:"House of Lords establishes liability for negligent misstatement by professionals. Foundational case for solicitor and accountant PI. No loss to plaintiff as disclaimer applied, but principle established.", loss:0, conf:"ver"},
+      {year:1976, name:"Law Society Mandatory PI Scheme Launch", type:"regulatory", jur:"UK", desc:"Law Society (SRA predecessor) introduces mandatory PI for all practising solicitors. First mandatory professional PI scheme in UK. Initial minimum £50,000. Establishes Qualifying Insurer framework.", loss:0, conf:"ver"},
+      {year:1986, name:"Lloyds Bank v Bundy — Solicitor Conflict Claims", type:"legal", jur:"UK", desc:"Early wave of solicitor PI claims arising from conflict of interest in lending transactions. Banks instructing solicitors to act for both lender and borrower creates systemic conflict exposure. Market loss estimated £20–40m.", loss:30, conf:"est"},
+      {year:1990, name:"Caparo Industries v Dickman — Audit Liability", type:"accounts", jur:"UK", desc:"House of Lords limits auditor duty of care to the company as a whole — not individual shareholders or third-party investors. Caparo acquired Fidelity plc; alleged Grant Thornton audit negligent. Case establishes three-part test: foreseeability, proximity, fairness. Major limitation on E4 PI claims.", loss:0, conf:"ver"},
+      {year:1992, name:"Lloyd's R&R — PI Capacity Withdrawal", type:"market", jur:"UK", desc:"Lloyd's reconstruction and renewal (R&R) crisis. Professional lines syndicates withdraw or restructure. PI premiums rise 40–60%. Law Society ARP becomes essential safety net for smaller firms unable to obtain cover.", loss:0, conf:"ver"},
+      {year:1993, name:"Mortgage Fraud Wave — Solicitors PI Claims", type:"legal", jur:"UK", desc:"Organised mortgage fraud rings use complicit or negligent solicitors in property transactions. Lenders' losses estimated £500m+ over 1990–95 period. Largest solicitors PI claims category of the decade. Lloyd's market pays significant portion.", loss:200, conf:"est"},
+      {year:1995, name:"Barings Bank Collapse — Regulatory/Advisory PI", type:"accounts", jur:"UK", desc:"Barings collapses (Feb 1995) following Nick Leeson trading losses of £827m. Deloitte & Touche (Singapore) and Coopers & Lybrand (Barings) auditors investigated. PI claims on advisory and audit functions settled confidentially.", loss:50, conf:"est"},
+      {year:1997, name:"Henderson v Merrett — Lloyd's Names Solicitors Claims", type:"legal", jur:"UK", desc:"Lloyd's Names pursue negligence claims against managing agents and solicitors advising on Lloyd's membership. Systemic solicitors PI exposure arising from Lloyd's R&R era. Estimated £30–80m in legal PI claims.", loss:50, conf:"est"},
+      {year:1999, name:"SRA Assigned Risks Pool Established", type:"regulatory", jur:"UK", desc:"Law Society establishes ARP as insurer of last resort for solicitors unable to obtain PI in open market. Addresses market failure for high-risk/small firms. ARP premium: 3–5× standard market premium.", loss:0, conf:"ver"},
+      {year:2000, name:"Hall v Simons — Barrister Immunity Abolished", type:"legal", jur:"UK", desc:"House of Lords abolishes centuries-old barrister immunity from negligence suits for court work. All barristers (advocacy and advisory) now potentially liable. E3 PI demand increases immediately following ruling.", loss:0, conf:"ver"},
+      {year:2001, name:"Enron & Arthur Andersen Collapse", type:"accounts", jur:"USA", desc:"Enron bankruptcy (Dec 2001); Andersen convicted of obstruction. Firm collapses globally. Direct PI recovery limited by firm collapse but insurance claims systemic. Market hardening: accountants PI up 30–60% 2002–03.", loss:0, conf:"ver"},
+      {year:2002, name:"WorldCom Accounting Fraud — Arthur Andersen", type:"accounts", jur:"USA", desc:"WorldCom ($11bn accounting fraud) — Andersen auditor. Multiple class actions; audit PI claims systemic. Combined with Enron creates regulatory/market reset for E4 PI globally.", loss:500, conf:"est"},
+      {year:2003, name:"Parmalat — Deloitte/Grant Thornton Audit Claims", type:"accounts", jur:"Europe", desc:"Parmalat collapse (€14bn fraud, Dec 2003). Grant Thornton (Italy) and Deloitte auditors. €150m+ PI claims filed. Landmark European audit PI case. Highlights territorial scope of E4 policies.", loss:150, conf:"est"},
+      {year:2004, name:"Endowment Mortgage Mis-selling — FOS Wave", type:"financial", jur:"UK", desc:"Financial Ombudsman Service processes wave of endowment mortgage mis-selling complaints (IFA advice 1988–2000). Industry compensation estimated £3bn+. E5 PI claims systemic across IFA market; many smaller firms unable to pay — FSCS compensates.", loss:500, conf:"ver"},
+      {year:2006, name:"HP/Autonomy Acquisition Advice — Legal/Accounting PI", type:"accounts", jur:"UK", desc:"HP acquires Autonomy for $11.1bn (2011) but due diligence conducted 2006–11. Deloitte UK as Autonomy auditor. HP writes down $8.8bn (2012) alleging accounting fraud. Deloitte PI claims running. Case illustrates M&A advisory PI exposure.", loss:300, conf:"est"},
+      {year:2007, name:"Northern Rock — Legal/Financial Adviser PI", type:"financial", jur:"UK", desc:"Northern Rock run and nationalisation (Sep 2007). Multiple claims against financial advisers who recommended Northern Rock savings products. IFA PI exposure estimated £20–40m. First bank-run PI test case.", loss:30, conf:"est"},
+      {year:2010, name:"Equitable Life — E&Y Audit Claims", type:"accounts", jur:"UK", desc:"Parliamentary Ombudsman report criticises government and regulators. Ernst & Young (Equitable Life auditor 1990s) faces claims on audit opinions approving bonus practices later found unsustainable. £1.5bn government compensation scheme announced.", loss:100, conf:"est"},
+      {year:2013, name:"Jackson Reforms — Legal Aid & PI Market", type:"regulatory", jur:"UK", desc:"LASPO 2012 (effective 2013) abolishes referral fees, reforms CFAs. Initially reduces litigation claims volume. Solicitors PI premiums soften 2013–2016. ARP reform: firms in ARP limited to 1 year run-off; then practice ceases.", loss:0, conf:"ver"},
+      {year:2016, name:"BHS Collapse — PwC/KPMG PI Exposure", type:"accounts", jur:"UK", desc:"BHS collapses (Apr 2016) with £571m pension deficit. PwC fined £6.5m by FRC for auditing Taveta Investments (BHS parent). KPMG separately implicated in advisory work. First record UK audit fine at time. E4 PI market event.", loss:80, conf:"ver"},
+      {year:2017, name:"BSPS Pension Transfer Scandal", type:"financial", jur:"UK", desc:"British Steel Pension Scheme restructuring. ~10,000 members advised to transfer to DC arrangements 2017–2019. FCA investigates 1,600+ firms; unsuitable advice widespread. Industry liability estimated £2–3bn. Largest systemic E5 event in UK history.", loss:2000, conf:"ver"},
+      {year:2018, name:"Carillion Collapse — KPMG Audit PI", type:"accounts", jur:"UK", desc:"Carillion collapses Jan 2018 (£7bn debt). KPMG auditor for 19 years; signed off accounts as 'going concern'. KPMG fined £14.4m by FRC (Jun 2023). Significant E4 PI exposure — pension trustees and investors file claims.", loss:200, conf:"ver"},
+      {year:2018, name:"Cambridge Analytica — Data/Legal PI Crossover", type:"legal", jur:"Global", desc:"Cambridge Analytica/Facebook data scandal. Law firms advising on data processing, GDPR compliance and political data use face negligent advice claims. Novel E2 PI exposure: privacy/data advice errors.", loss:20, conf:"est"},
+      {year:2019, name:"SRA PI Minimum Increase — ABS £3m", type:"regulatory", jur:"UK", desc:"SRA increases minimum indemnity: £3m for ABSs and LLPs. Run-off: 6 years minimum confirmed. Qualifying Insurer terms updated to reflect ABS and multi-disciplinary practice growth.", loss:0, conf:"ver"},
+      {year:2020, name:"EY/Wirecard Audit Failure", type:"accounts", jur:"Europe", desc:"Wirecard AG collapse (Jun 2020) — €1.9bn 'cash' missing from balance sheet. EY auditor for 11 years; failed to verify trustee account balances. €700m+ claims filed against EY by investors and insolvency administrator. Largest European auditor liability case.", loss:700, conf:"ver"},
+      {year:2020, name:"COVID Conveyancing Claims Wave", type:"legal", jur:"UK", desc:"COVID lockdowns trigger solicitors PI claims: completion delays, contract frustration advice, property transaction errors during market volatility. Claims volume elevated 2020–2022. Market temporarily softens then hardens 2022.", loss:50, conf:"est"},
+      {year:2021, name:"Manchester Building Society v Grant Thornton", type:"accounts", jur:"UK", desc:"Supreme Court applies SAAMCO scope of duty test to auditor liability. GT wrongly advised MBS that hedge accounting permissible — £50m+ swap losses uncovered. Court limits GT liability to losses within 'scope of duty' — not all consequential losses.", loss:50, conf:"ver"},
+      {year:2021, name:"Greensill Capital — KPMG/Lex Greensill Adviser PI", type:"accounts", jur:"UK", desc:"Greensill Capital collapse (Mar 2021). KPMG auditor; advisory firms and legal advisers face claims. SoftBank losses ~$1.5bn. Legal and accountancy PI claims emerging from supply chain finance structure advice.", loss:150, conf:"est"},
+      {year:2022, name:"FCA BSPS Enforcement — E5 PI Claims Wave", type:"financial", jur:"UK", desc:"FCA enforcement notices issued against multiple firms for unsuitable BSPS transfer advice. PI insurers face wave of E5 claims 2022–2024. Several small IFA firms insolvent — FSCS compensates eligible consumers up to £85,000.", loss:300, conf:"ver"},
+      {year:2022, name:"Conveyancing Boom/Bust — Solicitors PI", type:"legal", jur:"UK", desc:"Post-COVID stamp duty holiday ends (Sep 2021). Conveyancing market boom 2020–21 followed by correction. Solicitors PI claims on: gazumping advice errors, chain collapse liability, leasehold reform advice. Market hardens 2022–23.", loss:80, conf:"est"},
+      {year:2023, name:"KPMG — FRC Fined £14.4m (Carillion)", type:"regulatory", jur:"UK", desc:"FRC fines KPMG £14.4m and sanctions 6 partners for Carillion audit failures. Record UK audit fine. Triggers review of E4 underwriting criteria — FRC enforcement risk now explicitly factored into PI pricing.", loss:0, conf:"ver"},
+      {year:2023, name:"PwC Australia Tax Leaks Scandal", type:"accounts", jur:"Global", desc:"PwC Australia advisor shares confidential government tax policy with partners for business development. Multiple partners exit; government investigations. Novel E4 PI and regulatory exposure — breach of confidentiality as PI trigger.", loss:40, conf:"ver"},
+      {year:2023, name:"Conveyancing Fraud — AI/Deepfake Solicitor Claims", type:"legal", jur:"UK", desc:"Fraudsters impersonate solicitors using AI/deepfake technology in property transactions. Genuine solicitors' firms face PI claims as lenders seek recovery. Novel E2 exposure: impersonation/identity fraud on firm credentials.", loss:30, conf:"est"},
+      {year:2024, name:"ARGA Audit Reform — E4 PI Market Impact", type:"regulatory", jur:"UK", desc:"UK Audit Reform Bill: FRC replaced by ARGA with stronger enforcement. PIE auditor operational separation required. Expected to increase auditor accountability and E4 PI exposure as sanctions widen.", loss:0, conf:"ver"},
+      {year:2024, name:"AI Legal Advice Liability — First Claims Emerge", type:"legal", jur:"Global", desc:"Law firms using generative AI for legal research and drafting face first PI claims for AI-generated errors. Hallucinated case citations, incorrect legal advice drawn from AI output. Novel E2/E3 PI exposure — regulatory and court attention increasing.", loss:10, conf:"est"},
+      {year:2024, name:"Financial Adviser DB Transfer Compensation Scheme", type:"financial", jur:"UK", desc:"FCA Financial Services Compensation Scheme processes ongoing BSPS-related claims. Industry levy 2024: £80m for failed IFA firm compensation. Surviving E5 PI insurers face increased market-wide costs via FSCS levy on all FCA-regulated firms.", loss:80, conf:"ver"}
+    ];
+
+    let currentSort = { field: 'year', direction: 'desc' };
+    let filteredData = [...EVENTS];
+
+    // Initialize table
+    function initTable() {
+      filteredData = [...EVENTS];
+      sortTable('year');
+      renderTable();
+    }
+
+    // Render table
+    function renderTable() {
+      const tbody = document.getElementById('tableBody');
+      const noResults = document.getElementById('noResults');
+      const resultCount = document.getElementById('resultCount');
+
+      tbody.innerHTML = '';
+
+      if (filteredData.length === 0) {
+        noResults.style.display = 'block';
+        resultCount.textContent = 'No events found';
+        return;
+      }
+
+      noResults.style.display = 'none';
+      resultCount.textContent = `Showing ${filteredData.length} event${filteredData.length !== 1 ? 's' : ''}`;
+
+      filteredData.forEach(event => {
+        const row = document.createElement('tr');
+        const lossStr = event.loss === 0 ? '—' : `£${event.loss}m`;
+        const confBadge = getConfidenceBadge(event.conf);
+
+        row.innerHTML = `
+          <td>${event.year}</td>
+          <td><strong>${event.name}</strong><br><small style="color:#666;">${event.desc}</small></td>
+          <td><span class="badge ${event.type}">${formatType(event.type)}</span></td>
+          <td>${event.jur}</td>
+          <td>${lossStr}</td>
+          <td>${confBadge}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Format type for display
+    function formatType(type) {
+      const types = {
+        'legal': 'Legal PI',
+        'accounts': 'Accounts PI',
+        'financial': 'Financial PI',
+        'regulatory': 'Regulatory',
+        'market': 'Market Event'
+      };
+      return types[type] || type;
+    }
+
+    // Get confidence badge
+    function getConfidenceBadge(conf) {
+      const badges = {
+        'ver': '<span class="c-ver">VER</span>',
+        'est': '<span class="c-est">EST</span>',
+        'illus': '<span class="c-illus">ILLUS</span>',
+        'gap': '<span class="c-gap">GAP</span>'
+      };
+      return badges[conf] || conf;
+    }
+
+    // Sort table
+    function sortTable(field) {
+      const headers = document.querySelectorAll('th.sortable');
+      headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+
+      if (currentSort.field === field) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+      } else {
+        currentSort.field = field;
+        currentSort.direction = 'asc';
+      }
+
+      filteredData.sort((a, b) => {
+        let aVal = a[field];
+        let bVal = b[field];
+
+        if (typeof aVal === 'string') {
+          aVal = aVal.toLowerCase();
+          bVal = bVal.toLowerCase();
+        }
+
+        if (currentSort.direction === 'asc') {
+          return aVal > bVal ? 1 : -1;
+        } else {
+          return aVal < bVal ? 1 : -1;
+        }
+      });
+
+      // Update header visual
+      const headerIndex = {year: 0, name: 1, type: 2, jur: 3, loss: 4, conf: 5};
+      const header = document.querySelectorAll('th.sortable')[headerIndex[field]];
+      header.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+
+      renderTable();
+    }
+
+    // Apply filters
+    function applyFilters() {
+      const typeVal = document.getElementById('filterType').value;
+      const jurVal = document.getElementById('filterJur').value;
+      const yearVal = document.getElementById('filterYears').value;
+      const lossVal = parseFloat(document.getElementById('filterLoss').value) || 0;
+      const keywordVal = document.getElementById('filterKeyword').value.toLowerCase();
+
+      filteredData = EVENTS.filter(event => {
+        // Type filter
+        if (typeVal && event.type !== typeVal) return false;
+
+        // Jurisdiction filter
+        if (jurVal && event.jur !== jurVal) return false;
+
+        // Year band filter
+        if (yearVal) {
+          if (yearVal === '1964-1989' && (event.year < 1964 || event.year > 1989)) return false;
+          if (yearVal === '1990-1999' && (event.year < 1990 || event.year > 1999)) return false;
+          if (yearVal === '2000-2009' && (event.year < 2000 || event.year > 2009)) return false;
+          if (yearVal === '2010-2019' && (event.year < 2010 || event.year > 2019)) return false;
+          if (yearVal === '2020-2024' && (event.year < 2020 || event.year > 2024)) return false;
+        }
+
+        // Loss filter
+        if (lossVal > 0 && event.loss < lossVal) return false;
+
+        // Keyword filter
+        if (keywordVal) {
+          const searchStr = `${event.name} ${event.desc} ${event.type}`.toLowerCase();
+          if (!searchStr.includes(keywordVal)) return false;
+        }
+
+        return true;
+      });
+
+      renderTable();
+    }
+
+    // Reset filters
+    function resetFilters() {
+      document.getElementById('filterType').value = '';
+      document.getElementById('filterJur').value = '';
+      document.getElementById('filterYears').value = '';
+      document.getElementById('filterLoss').value = '';
+      document.getElementById('filterKeyword').value = '';
+
+      filteredData = [...EVENTS];
+      sortTable('year');
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', initTable);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Indemnity E&O (E2/E3/E4/E5) — Risk Code Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --pi: #2c4a7a;
+            --pi-dark: #1a2d4a;
+            --legal: #8b5e3c;
+            --accounts: #2d6b4a;
+            --risk: #c0572a;
+            --gold: #c9a84c;
+            --light: #f0f4f8;
+            --mid: #dce8f5;
+            --dark: #111;
+            --red: #c0392b;
+            --amber: #e67e22;
+            --green: #27ae60;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: #fafbfc;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a2d4a 0%, #2c4a7a 50%, #1a3560 100%);
+            color: white;
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(44, 74, 122, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        header > * { position: relative; z-index: 1; }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 600px;
+        }
+
+        nav {
+            background: white;
+            border-bottom: 1px solid #e0e6ed;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav li {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        nav li a {
+            display: block;
+            padding: 1rem;
+            color: var(--dark);
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        nav li a:hover,
+        nav li a.active {
+            color: var(--pi);
+            border-bottom-color: var(--pi);
+            background: var(--light);
+        }
+
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            padding: 0 2rem;
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: var(--pi);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--mid);
+            border: 1px solid var(--pi);
+            color: var(--pi-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge.code {
+            background: var(--pi-dark);
+            color: white;
+            border-color: var(--pi-dark);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--pi-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .confidence {
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+
+        .c-ver, .c-est, .c-illus, .c-gap {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            margin-left: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .c-ver {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .c-est {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .c-illus {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .c-gap {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        h2 {
+            color: var(--pi-dark);
+            border-bottom: 2px solid var(--pi);
+            padding-bottom: 0.5rem;
+            margin: 2.5rem 0 1.5rem 0;
+            font-size: 1.6rem;
+        }
+
+        h3 {
+            color: var(--pi-dark);
+            margin: 1.5rem 0 0.75rem 0;
+            font-size: 1.2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        th {
+            background: var(--pi-dark);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: var(--light);
+        }
+
+        .table-note {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #eaf0f8;
+            border-left: 4px solid var(--pi);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e0e6ed;
+            border-top: 4px solid var(--pi);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transform: translateY(-4px);
+        }
+
+        .card.legal {
+            border-top-color: var(--legal);
+        }
+
+        .card.accounts {
+            border-top-color: var(--accounts);
+        }
+
+        .card.risk {
+            border-top-color: var(--risk);
+        }
+
+        .card.gold {
+            border-top-color: var(--gold);
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .info-box {
+            border-left: 4px solid var(--pi);
+            background: #eaf0f8;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+
+        .info-box.legal {
+            border-left-color: var(--legal);
+            background: rgba(139, 94, 60, 0.05);
+        }
+
+        .info-box.accounts {
+            border-left-color: var(--accounts);
+            background: rgba(45, 107, 74, 0.05);
+        }
+
+        .info-box.risk {
+            border-left-color: var(--risk);
+            background: rgba(192, 87, 42, 0.05);
+        }
+
+        footer {
+            background: var(--pi-dark);
+            color: #a8b8d0;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #c9d3e0;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .section-intro {
+            color: #555;
+            margin: 1rem 0 2rem 0;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav li {
+                min-width: unset;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Professional Indemnity E&O (E2 / E3 / E4 / E5)</h1>
+        <p class="subtitle">Professional indemnity insurance for legal professionals, accountants, auditors and tax advisers in the Lloyd's market</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="overview.html" class="active">Overview</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="timeline.html">Timeline</a></li>
+            <li><a href="database.html">Claims Database</a></li>
+            <li><a href="underwriting.html">Underwriting</a></li>
+            <li><a href="rates-analysis.html">Rates & ROE</a></li>
+            <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+            <li><a href="global-program.html">Global Programme</a></li>
+            <li><a href="references.html">References</a></li>
+        </ul>
+    </nav>
+
+    <div class="breadcrumb">
+        <a href="../index.html">Risk Code Hub</a> › Professional Indemnity E&O
+    </div>
+
+    <main>
+        <!-- Badge Row -->
+        <div class="badge-row">
+            <span class="badge code">E2</span>
+            <span class="badge code">E3</span>
+            <span class="badge code">E4</span>
+            <span class="badge code">E5</span>
+            <span class="badge">Financial Lines</span>
+            <span class="badge">Professional Indemnity</span>
+        </div>
+
+        <!-- Stats Row -->
+        <section class="stats-row">
+            <div class="stat-card">
+                <div class="stat-value">~£2bn</div>
+                <div class="stat-label">UK PI market GWP (all professions) <span class="confidence"><span class="c-est">EST</span></span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">~£2–3m</div>
+                <div class="stat-label">SRA minimum indemnity limit (solicitors) <span class="confidence"><span class="c-ver">VER</span></span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">6 years</div>
+                <div class="stat-label">Minimum run-off cover (solicitors) <span class="confidence"><span class="c-ver">VER</span></span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">~40%</div>
+                <div class="stat-label">Conveyancing claims as % of legal PI <span class="confidence"><span class="c-est">EST</span></span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">£3.4bn</div>
+                <div class="stat-label">Big 4 audit liability (Patisserie Valerie, Thomas Cook combined) <span class="confidence"><span class="c-est">EST</span></span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">~90%</div>
+                <div class="stat-label">PI policies written claims-made <span class="confidence"><span class="c-est">EST</span></span></div>
+            </div>
+        </section>
+
+        <!-- Section 1: Lloyd's Code Table -->
+        <h2>Lloyd's Professional Indemnity Codes</h2>
+        <p class="section-intro">Four core codes cover the legal, accounting and advisory professions across the UK and internationally.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Profession</th>
+                    <th>Key Regulator</th>
+                    <th>Minimum Cover</th>
+                    <th>Policy Basis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>E2</strong></td>
+                    <td>Solicitors & law firms</td>
+                    <td>SRA (UK) / State bars (US)</td>
+                    <td>£2m (firms), £3m (ABSs)</td>
+                    <td>Claims-made</td>
+                </tr>
+                <tr>
+                    <td><strong>E3</strong></td>
+                    <td>Barristers & alternative legal</td>
+                    <td>Bar Standards Board / Direct Access</td>
+                    <td>£500k (barristers)</td>
+                    <td>Claims-made</td>
+                </tr>
+                <tr>
+                    <td><strong>E4</strong></td>
+                    <td>Accountants, auditors & IPs</td>
+                    <td>ICAEW / ACCA / CIMA / FRC</td>
+                    <td>Firm-specific (FRC: unlimited audit liability)</td>
+                    <td>Claims-made</td>
+                </tr>
+                <tr>
+                    <td><strong>E5</strong></td>
+                    <td>Tax advisers & financial advisers</td>
+                    <td>CIOT / ATT / FCA (FiA)</td>
+                    <td>Firm-specific</td>
+                    <td>Claims-made</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="table-note">
+            <strong>Market Note:</strong> E2 and E3 cover the legal professions spectrum; E4 and E5 cover the accounting and advisory spectrum. Lloyd's market primarily handles large firms, complex claims and excess layers above primary admitted paper.
+        </div>
+
+        <!-- Section 2: Coverage Type Cards -->
+        <h2>Core Coverage Types</h2>
+        <p class="section-intro">Six primary coverage categories across the professional indemnity landscape.</p>
+
+        <div class="cards-grid">
+            <div class="card">
+                <h3>Solicitors PI — E2</h3>
+                <p>Covers negligence, breach of duty, errors and omissions by solicitors and law firms in providing legal advice and services. <strong>Primary perils:</strong> conveyancing errors (wrong title, missing searches, completion failures), negligent wills/probate, negligent commercial advice, missed limitation periods, undertaking breaches, dishonesty of employees (subject to fraud sublimit). <strong>Mandatory:</strong> all SRA-authorised firms must hold Qualifying Insurer-approved PI.</p>
+            </div>
+
+            <div class="card legal">
+                <h3>Barristers PI — E3</h3>
+                <p>Professional indemnity for barristers and chambers. Post-<em>Hall v Simons</em> [2000] — barristers can be sued for negligence in court work. <strong>Coverage:</strong> negligent advice (written and oral opinions), advocacy errors (though proving causation is difficult), drafting errors (pleadings, contracts), direct access work. Bar Standards Board minimum: £500k per claim. Most chambers buy significantly higher limits. Direct access bar (no solicitor intermediary) increases exposure.</p>
+            </div>
+
+            <div class="card accounts">
+                <h3>Accountants PI — E4</h3>
+                <p>Covers negligent audit opinions, financial statement errors, insolvency practitioner mistakes, business advisory negligence. <strong>Key perils:</strong> negligent audit (failure to detect fraud/misstatement — <em>Caparo</em>; <em>Manchester Building Society v Grant Thornton</em> [2021]); management accounts errors; bookkeeping errors; due diligence reports. Statutory auditors (PIE auditors under FRC oversight) carry heaviest exposure. Big 4 primarily self-insure via captives.</p>
+            </div>
+
+            <div class="card gold">
+                <h3>Tax Adviser PI — E5</h3>
+                <p>Professional indemnity for tax advisers, CIOT/ATT members, and FCA-regulated financial advisers. <strong>Tax advice perils:</strong> negligent tax planning, incorrect returns leading to penalties, failure to advise on reliefs, VAT errors. <strong>Financial adviser perils:</strong> pension transfer advice (BSPS, BHS — major class action exposure), unsuitable investment recommendations, drawdown advice errors, SIPP miss-selling.</p>
+            </div>
+
+            <div class="card risk">
+                <h3>Run-off Coverage</h3>
+                <p>When a legal or accounting firm closes, partners/directors remain personally liable for past work for 6 years (solicitors: SRA requires 6 years minimum run-off). <strong>Run-off premium:</strong> typically 200–350% of last year's premium for 6-year tail. Lloyd's is a major run-off market — particularly for larger firms and mergers/acquisitions where legacy firms require long-tail coverage.</p>
+            </div>
+
+            <div class="card">
+                <h3>Excess Layer PI</h3>
+                <p>Lloyd's market primarily writes excess layer PI above admitted paper (Travelers, QBE, AIG primary). Large law firms (Magic Circle, Silver Circle) and Big 4/Top 10 accountancy firms require limits of £50–500m+. <strong>Excess layers:</strong> £5m xs £10m → £10m xs £15m → £25m xs £25m → £50m xs £50m. Individual excess layer premium: 30–60% of primary rate per layer.</p>
+            </div>
+        </div>
+
+        <!-- Section 3: Regulatory Framework -->
+        <h2>Regulatory Framework & Oversight</h2>
+        <p class="section-intro">Four major regulatory bodies govern professional indemnity insurance across UK professions.</p>
+
+        <div class="cards-grid">
+            <div class="card info-box legal">
+                <h3>SRA — Solicitors Regulation Authority</h3>
+                <p><strong>Mandatory PI</strong> for all SRA-authorised firms. <strong>Qualifying Insurers Scheme (QI):</strong> only approved insurers can provide primary cover. <strong>Assigned Risks Pool (ARP):</strong> safety net for firms that cannot obtain cover — FSCS-funded at premium above standard rates. <strong>SRA Indemnity Rules 2013</strong> (as amended): specify minimum terms including civil liability, dishonesty of employees, defence costs included in or additional to limit. <strong>SRA intervention:</strong> if firm closes/partner disappears, SRA intervenes and claims handled centrally.</p>
+            </div>
+
+            <div class="card info-box legal">
+                <h3>Bar Standards Board</h3>
+                <p>Barristers must hold PI meeting BSB Handbook requirements. <strong>Minimum:</strong> £500k each and every claim. Most chambers arrange group policy for all members. Direct Access barristers (no solicitor required) carry higher exposure — client-facing work without solicitor safety net. Self-employed barristers arrange own cover; chambers often buy group facility. BSB recognises Lloyd's market as qualifying insurer.</p>
+            </div>
+
+            <div class="card info-box accounts">
+                <h3>FRC / ICAEW</h3>
+                <p>Statutory auditors regulated by Financial Reporting Council (FRC) — "Public Interest Entity" auditors (FTSE 100/350, banks, insurers) carry <strong>unlimited liability</strong> under Companies Act 2006. <strong>Liability Limitation Agreements (LLAs):</strong> auditors may agree proportionate liability caps with company audit committees. ICAEW monitors PI adequacy for member firms. Big 4 all self-insure at primary layer; Lloyd's market provides excess layers for Tier 2 and Tier 3 firms.</p>
+            </div>
+
+            <div class="card info-box risk">
+                <h3>FCA</h3>
+                <p>Financial advisers, IFAs and wealth managers regulated by FCA require PI as condition of authorisation. <strong>FCA COBS 6.1A:</strong> adviser charges and product recommendations must be appropriate (suitability obligation). FSCS covers eligible claims up to £85,000 if firm fails. <strong>Pension transfer advice liability:</strong> DB-to-DC transfers require qualified pension transfer specialist (QPTS); BSPS/BHS scandal created systemic exposure — over 1,600 firms investigated by FCA for unsuitable pension transfer advice 2018–2022.</p>
+            </div>
+        </div>
+
+        <!-- Section 4: Market Overview -->
+        <h2>Professional Indemnity Market Overview</h2>
+        <p class="section-intro">Approximate GWP and underwriting characteristics by professional segment.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Segment</th>
+                    <th>Approx. GWP</th>
+                    <th>Typical Primary Limit</th>
+                    <th>Key Carriers</th>
+                    <th>Policy Basis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Solicitors PI (large firms)</strong></td>
+                    <td>~£300–400m <span class="c-est">EST</span></td>
+                    <td>£5–50m</td>
+                    <td>Lloyd's, Travelers, QBE, AIG</td>
+                    <td>Claims-made</td>
+                </tr>
+                <tr>
+                    <td><strong>Barristers PI</strong></td>
+                    <td>~£30–50m <span class="c-est">EST</span></td>
+                    <td>£500k–10m</td>
+                    <td>Lloyd's, BMIF, QBE</td>
+                    <td>Claims-made</td>
+                </tr>
+                <tr>
+                    <td><strong>Accountants PI (large firms)</strong></td>
+                    <td>~£200–300m <span class="c-est">EST</span></td>
+                    <td>£5–50m</td>
+                    <td>Lloyd's, Zurich, Travelers</td>
+                    <td>Claims-made</td>
+                </tr>
+                <tr>
+                    <td><strong>Tax / Financial Adviser PI</strong></td>
+                    <td>~£150–250m <span class="c-est">EST</span></td>
+                    <td>£1–10m</td>
+                    <td>Lloyd's, Hiscox, QBE</td>
+                    <td>Claims-made</td>
+                </tr>
+                <tr>
+                    <td><strong>Big 4 Excess Layers</strong></td>
+                    <td><span class="c-gap">GAP</span></td>
+                    <td>£50–500m+</td>
+                    <td>Lloyd's primary</td>
+                    <td>Claims-made</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        Risk Code Hub v2.4 — Professional Indemnity E&O (E2/E3/E4/E5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+    </footer>
+</body>
+</html>

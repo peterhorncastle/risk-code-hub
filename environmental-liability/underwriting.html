@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Underwriting | Environmental Liability (EP) | Risk Code Hub</title>
+<style>
+  :root{
+    --env:#2d6a4a; --env-dark:#1a3d1a; --earth:#7a4f2a; --water:#1a6a8a;
+    --hazard:#c0572a; --gold:#c9a84c; --light:#f2f7f4; --mid:#e4f0ea;
+    --dark:#111; --red:#c0392b; --amber:#e67e22; --green:#27ae60;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',sans-serif;background:#f0f5f2;color:#1a2a1a;line-height:1.6;}
+  header{background:linear-gradient(135deg,#0d2d10 0%,#1a4a2a 50%,#0d3020 100%);color:#fff;padding:2rem;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-40%;left:-10%;width:120%;height:200%;
+    background:radial-gradient(ellipse at 50% 50%,rgba(45,106,74,0.15) 0%,transparent 70%);pointer-events:none;}
+  .header-inner{max-width:1100px;margin:0 auto;position:relative;}
+  .breadcrumb{font-size:.8rem;opacity:.7;margin-bottom:.5rem;}
+  .breadcrumb a{color:#a8d4b8;text-decoration:none;}
+  header h1{font-size:1.9rem;font-weight:700;letter-spacing:-.5px;}
+  header p{opacity:.8;margin-top:.4rem;font-size:.95rem;}
+  .badge-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
+  .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    color:#fff;padding:.25rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;}
+  nav{background:#fff;border-bottom:2px solid var(--env);position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  nav ul{display:flex;list-style:none;max-width:1100px;margin:0 auto;overflow-x:auto;gap:0;}
+  nav li a{display:block;padding:.65rem 1rem;font-size:.82rem;font-weight:600;color:#555;
+    text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s;}
+  nav li a:hover,nav li a.active{color:var(--env);border-bottom-color:var(--env);}
+  main{max-width:1100px;margin:2rem auto;padding:0 1.5rem;}
+  section{background:#fff;border-radius:10px;padding:1.8rem;margin-bottom:1.8rem;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  h2{font-size:1.25rem;font-weight:700;color:var(--env-dark);margin-bottom:1rem;
+    padding-bottom:.5rem;border-bottom:2px solid var(--env);}
+  h3{font-size:1rem;font-weight:700;color:var(--env-dark);margin:1.2rem 0 .6rem;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem;}
+  .card{background:var(--light);border-radius:8px;padding:1.2rem;border-top:4px solid var(--env);}
+  .card.earth{border-top-color:var(--earth);}
+  .card.water{border-top-color:var(--water);}
+  .card.hazard{border-top-color:var(--hazard);}
+  .card.gold{border-top-color:var(--gold);}
+  .card h4{font-size:.9rem;font-weight:700;color:var(--env-dark);margin-bottom:.5rem;}
+  .card p,.card ul{font-size:.85rem;color:#444;}
+  .card ul{padding-left:1.1rem;}
+  .card li{margin-bottom:.25rem;}
+  .formula-box{background:linear-gradient(135deg,#e8f5f7 0%,#f0f8f4 100%);border-left:4px solid var(--water);
+    padding:1.2rem;border-radius:6px;margin:1.2rem 0;font-family:'Courier New',monospace;font-size:.85rem;color:#333;}
+  .formula-box strong{color:var(--env-dark);font-weight:700;}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:1rem;}
+  th{background:var(--env-dark);color:#fff;padding:.6rem .8rem;text-align:left;font-weight:600;}
+  td{padding:.55rem .8rem;border-bottom:1px solid #d8ede0;vertical-align:top;}
+  tr:nth-child(even) td{background:#f5faf7;}
+  .c-ver{background:#d4edda;color:#155724;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-est{background:#fff3cd;color:#856404;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-illus{background:#cce5ff;color:#004085;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .info-box{border-left:4px solid var(--env);background:#eaf5ef;padding:1rem 1.2rem;border-radius:0 6px 6px 0;margin:1rem 0;}
+  .info-box.earth{border-left-color:var(--earth);background:#f7f0e8;}
+  .info-box.water{border-left-color:var(--water);background:#e8f3f8;}
+  .info-box.hazard{border-left-color:var(--hazard);background:#fdf0ea;}
+  .info-box h4{font-size:.9rem;font-weight:700;margin-bottom:.4rem;}
+  .info-box p,.info-box ul{font-size:.84rem;color:#333;}
+  .info-box ul{padding-left:1.1rem;}
+  .info-box li{margin-bottom:.3rem;}
+  .matrix-grid{display:grid;gap:.6rem;margin-top:1rem;}
+  .matrix-row{display:grid;grid-template-columns:200px 1fr 1fr 1fr;gap:.4rem;align-items:center;font-size:.82rem;}
+  .matrix-row strong{grid-column:1;}
+  .matrix-cell{padding:.5rem .7rem;border-radius:4px;text-align:center;font-weight:600;color:#fff;}
+  .matrix-cell.green{background:#27ae60;}
+  .matrix-cell.amber{background:#e67e22;}
+  .matrix-cell.red{background:#c0392b;}
+  .matrix-label{padding:.5rem .7rem;background:var(--light);border-radius:4px;font-weight:600;color:var(--env-dark);}
+  .worked-example{background:#f9f5f0;border:1px solid #e0d5c7;border-radius:8px;padding:1.2rem;margin:1rem 0;}
+  .worked-example h4{color:var(--env-dark);margin-bottom:.5rem;font-size:.95rem;}
+  .worked-example p{font-size:.82rem;color:#333;margin:.3rem 0;line-height:1.5;}
+  footer{background:var(--env-dark);color:#a8c8b0;text-align:center;padding:1.2rem;font-size:.8rem;margin-top:2rem;}
+  footer a{color:#a8d4b8;text-decoration:none;}
+  @media(max-width:640px){header h1{font-size:1.4rem;}.matrix-row{grid-template-columns:150px 1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Environmental Liability (EP)</a> › Underwriting</div>
+    <h1>Underwriting</h1>
+    <p>Coverage triggers, Phase I/II ESA framework, rating factors and underwriting methodology</p>
+    <div class="badge-row">
+      <span class="badge">PLL & CPL</span>
+      <span class="badge">Claims-Made</span>
+      <span class="badge">ESA Framework</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="overview.html">Overview</a></li>
+    <li><a href="history.html">History</a></li>
+    <li><a href="timeline.html">Timeline</a></li>
+    <li><a href="database.html">Loss Database</a></li>
+    <li><a href="underwriting.html" class="active">Underwriting</a></li>
+    <li><a href="rates-analysis.html">Rates</a></li>
+    <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+    <li><a href="global-program.html">Global Programme</a></li>
+    <li><a href="references.html">References</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <section>
+    <h2>Coverage Trigger Framework</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Environmental Liability insurance is written on a <strong>claims-made</strong> basis, meaning coverage is triggered when a claim is made and reported to the insurer during the policy period or within the discovery period following policy expiration. <span class="c-ver">VER</span>
+    </p>
+    <div class="cards">
+      <div class="card water">
+        <h4>🎯 Claims-Made Trigger</h4>
+        <p>Coverage applies only if the claim is first made against the insured during the policy period or reported within a discovery period (typically 3–5 years). Not dependent on when the loss occurred.</p>
+      </div>
+      <div class="card">
+        <h4>📋 Pollution Condition Definition</h4>
+        <p>Presence of pollutants (CERCLA hazardous substances, petroleum, PFAS, etc.) in soil, groundwater, surface water or air. Includes past, present or threatened releases.</p>
+      </div>
+      <div class="card earth">
+        <h4>🔄 Discovery vs Occurrence</h4>
+        <p>Unlike occurrence policies, EIL covers claims made during the policy period even if the pollution occurred years earlier. "Discovery" of the condition is key — not the date of release.</p>
+      </div>
+      <div class="card hazard">
+        <h4>⏳ Retroactive Date Importance</h4>
+        <p>The policy retroactive date (typically back 15–30+ years for renewal business) establishes the earliest pollution event eligible for coverage. Excludes pre-retroactive-date conditions.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Phase I, II and III ESA Framework</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Environmental Site Assessments (ESAs) follow a phased approach, with Phase I and Phase II data heavily influencing underwriting and rating decisions.
+    </p>
+
+    <h3>Phase I ESA — Records & Records Search</h3>
+    <div class="info-box water">
+      <h4>ASTM E1527-21 Standard (2021 Update) <span class="c-ver">VER</span></h4>
+      <p><strong>Scope:</strong> Non-intrusive investigation combining records search, site inspection and interviews.</p>
+      <ul>
+        <li><strong>Historical records:</strong> Prior uses (Sanborn maps, aerial photos, property deeds) back 100+ years</li>
+        <li><strong>Regulatory database search:</strong> EPA CERCLIS, state environmental files, RCRA facilities, UST registries</li>
+        <li><strong>Site inspection:</strong> Visual inspection for staining, storage tanks, potential contamination indicators</li>
+        <li><strong>Interviews:</strong> Current/former operators, environmental personnel, tenants regarding operations and spills</li>
+        <li><strong>No sampling:</strong> Phase I is entirely desktop and walkover — no soil or water sampling</li>
+        <li><strong>REC identification:</strong> Recognises Environmental Conditions (RECs) — past/present activities suggesting contamination risk</li>
+      </ul>
+    </div>
+
+    <h3>Phase II ESA — Intrusive Investigation</h3>
+    <div class="info-box earth">
+      <h4>When Phase II is Triggered</h4>
+      <p>Any REC identified in Phase I, combined with planned disturbance or redevelopment, typically warrants Phase II investigation.</p>
+      <ul>
+        <li><strong>Sampling design:</strong> Soil boring, monitoring wells, vapor intrusion sampling, surface water sampling</li>
+        <li><strong>Laboratory analysis:</strong> Volatile organic compounds (VOCs), semi-volatile organics (SVOCs), metals, PFAS if suspected</li>
+        <li><strong>Risk assessment:</strong> Quantifies contamination levels vs regulatory standards; assesses exposure pathways</li>
+        <li><strong>Remedial action levels:</strong> Determines if cleanup is required and what method</li>
+      </ul>
+    </div>
+
+    <h3>Phase III ESA — Remediation Design and Execution</h3>
+    <div class="info-box hazard">
+      <h4>Remedial Engineering & Implementation</h4>
+      <p>Conditional on Phase II findings. Designs and implements cleanup (excavation, soil vapor extraction, pump-and-treat, capping, etc.). Typically outside the direct scope of underwriting but critical for Claims History factor. <span class="c-est">EST</span></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>PLL Rating Formula</h2>
+    <div class="formula-box">
+      <strong>Annual Premium = Site Value × Base Rate × Industry Loading × Site History Factor × Coverage Scope Factor × Claims History Factor</strong>
+    </div>
+    <p style="font-size:.84rem;color:#555;margin-top:.8rem;">Each factor ranges from ~0.8 (favorable) to ~2.0+ (adverse). Terrorism loading and regulatory status adjustments applied separately.</p>
+  </section>
+
+  <section>
+    <h2>Key Rating Factors (6 Cards)</h2>
+    <div class="cards">
+      <div class="card">
+        <h4>🏢 SIC/Industry Code</h4>
+        <p><strong>Very High Risk:</strong> Petroleum refineries, chemical manufacturing, metal smelters, electroplating. <strong>High Risk:</strong> Dry cleaning, auto repair, printing, gas stations. <strong>Moderate:</strong> Food processing, manufacturing. <strong>Low Risk:</strong> Retail, offices, schools.</p>
+      </div>
+      <div class="card earth">
+        <h4>📖 Site History</h4>
+        <p>Clean Phase II result (1.0×) vs Phase I only (1.2×) vs known contamination with active remediation (1.4–1.8×) vs legacy industrial with unknown conditions (2.0+×).</p>
+      </div>
+      <div class="card water">
+        <h4>🌊 Proximity to Sensitive Receptors</h4>
+        <p>Drinking water wells, schools, rivers, wetlands nearby increase risk. &gt;500m favorable (1.0×); 100–500m moderate (1.2×); &lt;100m from well/school adverse (1.6×).</p>
+      </div>
+      <div class="card hazard">
+        <h4>⚖️ Regulatory Status</h4>
+        <p>No regulatory action (1.0×) vs open state file (1.1×) vs proposed for NPL listing (1.3×) vs current NPL site (1.5–2.0×).</p>
+      </div>
+      <div class="card gold">
+        <h4>📏 Coverage Scope</h4>
+        <p>Third-party only (1.0×) vs full on-site cleanup included (1.1–1.3×) vs NRD extension (1.2–1.5×). Broader scope = higher exposure.</p>
+      </div>
+      <div class="card">
+        <h4>📋 Prior Claims & Known Conditions</h4>
+        <p>Zero claims/no known conditions (1.0×) vs disclosed conditions with resolution (1.1×) vs active remediation in place (1.3×) vs unresolved open claims (1.8–2.5×).</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>PLL vs CPL Comparison</h2>
+    <table>
+      <thead><tr><th>Attribute</th><th>Pollution Legal Liability (PLL)</th><th>Contractors Pollution Liability (CPL)</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Named Insured</strong></td>
+          <td>Site owner, operator, lessee of a scheduled location</td>
+          <td>General contractor, environmental contractor, remediation firm, subcontractor</td>
+        </tr>
+        <tr>
+          <td><strong>Trigger</strong></td>
+          <td>Claims-made; pollution from operations at insured premises or off-site migration from premises</td>
+          <td>Claims-made; pollution from contractor's work activities (disturbance of soil, excavation, spills during transport)</td>
+        </tr>
+        <tr>
+          <td><strong>Key Coverage</strong></td>
+          <td>On-site cleanup costs; third-party BI/PD; regulatory defence; off-site contamination arising from insured location</td>
+          <td>Third-party BI/PD only; not typically on-site cleanup unless within contract scope; defence costs</td>
+        </tr>
+        <tr>
+          <td><strong>Exclusions</strong></td>
+          <td>Known pre-inception conditions; asbestos/lead paint; PFAS (often excluded); gradual property damage to insured's own property</td>
+          <td>Known pollution at the project site (contractor due diligence required); contractual liability; most asbestos/lead paint</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Industry Risk Banding (8 Classes)</h2>
+    <table>
+      <thead><tr><th>Class</th><th>Risk Level</th><th>Examples</th><th>Typical Rate Range</th><th>Indicator</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>Very High</td>
+          <td>Petroleum refineries, chemical manufacturing, metal smelters, electroplating facilities</td>
+          <td>2.5–5.0%</td>
+          <td><span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>High</td>
+          <td>Dry cleaners, auto repair, printing, gas stations with USTs, industrial manufacturing</td>
+          <td>1.5–3.5%</td>
+          <td><span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td>Moderate-High</td>
+          <td>Construction, trucking/haulage, food processing, agriculture with pesticides/fuels</td>
+          <td>1.0–2.0%</td>
+          <td><span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td>Moderate</td>
+          <td>Retail, warehousing, light manufacturing, distribution centers</td>
+          <td>0.8–1.5%</td>
+          <td><span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td>Low</td>
+          <td>Offices, residential, schools, hospitals (no hazardous materials operations)</td>
+          <td>0.5–1.0%</td>
+          <td><span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td colspan="5" style="padding:0;"></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Worked Examples</h2>
+
+    <h3>Example A: Urban Brownfield PLL <span class="c-illus">ILLUS</span></h3>
+    <div class="worked-example">
+      <h4>Scenario: Former Dry Cleaner Site, Urban Redevelopment</h4>
+      <p><strong>Site Profile:</strong> 1.2 acres, downtown urban location, former dry cleaning operation (1985–2010). PCE (perchloroethylene) soil and groundwater contamination known from prior Phase II. Open state remedial action file. Proposed retail redevelopment.</p>
+      <p><strong>Inputs:</strong></p>
+      <p>• <strong>Site Value:</strong> $8,000,000 (estimated retail development value)</p>
+      <p>• <strong>Base Rate:</strong> 1.8% (PLL baseline)</p>
+      <p>• <strong>Industry Loading:</strong> 1.3× (dry cleaner — Class 2 High Risk)</p>
+      <p>• <strong>Site History Factor:</strong> 1.4× (known contamination requiring remediation)</p>
+      <p>• <strong>Regulatory Status Factor:</strong> 1.1× (open state file, not NPL)</p>
+      <p>• <strong>Coverage Scope Factor:</strong> 1.0× (third-party only, on-site cleanup via separate RCC policy)</p>
+      <p>• <strong>Claims History Factor:</strong> 1.0× (no prior EIL claims disclosed)</p>
+      <p><strong>Calculation:</strong> $8m × 1.8% × 1.3 × 1.4 × 1.1 × 1.0 × 1.0 = <strong>$28,512</strong> + terrorism loading (~3–5%) = ~$29,400–$29,900</p>
+      <p><strong>Additional:</strong> Separate Remediation Cost Cap policy on estimated $2.5m cleanup = ~$100k (4% of cap).</p>
+    </div>
+
+    <h3>Example B: CPL for Environmental Contractor <span class="c-illus">ILLUS</span></h3>
+    <div class="worked-example">
+      <h4>Scenario: Soil Remediation Contractor</h4>
+      <p><strong>Insured Profile:</strong> Speciality contractor performing excavation and off-site disposal of contaminated soil. Annual revenue $15 million, 50 employees, operations across 5 states. Five-year claims history clean.</p>
+      <p><strong>Inputs:</strong></p>
+      <p>• <strong>Basis:</strong> Annual revenue</p>
+      <p>• <strong>Rate:</strong> 1.2% of revenue (CPL standard)</p>
+      <p>• <strong>Revenue:</strong> $15,000,000</p>
+      <p>• <strong>Adjustment Factors:</strong> 1.0× (no adverse claims history, ISO 14001 in place, SPCC plan compliant)</p>
+      <p><strong>Calculation:</strong> $15m × 1.2% × 1.0 = <strong>$180,000</strong></p>
+      <p><strong>Structure:</strong> $500k SIR, $15m limit per occurrence. Single limit applies to third-party BI/PD and regulatory costs.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Quality Scoring Matrix (6 Dimensions)</h2>
+    <div class="matrix-grid">
+      <div class="matrix-row">
+        <div class="matrix-label">Phase I/II Status</div>
+        <div class="matrix-cell green">Phase II Clean</div>
+        <div class="matrix-cell amber">Phase I Only</div>
+        <div class="matrix-cell red">Known Contamination Undisclosed</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-label">Regulatory Status</div>
+        <div class="matrix-cell green">No Regulatory Action</div>
+        <div class="matrix-cell amber">Open State File</div>
+        <div class="matrix-cell red">NPL/Superfund Listing</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-label">Site History</div>
+        <div class="matrix-cell green">Light Industrial/Commercial</div>
+        <div class="matrix-cell amber">Mixed Legacy Use</div>
+        <div class="matrix-cell red">Former Heavy Industrial</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-label">Proximity to Receptors</div>
+        <div class="matrix-cell green">&gt;500m from Receptors</div>
+        <div class="matrix-cell amber">100–500m Away</div>
+        <div class="matrix-cell red">&lt;100m from Well/School</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-label">Financial Strength</div>
+        <div class="matrix-cell green">Strong ($50m+ Net Worth)</div>
+        <div class="matrix-cell amber">Adequate ($10–50m)</div>
+        <div class="matrix-cell red">Weak/Startup (&lt;$10m)</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-label">Prior Environmental Claims</div>
+        <div class="matrix-cell green">None</div>
+        <div class="matrix-cell amber">Disclosed with Resolution</div>
+        <div class="matrix-cell red">Open Claims Unresolved</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Key Exclusions in EIL Policies</h2>
+    <table>
+      <thead><tr><th>Exclusion</th><th>Rationale</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Pollution Conditions Known at Inception</strong></td>
+          <td>Insurer cannot cover existing, disclosed contamination. Separate RCC policy or Phase II warranty required.</td>
+        </tr>
+        <tr>
+          <td><strong>Asbestos & Lead Paint</strong></td>
+          <td>Generally excluded unless explicitly included within coverage scope. Specialized asbestos liability market exists. <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>PFAS (Per- and Polyfluoroalkyl Substances)</strong></td>
+          <td>Increasingly excluded or heavily sublimited in market. PFAS exclusions now standard as of 2024. <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>War, Terrorism, Civil Unrest</strong></td>
+          <td>Excluded under standard wordings. Terrorism loading available for additional premium.</td>
+        </tr>
+        <tr>
+          <td><strong>Workers Compensation & Employer's Liability</strong></td>
+          <td>These are separate classes; not covered under EIL policies.</td>
+        </tr>
+        <tr>
+          <td><strong>Contractual Liability (absent insured peril)</strong></td>
+          <td>Assumed liabilities under contracts excluded unless arising from EIL-covered pollution.</td>
+        </tr>
+        <tr>
+          <td><strong>Gradual Property Damage to Insured's Own Property</strong></td>
+          <td>EIL covers third-party and regulatory liability, not insured's own property depreciation from contamination. <span class="c-est">EST</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub · Environmental Liability (EP) · Module 05 – Underwriting · v2.2 · April 2026</p>
+  <p style="margin-top:.4rem;font-size:.75rem;"><a href="../index.html">← Hub Index</a></p>
+</footer>
+</body>
+</html>

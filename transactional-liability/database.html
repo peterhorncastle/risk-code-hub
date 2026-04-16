@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claims & Event Database — Transactional Liability (D8/D9/TA/TB/CD/CE)</title>
+  <style>
+    :root {
+      --tl: #1e3a5f;
+      --tl-dark: #0d1f33;
+      --deal: #c9a84c;
+      --tax: #2563a8;
+      --contingent: #6b3fa0;
+      --warn: #d97706;
+      --light: #f0f4f8;
+      --mid: #dce8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #0d1f33 0%, #1e3a5f 50%, #0a2040 100%);
+      color: #fff;
+      padding: 2rem 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    header .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .breadcrumb {
+      font-size: 0.9rem;
+      color: #a8c0d8;
+      margin-bottom: 1rem;
+    }
+
+    .breadcrumb a {
+      color: #a8c0d8;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+      color: #fff;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #c9d9e8;
+      font-weight: 400;
+    }
+
+    /* Navigation */
+    nav {
+      background: rgba(0, 0, 0, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 1.5rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    nav li {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    nav a {
+      display: block;
+      padding: 0.75rem;
+      color: #a8c0d8;
+      text-decoration: none;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    nav a:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    nav a.active {
+      color: #fff;
+      border-bottom-color: var(--deal);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Main container */
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    /* Filter bar */
+    .filter-section {
+      background: #fff;
+      border: 1px solid #d9e6f0;
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-group label {
+      font-weight: 600;
+      color: var(--tl);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      padding: 0.5rem;
+      border: 1px solid #c0d4e8;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      color: var(--dark);
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+      outline: none;
+      border-color: var(--tl);
+      box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+    }
+
+    /* Results count */
+    .results-info {
+      background: var(--mid);
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      color: var(--tl);
+    }
+
+    /* Table */
+    .table-container {
+      background: #fff;
+      border: 1px solid #d9e6f0;
+      border-radius: 6px;
+      overflow-x: auto;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    thead {
+      background: var(--mid);
+      border-bottom: 2px solid #b8d0e8;
+    }
+
+    th {
+      padding: 0.75rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--tl);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      transition: background-color 0.2s;
+    }
+
+    th:hover {
+      background: #c8dde8;
+    }
+
+    th::after {
+      content: ' ↕';
+      color: #9ab5d4;
+      margin-left: 0.3rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    th:hover::after {
+      opacity: 1;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #e9f0f8;
+      transition: background-color 0.15s;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    td {
+      padding: 0.75rem;
+    }
+
+    td:first-child {
+      font-weight: 600;
+      color: var(--tl);
+    }
+
+    /* Type badges */
+    .type-badge {
+      display: inline-block;
+      padding: 0.35rem 0.6rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .type-wi {
+      background: var(--tl);
+    }
+
+    .type-tax {
+      background: var(--tax);
+    }
+
+    .type-contingent {
+      background: var(--contingent);
+    }
+
+    .type-regulatory {
+      background: var(--deal);
+      color: #000;
+    }
+
+    .type-market {
+      background: var(--green);
+    }
+
+    /* Confidence badges */
+    .confidence-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #fff;
+    }
+
+    .c-ver {
+      background: var(--green);
+    }
+
+    .c-est {
+      background: var(--amber);
+    }
+
+    .c-illus {
+      background: #3b82f6;
+    }
+
+    .c-gap {
+      background: #ec4899;
+    }
+
+    /* Loss column */
+    .loss-value {
+      font-weight: 600;
+      font-family: 'Monaco', 'Courier New', monospace;
+      color: var(--dark);
+    }
+
+    .loss-zero {
+      color: #9ca3af;
+    }
+
+    /* Info box */
+    .info-box {
+      background: #fef3c7;
+      border-left: 4px solid var(--warn);
+      padding: 1.5rem;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+      color: #78350f;
+      font-size: 0.95rem;
+    }
+
+    .info-box strong {
+      color: #92400e;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--tl-dark);
+      color: #a8c0d8;
+      padding: 2rem 1rem;
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #a8c0d8;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .filter-row {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      nav ul {
+        flex-direction: column;
+      }
+
+      nav li {
+        min-width: auto;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      td, th {
+        padding: 0.5rem 0.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Risk Code Hub</a> › Transactional Liability
+      </div>
+      <h1>Claims & Event Database</h1>
+      <p class="subtitle">Searchable repository of major W&I claims, tax liability events and contingent risk cases 1990–2024</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+      <ul>
+        <li><a href="overview.html">Overview</a></li>
+        <li><a href="history.html">History</a></li>
+        <li><a href="timeline.html">Timeline</a></li>
+        <li><a href="database.html" class="active">Loss Database</a></li>
+        <li><a href="underwriting.html">Underwriting</a></li>
+        <li><a href="rates-analysis.html">Rates & ROE</a></li>
+        <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+        <li><a href="global-program.html">Global Programme</a></li>
+        <li><a href="references.html">References</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <main>
+    <!-- Filter section -->
+    <div class="filter-section">
+      <div class="filter-row">
+        <div class="filter-group">
+          <label for="typeFilter">Event Type</label>
+          <select id="typeFilter">
+            <option value="">All</option>
+            <option value="wi">W&I / R&W</option>
+            <option value="tax">Tax Liability</option>
+            <option value="contingent">Contingent Risk</option>
+            <option value="regulatory">Regulatory</option>
+            <option value="market">Market Event</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="jurisdictionFilter">Jurisdiction</label>
+          <select id="jurisdictionFilter">
+            <option value="">All</option>
+            <option value="USA">USA</option>
+            <option value="UK">UK</option>
+            <option value="Europe">Europe</option>
+            <option value="Global">Global</option>
+            <option value="Asia">Asia-Pacific</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="yearBandFilter">Year Band</label>
+          <select id="yearBandFilter">
+            <option value="">All</option>
+            <option value="1990-1999">1990–1999</option>
+            <option value="2000-2009">2000–2009</option>
+            <option value="2010-2019">2010–2019</option>
+            <option value="2020-2024">2020–2024</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="minLossFilter">Min Loss (£/$m)</label>
+          <select id="minLossFilter">
+            <option value="0">0</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-group">
+          <label for="keywordSearch">Keyword Search</label>
+          <input type="text" id="keywordSearch" placeholder="Search event name or description...">
+        </div>
+      </div>
+    </div>
+
+    <!-- Results count -->
+    <div class="results-info">
+      <span id="resultCount">35 events</span> matching filters
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table id="eventsTable">
+        <thead>
+          <tr>
+            <th class="sortable" data-column="year">Year</th>
+            <th class="sortable" data-column="name">Event</th>
+            <th class="sortable" data-column="type">Type</th>
+            <th class="sortable" data-column="jur">Jurisdiction</th>
+            <th class="sortable" data-column="loss">Loss (£/$m)</th>
+            <th class="sortable" data-column="conf">Confidence</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Info box -->
+    <div class="info-box">
+      <strong>Data Limitations:</strong> Transactional liability claims data is particularly opaque — deals are confidential, claims are rarely disclosed publicly, and settlement amounts are almost never reported. All loss figures marked EST represent market estimates derived from public academic research, broker market reports and industry surveys. VER entries reflect publicly reported figures. Individual policy claims are not disclosed.
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>Risk Code Hub v2.3 — Transactional Liability (D8/D9/TA/TB/CD/CE) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.</p>
+  </footer>
+
+  <script>
+    // Data array
+    const EVENTS = [
+      {year: 1990, name: "First Lloyd's W&I Policy Written", type: "market", jur: "UK", desc: "First warranty and indemnity insurance policy placed at Lloyd's for a continental European M&A transaction. Niche product, premium ~10% of limit.", loss: 0, conf: "est"},
+      {year: 1995, name: "Enact/ABN AMRO W&I Transaction", type: "wi", jur: "Europe", desc: "Early landmark European W&I policy supporting cross-border acquisition — cited as inflection point for PE adoption of W&I in Benelux.", loss: 0, conf: "est"},
+      {year: 1999, name: "Lloyd's W&I Market Formalised", type: "market", jur: "UK", desc: "Dedicated W&I underwriting teams established at several Lloyd's syndicates. Annual GWP estimated at £50–80m. Product used primarily for UK and European deals.", loss: 0, conf: "est"},
+      {year: 2002, name: "Sarbanes-Oxley Financial Rep Standard", type: "regulatory", jur: "USA", desc: "SOX Act raises bar for financial statement accuracy. Creates demand for financial statement rep coverage in US M&A. GWP impact modest as US R&W market still nascent.", loss: 0, conf: "ver"},
+      {year: 2005, name: "HMRC Employee Benefit Trust Investigations", type: "tax", jur: "UK", desc: "HMRC begins challenging EBT/EFRBS tax avoidance schemes prevalent in 2000s PE deals. TA insurance demand spikes for historic EBT exposure in acquisitions.", loss: 50, conf: "est"},
+      {year: 2007, name: "Pre-GFC M&A Boom W&I Volume Peak", type: "market", jur: "Global", desc: "Global M&A reaches ~$4.8tn. Lloyd's W&I GWP estimated £300–400m. Policies written on peak valuations — seeds future EBITDA rep claims.", loss: 0, conf: "est"},
+      {year: 2008, name: "GFC — M&A Collapse & First W&I Claims Wave", type: "wi", jur: "Global", desc: "Global M&A collapses ~60%. W&I claims emerge as 2006–07 deals unravel. Financial statement representation breaches dominate — EBITDA misstatements, working capital shortfalls.", loss: 200, conf: "est"},
+      {year: 2009, name: "Lehman Bros Related Deal Claims", type: "wi", jur: "USA", desc: "Deals involving Lehman-adjacent assets and financial institution acquisitions trigger W&I claims on financial statement and regulatory compliance representations.", loss: 75, conf: "est"},
+      {year: 2010, name: "Irish Section 110 Tax Risk Claims", type: "tax", jur: "Europe", desc: "Irish Revenue challenges Section 110 SPV structures used in post-GFC debt restructurings. TA claims emerge for buyers of restructured debt vehicles holding Irish SPVs.", loss: 40, conf: "est"},
+      {year: 2011, name: "Luxembourg Transfer Pricing Challenge", type: "tax", jur: "Europe", desc: "EU and Luxembourg tax authority challenge intra-group IP licensing arrangements. TB tax insurance claims on transfer pricing representations in multiple PE transactions.", loss: 30, conf: "est"},
+      {year: 2012, name: "NBI Structure Adopted — Market Event", type: "market", jur: "Europe", desc: "'No-box indemnity' (nil seller cap) becomes standard in European PE. Sellers return 100% deal proceeds at closing. W&I shifts from supplementary to primary buyer recourse.", loss: 0, conf: "est"},
+      {year: 2013, name: "UK Google/Starbucks Tax Scandal", type: "regulatory", jur: "UK", desc: "Parliamentary scrutiny of multinational tax avoidance generates reputational and legislative risk. TB insurance demand increases for group relief, royalty payment structures in UK acquisitions.", loss: 0, conf: "ver"},
+      {year: 2014, name: "US R&W Market Inflection — Deal Volume Surge", type: "market", jur: "USA", desc: "US R&W deal count grows ~170% year-on-year. Major insurers launch dedicated R&W teams. Premium rates compress from 4–5% to 2.5–3% of limit.", loss: 0, conf: "est"},
+      {year: 2015, name: "PE Portfolio Company Financial Statement Claims", type: "wi", jur: "Europe", desc: "Multiple Lloyd's W&I claims on 2012–13 vintage European PE deals — financial statement rep breaches, undisclosed liabilities, working capital shortfalls. Estimated aggregate £150–250m across market.", loss: 200, conf: "est"},
+      {year: 2016, name: "HMRC Loan Charge Announced", type: "tax", jur: "UK", desc: "UK government announces loan charge on disguised remuneration (EBT, contractor loan schemes). TA/TB claims emerge for historic employment tax exposure in target companies. Significant TA insurance demand.", loss: 80, conf: "ver"},
+      {year: 2017, name: "US Tax Cuts & Jobs Act — GILTI/BEAT Impact", type: "regulatory", jur: "USA", desc: "TCJA (Dec 2017) introduces GILTI, BEAT, FDII. Immediate demand for TA insurance covering transitional US tax positions, GILTI inclusions and historic transfer pricing in M&A.", loss: 0, conf: "ver"},
+      {year: 2018, name: "GDPR Enforcement — Data Privacy Reps", type: "regulatory", jur: "Europe", desc: "GDPR takes effect May 2018. Data privacy representations become standard W&I schedule. First data protection rep breach notifications emerge 2019.", loss: 25, conf: "ver"},
+      {year: 2018, name: "Healthcare Sector W&I Claims Spike", type: "wi", jur: "USA", desc: "US healthcare M&A generates elevated R&W claims — Medicare/Medicaid billing compliance reps, FDA approval representations, opioid litigation contingencies. Average paid claim $8–12m.", loss: 120, conf: "est"},
+      {year: 2019, name: "Record European W&I Market", type: "market", jur: "Europe", desc: "European W&I market reaches ~$1.5–2bn GWP. ~90% of European PE transactions use W&I. Lloyd's dominant market. Premium at all-time lows — 2–2.5% of limit.", loss: 0, conf: "est"},
+      {year: 2020, name: "COVID-19 — MAC Rep Claims & Deal Collapse", type: "wi", jur: "Global", desc: "Pandemic triggers ~$300bn of deal withdrawals. W&I/R&W claims on material adverse change reps, revenue warranties, supply chain representations. Insurers add pandemic exclusions.", loss: 500, conf: "ver"},
+      {year: 2020, name: "SPAC Boom — Forward-Looking Rep Risk", type: "market", jur: "USA", desc: "SPAC listings and de-SPAC mergers include projection representations atypical for W&I. 613 SPACs raise ~$162bn in 2020. Novel rep warranty/D&O crossover exposure.", loss: 0, conf: "ver"},
+      {year: 2021, name: "Global M&A Record — $5.8tn Peak", type: "market", jur: "Global", desc: "All-time M&A volume record. W&I/R&W deal count estimated 5,000+. Lloyd's TL GWP exceeds $1bn. Capacity outpaces demand — premium rates hit historic lows in H1 2021.", loss: 0, conf: "ver"},
+      {year: 2021, name: "Technology Sector IP Rep Claims", type: "wi", jur: "Global", desc: "Tech M&A boom generates IP ownership and software license rep claims. Open-source licence non-compliance, patent encumbrance and SaaS data ownership reps most common failure points.", loss: 150, conf: "est"},
+      {year: 2022, name: "Rate Hardening — Cyber Rep Exclusions", type: "market", jur: "Global", desc: "Post-pandemic claims experience drives 15–25% rate increases. Cyber/data privacy exclusions added to standard W&I wording. ESG representation disclosures added to underwriting submissions.", loss: 0, conf: "est"},
+      {year: 2022, name: "SEC SPAC Enforcement Actions", type: "regulatory", jur: "USA", desc: "SEC enforcement actions against SPAC sponsors for misleading projections and disclosure failures. W&I/D&O crossover claims on de-SPAC deals emerge. Multiple R&W claims notified.", loss: 90, conf: "ver"},
+      {year: 2022, name: "UK Property Rep Claims — Post-Brexit", type: "wi", jur: "UK", desc: "Post-Brexit commercial property acquisitions generate W&I claims on planning permission, VAT election and stamp duty land tax (SDLT) representations. HMRC SDLT reviews trigger TA claims.", loss: 45, conf: "est"},
+      {year: 2023, name: "All-Time High Claims Frequency", type: "wi", jur: "Global", desc: "~20–25% of 2019–21 vintage policies generate claim notifications. Financial statement reps remain #1 cause (~40% of claims). Average paid claim ~$6–8m. Market matures on claims management.", loss: 300, conf: "est"},
+      {year: 2023, name: "OECD Pillar Two — TA Insurance Surge", type: "tax", jur: "Global", desc: "Pillar Two global minimum tax (15%) effective Jan 2024. TA/TB insurance demand spikes for deferred tax positions, UTPR exposure and transitional safe harbours in multinational group M&A.", loss: 0, conf: "ver"},
+      {year: 2023, name: "AI/IP Representations — Novel Exposure", type: "wi", jur: "Global", desc: "Generative AI use by target companies creates novel IP/copyright representation risk. Training data ownership, copyright infringement by AI models, open-source contamination of proprietary code.", loss: 20, conf: "est"},
+      {year: 2023, name: "Life Sciences — FDA Rep Claims", type: "contingent", jur: "USA", desc: "Life sciences M&A generates contingent risk claims on FDA 510(k) clearances, IND application reps, clinical trial data integrity. Multiple CD/CE policies triggered on post-close regulatory findings.", loss: 80, conf: "est"},
+      {year: 2024, name: "PFAS Contingent Risk — CE Demand", type: "contingent", jur: "USA", desc: "EPA finalises PFAS MCL rules (April 2024). Chemical, automotive and textile M&A generates CE/CD contingent risk demand. Estimated $50–200m PFAS contingency policies placed at Lloyd's 2024.", loss: 100, conf: "ver"},
+      {year: 2024, name: "ESG Greenwashing Rep Claims Emerge", type: "wi", jur: "Europe", desc: "First W&I claim notifications related to ESG/sustainability representation breaches in European M&A. Net-zero commitments, carbon credit portfolios, supply chain human rights reps targeted.", loss: 30, conf: "est"},
+      {year: 2024, name: "Pillar Two UTPR — First TA Claims", type: "tax", jur: "Europe", desc: "First tax liability insurance notifications related to Pillar Two UTPR exposure in European multinational group acquisitions. TA insurers develop specific UTPR endorsements.", loss: 25, conf: "est"},
+      {year: 2024, name: "UK Employment Rights Bill — Rep Exposure", type: "regulatory", jur: "UK", desc: "UK Employment Rights Bill (2024) introduces worker status reclassification risk. W&I employment rep exposure increases for gig/contractor workforce in UK targets. TA demand for IR35 exposure.", loss: 0, conf: "ver"},
+      {year: 2024, name: "Asia-Pacific W&I Market Growth", type: "market", jur: "Asia", desc: "Asia-Pacific W&I market grows significantly — Japan, Australia, South Korea deal activity. Lloyd's APAC follow capacity increases. Premium rates 3–5% of limit (higher than Europe/US).", loss: 0, conf: "est"}
+    ];
+
+    // State
+    let sortState = { column: 'year', descending: true };
+    let filteredEvents = [...EVENTS];
+
+    // Utility: Format confidence badge
+    function getConfidenceBadge(conf) {
+      const badgeMap = {
+        'ver': '<span class="confidence-badge c-ver">VER</span>',
+        'est': '<span class="confidence-badge c-est">EST</span>',
+        'illus': '<span class="confidence-badge c-illus">ILLUS</span>',
+        'gap': '<span class="confidence-badge c-gap">GAP</span>'
+      };
+      return badgeMap[conf] || '';
+    }
+
+    // Utility: Format type badge
+    function getTypeBadge(type) {
+      const typeMap = {
+        'wi': 'W&I / R&W',
+        'tax': 'Tax Liability',
+        'contingent': 'Contingent Risk',
+        'regulatory': 'Regulatory',
+        'market': 'Market Event'
+      };
+      const displayName = typeMap[type] || type;
+      return `<span class="type-badge type-${type}">${displayName}</span>`;
+    }
+
+    // Utility: Format loss
+    function formatLoss(loss) {
+      if (loss === 0) return '—';
+      return `$${loss}m`;
+    }
+
+    // Filter events
+    function applyFilters() {
+      const typeFilter = document.getElementById('typeFilter').value;
+      const jurisdictionFilter = document.getElementById('jurisdictionFilter').value;
+      const yearBandFilter = document.getElementById('yearBandFilter').value;
+      const minLossFilter = parseInt(document.getElementById('minLossFilter').value) || 0;
+      const keywordSearch = document.getElementById('keywordSearch').value.toLowerCase();
+
+      filteredEvents = EVENTS.filter(event => {
+        // Type filter
+        if (typeFilter && event.type !== typeFilter) return false;
+
+        // Jurisdiction filter
+        if (jurisdictionFilter && event.jur !== jurisdictionFilter) return false;
+
+        // Year band filter
+        if (yearBandFilter) {
+          const year = event.year;
+          if (yearBandFilter === '1990-1999' && (year < 1990 || year > 1999)) return false;
+          if (yearBandFilter === '2000-2009' && (year < 2000 || year > 2009)) return false;
+          if (yearBandFilter === '2010-2019' && (year < 2010 || year > 2019)) return false;
+          if (yearBandFilter === '2020-2024' && (year < 2020 || year > 2024)) return false;
+        }
+
+        // Min loss filter
+        if (event.loss < minLossFilter) return false;
+
+        // Keyword search
+        if (keywordSearch) {
+          const searchableText = `${event.name} ${event.desc}`.toLowerCase();
+          if (!searchableText.includes(keywordSearch)) return false;
+        }
+
+        return true;
+      });
+
+      sortAndRender();
+    }
+
+    // Sort events
+    function sortAndRender() {
+      filteredEvents.sort((a, b) => {
+        const aVal = a[sortState.column];
+        const bVal = b[sortState.column];
+
+        if (typeof aVal === 'number') {
+          return sortState.descending ? bVal - aVal : aVal - bVal;
+        } else {
+          const comparison = String(aVal).localeCompare(String(bVal));
+          return sortState.descending ? -comparison : comparison;
+        }
+      });
+
+      renderTable();
+    }
+
+    // Render table
+    function renderTable() {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+
+      filteredEvents.forEach(event => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${event.year}</td>
+          <td title="${event.desc}">${event.name}</td>
+          <td>${getTypeBadge(event.type)}</td>
+          <td>${event.jur}</td>
+          <td class="loss-value ${event.loss === 0 ? 'loss-zero' : ''}">${formatLoss(event.loss)}</td>
+          <td>${getConfidenceBadge(event.conf)}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // Update results count
+      document.getElementById('resultCount').textContent = `${filteredEvents.length} event${filteredEvents.length !== 1 ? 's' : ''}`;
+    }
+
+    // Sorting handler
+    document.querySelectorAll('th.sortable').forEach(th => {
+      th.addEventListener('click', () => {
+        const column = th.dataset.column;
+        if (sortState.column === column) {
+          sortState.descending = !sortState.descending;
+        } else {
+          sortState.column = column;
+          sortState.descending = true;
+        }
+        sortAndRender();
+      });
+    });
+
+    // Filter handlers
+    document.getElementById('typeFilter').addEventListener('change', applyFilters);
+    document.getElementById('jurisdictionFilter').addEventListener('change', applyFilters);
+    document.getElementById('yearBandFilter').addEventListener('change', applyFilters);
+    document.getElementById('minLossFilter').addEventListener('change', applyFilters);
+    document.getElementById('keywordSearch').addEventListener('input', applyFilters);
+
+    // Initial render
+    document.addEventListener('DOMContentLoaded', () => {
+      sortAndRender();
+    });
+  </script>
+</body>
+</html>

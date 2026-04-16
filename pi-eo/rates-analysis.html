@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rates & ROE Analysis — Professional Indemnity E&O</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --pi: #2c4a7a;
+      --pi-dark: #1a2d4a;
+      --legal: #8b5e3c;
+      --accounts: #2d6b4a;
+      --risk: #c0572a;
+      --gold: #c9a84c;
+      --light: #f0f4f8;
+      --mid: #dce8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--dark);
+      background: #fafbfc;
+    }
+    header {
+      background: linear-gradient(135deg, #1a2d4a 0%, #2c4a7a 50%, #1a3560 100%);
+      color: white;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+    }
+    header > * { position: relative; z-index: 1; }
+    header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    header p { font-size: 1.05rem; opacity: 0.95; }
+    .breadcrumb {
+      background: #f5f7fa;
+      padding: 0.75rem 2rem;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .breadcrumb a { color: var(--pi); text-decoration: none; font-weight: 500; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    nav {
+      background: white;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e0e8f0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      font-size: 0.95rem;
+    }
+    nav a {
+      color: var(--pi);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+    nav a.active {
+      color: var(--risk);
+    }
+    nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1rem;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--risk);
+    }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    section { margin-bottom: 2.5rem; scroll-margin-top: 80px; }
+    h2 {
+      font-size: 1.6rem;
+      color: var(--pi);
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--gold);
+      padding-left: 1rem;
+    }
+    h3 {
+      font-size: 1.2rem;
+      color: var(--pi-dark);
+      margin: 1.5rem 0 0.75rem;
+    }
+    .chart-container {
+      position: relative;
+      height: 400px;
+      margin: 2rem 0;
+      background: white;
+      padding: 1.5rem;
+      border: 1px solid #e0e8f0;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .chart-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--pi);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .cycle-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .cycle-card {
+      background: white;
+      border: 1px solid #e0e8f0;
+      border-top: 4px solid;
+      padding: 1.25rem;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .cycle-card.pi { border-top-color: var(--pi); }
+    .cycle-card.risk { border-top-color: var(--risk); }
+    .cycle-card.gold { border-top-color: var(--gold); }
+    .cycle-card.accounts { border-top-color: var(--accounts); }
+    .cycle-card.green { border-top-color: var(--green); }
+    .cycle-card.legal { border-top-color: var(--legal); }
+    .cycle-card h4 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: var(--pi-dark);
+    }
+    .cycle-card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: white;
+      border: 1px solid #e0e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    thead {
+      background: linear-gradient(135deg, #2c4a7a 0%, #1a2d4a 100%);
+      color: white;
+    }
+    th, td {
+      padding: 0.9rem;
+      text-align: left;
+      border-bottom: 1px solid #e0e8f0;
+      font-size: 0.95rem;
+    }
+    tr:hover { background: #f8fafc; }
+    tr:last-child td { border-bottom: none; }
+    .c-est {
+      display: inline-block;
+      background: var(--amber);
+      color: white;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+    .c-illus {
+      display: inline-block;
+      background: #5b8cce;
+      color: white;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+    .scenario-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .scenario-card {
+      background: white;
+      border: 1px solid #e0e8f0;
+      padding: 1.25rem;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .scenario-card h4 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 3px;
+      color: white;
+      display: inline-block;
+    }
+    .scenario-card.bull h4 {
+      background: var(--green);
+    }
+    .scenario-card.base h4 {
+      background: var(--gold);
+      color: #222;
+    }
+    .scenario-card.bear h4 {
+      background: var(--red);
+    }
+    .scenario-card table {
+      margin: 1rem 0 0;
+      border: none;
+      box-shadow: none;
+    }
+    .scenario-card th {
+      background: #f5f7fa;
+      color: var(--pi-dark);
+      font-weight: 600;
+    }
+    .scenario-card td {
+      border-bottom: 1px solid #f0f4f8;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.9rem;
+    }
+    .scenario-card tr:last-child td {
+      border-bottom: 1px solid #e0e8f0;
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+      font-weight: 600;
+      background: #fafbfc;
+    }
+    .roi-value {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--pi);
+    }
+    .roi-value.positive { color: var(--green); }
+    .roi-value.negative { color: var(--red); }
+    footer {
+      background: var(--pi-dark);
+      color: #a8b8d0;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+    footer a { color: #c9a84c; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.6rem; }
+      header p { font-size: 0.95rem; }
+      nav { gap: 1rem; font-size: 0.9rem; }
+      main { padding: 1rem; }
+      .chart-container { height: 300px; }
+      .cycle-cards { grid-template-columns: 1fr; }
+      .scenario-cards { grid-template-columns: 1fr; }
+      table { font-size: 0.85rem; }
+      th, td { padding: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Rates & ROE Analysis</h1>
+    <p>PI market cycles, rate index, combined ratio history and return on equity modelling for legal and accountants PI</p>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Professional Indemnity E&O
+  </div>
+
+  <nav>
+    <a href="overview.html">Overview</a>
+    <a href="history.html">History</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="database.html">Claims Database</a>
+    <a href="underwriting.html">Underwriting</a>
+    <a href="rates-analysis.html" class="active">Rates & ROE</a>
+    <a href="risk-mitigation.html">Risk Mitigation</a>
+    <a href="global-program.html">Global Programme</a>
+    <a href="references.html">References</a>
+  </nav>
+
+  <main>
+    <!-- Section 1: Rate Index Chart -->
+    <section>
+      <h2>Rate Index Chart</h2>
+      <p><span class="c-est">EST</span></p>
+      <div class="chart-container">
+        <div class="chart-title">UK PI Rate Index 1990–2026 (1990=100) — All Professions</div>
+        <canvas id="rateIndexChart"></canvas>
+      </div>
+
+      <h3>Market Cycles</h3>
+      <div class="cycle-cards">
+        <div class="cycle-card pi">
+          <h4>Early Lloyd's Market (1990–1992)</h4>
+          <p>Lloyd's PI syndicates develop dedicated capacity. Market still relatively small. Rates moderate — 1–2% of fee income for legal PI. Limited claims data.</p>
+        </div>
+
+        <div class="cycle-card risk">
+          <h4>Lloyd's R&R Hardening (1992–1996)</h4>
+          <p>Lloyd's crisis triggers PI capacity withdrawal. Mortgage fraud wave from 1990-95 drives claims. Premium rises 40–60%. ARP established. Some firms uninsurable.</p>
+        </div>
+
+        <div class="cycle-card gold">
+          <h4>Soft Market Competition (1996–2001)</h4>
+          <p>New entrants (Zurich, AIG, QBE) compete aggressively for PI market. Premium falls to historical lows — 0.5–1.5% of fee income. Conveyancing claims building but not yet visible in pricing.</p>
+        </div>
+
+        <div class="cycle-card accounts">
+          <h4>Post-Enron Hard Market (2001–2006)</h4>
+          <p>Enron/Andersen collapse hardens E4 PI dramatically (+50–100%). WorldCom, Parmalat add to claims. Legal PI also hardens on conveyancing fraud claims. Sarbanes-Oxley creates US audit PI demand.</p>
+        </div>
+
+        <div class="cycle-card green">
+          <h4>Jackson/Regulation Soft Phase (2007–2018)</h4>
+          <p>Jackson Reforms reduce legal claims volume 2013–2016. BSPS exposed but not yet priced in. Market competes for PI premium — rates fall to near-record lows by 2017. E4 softens as Enron-era claims resolved.</p>
+        </div>
+
+        <div class="cycle-card legal">
+          <h4>BSPS/COVID Hardening (2019–2023)</h4>
+          <p>BSPS pension transfer liability creates systemic E5 hardening (25–50%+). COVID conveyancing boom/bust creates E2 claims spike. EY/Wirecard hardens E4. Market rate rises 20–35% peak-to-trough.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Sector Rate Grid -->
+    <section>
+      <h2>Sector Rate Grid</h2>
+      <p><span class="c-est">EST</span></p>
+      <table>
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Base Rate Range (% fee income)</th>
+            <th>Avg Retention</th>
+            <th>Policy Term</th>
+            <th>Key Claim Driver</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Solicitors — conveyancing heavy</strong></td>
+            <td>1.5–3.0%</td>
+            <td>£2m (SRA minimum)</td>
+            <td>Annual/rolling</td>
+            <td>Property fraud, title errors</td>
+          </tr>
+          <tr>
+            <td><strong>Solicitors — commercial</strong></td>
+            <td>0.6–1.2%</td>
+            <td>£3–5m</td>
+            <td>Annual/rolling</td>
+            <td>M&A advice, missed limitation</td>
+          </tr>
+          <tr>
+            <td><strong>Barristers</strong></td>
+            <td>0.4–1.0%</td>
+            <td>£500k–2m</td>
+            <td>Annual/rolling</td>
+            <td>Court negligence (Hall v Simons)</td>
+          </tr>
+          <tr>
+            <td><strong>Accountants — audit/non-PIE</strong></td>
+            <td>0.8–1.5%</td>
+            <td>£5–25m</td>
+            <td>Annual/rolling</td>
+            <td>Financial statement errors</td>
+          </tr>
+          <tr>
+            <td><strong>Accountants — PIE audit</strong></td>
+            <td>1.5–2.5%+</td>
+            <td>£25–100m</td>
+            <td>Annual/rolling</td>
+            <td>Audit failure, going concern</td>
+          </tr>
+          <tr>
+            <td><strong>Tax/Financial Advisers</strong></td>
+            <td>0.5–1.5%</td>
+            <td>£1–5m</td>
+            <td>Annual/rolling</td>
+            <td>Pension transfer, tax advice</td>
+          </tr>
+          <tr>
+            <td><strong>DB Pension Transfer Advisers</strong></td>
+            <td>2.0–8.0%</td>
+            <td>£1–5m</td>
+            <td>Annual/rolling</td>
+            <td>BSPS, unsuitable transfer</td>
+          </tr>
+          <tr>
+            <td><strong>Run-off (legal)</strong></td>
+            <td>200–350% of last premium</td>
+            <td>As expiring</td>
+            <td>6 years</td>
+            <td>Latent claims emergence</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 3: Combined Ratio Chart -->
+    <section>
+      <h2>Combined Ratio Analysis</h2>
+      <p><span class="c-est">EST</span></p>
+      <div class="chart-container">
+        <div class="chart-title">Estimated UK PI Combined Ratio 2014–2024</div>
+        <canvas id="combinedRatioChart"></canvas>
+      </div>
+      <p style="margin-top: 1rem; font-size: 0.95rem;"><strong>Note:</strong> Spike 2020–21 driven by BSPS E5 claims and COVID E2 claims. Recovery 2022–24 reflects rate hardening and improved underwriting selection.</p>
+    </section>
+
+    <!-- Section 4: ROE Scenarios -->
+    <section>
+      <h2>ROE Scenarios</h2>
+      <h3>Illustrative ROE — £150m PI GWP Portfolio <span class="c-illus">ILLUS</span></h3>
+
+      <div class="scenario-cards">
+        <div class="scenario-card bull">
+          <h4>Bull Case (80% CR)</h4>
+          <table>
+            <tr>
+              <td>Premium</td>
+              <td style="text-align: right;">£150m</td>
+            </tr>
+            <tr>
+              <td>Claims (44%)</td>
+              <td style="text-align: right;">£66m</td>
+            </tr>
+            <tr>
+              <td>Expenses (36%)</td>
+              <td style="text-align: right;">£54m</td>
+            </tr>
+            <tr>
+              <td>Combined Ratio</td>
+              <td style="text-align: right;">80%</td>
+            </tr>
+            <tr>
+              <td>Investment Income</td>
+              <td style="text-align: right;">£6m</td>
+            </tr>
+            <tr>
+              <td>Underwriting Profit</td>
+              <td style="text-align: right;">£30m + £6m</td>
+            </tr>
+            <tr>
+              <td><strong>ROE</strong></td>
+              <td style="text-align: right;"><span class="roi-value positive">+24.0%</span></td>
+            </tr>
+          </table>
+          <p style="margin-top: 0.75rem; font-size: 0.85rem;"><em>Capital 100% GWP: £150m</em></p>
+        </div>
+
+        <div class="scenario-card base">
+          <h4>Base Case (95% CR)</h4>
+          <table>
+            <tr>
+              <td>Premium</td>
+              <td style="text-align: right;">£150m</td>
+            </tr>
+            <tr>
+              <td>Claims (52%)</td>
+              <td style="text-align: right;">£78m</td>
+            </tr>
+            <tr>
+              <td>Expenses (43%)</td>
+              <td style="text-align: right;">£64.5m</td>
+            </tr>
+            <tr>
+              <td>Combined Ratio</td>
+              <td style="text-align: right;">95%</td>
+            </tr>
+            <tr>
+              <td>Investment Income</td>
+              <td style="text-align: right;">£6m</td>
+            </tr>
+            <tr>
+              <td>Underwriting Profit</td>
+              <td style="text-align: right;">£7.5m + £6m</td>
+            </tr>
+            <tr>
+              <td><strong>ROE</strong></td>
+              <td style="text-align: right;"><span class="roi-value">+9.0%</span></td>
+            </tr>
+          </table>
+          <p style="margin-top: 0.75rem; font-size: 0.85rem;"><em>Capital 100% GWP: £150m</em></p>
+        </div>
+
+        <div class="scenario-card bear">
+          <h4>Bear Case (118% CR)</h4>
+          <table>
+            <tr>
+              <td>Premium</td>
+              <td style="text-align: right;">£150m</td>
+            </tr>
+            <tr>
+              <td>Claims (70%)</td>
+              <td style="text-align: right;">£105m</td>
+            </tr>
+            <tr>
+              <td>Expenses (48%)</td>
+              <td style="text-align: right;">£72m</td>
+            </tr>
+            <tr>
+              <td>Combined Ratio</td>
+              <td style="text-align: right;">118%</td>
+            </tr>
+            <tr>
+              <td>Investment Income</td>
+              <td style="text-align: right;">£6m</td>
+            </tr>
+            <tr>
+              <td>Underwriting Loss</td>
+              <td style="text-align: right;">-£27m + £6m</td>
+            </tr>
+            <tr>
+              <td><strong>ROE</strong></td>
+              <td style="text-align: right;"><span class="roi-value negative">-14.0%</span></td>
+            </tr>
+          </table>
+          <p style="margin-top: 0.75rem; font-size: 0.85rem;"><em>Capital 100% GWP: £150m</em></p>
+        </div>
+      </div>
+
+      <p style="margin-top: 1.5rem; font-size: 0.95rem;"><strong>Note:</strong> Long-tail PI requires capital loading 90–110% of GWP. Investment income contribution relatively stable.</p>
+    </section>
+  </main>
+
+  <footer>
+    Risk Code Hub v2.4 — Professional Indemnity E&O (E2/E3/E4/E5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+  </footer>
+
+  <script>
+    // Rate Index Chart
+    const rateIndexCtx = document.getElementById('rateIndexChart').getContext('2d');
+    new Chart(rateIndexCtx, {
+      type: 'line',
+      data: {
+        labels: ['1990', '1993', '1996', '1999', '2002', '2004', '2006', '2008', '2010', '2012', '2014', '2016', '2018', '2020', '2022', '2024', '2026E'],
+        datasets: [{
+          label: 'Rate Index (1990=100)',
+          data: [100, 145, 120, 105, 190, 165, 130, 115, 105, 95, 85, 80, 88, 100, 125, 115, 110],
+          borderColor: '#2c4a7a',
+          backgroundColor: 'rgba(44, 74, 122, 0.1)',
+          borderWidth: 2.5,
+          tension: 0.3,
+          fill: true,
+          pointBackgroundColor: '#2c4a7a',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              font: { size: 12 },
+              color: '#333',
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            min: 70,
+            max: 200,
+            title: {
+              display: true,
+              text: 'Index (1990=100)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          }
+        }
+      }
+    });
+
+    // Combined Ratio Chart
+    const crCtx = document.getElementById('combinedRatioChart').getContext('2d');
+    new Chart(crCtx, {
+      type: 'bar',
+      data: {
+        labels: ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024E'],
+        datasets: [{
+          label: 'Combined Ratio (%)',
+          data: [82, 78, 80, 85, 90, 96, 108, 115, 102, 95, 92],
+          backgroundColor: [
+            '#27ae60', '#27ae60', '#27ae60', '#e67e22', '#e67e22', '#e67e22', '#c0392b', '#c0392b', '#c0392b', '#e67e22', '#e67e22'
+          ],
+          borderColor: [
+            '#27ae60', '#27ae60', '#27ae60', '#e67e22', '#e67e22', '#e67e22', '#c0392b', '#c0392b', '#c0392b', '#e67e22', '#e67e22'
+          ],
+          borderWidth: 0,
+          borderRadius: 3,
+        }]
+      },
+      options: {
+        indexAxis: undefined,
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              font: { size: 12 },
+              color: '#333',
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 120,
+            ticks: {
+              callback: function(value) {
+                return value + '%';
+              }
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

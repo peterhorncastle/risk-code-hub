@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rates & ROE Analysis — Transactional Liability | Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --tl: #1e3a5f;
+      --tl-dark: #0d1f33;
+      --deal: #c9a84c;
+      --tax: #2563a8;
+      --contingent: #6b3fa0;
+      --warn: #d97706;
+      --light: #f0f4f8;
+      --mid: #dce8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #fafbfc;
+    }
+    header {
+      background: linear-gradient(135deg, #0d1f33 0%, #1e3a5f 50%, #0a2040 100%);
+      color: white;
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    header h1, header p { position: relative; z-index: 1; }
+    header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    header p { font-size: 1.1rem; opacity: 0.9; }
+    nav {
+      background: var(--tl-dark);
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0;
+      border-bottom: 3px solid var(--deal);
+    }
+    nav a {
+      color: #a8c0d8;
+      text-decoration: none;
+      padding: 1rem 1.2rem;
+      font-size: 0.95rem;
+      transition: background 0.2s, color 0.2s;
+      border-right: 1px solid rgba(168, 192, 216, 0.2);
+    }
+    nav a:hover { background: rgba(201, 168, 76, 0.15); color: white; }
+    nav a.active { background: var(--deal); color: var(--dark); font-weight: 600; }
+    nav a:last-child { border-right: none; }
+    .breadcrumb {
+      background: var(--light);
+      padding: 1rem 2rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .breadcrumb a { color: var(--tl); text-decoration: none; font-weight: 500; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    section { margin-bottom: 3rem; }
+    h2 { font-size: 1.8rem; color: var(--tl); margin-bottom: 1.5rem; border-bottom: 2px solid var(--mid); padding-bottom: 0.5rem; }
+    h3 { font-size: 1.3rem; color: var(--tl-dark); margin-top: 1.5rem; margin-bottom: 1rem; }
+    .chart-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin: 2rem 0;
+      position: relative;
+      height: 400px;
+    }
+    .chart-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--tl);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+    .c-est {
+      background: var(--amber);
+      color: white;
+    }
+    .c-illus {
+      background: var(--tax);
+      color: white;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s;
+    }
+    .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .card h4 {
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid;
+      color: var(--tl);
+      border-bottom-color: var(--tl);
+    }
+    .card.tl h4 { color: var(--tl); border-bottom-color: var(--tl); }
+    .card.deal h4 { color: var(--deal); border-bottom-color: var(--deal); }
+    .card.tax h4 { color: var(--tax); border-bottom-color: var(--tax); }
+    .card.contingent h4 { color: var(--contingent); border-bottom-color: var(--contingent); }
+    .card.warn h4 { color: var(--warn); border-bottom-color: var(--warn); }
+    .card.green h4 { color: var(--green); border-bottom-color: var(--green); }
+    .card p { font-size: 0.9rem; line-height: 1.7; color: #555; margin-bottom: 0.6rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    table th {
+      background: var(--tl);
+      color: white;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid #ddd;
+      font-size: 0.9rem;
+    }
+    table tr:hover { background: var(--light); }
+    table tr:last-child td { border-bottom: none; }
+    .scenario-card {
+      background: white;
+      border-left: 4px solid var(--tl);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .scenario-card h4 { color: var(--tl); margin-bottom: 1rem; font-size: 1.1rem; }
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+    .scenario-item { line-height: 1.8; }
+    .scenario-item strong { color: var(--tl); display: block; margin-bottom: 0.3rem; }
+    .scenario-result {
+      background: var(--light);
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--tl);
+      font-size: 1.05rem;
+    }
+    .note {
+      background: #f8f4eb;
+      border-left: 3px solid var(--warn);
+      padding: 1rem;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #666;
+      border-radius: 4px;
+    }
+    footer {
+      background: var(--tl-dark);
+      color: #a8c0d8;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+    footer a { color: var(--deal); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Rates & ROE Analysis</h1>
+    <p>Market cycle, premium trends, combined ratio and return on equity modelling for transactional liability</p>
+  </header>
+
+  <nav>
+    <a href="overview.html">Overview</a>
+    <a href="history.html">History</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="database.html">Loss Database</a>
+    <a href="underwriting.html">Underwriting</a>
+    <a href="rates-analysis.html" class="active">Rates & ROE</a>
+    <a href="risk-mitigation.html">Risk Mitigation</a>
+    <a href="global-program.html">Global Programme</a>
+    <a href="references.html">References</a>
+  </nav>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Transactional Liability
+  </div>
+
+  <main>
+    <!-- Section 1: W&I Rate Index -->
+    <section>
+      <h2>W&I Premium Rate Index</h2>
+      <div class="chart-container">
+        <div class="chart-title">W&I Premium Rate Index (1995=100) — Europe <span class="badge c-est">EST</span></div>
+        <canvas id="rateIndexChart"></canvas>
+      </div>
+
+      <h3>Market Cycle Phases</h3>
+      <div class="cards">
+        <div class="card tl">
+          <h4>1. Niche/Formation (1990–1999)</h4>
+          <p>Limited competition; premium 8–12% of limit; narrow coverage; product restricted to large UK/European deals. Few claims data points.</p>
+        </div>
+
+        <div class="card deal">
+          <h4>2. PE Adoption (2000–2007)</h4>
+          <p>European PE drives volume; premium falls to 4–6%; coverage broadens; Lloyd's market GWP grows to ~£300m. Soft market driven by competition.</p>
+        </div>
+
+        <div class="card warn">
+          <h4>3. GFC Claims Reality (2008–2012)</h4>
+          <p>First wave of claims; financials reps sublimited; premium rises 20–30%; some capacity exits; market re-underwriting.</p>
+        </div>
+
+        <div class="card green">
+          <h4>4. NBI Revolution (2013–2019)</h4>
+          <p>NBI structure expands market dramatically; retention compresses; premium falls to 2–2.5% by 2019; US R&W competition intensifies; Lloyd's faces margin pressure.</p>
+        </div>
+
+        <div class="card contingent">
+          <h4>5. COVID Hardening (2020–2022)</h4>
+          <p>Claims spike; pandemic exclusions; ESG/cyber rep exclusions added; premium rises 15–25% from trough; retention floors raised.</p>
+        </div>
+
+        <div class="card tl">
+          <h4>6. Stabilisation (2023–2026)</h4>
+          <p>Claims management matures; market stable; premium 2.5–3.5%; capacity broadly adequate; Pillar Two and PFAS create new sub-product demand.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Sector Rate Grid -->
+    <section>
+      <h2>Sector Rate Grid</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Typical W&I Premium (% of Limit)</th>
+            <th>Avg Retention (% EV)</th>
+            <th>Policy Term</th>
+            <th>Key Underwriting Concern</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>UK/Northern Europe PE</strong></td>
+            <td>2.0–3.0%</td>
+            <td>0.5%</td>
+            <td>5–7 yrs</td>
+            <td>Financial statement reps; NBI standard</td>
+          </tr>
+          <tr>
+            <td><strong>Southern Europe PE</strong></td>
+            <td>2.5–3.5%</td>
+            <td>0.5–0.75%</td>
+            <td>5–7 yrs</td>
+            <td>Legal system complexity; less mature DD</td>
+          </tr>
+          <tr>
+            <td><strong>US R&W — Middle Market</strong></td>
+            <td>2.5–3.5%</td>
+            <td>0.75–1.0%</td>
+            <td>3–6 yrs</td>
+            <td>Fundamental reps; escrow still used</td>
+          </tr>
+          <tr>
+            <td><strong>US R&W — Large Cap</strong></td>
+            <td>2.0–3.0%</td>
+            <td>0.5%</td>
+            <td>4–6 yrs</td>
+            <td>Financial reps; SEC compliance; regulatory</td>
+          </tr>
+          <tr>
+            <td><strong>Asia-Pacific</strong></td>
+            <td>3.0–5.0%</td>
+            <td>0.75–1.0%</td>
+            <td>4–6 yrs</td>
+            <td>Disclosure standards; enforcement risk</td>
+          </tr>
+          <tr>
+            <td><strong>Tax Liability (TA)</strong></td>
+            <td>3.0–5.0%</td>
+            <td>Negotiated</td>
+            <td>5–10 yrs</td>
+            <td>Known/identified specific risk</td>
+          </tr>
+          <tr>
+            <td><strong>Tax Liability (TB)</strong></td>
+            <td>4.0–7.0%</td>
+            <td>Negotiated</td>
+            <td>5–10 yrs</td>
+            <td>Broad uncertain position; counsel opinion</td>
+          </tr>
+          <tr>
+            <td><strong>Contingent Risk (CD/CE)</strong></td>
+            <td>3.0–6.0%</td>
+            <td>Negotiated</td>
+            <td>3–10 yrs</td>
+            <td>Probability of crystallisation; legal opinion</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">All rows: <span class="badge c-est">EST</span></p>
+    </section>
+
+    <!-- Section 3: Combined Ratio -->
+    <section>
+      <h2>Combined Ratio Analysis</h2>
+      <div class="chart-container">
+        <div class="chart-title">Estimated W&I Combined Ratio 2015–2024E <span class="badge c-est">EST</span></div>
+        <canvas id="combinedRatioChart"></canvas>
+      </div>
+      <div class="note">
+        <strong>Data Note:</strong> Data is indicative market estimates. Actual CR varies significantly by syndicate, underwriting strategy and vintage year.
+      </div>
+    </section>
+
+    <!-- Section 4: ROE Scenarios -->
+    <section>
+      <h2>Illustrative ROE — £200m TL GWP Portfolio <span class="badge c-illus">ILLUS</span></h2>
+
+      <div class="scenario-card">
+        <h4 style="color: var(--green);">Bull Scenario (82% CR)</h4>
+        <div class="scenario-grid">
+          <div class="scenario-item">
+            <strong>Gross Premium</strong>
+            £200m
+          </div>
+          <div class="scenario-item">
+            <strong>Claims</strong>
+            £82m (41%)
+          </div>
+          <div class="scenario-item">
+            <strong>Expenses</strong>
+            £82m (41%)
+          </div>
+          <div class="scenario-item">
+            <strong>Combined Ratio</strong>
+            82%
+          </div>
+          <div class="scenario-item">
+            <strong>Investment Income</strong>
+            £8m (4%)
+          </div>
+          <div class="scenario-item">
+            <strong>Underwriting Profit</strong>
+            £36m
+          </div>
+        </div>
+        <div class="scenario-result">
+          Underwriting Profit £36m + Investment £8m = £44m | ROE: +22.0%
+        </div>
+      </div>
+
+      <div class="scenario-card" style="border-left-color: var(--tax);">
+        <h4 style="color: var(--tax);">Base Scenario (98% CR)</h4>
+        <div class="scenario-grid">
+          <div class="scenario-item">
+            <strong>Gross Premium</strong>
+            £200m
+          </div>
+          <div class="scenario-item">
+            <strong>Claims</strong>
+            £104m (52%)
+          </div>
+          <div class="scenario-item">
+            <strong>Expenses</strong>
+            £92m (46%)
+          </div>
+          <div class="scenario-item">
+            <strong>Combined Ratio</strong>
+            98%
+          </div>
+          <div class="scenario-item">
+            <strong>Investment Income</strong>
+            £8m (4%)
+          </div>
+          <div class="scenario-item">
+            <strong>Underwriting Profit</strong>
+            £4m
+          </div>
+        </div>
+        <div class="scenario-result" style="background: #fef3e2; color: var(--tax);">
+          Underwriting Profit £4m + Investment £8m = £12m | ROE: +6.0%
+        </div>
+      </div>
+
+      <div class="scenario-card" style="border-left-color: var(--red);">
+        <h4 style="color: var(--red);">Bear Scenario (125% CR)</h4>
+        <div class="scenario-grid">
+          <div class="scenario-item">
+            <strong>Gross Premium</strong>
+            £200m
+          </div>
+          <div class="scenario-item">
+            <strong>Claims</strong>
+            £142m (71%)
+          </div>
+          <div class="scenario-item">
+            <strong>Expenses</strong>
+            £108m (54%)
+          </div>
+          <div class="scenario-item">
+            <strong>Combined Ratio</strong>
+            125%
+          </div>
+          <div class="scenario-item">
+            <strong>Investment Income</strong>
+            £8m (4%)
+          </div>
+          <div class="scenario-item">
+            <strong>Underwriting Loss</strong>
+            -£50m
+          </div>
+        </div>
+        <div class="scenario-result" style="background: #fce8e3; color: var(--red);">
+          Underwriting Loss -£50m + Investment £8m = -£42m | ROE: -21.0%
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>Capital Allocation Note:</strong> Capital allocation ~100% of GWP (claims-made, long-tail financial lines).
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Risk Code Hub v2.3 — Transactional Liability (D8/D9/TA/TB/CD/CE) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+  </footer>
+
+  <script>
+    // W&I Rate Index Chart
+    const rateIndexCtx = document.getElementById('rateIndexChart').getContext('2d');
+    new Chart(rateIndexCtx, {
+      type: 'line',
+      data: {
+        labels: ['1995', '1998', '2001', '2004', '2007', '2010', '2012', '2014', '2016', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2026E'],
+        datasets: [{
+          label: 'Rate Index (1995=100)',
+          data: [100, 105, 115, 110, 108, 130, 135, 115, 100, 85, 75, 80, 70, 88, 95, 92, 90],
+          borderColor: '#1e3a5f',
+          backgroundColor: 'rgba(30, 58, 95, 0.08)',
+          fill: true,
+          tension: 0.3,
+          borderWidth: 3,
+          pointRadius: 5,
+          pointBackgroundColor: '#1e3a5f',
+          pointBorderColor: 'white',
+          pointBorderWidth: 2,
+          pointHoverRadius: 7,
+          legend: { display: true }
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              font: { size: 12 },
+              color: '#333'
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 150,
+            ticks: {
+              stepSize: 25,
+              font: { size: 11 },
+              color: '#666'
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.05)',
+              drawBorder: false
+            }
+          },
+          x: {
+            ticks: {
+              font: { size: 11 },
+              color: '#666'
+            },
+            grid: {
+              display: false,
+              drawBorder: false
+            }
+          }
+        }
+      }
+    });
+
+    // Combined Ratio Chart
+    const crCtx = document.getElementById('combinedRatioChart').getContext('2d');
+    const crData = [68, 72, 75, 78, 82, 112, 108, 88, 95, 90];
+    const crColors = crData.map(cr => {
+      if (cr < 90) return '#27ae60';
+      if (cr < 100) return '#e67e22';
+      return '#c0392b';
+    });
+
+    new Chart(crCtx, {
+      type: 'bar',
+      data: {
+        labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024E'],
+        datasets: [{
+          label: 'Combined Ratio (%)',
+          data: crData,
+          backgroundColor: crColors,
+          borderColor: crColors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        indexAxis: undefined,
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              font: { size: 12 },
+              color: '#333'
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 130,
+            ticks: {
+              stepSize: 20,
+              callback: function(value) { return value + '%'; },
+              font: { size: 11 },
+              color: '#666'
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.05)',
+              drawBorder: false
+            }
+          },
+          x: {
+            ticks: {
+              font: { size: 11 },
+              color: '#666'
+            },
+            grid: {
+              display: false,
+              drawBorder: false
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

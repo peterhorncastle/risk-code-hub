@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Environmental Liability (EP) | Risk Code Hub</title>
+<style>
+  :root{
+    --env:#2d6a4a; --env-dark:#1a3d1a; --earth:#7a4f2a; --water:#1a6a8a;
+    --hazard:#c0572a; --gold:#c9a84c; --light:#f2f7f4; --mid:#e4f0ea;
+    --dark:#111; --red:#c0392b; --amber:#e67e22; --green:#27ae60;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',sans-serif;background:#f0f5f2;color:#1a2a1a;line-height:1.6;}
+  header{background:linear-gradient(135deg,#0d2d10 0%,#1a4a2a 50%,#0d3020 100%);color:#fff;padding:2rem;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-40%;left:-10%;width:120%;height:200%;
+    background:radial-gradient(ellipse at 50% 50%,rgba(45,106,74,0.15) 0%,transparent 70%);pointer-events:none;}
+  .header-inner{max-width:1100px;margin:0 auto;position:relative;}
+  .breadcrumb{font-size:.8rem;opacity:.7;margin-bottom:.5rem;}
+  .breadcrumb a{color:#a8d4b8;text-decoration:none;}
+  header h1{font-size:1.9rem;font-weight:700;letter-spacing:-.5px;}
+  header p{opacity:.8;margin-top:.4rem;font-size:.95rem;}
+  .badge-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
+  .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    color:#fff;padding:.25rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;}
+  nav{background:#fff;border-bottom:2px solid var(--env);position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  nav ul{display:flex;list-style:none;max-width:1100px;margin:0 auto;overflow-x:auto;gap:0;}
+  nav li a{display:block;padding:.65rem 1rem;font-size:.82rem;font-weight:600;color:#555;
+    text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s;}
+  nav li a:hover,nav li a.active{color:var(--env);border-bottom-color:var(--env);}
+  main{max-width:1100px;margin:2rem auto;padding:0 1.5rem;}
+  section{background:#fff;border-radius:10px;padding:1.8rem;margin-bottom:1.8rem;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  h2{font-size:1.25rem;font-weight:700;color:var(--env-dark);margin-bottom:1rem;
+    padding-bottom:.5rem;border-bottom:2px solid var(--env);}
+  h3{font-size:1rem;font-weight:700;color:var(--env-dark);margin:1.2rem 0 .6rem;}
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem;}
+  .stat{background:var(--light);border-radius:8px;padding:1rem;text-align:center;border-top:3px solid var(--env);}
+  .stat.earth{border-top-color:var(--earth);}
+  .stat.water{border-top-color:var(--water);}
+  .stat.hazard{border-top-color:var(--hazard);}
+  .stat.gold{border-top-color:var(--gold);}
+  .stat-num{font-size:1.5rem;font-weight:700;color:var(--env-dark);}
+  .stat-label{font-size:.73rem;color:#555;margin-top:.2rem;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem;}
+  .card{background:var(--light);border-radius:8px;padding:1.2rem;border-top:4px solid var(--env);}
+  .card.earth{border-top-color:var(--earth);}
+  .card.water{border-top-color:var(--water);}
+  .card.hazard{border-top-color:var(--hazard);}
+  .card.gold{border-top-color:var(--gold);}
+  .card h4{font-size:.9rem;font-weight:700;color:var(--env-dark);margin-bottom:.5rem;}
+  .card p,.card ul{font-size:.85rem;color:#444;}
+  .card ul{padding-left:1.1rem;}
+  .card li{margin-bottom:.25rem;}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:1rem;}
+  th{background:var(--env-dark);color:#fff;padding:.6rem .8rem;text-align:left;font-weight:600;}
+  td{padding:.55rem .8rem;border-bottom:1px solid #d8ede0;vertical-align:top;}
+  tr:nth-child(even) td{background:#f5faf7;}
+  .c-ver{background:#d4edda;color:#155724;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-est{background:#fff3cd;color:#856404;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-illus{background:#cce5ff;color:#004085;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .info-box{border-left:4px solid var(--env);background:#eaf5ef;padding:1rem 1.2rem;border-radius:0 6px 6px 0;margin:1rem 0;}
+  .info-box.earth{border-left-color:var(--earth);background:#f7f0e8;}
+  .info-box.water{border-left-color:var(--water);background:#e8f3f8;}
+  .info-box.hazard{border-left-color:var(--hazard);background:#fdf0ea;}
+  .info-box h4{font-size:.9rem;font-weight:700;margin-bottom:.4rem;}
+  .info-box p,.info-box ul{font-size:.84rem;color:#333;}
+  .info-box ul{padding-left:1.1rem;}
+  .info-box li{margin-bottom:.3rem;}
+  footer{background:var(--env-dark);color:#a8c8b0;text-align:center;padding:1.2rem;font-size:.8rem;margin-top:2rem;}
+  footer a{color:#a8d4b8;text-decoration:none;}
+  @media(max-width:640px){header h1{font-size:1.4rem;}.stats-row{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Environmental Liability</div>
+    <h1>Environmental Liability</h1>
+    <p>Pollution Legal Liability · Contractors Pollution · Natural Resource Damages · EU Environmental Liability</p>
+    <div class="badge-row">
+      <span class="badge">Lloyd's Code EP</span>
+      <span class="badge">EIL · PLL · CPL</span>
+      <span class="badge">CERCLA · ELD</span>
+      <span class="badge">Claims-Made</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="overview.html" class="active">Overview</a></li>
+    <li><a href="history.html">History</a></li>
+    <li><a href="timeline.html">Timeline</a></li>
+    <li><a href="database.html">Loss Database</a></li>
+    <li><a href="underwriting.html">Underwriting</a></li>
+    <li><a href="rates-analysis.html">Rates</a></li>
+    <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+    <li><a href="global-program.html">Global Programme</a></li>
+    <li><a href="references.html">References</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">~$3bn</div><div class="stat-label">Global EIL GWP (EST)</div></div>
+    <div class="stat water"><div class="stat-num">450,000+</div><div class="stat-label">Contaminated sites USA (EST)</div></div>
+    <div class="stat earth"><div class="stat-num">$65bn+</div><div class="stat-label">BP Deepwater Horizon total costs (EST)</div></div>
+    <div class="stat hazard"><div class="stat-num">12,000+</div><div class="stat-label">PFAS contaminated sites USA (EST)</div></div>
+    <div class="stat gold"><div class="stat-num">27</div><div class="stat-label">EU ELD member states (VER)</div></div>
+    <div class="stat"><div class="stat-num">1980</div><div class="stat-label">CERCLA enacted (VER)</div></div>
+  </div>
+
+  <section>
+    <h2>Lloyd's Code EP — Environmental Impairment Liability</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Environmental Impairment Liability (EIL) — also referred to as Pollution Legal Liability (PLL) in the US market — provides coverage for third-party bodily injury and property damage, on-site and third-party cleanup costs, regulatory defence, and natural resource damages arising from pollution conditions. It is a specialist class, distinct from standard General Liability which typically includes an <strong>absolute pollution exclusion</strong> covering most contamination scenarios. <span class="c-ver">VER</span>
+    </p>
+
+    <h3>Lloyd's Code Structure</h3>
+    <table>
+      <thead><tr><th>Code</th><th>Class</th><th>Coverage Focus</th><th>Typical Limits</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>EP</strong></td>
+          <td>Environmental / Pollution Liability</td>
+          <td>Pollution Legal Liability (PLL); Contractors Pollution Liability (CPL); Environmental Professional Liability (EPL); Remediation Cost Cap (RCC)</td>
+          <td>$1m–$50m+ per occurrence <span class="c-est">EST</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Principal Coverage Types</h3>
+    <div class="cards">
+      <div class="card">
+        <h4>🏭 Pollution Legal Liability (PLL)</h4>
+        <p>The core EIL product. Covers site owners, operators and lessees for pollution conditions at a scheduled site. Includes on-site cleanup, third-party BI/PD, off-site migration claims and regulatory defence.</p>
+      </div>
+      <div class="card earth">
+        <h4>🔧 Contractors Pollution Liability (CPL)</h4>
+        <p>Covers contractors and subcontractors for pollution incidents arising from their operations. Especially relevant for environmental remediation contractors, general contractors disturbing contaminated soil, and utilities contractors.</p>
+      </div>
+      <div class="card water">
+        <h4>🌊 Natural Resource Damages (NRD)</h4>
+        <p>Covers liability to government trustees for injury to natural resources — water bodies, wildlife, wetlands, groundwater. NRD is separate from cleanup costs and can be very large (e.g. Deepwater Horizon NRD = $8.8bn). <span class="c-ver">VER</span></p>
+      </div>
+      <div class="card hazard">
+        <h4>☠️ Remediation Cost Cap (RCC)</h4>
+        <p>Covers cost overruns on pre-agreed environmental remediation projects. Insured retains a deductible/retention; policy pays costs exceeding the estimated cleanup figure up to a cap. Used in brownfield transactions and voluntary cleanups.</p>
+      </div>
+      <div class="card">
+        <h4>🔬 Environmental Professional Liability</h4>
+        <p>E&O cover for environmental consultants, engineers and remediation contractors for professional negligence in conducting Phase I/II ESAs, remediation design or regulatory compliance advice.</p>
+      </div>
+      <div class="card gold">
+        <h4>🚛 Transportation Pollution</h4>
+        <p>Covers spills and releases during transportation of hazardous materials — chemicals, waste, petroleum products. Extension to standard PLL or standalone product. Particularly relevant for hazmat haulers and waste contractors.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Key Regulatory Frameworks</h2>
+    <div class="cards">
+      <div class="card hazard">
+        <h4>🇺🇸 CERCLA / Superfund (1980)</h4>
+        <ul>
+          <li>Comprehensive Environmental Response, Compensation and Liability Act <span class="c-ver">VER</span></li>
+          <li>Strict, joint and several, retroactive liability <span class="c-ver">VER</span></li>
+          <li>EPA can compel cleanup by Potentially Responsible Parties (PRPs)</li>
+          <li>~1,300 sites on National Priorities List (NPL) <span class="c-est">EST</span></li>
+          <li>Average NPL site cleanup cost: $140m+ <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card water">
+        <h4>🇪🇺 EU Environmental Liability Directive (2004/35/CE)</h4>
+        <ul>
+          <li>Polluter-pays principle; prevention and remediation of environmental damage <span class="c-ver">VER</span></li>
+          <li>Covers: water damage, land damage, biodiversity damage <span class="c-ver">VER</span></li>
+          <li>No third-party civil liability — purely regulatory/administrative <span class="c-ver">VER</span></li>
+          <li>Implemented in UK via Environmental Damage Regulations 2009 <span class="c-ver">VER</span></li>
+          <li>Operators of certain "dangerous activities" face strict liability <span class="c-ver">VER</span></li>
+        </ul>
+      </div>
+      <div class="card earth">
+        <h4>🇺🇸 RCRA — Resource Conservation and Recovery Act</h4>
+        <ul>
+          <li>Governs generation, transportation and disposal of hazardous waste <span class="c-ver">VER</span></li>
+          <li>Corrective Action: EPA can require cleanup of historical releases at permitted facilities</li>
+          <li>Subtitle C: hazardous waste; Subtitle D: solid (municipal) waste; Subtitle I: underground storage tanks (USTs)</li>
+          <li>USTs: ~550,000 regulated USTs in USA <span class="c-est">EST</span>; leaking USTs a major EIL exposure</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🛢️ Oil Pollution Act 1990 (OPA)</h4>
+        <ul>
+          <li>Enacted in response to Exxon Valdez spill <span class="c-ver">VER</span></li>
+          <li>Strict liability for oil spills into US navigable waters</li>
+          <li>Responsible Party (RP) liable for cleanup and natural resource damages</li>
+          <li>Financial responsibility requirements (COFR) for vessels and facilities</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box hazard">
+      <h4>⚠️ PFAS — The Defining Emerging Liability</h4>
+      <p>Per- and polyfluoroalkyl substances (PFAS) — "forever chemicals" — are a group of ~12,000 synthetic compounds used in firefighting foam (AFFF), non-stick coatings, food packaging and industrial processes. <span class="c-ver">VER</span> They do not biodegrade and accumulate in groundwater, soil and human tissue. Landmark settlements:</p>
+      <ul>
+        <li>3M settled PFAS water supply claims for ~$10.3bn (June 2023) <span class="c-ver">VER</span></li>
+        <li>DuPont/Chemours/Corteva settled for ~$1.185bn (June 2023) <span class="c-ver">VER</span></li>
+        <li>AFFF (aqueous film-forming foam) litigation: military bases, airports — thousands of sites</li>
+        <li>EPA MCL for PFOA/PFOS set at 4 parts per trillion (April 2024) <span class="c-ver">VER</span></li>
+        <li>Industry-wide PFAS liability estimated at $400bn+ over 20 years <span class="c-est">EST</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Market Overview</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Environmental liability insurance is a specialist market dominated by a small number of experienced carriers. The US market is the largest, driven by CERCLA liability and brownfield redevelopment activity. The European market is growing following ELD implementation. <span class="c-est">EST</span>
+    </p>
+    <table>
+      <thead><tr><th>Segment</th><th>Key Carriers</th><th>Lloyd's Role</th><th>Market Maturity</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>US Pollution Legal Liability</td>
+          <td>AXA XL, AIG, Zurich, Beazley, Berkley One</td>
+          <td>Follow market for large/complex risks <span class="c-est">EST</span></td>
+          <td>Mature — 40+ years of dedicated product</td>
+        </tr>
+        <tr>
+          <td>US Contractors Pollution Liability</td>
+          <td>AXA XL, Travelers, Markel, Berkley</td>
+          <td>Limited direct play; follow market</td>
+          <td>Mature — standard construction requirement</td>
+        </tr>
+        <tr>
+          <td>European EIL</td>
+          <td>AXA XL, Zurich, Allianz, Generali</td>
+          <td>Lloyd's growing — post-ELD awareness</td>
+          <td>Developing — ELD-driven demand</td>
+        </tr>
+        <tr>
+          <td>Remediation Cost Cap</td>
+          <td>AXA XL, Berkley National, Aspen</td>
+          <td>Some Lloyd's participation</td>
+          <td>Niche — transaction-led demand</td>
+        </tr>
+        <tr>
+          <td>Environmental E&O / EPL</td>
+          <td>AXA XL, Beazley, Navigators</td>
+          <td>Lloyd's syndicates active</td>
+          <td>Moderate — growing consultant market</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Hub Navigation</h2>
+    <div class="cards">
+      <div class="card"><h4><a href="history.html" style="color:var(--env);text-decoration:none;">📖 History</a></h4><p>Evolution from general liability pollution exclusion through CERCLA/Superfund creation to PFAS mega-liability.</p></div>
+      <div class="card earth"><h4><a href="timeline.html" style="color:var(--earth);text-decoration:none;">📅 Timeline</a></h4><p>Major events 1976–2024: Love Canal, Bhopal, Exxon Valdez, Deepwater Horizon, PFAS settlements.</p></div>
+      <div class="card water"><h4><a href="database.html" style="color:var(--water);text-decoration:none;">🗄️ Loss Database</a></h4><p>35 searchable events — filter by type, jurisdiction, year and minimum loss size.</p></div>
+      <div class="card hazard"><h4><a href="underwriting.html" style="color:var(--hazard);text-decoration:none;">📋 Underwriting</a></h4><p>Phase I/II ESA framework, rating factors, PLL vs CPL methodology, worked examples.</p></div>
+      <div class="card"><h4><a href="rates-analysis.html" style="color:var(--env);text-decoration:none;">📈 Rates</a></h4><p>Market cycle 1986–2026, PFAS-driven hardening, combined ratio and ROE scenarios.</p></div>
+      <div class="card gold"><h4><a href="risk-mitigation.html" style="color:var(--earth);text-decoration:none;">🛡️ Risk Mitigation</a></h4><p>Environmental management systems, site controls, emergency response and ISO 14001.</p></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub · Environmental Liability (EP) · Module 01 – Overview · v2.2 · April 2026</p>
+  <p style="margin-top:.4rem;font-size:.75rem;"><a href="../index.html">← Hub Index</a></p>
+</footer>
+</body>
+</html>

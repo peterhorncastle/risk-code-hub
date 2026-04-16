@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Underwriting Methodology — Transactional Liability | Risk Code Hub</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --tl: #1e3a5f;
+      --tl-dark: #0d1f33;
+      --deal: #c9a84c;
+      --tax: #2563a8;
+      --contingent: #6b3fa0;
+      --warn: #d97706;
+      --light: #f0f4f8;
+      --mid: #dce8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #fafbfc;
+    }
+    header {
+      background: linear-gradient(135deg, #0d1f33 0%, #1e3a5f 50%, #0a2040 100%);
+      color: white;
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    header h1, header p { position: relative; z-index: 1; }
+    header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    header p { font-size: 1.1rem; opacity: 0.9; }
+    nav {
+      background: var(--tl-dark);
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0;
+      border-bottom: 3px solid var(--deal);
+    }
+    nav a {
+      color: #a8c0d8;
+      text-decoration: none;
+      padding: 1rem 1.2rem;
+      font-size: 0.95rem;
+      transition: background 0.2s, color 0.2s;
+      border-right: 1px solid rgba(168, 192, 216, 0.2);
+    }
+    nav a:hover { background: rgba(201, 168, 76, 0.15); color: white; }
+    nav a.active { background: var(--deal); color: var(--dark); font-weight: 600; }
+    nav a:last-child { border-right: none; }
+    .breadcrumb {
+      background: var(--light);
+      padding: 1rem 2rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .breadcrumb a { color: var(--tl); text-decoration: none; font-weight: 500; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    section { margin-bottom: 3rem; }
+    h2 { font-size: 1.8rem; color: var(--tl); margin-bottom: 1.5rem; border-bottom: 2px solid var(--mid); padding-bottom: 0.5rem; }
+    h3 { font-size: 1.3rem; color: var(--tl-dark); margin-top: 1.5rem; margin-bottom: 1rem; }
+    .info-box {
+      background: var(--light);
+      border-left: 5px solid var(--tl);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+      line-height: 1.7;
+    }
+    .info-box.hazard { border-left-color: var(--warn); background: rgba(217, 119, 6, 0.05); }
+    .info-box.deal { border-left-color: var(--deal); }
+    .formula-box {
+      background: #f8f4eb;
+      border: 1px solid #ddd;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      border-radius: 4px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s;
+    }
+    .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .card h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid;
+    }
+    .card.tl h4 { color: var(--tl); border-bottom-color: var(--tl); }
+    .card.deal h4 { color: var(--deal); border-bottom-color: var(--deal); }
+    .card.tax h4 { color: var(--tax); border-bottom-color: var(--tax); }
+    .card.contingent h4 { color: var(--contingent); border-bottom-color: var(--contingent); }
+    .card.warn h4 { color: var(--warn); border-bottom-color: var(--warn); }
+    .card.green h4 { color: var(--green); border-bottom-color: var(--green); }
+    .card p { font-size: 0.95rem; line-height: 1.7; color: #555; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    table th {
+      background: var(--tl);
+      color: white;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+    table tr:hover { background: var(--light); }
+    table tr:last-child td { border-bottom: none; }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+    .c-ver {
+      background: var(--green);
+      color: white;
+    }
+    .c-est {
+      background: var(--amber);
+      color: white;
+    }
+    .c-illus {
+      background: var(--tax);
+      color: white;
+    }
+    .c-gap {
+      background: var(--red);
+      color: white;
+    }
+    .example-box {
+      background: #f0f8ff;
+      border-left: 4px solid var(--tax);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+    }
+    .example-box h5 {
+      color: var(--tax);
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+    }
+    .example-box p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 0.6rem;
+      color: #333;
+    }
+    footer {
+      background: var(--tl-dark);
+      color: #a8c0d8;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+    footer a { color: var(--deal); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Underwriting Methodology</h1>
+    <p>Rating factors, NBI structure, retention mechanics and worked examples for W&I, tax liability and contingent risk</p>
+  </header>
+
+  <nav>
+    <a href="overview.html">Overview</a>
+    <a href="history.html">History</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="database.html">Loss Database</a>
+    <a href="underwriting.html" class="active">Underwriting</a>
+    <a href="rates-analysis.html">Rates & ROE</a>
+    <a href="risk-mitigation.html">Risk Mitigation</a>
+    <a href="global-program.html">Global Programme</a>
+    <a href="references.html">References</a>
+  </nav>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Transactional Liability
+  </div>
+
+  <main>
+    <!-- Section 1: Policy Basis & Claims-Made -->
+    <section>
+      <h2>Policy Basis & Claims-Made Structure</h2>
+      <div class="info-box">
+        <p><strong>All TL products are written on a claims-made basis.</strong> Coverage applies when a claim is first made against the insured during the policy period, regardless of when the underlying breach occurred. Policy period typically <strong>3–7 years for W&I</strong>; <strong>5–10 years for tax and contingent risk.</strong> Retroactive date = completion date of the transaction. Pre-inception known issues are <strong>EXCLUDED.</strong></p>
+      </div>
+    </section>
+
+    <!-- Section 2: W&I/R&W Rating Framework -->
+    <section>
+      <h2>W&I/R&W Rating Framework</h2>
+      <div class="formula-box">
+        W&I Premium = Policy Limit × Base Rate × Deal Factor × Jurisdiction Factor × Sector Factor<br><br>
+        Where Base Rate ≈ 2–4% of policy limit (European deals); 2.5–4.5% (US/R&W)
+      </div>
+
+      <h3>Six Rating Factor Cards</h3>
+      <div class="cards">
+        <div class="card tl">
+          <h4>1. Deal Type</h4>
+          <p><strong>PE buyout</strong> 1.0× | <strong>Strategic M&A</strong> 1.05–1.15× | <strong>Distressed/special</strong> 1.25–1.5× | <strong>Public-to-private</strong> 1.1–1.25× | <strong>Carve-out</strong> 1.15–1.3×</p>
+          <p style="margin-top: 0.8rem; font-size: 0.9rem; color: #666;"><em>PE deals have thorough DD processes; carve-outs have incomplete financial history.</em></p>
+        </div>
+
+        <div class="card deal">
+          <h4>2. Jurisdiction</h4>
+          <p><strong>UK</strong> 1.0× | <strong>Northern Europe</strong> 1.0–1.1× | <strong>Southern Europe</strong> 1.2–1.35× | <strong>US/Canada</strong> 1.0–1.15× | <strong>Asia-Pacific</strong> 1.25–1.5× | <strong>Emerging markets</strong> 1.4–1.8×</p>
+          <p style="margin-top: 0.8rem; font-size: 0.9rem; color: #666;"><em>Legal system quality, disclosure standards, courts sophistication.</em></p>
+        </div>
+
+        <div class="card tax">
+          <h4>3. Sector</h4>
+          <p><strong>General/diversified</strong> 1.0× | <strong>Technology</strong> 1.1–1.3× | <strong>Healthcare/pharma</strong> 1.2–1.4× | <strong>Financial services</strong> 1.3–1.5× | <strong>Real estate</strong> 0.9–1.1× | <strong>Manufacturing</strong> 0.95–1.05×</p>
+          <p style="margin-top: 0.8rem; font-size: 0.9rem; color: #666;"><em>Complex regulatory environments, IP/data concentration, financial services regulatory exposure.</em></p>
+        </div>
+
+        <div class="card contingent">
+          <h4>4. Deal Size</h4>
+          <p><strong>Sub-£50m EV</strong> 1.3–1.5× | <strong>£50–250m EV</strong> 1.0–1.2× | <strong>£250m–1bn EV</strong> 0.95–1.1× | <strong>£1bn+ EV</strong> 0.9–1.05×</p>
+          <p style="margin-top: 0.8rem; font-size: 0.9rem; color: #666;"><em>Large deals have proportionally more DD investment; small deals may have lighter process.</em></p>
+        </div>
+
+        <div class="card warn">
+          <h4>5. Retention</h4>
+          <p><strong>Standard:</strong> 0.5% of EV (European PE) | 0.75–1.0% of EV (strategic/larger) | <strong>Minimum floors:</strong> £/$250k–500k. <strong>NBI:</strong> retention sits with insurer — seller gives nil indemnity. Retention reduces moral hazard; lower retention = higher premium.</p>
+        </div>
+
+        <div class="card green">
+          <h4>6. Policy Limit</h4>
+          <p><strong>Typical W&I:</strong> 10–30% of Enterprise Value | <strong>Small deals:</strong> often 100% of deal value | <strong>US R&W:</strong> typically 10–15% of deal value | Aggregate cap including sub-limits for specific reps (financial statements, tax, etc.).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: NBI Structure -->
+    <section>
+      <h2>NBI Structure Explainer</h2>
+      <div class="info-box hazard">
+        <h3 style="margin-top: 0; color: var(--warn);">No-Box Indemnity (NBI) — The Modern Standard</h3>
+        <p><strong>Traditional structure:</strong> Seller indemnifies buyer, with indemnity capped (the "escrow box") and insurance backing the seller.</p>
+        <p style="margin-top: 1rem;"><strong>NBI structure:</strong> Seller gives nil/£1 indemnity cap — buyer's <strong>SOLE recourse for warranty breach is the W&I policy.</strong> Insurer steps into seller's shoes. <strong>Benefits:</strong> Seller returns 100% capital to LPs at close; clean exit; no post-deal disputes between buyer and seller. Insurer becomes counterparty to buyer. Standard in European PE; increasingly adopted in US R&W.</p>
+      </div>
+    </section>
+
+    <!-- Section 4: W&I Underwriting Process -->
+    <section>
+      <h2>W&I Underwriting Process</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th>Activity</th>
+            <th>Typical Timeline</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>NDA signed with insurer/broker</td>
+            <td>Day 1 (deal signing)</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Underwriting submission: SPA draft + DD reports + management presentation</td>
+            <td>Day 1–3</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Preliminary indicative terms (non-binding)</td>
+            <td>Day 2–5</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Full SPA review by underwriting counsel</td>
+            <td>Day 3–7</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Insurer Q&A session with deal team and advisers</td>
+            <td>Day 5–10</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Underwriting call — management meetings/DD walk-through</td>
+            <td>Day 7–12</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>Final policy terms agreed</td>
+            <td>Day 10–14 (pre-signing)</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>Policy bound at/before completion</td>
+            <td>Completion date</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 5: Tax Liability Underwriting -->
+    <section>
+      <h2>Tax Liability Underwriting (TA/TB)</h2>
+      <p>Distinct from W&I — tax insurer assesses probability of adverse tax outcome:</p>
+      <ul style="margin: 1rem 0 1rem 2rem; line-height: 1.8;">
+        <li><strong>Tax counsel opinion required</strong> (generally "more likely than not" / 50%+ threshold)</li>
+        <li><strong>Coverage only for risks where outcome is UNCERTAIN</strong> — known, certain liabilities excluded</li>
+        <li><strong>Premium:</strong> typically 3–7% of policy limit (higher than W&I due to binary/specific risk)</li>
+        <li><strong>Sub-types:</strong> TA (known identified risk — e.g., specific HMRC query, filed position under challenge) vs TB (broader uncertain position — e.g., transfer pricing methodology, R&D credit eligibility)</li>
+        <li><strong>Key underwriting questions:</strong> has HMRC/IRS been notified? Any ongoing enquiry? Counsel opinion strength? Statutory limitation period?</li>
+      </ul>
+
+      <h3>Tax Risk Categories</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>TA or TB</th>
+            <th>Typical Premium</th>
+            <th>Common Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Specific assessed tax dispute</td>
+            <td>TA</td>
+            <td>3–5% of limit</td>
+            <td>HMRC formal enquiry on historic group structure</td>
+          </tr>
+          <tr>
+            <td>Transfer pricing methodology</td>
+            <td>TB</td>
+            <td>4–7%</td>
+            <td>Arm's length test challenge on intra-group services</td>
+          </tr>
+          <tr>
+            <td>R&D tax credit eligibility</td>
+            <td>TB</td>
+            <td>3–5%</td>
+            <td>HMRC questioning qualifying activities</td>
+          </tr>
+          <tr>
+            <td>Group loss/relief utilisation</td>
+            <td>TA/TB</td>
+            <td>3–6%</td>
+            <td>Pre-acquisition loss carry-forward utilisation</td>
+          </tr>
+          <tr>
+            <td>VAT/SDLT structuring</td>
+            <td>TA</td>
+            <td>3–5%</td>
+            <td>Property transaction VAT election, SDLT group relief</td>
+          </tr>
+          <tr>
+            <td>GILTI/BEAT exposure (US)</td>
+            <td>TB</td>
+            <td>4–6%</td>
+            <td>US multinational Pillar 2 transitional safe harbour</td>
+          </tr>
+          <tr>
+            <td>Pillar Two UTPR exposure</td>
+            <td>TB</td>
+            <td>5–8%</td>
+            <td>OECD Pillar Two under-taxed profit rule</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 6: Quality Scoring Matrix -->
+    <section>
+      <h2>Quality Scoring Matrix</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Area</th>
+            <th style="background: rgba(39, 174, 96, 0.9);">Green</th>
+            <th style="background: rgba(230, 126, 34, 0.9);">Amber</th>
+            <th style="background: rgba(192, 57, 43, 0.9);">Red</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Due Diligence Quality</strong></td>
+            <td>Big 4 / Top-tier advisory; full financial DD; clean management accounts</td>
+            <td>Mid-tier advisers; limited scope DD</td>
+            <td>No financial DD; management-only accounts; no third-party QoE</td>
+          </tr>
+          <tr>
+            <td><strong>VDR Completeness</strong></td>
+            <td>Full 3-year audited accounts; clean tax returns; employment schedules; contracts complete</td>
+            <td>Some gaps; 2 years audited; partial tax</td>
+            <td>Material gaps; draft accounts; no tax returns</td>
+          </tr>
+          <tr>
+            <td><strong>SPA Quality</strong></td>
+            <td>Clear, comprehensive reps; carve-outs well-defined; disclosure letter thorough</td>
+            <td>Standard reps; some vague carve-outs; light disclosure letter</td>
+            <td>Narrow reps; broad carve-outs; minimal disclosure</td>
+          </tr>
+          <tr>
+            <td><strong>Target Company Profile</strong></td>
+            <td>Established profitable business; clean compliance record</td>
+            <td>Some regulatory history; minor historic issues</td>
+            <td>Regulatory investigations ongoing; disputed financials</td>
+          </tr>
+          <tr>
+            <td><strong>Deal Structure</strong></td>
+            <td>Simple share purchase; single jurisdiction</td>
+            <td>Multi-jurisdiction; some complexity</td>
+            <td>Carve-out; distressed; pre-pack; incomplete separation</td>
+          </tr>
+          <tr>
+            <td><strong>Tax Position</strong></td>
+            <td>Clean tax returns; no open enquiries; professional adviser sign-off</td>
+            <td>Minor open items; transfer pricing exposure</td>
+            <td>Active HMRC/IRS enquiry; historic aggressive planning</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 7: Worked Examples -->
+    <section>
+      <h2>Worked Examples</h2>
+
+      <h3>Example 1 — PE Buyout, UK Tech Company (W&I)</h3>
+      <div class="example-box">
+        <h5>Deal Structure</h5>
+        <p>£120m EV software business; 100% share acquisition; PE buyer, financial seller (PE fund)</p>
+        <p><strong>Policy structure:</strong> Limit = £24m (20% EV); Retention = £600k (0.5% EV); NBI structure; 5-year policy</p>
+
+        <h5 style="margin-top: 1.2rem;">Rating Calculation</h5>
+        <p><strong>Base rate:</strong> 3.0% of limit</p>
+        <p><strong>Adjustments:</strong> UK jurisdiction (1.0×); PE deal, good DD (1.0×); Tech sector (1.15×)</p>
+
+        <h5 style="margin-top: 1.2rem;">Premium Calculation</h5>
+        <p>£24m × 3.0% × 1.15 = <strong>£828,000</strong> <span class="badge c-illus">ILLUS</span></p>
+
+        <h5 style="margin-top: 1.2rem;">Key Rep Categories Covered</h5>
+        <p>Share title; financial statements; tax; employment (including contractors/IR35); IP (software ownership, open-source, data); material contracts; compliance/GDPR</p>
+
+        <h5 style="margin-top: 1.2rem;">Key Exclusions</h5>
+        <p>Forward-looking projections; pension deficit; environmental; cyber incidents post-close; disclosed IP disputes</p>
+      </div>
+
+      <h3>Example 2 — TA Tax Insurance, UK Group Relief</h3>
+      <div class="example-box">
+        <h5>Risk Scenario</h5>
+        <p>Target company has £8m of pre-acquisition losses claimed as group relief; HMRC challenging timing of loss crystallisation</p>
+        <p><strong>Tax counsel opinion:</strong> "More likely than not" (55% probability) that HMRC challenge fails</p>
+
+        <h5 style="margin-top: 1.2rem;">Policy Structure</h5>
+        <p><strong>Type:</strong> TA insurance; <strong>Limit:</strong> £8m (full tax exposure); <strong>Premium:</strong> 4.0% of limit</p>
+
+        <h5 style="margin-top: 1.2rem;">Premium Calculation</h5>
+        <p>£8m × 4.0% = <strong>£320,000</strong> <span class="badge c-illus">ILLUS</span></p>
+
+        <h5 style="margin-top: 1.2rem;">Coverage Provided</h5>
+        <p>HMRC assessment, interest and penalties on challenged group relief; legal defence costs; negotiated settlement</p>
+
+        <h5 style="margin-top: 1.2rem;">Exclusion</h5>
+        <p>Fraud; deliberate misrepresentation to HMRC; future group relief claims on same structure</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Risk Code Hub v2.3 — Transactional Liability (D8/D9/TA/TB/CD/CE) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+  </footer>
+</body>
+</html>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Underwriting Methodology — Professional Indemnity E&O</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --pi: #2c4a7a;
+      --pi-dark: #1a2d4a;
+      --legal: #8b5e3c;
+      --accounts: #2d6b4a;
+      --risk: #c0572a;
+      --gold: #c9a84c;
+      --light: #f0f4f8;
+      --mid: #dce8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--dark);
+      background: #fafbfc;
+    }
+    header {
+      background: linear-gradient(135deg, #1a2d4a 0%, #2c4a7a 50%, #1a3560 100%);
+      color: white;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+    }
+    header > * { position: relative; z-index: 1; }
+    header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    header p { font-size: 1.05rem; opacity: 0.95; }
+    .breadcrumb {
+      background: #f5f7fa;
+      padding: 0.75rem 2rem;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .breadcrumb a { color: var(--pi); text-decoration: none; font-weight: 500; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    nav {
+      background: white;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e0e8f0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      font-size: 0.95rem;
+    }
+    nav a {
+      color: var(--pi);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+    nav a.active {
+      color: var(--risk);
+    }
+    nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1rem;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--risk);
+    }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    section { margin-bottom: 2.5rem; scroll-margin-top: 80px; }
+    h2 {
+      font-size: 1.6rem;
+      color: var(--pi);
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--gold);
+      padding-left: 1rem;
+    }
+    h3 {
+      font-size: 1.2rem;
+      color: var(--pi-dark);
+      margin: 1.5rem 0 0.75rem;
+    }
+    .info-box {
+      background: linear-gradient(135deg, #f0f4f8 0%, #e8ecf3 100%);
+      border-left: 4px solid var(--pi);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+      line-height: 1.7;
+    }
+    .info-box strong { color: var(--pi); }
+    .factor-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .factor-card {
+      background: white;
+      border: 1px solid #e0e8f0;
+      border-left: 5px solid var(--pi);
+      padding: 1.25rem;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .factor-card h4 {
+      font-size: 1.05rem;
+      margin-bottom: 0.75rem;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 3px;
+      display: inline-block;
+    }
+    .factor-card.legal h4 { background: var(--legal); }
+    .factor-card.accounts h4 { background: var(--accounts); }
+    .factor-card.risk h4 { background: var(--risk); }
+    .factor-card.gold h4 { background: var(--gold); color: #222; }
+    .factor-card.pi h4 { background: var(--pi); }
+    .factor-card ul {
+      list-style: none;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+    .factor-card li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f0f4f8;
+    }
+    .factor-card li:last-child { border-bottom: none; }
+    .factor-card li strong { color: var(--pi-dark); }
+    .rating-formula {
+      background: #fafbfc;
+      border: 1px solid #d0d8e0;
+      padding: 1rem;
+      border-radius: 4px;
+      font-family: "Monaco", "Menlo", monospace;
+      font-size: 0.95rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: white;
+      border: 1px solid #e0e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    thead {
+      background: linear-gradient(135deg, #2c4a7a 0%, #1a2d4a 100%);
+      color: white;
+    }
+    th, td {
+      padding: 0.9rem;
+      text-align: left;
+      border-bottom: 1px solid #e0e8f0;
+      font-size: 0.95rem;
+    }
+    tr:hover { background: #f8fafc; }
+    tr:last-child td { border-bottom: none; }
+    .c-ver {
+      display: inline-block;
+      background: var(--green);
+      color: white;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+    .c-est {
+      display: inline-block;
+      background: var(--amber);
+      color: white;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+    .c-illus {
+      display: inline-block;
+      background: #5b8cce;
+      color: white;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+    .c-gap {
+      display: inline-block;
+      background: #d9534f;
+      color: white;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+    .quality-matrix {
+      display: grid;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .quality-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 1fr 1fr;
+      gap: 1rem;
+      background: white;
+      border: 1px solid #e0e8f0;
+      border-radius: 4px;
+      padding: 1rem;
+      align-items: start;
+    }
+    .quality-row > div:nth-child(1) {
+      font-weight: 600;
+      color: var(--pi);
+      font-size: 0.95rem;
+    }
+    .quality-row > div:nth-child(2) {
+      background: #f0f8f0;
+      padding: 0.75rem;
+      border-left: 3px solid var(--green);
+      border-radius: 3px;
+      font-size: 0.9rem;
+    }
+    .quality-row > div:nth-child(3) {
+      background: #fef5e8;
+      padding: 0.75rem;
+      border-left: 3px solid var(--amber);
+      border-radius: 3px;
+      font-size: 0.9rem;
+    }
+    .quality-row > div:nth-child(4) {
+      background: #ffe5e5;
+      padding: 0.75rem;
+      border-left: 3px solid var(--red);
+      border-radius: 3px;
+      font-size: 0.9rem;
+    }
+    .example-box {
+      background: linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%);
+      border: 1px solid #d0d8e0;
+      border-left: 4px solid var(--pi);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+    }
+    .example-box h4 {
+      color: var(--pi);
+      font-size: 1.05rem;
+      margin-bottom: 0.75rem;
+    }
+    .example-box p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+    .example-box .premium-line {
+      font-family: "Monaco", monospace;
+      font-size: 0.9rem;
+      background: white;
+      padding: 0.5rem 0.75rem;
+      border-radius: 3px;
+      margin: 0.5rem 0;
+      border-left: 3px solid var(--pi);
+    }
+    footer {
+      background: var(--pi-dark);
+      color: #a8b8d0;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+    footer a { color: #c9a84c; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.6rem; }
+      header p { font-size: 0.95rem; }
+      nav { gap: 1rem; font-size: 0.9rem; }
+      main { padding: 1rem; }
+      .factor-cards { grid-template-columns: 1fr; }
+      .quality-row { grid-template-columns: 1fr; }
+      table { font-size: 0.85rem; }
+      th, td { padding: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Underwriting Methodology</h1>
+    <p>Rating factors, claims-made mechanics, qualifying insurer requirements and worked examples for E2/E3/E4/E5</p>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Professional Indemnity E&O
+  </div>
+
+  <nav>
+    <a href="overview.html">Overview</a>
+    <a href="history.html">History</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="database.html">Claims Database</a>
+    <a href="underwriting.html" class="active">Underwriting</a>
+    <a href="rates-analysis.html">Rates & ROE</a>
+    <a href="risk-mitigation.html">Risk Mitigation</a>
+    <a href="global-program.html">Global Programme</a>
+    <a href="references.html">References</a>
+  </nav>
+
+  <main>
+    <!-- Section 1: Claims-Made Basis -->
+    <section>
+      <h2>Claims-Made Basis</h2>
+      <div class="info-box">
+        <p><strong>All PI products are written on a claims-made basis.</strong> The policy responds when a claim is first MADE against the insured during the policy period — not when the negligent act occurred. Critical: retroactive date (or "retroactive cover") determines how far back past acts are covered. Full prior acts coverage is standard for established firms. Run-off (tail) cover protects retired or dissolved firms for claims arising after policy expiry. Continuity of cover is essential — a gap in PI cover creates uninsured exposure for the gap period AND the future discovery period.</p>
+      </div>
+    </section>
+
+    <!-- Section 2: E2/E3 Legal PI Underwriting -->
+    <section>
+      <h2>E2/E3 Legal PI Underwriting</h2>
+
+      <h3>Rating Formula</h3>
+      <div class="rating-formula">Legal PI Premium = Annual Fee Income × Base Rate × Risk Factor × Cover Adjustments</div>
+      <p><strong>Base rate range:</strong> 0.4–3.0% of fee income (varies enormously by firm type and claims history)</p>
+
+      <h3>Six Rating Factors</h3>
+      <div class="factor-cards">
+        <div class="factor-card pi">
+          <h4>1. Work Type Mix</h4>
+          <ul>
+            <li><strong>Conveyancing:</strong> 1.5–2.5× (highest risk)</li>
+            <li><strong>Commercial property:</strong> 1.2–1.8×</li>
+            <li><strong>Personal injury:</strong> 1.3–2.0×</li>
+            <li><strong>Corporate M&A:</strong> 0.8–1.2×</li>
+            <li><strong>Litigation:</strong> 1.0–1.5×</li>
+            <li><strong>Private client/wills:</strong> 0.6–1.0×</li>
+            <li><strong>Family law:</strong> 0.8–1.2×</li>
+          </ul>
+          <p style="margin-top: 0.75rem; font-size: 0.85rem; border-top: 1px solid #e0e0e0; padding-top: 0.75rem;"><em>Conveyancing is #1 claims generator — highest transaction volume, binary outcomes, mandatory SRA reporting.</em></p>
+        </div>
+
+        <div class="factor-card legal">
+          <h4>2. Firm Size & Revenue</h4>
+          <ul>
+            <li><strong>Sole trader:</strong> 1.5–2.5×</li>
+            <li><strong>2–5 partners:</strong> 1.0–1.5×</li>
+            <li><strong>6–20 partners:</strong> 0.8–1.2×</li>
+            <li><strong>21–50 partners:</strong> 0.7–1.0×</li>
+            <li><strong>51+ / Top 100:</strong> 0.6–0.9×</li>
+          </ul>
+          <p style="margin-top: 0.75rem; font-size: 0.85rem; border-top: 1px solid #e0e0e0; padding-top: 0.75rem;"><em>Larger firms have supervision structures, specialist teams and quality management.</em></p>
+        </div>
+
+        <div class="factor-card risk">
+          <h4>3. Claims History</h4>
+          <ul>
+            <li><strong>Clean (5+ years):</strong> 0.8–0.9×</li>
+            <li><strong>1 minor claim (&lt;£50k):</strong> 1.0–1.15×</li>
+            <li><strong>1 significant (&gt;£100k):</strong> 1.2–1.5×</li>
+            <li><strong>Multiple claims:</strong> 1.5–2.5×</li>
+            <li><strong>Adverse trend:</strong> possible declination or ARP</li>
+          </ul>
+          <p style="margin-top: 0.75rem; font-size: 0.85rem; border-top: 1px solid #e0e0e0; padding-top: 0.75rem;"><em>Severity rather than frequency is primary underwriting driver for large firms.</em></p>
+        </div>
+
+        <div class="factor-card gold">
+          <h4>4. SRA Compliance Record</h4>
+          <ul>
+            <li><strong>No record:</strong> 1.0×</li>
+            <li><strong>Minor SRA investigation (resolved):</strong> 1.1–1.3×</li>
+            <li><strong>LSPO/COFA concerns:</strong> 1.2–1.5×</li>
+            <li><strong>Active SRA investigation:</strong> 1.5–2.0× or declination</li>
+          </ul>
+          <p style="margin-top: 0.75rem; font-size: 0.85rem; border-top: 1px solid #e0e0e0; padding-top: 0.75rem;"><em>COLP and COFA quality is key underwriting signal.</em></p>
+        </div>
+
+        <div class="factor-card accounts">
+          <h4>5. AML/Fraud Controls</h4>
+          <ul>
+            <li><strong>Robust procedures:</strong> 0.95–1.0×</li>
+            <li><strong>Standard procedures:</strong> 1.0×</li>
+            <li><strong>Property/client money concerns:</strong> 1.2–1.5×</li>
+            <li><strong>Past account issues:</strong> possible declination</li>
+          </ul>
+          <p style="margin-top: 0.75rem; font-size: 0.85rem; border-top: 1px solid #e0e0e0; padding-top: 0.75rem;"><em>SRA Accounts Rules compliance is critical — shortfalls are major PI trigger.</em></p>
+        </div>
+
+        <div class="factor-card pi">
+          <h4>6. Excess Layer Loading</h4>
+          <ul>
+            <li><strong>Primary (0–£2m):</strong> 100% rate</li>
+            <li><strong>First excess (£2–10m):</strong> 45–65%</li>
+            <li><strong>Second excess (£10–25m):</strong> 30–45%</li>
+            <li><strong>Third excess (£25–50m):</strong> 20–35%</li>
+            <li><strong>Upper excess (£50m+):</strong> 15–25%</li>
+          </ul>
+          <p style="margin-top: 0.75rem; font-size: 0.85rem; border-top: 1px solid #e0e0e0; padding-top: 0.75rem;"><em>Excess layers benefit from underlying retention and lower loss frequency.</em></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: E4/E5 Accountants & Financial Adviser PI -->
+    <section>
+      <h2>E4/E5 Accountants & Financial Adviser PI Underwriting</h2>
+
+      <h3>E4 Accountant Rating</h3>
+      <div class="rating-formula">Accountants PI Premium = Annual Fee Income × Base Rate × Practice Area Factor × Audit Factor</div>
+      <p><strong>Audit uplift:</strong> Statutory audit work adds 0.5–2.0× loading depending on: (a) PIE audits (FTSE 100/350, banks) — major loading; (b) non-PIE audits — standard loading; (c) no audit — lower base rate.</p>
+
+      <h3>E5 Financial Adviser Rating</h3>
+      <div class="rating-formula">IFA PI Premium = AUM × Rate + Fee Income × Rate × Product Risk Factor</div>
+      <p><strong>Highest risk:</strong> DB pension transfer advice (3–8% of turnover), structured products, with-profits. <strong>Lower risk:</strong> General investment management (ISA/GIA), protection insurance, mortgage advice.</p>
+
+      <h3>Practice Area Risk Classification</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Description</th>
+            <th>E4 Base Rate (% fee income)</th>
+            <th>E5 Base Rate (% revenue)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Class I</strong></td>
+            <td>Tax compliance only, management accounts, no audit</td>
+            <td>0.3–0.6%</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><strong>Class II</strong></td>
+            <td>Mixed practice: tax, audit (non-PIE), accounts, advisory</td>
+            <td>0.6–1.2%</td>
+            <td>0.5–1.0% (standard IFA)</td>
+          </tr>
+          <tr>
+            <td><strong>Class III</strong></td>
+            <td>PIE/listed company audit, financial due diligence, insolvency</td>
+            <td>1.2–2.5%</td>
+            <td>1.5–3.5% (DB transfers, structured products)</td>
+          </tr>
+          <tr>
+            <td><strong>Class IV</strong></td>
+            <td>Big 4/Top 6 excess layers; catastrophic audit liability</td>
+            <td>Negotiated</td>
+            <td>3.0–8.0% (active DB transfer, SIPP)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 4: Underwriting Process -->
+    <section>
+      <h2>Underwriting Process for Large Firms</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th>Activity</th>
+            <th>Timeline</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1</strong></td>
+            <td>Submission: proposal form + 5-year claims history + financials</td>
+            <td>4–6 weeks before renewal</td>
+          </tr>
+          <tr>
+            <td><strong>2</strong></td>
+            <td>Practice profile review: work type breakdown, staffing, supervision</td>
+            <td>Week 1–2 of review</td>
+          </tr>
+          <tr>
+            <td><strong>3</strong></td>
+            <td>Claims analysis: frequency, severity, open reserves, trends</td>
+            <td>Week 1–3</td>
+          </tr>
+          <tr>
+            <td><strong>4</strong></td>
+            <td>SRA/ICAEW/FRC compliance review: disciplinary history, regulatory actions</td>
+            <td>Week 2–3</td>
+          </tr>
+          <tr>
+            <td><strong>5</strong></td>
+            <td>Referral to reinsurance (large programmes £25m+)</td>
+            <td>Week 2–4</td>
+          </tr>
+          <tr>
+            <td><strong>6</strong></td>
+            <td>Pricing meeting: underwriter + claims + actuarial sign-off</td>
+            <td>Week 3–5</td>
+          </tr>
+          <tr>
+            <td><strong>7</strong></td>
+            <td>Indicative terms issued</td>
+            <td>Week 4–6</td>
+          </tr>
+          <tr>
+            <td><strong>8</strong></td>
+            <td>Final terms binding (confirmation of no material changes)</td>
+            <td>Renewal date</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 5: Quality Scoring Matrix -->
+    <section>
+      <h2>Quality Scoring Matrix</h2>
+      <div class="quality-matrix">
+        <div class="quality-row">
+          <div>Claims History</div>
+          <div><strong>Green:</strong> 5+ years clean; no reserve >£50k</div>
+          <div><strong>Amber:</strong> 1–2 claims, all settled; reserve <£200k total</div>
+          <div><strong>Red:</strong> 3+ claims; reserve >£200k; adverse trend</div>
+        </div>
+        <div class="quality-row">
+          <div>Work Type Mix</div>
+          <div><strong>Green:</strong> Low-risk dominated (corporate, private client)</div>
+          <div><strong>Amber:</strong> Mixed including conveyancing or audit</div>
+          <div><strong>Red:</strong> >30% conveyancing or active PIE audit</div>
+        </div>
+        <div class="quality-row">
+          <div>Regulatory Standing</div>
+          <div><strong>Green:</strong> No SRA/FRC flags; all returns current; clean DBS</div>
+          <div><strong>Amber:</strong> Minor queries resolved; COLP/COFA flag raised</div>
+          <div><strong>Red:</strong> Active investigation; past SDT finding; ARP history</div>
+        </div>
+        <div class="quality-row">
+          <div>AML/Fraud Controls</div>
+          <div><strong>Green:</strong> Lexis Nexis + SRA-compliant; annual AML training; MLCO active</div>
+          <div><strong>Amber:</strong> Standard procedures; some gaps in monitoring</div>
+          <div><strong>Red:</strong> Poor AML records; past client account discrepancy</div>
+        </div>
+        <div class="quality-row">
+          <div>Financial Stability</div>
+          <div><strong>Green:</strong> Revenue growing; partnership stable; PII reserve funded</div>
+          <div><strong>Amber:</strong> Revenue flat; some partner exits; reserve borderline</div>
+          <div><strong>Red:</strong> Revenue declining; key partner leaving; SRA concern about viability</div>
+        </div>
+        <div class="quality-row">
+          <div>Supervision Structure</div>
+          <div><strong>Green:</strong> Policies documented; peer review; CPD current</div>
+          <div><strong>Amber:</strong> Informal supervision; CPD variable</div>
+          <div><strong>Red:</strong> No documented supervision; sole practitioner high-risk work</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Run-off Calculation -->
+    <section>
+      <h2>Run-off Calculation (Legal Firms)</h2>
+      <div class="info-box">
+        <p><strong>SRA-mandated 6-year run-off for solicitors closing practice.</strong> Run-off premium calculation:</p>
+        <p style="margin-top: 0.75rem;"><strong>Run-off premium = Last year's PI premium × Run-off multiplier</strong></p>
+        <p style="margin-top: 0.75rem;">Run-off multiplier typically: Year 1 of tail = 200–250%; Years 1–6 aggregate = 300–400% of last annual premium.</p>
+        <p style="margin-top: 0.75rem;"><strong>Key drivers:</strong> work type tail (conveyancing has long tail — title defects emerge years later); average claims notification lag for legal PI = 18–36 months; limitation period for negligence = 6 years (Limitation Act 1980).</p>
+      </div>
+    </section>
+
+    <!-- Section 7: Worked Examples -->
+    <section>
+      <h2>Worked Examples</h2>
+
+      <div class="example-box">
+        <h4>Example 1 — 8-Partner London Law Firm (E2 Primary + Excess)</h4>
+        <p><strong>Firm profile:</strong> 8 equity partners; £3.5m annual fee income; 45% conveyancing, 35% commercial, 20% private client; clean claims history 7 years; SRA compliant</p>
+
+        <p style="margin-top: 1rem;"><strong>Primary layer (£0–£3m SRA minimum):</strong></p>
+        <ul style="margin-left: 1.5rem; list-style: disc;">
+          <li>Fee income × base rate = £3.5m × 1.2% = £42,000</li>
+          <li>Work type adjustment: 45% conveyancing → ×1.35</li>
+          <li>Clean history: ×0.9</li>
+          <li>Premium primary layer: £42,000 × 1.35 × 0.9 = <strong>£51,030</strong> <span class="c-illus">ILLUS</span></li>
+        </ul>
+
+        <p style="margin-top: 1rem;"><strong>Excess layer (£3m xs £3m):</strong> £42,000 × 50% = £21,000 × 1.35 × 0.9 = ~<strong>£25,500</strong> <span class="c-illus">ILLUS</span></p>
+
+        <p style="margin-top: 1rem;"><strong>Total programme:</strong> ~<strong>£76,500</strong> <span class="c-illus">ILLUS</span></p>
+      </div>
+
+      <div class="example-box">
+        <h4>Example 2 — Regional Top 20 Accountancy Firm (E4)</h4>
+        <p><strong>Firm profile:</strong> £12m annual fee income; 30% statutory audit (mix of PIE and non-PIE), 40% tax, 30% advisory; 2 PIE audits (FTSE SmallCap); 1 historic claim (settled £85k, 4 years ago)</p>
+
+        <p style="margin-top: 1rem;"><strong>Premium calculation:</strong></p>
+        <ul style="margin-left: 1.5rem; list-style: disc;">
+          <li>Base rate: Class III (PIE audit) = 1.8% of fee income</li>
+          <li>Claims loading: 1 historic claim (×1.15)</li>
+          <li>Audit uplift: 2 PIE audits (×1.25)</li>
+          <li>Premium: £12m × 1.8% × 1.15 × 1.25 = <strong>£310,500</strong> <span class="c-illus">ILLUS</span></li>
+        </ul>
+
+        <p style="margin-top: 1rem;"><strong>Excess layers (£10m xs £15m, Lloyd's):</strong> £25,000 <span class="c-illus">ILLUS</span></p>
+
+        <p style="margin-top: 1rem;"><strong>Total:</strong> ~<strong>£335,500</strong> <span class="c-illus">ILLUS</span></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Risk Code Hub v2.4 — Professional Indemnity E&O (E2/E3/E4/E5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+  </footer>
+</body>
+</html>

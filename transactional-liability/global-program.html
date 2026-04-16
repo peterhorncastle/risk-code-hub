@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Programme Structuring | Transactional Liability Hub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --tl: #1e3a5f;
+      --tl-dark: #0d1f33;
+      --deal: #c9a84c;
+      --tax: #2563a8;
+      --contingent: #6b3fa0;
+      --warn: #d97706;
+      --light: #f0f4f8;
+      --mid: #dce8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--dark);
+      background: var(--light);
+    }
+
+    header {
+      background: linear-gradient(135deg, #0d1f33 0%, #1e3a5f 50%, #0a2040 100%);
+      color: white;
+      padding: 2rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    nav {
+      background: white;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    nav li {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    nav a {
+      display: block;
+      padding: 1rem;
+      text-decoration: none;
+      color: var(--dark);
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    nav a:hover {
+      background: var(--light);
+      border-bottom-color: var(--tl);
+    }
+
+    nav a.active {
+      color: var(--tl);
+      border-bottom-color: var(--tl);
+      font-weight: 600;
+    }
+
+    .breadcrumb {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .breadcrumb a {
+      color: var(--tl);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    section {
+      margin: 2rem 0;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: var(--tl);
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--mid);
+    }
+
+    h3 {
+      color: var(--tl-dark);
+      font-size: 1.3rem;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .tower-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 2rem 0;
+    }
+
+    .tower-layer {
+      padding: 1.5rem;
+      color: white;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .tower-layer h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .tower-layer-amount {
+      font-size: 0.95rem;
+      opacity: 0.95;
+      margin-bottom: 0.3rem;
+    }
+
+    .tower-layer-desc {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .layer-1 {
+      background: var(--tl);
+    }
+
+    .layer-2 {
+      background: var(--deal);
+      color: #333;
+    }
+
+    .layer-3 {
+      background: var(--tax);
+    }
+
+    .layer-4 {
+      background: var(--contingent);
+    }
+
+    .layer-5 {
+      background: var(--tl);
+    }
+
+    .layer-6 {
+      background: var(--tl-dark);
+    }
+
+    .info-box {
+      background: var(--light);
+      border-left: 4px solid var(--tl);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .card h4 {
+      color: white;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .card-tl h4 {
+      background: var(--tl);
+    }
+
+    .card-deal h4 {
+      background: var(--deal);
+      color: #333;
+    }
+
+    .card-tax h4 {
+      background: var(--tax);
+    }
+
+    .card-contingent h4 {
+      background: var(--contingent);
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+
+    table thead {
+      background: var(--tl);
+      color: white;
+    }
+
+    table th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    table tbody tr:nth-child(even) {
+      background: var(--light);
+    }
+
+    table tbody tr:hover {
+      background: var(--mid);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+
+    .c-ver {
+      background: #d4edda;
+      color: var(--green);
+    }
+
+    .c-est {
+      background: #fff3cd;
+      color: var(--amber);
+    }
+
+    .c-illus {
+      background: #cfe2ff;
+      color: var(--tax);
+    }
+
+    .c-gap {
+      background: #f8d7da;
+      color: var(--red);
+    }
+
+    .case-study {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border: 2px solid var(--tax);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+
+    .case-study h3 {
+      margin-top: 0;
+    }
+
+    .case-study-item {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+      border-left: 3px solid var(--tax);
+    }
+
+    .lloyd-advantages {
+      background: linear-gradient(135deg, #1e3a5f 0%, #2a4f7a 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+
+    .lloyd-advantages h3 {
+      color: white;
+      margin-top: 0;
+    }
+
+    .lloyd-advantages ol {
+      margin-left: 1.5rem;
+    }
+
+    .lloyd-advantages li {
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+
+    footer {
+      background: var(--tl-dark);
+      color: #a8c0d8;
+      padding: 2rem 1rem;
+      text-align: center;
+      margin-top: 3rem;
+      border-top: 1px solid rgba(168, 192, 216, 0.2);
+    }
+
+    footer a {
+      color: #c9a84c;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      nav ul {
+        flex-direction: column;
+      }
+
+      nav li {
+        min-width: auto;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      table th, table td {
+        padding: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Global Programme Structuring</h1>
+    <p>Cross-border deal programme design, US vs European structures, multi-jurisdiction M&A and Lloyd's market advantages</p>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="overview.html">Overview</a></li>
+      <li><a href="history.html">History</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="database.html">Loss Database</a></li>
+      <li><a href="underwriting.html">Underwriting</a></li>
+      <li><a href="rates-analysis.html">Rates & ROE</a></li>
+      <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+      <li><a href="global-program.html" class="active">Global Programme</a></li>
+      <li><a href="references.html">References</a></li>
+    </ul>
+  </nav>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Transactional Liability › Global Programme
+  </div>
+
+  <main>
+    <!-- Section 1: TL Programme Tower -->
+    <section>
+      <h2>TL Programme Tower</h2>
+      <p>Transactional liability coverage is structured in layers, from top-layer contingent indemnity down to the buyer's first-loss retention. Each layer serves a distinct purpose within a multi-layered programme.</p>
+
+      <div class="tower-container">
+        <div class="tower-layer layer-1">
+          <h4>Layer 1: Contingent Risk / Specific Indemnity (CD/CE)</h4>
+          <div class="tower-layer-amount"><strong>Limit: £/$5–200m</strong></div>
+          <div class="tower-layer-desc">Per-risk cover for identified contingencies | Claims-made, 3–10 years | Covers specific identified risks (e.g., litigation, regulatory action, environmental liability)</div>
+        </div>
+
+        <div class="tower-layer layer-2">
+          <h4>Layer 2: Tax Liability XL (TA/TB — Upper Layer)</h4>
+          <div class="tower-layer-amount"><strong>Limit: £/$5–50m excess of £/$5m</strong></div>
+          <div class="tower-layer-desc">Aggregate or per-occurrence excess | 5–10 year term | Covers excess tax liability exposure above primary tax insurance layer</div>
+        </div>
+
+        <div class="tower-layer layer-3">
+          <h4>Layer 3: Tax Liability Primary (TA/TB)</h4>
+          <div class="tower-layer-amount"><strong>Limit: £/$2–10m primary layer</strong></div>
+          <div class="tower-layer-desc">Known risk (TA) or contingent tax (TB) | Claims-made, 5–10 years | Covers identified tax exposures or contingent tax positions</div>
+        </div>
+
+        <div class="tower-layer layer-4">
+          <h4>Layer 4: W&I / R&W — XL Layer</h4>
+          <div class="tower-layer-amount"><strong>Limit: 15–30% of EV excess of primary</strong></div>
+          <div class="tower-layer-desc">Large/complex deal excess layer | 5–7 years | Follows primary W&I, protecting against catastrophic warranty claim exposure</div>
+        </div>
+
+        <div class="tower-layer layer-5">
+          <h4>Layer 5: W&I / R&W — Primary Layer</h4>
+          <div class="tower-layer-amount"><strong>Limit: 10–20% of EV</strong></div>
+          <div class="tower-layer-desc">Core buyer protection | NBI standard | 5–7 years | Main warranty and representation protection covering all standard reps</div>
+        </div>
+
+        <div class="tower-layer layer-6">
+          <h4>Layer 6: SIR / Retention</h4>
+          <div class="tower-layer-amount"><strong>Limit: 0.5% EV (PE standard)</strong></div>
+          <div class="tower-layer-desc">Buyer's first loss | No insurance coverage | Buyer absorbs all losses below retention level</div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>Programme Structure Note:</strong> Programmes are structured per-transaction. Not all layers are used in every deal. Tax and contingent risk policies are placed separately from W&I and may involve different insurers. The tower above represents a complex, multi-layered acquisition; smaller transactions typically use only primary W&I + retention.
+      </div>
+    </section>
+
+    <!-- Section 2: Deal Structure Cards -->
+    <section>
+      <h2>Deal Structure Cards — Multi-Jurisdiction Deals</h2>
+      <p>Four common structures for cross-border M&A transactions:</p>
+
+      <div class="cards">
+        <div class="card card-tl">
+          <h4>Cross-Border M&A — "Wrap" Structure</h4>
+          <p>Single global W&I policy "wrapping" all jurisdictions in the deal. Master policy governed by English law; per-jurisdiction endorsements for local law variations. <strong>Common for:</strong> European multi-country deals, APAC acquisitions with UK holding structure. <strong>Advantage:</strong> Single insurer relationship; consistent coverage; simpler claims process. <strong>Challenge:</strong> Local law variations may require specific local endorsements.</p>
+        </div>
+
+        <div class="card card-deal">
+          <h4>US R&W + Non-US W&I</h4>
+          <p>Largest cross-border deals often have US R&W policy (US-domiciled insurer; New York or Delaware law) for US entity representations alongside Lloyd's W&I for non-US assets. Driven by US regulatory requirements and buyer preference for US-admitted paper. <strong>Essential:</strong> Coordination clause needed between policies to avoid double-recovery or gap.</p>
+        </div>
+
+        <div class="card card-tax">
+          <h4>Tax Spine — Multi-Jurisdiction</h4>
+          <p>Large multinational acquisitions may require separate TA/TB policies for each key tax jurisdiction. <strong>Example:</strong> UK group with German subsidiary and Irish IP holding company → three separate tax insurance placements. Lloyd's facility covers all three on shared terms. Each policy is stand-alone with separate tax counsel opinion per jurisdiction.</p>
+        </div>
+
+        <div class="card card-contingent">
+          <h4>Seller-Side Transaction Cover (D9)</h4>
+          <p>Less common but used when seller needs to cap indemnity exposure. Seller purchases D9 policy — insurer backs seller's obligations to buyer. <strong>Often used:</strong> PE fund returning capital to LPs (cannot retain reserves); listed company with litigation risk from warranty claims; family-owned business sale where seller cannot provide long escrow. Retention sits with seller; insurer covers excess.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: US R&W vs European W&I Comparison -->
+    <section>
+      <h2>US R&W vs European W&I Comparison</h2>
+      <p>Key differences in market structure, terms, and pricing between US-domiciled R&W policies and London market W&I placements:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>US R&W (D8/D9 US)</th>
+            <th>European W&I (D8/D9 EU)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Market basis</strong></td>
+            <td>Admitted (US-licensed)</td>
+            <td>Non-admitted / Lloyd's / London market</td>
+          </tr>
+          <tr>
+            <td><strong>Governing law</strong></td>
+            <td>New York or Delaware</td>
+            <td>English law</td>
+          </tr>
+          <tr>
+            <td><strong>Typical retention</strong></td>
+            <td>0.75–1.0% EV ($500k floor)</td>
+            <td>0.5% EV (£250k floor)</td>
+          </tr>
+          <tr>
+            <td><strong>NBI structure</strong></td>
+            <td>Increasingly standard</td>
+            <td>Industry standard (&gt;95% of PE deals)</td>
+          </tr>
+          <tr>
+            <td><strong>Premium rate</strong></td>
+            <td>2.5–4.0% of limit</td>
+            <td>2.0–3.5% of limit</td>
+          </tr>
+          <tr>
+            <td><strong>Policy term</strong></td>
+            <td>3–6 years</td>
+            <td>5–7 years</td>
+          </tr>
+          <tr>
+            <td><strong>Fundamental rep survival</strong></td>
+            <td>6 years</td>
+            <td>5–7 years</td>
+          </tr>
+          <tr>
+            <td><strong>Most common claims</strong></td>
+            <td>Financial statements, tax, compliance</td>
+            <td>Financial statements, tax, IP</td>
+          </tr>
+          <tr>
+            <td><strong>Escrow still used</strong></td>
+            <td>Mid-market / smaller deals</td>
+            <td>Rare — NBI standard</td>
+          </tr>
+          <tr>
+            <td><strong>Claim management</strong></td>
+            <td>US litigation culture — more aggressive</td>
+            <td>London market — negotiated</td>
+          </tr>
+          <tr>
+            <td><strong>SPAC/de-SPAC</strong></td>
+            <td>Active market (now declining)</td>
+            <td>Limited</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 4: Transaction Types by Size/Complexity -->
+    <section>
+      <h2>Transaction Types by Size / Complexity</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Deal Type</th>
+            <th>EV Range</th>
+            <th>W&I Limit</th>
+            <th>Premium Range</th>
+            <th>Key Structures Used</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Small-cap PE buyout</strong></td>
+            <td>£10–50m</td>
+            <td>30–50% EV</td>
+            <td>£60–150k</td>
+            <td>D8; NBI; 5yr; single layer <span class="badge c-illus">ILLUS</span></td>
+          </tr>
+          <tr>
+            <td><strong>Mid-market PE</strong></td>
+            <td>£50–250m</td>
+            <td>20–30% EV</td>
+            <td>£150–600k</td>
+            <td>D8 + TA if tax risk; NBI; 5yr <span class="badge c-illus">ILLUS</span></td>
+          </tr>
+          <tr>
+            <td><strong>Large-cap PE</strong></td>
+            <td>£250m–1bn</td>
+            <td>10–20% EV</td>
+            <td>£500k–2m</td>
+            <td>D8 + W&I XL + TA/TB; NBI; 6yr <span class="badge c-illus">ILLUS</span></td>
+          </tr>
+          <tr>
+            <td><strong>Mega-cap M&A</strong></td>
+            <td>£1bn+</td>
+            <td>10–15% EV</td>
+            <td>£2–10m</td>
+            <td>D8 primary + XL; TA/TB; CD/CE; multi-layer <span class="badge c-illus">ILLUS</span></td>
+          </tr>
+          <tr>
+            <td><strong>Strategic (trade buyer)</strong></td>
+            <td>Any</td>
+            <td>10–25% EV</td>
+            <td>+5–15% vs PE</td>
+            <td>D8; standard escrow or NBI; 5–7yr <span class="badge c-illus">ILLUS</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><em>All figures illustrative for educational purposes.</em></p>
+    </section>
+
+    <!-- Section 5: Captive & Alternative Structures -->
+    <section>
+      <h2>Captive & Alternative Structures</h2>
+
+      <div class="info-box">
+        <strong>Emerging Risk Transfer Models:</strong> Large repeat transactors (active PE funds, corporate acquirers with &gt;5 deals/year) increasingly use captive fronts, programme facilities and multi-deal frameworks to optimise cost, speed and claims control:
+        <ul style="margin-top: 1rem; margin-left: 1.5rem;">
+          <li><strong>Annual facility / multi-deal programme:</strong> Pre-agreed terms and wording for all deals within defined parameters. Binding authority at Lloyd's. Reduces transaction time from 10–14 days to 2–5 days per deal.</li>
+          <li><strong>Captive fronting:</strong> Buyer captive provides first layer (SIR); Lloyd's fronts primary W&I above captive retention. Improves ROI on captive capital; maintains claims-control.</li>
+          <li><strong>Synthetic R&W / NBI facility:</strong> Facility agreement pre-establishes NBI terms; seller gives nil indemnity at signing; insurer bound without individual underwriting (within pre-agreed parameters).</li>
+          <li><strong>Parametric tax cover:</strong> Fixed payout on confirmed adverse tax ruling — avoids proving loss quantum. Emerging for specific HMRC/IRS assessment scenarios.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 6: Illustrative Case Study -->
+    <section>
+      <div class="case-study">
+        <h3><span class="badge c-illus">ILLUS</span> Pan-European PE Buyout — 5-Country Technology Group</h3>
+
+        <h4>Deal Overview</h4>
+        <p>PE fund acquires software/technology group with operations in UK, Germany, Netherlands, France and Sweden. <strong>EV = €420m</strong>. Seller = PE fund exiting after 5-year hold. NBI structure required.</p>
+
+        <h4>Insurance Programme</h4>
+        <div class="case-study-item">
+          <strong>W&I primary (D8):</strong> €84m limit (20% EV) | English law | Lloyd's | 6-year | 0.5% EV retention (€2.1m) | <strong>Premium:</strong> €84m × 2.6% = €2.184m
+        </div>
+        <div class="case-study-item">
+          <strong>W&I XL (D8):</strong> €42m xs €84m | Lloyd's following line | 6-year | €0.45m
+        </div>
+        <div class="case-study-item">
+          <strong>UK Tax TA (HMRC R&D credit position):</strong> £8m | 5-year | <strong>Premium:</strong> £8m × 4.0% = £320k
+        </div>
+        <div class="case-study-item">
+          <strong>German Trade Tax TB (GmbH restructuring):</strong> €5m | 5-year | <strong>Premium:</strong> €5m × 5.0% = €250k
+        </div>
+        <div class="case-study-item">
+          <strong>Dutch IP Holding TA:</strong> €12m | 5-year | <strong>Premium:</strong> €12m × 3.5% = €420k
+        </div>
+
+        <p style="margin-top: 1.5rem; font-weight: 600;">
+          <strong>Total estimated programme cost:</strong> ~€3.6m <span class="badge c-illus">ILLUS</span>
+        </p>
+      </div>
+
+      <div class="lloyd-advantages">
+        <h3>Lloyd's Market Advantages</h3>
+        <ol>
+          <li><strong>Largest W&I capacity globally:</strong> Single syndicate lines up to £50m; lead + follow structure for larger limits</li>
+          <li><strong>Speed:</strong> Lloyd's box market allows same-day indicative terms for familiar deal types</li>
+          <li><strong>Cross-class:</strong> TL alongside D&O (financial lines) under coordinated programme</li>
+          <li><strong>Claims expertise:</strong> Financial lines claims specialists; average W&I claim resolved 12–18 months</li>
+          <li><strong>Tax/contingent:</strong> Specialist TA/TB/CD/CE capacity developed over 30 years — few non-Lloyd's markets can match depth</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Risk Code Hub v2.3 — Transactional Liability (D8/D9/TA/TB/CD/CE) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.</p>
+  </footer>
+</body>
+</html>

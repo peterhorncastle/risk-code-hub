@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Major Events Timeline — Transactional Liability (D8/D9/TA/TB/CD/CE) — Risk Code Hub</title>
+  <style>
+    :root {
+      --tl: #1e3a5f;
+      --tl-dark: #0d1f33;
+      --deal: #c9a84c;
+      --tax: #2563a8;
+      --contingent: #6b3fa0;
+      --warn: #d97706;
+      --light: #f0f4f8;
+      --mid: #dce8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #222;
+      background: #f9fafb;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #0d1f33 0%, #1e3a5f 50%, #0a2040 100%);
+      position: relative;
+      overflow: hidden;
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(201, 168, 76, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 50%, rgba(37, 99, 168, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    header > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #d0d8e8;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      background: white;
+      padding: 1rem 2rem;
+      font-size: 0.95rem;
+      color: #666;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .breadcrumb a {
+      color: var(--tl);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    /* Navigation */
+    nav {
+      background: white;
+      padding: 1rem 2rem;
+      border-bottom: 2px solid #e5e7eb;
+      overflow-x: auto;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    nav a {
+      color: #666;
+      text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    nav a:hover {
+      background: var(--light);
+      color: var(--tl);
+    }
+
+    nav a.active {
+      color: white;
+      background: var(--tl);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: var(--tl);
+      margin: 2.5rem 0 2rem 0;
+    }
+
+    /* Confidence Badges */
+    .c-ver, .c-est, .c-illus, .c-gap {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      vertical-align: super;
+    }
+
+    .c-ver {
+      background: rgba(39, 174, 96, 0.15);
+      color: var(--green);
+    }
+
+    .c-est {
+      background: rgba(230, 126, 34, 0.15);
+      color: var(--amber);
+    }
+
+    .c-illus {
+      background: rgba(37, 99, 168, 0.15);
+      color: var(--tax);
+    }
+
+    .c-gap {
+      background: rgba(192, 57, 43, 0.15);
+      color: var(--red);
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding: 2rem 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 30px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, #ddd 0%, #aaa 50%, #ddd 100%);
+    }
+
+    .timeline-event {
+      margin-bottom: 2.5rem;
+      padding-left: 100px;
+      position: relative;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 8px;
+      top: 5px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: white;
+      z-index: 2;
+    }
+
+    /* Dot color classes */
+    .dot-wi {
+      background: var(--tl);
+      border-color: #0d1f33;
+    }
+
+    .dot-tax {
+      background: var(--tax);
+      border-color: #1a3f7a;
+    }
+
+    .dot-regulatory {
+      background: var(--deal);
+      border-color: #9d7e3a;
+    }
+
+    .dot-contingent {
+      background: var(--contingent);
+      border-color: #4a2667;
+    }
+
+    .dot-claims {
+      background: var(--warn);
+      border-color: #a55e05;
+    }
+
+    .dot-market {
+      background: var(--green);
+      border-color: #1a6644;
+    }
+
+    .timeline-year {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.25rem;
+    }
+
+    .timeline-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-description {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.6;
+      margin: 0.5rem 0;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--tl-dark);
+      color: #a8c0d8;
+      padding: 2rem;
+      text-align: center;
+      margin-top: 3rem;
+      border-top: 1px solid #1a2a3a;
+    }
+
+    footer a {
+      color: #d0d8e8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    footer p {
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      main {
+        padding: 1rem;
+      }
+
+      .timeline::before {
+        left: 18px;
+      }
+
+      .timeline-dot {
+        left: -2px;
+        width: 40px;
+        height: 40px;
+        font-size: 0.7rem;
+      }
+
+      .timeline-event {
+        padding-left: 70px;
+      }
+
+      .timeline-year {
+        font-size: 1rem;
+      }
+
+      .timeline-title {
+        font-size: 1rem;
+      }
+
+      .timeline-description {
+        font-size: 0.9rem;
+      }
+
+      nav ul {
+        gap: 0.25rem;
+      }
+
+      nav a {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Major Events Timeline</h1>
+    <p class="subtitle">Key transactions, claims, regulatory changes and market inflections 1990–2024</p>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Transactional Liability › Timeline
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="overview.html">Overview</a></li>
+      <li><a href="history.html">History</a></li>
+      <li><a href="timeline.html" class="active">Timeline</a></li>
+      <li><a href="database.html">Loss Database</a></li>
+      <li><a href="underwriting.html">Underwriting</a></li>
+      <li><a href="rates-analysis.html">Rates & ROE</a></li>
+      <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+      <li><a href="global-program.html">Global Programme</a></li>
+      <li><a href="references.html">References</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h2>Timeline of Key Events</h2>
+
+    <div class="timeline">
+      <!-- Event 1 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-wi">1990</div>
+        <div class="timeline-year">1990</div>
+        <div class="timeline-title">First Lloyd's W&I Policy</div>
+        <div class="timeline-description">First warranty & indemnity policy written in the London market for a continental European M&A transaction. Product niche, high-priced (~10% of limit), narrow coverage. <span class="c-est">EST</span></div>
+      </div>
+
+      <!-- Event 2 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-regulatory">1994</div>
+        <div class="timeline-year">1994</div>
+        <div class="timeline-title">Uruguay Round / TRIPS Agreement</div>
+        <div class="timeline-description">WTO TRIPS Agreement standardises IP protections globally, increasing value of IP representations in M&A — driving early demand for IP rep coverage in W&I. <span class="c-ver">VER</span></div>
+      </div>
+
+      <!-- Event 3 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-market">1998</div>
+        <div class="timeline-year">1998</div>
+        <div class="timeline-title">BVCA Best Practice Guidelines</div>
+        <div class="timeline-description">British Venture Capital Association publishes M&A best practice guidelines referencing W&I insurance as standard risk management tool for PE exits in UK. Catalyst for European PE adoption. <span class="c-est">EST</span></div>
+      </div>
+
+      <!-- Event 4 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-regulatory">2002</div>
+        <div class="timeline-year">2002</div>
+        <div class="timeline-title">Sarbanes-Oxley Act (US)</div>
+        <div class="timeline-description">SOX introduces CEO/CFO certification of financial statements; increases financial rep accuracy standards. Drives demand for financial statement rep coverage in W&I. <span class="c-ver">VER</span></div>
+      </div>
+
+      <!-- Event 5 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-market">2007</div>
+        <div class="timeline-year">2007</div>
+        <div class="timeline-title">Record Pre-GFC M&A Peak</div>
+        <div class="timeline-description">Global M&A reaches ~$4.8tn — PE buyout frenzy; W&I written on peak valuations. Lloyd's TL market GWP estimated ~$300–400m. Seeds of future claims. <span class="c-est">EST</span></div>
+      </div>
+
+      <!-- Event 6 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-claims">2008</div>
+        <div class="timeline-year">2008</div>
+        <div class="timeline-title">Global Financial Crisis</div>
+        <div class="timeline-description">M&A deal volumes collapse ~60%. W&I claims emerge as inflated valuations unravel — financial statement and EBITDA representation breaches dominate. First systematic claims data for W&I market. <span class="c-ver">VER</span></div>
+      </div>
+
+      <!-- Event 7 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-claims">2010</div>
+        <div class="timeline-year">2010</div>
+        <div class="timeline-title">First Significant W&I Claims Paid</div>
+        <div class="timeline-description">Lloyd's syndicates pay first significant W&I claims ($5–30m range); market adjusts — financial statement reps sublimited or excluded; underwriting criteria tightened. <span class="c-est">EST</span></div>
+      </div>
+
+      <!-- Event 8 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-market">2012</div>
+        <div class="timeline-year">2012</div>
+        <div class="timeline-title">NBI Structure Emerges</div>
+        <div class="timeline-description">"No-box indemnity" (nil seller indemnity cap) becomes standard in European PE transactions. Sellers can return 100% of deal proceeds to LPs at closing. Structural shift — W&I moves from supplementary to primary recourse. <span class="c-est">EST</span></div>
+      </div>
+
+      <!-- Event 9 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-wi">2014</div>
+        <div class="timeline-year">2014</div>
+        <div class="timeline-title">US R&W Market Inflection</div>
+        <div class="timeline-description">US representations & warranties market scales rapidly. AIG, Tokio Marine, Liberty Mutual expand dedicated R&W teams. Deal count grows from ~300 to ~800 in a single year. Premium rates compress to 2.5–3.5% of limit. <span class="c-est">EST</span></div>
+      </div>
+
+      <!-- Event 10 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-tax">2017</div>
+        <div class="timeline-year">2017</div>
+        <div class="timeline-title">US Tax Cuts & Jobs Act</div>
+        <div class="timeline-description">TCJA introduces GILTI, BEAT, FDII — immediate demand surge for TA/TB tax insurance covering historic and transitional US tax positions in cross-border M&A. <span class="c-ver">VER</span></div>
+      </div>
+
+      <!-- Event 11 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-regulatory">2018</div>
+        <div class="timeline-year">2018</div>
+        <div class="timeline-title">GDPR Enforcement Begins</div>
+        <div class="timeline-description">EU GDPR takes effect May 2018. Data privacy representations become standard in W&I; cyber/data exclusions added by many insurers. First data rep claims emerge 2019–20. <span class="c-ver">VER</span></div>
+      </div>
+
+      <!-- Event 12 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-wi">2019</div>
+        <div class="timeline-year">2019</div>
+        <div class="timeline-title">Record European W&I Market</div>
+        <div class="timeline-description">European W&I market estimated at ~$1.5–2bn GWP — Lloyd's dominant. ~90% of European PE deals use W&I. Retention at historic low (0.5% EV); premium ~2–2.5% of limit. <span class="c-est">EST</span></div>
+      </div>
+
+      <!-- Event 13 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-claims">2020</div>
+        <div class="timeline-year">2020</div>
+        <div class="timeline-title">COVID-19 M&A Collapse</div>
+        <div class="timeline-description">Pandemic causes ~$300bn of announced deals to collapse or be renegotiated. W&I/R&W claims spike on MAC reps, revenue warranties and supply chain reps. Insurers add pandemic exclusions. <span class="c-ver">VER</span></div>
+      </div>
+
+      <!-- Event 14 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-market">2021</div>
+        <div class="timeline-year">2021</div>
+        <div class="timeline-title">Global M&A Record Year</div>
+        <div class="timeline-description">Global M&A reaches ~$5.8tn — all-time record. SPAC boom: 613 SPACs raise ~$162bn. W&I/R&W deal count estimated 5,000+. Lloyd's TL market GWP exceeds $1bn for first time. <span class="c-ver">VER</span></div>
+      </div>
+
+      <!-- Event 15 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-claims">2021</div>
+        <div class="timeline-year">2021</div>
+        <div class="timeline-title">SPAC Forward-Looking Rep Problem</div>
+        <div class="timeline-description">De-SPAC mergers include projection representations (unusual for W&I). SEC scrutiny of SPAC forecasts triggers first W&I/D&O crossover claims. Insurers exclude or sublimit SPAC projection reps. <span class="c-ver">VER</span></div>
+      </div>
+
+      <!-- Event 16 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-market">2022</div>
+        <div class="timeline-year">2022</div>
+        <div class="timeline-title">Rate Hardening & Cyber Rep Exclusions</div>
+        <div class="timeline-description">Premium rates rise 15–25%; cyber/data privacy reps excluded from standard W&I; retention floors increase. ESG/greenwashing representations added to SPA and W&I submissions. <span class="c-est">EST</span></div>
+      </div>
+
+      <!-- Event 17 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-claims">2023</div>
+        <div class="timeline-year">2023</div>
+        <div class="timeline-title">All-Time High Claims Frequency</div>
+        <div class="timeline-description">2020–21 vintage policies enter 3-year claims window. Claims frequency reaches record levels — ~20–25% of policies generate at least one notification. Financial statement reps remain #1 cause (~40%). Average paid claim ~$6–8m. <span class="c-est">EST</span></div>
+      </div>
+
+      <!-- Event 18 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-tax">2023</div>
+        <div class="timeline-year">2023</div>
+        <div class="timeline-title">OECD Pillar Two Goes Live</div>
+        <div class="timeline-description">OECD Pillar Two global minimum tax (15%) effective for accounting periods from Jan 2024. Creates immediate demand for TA/TB insurance covering deferred tax positions, UTPR exposure and transitional safe harbours in multinational M&A. <span class="c-ver">VER</span></div>
+      </div>
+
+      <!-- Event 19 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-contingent">2024</div>
+        <div class="timeline-year">2024</div>
+        <div class="timeline-title">PFAS Contingent Risk Surge</div>
+        <div class="timeline-description">EPA finalises PFAS MCL rules (April 2024). Chemical, automotive and textile M&A generates large CE/CD contingent risk demand. Several $50–200m PFAS contingency policies bound at Lloyd's. <span class="c-ver">VER</span></div>
+      </div>
+
+      <!-- Event 20 -->
+      <div class="timeline-event">
+        <div class="timeline-dot dot-wi">2024</div>
+        <div class="timeline-year">2024</div>
+        <div class="timeline-title">AI Representations Emerge</div>
+        <div class="timeline-description">Generative AI use by target companies creates novel IP/copyright representation risk in W&I. Insurers develop AI-specific warranty language and exclusions. First AI-related rep warranty claims begin to emerge. <span class="c-est">EST</span></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p><strong>Risk Code Hub v2.3</strong> — Transactional Liability (D8/D9/TA/TB/CD/CE)</p>
+    <p><a href="../index.html">← Back to Hub</a></p>
+    <p>Educational use only. Not financial advice.</p>
+  </footer>
+</body>
+</html>

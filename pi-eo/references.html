@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>References & Knowledge Sources | Risk Code Hub – PI E&O</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --pi: #2c4a7a; --pi-dark: #1a2d4a; --legal: #8b5e3c; --accounts: #2d6b4a;
+            --risk: #c0572a; --gold: #c9a84c; --light: #f0f4f8; --mid: #dce8f5;
+            --dark: #111; --red: #c0392b; --amber: #e67e22; --green: #27ae60;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: var(--dark); background: var(--light); }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a2d4a 0%, #2c4a7a 50%, #1a3560 100%);
+            color: #fff; padding: 3rem 2rem; position: relative; overflow: hidden;
+        }
+        header::before {
+            content: ''; position: absolute; top: 0; left: 50%; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+            transform: translate(-50%, -50%); pointer-events: none;
+        }
+        header > * { position: relative; z-index: 1; }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .subtitle { font-size: 1.1rem; opacity: 0.95; }
+
+        /* Breadcrumb */
+        nav.breadcrumb { background: #f8f9fa; padding: 1rem 2rem; font-size: 0.95rem; border-bottom: 1px solid #e0e0e0; }
+        nav.breadcrumb a { color: var(--pi); text-decoration: none; }
+        nav.breadcrumb a:hover { text-decoration: underline; }
+
+        /* Main nav tabs */
+        nav.tabs { background: #fff; border-bottom: 2px solid #e0e0e0; padding: 0 2rem; display: flex; flex-wrap: wrap; gap: 0; }
+        nav.tabs a {
+            display: block; padding: 1rem 1.5rem; text-decoration: none; color: #555;
+            font-size: 0.95rem; transition: all 0.3s; border-bottom: 3px solid transparent;
+        }
+        nav.tabs a:hover { color: var(--pi); }
+        nav.tabs a.active { color: var(--pi); border-bottom-color: var(--pi); font-weight: 600; }
+
+        /* Main content */
+        main { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        section { margin-bottom: 3rem; }
+        h2 { font-size: 1.8rem; color: var(--pi-dark); margin-bottom: 1.5rem; border-bottom: 3px solid var(--pi); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.3rem; color: var(--pi); margin: 1.5rem 0 0.8rem; }
+        p { color: #555; margin-bottom: 1rem; }
+
+        /* Confidence badges */
+        .c-ver, .c-est, .c-illus, .c-gap {
+            display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.6rem;
+            border-radius: 3px; margin-left: 0.5rem; text-transform: uppercase;
+        }
+        .c-ver { background: var(--green); color: #fff; }
+        .c-est { background: var(--amber); color: #fff; }
+        .c-illus { background: #3498db; color: #fff; }
+        .c-gap { background: #e74c3c; color: #fff; }
+
+        /* Badge legend cards */
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .card {
+            background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--pi); transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+        .card h4 {
+            color: #fff; padding: 0.5rem 0.8rem; border-radius: 3px; display: inline-block;
+            font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase;
+        }
+        .card.ver h4 { background: var(--green); }
+        .card.est h4 { background: var(--amber); }
+        .card.illus h4 { background: #3498db; }
+        .card.gap h4 { background: #e74c3c; }
+        .card p { color: #555; font-size: 0.95rem; line-height: 1.7; }
+
+        /* Warning box */
+        .warning-box {
+            background: #fef5e7; border: 3px solid var(--amber); padding: 1.5rem;
+            border-radius: 8px; margin: 1.5rem 0; color: #333;
+        }
+        .warning-box h4 { color: var(--amber); margin-bottom: 0.8rem; }
+        .warning-box strong { color: var(--risk); }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        th { background: var(--pi); color: #fff; padding: 1rem; text-align: left; font-weight: 600; font-size: 0.95rem; }
+        td { padding: 0.9rem; border-bottom: 1px solid #e0e0e0; font-size: 0.95rem; }
+        tr:hover { background: #f8f9fa; }
+        td:first-child { font-weight: 600; color: var(--pi-dark); }
+        table a { color: var(--pi); text-decoration: none; }
+        table a:hover { text-decoration: underline; }
+
+        /* Data gap list */
+        .gap-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .gap-item {
+            background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 5px solid #e74c3c;
+        }
+        .gap-item h4 { color: var(--pi-dark); margin-bottom: 0.8rem; }
+        .gap-item p { color: #555; font-size: 0.95rem; line-height: 1.7; }
+
+        /* Footer */
+        footer {
+            background: var(--pi-dark); color: #a8b8d0; padding: 2rem; text-align: center;
+            margin-top: 3rem; font-size: 0.9rem; border-top: 1px solid #2a3f5a;
+        }
+        footer a { color: var(--gold); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            nav.tabs { padding: 0; }
+            nav.tabs a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            main { padding: 0 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>References & Knowledge Sources</h1>
+        <p class="subtitle">Confidence badge legend, knowledge cutoff, primary sources and per-module data quality audit</p>
+    </header>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Risk Code Hub</a> › Professional Indemnity E&O
+    </nav>
+
+    <!-- Main navigation tabs -->
+    <nav class="tabs">
+        <a href="overview.html">Overview</a>
+        <a href="history.html">History</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="database.html">Claims Database</a>
+        <a href="underwriting.html">Underwriting</a>
+        <a href="rates-analysis.html">Rates & ROE</a>
+        <a href="risk-mitigation.html">Risk Mitigation</a>
+        <a href="global-program.html">Global Programme</a>
+        <a href="references.html" class="active">References</a>
+    </nav>
+
+    <main>
+        <!-- Section 1: Confidence Badge Legend -->
+        <section id="badge-legend">
+            <h2>Confidence Badge Legend</h2>
+            <p>Each claim in this hub is tagged with a confidence badge indicating the source and reliability of the information. Use these badges to determine the level of independent verification available.</p>
+
+            <div class="cards">
+                <div class="card ver">
+                    <h4><span class="c-ver">VER</span> Verifiable</h4>
+                    <p>Drawn from court judgments, regulatory publications, Hansard, FCA/SRA/FRC notices, or widely reported public records. These claims can be independently verified from authoritative sources.</p>
+                </div>
+                <div class="card est">
+                    <h4><span class="c-est">EST</span> Estimated</h4>
+                    <p>Derived from broker market reports, industry surveys, academic research; reasonable range but not independently confirmed by primary regulatory authority. Use as indicator but cross-reference with specialists.</p>
+                </div>
+                <div class="card illus">
+                    <h4><span class="c-illus">ILLUS</span> Illustrative</h4>
+                    <p>Worked examples with plausible but hypothetical figures for educational purposes; not based on actual policies. Useful for understanding structure but not market fact.</p>
+                </div>
+                <div class="card gap">
+                    <h4><span class="c-gap">GAP</span> Data Gap</h4>
+                    <p>Information not publicly available; cross-reference with a PI specialist broker before relying on this claim. Indicates an area where regulatory or market opacity exists.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Knowledge Cutoff Warning -->
+        <section id="cutoff">
+            <h2>Knowledge Cutoff & Regulatory Volatility</h2>
+
+            <div class="warning-box">
+                <h4>Knowledge Cutoff: May 2025</h4>
+                <p>Professional indemnity is a heavily regulated, constantly evolving class. Key areas most likely to have changed since cutoff:</p>
+                <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+                    <li><strong>SRA minimum PI limits and AMTC terms:</strong> Reviewed periodically; current requirements should be verified with SRA website</li>
+                    <li><strong>ARGA/Audit Reform Bill implementation:</strong> Status and timing of Big 4 separation, liability caps, and PIE restructuring</li>
+                    <li><strong>FCA BSPS enforcement and compensation quantum:</strong> Final settlement amounts and claims resolution deadlines</li>
+                    <li><strong>AI-related legal/advice liability standards:</strong> Emerging coverage triggers, exclusions, and underwriting practice</li>
+                    <li><strong>Big 4 audit reform separation timeline:</strong> Regulatory and operational implications for PI insurance</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>Always verify current requirements with a PI specialist broker and the relevant regulatory body.</strong></p>
+            </div>
+        </section>
+
+        <!-- Section 3: Primary Sources Table -->
+        <section id="sources">
+            <h2>Primary Sources (18 Items)</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Source</th>
+                        <th>Type</th>
+                        <th>Relevance</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>SRA: Minimum Terms and Conditions (AMTC)</td>
+                        <td>Regulatory</td>
+                        <td>E2 primary PI mandatory wording</td>
+                        <td><a href="https://www.sra.org.uk/solicitors/resources/indemnity-insurance/" target="_blank">sra.org.uk/indemnity</a></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>SRA: Qualifying Insurers List 2024</td>
+                        <td>Regulatory</td>
+                        <td>E2 approved insurer verification</td>
+                        <td><a href="https://www.sra.org.uk/solicitors/resources/indemnity-insurance/qualifying-insurers/" target="_blank">sra.org.uk/qualifying-insurers</a></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Bar Standards Board Handbook 2022</td>
+                        <td>Regulatory</td>
+                        <td>E3 PI requirements and advocacy</td>
+                        <td><a href="https://www.barstandardsboard.org.uk/for-barristers/bsb-handbook/" target="_blank">barstandardsboard.org.uk/handbook</a></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>FRC: Audit Quality Review Reports</td>
+                        <td>Regulatory</td>
+                        <td>E4 audit standard/quality basis</td>
+                        <td><a href="https://www.frc.org.uk/auditors/audit-quality" target="_blank">frc.org.uk/audit-quality</a></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>FCA: Consumer Investment Strategy 2021</td>
+                        <td>Regulatory</td>
+                        <td>E5 pension transfer suitability</td>
+                        <td><a href="https://www.fca.org.uk/publications/policy-statements/ps21-3-strengthening-our-financial-promotion-rules" target="_blank">fca.org.uk/ps21-3</a></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>ICAEW: Professional Indemnity Insurance Guidance</td>
+                        <td>Professional</td>
+                        <td>E4 PI requirements and practice</td>
+                        <td><a href="https://www.icaew.com/regulation/professional-indemnity-insurance" target="_blank">icaew.com/pii-guidance</a></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>FCA BSPS Thematic Review 2021</td>
+                        <td>Regulatory</td>
+                        <td>E5 BSPS liability basis</td>
+                        <td><a href="https://www.fca.org.uk/publications/thematic-reviews/tr21-2-british-steel-pension-transfer-advice" target="_blank">fca.org.uk/bsps-review</a></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>FRC: KPMG Enforcement Notice (Carillion) 2023</td>
+                        <td>Regulatory</td>
+                        <td>E4 audit liability case basis</td>
+                        <td><a href="https://www.frc.org.uk/news-and-events/news/2023/06/frc-sanctions-kpmg-for-failures-in-carillion-audit/" target="_blank">frc.org.uk/kpmg-carillion</a></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>Caparo Industries v Dickman [1990] 2 AC 605</td>
+                        <td>Case law</td>
+                        <td>E4 auditor duty of care</td>
+                        <td><a href="https://www.bailii.org/uk/cases/UKHL/1990/2.html" target="_blank">bailii.org/caparo</a></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>Hall v Simons [2000] UKHL 38</td>
+                        <td>Case law</td>
+                        <td>E3 barrister immunity abolished</td>
+                        <td><a href="https://www.bailii.org/uk/cases/UKHL/2000/38.html" target="_blank">bailii.org/hall-v-simons</a></td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>Manchester Building Society v Grant Thornton [2021]</td>
+                        <td>Case law</td>
+                        <td>E4 scope of duty — SAAMCO</td>
+                        <td><a href="https://www.bailii.org/uk/cases/UKSC/2021/20.html" target="_blank">bailii.org/manchester-v-gt</a></td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>Jackson Review: Review of Civil Litigation Costs (2009)</td>
+                        <td>Government</td>
+                        <td>E2 claims market reform basis</td>
+                        <td><a href="https://www.judiciary.gov.uk/publications/review-of-civil-litigation-costs-final-report/" target="_blank">judiciary.gov.uk/jackson-review</a></td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>SRA: AML Guidance 2020</td>
+                        <td>Regulatory</td>
+                        <td>AML/KYC controls basis for E2/E3</td>
+                        <td><a href="https://www.sra.org.uk/solicitors/guidance/anti-money-laundering/" target="_blank">sra.org.uk/aml</a></td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>MLR 2017 — Money Laundering Regulations</td>
+                        <td>Legislative</td>
+                        <td>AML obligations across all professions</td>
+                        <td><a href="https://www.legislation.gov.uk/uksi/2017/692" target="_blank">legislation.gov.uk/mlr-2017</a></td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>Marsh: UK PI Market Report 2023</td>
+                        <td>Broker report</td>
+                        <td>Premium rates and market conditions</td>
+                        <td><a href="https://www.marsh.com" target="_blank">marsh.com</a></td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>Willis Towers Watson: PI Market Outlook 2024</td>
+                        <td>Broker report</td>
+                        <td>Rate index and sector trends</td>
+                        <td><a href="https://www.wtwco.com" target="_blank">wtwco.com</a></td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td>FCA PS21/3: Strengthening Financial Promotion Rules</td>
+                        <td>Regulatory</td>
+                        <td>E5 record keeping (10 yr pension advice)</td>
+                        <td><a href="https://www.fca.org.uk/publications/policy-statements/ps21-3" target="_blank">fca.org.uk/ps21-3</a></td>
+                    </tr>
+                    <tr>
+                        <td>18</td>
+                        <td>Companies Act 2006 — Audit Liability Provisions</td>
+                        <td>Legislative</td>
+                        <td>E4 unlimited audit liability; LLA framework</td>
+                        <td><a href="https://www.legislation.gov.uk/ukpga/2006/46" target="_blank">legislation.gov.uk/ca-2006</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 4: Per-Module Confidence Audit -->
+        <section id="audit">
+            <h2>Per-Module Confidence Audit</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>Highest Confidence</th>
+                        <th>Key EST Claims</th>
+                        <th>Data Gaps</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01 Overview</td>
+                        <td>SRA limits <span class="c-ver">VER</span>; GWP figures <span class="c-est">EST</span></td>
+                        <td>UK PI market ~£2bn GWP; carrier market shares</td>
+                        <td>Actual Lloyd's E2/E3/E4/E5 GWP breakdown</td>
+                    </tr>
+                    <tr>
+                        <td>02 History</td>
+                        <td>Regulatory/case events <span class="c-ver">VER</span>; market estimates <span class="c-est">EST</span></td>
+                        <td>Lloyd's PI premium levels pre-2000; ARP volumes</td>
+                        <td>Pre-1990 PI market premium data</td>
+                    </tr>
+                    <tr>
+                        <td>03 Timeline</td>
+                        <td>All court cases <span class="c-ver">VER</span>; market events <span class="c-est">EST</span></td>
+                        <td>Loss figures for settlement events</td>
+                        <td>Actual claim settlement amounts — almost all confidential</td>
+                    </tr>
+                    <tr>
+                        <td>04 Database</td>
+                        <td>Court judgments <span class="c-ver">VER</span>; industry events <span class="c-est">EST</span></td>
+                        <td>Settlement amounts; aggregate market losses</td>
+                        <td>Individual policy claim amounts not publicly disclosed</td>
+                    </tr>
+                    <tr>
+                        <td>05 Underwriting</td>
+                        <td>Rate ranges <span class="c-est">EST</span>; case law basis <span class="c-ver">VER</span></td>
+                        <td>Fee income base rates; excess layer pricing factors</td>
+                        <td>Insurer-specific rate cards</td>
+                    </tr>
+                    <tr>
+                        <td>06 Rates & ROE</td>
+                        <td>Market cycles verifiable by direction; levels <span class="c-est">EST</span></td>
+                        <td>Rate index absolute levels; combined ratio data</td>
+                        <td>Syndicate-level PI combined ratios</td>
+                    </tr>
+                    <tr>
+                        <td>07 Risk Mitigation</td>
+                        <td>Regulatory standards <span class="c-ver">VER</span>; best practice <span class="c-est">EST</span></td>
+                        <td>Risk action premium impact quantification</td>
+                        <td>Insurer underwriting criteria by risk feature</td>
+                    </tr>
+                    <tr>
+                        <td>08 Global Programme</td>
+                        <td>Regulatory structures <span class="c-ver">VER</span>; excess pricing <span class="c-est">EST</span></td>
+                        <td>Programme case study premium totals</td>
+                        <td>Actual Magic Circle / Big 4 PI programme costs</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 5: Data Gap Disclosures -->
+        <section id="gaps">
+            <h2>Data Gap Disclosures</h2>
+            <p>The following areas represent known gaps in publicly available information. Before relying on claims in these areas, cross-reference with a specialist PI broker.</p>
+
+            <div class="gap-list">
+                <div class="gap-item">
+                    <h4>E2–E5 GWP Breakdown <span class="c-gap">GAP</span></h4>
+                    <p>Lloyd's does not publish GWP split between E2/E3/E4/E5. Total UK PI market estimates (~£2bn) are from broker surveys and ABI data — not disaggregated by profession. Individual sub-class data not available.</p>
+                </div>
+                <div class="gap-item">
+                    <h4>BSPS Aggregate Industry Liability <span class="c-gap">GAP</span></h4>
+                    <p>The £2–3bn estimate for BSPS pension transfer advice compensation is FCA-cited but the final settled quantum will not be known until all claims are resolved. As of May 2025 cutoff, significant exposure remains unresolved.</p>
+                </div>
+                <div class="gap-item">
+                    <h4>Big 4 PI Programme Costs <span class="c-gap">GAP</span></h4>
+                    <p>Big 4 firms (PwC, Deloitte, EY, KPMG) do not disclose PI programme costs or self-insurance reserves. All excess layer data for this segment is market intelligence from broker contacts — not verifiable from public sources.</p>
+                </div>
+                <div class="gap-item">
+                    <h4>EY/Wirecard Final Settlement <span class="c-gap">GAP</span></h4>
+                    <p>As of May 2025, EY Wirecard litigation was ongoing. The €700m+ claims figure is from filed pleadings — actual paid quantum unknown. Settlement is likely subject to confidentiality agreements.</p>
+                </div>
+                <div class="gap-item">
+                    <h4>AI Legal Advice Liability <span class="c-gap">GAP</span></h4>
+                    <p>This is an emerging area with no established case law or settled underwriting practice as of May 2025. Risk characterisation, coverage triggers and exclusions for AI-generated advice errors are actively under development by PI insurers and regulators.</p>
+                </div>
+                <div class="gap-item">
+                    <h4>SRA ARP Premium Data <span class="c-gap">GAP</span></h4>
+                    <p>Actual Assigned Risks Pool premium levels and utilisation statistics are not publicly disclosed in granular form. The "3–5× standard market rate" estimate is from published academic research and broker guidance — not from SRA primary data.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        Risk Code Hub v2.4 — Professional Indemnity E&O (E2/E3/E4/E5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+    </footer>
+</body>
+</html>

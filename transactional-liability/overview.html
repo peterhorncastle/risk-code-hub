@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transactional Liability (D8/D9/TA/TB/CD/CE) — Risk Code Hub</title>
+  <style>
+    :root {
+      --tl: #1e3a5f;
+      --tl-dark: #0d1f33;
+      --deal: #c9a84c;
+      --tax: #2563a8;
+      --contingent: #6b3fa0;
+      --warn: #d97706;
+      --light: #f0f4f8;
+      --mid: #dce8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #222;
+      background: #f9fafb;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #0d1f33 0%, #1e3a5f 50%, #0a2040 100%);
+      position: relative;
+      overflow: hidden;
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(201, 168, 76, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 50%, rgba(37, 99, 168, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    header > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #d0d8e8;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      background: white;
+      padding: 1rem 2rem;
+      font-size: 0.95rem;
+      color: #666;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .breadcrumb a {
+      color: var(--tl);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    /* Navigation */
+    nav {
+      background: white;
+      padding: 1rem 2rem;
+      border-bottom: 2px solid #e5e7eb;
+      overflow-x: auto;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    nav a {
+      color: #666;
+      text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    nav a:hover {
+      background: var(--light);
+      color: var(--tl);
+    }
+
+    nav a.active {
+      color: white;
+      background: var(--tl);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Stats Row */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .stat-card {
+      background: white;
+      border-left: 4px solid var(--tl);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-card.deal {
+      border-left-color: var(--deal);
+    }
+
+    .stat-card.tax {
+      border-left-color: var(--tax);
+    }
+
+    .stat-card.contingent {
+      border-left-color: var(--contingent);
+    }
+
+    .stat-card.warn {
+      border-left-color: var(--warn);
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--tl);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card.deal .stat-value {
+      color: var(--deal);
+    }
+
+    .stat-card.tax .stat-value {
+      color: var(--tax);
+    }
+
+    .stat-card.contingent .stat-value {
+      color: var(--contingent);
+    }
+
+    .stat-card.warn .stat-value {
+      color: var(--warn);
+    }
+
+    .stat-label {
+      font-size: 0.95rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .stat-badge {
+      margin-left: 0.5rem;
+    }
+
+    /* Confidence Badges */
+    .c-ver, .c-est, .c-illus, .c-gap {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      vertical-align: super;
+    }
+
+    .c-ver {
+      background: rgba(39, 174, 96, 0.15);
+      color: var(--green);
+    }
+
+    .c-est {
+      background: rgba(230, 126, 34, 0.15);
+      color: var(--amber);
+    }
+
+    .c-illus {
+      background: rgba(37, 99, 168, 0.15);
+      color: var(--tax);
+    }
+
+    .c-gap {
+      background: rgba(192, 57, 43, 0.15);
+      color: var(--red);
+    }
+
+    /* Section Titles */
+    h2 {
+      font-size: 1.8rem;
+      color: var(--tl);
+      margin: 2.5rem 0 1.5rem 0;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--mid);
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      color: var(--dark);
+      margin: 1.5rem 0 0.75rem 0;
+    }
+
+    /* Code Overview Table */
+    .table-container {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    thead {
+      background: var(--tl);
+      color: white;
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #ddd;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Coverage Type Cards */
+    .coverage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .coverage-card {
+      background: white;
+      border-left: 5px solid var(--tl);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .coverage-card.deal {
+      border-left-color: var(--deal);
+    }
+
+    .coverage-card.tax {
+      border-left-color: var(--tax);
+    }
+
+    .coverage-card.contingent {
+      border-left-color: var(--contingent);
+    }
+
+    .coverage-card.warn {
+      border-left-color: var(--warn);
+    }
+
+    .coverage-card h3 {
+      color: #222;
+      margin-top: 0;
+    }
+
+    .coverage-card p {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    /* Info Box */
+    .info-box {
+      background: var(--light);
+      border-left: 4px solid var(--tl);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+
+    .info-box.deal {
+      border-left-color: var(--deal);
+    }
+
+    .info-box.tax {
+      border-left-color: var(--tax);
+    }
+
+    .info-box h3 {
+      margin-top: 0;
+      color: var(--tl);
+    }
+
+    .info-box.deal h3 {
+      color: var(--deal);
+    }
+
+    .info-box.tax h3 {
+      color: var(--tax);
+    }
+
+    .info-box p {
+      margin: 0.75rem 0;
+      font-size: 0.95rem;
+    }
+
+    .info-box ul {
+      margin-left: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .info-box li {
+      margin: 0.5rem 0;
+    }
+
+    /* Market Overview Table Specific */
+    .market-table {
+      margin: 1.5rem 0;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--tl-dark);
+      color: #a8c0d8;
+      padding: 2rem;
+      text-align: center;
+      margin-top: 3rem;
+      border-top: 1px solid #1a2a3a;
+    }
+
+    footer a {
+      color: #d0d8e8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    footer p {
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      main {
+        padding: 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .coverage-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav ul {
+        gap: 0.25rem;
+      }
+
+      nav a {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.5rem;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+
+      th, td {
+        padding: 0.75rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Transactional Liability (D8 / D9 / TA / TB / CD / CE)</h1>
+    <p class="subtitle">Warranty & Indemnity, Tax Liability and Contingent Risk Insurance supporting M&A transactions</p>
+    <div class="badge-row">
+      <span class="badge">D8</span>
+      <span class="badge">D9</span>
+      <span class="badge">TA</span>
+      <span class="badge">TB</span>
+      <span class="badge">CD</span>
+      <span class="badge">CE</span>
+      <span class="badge">Financial Lines</span>
+    </div>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Transactional Liability
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="overview.html" class="active">Overview</a></li>
+      <li><a href="history.html">History</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+      <li><a href="database.html">Loss Database</a></li>
+      <li><a href="underwriting.html">Underwriting</a></li>
+      <li><a href="rates-analysis.html">Rates & ROE</a></li>
+      <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+      <li><a href="global-program.html">Global Programme</a></li>
+      <li><a href="references.html">References</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <!-- Stats Row -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">~$15bn</div>
+        <div class="stat-label">Annual W&I/R&W limits deployed globally <span class="c-est">EST</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">5,500+</div>
+        <div class="stat-label">W&I transactions globally 2023 <span class="c-est">EST</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">~3%</div>
+        <div class="stat-label">Avg. W&I premium as % of limit <span class="c-est">EST</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">$5tn+</div>
+        <div class="stat-label">Global M&A deal value 2021 peak <span class="c-ver">VER</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">30+</div>
+        <div class="stat-label">Years W&I insurance active in Lloyd's <span class="c-est">EST</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">~90%</div>
+        <div class="stat-label">PE buyouts using W&I/R&W in Europe <span class="c-est">EST</span></div>
+      </div>
+    </div>
+
+    <!-- Section 1: Lloyd's Code Overview -->
+    <h2>Lloyd's Code Overview</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Full Name</th>
+            <th>Coverage Type</th>
+            <th>Policy Basis</th>
+            <th>Typical Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>D8</strong></td>
+            <td>Warranty & Indemnity — Buyer</td>
+            <td>Covers buyer's loss from seller rep/warranty breach</td>
+            <td>Claims-made</td>
+            <td>PE/strategic M&A buyer protection</td>
+          </tr>
+          <tr>
+            <td><strong>D9</strong></td>
+            <td>Warranty & Indemnity — Seller</td>
+            <td>Covers seller's indemnity obligations post-close</td>
+            <td>Claims-made</td>
+            <td>Seller cap/escrow release</td>
+          </tr>
+          <tr>
+            <td><strong>TA</strong></td>
+            <td>Tax Liability — Known Risk</td>
+            <td>Specific identified tax uncertainty pre-transaction</td>
+            <td>Claims-made</td>
+            <td>Tax structuring, step-ups, historic positions</td>
+          </tr>
+          <tr>
+            <td><strong>TB</strong></td>
+            <td>Tax Liability — Contingent</td>
+            <td>Broader tax risk not yet crystallised</td>
+            <td>Claims-made</td>
+            <td>Transfer pricing, group relief, R&D credits</td>
+          </tr>
+          <tr>
+            <td><strong>CD</strong></td>
+            <td>Contingent Liability</td>
+            <td>Identified contingent legal/regulatory risk</td>
+            <td>Claims-made</td>
+            <td>Litigation, IP disputes, regulatory contingencies</td>
+          </tr>
+          <tr>
+            <td><strong>CE</strong></td>
+            <td>Contingent Risk — General</td>
+            <td>Broader unresolved risk exposure from transaction</td>
+            <td>Claims-made</td>
+            <td>Environmental contingencies, pension obligations</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section 2: Coverage Type Cards -->
+    <h2>Coverage Types</h2>
+    <div class="coverage-grid">
+      <div class="coverage-card">
+        <h3>D8 — Buyer W&I</h3>
+        <p>Protects buyer if seller breached representations or warranties in SPA. Nil recourse to seller (NBI structure). Limit typically 10–30% of deal value. Retention: 0.5–1.0% of EV. Premium 2–4% of limit. Covers: financial statement accuracy, title to shares/assets, compliance, IP ownership, tax, employment, environmental.</p>
+      </div>
+
+      <div class="coverage-card deal">
+        <h3>D9 — Seller W&I</h3>
+        <p>Less common. Allows seller to cap liability under indemnity. Insurer steps in for valid claims. Used when seller needs clean exit (PE funds returning capital). Often structured as "back-to-back" with D8.</p>
+      </div>
+
+      <div class="coverage-card tax">
+        <h3>TA — Tax Liability: Known</h3>
+        <p>Covers specific identified tax risks documented in due diligence. Examples: step-up elections, deferred tax disputes, group loss utilisation, VAT on property. Underwritten against tax counsel opinion. Indemnity structure; typically £5–100m per risk.</p>
+      </div>
+
+      <div class="coverage-card contingent">
+        <h3>TB — Tax Liability: Contingent</h3>
+        <p>Broader uncertain tax positions. Transfer pricing challenges by HMRC/IRS. R&D tax credit exposure. Cross-border withholding tax disputes. State/local tax nexus issues. Often multi-year run-off coverage.</p>
+      </div>
+
+      <div class="coverage-card warn">
+        <h3>CD — Contingent Liability</h3>
+        <p>Known legal/regulatory contingency that could materialise. Examples: pending litigation, regulatory investigations, IP infringement claims, employment class actions. Requires legal assessment and probability opinion.</p>
+      </div>
+
+      <div class="coverage-card">
+        <h3>CE — Contingent Risk: General</h3>
+        <p>Catch-all for unresolved SPA risks. PFAS/environmental contamination contingency. Pension deficit contingency. Earn-out dispute cover. Post-close regulatory approvals.</p>
+      </div>
+    </div>
+
+    <!-- Section 3: Transaction Structure Diagram -->
+    <h2>Transaction Structure</h2>
+    <div class="info-box deal">
+      <h3>Typical W&I Deal Flow</h3>
+      <ol style="margin-left: 1.5rem; line-height: 1.8;">
+        <li><strong>SPA negotiation:</strong> Seller and buyer agree on representations, warranties, and indemnity mechanics.</li>
+        <li><strong>W&I broker appointed:</strong> Deal team engages specialist broker to structure and market insurance.</li>
+        <li><strong>NDA + underwriting submission:</strong> Broker obtains executed SPA, VDR access, and due diligence reports.</li>
+        <li><strong>Insurer reviews:</strong> Underwriter scrutinises SPA, VDR, reports; identifies coverage questions.</li>
+        <li><strong>Q&A with deal advisers:</strong> Underwriter and buyer counsel/advisers clarify rep scope, exclusions, baskets.</li>
+        <li><strong>Policy bound at/before closing:</strong> Insurer issues binding quote; policy takes effect at or just before closing.</li>
+        <li><strong>Buyer holds policy (NBI structure):</strong> Buyer owns policy; seller has no rights or recourse to insurer.</li>
+      </ol>
+      <p style="margin-top: 1rem; font-style: italic; color: #666;"><strong>Key concept:</strong> No-box indemnity (NBI): seller gives nil or minimal indemnity cap; buyer's sole recourse is insurer.</p>
+    </div>
+
+    <!-- Section 4: Market Overview Table -->
+    <h2>Market Overview</h2>
+    <div class="table-container market-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Approx. GWP</th>
+            <th>Key Carriers</th>
+            <th>Typical Retention</th>
+            <th>Policy Term</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>W&I / R&W</strong></td>
+            <td>~$3–4bn <span class="c-est">EST</span></td>
+            <td>Lloyd's syndicates, AIG, Tokio Marine, Liberty Mutual, Berkshire</td>
+            <td>0.5–1.0% EV</td>
+            <td>3–7 years</td>
+          </tr>
+          <tr>
+            <td><strong>Tax Liability</strong></td>
+            <td>~$1–1.5bn <span class="c-est">EST</span></td>
+            <td>Lloyd's, AIG, Swiss Re, Convex</td>
+            <td>£/€/$5–20m per risk</td>
+            <td>5–10 years</td>
+          </tr>
+          <tr>
+            <td><strong>Contingent Liability</strong></td>
+            <td>~$500–800m <span class="c-est">EST</span></td>
+            <td>Lloyd's, Tokio Marine, AIG</td>
+            <td>Negotiated</td>
+            <td>3–10 years</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section 5: Key Underwriting Considerations -->
+    <h2>Key Underwriting Considerations</h2>
+    <div class="info-box tax">
+      <h3>Critical Factors in W&I & Tax Liability Underwriting</h3>
+      <ul>
+        <li><strong>Claims-made basis:</strong> Coverage triggered at time of claim notification (not occurrence). Policy must remain in force at claim time.</li>
+        <li><strong>SPA quality and rep scope:</strong> Narrow, specific reps easier to underwrite; broad "basket catch-alls" attract higher retention or exclusions.</li>
+        <li><strong>VDR completeness and adviser quality:</strong> Well-organised data rooms and credible advisers (Big 4 accounting, top-tier law) reduce underwriting uncertainty.</li>
+        <li><strong>Deal type (PE vs strategic):</strong> PE deals typically smaller retention, faster underwriting. Strategic deals larger, more complex reps.</li>
+        <li><strong>Jurisdiction (US, UK, Europe, ROW):</strong> US deals highest premium (~3–4%); UK/Europe moderate (~2.5–3%); emerging markets higher (~4–5%+).</li>
+        <li><strong>Industry sector:</strong> Tech, healthcare, pharma attract higher rates due to IP/regulatory complexity. Manufacturing/basic industries lower.</li>
+        <li><strong>Deal size:</strong> Large deals ($500m+) better pricing; smaller deals ($50–150m) attract higher rates due to fixed underwriting cost.</li>
+        <li><strong>Retention negotiation:</strong> Brokers target 0.5–1.0% EV for European PE; US market floor typically $500k–$1m regardless of deal size.</li>
+        <li><strong>Exclusions for disclosed/known issues:</strong> Any risk item disclosed pre-close or documented in VDR typically excluded from coverage (unless specifically insured as TA/TB/CD).</li>
+      </ul>
+    </div>
+
+  </main>
+
+  <footer>
+    <p><strong>Risk Code Hub v2.3</strong> — Transactional Liability (D8/D9/TA/TB/CD/CE)</p>
+    <p><a href="../index.html">← Back to Hub</a></p>
+    <p>Educational use only. Not financial advice.</p>
+  </footer>
+</body>
+</html>

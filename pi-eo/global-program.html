@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Programme Structuring | Risk Code Hub – PI E&O</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --pi: #2c4a7a; --pi-dark: #1a2d4a; --legal: #8b5e3c; --accounts: #2d6b4a;
+            --risk: #c0572a; --gold: #c9a84c; --light: #f0f4f8; --mid: #dce8f5;
+            --dark: #111; --red: #c0392b; --amber: #e67e22; --green: #27ae60;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: var(--dark); background: var(--light); }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a2d4a 0%, #2c4a7a 50%, #1a3560 100%);
+            color: #fff; padding: 3rem 2rem; position: relative; overflow: hidden;
+        }
+        header::before {
+            content: ''; position: absolute; top: 0; left: 50%; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+            transform: translate(-50%, -50%); pointer-events: none;
+        }
+        header > * { position: relative; z-index: 1; }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .subtitle { font-size: 1.1rem; opacity: 0.95; }
+
+        /* Breadcrumb */
+        nav.breadcrumb { background: #f8f9fa; padding: 1rem 2rem; font-size: 0.95rem; border-bottom: 1px solid #e0e0e0; }
+        nav.breadcrumb a { color: var(--pi); text-decoration: none; }
+        nav.breadcrumb a:hover { text-decoration: underline; }
+
+        /* Main nav tabs */
+        nav.tabs { background: #fff; border-bottom: 2px solid #e0e0e0; padding: 0 2rem; display: flex; flex-wrap: wrap; gap: 0; }
+        nav.tabs a {
+            display: block; padding: 1rem 1.5rem; text-decoration: none; color: #555;
+            font-size: 0.95rem; transition: all 0.3s; border-bottom: 3px solid transparent;
+        }
+        nav.tabs a:hover { color: var(--pi); }
+        nav.tabs a.active { color: var(--pi); border-bottom-color: var(--pi); font-weight: 600; }
+
+        /* Main content */
+        main { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        section { margin-bottom: 3rem; }
+        h2 { font-size: 1.8rem; color: var(--pi-dark); margin-bottom: 1.5rem; border-bottom: 3px solid var(--pi); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.3rem; color: var(--pi); margin: 1.5rem 0 0.8rem; }
+
+        /* Tower visualization */
+        .tower { display: flex; flex-direction: column; gap: 0; margin: 2rem 0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .tower-layer {
+            padding: 1.5rem; color: #fff; text-align: center; position: relative;
+            border-left: 5px solid rgba(0,0,0,0.2); min-height: 80px; display: flex; flex-direction: column; justify-content: center;
+        }
+        .tower-layer.catastrophe { background: var(--pi); }
+        .tower-layer.upper { background: var(--legal); }
+        .tower-layer.middle { background: var(--accounts); }
+        .tower-layer.first { background: var(--risk); }
+        .tower-layer.primary { background: var(--pi); min-height: 110px; font-size: 1.1rem; font-weight: 600; }
+        .tower-layer.sir { background: var(--pi-dark); font-size: 0.95rem; }
+        .layer-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; }
+        .layer-details { font-size: 0.9rem; opacity: 0.95; }
+
+        /* Cards */
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .card {
+            background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--pi); transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+        .card.legal { border-left-color: var(--legal); }
+        .card.accounts { border-left-color: var(--accounts); }
+        .card.risk { border-left-color: var(--risk); }
+        .card.gold { border-left-color: var(--gold); }
+        .card h4 { color: var(--pi-dark); margin-bottom: 0.8rem; font-size: 1.1rem; }
+        .card p { color: #555; font-size: 0.95rem; line-height: 1.7; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        th { background: var(--pi); color: #fff; padding: 1rem; text-align: left; font-weight: 600; }
+        td { padding: 0.9rem; border-bottom: 1px solid #e0e0e0; }
+        tr:hover { background: #f8f9fa; }
+
+        /* Confidence badges */
+        .c-ver, .c-est, .c-illus, .c-gap {
+            display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.6rem;
+            border-radius: 3px; margin-left: 0.5rem; text-transform: uppercase;
+        }
+        .c-ver { background: var(--green); color: #fff; }
+        .c-est { background: var(--amber); color: #fff; }
+        .c-illus { background: #3498db; color: #fff; }
+        .c-gap { background: #e74c3c; color: #fff; }
+
+        /* Info box */
+        .info-box {
+            background: #e8f4f8; border-left: 5px solid var(--pi); padding: 1.5rem;
+            border-radius: 4px; margin: 1.5rem 0; color: #333;
+        }
+        .info-box strong { color: var(--pi-dark); }
+
+        /* Case study */
+        .case-study { background: #fef5e7; border: 2px solid var(--gold); padding: 2rem; border-radius: 8px; margin: 2rem 0; }
+        .case-study h3 { color: var(--gold); }
+        .case-study ul { margin-left: 1.5rem; margin-top: 1rem; }
+        .case-study li { margin-bottom: 0.8rem; color: #555; }
+        .case-study .premium-line { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid #ddd; font-family: 'Courier New', monospace; }
+        .case-study .premium-line strong { color: var(--risk); }
+
+        /* Advantages box */
+        .advantages { background: #fff; border: 2px solid var(--pi); padding: 2rem; border-radius: 8px; margin: 1.5rem 0; }
+        .advantages h4 { color: var(--pi); margin-bottom: 1rem; }
+        .advantages ol { margin-left: 1.5rem; }
+        .advantages li { margin-bottom: 1rem; color: #555; line-height: 1.7; }
+
+        /* Footer */
+        footer {
+            background: var(--pi-dark); color: #a8b8d0; padding: 2rem; text-align: center;
+            margin-top: 3rem; font-size: 0.9rem; border-top: 1px solid #2a3f5a;
+        }
+        footer a { color: var(--gold); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            nav.tabs { padding: 0; }
+            nav.tabs a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            main { padding: 0 1rem; }
+            .tower-layer { padding: 1rem; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Global Programme Structuring</h1>
+        <p class="subtitle">Excess of loss towers, qualifying insurer schemes, cross-border programmes and Lloyd's market advantages for PI E&O</p>
+    </header>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="../index.html">Risk Code Hub</a> › Professional Indemnity E&O
+    </nav>
+
+    <!-- Main navigation tabs -->
+    <nav class="tabs">
+        <a href="overview.html">Overview</a>
+        <a href="history.html">History</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="database.html">Claims Database</a>
+        <a href="underwriting.html">Underwriting</a>
+        <a href="rates-analysis.html">Rates & ROE</a>
+        <a href="risk-mitigation.html">Risk Mitigation</a>
+        <a href="global-program.html" class="active">Global Programme</a>
+        <a href="references.html">References</a>
+    </nav>
+
+    <main>
+        <!-- Section 1: PI Programme Tower -->
+        <section id="tower">
+            <h2>PI Programme Tower Structure</h2>
+            <p>Professional Indemnity excess-of-loss towers are designed to match the risk appetite and regulatory requirements of different professional classes. The primary layer sets conditions; all excess layers follow the primary policy's wording and settlement decisions.</p>
+
+            <div class="tower">
+                <div class="tower-layer catastrophe">
+                    <div class="layer-title">Catastrophe XL / Top Excess</div>
+                    <div class="layer-details">£/$50–500m+ | Reinsurance-backed | Large firm / Big 4 equivalent only | Negotiated terms</div>
+                </div>
+                <div class="tower-layer upper">
+                    <div class="layer-title">Upper Excess Layers</div>
+                    <div class="layer-details">£/$25m xs £/$25m → £/$50m xs £/$50m | Lloyd's follow market | Rate: 15–25% of primary rate per layer</div>
+                </div>
+                <div class="tower-layer middle">
+                    <div class="layer-title">Middle Excess Layers</div>
+                    <div class="layer-details">£/$10m xs £/$15m → £/$15m xs £/$25m | Lloyd's lead + follow | Rate: 25–40% of primary rate</div>
+                </div>
+                <div class="tower-layer first">
+                    <div class="layer-title">First Excess Layer</div>
+                    <div class="layer-details">£/$5m xs £/$5m → £/$10m xs £/$10m | Lloyd's or specialist admitted | Rate: 40–65% of primary rate</div>
+                </div>
+                <div class="tower-layer primary">
+                    <div class="layer-title">Primary Layer</div>
+                    <div class="layer-details">£/$2–10m (SRA minimum £2–3m; US $1–5m) | Qualifying Insurer (UK) or admitted (US) | Full underwriting; all conditions set here</div>
+                </div>
+                <div class="tower-layer sir">
+                    <div class="layer-title">SIR / Deductible / Retention</div>
+                    <div class="layer-details">SRA minimum: nil excess permitted on primary | Commercial layers: agreed deductible | Large firms: self-insured retention (SIR) on first excess</div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Qualifying Insurer Principle:</strong> The SRA Qualifying Insurer Scheme mandates that solicitors' primary PI must be written on approved policy terms. Lloyd's syndicates are approved qualifying insurers. The primary policy sets conditions for all excess layers — excess insurers "follow the settlements" of the primary policy.
+            </div>
+        </section>
+
+        <!-- Section 2: UK SRA Qualifying Insurer Scheme -->
+        <section id="sra">
+            <h2>UK SRA Qualifying Insurer Scheme</h2>
+
+            <div class="cards">
+                <div class="card">
+                    <h4>Qualifying Insurer Status</h4>
+                    <p>Only SRA-approved insurers can provide primary PI cover for SRA-authorised law firms. Lloyd's is a QI. Approved Minimum Terms and Conditions (AMTC): prescribed wording covering scope, minimum limit, claims notification, dishonesty of employees, defence costs. All derogations from AMTC require SRA approval. Qualifying Insurer renewal list published annually on SRA website.</p>
+                </div>
+                <div class="card legal">
+                    <h4>Minimum Terms & Conditions</h4>
+                    <p>AMTC cover must include: (a) each and every claim basis; (b) all civil liability claims arising from private legal practice; (c) all partners, principals and employees; (d) former practice run-off; (e) dishonesty of principals and employees (up to minimum limit); (f) defence costs additional to limit (or included but minimum limits increased); (g) no policyholder excess on primary layer.</p>
+                </div>
+                <div class="card risk">
+                    <h4>Assigned Risks Pool (ARP)</h4>
+                    <p>Safety net for firms that cannot obtain QI cover in open market. ARP premium: typically 3–5× standard market rate. ARP cover: maximum 12 months; firm must close or obtain open-market cover. ARP managed by: SRA. Post-2013 reform: ARP firms limited — cannot take on new clients; must notify existing clients. Cost: FSCS-funded with surcharge on all QI premiums.</p>
+                </div>
+                <div class="card accounts">
+                    <h4>Run-off Requirements</h4>
+                    <p>All SRA-authorised firms must maintain 6-year run-off when closing. Run-off = claims-made policy continuing post-practice-closure. Run-off premium: paid from firm's assets at closure; partners jointly and severally liable for unpaid run-off premium. SRA obligation: if run-off not obtained, SRA intervenes and pursues partners individually.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: International Programme Structures -->
+        <section id="international">
+            <h2>International Programme Structures</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>UK Qualifying Insurer</th>
+                        <th>US Admitted</th>
+                        <th>Lloyd's Excess (Global)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Regulatory framework</strong></td>
+                        <td>SRA AMTC mandatory</td>
+                        <td>State-admitted; NAIC-compliant</td>
+                        <td>Non-admitted / Surplus Lines</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Minimum limit</strong></td>
+                        <td>£2m (firms) / £3m (ABS)</td>
+                        <td>Varies by state bar association</td>
+                        <td>Above primary admitted layer</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Policy wording</strong></td>
+                        <td>Prescribed (SRA AMTC)</td>
+                        <td>Standard form + endorsements</td>
+                        <td>Negotiated; follows primary</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Retentions</strong></td>
+                        <td>Nil on primary (SRA rule)</td>
+                        <td>$10k–$100k typical</td>
+                        <td>SIR negotiated</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Run-off</strong></td>
+                        <td>6 years mandatory (SRA)</td>
+                        <td>3–5 years typical</td>
+                        <td>Following primary</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mutual/group schemes</strong></td>
+                        <td>Law Society Special Risks; Chamber PI</td>
+                        <td>Bar mutual programmes; ABA programs</td>
+                        <td>Lloyd's binding authorities</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Key US jurisdictions</strong></td>
+                        <td>N/A</td>
+                        <td>NY, CA, TX, FL (highest volume)</td>
+                        <td>Excess of NY/CA admitted primary</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 4: Firm Type Structures -->
+        <section id="firm-types">
+            <h2>Firm Type Structures</h2>
+
+            <div class="cards">
+                <div class="card">
+                    <h4>Magic Circle / US Big Law</h4>
+                    <p><strong>Limits:</strong> £50–500m (total programme).</p>
+                    <p><strong>Structure:</strong> Primary admitted (UK QI or NY-admitted); Lloyd's excess layers at £25m, £50m, £100m+ intervals.</p>
+                    <p><strong>Annual premium:</strong> £1–5m+ total programme.</p>
+                    <p><strong>Key:</strong> Solicitor advocate immunity fully abolished; international offices require local admitted paper. Captive fronts increasingly used for primary retention.</p>
+                </div>
+                <div class="card legal">
+                    <h4>Mid-Tier National Firms</h4>
+                    <p><strong>Limits:</strong> £10–50m.</p>
+                    <p><strong>Primary:</strong> Travelers, Zurich, QBE, or Lloyd's facility.</p>
+                    <p><strong>Lloyd's excess:</strong> £5m+ layers.</p>
+                    <p><strong>SRA compliance:</strong> COLP/COFA reporting; annual compliance return.</p>
+                    <p><strong>Claims:</strong> Conveyancing and commercial disputes dominate.</p>
+                    <p><strong>Premium:</strong> £100k–£800k total programme.</p>
+                </div>
+                <div class="card accounts">
+                    <h4>Top 6 Accountancy Firms</h4>
+                    <p><strong>Coverage:</strong> Big 4 (PwC, Deloitte, EY, KPMG) and Grant Thornton / BDO primarily self-insure at primary — captive or group fund.</p>
+                    <p><strong>Lloyd's role:</strong> High excess layers (£50–500m+); specialist PIE audit run-off; M&A transaction advisory PI.</p>
+                    <p><strong>Pricing:</strong> Highly negotiated; loss reserves disclosed to select markets under NDA.</p>
+                    <p><strong>Key:</strong> Audit liability unlimited under Companies Act 2006 unless LLA agreed.</p>
+                </div>
+                <div class="card gold">
+                    <h4>IFA Networks / Financial Adviser Groups</h4>
+                    <p><strong>Regulation:</strong> FCA-regulated; PI as condition of authorisation.</p>
+                    <p><strong>Network PI:</strong> Group policy covering appointed representatives.</p>
+                    <p><strong>Direct authorisation:</strong> Individual firm buys own PI.</p>
+                    <p><strong>BSPS era:</strong> Many insurers exclude DB pension transfer advice for new policies; run-off tail for BSPS era still running.</p>
+                    <p><strong>Premium:</strong> £5k–£200k depending on DB transfer exposure and AUM.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Case Study -->
+        <section id="case-study">
+            <h2>Illustrative Case Study <span class="c-illus">ILLUS</span></h2>
+
+            <div class="case-study">
+                <h3>Top-50 UK Law Firm — 30 Partners</h3>
+
+                <p><strong>Firm profile:</strong> 30 equity partners; £18m annual fee income; 40% commercial/corporate, 30% commercial property, 20% employment/disputes, 10% private client; 1 minor claim settled £85k (4 years ago); no SRA concerns; COLP/COFA in place.</p>
+
+                <h4 style="margin-top: 1.5rem; color: var(--risk);">Programme Structure</h4>
+
+                <div class="premium-line">
+                    <span>Primary layer (£0–£10m): QI — Travelers</span>
+                    <strong>£170,100 <span class="c-illus">ILLUS</span></strong>
+                </div>
+                <div class="premium-line">
+                    <span>First excess (£10m xs £10m): Lloyd's</span>
+                    <strong>£93,600 <span class="c-illus">ILLUS</span></strong>
+                </div>
+                <div class="premium-line">
+                    <span>Second excess (£10m xs £20m): Lloyd's follow</span>
+                    <strong>£68,000 <span class="c-illus">ILLUS</span></strong>
+                </div>
+                <div class="premium-line">
+                    <span>Third excess (£10m xs £30m): Lloyd's top excess</span>
+                    <strong>£47,600 <span class="c-illus">ILLUS</span></strong>
+                </div>
+                <div class="premium-line">
+                    <span>Total limit: £40m per claim and in aggregate</span>
+                    <span class="c-illus">ILLUS</span>
+                </div>
+                <div class="premium-line" style="border-bottom: 2px solid var(--risk); font-weight: 700;">
+                    <span>Total estimated premium</span>
+                    <strong style="color: var(--risk);">~£379,300 <span class="c-illus">ILLUS</span></strong>
+                </div>
+            </div>
+
+            <div class="advantages">
+                <h4>Lloyd's Advantages in This Structure</h4>
+                <ol>
+                    <li><strong>Approved qualifying insurer:</strong> Lloyd's has QI status — can write SRA-compliant primary layer without additional approval process.</li>
+                    <li><strong>Market depth for large excess layers:</strong> Unique capacity for £50m–500m+ excess layers not available from single admitted insurer.</li>
+                    <li><strong>Claims expertise:</strong> Specialist financial lines and PI claims practitioners; average legal PI claim notification to resolution ~24–36 months.</li>
+                    <li><strong>Run-off expertise:</strong> Long-tail run-off portfolio management — Lloyd's Society Fund backs closed syndicates' run-off obligations.</li>
+                    <li><strong>Cross-border follow:</strong> Lloyd's excess policy follows primary terms for international offices, reducing programme complexity.</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        Risk Code Hub v2.4 — Professional Indemnity E&O (E2/E3/E4/E5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+    </footer>
+</body>
+</html>

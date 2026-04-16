@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Programme | Environmental Liability (EP) | Risk Code Hub</title>
+<style>
+  :root{
+    --env:#2d6a4a; --env-dark:#1a3d1a; --earth:#7a4f2a; --water:#1a6a8a;
+    --hazard:#c0572a; --gold:#c9a84c; --light:#f2f7f4; --mid:#e4f0ea;
+    --dark:#111; --red:#c0392b; --amber:#e67e22; --green:#27ae60;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',sans-serif;background:#f0f5f2;color:#1a2a1a;line-height:1.6;}
+  header{background:linear-gradient(135deg,#0d2d10 0%,#1a4a2a 50%,#0d3020 100%);color:#fff;padding:2rem;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-40%;left:-10%;width:120%;height:200%;
+    background:radial-gradient(ellipse at 50% 50%,rgba(45,106,74,0.15) 0%,transparent 70%);pointer-events:none;}
+  .header-inner{max-width:1100px;margin:0 auto;position:relative;}
+  .breadcrumb{font-size:.8rem;opacity:.7;margin-bottom:.5rem;}
+  .breadcrumb a{color:#a8d4b8;text-decoration:none;}
+  header h1{font-size:1.9rem;font-weight:700;letter-spacing:-.5px;}
+  header p{opacity:.8;margin-top:.4rem;font-size:.95rem;}
+  .badge-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
+  .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    color:#fff;padding:.25rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;}
+  nav{background:#fff;border-bottom:2px solid var(--env);position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  nav ul{display:flex;list-style:none;max-width:1100px;margin:0 auto;overflow-x:auto;gap:0;}
+  nav li a{display:block;padding:.65rem 1rem;font-size:.82rem;font-weight:600;color:#555;
+    text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s;}
+  nav li a:hover,nav li a.active{color:var(--env);border-bottom-color:var(--env);}
+  main{max-width:1100px;margin:2rem auto;padding:0 1.5rem;}
+  section{background:#fff;border-radius:10px;padding:1.8rem;margin-bottom:1.8rem;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  h2{font-size:1.25rem;font-weight:700;color:var(--env-dark);margin-bottom:1rem;
+    padding-bottom:.5rem;border-bottom:2px solid var(--env);}
+  h3{font-size:1rem;font-weight:700;color:var(--env-dark);margin:1.2rem 0 .6rem;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem;}
+  .card{background:var(--light);border-radius:8px;padding:1.2rem;border-top:4px solid var(--env);}
+  .card.earth{border-top-color:var(--earth);}
+  .card.water{border-top-color:var(--water);}
+  .card.hazard{border-top-color:var(--hazard);}
+  .card.gold{border-top-color:var(--gold);}
+  .card h4{font-size:.9rem;font-weight:700;color:var(--env-dark);margin-bottom:.5rem;}
+  .card p,.card ul{font-size:.85rem;color:#444;}
+  .card ul{padding-left:1.1rem;}
+  .card li{margin-bottom:.25rem;}
+  .tower-container{background:linear-gradient(to bottom,#e8f5f7,#f5f9f7);border-radius:8px;padding:1.5rem;margin:1.5rem 0;border:1px solid #d8e8e5;}
+  .tower-layer{margin:.8rem 0;padding:1rem;border-radius:6px;color:#fff;font-weight:600;text-align:center;font-size:.9rem;border-left:4px solid;}
+  .tower-layer.sir{background:var(--earth);border-left-color:#5a2f1a;}
+  .tower-layer.primary{background:var(--env);border-left-color:var(--env-dark);}
+  .tower-layer.excess1{background:var(--water);border-left-color:#0a3a5a;}
+  .tower-layer.excess2{background:#1a4a6a;border-left-color:#0a2a4a;}
+  .tower-layer.umbrella{background:#6b4c9a;border-left-color:#4a2a7a;}
+  .info-box{border-left:4px solid var(--env);background:#eaf5ef;padding:1rem 1.2rem;border-radius:0 6px 6px 0;margin:1rem 0;}
+  .info-box.earth{border-left-color:var(--earth);background:#f7f0e8;}
+  .info-box.water{border-left-color:var(--water);background:#e8f3f8;}
+  .info-box.hazard{border-left-color:var(--hazard);background:#fdf0ea;}
+  .info-box h4{font-size:.9rem;font-weight:700;margin-bottom:.4rem;}
+  .info-box p,.info-box ul{font-size:.84rem;color:#333;}
+  .info-box ul{padding-left:1.1rem;}
+  .info-box li{margin-bottom:.3rem;}
+  .case-study{background:linear-gradient(135deg,#2a5a3a 0%,#1a3d2a 100%);color:#fff;border-radius:8px;padding:1.5rem;margin:1.5rem 0;}
+  .case-study h4{color:#a8d4b8;font-weight:700;margin-bottom:.5rem;}
+  .case-study p{font-size:.82rem;margin:.3rem 0;line-height:1.5;}
+  .case-study strong{color:#c9a84c;}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:1rem;}
+  th{background:var(--env-dark);color:#fff;padding:.6rem .8rem;text-align:left;font-weight:600;}
+  td{padding:.55rem .8rem;border-bottom:1px solid #d8ede0;vertical-align:top;}
+  tr:nth-child(even) td{background:#f5faf7;}
+  .c-ver{background:#d4edda;color:#155724;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-est{background:#fff3cd;color:#856404;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-illus{background:#cce5ff;color:#004085;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  footer{background:var(--env-dark);color:#a8c8b0;text-align:center;padding:1.2rem;font-size:.8rem;margin-top:2rem;}
+  footer a{color:#a8d4b8;text-decoration:none;}
+  @media(max-width:640px){header h1{font-size:1.4rem;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Environmental Liability (EP)</a> › Global Programme</div>
+    <h1>Global Programme Structure</h1>
+    <p>Tower architecture, portfolio structures, transaction-based placements and Lloyd's market advantages</p>
+    <div class="badge-row">
+      <span class="badge">Programme Tower</span>
+      <span class="badge">Multi-Site Portfolio</span>
+      <span class="badge">US vs Europe</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="overview.html">Overview</a></li>
+    <li><a href="history.html">History</a></li>
+    <li><a href="timeline.html">Timeline</a></li>
+    <li><a href="database.html">Loss Database</a></li>
+    <li><a href="underwriting.html">Underwriting</a></li>
+    <li><a href="rates-analysis.html">Rates</a></li>
+    <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+    <li><a href="global-program.html" class="active">Global Programme</a></li>
+    <li><a href="references.html">References</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <section>
+    <h2>Programme Structure Overview</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Environmental Liability Insurance is primarily placed on a <strong>per-site</strong> or <strong>per-portfolio</strong> basis. Large industrial companies and multinationals organize coverage into multi-layer towers combining primary EIL policies with excess/umbrella capacity. The US market dominates; European placement is admitted or Lloyd's Brussels-based. Claims-made policies with long discovery periods require careful attention to renewal continuity.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <h4>🏢 Per-Site Placement</h4>
+        <p>Single facility (manufacturing plant, brownfield redevelopment, remediation site) insured under standalone EIL policy. Typical limit $5–25m. Used for acquisition due diligence or known contamination undergoing remediation.</p>
+      </div>
+      <div class="card earth">
+        <h4>🗂️ Portfolio / Multi-Site Structure</h4>
+        <p>Industrial conglomerate with 50+ facilities (retail operator, manufacturing network). Blanket policy covers all scheduled/unscheduled sites. Per-site sublimits common. Basket deductibles aggregate across portfolio.</p>
+      </div>
+      <div class="card water">
+        <h4>📋 Claims-Made Coverage</h4>
+        <p>Claims trigger during policy period or within discovery period (3–5 years post-expiration). <strong>Renewal continuity critical:</strong> no gap in coverage. Retroactive date carries forward at renewal to protect historical loss tail.</p>
+      </div>
+      <div class="card hazard">
+        <h4>⏳ Long Tail Exposure</h4>
+        <p>Environmental liability has the longest tail in insurance — claims may emerge 20–30+ years after pollution event. Extended reporting periods (ERPs) / discovery periods essential. Captive structures common for very large multinationals.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>5-Layer Programme Tower</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Large industrial risks are structured in stacked layers, with increasing limits and escalating premiums. This architecture allows the insured to optimize deductibles and aggregate limits.
+    </p>
+    <div class="tower-container">
+      <div class="tower-layer umbrella">☂️ Layer 5: Umbrella / Catastrophic<br>$100m+ xs $100m — Portfolio/PFAS scenario</div>
+      <div class="tower-layer excess2">📊 Layer 4: Excess Layer 2<br>$50m xs $50m — Excess over primary + Excess 1</div>
+      <div class="tower-layer excess1">📊 Layer 3: Excess Layer 1<br>$25m xs $25m — Excess over primary</div>
+      <div class="tower-layer primary">🛡️ Layer 2: Primary EIL Layer<br>$1m–$25m — Claims-made, cleanup + 3rd party</div>
+      <div class="tower-layer sir">💰 Layer 1: SIR / Deductible<br>$50k–$5m per occurrence — Insured's retention</div>
+    </div>
+    <p style="font-size:.82rem;color:#666;margin-top:1rem;"><strong>Example: $15m + $25m xs $15m + $50m xs $50m</strong> provides $90m total limit with $15m primary layer. Insured SIR $1m per occurrence. All layers claims-made.</p>
+  </section>
+
+  <section>
+    <h2>Portfolio & Multi-Site Structures</h2>
+    <div class="info-box water">
+      <h4>Industrial Conglomerate – 50+ Sites</h4>
+      <ul>
+        <li><strong>Blanket vs Scheduled:</strong> Blanket policy covers all locations (owned &amp; operated) — more flexible, accommodates acquisitions. Scheduled approach lists each facility — allows per-site loading for known bad actors.</li>
+        <li><strong>Per-Site Sublimits:</strong> Total policy limit $50m, but individual site sublimit $5m. Protects against single mega-loss depleting aggregate.</li>
+        <li><strong>Basket Deductible:</strong> First $500k of losses from all sites aggregate in first loss year; resets annually. Balances moral hazard &amp; insured cost.</li>
+        <li><strong>Annual Aggregate Limit:</strong> Total claim payout across all sites capped at $100m per policy year. Excess rolls to umbrella/excess layers.</li>
+        <li><strong>Premium Basis:</strong> Usually "schedule premium" based on total scheduled site value + industry loading. Annual audit adjusts premium if sites acquired/divested.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>US vs European Structure Comparison</h2>
+    <table>
+      <thead><tr><th>Attribute</th><th>United States</th><th>Europe</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Regulatory Trigger</strong></td>
+          <td>CERCLA / RCRA — strict, joint &amp; several liability. EPA can compel PRP cleanup at $140m+ sites. <span class="c-ver">VER</span></td>
+          <td>EU ELD 2004/35/CE + national law — polluter-pays; admin/regulatory enforcement only. No private third-party civil liability under ELD itself. <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>Policy Basis</strong></td>
+          <td>Claims-made standard. Retroactive dates 15–30+ years typical. Discovery periods 3–5 years post-expiration. <span class="c-est">EST</span></td>
+          <td>Mix of claims-made (US-style) &amp; occurrence (traditional). Occurrence policies for admitted market; claims-made for Lloyd's/specialty.</td>
+        </tr>
+        <tr>
+          <td><strong>Carrier Market</strong></td>
+          <td>Surplus lines dominant (AXA XL, Berkley, Beazley lead). Lloyd's 10–15% market share; mainly excess layers. <span class="c-est">EST</span></td>
+          <td>Admitted market primary (Allianz, AXA, Zurich, Generali). Lloyd's growing post-ELD; Brussels syndicate cluster. <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>Limits Available</strong></td>
+          <td>$100m+ per occurrence achievable through tower structures. Unlimited aggregate via excess/umbrella. <span class="c-est">EST</span></td>
+          <td>Typically €10–50m per occurrence. €50m+ requires multi-country placement. Higher capacity constraints than US. <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>NRD Coverage</strong></td>
+          <td>Available as extension — covers liability to government trustees for natural resource damages. <span class="c-ver">VER</span></td>
+          <td>Limited / emerging. ELD mandates restoration but not insurance-recoverable NRD in traditional sense. Pilot products emerging. <span class="c-est">EST</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Transaction-Based EIL Placement</h2>
+    <div class="info-box hazard">
+      <h4>Merger &amp; Acquisition (M&amp;A) Environmental Insurance</h4>
+      <p><strong>Context:</strong> Transaction-driven EIL placements are distinct from ongoing programme business. Used to bridge environmental due diligence findings.</p>
+      <ul>
+        <li><strong>Typical Deal Trigger:</strong> $50m+ transaction value; seller with environmental liability exposure or unknown conditions at acquisition sites.</li>
+        <li><strong>Seller Protection Policy (SOP):</strong> Covers seller's retained environmental liability post-closing (legacy conditions, unknown migration). Limits $5–20m common.</li>
+        <li><strong>Buyer Protection Policy (BOP):</strong> Covers buyer against unknown environmental conditions discovered post-closing. Retroactive date to closing; discovery trigger for claims made in 3–5 years after acquisition.</li>
+        <li><strong>Remediation Cost Cap (RCC):</strong> For known contamination sites with agreed cleanup scope/cost. Policy covers overruns above estimated price up to cap. Rate 3–8% of cap limit; caps $2–10m typical. <span class="c-est">EST</span></li>
+        <li><strong>Placement Timeline:</strong> Usually placed at or just before closing; tight 2–4 week underwriting window. Broker coordination with seller counsel &amp; buyer counsel essential.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Captive Structures</h2>
+    <div class="info-box">
+      <h4>Large Multinational Captive Retention</h4>
+      <p><strong>Typical Structure:</strong> Oil majors, chemical companies, mining conglomerates with extreme EIL exposure use captive vehicles to retain first $10–50m per site. Commercial market buys excess.</p>
+      <ul>
+        <li><strong>Motivation:</strong> Captive retention cheaper than commercial premium for frequently-loss-free sites. Profit participation on investment income. Stability/control of coverage terms.</li>
+        <li><strong>Quota Share Reinsurance:</strong> Captive may buy 50–75% quota share from commercial reinsurers to spread catastrophic tail risk (e.g., Superfund site discovery).</li>
+        <li><strong>Excess Layer Buying:</strong> Captive deductible $25m; buys $50m xs $25m from Lloyd's or admitted market to cover worst-case (PFAS, mega-spill scenario).</li>
+        <li><strong>Captive Economics:</strong> Premium saved vs commercial placement partially offset by captive setup costs (~$1–3m initial), annual management (~$500k–$1m), and reserve strengthening for tail exposure.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Government &amp; Public Sector Structures</h2>
+    <div class="cards">
+      <div class="card hazard">
+        <h4>🇺🇸 US Federal Government</h4>
+        <p>DoE, DoD, USDA facilities largely self-insure through federal indemnification. EPA Superfund acts as industry-wide backstop for orphan sites with no solvent PRP. CERCLA established US$15bn+ Superfund trust (now depleted; Congress usually appropriates ad-hoc). <span class="c-ver">VER</span></p>
+      </div>
+      <div class="card water">
+        <h4>💰 State UST Financial Assurance Funds</h4>
+        <p>All 50 US states operate UST financial assurance programmes — gas stations &amp; fuel distributors required to show ability to pay cleanup (via insurance, surety, state fund contribution). State funds provide backup if individual operators can't pay. Collectively manage ~$500bn contingent liability. <span class="c-ver">VER</span></p>
+      </div>
+      <div class="card">
+        <h4>🏛️ EU Member State Environmental Funds</h4>
+        <p>European states maintain environmental remediation funds to cover orphan sites &amp; bankrupted polluters. No unified EU fund; each state manages independently under ELD Article 14. Coverage limits &amp; scope vary widely.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Illustrative Case Study: Multi-Site Petroleum Retailer <span class="c-illus">ILLUS</span></h2>
+    <div class="case-study">
+      <h4>Scenario: National Gas Station Operator with Legacy UST Exposure</h4>
+      <p><strong>Insured Profile:</strong> Large US petroleum retailer operating 85 corporate gas stations + 3 bulk fuel terminals. 40 stations have known legacy UST contamination (PCE, BTEX in groundwater); 45 stations Phase II clean. Total portfolio value $450 million.</p>
+      <p><strong>Environmental Exposure:</strong> 40 sites with active or historical contamination; estimated aggregate remediation cost $8–15m. Some sites within 500m of drinking water wells (moderate regulatory risk). 5-year clean claims history. ISO 14001 certified.</p>
+      <p><strong>Insurance Programme:</strong></p>
+      <p>• <strong>Primary EIL (Blanket PLL):</strong> $50m limit, $500k basket deductible, $100m annual aggregate</p>
+      <p>• <strong>Excess Layer 1:</strong> $50m xs $50m — Excess over primary + any layer gap</p>
+      <p>• <strong>Remediation Cost Cap (RCC):</strong> $8m aggregate for 3 known remediation sites, 4% rate</p>
+      <p><strong>Underwriting Inputs:</strong></p>
+      <p>• <strong>Site Value:</strong> $450m (total portfolio value)</p>
+      <p>• <strong>Base Rate:</strong> 0.9% (retail commercial baseline)</p>
+      <p>• <strong>Industry Loading:</strong> 1.15× (petroleum retail with legacy UST exposure)</p>
+      <p>• <strong>Site History Factor:</strong> 1.20× (known contamination, Phase II on 40 sites)</p>
+      <p>• <strong>Regulatory Factor:</strong> 1.05× (no NPL sites; some state open files)</p>
+      <p>• <strong>Claims History Factor:</strong> 1.0× (clean 5-year history)</p>
+      <p><strong>Calculation (Primary Layer):</strong><br>
+      $450m × 0.9% × 1.15 × 1.20 × 1.05 × 1.0 = $6,468,000</p>
+      <p>• <strong>Excess Layer 1 (50m xs 50m):</strong> ~$425,000 (specialty rate ~0.85%)</p>
+      <p>• <strong>RCC Policy (8m limit, 4% rate):</strong> $320,000</p>
+      <p><strong>Total Annual Programme Cost:</strong> ~$4,650,000 + RCC $320,000 = <strong>~$4.97 million</strong></p>
+      <p><strong>Key Features:</strong> Blanket pollution condition language allows acquisition of new stations without policy amendment. Per-site remediation tracked &amp; reported to insurer. Annual renewal maintains continuous claims-made coverage. Excess layer provides catastrophic tail protection if major subsidence/PFAS discovery occurs.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Lloyd's Market Advantages</h2>
+    <table>
+      <thead><tr><th>Advantage</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Specialty Expertise</strong></td>
+          <td>Lloyd's syndicates focus exclusively on environmental/specialty; underwriters have 20+ years EIL experience. Rapid decision-making on complex/large risks. <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>Flexible Wordings</strong></td>
+          <td>Lloyd's policies accommodate bespoke coverage triggers, NRD extensions, pollution condition definitions custom-tailored to insured exposures. No standard-form rigidity. <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>Claims-Made Architecture</strong></td>
+          <td>Lloyd's innovated long-tail claims-made coverage with extended discovery periods (3–5 years) and retroactive date flexibility. Allows insured to manage tail exposure. <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>Capacity Depth</strong></td>
+          <td>Multiple Lloyd's syndicates can participate in single risk; enables stacking to $100m+ per-occurrence limits on complex risks. Admission/surplus line available. <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>International Markets</strong></td>
+          <td>Lloyd's Brussels office serves EU/ELD exposures. Lloyd's London can write global programmes covering US + Europe in single policy placement. <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>Claims Handling</strong></td>
+          <td>Lloyd's claims procedures well-established; long history of environmental claim experience. Independent adjusters &amp; environmental experts engaged for large claims. <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>Pricing on Complex Risks</strong></td>
+          <td>Lloyd's willing to underwrite high-risk/specialized exposures (contaminated site remediation, PFAS-adjacent sites, emerging liabilities) that traditional carriers avoid. Premium reflects risk, not blanket exclusion. <span class="c-est">EST</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub · Environmental Liability (EP) · Module 08 – Global Programme · v2.2 · April 2026</p>
+  <p style="margin-top:.4rem;font-size:.75rem;"><a href="../index.html">← Hub Index</a></p>
+</footer>
+</body>
+</html>
