@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space – References | Risk Code Hub</title>
+<style>
+  :root {
+    --space:#1a1a4a; --orbit:#4a90d9; --launch:#e05c2a; --sat:#2d8a6a;
+    --gold:#c9a84c; --light:#f4f6fb; --mid:#e8ecf5; --dark:#111;
+    --red:#c0392b; --amber:#e67e22; --green:#27ae60; --purple:#7b52ab;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',sans-serif;background:#f0f2f8;color:#1a1a2e;line-height:1.6;}
+  header{background:linear-gradient(135deg,#0a0a2a 0%,#1a1a4a 50%,#0d2240 100%);color:#fff;padding:2rem;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-40%;left:-10%;width:120%;height:200%;
+    background:radial-gradient(ellipse at 50% 50%,rgba(74,144,217,0.08) 0%,transparent 70%);pointer-events:none;}
+  .header-inner{max-width:1100px;margin:0 auto;position:relative;}
+  .breadcrumb{font-size:.8rem;opacity:.7;margin-bottom:.5rem;}
+  .breadcrumb a{color:#a8c4e8;text-decoration:none;}
+  header h1{font-size:1.9rem;font-weight:700;letter-spacing:-.5px;}
+  header p{opacity:.8;margin-top:.4rem;font-size:.95rem;}
+  .badge-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
+  .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    color:#fff;padding:.25rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;}
+  nav{background:#fff;border-bottom:2px solid var(--orbit);position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  nav ul{display:flex;list-style:none;max-width:1100px;margin:0 auto;overflow-x:auto;gap:0;}
+  nav li a{display:block;padding:.65rem 1rem;font-size:.82rem;font-weight:600;color:#555;
+    text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s;}
+  nav li a:hover,nav li a.active{color:var(--orbit);border-bottom-color:var(--orbit);}
+  main{max-width:1100px;margin:2rem auto;padding:0 1.5rem;}
+  section{background:#fff;border-radius:10px;padding:1.8rem;margin-bottom:1.8rem;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  h2{font-size:1.25rem;font-weight:700;color:var(--space);margin-bottom:1rem;
+    padding-bottom:.5rem;border-bottom:2px solid var(--orbit);}
+  h3{font-size:1rem;font-weight:700;color:var(--space);margin:1.2rem 0 .6rem;}
+
+  /* Badge legend */
+  .badge-legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-top:1rem;}
+  .bl-card{border-radius:8px;padding:1.1rem;border-left:5px solid #ccc;}
+  .bl-card.ver{border-left-color:var(--green);background:#d4edda;}
+  .bl-card.est{border-left-color:var(--amber);background:#fff3cd;}
+  .bl-card.illus{border-left-color:var(--orbit);background:#cce5ff;}
+  .bl-card.gap{border-left-color:var(--red);background:#f8d7da;}
+  .bl-card h4{font-size:.85rem;font-weight:700;margin-bottom:.3rem;}
+  .bl-card p{font-size:.8rem;color:#333;}
+  .c-ver{background:#d4edda;color:#155724;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-est{background:#fff3cd;color:#856404;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-illus{background:#cce5ff;color:#004085;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-gap{background:#f8d7da;color:#721c24;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+
+  /* Cutoff box */
+  .cutoff-box{background:linear-gradient(90deg,#1a1a4a,#2a2a6a);color:#fff;border-radius:8px;padding:1.2rem;margin:1rem 0;}
+  .cutoff-box h4{color:var(--gold);margin-bottom:.4rem;font-size:.92rem;}
+  .cutoff-box p{font-size:.84rem;opacity:.9;}
+
+  /* Source table */
+  table{width:100%;border-collapse:collapse;font-size:.84rem;margin-top:1rem;}
+  th{background:var(--space);color:#fff;padding:.6rem .8rem;text-align:left;font-weight:600;}
+  td{padding:.55rem .8rem;border-bottom:1px solid #e0e4ef;vertical-align:top;}
+  tr:nth-child(even) td{background:#f7f9fc;}
+  a{color:var(--orbit);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  /* Audit table */
+  .audit-table th{font-size:.78rem;}
+  .audit-table td{font-size:.78rem;}
+  .at-green{color:#155724;font-weight:700;}
+  .at-amber{color:#856404;font-weight:700;}
+  .at-red{color:#721c24;font-weight:700;}
+
+  /* Gap box */
+  .gap-box{border-left:4px solid var(--red);background:#fef0ef;padding:1rem 1.2rem;border-radius:0 6px 6px 0;margin:.8rem 0;}
+  .gap-box h4{font-size:.87rem;font-weight:700;color:var(--red);margin-bottom:.3rem;}
+  .gap-box p{font-size:.83rem;color:#333;}
+
+  footer{background:var(--space);color:#aab8d0;text-align:center;padding:1.2rem;font-size:.8rem;margin-top:2rem;}
+  footer a{color:#a8c4e8;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="breadcrumb">
+      <a href="../index.html">Risk Code Hub</a> › <a href="index.html">Space (SC/SL/SO)</a> › References
+    </div>
+    <h1>Module 09 — References &amp; Data Quality</h1>
+    <p>Sources, confidence badges, knowledge cutoff and data gap disclosures for the Space hub</p>
+    <div class="badge-row">
+      <span class="badge">SC · SL · SO</span>
+      <span class="badge">Confidence Framework v2.0</span>
+      <span class="badge">Knowledge Cutoff: May 2025</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="history.html">History</a></li>
+    <li><a href="timeline.html">Timeline</a></li>
+    <li><a href="database.html">Loss Database</a></li>
+    <li><a href="underwriting.html">Underwriting</a></li>
+    <li><a href="rates-analysis.html">Rates</a></li>
+    <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+    <li><a href="global-program.html">Global Programme</a></li>
+    <li><a href="references.html" class="active">References</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- 1. Confidence Badge Legend -->
+  <section>
+    <h2>1. Confidence Badge Framework</h2>
+    <p style="font-size:.87rem;color:#444;margin-bottom:1rem;">
+      Every factual claim in this hub carries an inline confidence badge. The framework is consistent across all Risk Code Hub modules (introduced v2.0).
+    </p>
+    <div class="badge-legend">
+      <div class="bl-card ver">
+        <h4><span class="c-ver">VER</span> — Verified</h4>
+        <p>Sourced from primary documentation: UN treaty text, FCC/ITU official filings, NASA/ESA press releases, peer-reviewed space engineering literature, or Lloyd's market circulars. High confidence.</p>
+      </div>
+      <div class="bl-card est">
+        <h4><span class="c-est">EST</span> — Estimate</h4>
+        <p>Derived from market reports (Swiss Re sigma, Marsh/Aon annual reviews), broker presentations, industry conferences, or cross-referenced secondary sources. Directionally reliable; not primary-sourced.</p>
+      </div>
+      <div class="bl-card illus">
+        <h4><span class="c-illus">ILLUS</span> — Illustrative</h4>
+        <p>Constructed for training purposes to demonstrate underwriting or programme concepts. Based on plausible market parameters but NOT actual placement data. Do not cite commercially.</p>
+      </div>
+      <div class="bl-card gap">
+        <h4><span class="c-gap">GAP</span> — Data Gap</h4>
+        <p>Identified area where reliable public data is unavailable. Noted at source to signal where professional judgement or confidential market data is required.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Knowledge Cutoff -->
+  <section>
+    <h2>2. Knowledge Cutoff &amp; Currency</h2>
+    <div class="cutoff-box">
+      <h4>⏱️ Knowledge Cutoff: May 2025</h4>
+      <p>This hub was compiled using information available to Claude (Anthropic) through May 2025. Space insurance is a fast-moving market — the following categories of information may be materially out of date and should be verified against current sources before professional use:</p>
+    </div>
+    <ul style="font-size:.85rem;color:#333;padding-left:1.5rem;margin-top:.8rem;line-height:2;">
+      <li>Launch vehicle reliability statistics (Falcon 9, Ariane 6, New Glenn, Starship flight histories)</li>
+      <li>Mega-constellation satellite counts (Starlink, OneWeb/Eutelsat, Amazon Kuiper)</li>
+      <li>FCC and OFCOM regulatory developments (5-year deorbit implementation, new licence conditions)</li>
+      <li>Solar Cycle 25 activity data and space weather events post-May 2025</li>
+      <li>Market rate movements, Lloyd's market participants, syndicate capacity changes</li>
+      <li>Viasat-3, ViaSat-3 Americas partial loss claim final settlement figures</li>
+      <li>New ASAT developments, debris creation events</li>
+      <li>Active debris removal (ADR) technology deployments (Astroscale ADRAS-J status)</li>
+    </ul>
+  </section>
+
+  <!-- 3. Primary Sources -->
+  <section>
+    <h2>3. Primary Sources</h2>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Source</th><th>Jurisdiction/Issuer</th><th>Key Content</th><th>URL</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Treaty on Principles Governing the Activities of States in the Exploration and Use of Outer Space (Outer Space Treaty 1967)</strong></td>
+          <td>United Nations</td>
+          <td>Art. VI (state responsibility), Art. VII (liability for damage), Art. IX (consultation/contamination)</td>
+          <td><a href="https://www.unoosa.org/oosa/en/ourwork/spacelaw/treaties/outerspacetreaty.html" target="_blank">unoosa.org</a></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Convention on International Liability for Damage Caused by Space Objects (Liability Convention 1972)</strong></td>
+          <td>United Nations</td>
+          <td>Absolute liability for surface damage; fault-based for in-orbit; claims procedure</td>
+          <td><a href="https://www.unoosa.org/oosa/en/ourwork/spacelaw/treaties/liability-convention.html" target="_blank">unoosa.org</a></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>IADC Space Debris Mitigation Guidelines (2002, revised 2021)</strong></td>
+          <td>Inter-Agency Space Debris Coordination Committee</td>
+          <td>25-year LEO disposal; GEO graveyard orbit; passivation; conjunction avoidance</td>
+          <td><a href="https://www.iadc-home.org/documents_public" target="_blank">iadc-home.org</a></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>FCC Part 25 — Mitigation of Orbital Debris (2022 Amendment)</strong></td>
+          <td>US Federal Communications Commission</td>
+          <td>5-year post-mission disposal rule for US-licensed LEO satellites; effective Sept 2024</td>
+          <td><a href="https://www.fcc.gov/consumers/guides/fccs-space-debris-rules" target="_blank">fcc.gov</a></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>ITU Radio Regulations</strong></td>
+          <td>International Telecommunication Union</td>
+          <td>Frequency coordination; orbital slot filing; interference rights and dispute procedures</td>
+          <td><a href="https://www.itu.int/en/ITU-R/space/Pages/default.aspx" target="_blank">itu.int</a></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>ISO 24113:2019 — Space Systems: Space Debris Mitigation Requirements</strong></td>
+          <td>International Organization for Standardization</td>
+          <td>International standard harmonising IADC guidelines; used by ESA and national agencies</td>
+          <td><a href="https://www.iso.org/standard/72383.html" target="_blank">iso.org</a></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>UK Space Industry Act 2018</strong></td>
+          <td>UK Parliament / Civil Aviation Authority</td>
+          <td>Licensing framework for UK launches; third-party liability insurance requirements; CAA oversight</td>
+          <td><a href="https://www.legislation.gov.uk/ukpga/2018/5/contents" target="_blank">legislation.gov.uk</a></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>Commercial Space Launch Act (as amended) — 51 USC § 50901</strong></td>
+          <td>US Congress / FAA Office of Commercial Space Transportation</td>
+          <td>FAA licensing; MPL framework; US government indemnification above required coverage</td>
+          <td><a href="https://www.faa.gov/space/licensing_and_safety" target="_blank">faa.gov</a></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>NSA/CISA: Cybersecurity Best Practices for Space Systems (2022)</strong></td>
+          <td>US NSA / CISA</td>
+          <td>Post-Viasat KA-SAT ground segment hardening; command link encryption; supply chain controls</td>
+          <td><a href="https://www.nsa.gov/Press-Room/Press-Releases-Statements/Press-Release-View/Article/3269919/nsa-cisa-release-cybersecurity-guidance-for-space-systems/" target="_blank">nsa.gov</a></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>NOAA Space Weather Prediction Center (SWPC)</strong></td>
+          <td>US National Oceanic and Atmospheric Administration</td>
+          <td>Real-time solar proton flux, Kp index, Dst index; space weather scales (G/S/R)</td>
+          <td><a href="https://www.swpc.noaa.gov/" target="_blank">swpc.noaa.gov</a></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><strong>Swiss Re Institute — Space Market Analysis</strong></td>
+          <td>Swiss Re Institute</td>
+          <td>Annual GWP estimates; market cycle commentary; loss ratio data by year</td>
+          <td><a href="https://www.swissre.com/institute/" target="_blank">swissre.com</a></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><strong>Marsh Space Practice — Annual Space Insurance Market Report</strong></td>
+          <td>Marsh (insurance broker)</td>
+          <td>Launch and in-orbit rate benchmarks; market capacity; claims commentary</td>
+          <td><a href="https://www.marsh.com/en/industries/aerospace.html" target="_blank">marsh.com</a></td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><strong>Space-Track.org (18th Space Defense Squadron)</strong></td>
+          <td>US Space Force</td>
+          <td>Official US Space Surveillance Network (SSN) object catalogue; conjunction data messages (CDMs)</td>
+          <td><a href="https://www.space-track.org/" target="_blank">space-track.org</a></td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><strong>ESA Space Environment Report (annual)</strong></td>
+          <td>European Space Agency</td>
+          <td>Annual orbital debris population statistics; fragmentation event summaries; reentry data</td>
+          <td><a href="https://www.esa.int/Safety_Security/Space_Debris/Space_Environment_Report_2024" target="_blank">esa.int</a></td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><strong>Lloyd's Market Bulletin — Space</strong></td>
+          <td>Lloyd's of London</td>
+          <td>Market guidance; war/cyber exclusion clauses; capacity publications</td>
+          <td><a href="https://www.lloyds.com/conducting-business/market-oversight/acts-and-regulations/market-bulletins" target="_blank">lloyds.com</a></td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><strong>ECSS — European Cooperation for Space Standardization</strong></td>
+          <td>ESA / European space industry</td>
+          <td>ECSS-E-ST-10-04C space environment; ECSS-E-ST-70C ground systems; engineering standards</td>
+          <td><a href="https://ecss.nl/standards/" target="_blank">ecss.nl</a></td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><strong>Kessler &amp; Cour-Palais (1978) — Collision Frequency of Artificial Satellites</strong></td>
+          <td>Journal of Geophysical Research</td>
+          <td>Original Kessler Syndrome paper; orbital debris cascade threshold concept</td>
+          <td><a href="https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/JA083iA06p02637" target="_blank">agupubs.onlinelibrary.wiley.com</a></td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><strong>NASA Orbital Debris Quarterly News</strong></td>
+          <td>NASA Orbital Debris Program Office</td>
+          <td>ODQN: quarterly debris population updates; ASAT event analysis; conjunction statistics</td>
+          <td><a href="https://orbitaldebris.jsc.nasa.gov/quarterly-news/" target="_blank">orbitaldebris.jsc.nasa.gov</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 4. Per-Module Confidence Audit -->
+  <section>
+    <h2>4. Per-Module Confidence Audit</h2>
+    <p style="font-size:.87rem;color:#444;margin-bottom:1rem;">
+      Summary of confidence level distribution by module. VER = primary-sourced; EST = estimated/secondary; ILLUS = illustrative training figures; GAP = data gap identified.
+    </p>
+    <table class="audit-table">
+      <thead>
+        <tr>
+          <th>Module</th>
+          <th>VER Count</th>
+          <th>EST Count</th>
+          <th>ILLUS Items</th>
+          <th>Data Gaps</th>
+          <th>Primary Sources Used</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>01 — Overview</strong></td>
+          <td class="at-green">~8</td>
+          <td class="at-amber">~6</td>
+          <td>0</td>
+          <td>1 (total GWP precision)</td>
+          <td>Lloyd's, ESA, Swiss Re</td>
+        </tr>
+        <tr>
+          <td><strong>02 — History</strong></td>
+          <td class="at-green">~18</td>
+          <td class="at-amber">~4</td>
+          <td>0</td>
+          <td>0</td>
+          <td>UN Treaties, NASA, US CSL Act</td>
+        </tr>
+        <tr>
+          <td><strong>03 — Timeline</strong></td>
+          <td class="at-green">~17</td>
+          <td class="at-amber">~5</td>
+          <td>0</td>
+          <td>1 (1998-99 aggregate losses)</td>
+          <td>Press releases, regulatory filings, NASA</td>
+        </tr>
+        <tr>
+          <td><strong>04 — Loss Database</strong></td>
+          <td class="at-green">~15</td>
+          <td class="at-amber">~20</td>
+          <td>0</td>
+          <td>3 (settlement amounts)</td>
+          <td>Press, regulatory filings, Swiss Re</td>
+        </tr>
+        <tr>
+          <td><strong>05 — Underwriting</strong></td>
+          <td class="at-green">~6</td>
+          <td class="at-amber">~22</td>
+          <td>4 (worked examples)</td>
+          <td>2 (actual rate benchmarks)</td>
+          <td>Market practice; Marsh/Aon commentary</td>
+        </tr>
+        <tr>
+          <td><strong>06 — Rates Analysis</strong></td>
+          <td class="at-green">~5</td>
+          <td class="at-amber">~18</td>
+          <td>5 (ROE scenarios, CR table)</td>
+          <td>2 (Lloyd's space GWP split)</td>
+          <td>Swiss Re, Marsh, public market commentary</td>
+        </tr>
+        <tr>
+          <td><strong>07 — Risk Mitigation</strong></td>
+          <td class="at-green">~28</td>
+          <td class="at-amber">~20</td>
+          <td>1 (quality matrix)</td>
+          <td>1 (cyber/space policy interface)</td>
+          <td>IADC, FCC, NSA/CISA, NOAA SWPC, ISO</td>
+        </tr>
+        <tr>
+          <td><strong>08 — Global Programme</strong></td>
+          <td class="at-green">~10</td>
+          <td class="at-amber">~25</td>
+          <td>6 (programme tower, case study)</td>
+          <td>2 (operator premium disclosure)</td>
+          <td>UN Treaties, FAA, UK Space Industry Act</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 5. Data Gap Disclosures -->
+  <section>
+    <h2>5. Data Gap Disclosures</h2>
+    <p style="font-size:.87rem;color:#444;margin-bottom:.5rem;">Identified areas where public data is insufficient to support VER-level claims. Professional market sources are required for these items.</p>
+
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 01</span> — Lloyd's Space Market GWP by Code</h4>
+      <p>Lloyd's does not publish granular GWP breakdowns by risk code (SC/SL/SO). The total space market GWP (approximately $700–750m globally) is a Swiss Re and Marsh estimate. The Lloyd's share cannot be precisely stated from public sources. Used where referenced: Overview (Module 01), Rates Analysis (Module 06).</p>
+    </div>
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 02</span> — 1998–1999 Aggregate Loss Totals</h4>
+      <p>The commonly cited figure of ~$2.5–3.5bn aggregate losses in 1998-99 is based on market practitioner estimates in broker reviews and conference presentations, not audited Lloyd's or reinsurer accounts. The figure may include non-insurance losses. Used where referenced: Overview (Module 01), Timeline (Module 03).</p>
+    </div>
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 03</span> — Actual Launch Rate Benchmarks (Current)</h4>
+      <p>Launch Rate on Line data is commercially sensitive and not published by operators or underwriters. The benchmarks in Module 05 (Falcon 9: 1.5–3%, Ariane 6: 3–6%, etc.) are derived from broker market commentary, practitioner interviews and secondary sources including aviation/aerospace trade press. Actual rates will differ by operator relationship, satellite value, and market conditions at placement.</p>
+    </div>
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 04</span> — Viasat-3 Americas Final Settlement</h4>
+      <p>The Viasat-3 Americas partial loss (2022 deployment anomaly) was reported in media as approximately $420m insured value claim. The final insurance settlement figure is confidential. The loss is included in the database at the reported insured value figure, which may differ from the settled claim amount.</p>
+    </div>
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 05</span> — Mega-Constellation Blanket Insurance Pricing</h4>
+      <p>No public data is available on actual premium rates or coverage structures for Starlink, OneWeb or Amazon Kuiper constellation covers. SpaceX is believed to self-insure Starlink; OneWeb/Eutelsat's insurance programme is not publicly disclosed. The constellation tier framework in Module 08 is entirely illustrative.</p>
+    </div>
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 06</span> — Combined Ratio Data (Space Market, Historical)</h4>
+      <p>Space market combined ratios as presented in Module 06 are reconstructed estimates based on public loss event data and estimated GWP from market reports. Actual combined ratios are not published by Lloyd's or major reinsurers at the space code level. These figures should be treated as illustrative of market cycle direction, not as accounting data.</p>
+    </div>
+  </section>
+
+  <!-- 6. Methodology Note -->
+  <section>
+    <h2>6. Methodology &amp; Disclaimer</h2>
+    <p style="font-size:.87rem;color:#444;line-height:1.8;">
+      This hub was compiled by Claude (Anthropic) as a training resource for Lloyd's market insurance professionals.
+      It is intended to support the education of trainee underwriters and is not a substitute for professional market guidance,
+      primary treaty/regulatory texts, or syndicate-specific underwriting authorities.
+    </p>
+    <p style="font-size:.87rem;color:#444;line-height:1.8;margin-top:.8rem;">
+      <strong>Space insurance is a specialist class.</strong> Rates, limits, wordings and appetite vary significantly between Lloyd's syndicates and across the market cycle.
+      Any figures marked <span class="c-illus">ILLUS</span> are constructed for illustrative/training purposes and must not be used as reference rates for actual placements.
+      Figures marked <span class="c-est">EST</span> are estimates from secondary or market commentary sources and carry meaningful uncertainty.
+    </p>
+    <p style="font-size:.87rem;color:#444;line-height:1.8;margin-top:.8rem;">
+      This resource is maintained as a living document. Users are encouraged to verify all time-sensitive data (satellite counts, launch reliability statistics,
+      regulatory rules, market rates) against current sources. The Risk Code Hub carries a version date — refer to the build tracker for the current version.
+    </p>
+    <p style="font-size:.85rem;color:#777;margin-top:1rem;">
+      Hub version: v2.1 · Space hub compiled: April 2026 ·
+      <a href="../build-tracker.html">View build tracker</a> ·
+      <a href="../CHANGELOG.md">View changelog</a>
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub · Space (SC/SL/SO) · Module 09 – References · v2.1 · April 2026</p>
+  <p style="margin-top:.4rem;font-size:.75rem;">
+    <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp;
+    <a href="index.html">Space Hub Overview</a>
+  </p>
+</footer>
+
+</body>
+</html>

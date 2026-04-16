@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Insurance – Rates &amp; ROE | Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root { --navy:#0d2240;--space:#1a1a4a;--accent:#c8a84b;--orbit:#4a90d9;--launch:#e05c2a;--sat:#2d8a6a;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a0a2a 0%,#1a1a4a 50%,#0d2240 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8c8e8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#8899bb; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .chart-wrap { background:#fff; border:1px solid var(--border); border-radius:12px; padding:28px; margin:24px 0; }
+    .chart-wrap h3 { font-size:1rem; color:var(--navy); margin-bottom:4px; }
+    .chart-wrap .chart-sub { font-size:0.82rem; color:var(--muted); margin-bottom:18px; }
+    .chart-wrap canvas { max-height:340px; }
+
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.87rem; background:#fff; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+    th { background:var(--space); color:#fff; padding:10px 14px; text-align:left; font-size:0.82rem; }
+    td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tr:last-child td { border-bottom:none; }
+    tr:nth-child(even) td { background:#f8fafc; }
+    td strong { color:var(--navy); }
+
+    .cycle-block { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 22px; margin:12px 0; border-left:5px solid var(--orbit); }
+    .cycle-block.hard { border-left-color:var(--launch); }
+    .cycle-block.newspace { border-left-color:var(--sat); }
+    .cycle-block .cy-date { font-size:0.75rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--orbit); margin-bottom:6px; }
+    .cycle-block.hard .cy-date { color:var(--launch); }
+    .cycle-block.newspace .cy-date { color:var(--sat); }
+    .cycle-block h4 { font-size:0.95rem; color:var(--navy); margin-bottom:6px; }
+    .cycle-block p { font-size:0.87rem; margin:0; }
+
+    .roe-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin:20px 0; }
+    .roe-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; text-align:center; }
+    .roe-card.bull { border-top:4px solid var(--sat); }
+    .roe-card.base { border-top:4px solid var(--accent); }
+    .roe-card.bear { border-top:4px solid var(--launch); }
+    .roe-card .roe-label { font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+    .roe-card .roe-val { font-size:2rem; font-weight:800; margin:8px 0; }
+    .roe-card.bull .roe-val { color:var(--sat); }
+    .roe-card.base .roe-val { color:#7a5200; }
+    .roe-card.bear .roe-val { color:var(--launch); }
+    .roe-card .roe-cr { font-size:0.85rem; color:var(--muted); }
+
+    .badge { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 7px; border-radius:10px; letter-spacing:0.5px; margin-left:4px; vertical-align:middle; }
+    .b-verified { background:#e6f4ea; color:#1a5c28; }
+    .b-estimate { background:#fef3e2; color:#7a4500; }
+    .b-illustrative { background:#e3eeff; color:#1a3a7a; }
+
+    @media(max-width:700px) { .roe-grid { grid-template-columns:1fr; } }
+    footer { background:var(--space); color:#6677aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Space</a> › Rates &amp; ROE</div>
+  <div class="tag">Module 05 — Rates &amp; ROE Analysis</div>
+  <h1>Space Insurance Rates &amp; Return on Equity</h1>
+  <p>Space insurance pricing cycle 1995–2026, the 1998–1999 catastrophe-driven hard market, SpaceX reusability compression, mega-constellation portfolio underwriting, and ROE scenarios on a hypothetical $200m GWP space portfolio.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a><a href="history.html">History</a><a href="timeline.html">Timeline</a><a href="database.html">Claims Database</a><a href="underwriting.html">Underwriting</a><a href="rates-analysis.html" class="active">Rates &amp; ROE</a><a href="risk-mitigation.html">Risk Mitigation</a><a href="global-program.html">Global Programmes</a><a href="references.html">References</a>
+</nav>
+<main>
+
+  <h2>1. Space Insurance Rate Index — 1995–2026</h2>
+  <p>The chart below shows an estimated space insurance launch rate index (base 1995=100) for GEO commercial satellite launches. The cycle is dominated by the catastrophic 1998–1999 loss year, subsequent hard market, gradual softening, and the structural compression driven by SpaceX Falcon 9 reusability and market competition from 2015 onwards. <span class="badge b-estimate">EST</span></p>
+
+  <div class="chart-wrap">
+    <h3>GEO Commercial Launch Rate Index (1995=100) — Estimated</h3>
+    <div class="chart-sub">Source: Market estimates from published loss data, broker market reports, and industry commentary. Directional accuracy high; exact rate levels are commercial estimates.</div>
+    <canvas id="rateChart"></canvas>
+  </div>
+
+  <h2>2. Market Cycle Phases</h2>
+
+  <div class="cycle-block">
+    <div class="cy-date">1990–1997 — Soft to Moderate Market</div>
+    <h4>Growing Commercial Market; Manageable Loss Experience</h4>
+    <p>The post-Challenger commercial launch market expanded. Ariane 4 was the dominant commercial launcher; Atlas, Titan, and early Proton competed. Loss experience was manageable — individual satellite failures occurred but did not overwhelm the market. Global GWP grew from ~$100m to ~$500m. Rates were moderate and competitive. <span class="badge b-estimate">EST</span></p>
+  </div>
+
+  <div class="cycle-block hard">
+    <div class="cy-date">1998–2001 — Catastrophe Hard Market</div>
+    <h4>1998–99 Loss Year Drives 3–5× Rate Increases</h4>
+    <p>The aggregate insured loss of approximately $2.5–3.5bn against a GWP of ~$600m produced a combined ratio estimated at 500%+. <span class="badge b-estimate">EST</span> Launch rates tripled or quadrupled. Terms tightened: deductibles increased, CTL thresholds raised, exclusions broadened. Several underwriters left the market permanently. The market contracted in both capacity and GWP as operators deferred discretionary insurance or self-insured.</p>
+  </div>
+
+  <div class="cycle-block">
+    <div class="cy-date">2002–2008 — Hard Market Recovery</div>
+    <h4>Best Underwriting Years; Gradual Softening</h4>
+    <p>With rates elevated and loss experience improved, the market produced strong underwriting profits through approximately 2002–2006. The Sea Launch/NSS-8 failure (2007) and a cluster of in-orbit anomalies maintained some discipline, but by 2008 competitive pressure was driving rates lower. New capital entered attracted by the profitable years. <span class="badge b-estimate">EST</span></p>
+  </div>
+
+  <div class="cycle-block">
+    <div class="cy-date">2009–2014 — Soft Market; ITAR Restructuring</div>
+    <h4>Competition, ITAR Effects, and Continued Rate Decline</h4>
+    <p>The market softened steadily. ITAR restrictions pushed some non-US satellite placements away from US-market participants, growing the European (AXA XL Space, AMOS/Allianz Space) and eventually the Asian market share. Loss experience was mixed: the Iridium-Cosmos collision (2009) was significant but not a large insured loss; several GEO partial losses maintained some pricing discipline. GWP plateaued at $500–600m. <span class="badge b-estimate">EST</span></p>
+  </div>
+
+  <div class="cycle-block newspace">
+    <div class="cy-date">2015–2020 — Falcon 9 Disruption</div>
+    <h4>Reusable Launch Compression; New Market Structure</h4>
+    <p>SpaceX Falcon 9 established reusable operations from 2017. Launch costs dropped dramatically. The Amos-6 pad explosion (2016) briefly hardened the market, but the overall trajectory was compressive. Launch rates compressed. The emergence of mega-constellations (Starlink, OneWeb) required new portfolio underwriting approaches that did not exist in the traditional per-satellite model. <span class="badge b-estimate">EST</span></p>
+  </div>
+
+  <div class="cycle-block hard">
+    <div class="cy-date">2020–2026 — Selective Hardening; Structural Change</div>
+    <h4>Boeing 702MP Anomalies; Debris Risk; New Vehicle Premium</h4>
+    <p>The pattern of Boeing 702MP satellite propulsion anomalies (Intelsat IS-33e, IS-35e and others) drove specific underwriting loading for that bus type. The Viasat-3 Americas constructive total loss (2023, ~$420m) was the largest single space insurance claim in years and reminded the market of catastrophic tail risk. New launch vehicles (Ariane 6, New Glenn, Starship development) attracted higher rates. <span class="badge b-estimate">EST</span></p>
+  </div>
+
+  <h2>3. Space Insurance Sector Rate Grid</h2>
+  <table>
+    <thead><tr><th>Segment</th><th>Typical Rate Range</th><th>Market Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>GEO telecom — mature vehicle, mid-life SO</strong></td><td>1.5% – 2.5% p.a. (SO)</td><td>Established market; competitive capacity</td></tr>
+      <tr><td><strong>GEO telecom — launch (Falcon 9)</strong></td><td>1.5% – 3.0% SL</td><td>Lowest launch rates for mature vehicles</td></tr>
+      <tr><td><strong>GEO telecom — launch (new vehicle)</strong></td><td>4.0% – 8.0% SL</td><td>New vehicle premium; reduces with track record</td></tr>
+      <tr><td><strong>MEO navigation (GPS/Galileo type)</strong></td><td>2.0% – 3.5% p.a.</td><td>Government programmes often self-insure; commercial MEO limited market</td></tr>
+      <tr><td><strong>LEO small satellite (individual)</strong></td><td>3.0% – 6.0% SL / 2.0% – 4.0% SO</td><td>Higher rate; lower absolute premium; many self-insure</td></tr>
+      <tr><td><strong>LEO constellation — fleet/portfolio policy</strong></td><td>Bespoke; typically aggregate cap + deductible</td><td>Portfolio approach; expected losses budgeted; XL for catastrophe</td></tr>
+      <tr><td><strong>Earth observation satellite</strong></td><td>2.5% – 4.5% SL; 2.0% – 3.5% SO</td><td>Similar to GEO but often smaller insured values</td></tr>
+      <tr><td><strong>Deep space / lunar mission</strong></td><td>4.0% – 12%+ SL</td><td>Very limited market; novel mission profile; few underwriters</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.85rem;color:var(--muted);">All rates are indicative market estimates. <span class="badge b-estimate">EST</span> Space insurance is individually negotiated; rates depend strongly on specific mission profile, vehicle, bus heritage, and current market conditions.</p>
+
+  <h2>4. Combined Ratio Analysis</h2>
+  <p>Space insurance combined ratios are inherently volatile — a single large GEO loss can push the annual market from profitability into significant loss. The chart below shows estimated market combined ratios. <span class="badge b-estimate">EST</span></p>
+
+  <div class="chart-wrap">
+    <h3>Space Insurance Market — Estimated Combined Ratio 2000–2026</h3>
+    <div class="chart-sub">Red bars = underwriting loss (&gt;100%). Green bars = underwriting profit. Breakeven = 100%. Source: market estimates from published industry data.</div>
+    <canvas id="crChart"></canvas>
+  </div>
+
+  <table>
+    <thead><tr><th>Year</th><th>Key Events</th><th>Est. Combined Ratio</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>2000</td><td>Post-catastrophe hard market</td><td>72%</td><td>Excellent result; elevated rates, improved loss experience</td></tr>
+      <tr><td>2002</td><td>Hard market peak profitability</td><td>65%</td><td>Best underwriting period in market history</td></tr>
+      <tr><td>2005</td><td>Gradual softening begins</td><td>80%</td><td>Still profitable; loss experience benign</td></tr>
+      <tr><td>2007</td><td>Sea Launch/NSS-8; AMC-9</td><td>105%</td><td>NSS-8 and AMC-9 combined push to marginal loss</td></tr>
+      <tr><td>2009</td><td>Iridium-Cosmos collision</td><td>95%</td><td>Relatively modest insured loss from collision event</td></tr>
+      <tr><td>2011</td><td>Benign year</td><td>78%</td><td>Soft market but good loss experience</td></tr>
+      <tr><td>2013</td><td>Yamal-402 life reduction partial loss</td><td>98%</td><td>Yamal-402 precedent-setting; near breakeven</td></tr>
+      <tr><td>2014</td><td>Proton-M Express AM4R; multiple anomalies</td><td>115%</td><td>Proton failure year; market-wide underwriting loss</td></tr>
+      <tr><td>2016</td><td>Amos-6 pad explosion; IS-33e partial</td><td>130%</td><td>Amos-6 + IS-33e significant; hard year</td></tr>
+      <tr><td>2017</td><td>IS-35e; AMC-9 breakup</td><td>110%</td><td>Boeing 702MP pattern emerging</td></tr>
+      <tr><td>2019</td><td>Relatively benign</td><td>85%</td><td>Good year despite soft rates; Falcon 9 reliability</td></tr>
+      <tr><td>2021</td><td>Market rebalancing</td><td>90%</td><td>Gradual rate recovery; loss experience acceptable</td></tr>
+      <tr><td>2023</td><td>Viasat-3 Americas CTL (~$420m)</td><td>140%</td><td>Largest single space insurance loss in years</td></tr>
+      <tr><td>2024</td><td>Post-Viasat rate adjustment; new vehicles</td><td>105%</td><td>Rates adjusting; continued new vehicle premium</td></tr>
+      <tr><td>2025–26E</td><td>Selective hardening; Viasat hangover</td><td>95%</td><td>Forecast improvement as rates harden on affected segments <span class="badge b-estimate">EST</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. ROE Scenarios — Hypothetical $200m GWP Space Portfolio</h2>
+  <p>ROE scenarios for a hypothetical $200m GWP space insurance portfolio (mix of SL, SO, SC across GEO, LEO, and launch services). <span class="badge b-illustrative">ILLUS</span></p>
+
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="roe-label">Bull — Benign Year</div>
+      <div class="roe-val">+22.5%</div>
+      <div class="roe-cr">Combined Ratio: 72%</div>
+    </div>
+    <div class="roe-card base">
+      <div class="roe-label">Base — Average Year</div>
+      <div class="roe-val">+7.2%</div>
+      <div class="roe-cr">Combined Ratio: 95%</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="roe-label">Bear — Major Loss Year</div>
+      <div class="roe-val">−28.4%</div>
+      <div class="roe-cr">Combined Ratio: 145%</div>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>Item</th><th>Bull (72% CR)</th><th>Base (95% CR)</th><th>Bear (145% CR)</th></tr></thead>
+    <tbody>
+      <tr><td>Gross Written Premium</td><td>$200m</td><td>$200m</td><td>$200m</td></tr>
+      <tr><td>Net Earned Premium (after reinsurance ~15%)</td><td>$170m</td><td>$170m</td><td>$170m</td></tr>
+      <tr><td>Underwriting Profit / (Loss)</td><td><strong style="color:#2d8a6a;">+$47.6m</strong></td><td><strong style="color:#7a5200;">+$8.5m</strong></td><td><strong style="color:#e05c2a;">−$76.5m</strong></td></tr>
+      <tr><td>Investment Income (2.5% on reserves)</td><td>$6m</td><td>$6m</td><td>$6m</td></tr>
+      <tr><td>Pre-tax Profit / (Loss)</td><td>$53.6m</td><td>$14.5m</td><td>−$70.5m</td></tr>
+      <tr><td>Allocated Capital (120% of GWP — space is capital-intensive)</td><td>$240m</td><td>$240m</td><td>$240m</td></tr>
+      <tr><td><strong>Return on Equity</strong></td><td><strong style="color:#2d8a6a;">+22.3%</strong></td><td><strong style="color:#7a5200;">+6.0%</strong></td><td><strong style="color:#e05c2a;">−29.4%</strong></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.85rem;color:var(--muted);">Space insurance requires significantly more capital per dollar of GWP than standard property classes due to high severity / binary-outcome risk profile. Capital allocation at 120% of GWP is indicative. A single major GEO total loss ($300–400m) against a $200m GWP book is a plausible scenario that would produce extreme bear-case results. <span class="badge b-illustrative">ILLUS</span></p>
+
+</main>
+<footer>Risk Code Hub · Space (SC · SL · SO) · Module 05: Rates &amp; ROE · v2.1 — April 2026</footer>
+
+<script>
+// Rate Index Chart
+const rateCtx = document.getElementById('rateChart').getContext('2d');
+const years = [1995,1997,1999,2001,2003,2005,2007,2009,2011,2013,2015,2017,2019,2021,2023,2026];
+const launchRates = [100,105,340,320,220,180,165,145,130,120,95,72,60,65,75,70];
+
+new Chart(rateCtx, {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [
+      {
+        label: 'GEO Launch Rate Index (1995=100)',
+        data: launchRates,
+        borderColor: '#e05c2a',
+        backgroundColor: 'rgba(224,92,42,0.10)',
+        borderWidth: 2.5,
+        pointRadius: 4,
+        fill: true,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      x: { title: { display: true, text: 'Year' } },
+      y: {
+        title: { display: true, text: 'Rate Index (1995=100)' },
+        min: 40, max: 360,
+        grid: { color: '#e8eef4' }
+      }
+    }
+  }
+});
+
+// Combined Ratio Chart
+const crCtx = document.getElementById('crChart').getContext('2d');
+const crYears = [2000,2002,2005,2007,2009,2011,2013,2014,2016,2017,2019,2021,2023,2024,'25-26E'];
+const crData  = [72,65,80,105,95,78,98,115,130,110,85,90,140,105,95];
+const crColors = crData.map(v => v >= 100 ? 'rgba(224,92,42,0.75)' : 'rgba(45,138,106,0.75)');
+
+new Chart(crCtx, {
+  type: 'bar',
+  data: {
+    labels: crYears,
+    datasets: [{
+      label: 'Combined Ratio (%)',
+      data: crData,
+      backgroundColor: crColors,
+      borderColor: crColors.map(c => c.replace('0.75','1')),
+      borderWidth: 1.5
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { title: { display: true, text: 'Year' } },
+      y: {
+        title: { display: true, text: 'Combined Ratio (%)' },
+        min: 50, max: 160,
+        ticks: { callback: v => v + '%' },
+        grid: { color: '#e8eef4' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

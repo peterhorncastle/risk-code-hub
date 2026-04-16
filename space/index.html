@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Insurance | Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--space:#1a1a4a;--space-dark:#0a0a2a;--space-light:#e8e8ff;--accent:#c8a84b;--orbit:#4a90d9;--orbit-light:#e3f0ff;--launch:#e05c2a;--launch-light:#fff0ea;--sat:#2d8a6a;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a0a2a 0%,#1a1a4a 50%,#0d2240 100%); color:#fff; padding:40px; position:relative; overflow:hidden; }
+    header::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 80% 30%,rgba(74,144,217,0.18) 0%,transparent 60%),radial-gradient(ellipse at 20% 70%,rgba(200,168,75,0.10) 0%,transparent 50%); }
+    header .inner { position:relative; z-index:1; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8c8e8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#8899bb; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    /* Stats row */
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; margin:28px 0; }
+    .stat-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; text-align:center; }
+    .stat-card .val { font-size:1.6rem; font-weight:800; color:var(--orbit); line-height:1.1; }
+    .stat-card .val.launch { color:var(--launch); }
+    .stat-card .val.sat { color:var(--sat); }
+    .stat-card .val.gold { color:#7a5200; }
+    .stat-card .lbl { font-size:0.74rem; color:var(--muted); margin-top:5px; line-height:1.4; }
+    .stat-card .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin-top:4px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+
+    /* Coverage grid */
+    .cov-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin:24px 0; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--orbit); }
+    .cov-card.launch { border-top-color:var(--launch); }
+    .cov-card.liability { border-top-color:var(--accent); }
+    .cov-card.inorbit { border-top-color:var(--sat); }
+    .cov-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .cov-card ul { padding-left:16px; }
+    .cov-card li { font-size:0.84rem; margin-bottom:5px; line-height:1.5; }
+
+    /* Code table */
+    .code-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:24px 0; }
+    .code-table table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .code-table th { background:var(--space); color:#fff; padding:10px 16px; text-align:left; }
+    .code-table td { padding:10px 16px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .code-table tr:last-child td { border-bottom:none; }
+    .code-table tr:nth-child(even) td { background:#f8fafc; }
+    .code-chip { display:inline-block; background:var(--space); color:#fff; font-weight:800; font-size:0.8rem; padding:2px 10px; border-radius:12px; letter-spacing:1px; margin-right:4px; }
+    .code-chip.orbit { background:var(--orbit); }
+    .code-chip.launch-chip { background:var(--launch); }
+    .code-chip.sat-chip { background:var(--sat); }
+
+    /* Dark info box */
+    .info-box { background:var(--space); color:#c8d8f0; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:var(--accent); margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    /* Module cards */
+    .module-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:24px 0; }
+    .mod-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; text-decoration:none; color:var(--text); transition:box-shadow 0.2s,border-color 0.2s; display:block; }
+    .mod-card:hover { box-shadow:0 4px 16px rgba(13,34,64,0.12); border-color:var(--orbit); }
+    .mod-card .mod-num { font-size:0.7rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--orbit); margin-bottom:4px; }
+    .mod-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:4px; }
+    .mod-card p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.4; }
+
+    .badge { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 7px; border-radius:10px; letter-spacing:0.5px; margin-left:4px; vertical-align:middle; }
+    .b-verified { background:#e6f4ea; color:#1a5c28; }
+    .b-estimate { background:#fef3e2; color:#7a4500; }
+
+    footer { background:var(--space); color:#6677aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Space</div>
+    <div class="tag">Lloyd's Risk Codes SC · SL · SO</div>
+    <h1>Space Insurance</h1>
+    <p>Satellite launch, construction-to-in-orbit, and operational transponder insurance. Covers expendable and reusable launch vehicles, satellite manufacturing risk, in-orbit anomalies, on-orbit life extension, and space liability under the Outer Space Treaty and Liability Convention.</p>
+  </div>
+</header>
+<nav>
+  <a href="index.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val launch">~$700m</div>
+      <div class="lbl">Est. global space insurance GWP (2024)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val">2,000+</div>
+      <div class="lbl">Active satellites in commercial operation (2024)</div>
+      <span class="badge b-v">VER</span>
+    </div>
+    <div class="stat-card">
+      <div class="val orbit">6,500+</div>
+      <div class="lbl">Starlink satellites launched (SpaceX, 2024)</div>
+      <span class="badge b-v">VER</span>
+    </div>
+    <div class="stat-card">
+      <div class="val sat">~2%</div>
+      <div class="lbl">Typical in-orbit annual premium rate (GEO telecom)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val gold">$3.5bn</div>
+      <div class="lbl">PanAmSat Galaxy 4 / total 1998–1999 losses driving hard market</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val launch">$60bn+</div>
+      <div class="lbl">Est. global space industry revenue (2024)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+  </div>
+
+  <h2>Lloyd's Risk Code Structure</h2>
+  <div class="code-table">
+    <table>
+      <thead><tr><th>Code</th><th>Class</th><th>Coverage Scope</th><th>Typical Limit</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="code-chip launch-chip">SC</span></td>
+          <td><strong>Satellite — Construction / Pre-Launch</strong></td>
+          <td>Physical damage to satellite during manufacture, testing, transportation (air/sea) and launch campaign. Coverage period: factory → launch pad. Key perils: handling damage, vibration/acoustic testing failure, contamination, launch pad fire. Analogous to marine cargo but for high-value, one-of-a-kind spacecraft.</td>
+          <td>$50m – $600m+ per satellite</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip orbit">SL</span></td>
+          <td><strong>Satellite — Launch &amp; Early Orbit</strong></td>
+          <td>All-risks coverage from ignition through launch vehicle separation, orbit raising (apogee kick motor), and in-orbit testing phase (LEOP — Launch &amp; Early Orbit Phase). Typically 12 months from launch. Covers total loss, constructive total loss, and partial loss of satellite capability.</td>
+          <td>$100m – $600m+ per launch</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip sat-chip">SO</span></td>
+          <td><strong>Satellite — In-Orbit / Operational</strong></td>
+          <td>Annual operational coverage for in-orbit satellites against total loss, partial loss (reduced transponder capacity/power), and in-orbit life loss. Key perils: solar events, orbital debris collision, power subsystem failure, thruster anomaly, software failure, ASAT/cyber interference. Typically renewed annually.</td>
+          <td>$50m – $500m+ per satellite</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Coverage Architecture</h2>
+  <div class="cov-grid">
+    <div class="cov-card">
+      <h4>🛰️ Construction Risk (SC)</h4>
+      <ul>
+        <li>All-risks physical damage during manufacture</li>
+        <li>Factory acceptance testing (vibration, thermal vacuum)</li>
+        <li>Transportation to launch site — air freight or sea</li>
+        <li>Launch campaign handling and fuelling</li>
+        <li>Contamination, ESD, handling error</li>
+        <li>Typically written as inland marine / cargo hybrid</li>
+      </ul>
+    </div>
+    <div class="cov-card launch">
+      <h4>🚀 Launch Risk (SL)</h4>
+      <ul>
+        <li>Launch vehicle failure / range safety destruct</li>
+        <li>Separation failure (fairing, payload separation)</li>
+        <li>Propulsion anomaly in orbit-raising phase</li>
+        <li>Apogee kick motor / upper stage failure</li>
+        <li>LEOP phase anomalies (antenna deployment, solar array)</li>
+        <li>Partial loss: reduced capacity/power at end of LEOP</li>
+      </ul>
+    </div>
+    <div class="cov-card inorbit">
+      <h4>🛸 In-Orbit Operations (SO)</h4>
+      <ul>
+        <li>Total loss: catastrophic failure, loss of control</li>
+        <li>Constructive total loss: &gt;75% capacity loss (typical)</li>
+        <li>Partial loss: transponder failure, power degradation</li>
+        <li>Gradual revenue loss from life reduction</li>
+        <li>On-orbit servicing gap (emerging market)</li>
+        <li>Annual renewable; life expectancy typically 15–18 years GEO <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="cov-card liability">
+      <h4>⚖️ Space Liability</h4>
+      <ul>
+        <li>Third party liability for damage caused by spacecraft</li>
+        <li>Outer Space Treaty 1967: launching state bears absolute liability <span class="badge b-v">VER</span></li>
+        <li>Liability Convention 1972: governs international claims between states</li>
+        <li>Launch range and ground operations liability</li>
+        <li>Re-entry debris / ASAT debris field liability (emerging)</li>
+        <li>Typically written as a separate liability slip</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3>🌌 The NewSpace Revolution — Underwriting Context</h3>
+    <p>The space insurance market is undergoing its most significant structural transformation since the late 1990s hard market. Three factors are reshaping the risk landscape: <span class="badge b-e">EST</span></p>
+    <ul>
+      <li><strong>Reusable launch vehicles:</strong> SpaceX Falcon 9 (first flight 2010; operational reusability from 2017) has launched over 250 missions as of 2024 with a near-perfect success rate, dramatically reducing launch cost (from ~$60,000/kg on traditional ELVs to ~$2,700/kg on Falcon 9) and compressing launch risk premiums.</li>
+      <li><strong>Mega-constellations:</strong> SpaceX Starlink (6,500+ satellites by 2024), Amazon Kuiper, OneWeb, and Chinese LEO constellation programmes are placing hundreds of small satellites at a time. Traditional per-satellite underwriting is replaced by portfolio/fleet approaches; debris accumulation risk is unprecedented.</li>
+      <li><strong>Miniaturisation and commoditisation:</strong> CubeSats and small sats (1–500kg) have democratised space access. Insurance value per satellite has dropped dramatically; the risk pool has expanded but average premium has shrunk. Some nano/micro-sat operators self-insure.</li>
+    </ul>
+    <p style="margin-top:10px;">The traditional space insurance market — dominated by AXA XL, Global Aerospace, AMOS, Atrium/Tokio Marine, and Lloyd's syndicates — is adjusting to a market where launch frequency has increased 5× since 2016 but premium per launch has compressed significantly.</p>
+  </div>
+
+  <h2>Market Participants</h2>
+  <p>The Lloyd's space insurance market is small and highly specialised. The active underwriting community numbers fewer than 20 major participants globally. <span class="badge b-e">EST</span></p>
+
+  <div class="code-table">
+    <table>
+      <thead><tr><th>Participant Type</th><th>Key Players (Illustrative)</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Lloyd's Syndicates</strong></td><td>Various syndicates with space lines (Atrium, Hiscox Space, Beazley, others)</td><td>Lead and follow capacity on SC/SL/SO slips; London market is the dominant placement venue for international space business</td></tr>
+        <tr><td><strong>Global Specialty Insurers</strong></td><td>AXA XL Space, Global Aerospace, AMOS (formerly Allianz Space)</td><td>Major capacity providers; often co-lead large GEO telecom programmes</td></tr>
+        <tr><td><strong>Space Reinsurers</strong></td><td>Munich Re, Swiss Re, Hannover Re</td><td>Capacity backstop; XL reinsurance for cat accumulation; modelling support</td></tr>
+        <tr><td><strong>Space Brokers</strong></td><td>Marsh (Space Specialty Practice), Aon Space, Willis Towers Watson Space</td><td>Specialist placement brokers; connect satellite operators with underwriters; provide risk engineering input</td></tr>
+        <tr><td><strong>Satellite Operators</strong></td><td>Intelsat, SES, Eutelsat, Viasat, Telesat, national agencies (ESA/NASA/JAXA — usually self-insure or partially insure)</td><td>Primary insureds on SO programmes; also SC during manufacture</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Hub Modules</h2>
+  <div class="module-grid">
+    <a href="history.html" class="mod-card">
+      <div class="mod-num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From Sputnik 1957, first space policy 1965, Intelsat era, the 1998–99 catastrophe year, to NewSpace disruption</p>
+    </a>
+    <a href="timeline.html" class="mod-card">
+      <div class="mod-num">Module 02</div>
+      <h4>Major Events Timeline</h4>
+      <p>20 major space insurance events: launch failures, in-orbit anomalies, satellite collisions, regulatory milestones</p>
+    </a>
+    <a href="database.html" class="mod-card">
+      <div class="mod-num">Module 03</div>
+      <h4>Claims Database</h4>
+      <p>Searchable database of 35 space insurance losses — filter by type, orbit, year, loss size</p>
+    </a>
+    <a href="underwriting.html" class="mod-card">
+      <div class="mod-num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>Launch vehicle reliability rating, satellite heritage scoring, in-orbit rate methodology, worked examples</p>
+    </a>
+    <a href="rates-analysis.html" class="mod-card">
+      <div class="mod-num">Module 05</div>
+      <h4>Rates &amp; ROE</h4>
+      <p>Space market pricing cycle 1990–2026, NewSpace rate compression, ROE scenarios</p>
+    </a>
+    <a href="risk-mitigation.html" class="mod-card">
+      <div class="mod-num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Redundancy design, space debris mitigation, ASAT risk, cybersecurity for satellite operations</p>
+    </a>
+    <a href="global-program.html" class="mod-card">
+      <div class="mod-num">Module 07</div>
+      <h4>Global Programmes</h4>
+      <p>Multi-satellite fleet programmes, mega-constellation portfolio cover, national space agency structures</p>
+    </a>
+    <a href="references.html" class="mod-card">
+      <div class="mod-num">Module 09</div>
+      <h4>References &amp; Sources</h4>
+      <p>Source citations, confidence audit, and data gap disclosures for the Space hub</p>
+    </a>
+  </div>
+
+</main>
+<footer>Risk Code Hub · Space (SC · SL · SO) · v2.1 — April 2026</footer>
+</body>
+</html>

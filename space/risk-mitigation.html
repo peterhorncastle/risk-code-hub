@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space – Risk Mitigation | Risk Code Hub</title>
+<style>
+  :root {
+    --space:#1a1a4a; --orbit:#4a90d9; --launch:#e05c2a; --sat:#2d8a6a;
+    --gold:#c9a84c; --light:#f4f6fb; --mid:#e8ecf5; --dark:#111;
+    --red:#c0392b; --amber:#e67e22; --green:#27ae60;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',sans-serif;background:#f0f2f8;color:#1a1a2e;line-height:1.6;}
+  header{background:linear-gradient(135deg,#0a0a2a 0%,#1a1a4a 50%,#0d2240 100%);color:#fff;padding:2rem;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-40%;left:-10%;width:120%;height:200%;
+    background:radial-gradient(ellipse at 50% 50%,rgba(74,144,217,0.08) 0%,transparent 70%);pointer-events:none;}
+  .header-inner{max-width:1100px;margin:0 auto;position:relative;}
+  .breadcrumb{font-size:.8rem;opacity:.7;margin-bottom:.5rem;}
+  .breadcrumb a{color:#a8c4e8;text-decoration:none;}
+  header h1{font-size:1.9rem;font-weight:700;letter-spacing:-.5px;}
+  header p{opacity:.8;margin-top:.4rem;font-size:.95rem;}
+  .badge-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
+  .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    color:#fff;padding:.25rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;}
+  nav{background:#fff;border-bottom:2px solid var(--orbit);position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  nav ul{display:flex;list-style:none;max-width:1100px;margin:0 auto;overflow-x:auto;gap:0;}
+  nav li a{display:block;padding:.65rem 1rem;font-size:.82rem;font-weight:600;color:#555;
+    text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s;}
+  nav li a:hover,nav li a.active{color:var(--orbit);border-bottom-color:var(--orbit);}
+  main{max-width:1100px;margin:2rem auto;padding:0 1.5rem;}
+  section{background:#fff;border-radius:10px;padding:1.8rem;margin-bottom:1.8rem;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  h2{font-size:1.25rem;font-weight:700;color:var(--space);margin-bottom:1rem;
+    padding-bottom:.5rem;border-bottom:2px solid var(--orbit);}
+  h3{font-size:1rem;font-weight:700;color:var(--space);margin:1.2rem 0 .6rem;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem;}
+  .card{background:var(--light);border-radius:8px;padding:1.2rem;border-top:4px solid var(--orbit);}
+  .card.launch{border-top-color:var(--launch);}
+  .card.sat{border-top-color:var(--sat);}
+  .card.amber{border-top-color:var(--amber);}
+  .card.red{border-top-color:var(--red);}
+  .card h4{font-size:.9rem;font-weight:700;color:var(--space);margin-bottom:.5rem;}
+  .card p,.card ul{font-size:.85rem;color:#444;}
+  .card ul{padding-left:1.1rem;}
+  .card li{margin-bottom:.25rem;}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:1rem;}
+  th{background:var(--space);color:#fff;padding:.6rem .8rem;text-align:left;font-weight:600;}
+  td{padding:.55rem .8rem;border-bottom:1px solid #e0e4ef;vertical-align:top;}
+  tr:nth-child(even) td{background:#f7f9fc;}
+  .c-ver{background:#d4edda;color:#155724;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-est{background:#fff3cd;color:#856404;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-illus{background:#cce5ff;color:#004085;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .info-box{border-left:4px solid var(--orbit);background:#eef5fb;padding:1rem 1.2rem;border-radius:0 6px 6px 0;margin:1rem 0;}
+  .info-box.launch{border-left-color:var(--launch);background:#fdf0ea;}
+  .info-box.sat{border-left-color:var(--sat);background:#eaf5f0;}
+  .info-box.warn{border-left-color:var(--red);background:#fef0ef;}
+  .info-box h4{font-size:.9rem;font-weight:700;margin-bottom:.4rem;}
+  .info-box p,.info-box ul{font-size:.84rem;color:#333;}
+  .info-box ul{padding-left:1.1rem;}
+  .info-box li{margin-bottom:.3rem;}
+  .quality-grid{display:grid;grid-template-columns:1.8fr repeat(3,1fr);gap:0;border:1px solid #dce3f0;border-radius:8px;overflow:hidden;margin-top:1rem;font-size:.82rem;}
+  .qg-head{background:var(--space);color:#fff;padding:.5rem .7rem;font-weight:700;}
+  .qg-green{background:#d4edda;color:#155724;padding:.5rem .7rem;}
+  .qg-amber{background:#fff3cd;color:#856404;padding:.5rem .7rem;}
+  .qg-red{background:#f8d7da;color:#721c24;padding:.5rem .7rem;}
+  .qg-label{background:#f4f6fb;padding:.5rem .7rem;font-weight:600;border-bottom:1px solid #dce3f0;}
+  .top-actions{counter-reset:action;list-style:none;padding:0;margin-top:1rem;}
+  .top-actions li{counter-increment:action;display:flex;align-items:flex-start;gap:.8rem;
+    padding:.75rem;margin-bottom:.5rem;background:var(--light);border-radius:8px;
+    border-left:4px solid var(--orbit);font-size:.87rem;}
+  .top-actions li::before{content:counter(action);background:var(--orbit);color:#fff;
+    font-weight:700;width:1.6rem;height:1.6rem;border-radius:50%;display:flex;
+    align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem;}
+  footer{background:var(--space);color:#aab8d0;text-align:center;padding:1.2rem;font-size:.8rem;margin-top:2rem;}
+  footer a{color:#a8c4e8;text-decoration:none;}
+  @media(max-width:640px){
+    header h1{font-size:1.4rem;}
+    .quality-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="breadcrumb">
+      <a href="../index.html">Risk Code Hub</a> › <a href="index.html">Space (SC/SL/SO)</a> › Risk Mitigation
+    </div>
+    <h1>Module 07 — Risk Mitigation</h1>
+    <p>Space debris, ASAT threats, satellite resilience, ground segment security &amp; space weather controls</p>
+    <div class="badge-row">
+      <span class="badge">SC · Construction</span>
+      <span class="badge">SL · Launch + LEOP</span>
+      <span class="badge">SO · In-Orbit</span>
+      <span class="badge">IADC / ITU / FCC / ISO 24113</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="history.html">History</a></li>
+    <li><a href="timeline.html">Timeline</a></li>
+    <li><a href="database.html">Loss Database</a></li>
+    <li><a href="underwriting.html">Underwriting</a></li>
+    <li><a href="rates-analysis.html">Rates</a></li>
+    <li><a href="risk-mitigation.html" class="active">Risk Mitigation</a></li>
+    <li><a href="global-program.html">Global Programme</a></li>
+    <li><a href="references.html">References</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- 1. Space Debris Mitigation -->
+  <section>
+    <h2>1. Space Debris Mitigation</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      There are an estimated <strong>27,000+ trackable objects ≥10 cm</strong> <span class="c-ver">VER</span>
+      and over <strong>500,000 objects ≥1 cm</strong> <span class="c-est">EST</span> in Earth orbit.
+      Compliance with post-mission disposal standards is a primary underwriting control for both launch and in-orbit covers.
+    </p>
+
+    <div class="info-box">
+      <h4>🛰️ IADC Space Debris Mitigation Guidelines (2002, revised 2021)</h4>
+      <p>The Inter-Agency Space Debris Coordination Committee guidelines — adopted by ESA, NASA, JAXA, Roscosmos, CNSA and others — form the global baseline. Key requirements relevant to insurers:</p>
+      <ul>
+        <li>LEO (200–2000 km): post-mission disposal within <strong>25 years</strong> <span class="c-ver">VER</span> (FCC reduced to 5 years for US-licensed satellites from September 2024) <span class="c-ver">VER</span></li>
+        <li>GEO graveyard orbit: minimum 235 km above GEO arc (300 km drift-off preferred) <span class="c-ver">VER</span></li>
+        <li>Passivation: all remaining propellant, pressurant and batteries must be vented at end-of-life to prevent on-orbit fragmentation <span class="c-ver">VER</span></li>
+        <li>Avoid deliberate manoeuvres that generate debris clouds or break apart objects</li>
+        <li>Conjunction analysis and avoidance manoeuvres for tracked conjunction events (Pc > 1:10,000 typical threshold) <span class="c-est">EST</span></li>
+      </ul>
+    </div>
+
+    <h3>Deorbit Compliance Framework</h3>
+    <div class="cards">
+      <div class="card">
+        <h4>📋 Pre-Launch Compliance</h4>
+        <ul>
+          <li>Debris mitigation plan filed with regulator (FCC, ITU, national authority)</li>
+          <li>Orbital lifetime analysis demonstrating ≤5yr (LEO) or graveyard capability (GEO)</li>
+          <li>Fragmentation risk assessment (breakup models)</li>
+          <li>Propellant budget allocated for deorbit manoeuvres</li>
+        </ul>
+      </div>
+      <div class="card launch">
+        <h4>🚀 Launch Phase Controls</h4>
+        <ul>
+          <li>Upper stage passivation after payload separation</li>
+          <li>Spent rocket body disposal plan (reentry or graveyard)</li>
+          <li>Propellant residual minimisation protocol</li>
+          <li>Launch window selection to minimise debris risk corridors</li>
+        </ul>
+      </div>
+      <div class="card sat">
+        <h4>🛰️ In-Orbit Controls</h4>
+        <ul>
+          <li>Regular Space Surveillance Network (SSN) conjunction screening <span class="c-ver">VER</span></li>
+          <li>Collision avoidance manoeuvres logged and reported to insurer</li>
+          <li>Fuel reservation ≥5% of total delta-V for deorbit <span class="c-est">EST</span></li>
+          <li>EOL passivation sequence verified in operations manual</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <h4>⚠️ Non-Compliance Indicators</h4>
+        <ul>
+          <li>No deorbit plan filed or approved by competent authority</li>
+          <li>Propellant budget insufficient for post-mission disposal</li>
+          <li>Operator with history of failed deorbit manoeuvres</li>
+          <li>Mission architecture in densely populated orbital shell without CAM capability</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box warn" style="margin-top:1rem;">
+      <h4>⚠️ Kessler Syndrome — Cascading Debris Risk</h4>
+      <p>Donald Kessler's 1978 hypothesis describes a cascade scenario where orbital debris density reaches a threshold triggering self-sustaining collision chains. The <strong>China ASAT test (January 2007)</strong> created ~3,500 trackable fragments in a densely used LEO band (800–850 km); the <strong>Russia ASAT test (November 2021)</strong> against Cosmos 1408 created ~1,500 trackable fragments threatening the ISS. <span class="c-ver">VER</span> Underwriters should apply surcharges for missions in high-debris-density orbital shells (600–900 km LEO band). <span class="c-est">EST</span></p>
+    </div>
+
+    <h3>Mega-Constellation Specific Controls</h3>
+    <table>
+      <thead>
+        <tr><th>Control Area</th><th>Starlink (SpaceX)</th><th>OneWeb / Eutelsat</th><th>Amazon Kuiper</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Autonomous CAM</td>
+          <td>Automated collision avoidance via Starlink onboard autonomy <span class="c-ver">VER</span></td>
+          <td>Manual with AI-assisted screening <span class="c-est">EST</span></td>
+          <td>Autonomous on-board system planned <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td>Deorbit Capability</td>
+          <td>~5-week natural reentry at 550 km altitude <span class="c-ver">VER</span></td>
+          <td>1,200 km orbit — 5yr active deorbit planned <span class="c-est">EST</span></td>
+          <td>590 km orbit; propulsion for deorbit <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td>Failure Rate (on-orbit)</td>
+          <td>~2-3% functional failure rate (est. from public tracking) <span class="c-est">EST</span></td>
+          <td>&lt;5% target <span class="c-est">EST</span></td>
+          <td>Pre-operational; not yet available</td>
+        </tr>
+        <tr>
+          <td>Regulator Filing</td>
+          <td>FCC-licensed; 5-year deorbit rule compliance <span class="c-ver">VER</span></td>
+          <td>UK Ofcom + FCC <span class="c-ver">VER</span></td>
+          <td>FCC ITU filings active <span class="c-ver">VER</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 2. ASAT & Electronic Warfare -->
+  <section>
+    <h2>2. ASAT &amp; Electronic Warfare Risk</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Anti-satellite weapons and electronic warfare represent a growing threat to commercial satellite operations. Most space insurance policies contain explicit war/ASAT exclusions, but the risk informs underwriting appetite for operators in contested orbital environments.
+    </p>
+
+    <div class="cards">
+      <div class="card red">
+        <h4>💥 Kinetic ASAT</h4>
+        <p>Direct-ascent missiles (DA-ASAT) can destroy satellites and create catastrophic debris fields. Demonstrated by: USA (1985, F-15 launch), China (2007, FY-1C), India (Mission Shakti 2019), Russia (Cosmos 1408 2021). <span class="c-ver">VER</span></p>
+        <p style="margin-top:.5rem;font-size:.8rem;"><em>Insurance treatment: War/hostile action exclusion; not insurable on standard space policy.</em></p>
+      </div>
+      <div class="card red">
+        <h4>📡 Jamming &amp; Spoofing</h4>
+        <ul>
+          <li><strong>Uplink jamming:</strong> interferes with ground-to-satellite command signals</li>
+          <li><strong>Downlink jamming:</strong> disrupts satellite-to-ground data/communications</li>
+          <li><strong>GNSS spoofing:</strong> false position signals affecting attitude control or navigation payloads</li>
+          <li>Russia-Ukraine conflict demonstrated large-scale GPS spoofing over Eastern Europe <span class="c-ver">VER</span></li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <h4>🔌 Co-orbital / Proximity Ops</h4>
+        <ul>
+          <li>Rendezvous and proximity operations (RPO) by state actors</li>
+          <li>Russia's Kosmos-2543 demonstrated close-approach manoeuvres 2020 <span class="c-ver">VER</span></li>
+          <li>Laser dazzling / directed energy interference</li>
+          <li>Co-orbital ASAT: satellites capable of grappling or disabling targets</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🛡️ Underwriting Response</h4>
+        <ul>
+          <li>ASAT and war exclusion mandatory on standard wording <span class="c-ver">VER</span></li>
+          <li>Cyber/electronic warfare typically excluded unless specific cyber extension</li>
+          <li>Operators in high-risk orbital bands (sun-synchronous LEO, GEO arc) attract additional scrutiny</li>
+          <li>Military/dual-use payloads require specific underwriter approval</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box launch">
+      <h4>📌 Electronic Warfare — What IS Insurable</h4>
+      <p>While kinetic ASAT and deliberate jamming are excluded, certain EW-adjacent losses may be covered under standard space policies if accidental rather than hostile in nature:</p>
+      <ul>
+        <li>Accidental interference from adjacent satellite (adjacent-satellite interference — ASI) — can be covered if accidental</li>
+        <li>Transponder failure caused by uplink power surge (not intentional jamming)</li>
+        <li>Software anomaly triggered by erroneous command (not cyber attack) — may be covered</li>
+        <li>Operators should clarify EW/cyber boundary with underwriter at placement <span class="c-est">EST</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3. Satellite System Redundancy -->
+  <section>
+    <h2>3. Satellite System Redundancy Design</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Spacecraft design redundancy is a primary determinant of in-orbit loss probability and partial-loss severity. Underwriters assess redundancy architecture as part of spacecraft heritage review.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h4>⚡ Power Subsystem</h4>
+        <ul>
+          <li>Dual solar array strings with independent power control units</li>
+          <li>Battery redundancy: multiple cells with bypass diodes</li>
+          <li>Power control and distribution unit (PCDU) redundancy</li>
+          <li>Eclipse tolerance design: battery capacity for full orbital night operations</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🌐 Attitude Control (ADCS)</h4>
+        <ul>
+          <li>Redundant reaction wheels (typically 4 wheels for 3-axis + spare)</li>
+          <li>Backup magnetorquers or thrusters for attitude control</li>
+          <li>Redundant star trackers and inertial measurement units</li>
+          <li>Safe/survival mode capability if primary ADCS fails</li>
+        </ul>
+      </div>
+      <div class="card sat">
+        <h4>📡 Transponder / Payload</h4>
+        <ul>
+          <li>Redundant transponders (typically 1:1 or 2:1 redundancy for GEO comsat) <span class="c-est">EST</span></li>
+          <li>Travelling Wave Tube Amplifier (TWTA) redundancy per frequency band</li>
+          <li>Frequency flexibility to work around failed transponders</li>
+          <li>Mission-specific payload redundancy (imaging, navigation, broadband)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🔧 Propulsion</h4>
+        <ul>
+          <li>Redundant thrusters for orbit raising, station-keeping and deorbit</li>
+          <li>Dual propellant feed paths with isolation valves</li>
+          <li>Bipropellant vs monopropellant tradeoff affects redundancy architecture</li>
+          <li>Electric propulsion (Hall effect thrusters): growing adoption, slower orbit raising but high Isp</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>💻 On-Board Computer (OBC)</h4>
+        <ul>
+          <li>Cold or warm redundant OBC (main + backup processor)</li>
+          <li>Radiation-hardened components for GEO Van Allen belt exposure</li>
+          <li>Watchdog timers and autonomous reset capability</li>
+          <li>Software uplink capability for in-orbit patch/fix</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <h4>⚠️ Single Points of Failure</h4>
+        <ul>
+          <li>Any non-redundant component that causes CTL if it fails</li>
+          <li>Heritage anomaly review: prior satellite bus anomalies in same family</li>
+          <li>Known Achilles heels (e.g. certain TWTA suppliers with elevated failure rates) <span class="c-est">EST</span></li>
+          <li>Underwriters may require FMEA (Failure Modes &amp; Effects Analysis) disclosure</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Partial Loss Thresholds by Redundancy Architecture</h3>
+    <table>
+      <thead>
+        <tr><th>Failure Mode</th><th>Redundant Design Outcome</th><th>Non-Redundant Outcome</th><th>Typical Loss Claim</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Single transponder failure</td>
+          <td>Switch to backup: no capacity loss</td>
+          <td>Capacity loss proportional to failed unit</td>
+          <td>Nil / proportional partial loss <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td>Single solar array failure</td>
+          <td>Power reduction ~15-25%; operations curtailed <span class="c-est">EST</span></td>
+          <td>Severe power deficit; likely CTL</td>
+          <td>Partial loss (life reduction) <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td>Reaction wheel failure (1 of 4)</td>
+          <td>Maintain 3-axis control with remaining 3 wheels</td>
+          <td>Attitude control degraded; gyroscopic mode</td>
+          <td>Loading on remaining system; life shortening <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td>OBC primary failure</td>
+          <td>Switchover to backup OBC; short outage</td>
+          <td>Safe mode only; potential CTL if no recovery</td>
+          <td>Revenue loss during recovery; may be partial loss claim <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td>Battery cell failure</td>
+          <td>Reduced eclipse capacity; payload derating</td>
+          <td>Loss of eclipse operations; life reduction</td>
+          <td>Partial loss — life reduction approach <span class="c-est">EST</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 4. Ground Segment Cybersecurity -->
+  <section>
+    <h2>4. Ground Segment Cybersecurity</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      The ground segment — satellite control stations, mission control centres, data downlink facilities and customer terminals — represents the most accessible attack surface for adversaries seeking to disrupt satellite operations. The <strong>Viasat KA-SAT cyberattack (24 February 2022)</strong>, which disabled ~40,000 modems across Europe at the outset of the Russia-Ukraine war, highlighted the systemic risk. <span class="c-ver">VER</span>
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h4>🔐 Command Link Security</h4>
+        <ul>
+          <li>AES-256 encryption for all telecommand uplinks <span class="c-est">EST</span></li>
+          <li>Multi-factor authentication for command authority</li>
+          <li>Hardened telecommand terminal with air-gap controls</li>
+          <li>Uplink frequency randomisation / frequency hopping</li>
+          <li>Command authentication codes (CAC) for all critical commands</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🏢 Mission Control Centre</h4>
+        <ul>
+          <li>ISO 27001 certification for ground system operators <span class="c-ver">VER</span></li>
+          <li>Network segmentation: mission-critical vs. administrative systems</li>
+          <li>Privileged access management (PAM) with audit trail</li>
+          <li>Intrusion detection / SIEM monitoring</li>
+          <li>Regular penetration testing (minimum annual) <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card sat">
+        <h4>📡 Telemetry &amp; Tracking</h4>
+        <ul>
+          <li>Authenticated downlink telemetry to prevent spoofed health data</li>
+          <li>Diverse tracking station network (≥2 geographically separate) <span class="c-est">EST</span></li>
+          <li>Redundant ground stations with failover capability</li>
+          <li>Encrypted inter-site communications</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <h4>⚠️ User Terminal Security</h4>
+        <ul>
+          <li>End-user terminal firmware update integrity verification</li>
+          <li>Viasat precedent: modem firmware overwrite via VPN vulnerability <span class="c-ver">VER</span></li>
+          <li>User segment isolation from satellite control plane</li>
+          <li>SATCOM-specific threat intelligence feeds (CISA/NSA advisories)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box warn">
+      <h4>⚠️ Cyber/Space Insurance Interface</h4>
+      <p>Standard space policies (SC/SL/SO) typically exclude losses caused by cyber events — including command override, malware-induced satellite anomaly or ground system compromise. The cyber exclusion has been tightened in the Lloyd's market following the Viasat event. Operators should consider:</p>
+      <ul>
+        <li>A dedicated <strong>cyber policy</strong> covering ground segment BI and liability</li>
+        <li>A <strong>space cyber extension</strong> (where available) on the in-orbit policy covering accidental cyber-induced anomalies — explicitly not hostile action</li>
+        <li>Clarity in the space policy wording on the cyber/accidental interface — some policies use a "hostile/non-hostile" distinction <span class="c-est">EST</span></li>
+      </ul>
+    </div>
+
+    <h3>Ground Segment Security Standards</h3>
+    <table>
+      <thead>
+        <tr><th>Standard / Framework</th><th>Applicability</th><th>Key Requirement</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NIST SP 800-53</td>
+          <td>US government / commercial operators</td>
+          <td>Security control baseline for space systems <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td>CCSDS (Consultative Committee for Space Data Systems)</td>
+          <td>International, multi-agency missions</td>
+          <td>Secure telecommand protocols; encrypted uplink standards <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td>ECSS-E-ST-70C (ESA)</td>
+          <td>ESA-procured missions</td>
+          <td>Ground system architecture and operations standards <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td>ISO/IEC 27001</td>
+          <td>General IT / mission control</td>
+          <td>Information security management system certification <span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td>NSA/CISA Space Security Advisories (2022+)</td>
+          <td>US commercial operators</td>
+          <td>Best practices for securing SATCOM networks post-Viasat <span class="c-ver">VER</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 5. Space Weather Monitoring -->
+  <section>
+    <h2>5. Space Weather Monitoring</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Solar activity is a major cause of satellite anomalies — the Telstar 401 loss (1997, $230m) <span class="c-est">EST</span> and multiple partial losses have been attributed to solar storms. Monitoring and forecasting capability is a key underwriting control for in-orbit policies.
+    </p>
+
+    <div class="cards">
+      <div class="card launch">
+        <h4>☀️ Solar Energetic Particles (SEP)</h4>
+        <ul>
+          <li>High-energy proton events damage solar cells and electronics</li>
+          <li>GEO satellites at greatest risk — no magnetic field shielding</li>
+          <li>NOAA Space Weather Prediction Center (SWPC) issues SEP alerts <span class="c-ver">VER</span></li>
+          <li>Threshold: NOAA S3+ events trigger operational precautions <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🌐 Geomagnetic Storms (Dst Index)</h4>
+        <ul>
+          <li>Dst index measures ring current intensity: &lt;−50 nT moderate; &lt;−100 nT severe <span class="c-ver">VER</span></li>
+          <li>Induced currents affect power systems; atmospheric drag increase affects LEO orbits</li>
+          <li>Starlink lost ~40 satellites in February 2022 geomagnetic storm during launch (Dst ~−67 nT) <span class="c-ver">VER</span></li>
+          <li>Operators should have drag-aware orbit insertion protocols post-Starlink event</li>
+        </ul>
+      </div>
+      <div class="card sat">
+        <h4>⚡ Electrostatic Discharge (ESD)</h4>
+        <ul>
+          <li>Surface and internal charging from magnetospheric electrons</li>
+          <li>Can cause logic upsets, component damage, or anomalous commands</li>
+          <li>GEO midnight sector most exposed (substorm injection)</li>
+          <li>DEBIE-2 / SURF instruments provide in-orbit charging data for risk models <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🔬 Single Event Effects (SEE)</h4>
+        <ul>
+          <li>High-energy particles cause single-event upsets (SEU) in memory or logic</li>
+          <li>Single-event latch-up (SEL) can destroy devices if not power-cycled promptly</li>
+          <li>Radiation-hardened-by-design (RHBD) components reduce susceptibility</li>
+          <li>South Atlantic Anomaly (SAA) — high-flux region affecting LEO passes <span class="c-ver">VER</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Space Weather Monitoring Protocol — Underwriting Controls</h3>
+    <table>
+      <thead>
+        <tr><th>Threat</th><th>Monitoring Source</th><th>Operator Response</th><th>Underwriting Relevance</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Solar Proton Events</td>
+          <td>NOAA SWPC GOES proton flux; STEREO spacecraft</td>
+          <td>Reduce payload power; enter safe mode during S3+ events</td>
+          <td>Operators with real-time SWPC monitoring connection preferred <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td>Geomagnetic Storms</td>
+          <td>Dst index (Kyoto World Data Centre); NOAA Kp index</td>
+          <td>Defer LEO insertion; increase station-keeping frequency; safe mode</td>
+          <td>Evidence of orbit insertion go/no-go criteria for LEO launch <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td>ESD / Surface Charging</td>
+          <td>AE-8/AP-8 environment models; real-time L1 solar wind data</td>
+          <td>Payload power cycling; passive discharge surfaces on spacecraft design</td>
+          <td>Spacecraft design review: ESD mitigation in material selection <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td>Coronal Mass Ejection (CME)</td>
+          <td>SOHO/LASCO coronagraph; NASA CCMC real-time</td>
+          <td>72-96 hour advance warning; precautionary safe mode entry</td>
+          <td>X-class CME within 12 months of coverage start warrants attention <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td>Solar Cycle Peak Radiation</td>
+          <td>NOAA Solar Cycle 25 prediction; NASA SPENVIS tool</td>
+          <td>End-of-life degradation factor increased; shielding upgrades</td>
+          <td>Late-life satellites in Solar Cycle 25 peak (2024-2025) warrant age loading <span class="c-est">EST</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box sat">
+      <h4>☀️ Solar Cycle 25 — Market Implication (2024-2026)</h4>
+      <p>Solar Cycle 25 peak activity was predicted for 2025 ± 1 year. NOAA SWPC data through 2024 showed Solar Cycle 25 tracking above the consensus prediction — the strongest cycle since SC23 (2000-2001). <span class="c-ver">VER</span> The May 2024 Carrington-class geomagnetic storm (Dst ~−400 nT, strongest since 2003) reinforced operator awareness. <span class="c-ver">VER</span> Underwriters should apply discretionary loading for GEO missions launched into the 2024-2026 peak window with late-life solar cell degradation exposure. <span class="c-est">EST</span></p>
+    </div>
+  </section>
+
+  <!-- 6. Quality Scoring Matrix -->
+  <section>
+    <h2>6. Risk Quality Scoring Matrix</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Assessed across six control dimensions. A predominantly Green profile supports standard pricing; Amber areas attract loadings; Red flags may restrict appetite or trigger declination. <span class="c-illus">ILLUSTRATIVE</span>
+    </p>
+    <div class="quality-grid">
+      <div class="qg-head">Control Area</div><div class="qg-head" style="background:#155724;">🟢 Green</div>
+      <div class="qg-head" style="background:#856404;">🟡 Amber</div><div class="qg-head" style="background:#721c24;">🔴 Red</div>
+
+      <div class="qg-label">Launch Vehicle Reliability</div>
+      <div class="qg-green">≥30 consecutive successful launches; mature vehicle family; redundant FTS</div>
+      <div class="qg-amber">10-30 launches; some anomaly history; new vehicle variant</div>
+      <div class="qg-red">First launch or &lt;10 flight history; unresolved anomaly from prior mission</div>
+
+      <div class="qg-label">Satellite Bus Heritage</div>
+      <div class="qg-green">Proven bus family ≥5 on-orbit examples; no repeat anomalies; strong manufacturer track record</div>
+      <div class="qg-amber">2-5 on-orbit examples; minor anomaly history resolved; new payload on proven bus</div>
+      <div class="qg-red">First-of-type bus; experimental design; known single points of failure unresolved</div>
+
+      <div class="qg-label">In-Orbit Anomaly History</div>
+      <div class="qg-green">No anomalies in last 12 months; full subsystem redundancy intact; stable telemetry</div>
+      <div class="qg-amber">Minor anomaly resolved; non-essential subsystem degraded; monitoring in progress</div>
+      <div class="qg-red">Major anomaly unresolved; redundancy compromised; degraded power or ADCS</div>
+
+      <div class="qg-label">Operator Experience &amp; Procedures</div>
+      <div class="qg-green">Tier-1 operator (Intelsat, SES, Viasat); ≥10yr operations; certified MCC; ISO 27001</div>
+      <div class="qg-amber">Mid-tier operator; ≥3yr experience; adequate MCC staffing; some process gaps</div>
+      <div class="qg-red">NewSpace startup; first satellite; limited MCC capability; no redundant ground station</div>
+
+      <div class="qg-label">Debris Mitigation Plan</div>
+      <div class="qg-green">Approved DMP filed; deorbit propellant budgeted; autonomous CAM capability; IADC compliant</div>
+      <div class="qg-amber">DMP filed but pending approval; manual CAM only; marginal propellant budget</div>
+      <div class="qg-red">No DMP filed; orbital lifetime exceeds 25yr threshold; non-compliant with national licensing authority</div>
+
+      <div class="qg-label">Ground Segment Cybersecurity</div>
+      <div class="qg-green">ISO 27001 certified MCC; encrypted command uplink; annual pen-test; SIEM monitoring</div>
+      <div class="qg-amber">Basic IT security; command encryption present; no formal pen-test; limited segmentation</div>
+      <div class="qg-red">No command encryption documented; known vulnerabilities unpatched; user terminal security gap</div>
+    </div>
+  </section>
+
+  <!-- 7. Standards Reference -->
+  <section>
+    <h2>7. Standards &amp; Regulatory Reference</h2>
+    <table>
+      <thead>
+        <tr><th>Standard / Body</th><th>Scope</th><th>Key Relevance</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>IADC Space Debris Mitigation Guidelines</strong></td>
+          <td>Global (12-agency)</td>
+          <td>Post-mission disposal; LEO 25-year rule; GEO graveyard; passivation</td>
+          <td><span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>FCC 5-Year Deorbit Rule</strong> (Part 25, 2022)</td>
+          <td>US-licensed satellites</td>
+          <td>All LEO satellites must deorbit within 5 years of mission end, effective Sept 2024</td>
+          <td><span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>ITU Radio Regulations</strong></td>
+          <td>Global frequency coordination</td>
+          <td>Spectrum filing; orbital slot coordination; interference rights</td>
+          <td><span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>ISO 24113</strong> (Space debris mitigation)</td>
+          <td>ISO international standard</td>
+          <td>Harmonises IADC guidelines into international standard form</td>
+          <td><span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>ECSS-E-ST-10-04C</strong> (Space environment)</td>
+          <td>ESA / European missions</td>
+          <td>Space environment modelling: radiation, debris, thermal, plasma</td>
+          <td><span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>CCSDS 351.0-M-1</strong> (Security architecture)</td>
+          <td>Multi-agency, international</td>
+          <td>Secure telecommand and telemetry architecture recommendations</td>
+          <td><span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>NSA/CISA: Cybersecurity Best Practices for Space Systems</strong> (2022)</td>
+          <td>US commercial space</td>
+          <td>Post-Viasat advisory; ground segment hardening; supply chain controls</td>
+          <td><span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>Outer Space Treaty 1967 (Art. VI/VII)</strong></td>
+          <td>UN — 112 states parties</td>
+          <td>State responsibility for national space activities; liability for damage</td>
+          <td><span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>UN Space Debris Mitigation Guidelines (2007)</strong></td>
+          <td>UN COPUOS member states</td>
+          <td>Voluntary guidelines later embedded in national licensing frameworks</td>
+          <td><span class="c-ver">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>NOAA SWPC Space Weather Scales</strong></td>
+          <td>Global reference</td>
+          <td>G1-G5 geomagnetic; S1-S5 solar radiation; R1-R5 radio blackout scales</td>
+          <td><span class="c-ver">VER</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 8. Top Actions -->
+  <section>
+    <h2>8. Top 10 Operator Risk Actions</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:.5rem;">Priority mitigations that satellite operators and underwriters should seek to confirm at placement or renewal. <span class="c-est">EST</span></p>
+    <ol class="top-actions">
+      <li>File and obtain regulatory approval for a <strong>Debris Mitigation Plan</strong> before launch — budget adequate propellant for compliant post-mission disposal.</li>
+      <li>Demonstrate <strong>conjunction screening capability</strong> — show access to Space-Track.org or commercial SSA provider and documented CAM decision criteria.</li>
+      <li>Ensure all launch vehicle upper stages are <strong>passivated within 6 hours</strong> of payload separation to eliminate fragmentation risk.</li>
+      <li>Implement <strong>encrypted command uplinks</strong> with multi-factor authentication for all satellite commanding — obtain CCSDS 351 compliance confirmation from spacecraft manufacturer.</li>
+      <li>Obtain <strong>ISO 27001 certification</strong> (or equivalent) for the Mission Control Centre and conduct annual penetration testing of ground segment systems.</li>
+      <li>Subscribe to <strong>NOAA SWPC real-time alerts</strong> (proton flux, Kp index, Dst) and establish documented go/no-go criteria for launch into elevated space weather conditions.</li>
+      <li>Commission a <strong>Failure Modes &amp; Effects Analysis (FMEA)</strong> for the spacecraft and disclose known single points of failure to the underwriter at placement.</li>
+      <li>Maintain a <strong>redundant ground station</strong> (geographically separate) for mission-critical satellite operations — document failover capability and test annually.</li>
+      <li>For late-life satellites (≥75% design life), commission a <strong>life extension assessment</strong> identifying degraded subsystems and propose revised operating modes to support continued insurability.</li>
+      <li>Establish a <strong>space weather anomaly log</strong> — document all SEU events, power fluctuations and attitude anomalies with correlation to NOAA solar activity indices to support renewal data requirements.</li>
+    </ol>
+  </section>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub · Space (SC/SL/SO) · Module 07 – Risk Mitigation · v2.1 · April 2026</p>
+  <p style="margin-top:.4rem;font-size:.75rem;">
+    <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp;
+    <a href="global-program.html">Module 08: Global Programme →</a>
+  </p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space – Global Programme | Risk Code Hub</title>
+<style>
+  :root {
+    --space:#1a1a4a; --orbit:#4a90d9; --launch:#e05c2a; --sat:#2d8a6a;
+    --gold:#c9a84c; --light:#f4f6fb; --mid:#e8ecf5; --dark:#111;
+    --red:#c0392b; --amber:#e67e22; --green:#27ae60; --purple:#7b52ab;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',sans-serif;background:#f0f2f8;color:#1a1a2e;line-height:1.6;}
+  header{background:linear-gradient(135deg,#0a0a2a 0%,#1a1a4a 50%,#0d2240 100%);color:#fff;padding:2rem;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-40%;left:-10%;width:120%;height:200%;
+    background:radial-gradient(ellipse at 50% 50%,rgba(74,144,217,0.08) 0%,transparent 70%);pointer-events:none;}
+  .header-inner{max-width:1100px;margin:0 auto;position:relative;}
+  .breadcrumb{font-size:.8rem;opacity:.7;margin-bottom:.5rem;}
+  .breadcrumb a{color:#a8c4e8;text-decoration:none;}
+  header h1{font-size:1.9rem;font-weight:700;letter-spacing:-.5px;}
+  header p{opacity:.8;margin-top:.4rem;font-size:.95rem;}
+  .badge-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
+  .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    color:#fff;padding:.25rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;}
+  nav{background:#fff;border-bottom:2px solid var(--orbit);position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  nav ul{display:flex;list-style:none;max-width:1100px;margin:0 auto;overflow-x:auto;gap:0;}
+  nav li a{display:block;padding:.65rem 1rem;font-size:.82rem;font-weight:600;color:#555;
+    text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent;transition:.2s;}
+  nav li a:hover,nav li a.active{color:var(--orbit);border-bottom-color:var(--orbit);}
+  main{max-width:1100px;margin:2rem auto;padding:0 1.5rem;}
+  section{background:#fff;border-radius:10px;padding:1.8rem;margin-bottom:1.8rem;
+    box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  h2{font-size:1.25rem;font-weight:700;color:var(--space);margin-bottom:1rem;
+    padding-bottom:.5rem;border-bottom:2px solid var(--orbit);}
+  h3{font-size:1rem;font-weight:700;color:var(--space);margin:1.2rem 0 .6rem;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;margin-top:1rem;}
+  .card{background:var(--light);border-radius:8px;padding:1.2rem;border-top:4px solid var(--orbit);}
+  .card.launch{border-top-color:var(--launch);}
+  .card.sat{border-top-color:var(--sat);}
+  .card.purple{border-top-color:var(--purple);}
+  .card.amber{border-top-color:var(--amber);}
+  .card.gold{border-top-color:var(--gold);}
+  .card h4{font-size:.9rem;font-weight:700;color:var(--space);margin-bottom:.5rem;}
+  .card p,.card ul{font-size:.85rem;color:#444;}
+  .card ul{padding-left:1.1rem;}
+  .card li{margin-bottom:.25rem;}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:1rem;}
+  th{background:var(--space);color:#fff;padding:.6rem .8rem;text-align:left;font-weight:600;}
+  td{padding:.55rem .8rem;border-bottom:1px solid #e0e4ef;vertical-align:top;}
+  tr:nth-child(even) td{background:#f7f9fc;}
+  .c-ver{background:#d4edda;color:#155724;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-est{background:#fff3cd;color:#856404;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .c-illus{background:#cce5ff;color:#004085;border-radius:4px;padding:.1rem .35rem;font-size:.7rem;font-weight:700;}
+  .info-box{border-left:4px solid var(--orbit);background:#eef5fb;padding:1rem 1.2rem;border-radius:0 6px 6px 0;margin:1rem 0;}
+  .info-box.launch{border-left-color:var(--launch);background:#fdf0ea;}
+  .info-box.sat{border-left-color:var(--sat);background:#eaf5f0;}
+  .info-box.purple{border-left-color:var(--purple);background:#f3eef9;}
+  .info-box.gold{border-left-color:var(--gold);background:#fdf8ee;}
+  .info-box h4{font-size:.9rem;font-weight:700;margin-bottom:.4rem;}
+  .info-box p,.info-box ul{font-size:.84rem;color:#333;}
+  .info-box ul{padding-left:1.1rem;}
+  .info-box li{margin-bottom:.3rem;}
+
+  /* Programme tower */
+  .tower{display:flex;flex-direction:column;gap:.5rem;margin:1rem 0;}
+  .tower-layer{border-radius:8px;padding:1rem 1.2rem;position:relative;}
+  .tower-layer h4{font-size:.88rem;font-weight:700;margin-bottom:.25rem;}
+  .tower-layer p{font-size:.82rem;opacity:.9;}
+  .tl-catastrophe{background:linear-gradient(90deg,#2d0a4e,#4a1a7a);color:#e8d5ff;}
+  .tl-xl2{background:linear-gradient(90deg,#1a3a6a,#2a5a9a);color:#d5eaff;}
+  .tl-xl1{background:linear-gradient(90deg,#0d4d6a,#1a7a9a);color:#d5f0ff;}
+  .tl-inorbit{background:linear-gradient(90deg,#0d5a3a,#1a8a5a);color:#d5fff0;}
+  .tl-launch{background:linear-gradient(90deg,#7a2a0a,#b04a1a);color:#ffe0d0;}
+  .tl-construction{background:linear-gradient(90deg,#5a4a0a,#8a720a);color:#fff3cc;}
+  .tl-sir{background:#3a3a5a;color:#d0d8f0;}
+  .tl-badge{position:absolute;right:1rem;top:50%;transform:translateY(-50%);
+    background:rgba(255,255,255,.15);border-radius:6px;padding:.2rem .6rem;font-size:.75rem;font-weight:700;}
+
+  /* Case study */
+  .case-study{background:linear-gradient(135deg,#0d0d2e,#1a1a4a);color:#fff;border-radius:10px;padding:1.5rem;margin-top:1rem;}
+  .case-study h3{color:var(--gold);border-bottom:1px solid rgba(201,168,76,.3);padding-bottom:.5rem;margin-bottom:1rem;}
+  .cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.8rem;margin-bottom:1rem;}
+  .cs-item{background:rgba(255,255,255,.06);border-radius:6px;padding:.8rem;border-left:3px solid var(--orbit);}
+  .cs-item.launch-item{border-left-color:var(--launch);}
+  .cs-item.sat-item{border-left-color:var(--sat);}
+  .cs-item h5{font-size:.8rem;font-weight:700;color:#a8c4e8;margin-bottom:.3rem;}
+  .cs-item p{font-size:.82rem;color:#c8d8e8;}
+  .cs-total{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);
+    border-radius:8px;padding:.8rem 1.2rem;text-align:center;margin-top:.8rem;}
+  .cs-total span{font-size:1.4rem;font-weight:700;color:var(--gold);}
+  .cs-total p{font-size:.82rem;color:#a8c4e8;margin-top:.2rem;}
+
+  footer{background:var(--space);color:#aab8d0;text-align:center;padding:1.2rem;font-size:.8rem;margin-top:2rem;}
+  footer a{color:#a8c4e8;text-decoration:none;}
+  @media(max-width:640px){header h1{font-size:1.4rem;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="breadcrumb">
+      <a href="../index.html">Risk Code Hub</a> › <a href="index.html">Space (SC/SL/SO)</a> › Global Programme
+    </div>
+    <h1>Module 08 — Global Programme</h1>
+    <p>Multi-phase programme towers, major fleet structures, government/agency models &amp; mega-constellation covers</p>
+    <div class="badge-row">
+      <span class="badge">SC · Construction</span>
+      <span class="badge">SL · Launch + LEOP</span>
+      <span class="badge">SO · In-Orbit</span>
+      <span class="badge">Lloyd's &amp; London Market</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="history.html">History</a></li>
+    <li><a href="timeline.html">Timeline</a></li>
+    <li><a href="database.html">Loss Database</a></li>
+    <li><a href="underwriting.html">Underwriting</a></li>
+    <li><a href="rates-analysis.html">Rates</a></li>
+    <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+    <li><a href="global-program.html" class="active">Global Programme</a></li>
+    <li><a href="references.html">References</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- 1. Programme Architecture -->
+  <section>
+    <h2>1. Space Insurance Programme Architecture</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      A commercial satellite programme typically involves three discrete insurance phases — construction, launch/LEOP and in-orbit — each with separate policy periods, limits and risk carriers. Large operators may place all three phases as an integrated programme with a single lead underwriter providing continuity across the satellite lifecycle. <span class="c-est">EST</span>
+    </p>
+
+    <div class="tower">
+      <div class="tower-layer tl-catastrophe">
+        <span class="tl-badge">CAT XL / Umbrella</span>
+        <h4>🌐 Catastrophe / Umbrella Layer</h4>
+        <p>Aggregate excess-of-loss protection for fleet-wide events; solar storm, ASAT debris field, cascading collision. Specialist reinsurance market. Limits: $100m–$500m+ <span class="c-est">EST</span></p>
+      </div>
+      <div class="tower-layer tl-xl2">
+        <span class="tl-badge">XL Layer 2</span>
+        <h4>📈 Excess of Loss — Upper Layer</h4>
+        <p>Excess $100m xs $50m (illustrative). London market and continental European reinsurers. Annual aggregate or per-occurrence. <span class="c-illus">ILLUS</span></p>
+      </div>
+      <div class="tower-layer tl-xl1">
+        <span class="tl-badge">XL Layer 1</span>
+        <h4>📈 Excess of Loss — Lower Layer</h4>
+        <p>Excess $50m xs $25m (illustrative). Lloyd's syndicates as primary market with capacity from global specialty. <span class="c-illus">ILLUS</span></p>
+      </div>
+      <div class="tower-layer tl-inorbit">
+        <span class="tl-badge">SO · In-Orbit</span>
+        <h4>🛰️ In-Orbit Annual Cover</h4>
+        <p>Per-satellite or fleet annual policy. Physical damage / CTL / partial loss. Typical limits $50m–$500m per satellite. Key carriers: Lloyd's syndicates (Atrium, Brit, Hiscox), Starr, AXA XL. <span class="c-est">EST</span></p>
+      </div>
+      <div class="tower-layer tl-launch">
+        <span class="tl-badge">SL · Launch + LEOP</span>
+        <h4>🚀 Launch &amp; Early Orbit Phase Cover</h4>
+        <p>Covers launch through LEOP (typically 180 days). Per-launch limits $100m–$600m. Rate on Line driven by vehicle reliability. Co-insurance market with Lloyd's lead. <span class="c-est">EST</span></p>
+      </div>
+      <div class="tower-layer tl-construction">
+        <span class="tl-badge">SC · Construction</span>
+        <h4>🏗️ Pre-Launch / Construction Cover</h4>
+        <p>All-risks cover during manufacture, AIT and transport. Limits scale from $50m (smallsats) to $600m+ (large GEO). Ground risk and pre-launch testing included. <span class="c-est">EST</span></p>
+      </div>
+      <div class="tower-layer tl-sir">
+        <h4>🛡️ Self-Insured Retention / Deductible</h4>
+        <p>Varies by operator. Large primes (Boeing, Airbus Defence) typically self-insure up to $10–25m per event <span class="c-est">EST</span>. National agencies (NASA, ESA) operate partial self-insurance models.</p>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <h4>📌 Integrated Lifecycle Programme Advantages</h4>
+      <ul>
+        <li>Single lead underwriter providing policy continuity from factory floor to EOL</li>
+        <li>Eliminates coverage gaps at launch transition (construction → launch handoff risk)</li>
+        <li>Fleet-wide data benefits underwriter's actuarial view; loyalty discount available for long-term clients <span class="c-est">EST</span></li>
+        <li>Simplified claims handling — no dispute over which phase a loss occurred</li>
+        <li>Co-insurance line slip enables broker to build consistent market panel efficiently <span class="c-est">EST</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 2. Major Operator Fleet Structures -->
+  <section>
+    <h2>2. Major Operator Fleet Structures</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:.8rem;">How tier-1 operators and government agencies structure their space insurance programmes. <span class="c-est">EST</span></p>
+
+    <h3>Commercial GEO Fleet Operators</h3>
+    <table>
+      <thead>
+        <tr><th>Operator</th><th>Fleet Size (approx.)</th><th>Programme Structure</th><th>Typical Approach</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Intelsat</strong></td>
+          <td>~50 GEO satellites <span class="c-est">EST</span></td>
+          <td>Fleet in-orbit cover; per-satellite construction/launch</td>
+          <td>London market lead; aggregate fleet limit with per-satellite sublimit; large SIR post-bankruptcy restructuring <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>SES</strong></td>
+          <td>~70 GEO + MEO satellites <span class="c-est">EST</span></td>
+          <td>Integrated fleet programme; separate O3b MEO section</td>
+          <td>Lloyd's + continental European market; programme includes launch cover for new satellites; 5-year fleet policy preferred <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>Viasat</strong></td>
+          <td>3 GEO + ViaSat-3 (partial loss) <span class="c-est">EST</span></td>
+          <td>Per-satellite annual cover with XL layers</td>
+          <td>Viasat-3 Americas (2022) partial loss claim ~$420m settled with London market and reinsurers <span class="c-est">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>Eutelsat</strong></td>
+          <td>~35 GEO + OneWeb LEO (648 satellites) <span class="c-est">EST</span></td>
+          <td>Bifurcated: traditional GEO fleet + LEO constellation blanket cover</td>
+          <td>OneWeb LEO: per-launch batch cover during deployment; annual blanket in-orbit post-constellation; constellation pricing model evolving <span class="c-est">EST</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:1.5rem;">Government &amp; Agency Structures</h3>
+    <div class="cards">
+      <div class="card purple">
+        <h4>🇺🇸 NASA</h4>
+        <ul>
+          <li>Government self-insurance for most missions <span class="c-ver">VER</span></li>
+          <li>Commercial payload missions may carry private insurance</li>
+          <li>Hubble, Webb: self-insured — replacement impossible, insurance not practical</li>
+          <li>Commercial COTS/CRS: SpaceX and Boeing carry launch liability insurance <span class="c-ver">VER</span></li>
+        </ul>
+      </div>
+      <div class="card purple">
+        <h4>🇪🇺 ESA</h4>
+        <ul>
+          <li>ESA typically self-insures scientific missions <span class="c-ver">VER</span></li>
+          <li>Member state payloads may have national cover</li>
+          <li>Ariane 6 launch vehicle: ArianeGroup carries third-party liability cover <span class="c-est">EST</span></li>
+          <li>Earth Observation constellation (Sentinel): partially insured <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card purple">
+        <h4>🇬🇧 UK Space Agency</h4>
+        <ul>
+          <li>Space Industry Act 2018: operators must hold third-party liability insurance as condition of launch licence <span class="c-ver">VER</span></li>
+          <li>CAA regulates UK-licensed launch operators (Spaceport Cornwall framework)</li>
+          <li>Government indemnity backstop available above private market limits <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card gold">
+        <h4>🏛️ Defence / Intelligence (US)</h4>
+        <ul>
+          <li>DoD satellites: self-insured by US Government <span class="c-ver">VER</span></li>
+          <li>Commercial Satellite Communications (COMSATCOM): DoD leases capacity from commercial operators who may carry private cover</li>
+          <li>ITAR restrictions limit Lloyd's market involvement in US defence satellite programmes <span class="c-ver">VER</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Mega-Constellation Portfolio Structures -->
+  <section>
+    <h2>3. Mega-Constellation Portfolio Cover</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Traditional per-satellite underwriting is impractical for constellations of hundreds or thousands of smallsats. The market has evolved fleet/portfolio models. <span class="c-est">EST</span>
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h4>🚀 Batch Launch Cover</h4>
+        <ul>
+          <li>Group of satellites (20–60 per Falcon 9 rideshare) insured on a single launch policy</li>
+          <li>Launch premium: aggregate insured value × batch launch rate</li>
+          <li>Per-satellite value: $500k–$5m for smallsats vs. $150–600m for GEO <span class="c-est">EST</span></li>
+          <li>Pro-rata loss settlement for percentage of batch lost</li>
+        </ul>
+      </div>
+      <div class="card sat">
+        <h4>🛰️ Annual Fleet Blanket</h4>
+        <ul>
+          <li>Single annual policy covering entire deployed constellation</li>
+          <li>Per-event limit (loss of X satellites in one collision/event) + annual aggregate</li>
+          <li>Premium: aggregate fleet value × negotiated annual rate (0.5-2% est.) <span class="c-est">EST</span></li>
+          <li>CTL trigger at fleet level: loss of Y% of constellation capacity</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <h4>📊 Portfolio Loss Model</h4>
+        <ul>
+          <li>Underwriters model expected annual loss frequency from: debris collision, launch failure, solar storm, cybersecurity</li>
+          <li>Expected value loss model vs. binary per-satellite model</li>
+          <li>Correlation risk: debris event could eliminate multiple satellites in same orbital shell</li>
+          <li>Reinsurance essential for catastrophe correlation loss scenarios <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card launch">
+        <h4>⚡ Starlink — Market Reference</h4>
+        <ul>
+          <li>SpaceX self-insures Starlink constellation — insufficient private market capacity <span class="c-est">EST</span></li>
+          <li>~6,500 operational satellites (Q1 2024); 1,000+ more planned <span class="c-ver">VER</span></li>
+          <li>Third-party liability: US Federal Aviation Administration (FAA) licence requires indemnification <span class="c-ver">VER</span></li>
+          <li>Market watching for any future move to partial private insurance as constellation matures</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Constellation Insurance Tier Framework</h3>
+    <table>
+      <thead>
+        <tr><th>Constellation Tier</th><th>Satellite Count</th><th>Insurance Approach</th><th>Indicative Premium Band</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Micro constellation</td>
+          <td>3–20 satellites</td>
+          <td>Per-satellite annual policies; batch launch covers</td>
+          <td>$2m–$20m total fleet premium p.a. <span class="c-illus">ILLUS</span></td>
+        </tr>
+        <tr>
+          <td>Small constellation</td>
+          <td>20–100 satellites</td>
+          <td>Fleet blanket cover; batch launch; per-event sublimits</td>
+          <td>$10m–$50m total fleet premium p.a. <span class="c-illus">ILLUS</span></td>
+        </tr>
+        <tr>
+          <td>Medium constellation</td>
+          <td>100–500 satellites</td>
+          <td>Portfolio model; aggregate fleet + XL layers; captive element</td>
+          <td>$30m–$150m total fleet premium p.a. <span class="c-illus">ILLUS</span></td>
+        </tr>
+        <tr>
+          <td>Mega-constellation</td>
+          <td>500+ satellites</td>
+          <td>Partial/selective insurance; government backstop; primarily self-insured</td>
+          <td>Market capacity insufficient for full cover <span class="c-est">EST</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 4. Third-Party Liability -->
+  <section>
+    <h2>4. Third-Party Liability in Space</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Space liability is governed by the <strong>Liability Convention 1972</strong> (absolute state liability for surface damage; fault-based for space object collisions) and national licensing regimes. Commercial operators must hold adequate third-party liability insurance as a condition of their operating licence. <span class="c-ver">VER</span>
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h4>🌍 Surface / Air Damage (Absolute Liability)</h4>
+        <ul>
+          <li>Launching state absolutely liable for damage caused on Earth's surface or to aircraft <span class="c-ver">VER</span></li>
+          <li>No fault required — operator must demonstrate causal link only</li>
+          <li>Example: Cosmos 954 (1978) — USSR paid Canada CAD $3m for radioactive debris <span class="c-ver">VER</span></li>
+          <li>Uncontrolled reentries increasing as mega-constellations deploy</li>
+        </ul>
+      </div>
+      <div class="card launch">
+        <h4>🚀 Launch Third-Party Liability</h4>
+        <ul>
+          <li>US: Commercial Space Launch Act — FAA maximum probable loss (MPL) calculation determines required coverage <span class="c-ver">VER</span></li>
+          <li>UK: Space Industry Act 2018 — operators must carry TPL as condition of licence <span class="c-ver">VER</span></li>
+          <li>Coverage: bodily injury and property damage to third parties on ground and in air during launch operations</li>
+          <li>Typical limit: $500m–$1.5bn third-party liability (US) <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card sat">
+        <h4>🛰️ In-Orbit Collision Liability</h4>
+        <ul>
+          <li>Fault-based under Liability Convention Art. III for in-orbit collisions <span class="c-ver">VER</span></li>
+          <li>Iridium-Cosmos 2009: no liability claim made — Iridium at fault, Cosmos derelict <span class="c-ver">VER</span></li>
+          <li>FCC debris rules create quasi-liability framework for debris non-compliance</li>
+          <li>In-orbit liability cover available on specialist space market; typically low limits vs. hull values <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <h4>🏛️ Indemnification / Government Backstop</h4>
+        <ul>
+          <li>US: Government indemnifies above the required insurance limit up to $1.5bn above the MPL — for US-licensed launches <span class="c-ver">VER</span></li>
+          <li>UK: CAA provides government indemnity backstop for licensed launches</li>
+          <li>Backstop critical for commercial viability — private market cannot cover full catastrophic liability</li>
+          <li>Government backstop does NOT cover hull/payload losses — physical damage insurance remains private market</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-box launch">
+      <h4>🚀 FAA Maximum Probable Loss (MPL) Framework</h4>
+      <p>The FAA calculates the MPL for each US launch based on the launch vehicle's debris model, trajectory and overflown populations. This determines the minimum third-party liability insurance the operator must carry. The MPL calculation considers expected casualty rates from uncontrolled reentry, debris dispersion and range safety. <span class="c-ver">VER</span> For Falcon 9 launches from Cape Canaveral, the typical required TPL coverage is in the range of $500m–$1.5bn depending on trajectory and overflight population. <span class="c-est">EST</span></p>
+    </div>
+  </section>
+
+  <!-- 5. Captive & Alternative Structures -->
+  <section>
+    <h2>5. Captive &amp; Alternative Programme Structures</h2>
+    <div class="cards">
+      <div class="card purple">
+        <h4>🏦 Captive Insurance</h4>
+        <ul>
+          <li>Large operators ($50m+ annual premium) may form captive to retain primary layer</li>
+          <li>Captive retains predictable lower layers; purchases excess / catastrophe reinsurance</li>
+          <li>Advantages: premium retention, risk data accumulation, customised coverage</li>
+          <li>Satellite industry captives less common than aviation — binary loss nature reduces actuarial benefits <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card purple">
+        <h4>📊 Parametric Cover</h4>
+        <ul>
+          <li>Emerging: parametric triggers for space weather events (Dst index threshold, S4+ proton event)</li>
+          <li>Rapid claim payment without lengthy satellite health assessment</li>
+          <li>Basis risk: parametric trigger may not correlate perfectly with actual satellite loss</li>
+          <li>Swiss Re, Aon, Eutelsat have explored parametric space weather structures <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card gold">
+        <h4>💼 Profit Sharing / Long-Term Agreement</h4>
+        <ul>
+          <li>Multi-year deals (3–5yr) with agreed rate bands and profit/loss commissions</li>
+          <li>Premium certainty for operator; retention alignment for underwriter</li>
+          <li>Lloyd's market supports LTA structures for established fleet operators</li>
+          <li>Typical profit commission: 15–25% of underwriting profit if CR &lt;80% <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+      <div class="card sat">
+        <h4>🛰️ In-Orbit Life Extension Insurance</h4>
+        <ul>
+          <li>Niche product for satellites beyond design life receiving life extension services</li>
+          <li>Northrop Grumman MEV (Mission Extension Vehicle) docking with Intelsat satellites <span class="c-ver">VER</span></li>
+          <li>Underwriters must assess grapple/docking risk + extended operations risk</li>
+          <li>Very limited market; bespoke negotiation required <span class="c-est">EST</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Illustrative Case Study -->
+  <section>
+    <h2>6. Illustrative GEO Fleet Programme — Case Study</h2>
+    <p style="font-size:.88rem;color:#444;margin-bottom:1rem;">
+      Illustrative programme for a mid-tier GEO operator with 8 satellites across 3 phases.
+      All figures are <span class="c-illus">ILLUSTRATIVE</span> for training purposes only.
+    </p>
+
+    <div class="case-study">
+      <h3>Mid-Tier GEO Operator — 8-Satellite Fleet Programme</h3>
+      <p style="font-size:.83rem;color:#a8c4e8;margin-bottom:1rem;">
+        Operator profile: 8 GEO comsats, 6 operational (ages 2–12 years), 1 in construction, 1 launch planned Q3 2026.
+        Primary business: fixed satellite services (FSS) — video distribution and broadband. Luxembourg licensing.
+      </p>
+      <div class="cs-grid">
+        <div class="cs-item">
+          <h5>🏗️ SC — Construction (1 satellite)</h5>
+          <p>Insured value: $280m<br>
+          All-risks construction cover<br>
+          AIT + transport included<br>
+          Rate: 0.4% pa<br>
+          Premium: ~$1.1m</p>
+        </div>
+        <div class="cs-item launch-item">
+          <h5>🚀 SL — Launch (1 satellite, Ariane 6)</h5>
+          <p>Insured value: $295m<br>
+          Launch + 180-day LEOP<br>
+          Vehicle reliability factor: 0.85<br>
+          Rate: ~4.5% (Ariane 6 bracket)<br>
+          Premium: ~$13.3m</p>
+        </div>
+        <div class="cs-item sat-item">
+          <h5>🛰️ SO — Fleet Annual (6 satellites)</h5>
+          <p>Combined insured value: $920m<br>
+          Annual in-orbit cover<br>
+          Blended fleet rate: ~1.6%<br>
+          Age loading (Sat-1, yr 12): +25%<br>
+          Fleet premium: ~$15.3m</p>
+        </div>
+        <div class="cs-item">
+          <h5>📈 XL Layer 1 (xs $50m)</h5>
+          <p>Limit: $50m xs $50m<br>
+          Provides cover for partial large losses exceeding primary<br>
+          Rate on Line: ~3.5%<br>
+          Premium: ~$1.75m</p>
+        </div>
+        <div class="cs-item">
+          <h5>📈 XL Layer 2 (xs $100m)</h5>
+          <p>Limit: $100m xs $100m<br>
+          Upper layer for CTL events<br>
+          Rate on Line: ~1.8%<br>
+          Premium: ~$1.8m</p>
+        </div>
+        <div class="cs-item">
+          <h5>🌍 TPL — Third-Party Liability</h5>
+          <p>Combined limit: $1bn per event<br>
+          Launch + in-orbit sections<br>
+          Annual rate: ~0.05%<br>
+          Premium: ~$0.5m</p>
+        </div>
+      </div>
+      <div class="cs-total">
+        <span>~$33.8m</span>
+        <p>Total estimated annual programme premium — all phases combined <span class="c-illus">ILLUS</span></p>
+      </div>
+      <p style="font-size:.78rem;color:#8090a8;margin-top:.8rem;">
+        Note: Illustrative only. Actual premiums depend on satellite heritage, operator track record, market conditions at placement, co-insurance panel and broker negotiations. TPL premium illustrative only — actual requires FAA/national authority MPL calculation.
+      </p>
+    </div>
+  </section>
+
+  <!-- 7. Lloyd's Competitive Advantages -->
+  <section>
+    <h2>7. Lloyd's Market — Space Programme Advantages</h2>
+    <table>
+      <thead>
+        <tr><th>Advantage</th><th>Detail</th><th>Alternative Market Comparison</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Single Lead Underwriter</strong></td>
+          <td>Lead sets terms for entire co-insurance line slip; simplifies placement for complex multi-phase programmes <span class="c-ver">VER</span></td>
+          <td>US surplus lines: multiple direct insurers each requiring separate negotiations</td>
+        </tr>
+        <tr>
+          <td><strong>Large Individual Lines</strong></td>
+          <td>Leading syndicates can write $20–50m lines on a single risk <span class="c-est">EST</span>; enables large GEO satellites ($300m+) to be placed efficiently</td>
+          <td>Company markets: individual lines often smaller, requiring more co-insurers</td>
+        </tr>
+        <tr>
+          <td><strong>Bespoke Wording Flexibility</strong></td>
+          <td>Lloyd's supports unique manuscript wordings for novel risks (life extension, mega-constellation, on-orbit servicing) <span class="c-ver">VER</span></td>
+          <td>US admitted markets: rigid standard forms; limited manuscript capability</td>
+        </tr>
+        <tr>
+          <td><strong>Partial Loss Expertise</strong></td>
+          <td>London market leads in transponder capacity loss valuation; life reduction methodology; complex partial claims <span class="c-est">EST</span></td>
+          <td>Non-specialist markets lack claims handling expertise for satellite partial losses</td>
+        </tr>
+        <tr>
+          <td><strong>Financial Security</strong></td>
+          <td>Lloyd's rated AM Best A (Excellent) <span class="c-ver">VER</span>; central fund backstop; chain of security model</td>
+          <td>Some space-active national markets carry lower ratings</td>
+        </tr>
+        <tr>
+          <td><strong>Reinsurance Access</strong></td>
+          <td>Lloyd's syndicates can buy outwards reinsurance from Munich Re, Swiss Re, Hannover Re — enabling higher capacity lines</td>
+          <td>Direct company markets retain more on balance sheet; less reinsurance structure transparency</td>
+        </tr>
+        <tr>
+          <td><strong>Global Broker Network</strong></td>
+          <td>Marsh, Aon, WTW, BMS specialist space teams based in London with Lloyd's relationships; single broking relationship for global programme <span class="c-ver">VER</span></td>
+          <td>Regional brokers may lack access to leading space underwriters</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box sat">
+      <h4>🛰️ Active Space Syndicates at Lloyd's (Illustrative)</h4>
+      <p>The Lloyd's space market comprises a small number of specialist syndicates with dedicated space underwriting teams. Key participants include Atrium (609), Brit (2987), Hiscox (33), Beazley (623/2623) and Tokio Marine Kiln (TMK 510/557). <span class="c-est">EST</span> Capacity fluctuates with market conditions — post-1999 catastrophe, multiple syndicates exited and have not returned. The market currently offers approximately $800m–$1.2bn total capacity for a single large GEO satellite launch risk. <span class="c-est">EST</span></p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub · Space (SC/SL/SO) · Module 08 – Global Programme · v2.1 · April 2026</p>
+  <p style="margin-top:.4rem;font-size:.75rem;">
+    <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp;
+    <a href="references.html">Module 09: References →</a>
+  </p>
+</footer>
+
+</body>
+</html>

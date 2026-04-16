@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Insurance – Underwriting | Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--space:#1a1a4a;--accent:#c8a84b;--orbit:#4a90d9;--orbit-light:#e3f0ff;--launch:#e05c2a;--launch-light:#fff0ea;--sat:#2d8a6a;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a0a2a 0%,#1a1a4a 50%,#0d2240 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8c8e8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#8899bb; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--space); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .formula-box { background:var(--space); color:#e8f0fa; border-radius:10px; padding:22px 28px; margin:20px 0; font-family:monospace; font-size:0.9rem; line-height:2; }
+    .formula-box .formula-title { font-family:'Segoe UI',Arial,sans-serif; font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:10px; font-weight:700; }
+    .formula-box span.var { color:#a8d8f8; }
+    .formula-box span.note { font-family:'Segoe UI',Arial,sans-serif; font-size:0.78rem; color:#8899aa; font-style:italic; }
+
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:20px 0; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--orbit); }
+    .factor-card.launch { border-top-color:var(--launch); }
+    .factor-card.sat { border-top-color:var(--sat); }
+    .factor-card.acc { border-top-color:var(--accent); }
+    .factor-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .factor-card p { font-size:0.85rem; margin:0; color:var(--muted); line-height:1.6; }
+    .factor-card .range { font-size:0.9rem; font-weight:800; color:var(--orbit); margin-top:8px; }
+    .factor-card.launch .range { color:var(--launch); }
+    .factor-card.sat .range { color:var(--sat); }
+    .factor-card.acc .range { color:#7a5200; }
+
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.87rem; background:#fff; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+    th { background:var(--space); color:#fff; padding:10px 14px; text-align:left; font-size:0.82rem; }
+    td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tr:last-child td { border-bottom:none; }
+    tr:nth-child(even) td { background:#f8fafc; }
+    td strong { color:var(--navy); }
+
+    .matrix { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.82rem; }
+    .matrix th { background:var(--navy); color:#fff; padding:8px 12px; text-align:center; }
+    .matrix th:first-child { text-align:left; }
+    .matrix td { padding:8px 12px; border:1px solid var(--border); text-align:center; }
+    .matrix td:first-child { font-weight:600; color:var(--navy); text-align:left; background:#f8fafc; }
+    .green { background:#e6f4ea; color:#1a5c28; font-weight:700; font-size:0.78rem; }
+    .amber { background:#fef3e2; color:#7a4500; font-weight:700; font-size:0.78rem; }
+    .red { background:#fde8e8; color:#8b0000; font-weight:700; font-size:0.78rem; }
+
+    .example-box { background:#fff; border:2px solid var(--orbit); border-radius:12px; padding:28px 32px; margin:24px 0; }
+    .example-box.launch-ex { border-color:var(--launch); }
+    .example-box h3 { color:var(--space); margin-top:0; font-size:1.05rem; }
+    .example-box.launch-ex h3 { color:#8b3000; }
+    .example-box .scenario { background:var(--orbit-light); border-radius:8px; padding:14px 18px; margin:14px 0; font-size:0.88rem; line-height:1.7; }
+    .example-box.launch-ex .scenario { background:var(--launch-light); }
+    .example-box .total-row td { background:#e3f0ff; font-weight:700; color:var(--space); }
+    .example-box.launch-ex .total-row td { background:#fff0ea; color:#8b3000; }
+    .example-box .premium-out { font-size:1.1rem; font-weight:800; color:var(--space); margin-top:14px; padding:12px 16px; background:var(--orbit-light); border-radius:8px; }
+    .example-box.launch-ex .premium-out { color:#8b3000; background:var(--launch-light); }
+
+    .badge { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 7px; border-radius:10px; letter-spacing:0.5px; margin-left:4px; vertical-align:middle; }
+    .b-verified { background:#e6f4ea; color:#1a5c28; }
+    .b-estimate { background:#fef3e2; color:#7a4500; }
+    .b-illustrative { background:#e3eeff; color:#1a3a7a; }
+
+    footer { background:var(--space); color:#6677aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">Space</a> › Underwriting</div>
+  <div class="tag">Module 04 — Underwriting</div>
+  <h1>Space Insurance Underwriting Methodology</h1>
+  <p>Launch vehicle reliability scoring, satellite heritage assessment, in-orbit annual rate methodology, partial loss valuation approaches, and worked examples for GEO telecom and LEO constellation underwriting.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a><a href="history.html">History</a><a href="timeline.html">Timeline</a><a href="database.html">Claims Database</a><a href="underwriting.html" class="active">Underwriting</a><a href="rates-analysis.html">Rates &amp; ROE</a><a href="risk-mitigation.html">Risk Mitigation</a><a href="global-program.html">Global Programmes</a><a href="references.html">References</a>
+</nav>
+<main>
+
+  <h2>1. Launch Insurance (SL) — Rate Methodology</h2>
+  <p>Launch insurance premium is expressed as a rate on line (RoL) — a percentage of the insured value. The primary underwriting inputs are launch vehicle reliability, satellite bus heritage, mission profile complexity, and launch site/range conditions. <span class="badge b-estimate">EST</span></p>
+
+  <div class="formula-box">
+    <div class="formula-title">Launch Insurance Premium Formula</div>
+    <span class="var">Launch Premium</span> = <span class="var">Insured Value ($)</span> × <span class="var">Base Launch Rate (%)</span> × <span class="var">Vehicle Reliability Factor</span> × <span class="var">Mission Complexity Factor</span> × <span class="var">Satellite Heritage Factor</span><br>
+    <span class="note">Expressed as % of insured value. Base rate driven by launch vehicle success history. All factors multiplicative.</span>
+  </div>
+
+  <div class="card-grid">
+    <div class="factor-card launch">
+      <h4>Launch Vehicle Reliability</h4>
+      <p>Success rate over last 20+ missions. New vehicles or post-failure returns carry higher loadings. SpaceX Falcon 9 (98%+ success) attracts lowest commercial rates. New vehicles (Starship, Neutron) attract very high initial rates until track record established.</p>
+      <div class="range">Base rate range: 1.5% – 12% of insured value <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card launch">
+      <h4>Launch Vehicle — Reused Stage</h4>
+      <p>SpaceX Falcon 9 reused first stages were initially loaded ~0.5–1% above new stage. As reuse data accumulated (15+ flights on individual boosters), the market largely converged on par pricing with new stages. Some underwriters still apply a modest reuse loading beyond booster flight 10.</p>
+      <div class="range">Reuse loading (if applied): +0.0% – +0.5% <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card">
+      <h4>LEOP Complexity Factor</h4>
+      <p>LEOP (Launch and Early Orbit Phase) complexity: number of deployment steps, apogee kick motor / electric propulsion orbit-raising duration (weeks to months for ion propulsion), antenna deployment, solar array deployment. More steps = higher risk.</p>
+      <div class="range">Factor: 1.0 (simple LEOP) – 1.40 (multi-step complex) <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card">
+      <h4>Satellite Bus Heritage</h4>
+      <p>Bus flight heritage (number of successfully-operating satellites of same design): first flight of new bus = highest loading. Established bus with 10+ in-orbit successes = lowest loading. Boeing 702MP series attracted specific loading after propulsion anomaly pattern. Airbus Eurostar, Boeing 601, SSL 1300 are established buses.</p>
+      <div class="range">Heritage discount: 0% (new bus) to −15% (mature bus &gt;15 in-orbit) <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card sat">
+      <h4>Launch Site / Range</h4>
+      <p>Established ranges (Kourou, Cape Canaveral, Vandenberg) attract lowest rates. New/emerging launch sites carry additional loading. Weather delays at launch sites can affect coverage period and must be managed within policy terms.</p>
+      <div class="range">Range loading: 0% – +15% for non-standard sites <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card sat">
+      <h4>Orbit Type</h4>
+      <p>GTO (Geostationary Transfer Orbit) missions require apogee kick motor firing — a high-risk phase. Direct GEO injection (few vehicles available) reduces this risk. LEO deployment simpler but radiation environment issues in some LEO bands (Van Allen belts crossing).</p>
+      <div class="range">GTO loading vs. GEO direct: +10% – +20% <span class="badge b-estimate">EST</span></div>
+    </div>
+  </div>
+
+  <h3>Launch Vehicle Rate Benchmark Table</h3>
+  <table>
+    <thead><tr><th>Launch Vehicle</th><th>Operator</th><th>Success Rate (approx.)</th><th>Indicative Launch Insurance Rate</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Falcon 9</strong></td><td>SpaceX (USA)</td><td>~98.5% (300+ missions) <span class="badge b-verified">VER</span></td><td>1.5% – 3.0% of insured value</td><td>Market standard; reuse broadly accepted</td></tr>
+      <tr><td><strong>Ariane 6</strong></td><td>Arianespace/ArianeGroup (EU)</td><td>Limited (2024 maiden flight) <span class="badge b-verified">VER</span></td><td>3.0% – 6.0%</td><td>Ariane 5 successor; new vehicle premium</td></tr>
+      <tr><td><strong>Atlas V</strong></td><td>ULA (USA)</td><td>~99% (over 90 missions) <span class="badge b-verified">VER</span></td><td>2.0% – 3.5%</td><td>Retiring; replaced by Vulcan Centaur</td></tr>
+      <tr><td><strong>Proton-M</strong></td><td>Roscosmos (Russia)</td><td>~90–92% <span class="badge b-estimate">EST</span></td><td>4.0% – 8.0%</td><td>Elevated post multiple failures 2012–2014; market access restricted post-Ukraine 2022</td></tr>
+      <tr><td><strong>Long March 3B</strong></td><td>CASC (China)</td><td>~95% <span class="badge b-estimate">EST</span></td><td>3.5% – 6.0%</td><td>ITAR restrictions limit US/some European underwriter participation</td></tr>
+      <tr><td><strong>Electron</strong></td><td>Rocket Lab (NZ/USA)</td><td>~90% (small payload LEO) <span class="badge b-estimate">EST</span></td><td>4.0% – 7.0%</td><td>Small satellite market; low absolute premium</td></tr>
+      <tr><td><strong>Starship / Super Heavy</strong></td><td>SpaceX (USA)</td><td>Developmental (2023–24) <span class="badge b-verified">VER</span></td><td>8.0% – 15%+ (developmental)</td><td>Commercial deployment not yet operational as of 2024</td></tr>
+      <tr><td><strong>New Glenn</strong></td><td>Blue Origin (USA)</td><td>First flight January 2025</td><td>5.0% – 10% (initial) <span class="badge b-estimate">EST</span></td><td>New vehicle; limited flight history</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. In-Orbit Insurance (SO) — Annual Rate Methodology</h2>
+  <p>In-orbit annual insurance (SO) is rated differently from launch — it is based on the probability and severity of failure during normal operations. The primary loss drivers are subsystem reliability, remaining operational life, and in-orbit environment (orbit altitude, solar activity, debris environment). <span class="badge b-estimate">EST</span></p>
+
+  <div class="formula-box">
+    <div class="formula-title">In-Orbit Annual Premium Formula</div>
+    <span class="var">Annual Premium</span> = <span class="var">Current Insured Value ($)</span> × <span class="var">Base In-Orbit Rate (%)</span> × <span class="var">Age/Life Factor</span> × <span class="var">Subsystem Redundancy Factor</span> × <span class="var">Orbit Environment Factor</span><br>
+    <span class="note">Insured value typically declines annually with remaining life (residual economic value basis or declining replacement cost).</span>
+  </div>
+
+  <div class="card-grid">
+    <div class="factor-card">
+      <h4>GEO Telecom — Standard Annual Rate</h4>
+      <p>A mature, well-heritage GEO telecom satellite in years 3–10 of a 15–18 year life. Standard bus design with documented flight heritage. No prior anomalies. Good subsystem redundancy.</p>
+      <div class="range">Approx. 1.5% – 2.5% p.a. of insured value <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card">
+      <h4>Age Factor</h4>
+      <p>New satellites (years 1–3) may attract slightly higher rates as design issues manifest early. Mid-life (years 4–12) lowest rate period. Late-life (years 12+) increasing rate as fuel depletion and component aging elevate failure probability.</p>
+      <div class="range">Late-life loading (&gt;12 years): +20% – +50% <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card sat">
+      <h4>LEO Small Satellite</h4>
+      <p>Higher radiation exposure at certain LEO altitudes; shorter design life (3–7 years typical); less redundancy in small satellite designs; lower insured values per satellite. Many small satellite operators self-insure or carry fleet/portfolio policies.</p>
+      <div class="range">Approx. 2.0% – 4.0% p.a. (if insured individually) <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card acc">
+      <h4>Prior Anomaly Loading</h4>
+      <p>A satellite that experienced an anomaly in a prior policy year (but recovered) carries a specific loading in subsequent years. Anomaly type matters: recoverable attitude anomaly vs. permanent partial subsystem failure have different loading implications.</p>
+      <div class="range">Anomaly loading: +15% – +100%+ depending on type <span class="badge b-estimate">EST</span></div>
+    </div>
+  </div>
+
+  <h2>3. Partial Loss Valuation — Transponder/Capacity Approach</h2>
+  <p>In-orbit partial losses are the most complex valuation challenge in space insurance. A satellite that loses 30% of its transponder capacity is not simply worth 30% less — the residual value depends on which transponders failed (coverage region, frequency band), operator contracts, and the capacity market. <span class="badge b-estimate">EST</span></p>
+
+  <table>
+    <thead><tr><th>Partial Loss Scenario</th><th>Valuation Method</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Transponder Capacity Loss</strong></td><td>Revenue stream approach: PV of lost transponder lease revenue over remaining life × discount rate. Or: replacement capacity cost × fraction lost.</td><td>Most GEO telecom satellites. Basis of loss is typically the capacity the satellite can no longer provide vs. design specification.</td></tr>
+      <tr><td><strong>Life Reduction (Fuel Loss)</strong></td><td>Original insured value × (years of life lost / original design life) = partial loss quantum</td><td>Common in orbit-raising anomalies where satellite uses its own propellant to compensate for launch vehicle undershoot. Yamal-402 (2013) set key precedent.</td></tr>
+      <tr><td><strong>Power Degradation</strong></td><td>Power output × revenue per watt of capacity = economic loss per year × remaining life</td><td>Solar array degradation beyond design spec. Relevant where power directly limits transponder count.</td></tr>
+      <tr><td><strong>CTL Threshold</strong></td><td>Constructive Total Loss typically defined in policy at 60–80% loss of design capacity. Below this threshold: partial loss. Above: CTL paid at full insured value.</td><td>CTL threshold is a key negotiation point at inception. Operators prefer lower CTL thresholds (lower bar to collect full SI); underwriters prefer higher thresholds.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Quality Scoring Matrix</h2>
+  <p>The following matrix provides a qualitative overlay for space underwriters. Risks with multiple Amber or Red indicators should attract premium loading or referral. <span class="badge b-illustrative">ILLUS</span></p>
+
+  <table class="matrix">
+    <thead>
+      <tr><th>Assessment Area</th><th>Green ✅</th><th>Amber ⚠️</th><th>Red ❌</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Launch Vehicle Reliability</td>
+        <td class="green">Mature vehicle &gt;50 flights, &gt;97% success; recent mission review complete</td>
+        <td class="amber">Vehicle 10–50 flights; recent minor anomaly investigated &amp; resolved</td>
+        <td class="red">New vehicle (&lt;10 flights); recent failure under investigation; post-failure return</td>
+      </tr>
+      <tr>
+        <td>Satellite Bus Heritage</td>
+        <td class="green">Bus type with &gt;10 in-orbit successes; same bus at current operator</td>
+        <td class="amber">Bus type 3–10 flights; minor modifications from prior version</td>
+        <td class="red">First flight of new bus design; significant modification from heritage; known design issue (e.g. 702MP propulsion)</td>
+      </tr>
+      <tr>
+        <td>In-Orbit History (SO)</td>
+        <td class="green">No prior anomalies; all subsystems nominal; fuel margin as designed</td>
+        <td class="amber">Minor anomaly (resolved); slightly below design fuel margin; one subsystem on redundancy</td>
+        <td class="red">Significant anomaly on record; primary subsystem failed (on backup); fuel below planned minimum</td>
+      </tr>
+      <tr>
+        <td>Operator Experience</td>
+        <td class="green">Established operator; dedicated mission operations team; 24/7 ground control</td>
+        <td class="amber">New operator with experienced team from prior programme; limited in-house operations</td>
+        <td class="red">First-time operator; relying solely on manufacturer for operations; no contingency ops plan</td>
+      </tr>
+      <tr>
+        <td>Debris Mitigation Plan</td>
+        <td class="green">Documented post-mission disposal plan; fuel reserved for deorbit; FCC-compliant 5-year deorbit</td>
+        <td class="amber">Disposal plan exists; fuel margin tight; compliance achievable but not guaranteed</td>
+        <td class="red">No disposal plan; insufficient fuel for controlled deorbit; non-compliant with FCC/ITU deorbit rules</td>
+      </tr>
+      <tr>
+        <td>Cybersecurity of Ground Segment</td>
+        <td class="green">Encrypted command links; authenticated uplink; regular penetration testing; IR plan</td>
+        <td class="amber">Some controls in place; partial encryption; no formal pen-test in past 24 months</td>
+        <td class="red">No encryption on command uplink; shared ground station with inadequate security; no incident response plan</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5. Worked Examples</h2>
+
+  <div class="example-box launch-ex">
+    <h3>Worked Example A — GEO Telecom Satellite Launch (SL)</h3>
+    <div class="scenario">
+      <strong>Risk profile:</strong> New-build GEO communications satellite (Ku-band, 32 transponders). Bus: Airbus Eurostar 3000EOR (electric orbit-raising; 6-month LEOP). Launch vehicle: Ariane 6 (maiden commercial mission, limited flight history). Launch site: Kourou, French Guiana. Insured value: $280m. Operator: established Tier-1 satellite operator with 8 in-orbit satellites.
+    </div>
+    <table>
+      <thead><tr><th>Rating Element</th><th>Factor / Rate</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Base launch rate (Ariane 6 — new vehicle)</td><td>4.50% of IV</td><td>New vehicle premium; limited heritage</td></tr>
+        <tr><td>LEOP complexity (electric orbit-raising)</td><td>× 1.25</td><td>6-month EOR adds significant risk window</td></tr>
+        <tr><td>Bus heritage (Eurostar 3000EOR — mature bus variant)</td><td>× 0.90</td><td>Established bus with heritage discount</td></tr>
+        <tr><td>Operator experience (Tier-1)</td><td>× 0.95</td><td>Experienced operator credit</td></tr>
+        <tr class="total-row"><td colspan="2"><strong>Indicated Launch Rate</strong></td><td><strong>4.50% × 1.25 × 0.90 × 0.95 = 4.81%</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="premium-out">Indicative launch premium: $280m × 4.81% = <strong>~$13.5m</strong> <span class="badge b-illustrative">ILLUS</span></div>
+    <p style="font-size:0.84rem;color:var(--muted);margin-top:10px;">Note: Electric orbit-raising significantly elevates LEOP premium relative to chemical propulsion equivalent. Ariane 6 rate will compress as flight history accumulates. First in-orbit annual (SO) policy typically placed at inception alongside SL coverage.</p>
+  </div>
+
+  <div class="example-box">
+    <h3>Worked Example B — GEO Satellite In-Orbit Annual Renewal (SO)</h3>
+    <div class="scenario">
+      <strong>Risk profile:</strong> Intelsat GEO communications satellite, year 8 of 15-year design life. Boeing 601HP bus (mature heritage). All primary subsystems nominal. One transponder failed (replaced by redundant unit) — no capacity loss. Fuel: 7 years remaining per plan. Insured value: $195m (declining from original $260m on residual-life basis). No prior claims.
+    </div>
+    <table>
+      <thead><tr><th>Rating Element</th><th>Factor / Rate</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Base in-orbit rate (GEO, mid-life, established bus)</td><td>2.00% p.a. of IV</td><td>Mid-life Boeing 601HP — mature design</td></tr>
+        <tr><td>Age factor (year 8, within designed life window)</td><td>× 1.00</td><td>No loading — within normal operating window</td></tr>
+        <tr><td>Prior anomaly (1 transponder failure — on redundancy)</td><td>× 1.10</td><td>Nominal loading — system on backup but functional</td></tr>
+        <tr><td>Operator credit (Intelsat — experienced operator)</td><td>× 0.95</td><td>Tier-1 operator, experienced ground team</td></tr>
+        <tr class="total-row"><td colspan="2"><strong>Indicated Annual Rate</strong></td><td><strong>2.00% × 1.00 × 1.10 × 0.95 = 2.09%</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="premium-out">Indicative annual in-orbit premium: $195m × 2.09% = <strong>~$4.1m</strong> <span class="badge b-illustrative">ILLUS</span></div>
+    <p style="font-size:0.84rem;color:var(--muted);margin-top:10px;">Note: Insured value of $195m reflects residual economic value after 8 years of 15-year design life (insured value typically reviewed annually with operator and broker). The failed-then-recovered transponder is noted but the satellite is fully operational — modest anomaly loading appropriate.</p>
+  </div>
+
+  <h2>6. Key Exclusions &amp; Coverage Considerations</h2>
+  <table>
+    <thead><tr><th>Exclusion / Issue</th><th>Standard Position</th><th>Lloyd's / Market Flexibility</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Cyber / Command Takeover</strong></td><td>Standard SL/SO policies typically exclude loss caused by hostile electronic interference or cyberattack on ground systems</td><td>Emerging endorsement market for cyber coverage on command/control links; limited capacity; expensive</td></tr>
+      <tr><td><strong>ASAT / War in Space</strong></td><td>War exclusion (broadly worded) typically excludes deliberate destruction by hostile state action</td><td>Distinction between inadvertent debris collision (covered) and deliberate ASAT strike (excluded) is complex; 2021 Russia ASAT test created no direct covered claim as the targeted satellite was already defunct</td></tr>
+      <tr><td><strong>Deliberate Sacrifice / Deorbit</strong></td><td>Voluntary abandonment or deliberate disposal typically excluded</td><td>End-of-life deorbit manoeuvres clearly excluded; involuntary loss of fuel control leading to unavoidable re-entry may be covered depending on wording</td></tr>
+      <tr><td><strong>Wear &amp; Tear / Gradual Degradation</strong></td><td>Excluded — gradual solar panel degradation per design spec not covered</td><td>Degradation beyond design spec (excessive) may be covered; distinction requires technical expert evidence</td></tr>
+      <tr><td><strong>Commercial Failure / Non-Delivery of Service</strong></td><td>Business interruption / revenue loss excluded unless directly caused by physical damage</td><td>Some BI extensions available for direct loss of revenue from covered physical peril on major GEO assets</td></tr>
+      <tr><td><strong>Experimental / Developmental Missions</strong></td><td>Full all-risks coverage often not available for developmental or first-flight missions</td><td>Limited coverage available; higher rates; may be limited to structural total loss only</td></tr>
+    </tbody>
+  </table>
+
+</main>
+<footer>Risk Code Hub · Space (SC · SL · SO) · Module 04: Underwriting · v2.1 — April 2026</footer>
+</body>
+</html>
