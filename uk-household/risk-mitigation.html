@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Household – Risk Mitigation | Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--house:#2d6a2d;--house-dark:#1a4a1a;--house-light:#e8f5e3;--accent:#c8a84b;--brick:#8b3a2a;--flood:#1565c0;--flood-light:#e3eeff;--slate:#5a6e7a;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#2d6a2d 55%,#1a4a1a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d4b8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8d4b8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--house-dark); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .control-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; margin:24px 0; }
+    .control-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:22px 24px; border-top:4px solid var(--house); }
+    .control-card.flood { border-top-color:var(--flood); }
+    .control-card.fire { border-top-color:var(--brick); }
+    .control-card.security { border-top-color:var(--accent); }
+    .control-card.netzero { border-top-color:#6a2d6a; }
+    .control-card h4 { font-size:0.95rem; font-weight:700; color:var(--navy); margin-bottom:10px; }
+    .control-card ul { padding-left:18px; }
+    .control-card li { font-size:0.87rem; margin-bottom:6px; line-height:1.6; color:var(--text); }
+    .control-card .impact { font-size:0.8rem; font-weight:700; margin-top:12px; padding:6px 10px; border-radius:6px; }
+    .control-card .impact.green { background:#e6f4ea; color:#1a5c28; }
+    .control-card .impact.amber { background:#fef3e2; color:#7a4500; }
+
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.87rem; background:#fff; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+    th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.82rem; }
+    td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tr:last-child td { border-bottom:none; }
+    tr:nth-child(even) td { background:#f8fafc; }
+
+    .flood-box { background:var(--flood-light); border:2px solid var(--flood); border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .flood-box h3 { color:var(--flood); margin-top:0; }
+    .flood-box p, .flood-box li { font-size:0.9rem; color:#1a2a4a; }
+    .flood-box ul { padding-left:20px; margin:10px 0; }
+    .flood-box li { margin-bottom:6px; line-height:1.6; }
+
+    .warn-box { background:#fde8e8; border:2px solid var(--brick); border-radius:12px; padding:22px 26px; margin:24px 0; }
+    .warn-box h4 { color:var(--brick); font-size:0.95rem; margin-bottom:8px; }
+    .warn-box p, .warn-box li { font-size:0.87rem; color:#4a1a1a; }
+    .warn-box ul { padding-left:18px; margin:8px 0; }
+    .warn-box li { margin-bottom:6px; }
+
+    .netzero-box { background:#f5e8ff; border:2px solid #6a2d6a; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .netzero-box h3 { color:#6a2d6a; margin-top:0; }
+    .netzero-box p, .netzero-box li { font-size:0.9rem; color:#2a0a2a; }
+    .netzero-box ul { padding-left:20px; margin:10px 0; }
+    .netzero-box li { margin-bottom:6px; line-height:1.6; }
+
+    .pfr-table { background:#fff; }
+    .action-list { list-style:none; padding:0; margin:16px 0; }
+    .action-list li { padding:10px 14px; border-left:4px solid var(--house); background:#fff; margin-bottom:8px; border-radius:0 8px 8px 0; font-size:0.9rem; line-height:1.6; }
+    .action-list li span.num { font-weight:800; color:var(--house-dark); margin-right:8px; }
+
+    .badge { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 7px; border-radius:10px; letter-spacing:0.5px; margin-left:4px; vertical-align:middle; }
+    .b-verified { background:#e6f4ea; color:#1a5c28; }
+    .b-estimate { background:#fef3e2; color:#7a4500; }
+    .b-illustrative { background:#e3eeff; color:#1a3a7a; }
+
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">UK Household</a> › Risk Mitigation</div>
+  <div class="tag">Module 07 — Risk Mitigation</div>
+  <h1>UK Household Risk Mitigation &amp; Control</h1>
+  <p>Flood resilience measures, subsidence management, fire and security controls, non-standard construction maintenance, and emerging net zero retrofit risks — with underwriting relevance for each control category.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+<main>
+
+  <h2>1. Flood Resilience — Property Flood Resilience (PFR)</h2>
+  <p>Property Flood Resilience (PFR) is the framework for measures that either prevent floodwater entering a property (resistance) or reduce the damage caused when water does enter (resilience). Flood Re actively promotes PFR adoption and the government's 2020 National Flood and Coastal Erosion Risk Management Strategy commits to 50% of eligible properties having PFR measures in place. <span class="badge b-verified">VER</span></p>
+
+  <div class="flood-box">
+    <h3>🌊 PFR Measure Categories</h3>
+    <p><strong>Resistance measures</strong> — prevent water entry:</p>
+    <ul>
+      <li><strong>Flood doors and barriers:</strong> Purpose-built flood doors (to CIRIA/BSI standards) rated to withstand a defined hydrostatic head of water; temporary barriers across doorways (demountable or deployable). Can resist water up to ~0.6–0.9m depth if properly installed and sealed. <span class="badge b-verified">VER</span></li>
+      <li><strong>Air brick covers:</strong> Snap-on or permanent covers over ventilation bricks — a primary entry route for groundwater and shallow surface flooding. Inexpensive (~£20–£80 per brick) and highly effective for low-depth events.</li>
+      <li><strong>Non-return valves (sewage backflow):</strong> Prevent sewer water backflow through drains into the property — critical in urban flash flood events where drainage systems surcharge.</li>
+      <li><strong>Sump and pump systems:</strong> Automatic pumping of groundwater/seepage before it reaches floor level; requires maintained power supply and regular testing.</li>
+      <li><strong>Raised electrical sockets and consumer units:</strong> Moving electrical infrastructure above likely flood water level to prevent both immediate danger and post-flood re-occupation delay.</li>
+    </ul>
+    <p style="margin-top:12px;"><strong>Resilience measures</strong> — limit damage when water enters:</p>
+    <ul>
+      <li><strong>Flood-resilient flooring:</strong> Ceramic tiles, concrete, or flood-resilient engineered wood rather than standard timber/carpet — can be cleaned and dried rather than replaced. Reduces reinstatement cost significantly.</li>
+      <li><strong>Lime plaster and lime render:</strong> Breathable plaster systems that dry out post-flooding without the need for full wall strip-out; standard plasterboard requires complete removal and replacement after wetting.</li>
+      <li><strong>Raised white goods and kitchen units:</strong> Dishwashers, washing machines, and kitchen cabinet carcasses raised off flood-risk floor level; stainless steel or composite rather than chipboard cabinets.</li>
+      <li><strong>Ground floor wet room design:</strong> Full tile and drainage system enabling quick clean-down post-flooding.</li>
+    </ul>
+    <p style="margin-top:12px;"><strong>Underwriting relevance:</strong> Flood Re's Quinquennial Review 2022 confirmed intent to offer PFR-positive pricing discounts from the mid-2020s. <span class="badge b-verified">VER</span> Lloyd's HP underwriters should document PFR measures in the risk file — properties with demonstrable resistance and resilience measures warrant materially lower flood loadings than equivalent un-improved Zone 2/3 risks.</p>
+  </div>
+
+  <h2>2. Flood Risk Monitoring &amp; Alerts</h2>
+  <table>
+    <thead><tr><th>Control</th><th>Detail</th><th>Underwriting Impact</th></tr></thead>
+    <tbody>
+      <tr><td><strong>EA Flood Warning Registration</strong></td><td>Environment Agency Floodline Warnings Direct — automated phone/email/SMS alerts when flood warning issued for the property's area. Free service. <span class="badge b-verified">VER</span></td><td>Evidence of registration suggests proactive risk management; enables deployment of temporary resistance measures</td></tr>
+      <tr><td><strong>Flood Risk Assessment (FRA)</strong></td><td>Independent professional assessment of site-specific flood risk, drainage, and appropriate resilience measures. Required for planning applications in Zone 2/3.</td><td>Positive signal — evidence of informed risk awareness; reduces adverse selection risk</td></tr>
+      <tr><td><strong>Professional Flood Survey</strong></td><td>Specialist flood survey (e.g. RICS flood survey, independent hydrology survey) identifying specific inundation routes and recommended measures</td><td>Enables underwriter to apply targeted loadings rather than blanket Zone 2/3 rates</td></tr>
+      <tr><td><strong>JBA / Ambiental Flood Scores</strong></td><td>Third-party peril data providers (JBA Risk Management, Ambiental, Intermap) used by most Lloyd's syndicates to score flood exposure at property level using high-resolution terrain data</td><td>Core tool for HP portfolio pricing; can identify properties with lower actual risk than EA Zone classification implies</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Subsidence Management</h2>
+  <p>Subsidence risk mitigation is primarily about managing clay-soil moisture levels and tree proximity. Once subsidence has occurred, the claims management process is complex and long-duration (typically 2–4 years). Underwriters should look for evidence that the risk owner has proactively addressed the known drivers. <span class="badge b-verified">VER</span></p>
+
+  <div class="control-grid">
+    <div class="control-card">
+      <h4>🌳 Tree Management</h4>
+      <ul>
+        <li>Arborist survey identifying high-water-demand species within 5–10m radius</li>
+        <li>Root barrier installation between significant trees and foundations</li>
+        <li>Managed crown reduction or removal of highest-risk trees</li>
+        <li>Long-term monitoring plan — annual arborist inspection</li>
+      </ul>
+      <div class="impact green">Premium Benefit: −10% to −25% on subsidence loading where proactive tree management documented</div>
+    </div>
+    <div class="control-card">
+      <h4>💧 Drainage &amp; Moisture Management</h4>
+      <ul>
+        <li>French drains / soakaways to prevent surface water pooling adjacent to foundations</li>
+        <li>Leaking drains survey and repair (drain camera survey) — leaking drains in clay soils concentrate moisture</li>
+        <li>Soil moisture monitoring sensors (available for residential use) for high-risk properties</li>
+        <li>Guttering and downpipe maintenance — overflow adjacent to foundations is a minor but cumulative risk factor</li>
+      </ul>
+      <div class="impact green">Premium Benefit: Drain survey certificate reduces adverse selection signal</div>
+    </div>
+    <div class="control-card">
+      <h4>🏗️ Foundation Investigation &amp; Underpinning</h4>
+      <ul>
+        <li>Structural engineers report confirming foundation depth and condition</li>
+        <li>Underpinning (conventional or mini-piled) for properties with historic movement</li>
+        <li>Crack monitoring programme (tell-tales, crack gauges) — evidence of stable monitoring rather than ignored movement</li>
+        <li>Ground investigation borehole data for clay type and shrink-swell potential</li>
+      </ul>
+      <div class="impact amber">Note: Underpinned property is complex — some syndicates decline; others accept with survey confirmation of completed works</div>
+    </div>
+    <div class="control-card">
+      <h4>🔍 Pre-Inception Survey</h4>
+      <ul>
+        <li>Independent building survey (RICS Level 3 / full structural survey) completed within 3 years</li>
+        <li>Specialist subsidence survey where prior movement disclosed</li>
+        <li>Thermal imaging survey for moisture ingress detection</li>
+        <li>Clear disclosure obligation: all known movement, prior claims, and works must be declared at inception</li>
+      </ul>
+      <div class="impact green">Survey within 3 years supports acceptance and accurate premium; undisclosed prior movement is a major coverage risk</div>
+    </div>
+  </div>
+
+  <h2>4. Fire Risk Controls</h2>
+
+  <div class="control-grid">
+    <div class="control-card fire">
+      <h4>🔥 Standard Fire Controls</h4>
+      <ul>
+        <li>Interlinked smoke detection on all floors (BS 5839-6 Grade D standard for residential) <span class="badge b-verified">VER</span></li>
+        <li>Heat detector in kitchen (smoke detectors typically removed from kitchens due to false alarm rate)</li>
+        <li>Carbon monoxide detectors adjacent to all combustion appliances</li>
+        <li>Annual boiler and gas appliance service (Gas Safe registered engineer)</li>
+        <li>Electrical Installation Condition Report (EICR) — recommended every 10 years for owner-occupied</li>
+      </ul>
+      <div class="impact green">Compliant smoke detection: standard requirement. Non-compliant: potential claims defensibility issue</div>
+    </div>
+    <div class="control-card fire">
+      <h4>🏚️ Thatched Property Fire Controls</h4>
+      <ul>
+        <li>Specialist spark arrestor on chimney — prevents chimney spark ignition of thatch (primary cause of thatch fires)</li>
+        <li>Fire retardant treatment of thatch — regular re-treatment every 5–10 years</li>
+        <li>Thermal imaging of chimney stack to detect cracks/heat penetration</li>
+        <li>Dedicated hose reel and external water supply (some insurers require)</li>
+        <li>Lightning conductor on thatched properties — standard requirement from specialist insurers</li>
+        <li>Minimum 1 hour fire separation between main house and thatched outbuildings</li>
+      </ul>
+      <div class="impact amber">Spark arrestor is non-negotiable for most Lloyd's thatched property underwriters</div>
+    </div>
+    <div class="control-card fire">
+      <h4>🏛️ Listed Building Fire Controls</h4>
+      <ul>
+        <li>Grade I/II listed buildings: often limited in upgrades permitted without conservation consent</li>
+        <li>Automatic fire suppression (sprinkler system) — increasingly required by specialist insurers for large listed houses, though conservation consent required</li>
+        <li>Fire risk assessment by specialist consultant for Grade I properties</li>
+        <li>Separation of historic structural elements from modern heating systems</li>
+        <li>Heritage timber (old growth oak beams) — specific fire spread risk; documented in survey</li>
+      </ul>
+      <div class="impact amber">Sprinkler system in a large listed property is a material premium reduction but requires specialist installation and conservation officer approval</div>
+    </div>
+  </div>
+
+  <h2>5. Security Controls</h2>
+  <table>
+    <thead><tr><th>Control</th><th>Standard</th><th>Detail &amp; Underwriting Relevance</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Intruder Alarm</strong></td><td>BS EN 50131 Grade 2 minimum; Grade 3 for high-value</td><td>Professionally installed, annual NSI/SSAIB-certificated maintenance. Monitored (ARK/URN) preferred over bell-only. Discount: typically 5–15% on contents premium from specialist HNW insurers. <span class="badge b-estimate">EST</span></td></tr>
+      <tr><td><strong>Door Locks</strong></td><td>BS3621 5-lever mortice deadlock on all external doors</td><td>Multi-point locking on UPVC/composite doors equivalent. Anti-snap cylinder locks (TS007 3-star) on cylinders. Window locks on all accessible windows. Non-compliance: potential claims defensibility issue if forced entry through inadequate lock.</td></tr>
+      <tr><td><strong>Secured by Design (SBD)</strong></td><td>Police-backed UK new-build accreditation scheme</td><td>New builds with SBD certification demonstrate enhanced perimeter and access security. Some syndicates apply positive credit on contents rating for SBD properties.</td></tr>
+      <tr><td><strong>CCTV</strong></td><td>Monitored or recorded HD CCTV covering approach and entry points</td><td>Positive signal for HNW properties; deters opportunistic theft. Smart CCTV with remote monitoring increasingly standard in HNW market. CCTV does not replace physical locks/alarms for underwriting purposes.</td></tr>
+      <tr><td><strong>Safe — Jewellery &amp; Valuables</strong></td><td>Cash-rated approved safe (Grade 0–VI depending on value stored)</td><td>Safe grade must match stored value. Underfloor or wall concealment. Anchor-bolted to floor/wall structure. Improper safe (e.g. unanchored small cash box) may not meet policy requirements for theft of stored valuables. Jewellery limits often conditioned on a specific minimum safe grade. <span class="badge b-estimate">EST</span></td></tr>
+      <tr><td><strong>Rural Properties — Specific Issues</strong></td><td>No standard — risk-specific assessment</td><td>Rural isolated properties face elevated burglary risk. Smart home systems (remote monitoring, connected locks), farm watch registration, property marking schemes (SmartWater, Selectamark) all evidence positive risk management intent.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6. Non-Standard Construction Maintenance</h2>
+  <table>
+    <thead><tr><th>Construction Type</th><th>Key Maintenance Obligation</th><th>Failure Consequence</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Thatched Roof</strong></td><td>Re-thatching every 25–40 years (longstraw/combed wheat reed) or 40–60 years (water reed); ridge replacement every 10–15 years. Annual inspection for bird/animal damage, moss growth, and ridge condition.</td><td>Deteriorated thatch is a major fire risk (reduced structural integrity means fire spreads faster). Non-maintained thatch may void fire cover.</td></tr>
+      <tr><td><strong>Flat Roof</strong></td><td>Annual inspection of membrane, drains, and flashing. Typical membrane life 15–25 years (felt) or 25–35 years (GRP/EPDM). Ponding water a key indicator of drainage failure.</td><td>Undetected membrane failure leads to escape of water — typically a high-frequency, moderate-severity claim category for flat-roof properties.</td></tr>
+      <tr><td><strong>Timber Frame</strong></td><td>Regular moisture monitoring especially at ground-to-frame connections; checking for rot, pest damage, and frame movement. Specialist timber treatment against woodworm/beetle every 20 years.</td><td>Undetected rot or structural movement — coverage disputes possible if insurer argues gradual deterioration exclusion applies.</td></tr>
+      <tr><td><strong>Pre-cast Concrete (BISF/Airey)</strong></td><td>Specialist structural inspection — standard surveys may miss frame corrosion. Heating and moisture control critical to prevent internal condensation and accelerate frame deterioration.</td><td>Frame failure is effectively gradual deterioration and may not be covered. Mortgage lenders' reluctance to lend can complicate sale.</td></tr>
+      <tr><td><strong>Listed Building Stone Work</strong></td><td>5-yearly inspection of stone and lime pointing; repointing with lime mortar only (Portland cement in listed buildings causes stone spalling and is prohibited). Rainwater goods — cast iron or lead maintenance.</td><td>Water ingress through failed pointing is a significant escape-of-water risk in stone buildings. Conservation officer must approve repairs.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>7. Net Zero Retrofit — Emerging Risk Controls</h2>
+
+  <div class="netzero-box">
+    <h3>⚡ Net Zero Retrofit: Emerging Loss Categories &amp; Controls</h3>
+    <p>The UK government's net zero agenda is creating new risk categories that are insufficiently priced or addressed in most standard household policies. Three primary emerging risks for Lloyd's HP underwriters: <span class="badge b-estimate">EST</span></p>
+    <ul>
+      <li><strong>Heat Pump Fires:</strong> Air source and ground source heat pumps contain refrigerants and compressors. Early loss experience from specialist insurers suggests compressor fires and refrigerant leaks are emerging as a small but growing sub-peril. Controls: correct installation to MCS certification standard, annual service by F-Gas registered engineer, ventilated installation space.</li>
+      <li><strong>Solar Panel Damage &amp; Fire:</strong> Storm and hail damage to PV panels is increasingly frequent as install base grows. More significantly, DC arc faults in PV wiring (a specific electrical fire risk not well-addressed by standard fire detection) are an emerging category. Controls: arc fault detection devices (AFDDs), annual panel and inverter inspection, lightning protection where panels are on high-risk structures.</li>
+      <li><strong>EV Charging Point Liability &amp; Fire:</strong> Domestic EV charging (primarily overnight slow-charging via 7kW home wallbox) creates fire risk from electrical fault. Major risk: battery thermal runaway in adjacent garage. Controls: OLEV/OZEV-compliant charger installation (required for grant funding), smart charging (reduced load-shedding risk), garage fire detection and suppression, periodic EICR review of charging circuit.</li>
+      <li><strong>External Wall Insulation (EWI) &amp; Cladding:</strong> Post-Grenfell awareness of combustible cladding risk extends to residential EWI retrofits. Some EWI products use expanded polystyrene (EPS) which has fire-spread characteristics if incorrectly specified or installed. Controls: EWI specification to BR 135 fire performance requirements, professional installation with BBA/BBA certificate, building control sign-off.</li>
+    </ul>
+    <p style="margin-top:10px;"><strong>Lloyd's underwriting action:</strong> The HP renewal questionnaire should include a specific section on retrofit installations (heat pump Y/N, solar PV Y/N, EV charger Y/N, EWI Y/N) to enable appropriate rating rather than relying on the existing scope of standard policy cover. Most standard policies were written before these risks were material.</p>
+  </div>
+
+  <h2>8. Top 10 Risk Mitigation Actions for HP Insureds</h2>
+
+  <ul class="action-list">
+    <li><span class="num">01</span><strong>Flood Zone 2/3:</strong> Register with EA Flood Warnings Direct. Install air brick covers. Commission a professional flood survey. Consider permanent flood door/barrier installation.</li>
+    <li><span class="num">02</span><strong>High shrink-swell zone:</strong> Commission an arborist survey for trees within 10m. Remove or crown-reduce high-water-demand trees. Install root barriers where removal isn't possible.</li>
+    <li><span class="num">03</span><strong>Thatched property:</strong> Install spark arrestor if not already fitted. Keep thatch clear of chimney spark trajectory. Maintain 6m separation from LPG tanks. Annual inspection by Master Thatcher.</li>
+    <li><span class="num">04</span><strong>Listed building:</strong> Commission RICS Level 3 structural survey and keep current (max 3 years old). Commission specialist rebuild cost valuation by RICS-qualified building surveyor — not BCIS automated estimate.</li>
+    <li><span class="num">05</span><strong>All properties:</strong> Ensure sum insured reflects current BCIS rebuild cost. With post-2021 inflation, a property not revalued since 2019–2020 is likely under-insured by 20–30%. Request an insurer rebuild cost review.</li>
+    <li><span class="num">06</span><strong>Security (high-value contents):</strong> Install NSI/SSAIB-certificated monitored alarm. Ensure jewellery and watches are stored in a cash-rated, anchor-bolted safe when not in use. Maintain individual valuations.</li>
+    <li><span class="num">07</span><strong>Escape of water (all properties):</strong> Fit lever-operated isolation valves on all water supply pipes. Know where the mains stopcock is. Consider automatic leak detection (Leakbot or equivalent) for premium reduction.</li>
+    <li><span class="num">08</span><strong>Unoccupied property:</strong> Notify insurer before property becomes unoccupied &gt;30 days. Inspect and report to insurer. Drain down water system in winter. Arrange regular inspection visits.</li>
+    <li><span class="num">09</span><strong>Net zero retrofit:</strong> Ensure all retrofit installations (heat pump, solar, EV charger) are professionally installed to relevant certification standards. Notify insurer of material changes to property as required by policy conditions.</li>
+    <li><span class="num">10</span><strong>Fine art and jewellery:</strong> Maintain current professional valuations (max 3–5 years old). Photography and serial numbers on record. Keep a secure digital copy of all valuation certificates off-site or in cloud storage.</li>
+  </ul>
+
+  <h2>9. Standards Reference</h2>
+  <table>
+    <thead><tr><th>Standard / Scheme</th><th>Relevant To</th><th>Underwriting Relevance</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Secured by Design (SBD)</strong></td><td>Perimeter security, doors, windows</td><td>Police-backed UK standard; positive credit on new-build contents</td></tr>
+      <tr><td><strong>BS 3621</strong></td><td>Door locks (5-lever mortice deadlocks)</td><td>Minimum standard; non-compliance = potential theft claim defensibility issue</td></tr>
+      <tr><td><strong>BS EN 50131</strong></td><td>Intruder alarm systems</td><td>Grade 2 (residential), Grade 3 (HNW/high value)</td></tr>
+      <tr><td><strong>BS 5839-6</strong></td><td>Smoke and heat detection (residential)</td><td>Grade D (mains-powered with battery backup) = minimum for household insurance</td></tr>
+      <tr><td><strong>CIRIA C790</strong></td><td>Property Flood Resilience — design guide</td><td>Industry standard for PFR measure specification and installation</td></tr>
+      <tr><td><strong>MCS (Microgeneration Certification Scheme)</strong></td><td>Heat pump and solar PV installation</td><td>MCS certification required for government grant eligibility; evidence of professional installation</td></tr>
+      <tr><td><strong>OZEV/OLEV Charger Standard</strong></td><td>EV charge point installation</td><td>Required for government grant; ensures minimum installation safety standard</td></tr>
+      <tr><td><strong>BR 135</strong></td><td>External cladding / EWI fire performance</td><td>Fire performance standard for external wall systems post-Grenfell</td></tr>
+      <tr><td><strong>BGS National Shrink-Swell Dataset</strong></td><td>Subsidence risk zoning</td><td>Zones S1–S4 (low to very high); key GIS input for HP underwriting</td></tr>
+      <tr><td><strong>EA Flood Map for Planning</strong></td><td>Flood zone designation</td><td>Zones 1, 2, 3a, 3b — core tool for flood loading factor and Flood Re eligibility</td></tr>
+    </tbody>
+  </table>
+
+</main>
+<footer>Risk Code Hub · UK Household Property (HP) · Module 07: Risk Mitigation · v2.0 — April 2026</footer>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Household – Claims Database | Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--house:#2d6a2d;--house-dark:#1a4a1a;--house-light:#e8f5e3;--accent:#c8a84b;--brick:#8b3a2a;--flood:#1565c0;--slate:#5a6e7a;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0;--red:#8b1a1a;--orange:#e65100; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#2d6a2d 55%,#1a4a1a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d4b8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8d4b8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:40px 30px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .filter-bar { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin:24px 0; display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+    .filter-bar label { font-size:0.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+    .filter-bar select, .filter-bar input { border:1px solid var(--border); border-radius:6px; padding:7px 12px; font-size:0.84rem; color:var(--text); background:#fff; }
+    .filter-bar select:focus, .filter-bar input:focus { outline:none; border-color:var(--house); }
+    .btn-reset { background:var(--navy); color:#fff; border:none; border-radius:6px; padding:7px 16px; font-size:0.82rem; font-weight:700; cursor:pointer; }
+
+    .result-bar { font-size:0.82rem; color:var(--muted); margin:8px 0 16px; }
+    .db-table-wrap { overflow-x:auto; }
+    .db-table { width:100%; border-collapse:collapse; font-size:0.84rem; }
+    .db-table th { background:var(--navy); color:#fff; padding:10px 12px; text-align:left; font-size:0.76rem; text-transform:uppercase; letter-spacing:0.8px; cursor:pointer; white-space:nowrap; user-select:none; }
+    .db-table th:hover { background:#1a3a5c; }
+    .db-table td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .db-table tr:hover td { background:#f0f7f0; }
+    .year-cell { font-weight:700; color:var(--house-dark); white-space:nowrap; }
+    .name-cell { font-weight:600; color:var(--text); min-width:180px; }
+    .loss-cell { font-weight:700; color:var(--brick); white-space:nowrap; }
+    .desc-cell { font-size:0.8rem; color:var(--muted); max-width:300px; }
+
+    .tag-storm { background:#e3ecf8; color:var(--navy); font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:4px; display:inline-block; }
+    .tag-flood { background:#e3f0ff; color:var(--flood); font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:4px; display:inline-block; }
+    .tag-subsidence { background:#fde8e8; color:var(--brick); font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:4px; display:inline-block; }
+    .tag-regulatory { background:#fef3e2; color:#7a4500; font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:4px; display:inline-block; }
+    .tag-fire { background:#ffe8d6; color:var(--orange); font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:4px; display:inline-block; }
+
+    .conf-badge { font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:8px; margin-left:3px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+
+    .notice-box { background:var(--house-light); border:1px solid var(--house); border-radius:8px; padding:14px 18px; margin:16px 0; font-size:0.84rem; color:var(--house-dark); }
+
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">UK Household</a> › Claims Database</div>
+  <div class="tag">Module 03 — Claims Database</div>
+  <h1>UK Household — Major Loss Events Database</h1>
+  <p>35 major UK household loss events 1987–2024 — filter by peril type, region, and year. Insured loss figures in £ at time of event unless otherwise noted.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a><a href="history.html">History</a><a href="timeline.html">Timeline</a><a href="database.html" class="active">Claims Database</a><a href="underwriting.html">Underwriting</a><a href="rates-analysis.html">Rates &amp; ROE</a><a href="risk-mitigation.html">Risk Mitigation</a><a href="global-program.html">Global Programmes</a><a href="references.html">References</a>
+</nav>
+<main>
+  <div class="notice-box">
+    <strong>Data note:</strong> Insured loss figures are ABI estimates or Swiss Re sigma/Munich Re NatCat data unless individually cited. Where figures are market estimates, they are tagged <span class="conf-badge b-e">EST</span>. Verified published figures are tagged <span class="conf-badge b-v">VER</span>. All values in £ sterling at time of event (not inflation-adjusted) unless noted.
+  </div>
+
+  <div class="filter-bar">
+    <label>Peril</label>
+    <select id="f-type">
+      <option value="">All perils</option>
+      <option value="storm">Storm / Windstorm</option>
+      <option value="flood">Flood</option>
+      <option value="subsidence">Subsidence</option>
+      <option value="fire">Fire</option>
+      <option value="regulatory">Regulatory / Market</option>
+    </select>
+    <label>Region</label>
+    <select id="f-region">
+      <option value="">All regions</option>
+      <option value="national">National / England-wide</option>
+      <option value="south">South &amp; East England</option>
+      <option value="north">North England / Cumbria</option>
+      <option value="midlands">Midlands</option>
+      <option value="wales">Wales</option>
+      <option value="scotland">Scotland</option>
+      <option value="london">London</option>
+    </select>
+    <label>From year</label>
+    <select id="f-year">
+      <option value="">All years</option>
+      <option value="1987">1987–1999</option>
+      <option value="2000">2000–2009</option>
+      <option value="2010">2010–2019</option>
+      <option value="2020">2020–2024</option>
+    </select>
+    <label>Min loss</label>
+    <select id="f-min">
+      <option value="">All</option>
+      <option value="100">£100m+</option>
+      <option value="500">£500m+</option>
+      <option value="1000">£1bn+</option>
+    </select>
+    <input type="text" id="f-search" placeholder="Search event, location…">
+    <button class="btn-reset" onclick="resetFilters()">Reset</button>
+  </div>
+  <div class="result-bar" id="result-count">Loading…</div>
+
+  <div class="db-table-wrap">
+    <table class="db-table" id="db-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Year</th>
+          <th onclick="sortTable(1)">Event</th>
+          <th onclick="sortTable(2)">Peril</th>
+          <th onclick="sortTable(3)">Region</th>
+          <th>Description</th>
+          <th onclick="sortTable(5)">Insured Loss (£m)</th>
+          <th>Confidence</th>
+        </tr>
+      </thead>
+      <tbody id="db-body"></tbody>
+    </table>
+  </div>
+</main>
+<footer>Risk Code Hub · UK Household Property (HP) · Module 03: Claims Database · v2.0 — April 2026</footer>
+<script>
+const DB = [
+  {year:1987,name:"Great Storm",type:"storm",region:"south",desc:"Overnight 15–16 Oct; 122mph gusts; 300,000 homes damaged; 18m trees felled; south & east England, Greater London.",loss:2000,conf:"VER"},
+  {year:1990,name:"Burns Day Storm & Feb Storms",type:"storm",region:"national",desc:"25 Jan 1990 Burns Day Storm + February follow-on storms; 47 UK deaths; most costly UK storm year to that date.",loss:3000,conf:"VER"},
+  {year:1990,name:"Subsidence Crisis Begins",type:"subsidence",region:"south",desc:"1989–91 drought triggers clay shrinkage across London, Essex, Kent, East Anglia. Claims develop over 5 years. £3bn cumulative.",loss:600,conf:"VER"},
+  {year:1993,name:"Subsidence Crisis Peak",type:"subsidence",region:"south",desc:"Subsidence claims peak in 1993 after 1989–1992 drought cycle. SE England composites face significant reserve development.",loss:900,conf:"VER"},
+  {year:2000,name:"Autumn 2000 Floods",type:"flood",region:"national",desc:"Oct–Nov 2000; River Ouse (York), Severn (Shrewsbury, Worcester), Thames (Oxford); 10,000+ homes flooded.",loss:1000,conf:"VER"},
+  {year:2002,name:"ABI Statement of Principles",type:"regulatory",region:"national",desc:"Voluntary agreement: ABI members commit to flood insurance availability; government commits to flood defence investment.",loss:0,conf:"VER"},
+  {year:2003,name:"European Heat Wave — UK Subsidence",type:"subsidence",region:"south",desc:"Summer 2003 extreme heat (38.5°C UK record at time); significant clay shrinkage; subsidence claims wave in 2003–2005.",loss:200,conf:"EST"},
+  {year:2004,name:"Boscastle Flash Flood",type:"flood",region:"south",desc:"16 Aug; flash flood through village; all three rivers simultaneously flooded; 100+ vehicles lost; village centre devastated.",loss:15,conf:"VER"},
+  {year:2005,name:"Carlisle Floods",type:"flood",region:"north",desc:"River Eden; 2,000+ properties flooded; 3 killed; design event for city's subsequent flood defence upgrade.",loss:200,conf:"VER"},
+  {year:2007,name:"Summer Floods — Hull, Tewkesbury, Yorkshire",type:"flood",region:"national",desc:"55,000 homes flooded nationally; Hull worst-affected (8,600 homes); Tewkesbury, Sheffield, Doncaster, W Yorkshire. Largest UK flood loss on record.",loss:3000,conf:"VER"},
+  {year:2008,name:"Post-2007 Flood Re Debate",type:"regulatory",region:"national",desc:"Post-Pitt Review; government and ABI begin negotiations on replacement for Statement of Principles. Flood Re concept emerges.",loss:0,conf:"VER"},
+  {year:2009,name:"Cumbria Floods — Storm Desmond (2009 event)",type:"flood",region:"north",desc:"November 2009; extreme rainfall in Lake District; River Derwent floods Workington, Cockermouth; 1,300+ homes affected.",loss:175,conf:"VER"},
+  {year:2012,name:"June–July 2012 UK Floods",type:"flood",region:"national",desc:"Wettest April–June in UK since 1912; widespread river flooding across northern England, Midlands, Wales.",loss:600,conf:"EST"},
+  {year:2013,name:"Storm St Jude",type:"storm",region:"south",desc:"27–28 Oct 2013; most powerful autumn windstorm since 1987; 4 killed UK; widespread roof and structural damage south/east England.",loss:150,conf:"EST"},
+  {year:2013,name:"Storm Xaver — North Sea Coastal Flooding",type:"flood",region:"national",desc:"5–6 Dec 2013; severe North Sea storm surge; coastal flooding in Norfolk, Lincolnshire, Yorkshire, Thames Estuary.",loss:100,conf:"EST"},
+  {year:2014,name:"Somerset Levels Winter Flooding",type:"flood",region:"south",desc:"Dec 2013–Feb 2014; ~600 homes flooded for up to 10 weeks; national media event; Levels drainage debate. Part of £1.1bn winter 2013/14 total.",loss:100,conf:"VER"},
+  {year:2015,name:"Storm Desmond — Cumbria Record Rainfall",type:"flood",region:"north",desc:"5–6 Dec; 341.4mm/24hr at Honister Pass (UK record); 16,000+ properties flooded; Carlisle flooded despite post-2005 defences.",loss:500,conf:"VER"},
+  {year:2015,name:"Storms Eva & Frank",type:"flood",region:"north",desc:"Dec 2015; further Cumbria and Yorkshire flooding following saturated ground from Desmond. Leeds city centre flooded.",loss:400,conf:"VER"},
+  {year:2016,name:"Flood Re Launch",type:"regulatory",region:"national",desc:"4 April 2016; Flood Re Ltd commences operations under Water Act 2014; ~£180m annual levy on household insurers; pre-2009 properties eligible.",loss:0,conf:"VER"},
+  {year:2018,name:"Beast from the East — Freeze-Thaw Damage",type:"storm",region:"national",desc:"Feb–Mar 2018; 'Beast from the East' cold snap; burst pipe claims surge nationally; escape-of-water claims wave.",loss:100,conf:"EST"},
+  {year:2018,name:"Summer 2018 Drought — Subsidence",type:"subsidence",region:"south",desc:"Long dry summer 2018; significant clay shrinkage; subsidence notifications increase ~20% vs annual average.",loss:150,conf:"EST"},
+  {year:2019,name:"FCA GIPP Market Study Launched",type:"regulatory",region:"national",desc:"FCA announces market study into general insurance pricing practices; focuses on loyalty penalty in home and motor insurance.",loss:0,conf:"VER"},
+  {year:2020,name:"Storm Ciara",type:"storm",region:"national",desc:"8–9 Feb 2020; widespread wind damage; gusts over 90mph; structural damage to homes across UK.",loss:200,conf:"EST"},
+  {year:2020,name:"Storm Dennis",type:"flood",region:"national",desc:"15–16 Feb 2020; extreme rainfall; Wye, Severn valleys, South Wales, Yorkshire flooded; significant household claims.",loss:300,conf:"EST"},
+  {year:2021,name:"Storm Christoph — River Flooding",type:"flood",region:"national",desc:"Jan 2021; prolonged rainfall; River Mersey, Irwell, Don, Weaver flooding; Manchester and Cheshire most affected.",loss:100,conf:"EST"},
+  {year:2021,name:"Storm Arwen",type:"storm",region:"north",desc:"Nov 2021; exceptionally powerful November windstorm; gusts 90mph+ across Scotland, northern England; prolonged power outages; widespread roof damage.",loss:150,conf:"EST"},
+  {year:2022,name:"FCA GIPP Rules in Force",type:"regulatory",region:"national",desc:"1 Jan 2022; renewal price = new business price rule; estimated £1.2bn+ annual consumer benefit in home and motor combined.",loss:0,conf:"VER"},
+  {year:2022,name:"Storm Eunice",type:"storm",region:"national",desc:"18 Feb 2022; 122mph gust (Needles IoW); Red weather warning SE England and Wales; worst wind event since 1987 in south.",loss:400,conf:"EST"},
+  {year:2022,name:"Extreme Heat — Record Temperature & Subsidence",type:"subsidence",region:"south",desc:"July 2022 UK record 40.3°C; driest summer since 1976; BGS updated shrink-swell risk maps; ABI reports 30–40% subsidence notification uplift.",loss:250,conf:"EST"},
+  {year:2023,name:"Building Cost Inflation Crisis",type:"regulatory",region:"national",desc:"BCIS Rebuild Cost Index up ~28% 2021–2023; ~80% of UK homes under-insured by value; ABI warns of under-insurance epidemic at scale.",loss:0,conf:"VER"},
+  {year:2023,name:"Storm Babet — Brechin Flooding",type:"flood",region:"scotland",desc:"18–20 Oct 2023; worst Brechin flooding in living memory; significant eastern Scotland and Yorkshire household losses.",loss:400,conf:"EST"},
+  {year:2023,name:"Storm Ciaran — South Coast",type:"storm",region:"south",desc:"1–2 Nov 2023; 100mph+ gusts IoW and south coast; significant structural damage Hampshire, West Sussex, Kent.",loss:350,conf:"EST"},
+  {year:2023,name:"Storm Debi",type:"storm",region:"national",desc:"Nov 2023; further named storm; Ireland and western UK most affected; widespread wind damage.",loss:100,conf:"EST"},
+  {year:2024,name:"Storm Henk & Winter Floods",type:"flood",region:"national",desc:"Jan 2024; Storm Henk brought severe flooding to Midlands; River Trent, Severn, and Thames all at or near record levels.",loss:300,conf:"EST"},
+  {year:2024,name:"Net Zero Retrofit — EV & Heat Pump Claims",type:"regulatory",region:"national",desc:"Emerging: heat pump compressor fires, solar panel storm damage, EV overnight charging fires entering household claims mix. New sub-peril monitoring begun by specialist underwriters.",loss:30,conf:"EST"}
+];
+
+let sorted = [...DB], sortCol = 0, sortAsc = false;
+
+function getDecade(y){ if(y<2000)return"1987"; if(y<2010)return"2000"; if(y<2020)return"2010"; return"2020"; }
+
+function typeTag(t){
+  const m={storm:"tag-storm",flood:"tag-flood",subsidence:"tag-subsidence",regulatory:"tag-regulatory",fire:"tag-fire"};
+  const l={storm:"Storm",flood:"Flood",subsidence:"Subsidence",regulatory:"Regulatory",fire:"Fire"};
+  return`<span class="${m[t]||'tag-storm'}">${l[t]||t}</span>`;
+}
+function fmtLoss(v){ return v===0?'—':v>=1000?`£${(v/1000).toFixed(1)}bn`:`£${v}m`; }
+function confBadge(c){ return c==='VER'?'<span class="conf-badge b-v">VER</span>':'<span class="conf-badge b-e">EST</span>'; }
+
+function applyFilters(){
+  const type=document.getElementById('f-type').value;
+  const region=document.getElementById('f-region').value;
+  const year=document.getElementById('f-year').value;
+  const min=parseFloat(document.getElementById('f-min').value)||0;
+  const search=document.getElementById('f-search').value.toLowerCase();
+  let data=DB.filter(r=>{
+    if(type&&r.type!==type)return false;
+    if(region&&r.region!==region)return false;
+    if(year&&getDecade(r.year)!==year)return false;
+    if(min&&r.loss<min)return false;
+    if(search&&!(r.name.toLowerCase().includes(search)||r.desc.toLowerCase().includes(search)))return false;
+    return true;
+  });
+  sorted=[...data];
+  doSort();
+}
+function doSort(){
+  sorted.sort((a,b)=>{
+    let va,vb;
+    if(sortCol===0){va=a.year;vb=b.year;}
+    else if(sortCol===1){va=a.name;vb=b.name;}
+    else if(sortCol===5){va=a.loss;vb=b.loss;}
+    else{va=a.type;vb=b.type;}
+    if(va<vb)return sortAsc?-1:1;
+    if(va>vb)return sortAsc?1:-1;
+    return 0;
+  });
+  render();
+}
+function sortTable(col){
+  if(sortCol===col)sortAsc=!sortAsc;
+  else{sortCol=col;sortAsc=true;}
+  doSort();
+}
+function render(){
+  const tbody=document.getElementById('db-body');
+  tbody.innerHTML='';
+  sorted.forEach(r=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="year-cell">${r.year}</td><td class="name-cell">${r.name}</td><td>${typeTag(r.type)}</td><td style="font-size:0.8rem;color:var(--muted)">${r.region}</td><td class="desc-cell">${r.desc}</td><td class="loss-cell">${fmtLoss(r.loss)}</td><td>${confBadge(r.conf)}</td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('result-count').textContent=sorted.length+' events shown';
+}
+function resetFilters(){
+  ['f-type','f-region','f-year','f-min'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-search').value='';
+  sorted=[...DB];sortCol=0;sortAsc=false;render();
+}
+['f-type','f-region','f-year','f-min'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+document.getElementById('f-search').addEventListener('input',applyFilters);
+render();
+</script>
+</body>
+</html>

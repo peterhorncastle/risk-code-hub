@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Household Property Insurance – Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--house:#2d6a2d;--house-dark:#1a4a1a;--house-light:#e8f5e3;--accent:#c8a84b;--brick:#8b3a2a;--flood:#1565c0;--slate:#5a6e7a;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0;--green:#2a7a3a;--red:#8b1a1a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#2d6a2d 55%,#1a4a1a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d4b8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8d4b8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:14px; margin:28px 0 36px; }
+    .stat-box { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; text-align:center; }
+    .stat-box .num { font-size:1.55rem; font-weight:800; color:var(--house); }
+    .stat-box .label { font-size:0.74rem; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+    .code-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.88rem; }
+    .code-table th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .code-table td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .code-table tr:nth-child(even) td { background:#f8fafc; }
+    .code-pill { display:inline-block; background:var(--house); color:#fff; font-size:0.72rem; font-weight:700; padding:3px 8px; border-radius:4px; letter-spacing:1px; }
+    .code-pill.brick { background:var(--brick); }
+    .code-pill.flood { background:var(--flood); }
+
+    .coverage-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; margin:22px 0 36px; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-top:4px solid var(--house); }
+    .cov-card.bldg { border-top-color:var(--house); }
+    .cov-card.cont { border-top-color:var(--accent); }
+    .cov-card.hnw { border-top-color:var(--brick); }
+    .cov-card.flood { border-top-color:var(--flood); }
+    .cov-card.legal { border-top-color:var(--slate); }
+    .cov-card.nonst { border-top-color:var(--red); }
+    .cov-card h4 { font-size:0.92rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .cov-card p { font-size:0.82rem; color:var(--muted); margin:0; line-height:1.5; }
+
+    .floodre-box { background:var(--flood); color:#fff; border-radius:10px; padding:28px 32px; margin:28px 0; }
+    .floodre-box h3 { font-size:1.05rem; margin-bottom:12px; color:#e8f0f8; }
+    .floodre-box p { color:#ccddf0; font-size:0.88rem; line-height:1.7; margin-bottom:8px; }
+    .floodre-box p:last-child { margin:0; }
+
+    .market-box { background:var(--house-light); border:2px solid var(--house); border-radius:10px; padding:24px 28px; margin:24px 0; }
+    .market-box h4 { color:var(--house-dark); font-size:0.95rem; margin-bottom:10px; }
+    .market-box p { font-size:0.88rem; color:var(--text); margin-bottom:8px; line-height:1.6; }
+    .market-box p:last-child { margin:0; }
+
+    .module-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; margin:24px 0; }
+    .mod-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; cursor:pointer; transition:all 0.2s; text-decoration:none; color:inherit; display:block; }
+    .mod-card:hover { border-color:var(--house); box-shadow:0 3px 12px rgba(45,106,45,0.12); }
+    .mod-card .mod-num { font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--house); margin-bottom:6px; }
+    .mod-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:4px; }
+    .mod-card p { font-size:0.79rem; color:var(--muted); margin:0; line-height:1.4; }
+
+    .badge { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 7px; border-radius:10px; letter-spacing:0.5px; margin-left:4px; }
+    .b-verified { background:#e6f4ea; color:#1a5c28; }
+    .b-estimate { background:#fef3e2; color:#7a4500; }
+
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › UK Household Property</div>
+  <div class="tag">Lloyd's Risk Code HP</div>
+  <h1>UK Household Property Insurance</h1>
+  <p>Buildings and contents insurance for UK residential properties — from standard homes through to high net worth (HNW) estates, listed buildings, non-standard construction, and flood-risk properties. One of the UK's largest personal lines markets and a specialist class within Lloyd's.</p>
+</header>
+
+<nav>
+  <a href="index.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+
+<main>
+  <div class="stats-row">
+    <div class="stat-box"><div class="num">~£14bn</div><div class="label">UK household insurance GWP est. 2024 <span class="badge b-estimate">EST</span></div></div>
+    <div class="stat-box"><div class="num">26m+</div><div class="label">UK residential dwellings <span class="badge b-verified">VER</span></div></div>
+    <div class="stat-box"><div class="num">5.2m</div><div class="label">Properties at flood risk in England <span class="badge b-verified">VER</span></div></div>
+    <div class="stat-box"><div class="num">£3bn+</div><div class="label">Summer 2007 floods — UK insured losses <span class="badge b-verified">VER</span></div></div>
+    <div class="stat-box"><div class="num">2016</div><div class="label">Flood Re scheme launched — flood cross-subsidy for high-risk homes <span class="badge b-verified">VER</span></div></div>
+    <div class="stat-box"><div class="num">Jan 2022</div><div class="label">FCA GIPP reform — end of loyalty pricing penalty <span class="badge b-verified">VER</span></div></div>
+  </div>
+
+  <h2>Lloyd's Risk Code</h2>
+  <table class="code-table">
+    <thead><tr><th>Code</th><th>Class</th><th>Scope</th><th>Lloyd's Market Role</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="code-pill">HP</span></td>
+        <td><strong>Household Property (UK)</strong></td>
+        <td>Buildings and contents insurance for UK residential properties. Covers standard and non-standard construction, all occupancy types, HNW homes, listed buildings, and flood-risk properties. Peril set: fire, storm, flood, subsidence, escape of water, theft, malicious damage, accidental damage (extension). Personal possessions all-risks extension available.</td>
+        <td>Lloyd's syndicates (principally Hiscox, Brit, Beazley) occupy the specialist and HNW segment. The mass-market (Aviva, Direct Line, LV=, Admiral) is outside Lloyd's. HP code at Lloyd's is predominantly: HNW (rebuild value £1m+), non-standard construction (listed, thatched, timber frame), flood zone properties, let and holiday homes, unoccupied properties.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Coverage Structure</h2>
+  <div class="coverage-grid">
+    <div class="cov-card bldg">
+      <h4>Buildings Insurance</h4>
+      <p>Physical damage to the structure, fixtures, and fittings. Reinstatement (rebuild) cost basis. Perils: FLEXA (Fire, Lightning, Explosion, Aircraft), storm, flood, subsidence/heave/landslip, escape of water, malicious damage, theft. Architects' and surveyors' fees, debris removal, temporary accommodation included.</p>
+    </div>
+    <div class="cov-card cont">
+      <h4>Contents Insurance</h4>
+      <p>Household goods, furniture, furnishings, clothing, electronics. New-for-old or indemnity basis. Same peril set as buildings. Single article limits apply. High-value items (jewellery, art, watches, tech) typically require specification above threshold. Accidental damage extension available.</p>
+    </div>
+    <div class="cov-card hnw">
+      <h4>High Net Worth (HNW)</h4>
+      <p>Blanket or scheduled cover for properties with high rebuild values and valuable contents. Agreed value basis for specified items — no average/under-insurance argument. Fine art, jewellery, wine collections, antiques. Personal possessions worldwide. Staff/domestic workers extension. Loss of rent. Alternative accommodation — no sublimit.</p>
+    </div>
+    <div class="cov-card flood">
+      <h4>Flood Risk Properties</h4>
+      <p>Properties in EA Flood Zone 2 or 3 (medium/high flood risk). Standard market may decline or price prohibitively — Flood Re or specialist Lloyd's cover required. Cover for flood damage to buildings and contents, temporary accommodation, alternative premises. Drying out costs. Section 6 Flood Re eligible risks: pre-2009 build, non-commercial.</p>
+    </div>
+    <div class="cov-card nonst">
+      <h4>Non-Standard Construction</h4>
+      <p>Listed buildings (Grade I, II*, II), thatched properties, timber frame, concrete-framed (Airey/Reema/Cornish houses), steel-framed. Standard market typically declines. Lloyd's specialist market provides cover with reinstatement conditions (like-for-like rebuild for listed). Higher rates reflect rebuilding cost uncertainty and specialist contractor requirements.</p>
+    </div>
+    <div class="cov-card legal">
+      <h4>Legal Expenses &amp; Home Emergency</h4>
+      <p>Commonly bundled with HP: legal expenses for property disputes, employment, personal injury (£50,000–£100,000 limit). Home emergency: boiler/heating failure, plumbing, pest infestation, lost keys (typically £500–£1,500 per call-out). These ancillary covers are significant premium contributors in the mass market.</p>
+    </div>
+  </div>
+
+  <h2>Flood Re — The UK's Flood Cross-Subsidy Scheme</h2>
+  <div class="floodre-box">
+    <h3>What Is Flood Re?</h3>
+    <p>Flood Re is a reinsurance scheme launched in April 2016, jointly established by the UK Government and insurance industry (ABI members). It allows insurers to cede the flood element of high-risk household policies to a central pool (Flood Re Ltd) at fixed ceded premiums based on council tax band — irrespective of actual flood risk. The scheme is cross-subsidised by a levy on all UK household insurers (~£180m per year).</p>
+    <p><strong>Eligibility:</strong> Standard household policies for properties built before 1 January 2009. Excludes: properties built post-2009 (moral hazard avoidance), commercial properties, leasehold flats where buildings are managed by freeholder, purpose-built blocks of flats.</p>
+    <p><strong>Impact on Lloyd's HP:</strong> Lloyd's syndicates writing HP may participate in Flood Re for eligible risks. The scheme has expanded the insurable market for flood-risk properties but creates a cliff-edge for post-2009 properties. <strong>Transition plan:</strong> Flood Re is designed to wind down by 2039, with premiums gradually rising to reflect actual risk — intended to incentivise property-level flood resilience over the 20-year period.</p>
+  </div>
+
+  <h2>Lloyd's Market Position — Who Writes HP?</h2>
+  <div class="market-box">
+    <h4>The Two-Tier UK Household Market</h4>
+    <p><strong>Mass market (outside Lloyd's):</strong> Aviva (~17% market share), Direct Line Group (Churchill, Green Flag, Privilege, ~15%), LV=, Zurich, AXA, Admiral, NFU Mutual, Ageas. Price-comparison (PCW) dominated. Vanilla risks, standard construction, high-volume low-premium business. FCA GIPP reform (Jan 2022) heavily impacted this segment by eliminating loyalty pricing differentials.</p>
+    <p><strong>Specialist / Lloyd's market:</strong> Hiscox (market leader — HNW and non-standard), Brit, Beazley, MAPFRE, and several specialist MGA/coverholder operations. Focus: rebuild values £500k+, HNW contents, listed buildings, flood zone 3, let properties, unoccupied properties, holiday homes. Typically placed through specialist brokers (Aon Private Client, Marsh Private Client, Howden, Schroders Personal Wealth).</p>
+    <p><strong>Lloyd's HP GWP:</strong> Not published separately. Estimated at £200m–£400m within Lloyd's total property account. <span class="badge b-estimate">EST</span> — based on Hiscox UK household reported revenues and Lloyd's Syndicate Business Forecasts.</p>
+  </div>
+
+  <h2>Hub Modules</h2>
+  <div class="module-cards">
+    <a class="mod-card" href="history.html"><div class="mod-num">Module 01</div><h4>History &amp; Origins</h4><p>Fire insurance after 1666, mutual societies, nationalisation debate, mass-market expansion, subsidence crisis, Flood Re</p></a>
+    <a class="mod-card" href="timeline.html"><div class="mod-num">Module 02</div><h4>Major Events Timeline</h4><p>1987 Great Storm to 2024 — UK storms, floods, subsidence events and regulatory milestones</p></a>
+    <a class="mod-card" href="database.html"><div class="mod-num">Module 03</div><h4>Claims Database</h4><p>35 major UK household loss events — filter by peril, region, and year</p></a>
+    <a class="mod-card" href="underwriting.html"><div class="mod-num">Module 04</div><h4>Underwriting Methodology</h4><p>Buildings/contents rating, HNW approach, non-standard construction, Flood Re, Lloyd's HP positioning</p></a>
+    <a class="mod-card" href="rates-analysis.html"><div class="mod-num">Module 05</div><h4>Rates &amp; ROE Analysis</h4><p>UK household pricing cycle 2000–2026, FCA GIPP impact, combined ratios, ROE scenarios</p></a>
+    <a class="mod-card" href="risk-mitigation.html"><div class="mod-num">Module 06</div><h4>Risk Mitigation</h4><p>Flood resilience, subsidence management, security standards, non-standard construction controls, net zero retrofit risks</p></a>
+    <a class="mod-card" href="global-program.html"><div class="mod-num">Module 07</div><h4>Programme Structuring</h4><p>HNW multi-property programmes, landlord portfolios, overseas second homes, captive structures</p></a>
+    <a class="mod-card" href="references.html"><div class="mod-num">Sources</div><h4>References &amp; Citations</h4><p>Source list, confidence levels, data gaps disclosed</p></a>
+  </div>
+</main>
+<footer>Risk Code Hub · UK Household Property (HP) · v2.0 — April 2026</footer>
+</body>
+</html>

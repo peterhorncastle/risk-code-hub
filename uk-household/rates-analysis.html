@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Household – Rates &amp; ROE | Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root { --navy:#0d2240;--house:#2d6a2d;--house-dark:#1a4a1a;--house-light:#e8f5e3;--accent:#c8a84b;--brick:#8b3a2a;--flood:#1565c0;--flood-light:#e3eeff;--slate:#5a6e7a;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#2d6a2d 55%,#1a4a1a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d4b8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8d4b8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .chart-wrap { background:#fff; border:1px solid var(--border); border-radius:12px; padding:28px; margin:24px 0; }
+    .chart-wrap h3 { font-size:1rem; color:var(--navy); margin-bottom:4px; }
+    .chart-wrap .chart-sub { font-size:0.82rem; color:var(--muted); margin-bottom:18px; }
+    .chart-wrap canvas { max-height:340px; }
+
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.87rem; background:#fff; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+    th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.82rem; }
+    td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tr:last-child td { border-bottom:none; }
+    tr:nth-child(even) td { background:#f8fafc; }
+    td strong { color:var(--navy); }
+
+    .cycle-block { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 22px; margin:12px 0; border-left:5px solid var(--house); }
+    .cycle-block.hard { border-left-color:var(--brick); }
+    .cycle-block.soft { border-left-color:var(--flood); }
+    .cycle-block.reform { border-left-color:var(--accent); }
+    .cycle-block .cy-date { font-size:0.75rem; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--house); margin-bottom:6px; }
+    .cycle-block.hard .cy-date { color:var(--brick); }
+    .cycle-block.soft .cy-date { color:var(--flood); }
+    .cycle-block.reform .cy-date { color:#7a5200; }
+    .cycle-block h4 { font-size:0.95rem; color:var(--navy); margin-bottom:6px; }
+    .cycle-block p { font-size:0.87rem; margin:0; }
+
+    .roe-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin:20px 0; }
+    .roe-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; text-align:center; }
+    .roe-card.bull { border-top:4px solid #2d6a2d; }
+    .roe-card.base { border-top:4px solid #c8a84b; }
+    .roe-card.bear { border-top:4px solid #8b3a2a; }
+    .roe-card .roe-label { font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+    .roe-card .roe-val { font-size:2rem; font-weight:800; margin:8px 0; }
+    .roe-card.bull .roe-val { color:#2d6a2d; }
+    .roe-card.base .roe-val { color:#7a5200; }
+    .roe-card.bear .roe-val { color:#8b3a2a; }
+    .roe-card .roe-cr { font-size:0.85rem; color:var(--muted); }
+
+    .badge { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 7px; border-radius:10px; letter-spacing:0.5px; margin-left:4px; vertical-align:middle; }
+    .b-verified { background:#e6f4ea; color:#1a5c28; }
+    .b-estimate { background:#fef3e2; color:#7a4500; }
+    .b-illustrative { background:#e3eeff; color:#1a3a7a; }
+
+    .gipp-box { background:#fef8e8; border:2px solid var(--accent); border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .gipp-box h3 { color:#7a5200; margin-bottom:10px; }
+    .gipp-box p, .gipp-box li { font-size:0.9rem; }
+    .gipp-box ul { padding-left:20px; margin:8px 0; }
+    .gipp-box li { margin-bottom:6px; line-height:1.6; }
+
+    @media(max-width:700px) { .roe-grid { grid-template-columns:1fr; } }
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">UK Household</a> › Rates &amp; ROE</div>
+  <div class="tag">Module 06 — Rates &amp; ROE Analysis</div>
+  <h1>UK Household Rates &amp; Return on Equity</h1>
+  <p>UK household insurance pricing cycle 2000–2026, the structural impact of FCA GIPP reform, combined ratio analysis, and ROE scenarios on a hypothetical £500m Lloyd's HP portfolio.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+<main>
+
+  <h2>1. UK Household Premium Rate Index — 2000–2026</h2>
+  <p>The chart below shows an estimated UK household buildings premium rate index (base 2000=100), illustrating the major pricing cycle phases driven by catastrophe events, soft-market competition, and regulatory intervention. <span class="badge b-estimate">EST</span> — constructed from ABI published market data, Swiss Re sigma reports, FCA market studies, and BCIS rebuild cost data. Exact rate levels are market estimates; directional accuracy is high.</p>
+
+  <div class="chart-wrap">
+    <h3>UK Household Buildings — Estimated Rate Index (2000=100)</h3>
+    <div class="chart-sub">Source: ABI, Swiss Re sigma estimates, FCA market data, BCIS. Indicative directional index — not an exact market series.</div>
+    <canvas id="rateChart"></canvas>
+  </div>
+
+  <h2>2. Pricing Cycle Phases</h2>
+
+  <div class="cycle-block hard">
+    <div class="cy-date">2000–2003 — Hard Market Entry</div>
+    <h4>Post-2000 Flood Events Drive Rate Increases</h4>
+    <p>The autumn 2000 UK floods (estimated £1bn insured loss) <span class="badge b-verified">VER</span> and subsequent winter storms in 2001–2002 prompted material premium increases. Competition remained but loss ratios had deteriorated after several soft years. The ABI's Statement of Principles (2002) on flood insurance was a direct response to growing insurer reluctance to offer flood cover in high-risk areas.</p>
+  </div>
+
+  <div class="cycle-block soft">
+    <div class="cy-date">2003–2007 — Softening &amp; PCW Growth</div>
+    <h4>Price Comparison Websites Compress Margins</h4>
+    <p>The rapid growth of PCWs (Confused.com 2002, Compare the Market / GoCompare 2006) <span class="badge b-verified">VER</span> intensified new business price competition. Average household insurance premiums fell in real terms as insurers competed on price leadership. Loyalty pricing (charging renewal customers above new business rate) emerged as a structural feature as insurers cross-subsidised acquisition. Frequency claims (escape of water, theft) were managed down through policy wordings and excess increases.</p>
+  </div>
+
+  <div class="cycle-block hard">
+    <div class="cy-date">2007–2009 — Summer 2007 Floods Reset</div>
+    <h4>£3bn Event Triggers Structural Repricing</h4>
+    <p>The summer 2007 UK floods — 55,000 homes flooded, approximately £3bn insured loss <span class="badge b-verified">VER</span> — produced the most significant UK household rate increase of the modern era. Flood Zone 2 and 3 properties saw disproportionate premium increases. Reinsurance costs increased. Several composite insurers re-examined their flood aggregation and began withdrawing new business from high-risk postcodes.</p>
+  </div>
+
+  <div class="cycle-block soft">
+    <div class="cy-date">2009–2014 — Benign Loss Period, Soft Market</div>
+    <h4>No Major Cat Events; Continued Margin Pressure</h4>
+    <p>A relatively benign loss period for UK household allowed pricing to soften. PCW distribution continued to expand share. Loyalty pricing gap widened — long-standing customers cross-subsidised competitive new business pricing. The ABI estimated the average renewal premium was £75–£100 above equivalent new business pricing by 2014 for home insurance. <span class="badge b-estimate">EST</span> FCA (successor to FSA, created 2013) began market surveillance of pricing practices.</p>
+  </div>
+
+  <div class="cycle-block hard">
+    <div class="cy-date">2014–2016 — Winter Floods 2013–14 &amp; Flood Re Launch</div>
+    <h4>Flood Re Changes Market Structure</h4>
+    <p>Storms St Jude, Xaver, and the Somerset Levels inundation (winter 2013–14) produced approximately £1.1bn in insured losses. <span class="badge b-verified">VER</span> The launch of Flood Re in April 2016 changed the market structure fundamentally for flood risk: the cost of ceding flood risk to Flood Re (fixed premium by council tax band) became a floor, removing incentive for competitive flood underpricing in Zone 2/3 properties.</p>
+  </div>
+
+  <div class="cycle-block reform">
+    <div class="cy-date">2019–2022 — FCA GIPP Intervention</div>
+    <h4>Loyalty Pricing Outlawed: Structural Market Reset</h4>
+    <p>FCA PS21/5 (May 2021), effective 1 January 2022, banned renewal premiums exceeding equivalent new business pricing. <span class="badge b-verified">VER</span> The structural impact was significant: insurers could no longer subsidise new business acquisition costs with loyalty penalty income. New business prices increased; renewal prices for loyal customers decreased or held flat. Pricing algorithms were restructured across the market. Some insurers withdrew from PCW channels.</p>
+  </div>
+
+  <div class="cycle-block hard">
+    <div class="cy-date">2022–2026 — Inflation Shock &amp; Continued Hardening</div>
+    <h4>BCIS Rebuild Cost Inflation Drives Premium Rises</h4>
+    <p>Post-COVID building cost inflation saw the BCIS Rebuilding Cost Index rise approximately 28% between 2021 and 2023. <span class="badge b-verified">VER</span> Automatically, adequate sum-insured levels required significant increases. Insurers faced a double hit: rising rebuild costs increased claims costs on losses; and under-insured properties (estimated 80% of UK stock <span class="badge b-estimate">EST</span>) meant average clause issues. Storm Eunice (February 2022, ~£400m) and a cluster of North Sea storms in 2023–2024 maintained elevated loss ratios. UK household insurance premiums were rising at double-digit rates annually in 2022–2024.</p>
+  </div>
+
+  <h2>3. FCA GIPP Reform — Structural Impact Analysis</h2>
+
+  <div class="gipp-box">
+    <h3>🏛️ FCA PS21/5 — The Loyalty Pricing Ban (January 2022)</h3>
+    <p>The FCA's General Insurance Pricing Practices (GIPP) market study found that 6 million home and motor insurance customers were paying an aggregate loyalty penalty of over £1.2bn per year. <span class="badge b-verified">VER</span> (Source: FCA PS21/5, May 2021.) The key findings for household insurance specifically:</p>
+    <ul>
+      <li>Home insurance: approximately 3 million customers paying an average £70/year loyalty penalty <span class="badge b-verified">VER</span></li>
+      <li>Loyal customers of 5+ years were paying approximately 70% more than new customers at the same insurer for equivalent cover <span class="badge b-estimate">EST</span></li>
+      <li>The loyalty pricing structure cross-subsidised customer acquisition: PCW new business rates were loss-making, recovered from loyalty pricing on retained book</li>
+      <li>Pricing algorithms incorporated "price optimisation" — customers identified as less price-sensitive (older, rural, less digitally engaged) were charged more <span class="badge b-verified">VER</span></li>
+    </ul>
+    <p style="margin-top:12px;"><strong>Post-January 2022 structural changes:</strong></p>
+    <ul>
+      <li>New business rates increased (subsidy removed) — PCW shoppers saw headline prices rise</li>
+      <li>Renewal prices for loyal customers fell or held flat — genuine repricing to risk cost</li>
+      <li>Combined ratios increased in 2022–23 as market adjusted (underwriting cycle reset)</li>
+      <li>Some insurers exited PCW aggregator channels to protect margin</li>
+      <li>Auto-renewal cancellation made simpler — churn rates increased slightly</li>
+    </ul>
+  </div>
+
+  <h2>4. Combined Ratio Analysis — UK Household Market</h2>
+  <p>The combined ratio chart below shows estimated UK household market combined ratios for 2010–2026. A combined ratio below 100% represents an underwriting profit; above 100% is an underwriting loss. <span class="badge b-estimate">EST</span> — constructed from ABI published market data, Lloyd's market results, and Swiss Re sigma UK P&C estimates.</p>
+
+  <div class="chart-wrap">
+    <h3>UK Household — Estimated Combined Ratio (%) 2010–2026</h3>
+    <div class="chart-sub">100% = breakeven. Source: ABI, Swiss Re sigma, Lloyd's Market Results (estimates). Directional accuracy high; exact values are market estimates.</div>
+    <canvas id="crChart"></canvas>
+  </div>
+
+  <table>
+    <thead><tr><th>Year</th><th>Key Event</th><th>Est. Loss Ratio</th><th>Est. Expense Ratio</th><th>Est. Combined Ratio</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>2010</td><td>Winter freeze claims spike</td><td>71%</td><td>29%</td><td>100%</td><td>Cold snap burst pipe surge</td></tr>
+      <tr><td>2011</td><td>Relatively benign year</td><td>63%</td><td>29%</td><td>92%</td><td>Profitable underwriting year</td></tr>
+      <tr><td>2012</td><td>Spring/summer flooding</td><td>68%</td><td>29%</td><td>97%</td><td>April–July sequential flood events</td></tr>
+      <tr><td>2013</td><td>Winter storms St Jude/Xaver</td><td>72%</td><td>28%</td><td>100%</td><td>December coastal/fluvial flood</td></tr>
+      <tr><td>2014</td><td>Somerset Levels, Thames Valley</td><td>74%</td><td>28%</td><td>102%</td><td>Marginal underwriting loss</td></tr>
+      <tr><td>2015</td><td>Storms Desmond/Eva/Frank</td><td>76%</td><td>27%</td><td>103%</td><td>December floods; Carlisle/Cumbria</td></tr>
+      <tr><td>2016</td><td>Flood Re launch; benign year</td><td>60%</td><td>27%</td><td>87%</td><td>Best underwriting year of decade</td></tr>
+      <tr><td>2017</td><td>Benign UK year</td><td>62%</td><td>27%</td><td>89%</td><td>Low domestic cat activity</td></tr>
+      <tr><td>2018</td><td>Beast from the East (freeze claims)</td><td>68%</td><td>27%</td><td>95%</td><td>February freeze; escape of water surge</td></tr>
+      <tr><td>2019</td><td>Benign; FCA market study announced</td><td>64%</td><td>28%</td><td>92%</td><td>FCA GIPP study begins</td></tr>
+      <tr><td>2020</td><td>Storms Ciara/Dennis; COVID</td><td>70%</td><td>29%</td><td>99%</td><td>February storms; COVID legal disputes</td></tr>
+      <tr><td>2021</td><td>Inflation begins; FCA PS21/5 issued</td><td>66%</td><td>29%</td><td>95%</td><td>Benign weather; cost inflation emerging</td></tr>
+      <tr><td>2022</td><td>Storm Eunice; BCIS inflation; GIPP live</td><td>78%</td><td>30%</td><td>108%</td><td>Building cost surge + Storm Eunice</td></tr>
+      <tr><td>2023</td><td>Babet, Ciaran; subsidence; inflation</td><td>80%</td><td>30%</td><td>110%</td><td>Double-digit premium rises begin</td></tr>
+      <tr><td>2024</td><td>Persistent storm season; inflation peak</td><td>74%</td><td>29%</td><td>103%</td><td>Rebuild cost inflation plateauing</td></tr>
+      <tr><td>2025–26E</td><td>Rate hardening improves ratios</td><td>70%</td><td>28%</td><td>98%</td><td>Forecast return towards breakeven <span class="badge b-estimate">EST</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. UK Household Sector Rate Grid</h2>
+  <table>
+    <thead><tr><th>Segment</th><th>Typical Buildings Rate (£/£1k SI)</th><th>Loss Ratio Profile</th><th>Market</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Standard owner-occupied, low risk</strong></td><td>£0.90 – £1.40</td><td>60–70% (benign years), 80–90% (loss years)</td><td>Mass market + Lloyd's</td></tr>
+      <tr><td><strong>HNW rural (listed, non-standard)</strong></td><td>£1.40 – £3.50 (loaded)</td><td>65–75%; higher severity, lower frequency</td><td>Lloyd's specialist</td></tr>
+      <tr><td><strong>Flood Zone 2 (via Flood Re)</strong></td><td>£1.20 – £2.00 + fixed Flood Re cession</td><td>Variable; flood element ceded to Flood Re</td><td>Standard + Lloyd's</td></tr>
+      <tr><td><strong>Flood Zone 3 (post-2009, no Flood Re)</strong></td><td>£2.50 – £8.00+ or declined</td><td>Very high; actuarial flood pricing</td><td>Lloyd's specialist/surplus lines</td></tr>
+      <tr><td><strong>Buy-to-let / HMO portfolio</strong></td><td>£1.20 – £2.50 (loaded for occupancy)</td><td>70–80% (higher escape-of-water/theft frequency)</td><td>Specialist landlord market</td></tr>
+      <tr><td><strong>Unoccupied property</strong></td><td>£3.00 – £8.00 (heavily loaded)</td><td>Very high frequency; arson, escape of water</td><td>Specialist only</td></tr>
+      <tr><td><strong>Thatched / non-standard construction</strong></td><td>£2.50 – £6.00 (specialist policy)</td><td>High fire frequency; high severity; low volume</td><td>Lloyd's / specialist</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.85rem;color:var(--muted);">All rates are indicative market estimates. <span class="badge b-estimate">EST</span> Actual rates vary by postcode, claims history, and individual risk factors. Source: specialist broker market guidance, ABI published data, estimated from public insurer filings.</p>
+
+  <h2>6. ROE Scenarios — Hypothetical £500m GWP Lloyd's HP Portfolio</h2>
+  <p>The following scenarios illustrate return on equity (ROE) for a hypothetical £500m GWP Lloyd's-market UK household (HP) portfolio under three combined ratio assumptions, using standard Lloyd's capital model parameters. <span class="badge b-illustrative">ILLUS</span></p>
+
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="roe-label">Bull — Benign Loss Year</div>
+      <div class="roe-val">+14.2%</div>
+      <div class="roe-cr">Combined Ratio: 88%</div>
+    </div>
+    <div class="roe-card base">
+      <div class="roe-label">Base — Average Loss Year</div>
+      <div class="roe-val">+5.8%</div>
+      <div class="roe-cr">Combined Ratio: 99%</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="roe-label">Bear — Cat Loss Year</div>
+      <div class="roe-val">−12.4%</div>
+      <div class="roe-cr">Combined Ratio: 118%</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Bull (88% CR)</th>
+        <th>Base (99% CR)</th>
+        <th>Bear (118% CR)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Gross Written Premium</td><td>£500m</td><td>£500m</td><td>£500m</td></tr>
+      <tr><td>Net Earned Premium (after reinsurance)</td><td>£425m</td><td>£425m</td><td>£425m</td></tr>
+      <tr><td>Underwriting Profit / (Loss)</td><td><strong style="color:#2d6a2d;">+£51m</strong></td><td><strong style="color:#7a5200;">+£4m</strong></td><td><strong style="color:#8b3a2a;">−£77m</strong></td></tr>
+      <tr><td>Investment Income (2.5% on reserves)</td><td>£18m</td><td>£18m</td><td>£18m</td></tr>
+      <tr><td>Pre-tax Profit / (Loss)</td><td>£69m</td><td>£22m</td><td>−£59m</td></tr>
+      <tr><td>Allocated Capital (50% of GWP)</td><td>£250m</td><td>£250m</td><td>£250m</td></tr>
+      <tr><td><strong>Return on Equity</strong></td><td><strong style="color:#2d6a2d;">+27.6%</strong></td><td><strong style="color:#7a5200;">+8.8%</strong></td><td><strong style="color:#8b3a2a;">−23.6%</strong></td></tr>
+      <tr><td>Reinsurance Cost (Flood Re cession + XL)</td><td>£75m (est.)</td><td>£75m (est.)</td><td>£75m (est.)</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.85rem;color:var(--muted);">All figures are illustrative. Capital allocation assumes 50% of GWP as per approximate Lloyd's Syndicate Business Forecasting norms for property classes. Reinsurance structure includes Flood Re cessions and XL programme. Investment income at 2.5% assumed on average float. <span class="badge b-illustrative">ILLUS</span></p>
+
+  <div class="chart-wrap">
+    <h3>UK Household — Estimated Combined Ratio by Year (2010–2026E)</h3>
+    <div class="chart-sub">Red bars = underwriting loss (&gt;100%). Green bars = underwriting profit. Breakeven = 100%.</div>
+    <canvas id="crBarChart"></canvas>
+  </div>
+
+</main>
+<footer>Risk Code Hub · UK Household Property (HP) · Module 06: Rates &amp; ROE · v2.0 — April 2026</footer>
+
+<script>
+// Rate Index Chart
+const rateCtx = document.getElementById('rateChart').getContext('2d');
+const years = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+const rateIndex = [100,104,112,118,115,112,108,122,130,126,121,116,113,114,118,120,104,102,105,108,111,115,134,148,152,148,145];
+
+new Chart(rateCtx, {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [{
+      label: 'UK Household Buildings Rate Index (2000=100)',
+      data: rateIndex,
+      borderColor: '#2d6a2d',
+      backgroundColor: 'rgba(45,106,45,0.10)',
+      borderWidth: 2.5,
+      pointRadius: 3,
+      fill: true,
+      tension: 0.35
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top', labels: { font: { size: 12 } } },
+      annotation: {}
+    },
+    scales: {
+      x: { title: { display: true, text: 'Year', font: { size: 12 } } },
+      y: {
+        title: { display: true, text: 'Rate Index (2000=100)', font: { size: 12 } },
+        min: 80, max: 170,
+        grid: { color: '#e8eef4' }
+      }
+    }
+  }
+});
+
+// Combined Ratio Bar Chart
+const crCtx = document.getElementById('crBarChart').getContext('2d');
+const crYears = [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,'2025-26E'];
+const crData  = [100,92,97,100,102,103,87,89,95,92,99,95,108,110,103,98];
+const crColors = crData.map(v => v >= 100 ? 'rgba(139,58,42,0.75)' : 'rgba(45,106,45,0.75)');
+const crBorders = crData.map(v => v >= 100 ? '#8b3a2a' : '#2d6a2d');
+
+new Chart(crCtx, {
+  type: 'bar',
+  data: {
+    labels: crYears,
+    datasets: [{
+      label: 'Combined Ratio (%)',
+      data: crData,
+      backgroundColor: crColors,
+      borderColor: crBorders,
+      borderWidth: 1.5
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => `Combined Ratio: ${ctx.parsed.y}%`
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Year', font: { size: 12 } } },
+      y: {
+        title: { display: true, text: 'Combined Ratio (%)', font: { size: 12 } },
+        min: 80, max: 120,
+        grid: { color: '#e8eef4' },
+        ticks: {
+          callback: v => v + '%'
+        }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

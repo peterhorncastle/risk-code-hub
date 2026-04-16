@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Household – Underwriting | Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--house:#2d6a2d;--house-dark:#1a4a1a;--house-light:#e8f5e3;--accent:#c8a84b;--brick:#8b3a2a;--flood:#1565c0;--flood-light:#e3eeff;--slate:#5a6e7a;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#2d6a2d 55%,#1a4a1a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d4b8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8d4b8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--house-dark); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    /* Factor cards */
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:20px 0; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--house); }
+    .factor-card.flood-card { border-top-color:var(--flood); }
+    .factor-card.hnw-card { border-top-color:var(--accent); }
+    .factor-card.subsid-card { border-top-color:var(--brick); }
+    .factor-card h4 { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:8px; }
+    .factor-card p { font-size:0.85rem; margin:0; color:var(--muted); line-height:1.6; }
+    .factor-card .range { font-size:0.9rem; font-weight:800; color:var(--house-dark); margin-top:8px; }
+    .factor-card.flood-card .range { color:var(--flood); }
+    .factor-card.hnw-card .range { color:#7a5200; }
+    .factor-card.subsid-card .range { color:var(--brick); }
+
+    /* Tables */
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.87rem; background:#fff; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+    th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.82rem; letter-spacing:0.3px; }
+    td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tr:last-child td { border-bottom:none; }
+    tr:nth-child(even) td { background:#f8fafc; }
+    td strong { color:var(--navy); }
+
+    /* Formula box */
+    .formula-box { background:var(--navy); color:#e8f0fa; border-radius:10px; padding:22px 28px; margin:20px 0; font-family:monospace; font-size:0.9rem; line-height:2; }
+    .formula-box .formula-title { font-family:'Segoe UI',Arial,sans-serif; font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:10px; font-weight:700; }
+    .formula-box span.var { color:#a8d8a8; }
+    .formula-box span.note { font-family:'Segoe UI',Arial,sans-serif; font-size:0.78rem; color:#8899aa; font-style:italic; }
+
+    /* Flood Re box */
+    .flood-box { background:var(--flood-light); border:2px solid var(--flood); border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .flood-box h3 { color:var(--flood); margin-top:0; }
+    .flood-box p, .flood-box li { font-size:0.9rem; color:#1a2a4a; }
+    .flood-box ul { padding-left:20px; margin:10px 0; }
+    .flood-box li { margin-bottom:6px; line-height:1.6; }
+
+    /* Warning box */
+    .warn-box { background:#fff8e1; border:2px solid #f59e0b; border-radius:12px; padding:22px 26px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; font-size:0.95rem; margin-bottom:8px; }
+    .warn-box p { font-size:0.87rem; margin:0; color:#5a3500; }
+
+    /* Scoring matrix */
+    .matrix { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.82rem; }
+    .matrix th { background:var(--navy); color:#fff; padding:8px 12px; text-align:center; }
+    .matrix th:first-child { text-align:left; }
+    .matrix td { padding:8px 12px; border:1px solid var(--border); text-align:center; }
+    .matrix td:first-child { font-weight:600; color:var(--navy); text-align:left; background:#f8fafc; }
+    .green { background:#e6f4ea; color:#1a5c28; font-weight:700; font-size:0.78rem; }
+    .amber { background:#fef3e2; color:#7a4500; font-weight:700; font-size:0.78rem; }
+    .red { background:#fde8e8; color:#8b0000; font-weight:700; font-size:0.78rem; }
+
+    /* Worked examples */
+    .example-box { background:#fff; border:2px solid var(--house); border-radius:12px; padding:28px 32px; margin:24px 0; }
+    .example-box.hnw { border-color:var(--accent); }
+    .example-box h3 { color:var(--house-dark); margin-top:0; font-size:1.05rem; }
+    .example-box.hnw h3 { color:#7a5200; }
+    .example-box .scenario { background:var(--house-light); border-radius:8px; padding:14px 18px; margin:14px 0; font-size:0.88rem; line-height:1.7; }
+    .example-box.hnw .scenario { background:#fef8e8; }
+    .example-box table { margin:12px 0; }
+    .example-box .total-row td { background:#e8f5e3; font-weight:700; color:var(--house-dark); }
+    .example-box.hnw .total-row td { background:#fef3e2; color:#7a5200; }
+    .example-box .premium-out { font-size:1.1rem; font-weight:800; color:var(--house-dark); margin-top:14px; padding:12px 16px; background:var(--house-light); border-radius:8px; }
+    .example-box.hnw .premium-out { color:#7a5200; background:#fef8e8; }
+
+    /* Badges */
+    .badge { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 7px; border-radius:10px; letter-spacing:0.5px; margin-left:4px; vertical-align:middle; }
+    .b-verified { background:#e6f4ea; color:#1a5c28; }
+    .b-estimate { background:#fef3e2; color:#7a4500; }
+    .b-illustrative { background:#e3eeff; color:#1a3a7a; }
+
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">UK Household</a> › Underwriting</div>
+  <div class="tag">Module 05 — Underwriting</div>
+  <h1>UK Household Underwriting Methodology</h1>
+  <p>Rating methodology for Lloyd's HP business: BCIS rebuild cost basis, flood zone and subsidence loadings, HNW agreed value and blanket cover, Flood Re interaction, and non-standard construction factors — with worked examples.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+<main>
+
+  <h2>1. Buildings Rating — Core Methodology</h2>
+  <p>UK household buildings rating at Lloyd's is driven primarily by rebuild cost (not market value), location-specific peril loadings, and construction type. The BCIS (Building Cost Information Service) Rebuild Cost database is the industry standard for estimating the cost of reinstating a property to the same specification. <span class="badge b-verified">VER</span> Sum insured should reflect full rebuild cost inclusive of demolition, professional fees (typically 10–15% uplift), and VAT.</p>
+
+  <div class="formula-box">
+    <div class="formula-title">Buildings Premium Formula</div>
+    <span class="var">Annual Premium</span> = <span class="var">Rebuild Cost (£)</span> × <span class="var">Base Rate (per £1,000)</span> × <span class="var">Flood Loading Factor</span> × <span class="var">Subsidence Loading Factor</span> × <span class="var">Construction Factor</span> × <span class="var">Occupancy Factor</span><br>
+    <span class="note">+ Fixed Perils Add-ons (accidental damage, legal expenses) if included</span>
+  </div>
+
+  <div class="card-grid">
+    <div class="factor-card">
+      <h4>Base Rate (Standard Construction)</h4>
+      <p>Masonry/brick detached house, low-risk postcode, owner-occupied. Base rate drives standard-risk pricing before any loadings.</p>
+      <div class="range">£0.90 – £1.40 per £1,000 SI <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card">
+      <h4>Occupancy Factor</h4>
+      <p>Owner-occupied is base 1.0. Let property (buy-to-let/HMO) typically loads 20–40%. Holiday let or short-term furnished holiday letting (FHL) loads 30–60%. Unoccupied >30 days loads 50–200% depending on duration.</p>
+      <div class="range">Factor: 1.0 – 3.0 <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card flood-card">
+      <h4>EA Flood Zone Loading — Zone 2</h4>
+      <p>Environment Agency Flood Zone 2 (medium probability flood plain, 1-in-100 to 1-in-1,000 year return). Material loading applied. Flood Re eligibility assessed.</p>
+      <div class="range">Loading: +25% – +60% <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card flood-card">
+      <h4>EA Flood Zone Loading — Zone 3</h4>
+      <p>Environment Agency Flood Zone 3 (high probability, &gt;1% annual chance fluvial flood or &gt;0.5% tidal). Significant loading or referral to Flood Re. Zone 3b functional floodplain may be uninsurable in standard market.</p>
+      <div class="range">Loading: +60% – +200%+ <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card subsid-card">
+      <h4>Subsidence Loading — High Shrink-Swell</h4>
+      <p>BGS National Shrink-Swell Susceptibility Dataset Zones H3/H4 (high/very high). Covers central/south London, Essex, Kent, East Anglia. Loading applied to buildings premium only.</p>
+      <div class="range">Loading: +15% – +50% <span class="badge b-estimate">EST</span></div>
+    </div>
+    <div class="factor-card subsid-card">
+      <h4>Tree Proximity Factor</h4>
+      <p>High-water-demand trees (oak, willow, poplar, elm) within 5m of foundations in a high shrink-swell zone are a material underwriting consideration. Survey may be required. Some risks declined in standard market.</p>
+      <div class="range">Surcharge: +10% – +30% <span class="badge b-estimate">EST</span></div>
+    </div>
+  </div>
+
+  <h2>2. Construction &amp; Non-Standard Factors</h2>
+  <p>Non-standard construction is the primary driver of specialist Lloyd's household underwriting. Standard composite household policies typically restrict or exclude non-standard construction. <span class="badge b-verified">VER</span> Lloyd's HP underwriters assess rebuild cost and peril exposure individually for each construction type.</p>
+
+  <table>
+    <thead>
+      <tr><th>Construction Type</th><th>Key Exposure</th><th>Typical Loading vs Standard</th><th>Confidence</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Thatched Roof</strong></td><td>Fire (chimney sparks, electrical); rebuild cost 2–4× standard; specialist thatchers scarce</td><td>+80% – +200% fire premium; specialist policy required</td><td><span class="badge b-estimate">EST</span></td></tr>
+      <tr><td><strong>Listed Building (Grade I/II)</strong></td><td>Like-for-like reinstatement; specialist materials/craftsmen; Planning/conservation consent; BCIS rate not applicable — surveyor valuation required</td><td>Rebuild cost often 3–5× BCIS standard; rate broadly comparable but SI much higher</td><td><span class="badge b-estimate">EST</span></td></tr>
+      <tr><td><strong>Timber Frame</strong></td><td>Fire spread faster than masonry; moisture ingress/rot; structural warranty issues; some mortgage lenders restrict</td><td>+20% – +50% fire element</td><td><span class="badge b-estimate">EST</span></td></tr>
+      <tr><td><strong>Pre-cast Concrete (BISF, Airey, Reema)</strong></td><td>Designated Defective (Housing Defects Act 1984); mortgage finance restricted; demand surge in repair; poor thermal performance</td><td>Often declined in standard market; specialist rate +40% – +80%</td><td><span class="badge b-estimate">EST</span></td></tr>
+      <tr><td><strong>Steel Frame (BISF)</strong></td><td>Corrosion of steel frame; hard to assess without intrusive survey; mortgage lenders cautious</td><td>+30% – +60%</td><td><span class="badge b-estimate">EST</span></td></tr>
+      <tr><td><strong>Flat Roof (&gt;25% area)</strong></td><td>Water pooling, membrane degradation; higher escape-of-water frequency; short replacement cycle (15–25 years)</td><td>+15% – +35% buildings premium</td><td><span class="badge b-estimate">EST</span></td></tr>
+      <tr><td><strong>Converted Church/Barn</strong></td><td>Unusual construction; planning constraints; stained glass/architectural features; drainage</td><td>Individual survey required; +30% – +100% indicative</td><td><span class="badge b-estimate">EST</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Contents Rating</h2>
+  <p>Contents rating at Lloyd's specialist level moves beyond the standard bedroom-count thumb rules used by mass-market insurers. For HNW policies, contents sum insured is individually declared or blanket-assessed. Key rating factors:</p>
+
+  <table>
+    <thead>
+      <tr><th>Rating Factor</th><th>Detail</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Sum Insured Basis</strong></td><td>New-for-old (standard) vs indemnity (older/rental policies). New-for-old is market standard at Lloyd's for HNW; indemnity basis materially reduces premium but must be clearly disclosed.</td></tr>
+      <tr><td><strong>Single Article Limit</strong></td><td>Standard policies apply an unspecified single article limit (typically £1,500–£2,500). Items above this limit must be scheduled and specified. Jewellery, watches, fine art, and wine collections are major scheduling categories for HNW risks.</td></tr>
+      <tr><td><strong>High-Value Items</strong></td><td>Jewellery, watches, fine art, antiques, wine/spirits, musical instruments. Typically rated at 0.5%–2.0% of declared value per annum depending on storage (in-home vs vault) and security. Professional valuation certificates required for items &gt;£10,000–£25,000.</td></tr>
+      <tr><td><strong>Home Office / Business Equipment</strong></td><td>Post-COVID working-from-home has increased average laptop/equipment values in-situ. Many standard policies limit business equipment at home to £2,000–£5,000. Lloyd's policies may extend to full replacement value.</td></tr>
+      <tr><td><strong>All-Risks Extension (Away from Home)</strong></td><td>Extends contents cover to items temporarily removed from the home (clothing, jewellery, laptops while travelling). Rated at approximately 0.2%–0.5% of all-risks value per annum.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. HNW Methodology — Agreed Value &amp; Blanket Cover</h2>
+  <p>Lloyd's HNW household underwriting departs significantly from mass-market methodology. The core distinction is the move from sum-insured indemnity or new-for-old to <strong>agreed value</strong> and comprehensive blanket coverage — most prominently adopted by Hiscox, Chubb, and AIG Private Client Group. <span class="badge b-estimate">EST</span> — based on specialist carrier published product descriptions.</p>
+
+  <table>
+    <thead>
+      <tr><th>Feature</th><th>Standard Household</th><th>HNW / Lloyd's Approach</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Buildings SI Basis</strong></td><td>Owner-declared rebuild cost; under-insurance common</td><td>Surveyor-validated agreed value; insurer carries under-insurance risk</td></tr>
+      <tr><td><strong>Contents SI Basis</strong></td><td>Declared sum insured with single-article limits</td><td>Blanket contents sum (e.g. £500,000) covers all contents automatically; high-value items scheduled</td></tr>
+      <tr><td><strong>Fine Art &amp; Collectibles</strong></td><td>Excluded or very limited (e.g. £1,000 aggregate)</td><td>Full scheduling; agreed value; worldwide; fine art specialists (Axa Art, Chubb) involved</td></tr>
+      <tr><td><strong>Claims Service</strong></td><td>Call centre, nominated repair networks</td><td>Personal claims handler; open market repairs; like-for-like reinstatement guaranteed</td></tr>
+      <tr><td><strong>Liability Limit</strong></td><td>£2m–£5m standard occupiers/personal</td><td>£10m–£50m for HNW; includes employer's liability for domestic staff</td></tr>
+      <tr><td><strong>Additional Covers</strong></td><td>Optional bolt-ons for legal expenses, home emergency</td><td>Bundled: private health nurse call-out, kidnap &amp; ransom extension, travel cancellation, cyber incident response</td></tr>
+      <tr><td><strong>Premium Band (indicative)</strong></td><td>£300 – £1,000/yr for average home</td><td>£3,000 – £50,000+/yr for HNW multi-property <span class="badge b-illustrative">ILLUS</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Fine Art &amp; Jewellery Threshold Guidelines</h3>
+  <p>Items above certain thresholds typically require professional valuation, specialist scheduling, and dedicated policy wording rather than blanket contents cover: <span class="badge b-estimate">EST</span></p>
+  <table>
+    <thead><tr><th>Category</th><th>Valuation Threshold</th><th>Storage Requirement</th><th>Rating Range (% value p.a.)</th></tr></thead>
+    <tbody>
+      <tr><td>Jewellery &amp; Watches</td><td>Individual items &gt;£5,000</td><td>Approved safe (grade dependent) for items &gt;£15,000</td><td>0.5% – 1.5%</td></tr>
+      <tr><td>Fine Art &amp; Antiques</td><td>Items &gt;£10,000; collections &gt;£50,000</td><td>Climate control for significant works</td><td>0.4% – 1.2%</td></tr>
+      <tr><td>Wine &amp; Spirits Collection</td><td>Collections &gt;£25,000</td><td>Specialist storage or bonded warehouse preferred</td><td>0.3% – 0.8%</td></tr>
+      <tr><td>Classic Cars (in private garage)</td><td>Agreed value per vehicle</td><td>Alarmed, secure garage; mileage restriction</td><td>0.8% – 2.5% hull</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Flood Re Interaction</h2>
+
+  <div class="flood-box">
+    <h3>🌊 Flood Re — Underwriting Mechanics</h3>
+    <p>Flood Re is a reinsurance scheme operating behind the direct insurer. The underwriter issues the policy as normal; the insurer then cedes the flood risk element to Flood Re at a fixed premium set by council tax band. The insurer retains the non-flood perils (fire, storm, subsidence, theft, escape of water). <span class="badge b-verified">VER</span></p>
+    <p style="margin-top:12px;"><strong>Eligibility criteria (all must apply):</strong></p>
+    <ul>
+      <li>UK domestic property only (commercial risks excluded) <span class="badge b-verified">VER</span></li>
+      <li>Property must have been built before 1 January 2009 — post-2009 properties are NOT eligible <span class="badge b-verified">VER</span></li>
+      <li>Purpose-built blocks of flats (leasehold): individual flats eligible only if the building itself is eligible</li>
+      <li>Eligibility applies to both buildings and contents policies separately</li>
+    </ul>
+    <p style="margin-top:12px;"><strong>Flood Re ceded premium by council tax band (2024/25):</strong> <span class="badge b-estimate">EST</span></p>
+    <table style="margin:8px 0;font-size:0.85rem;">
+      <thead><tr><th>Council Tax Band</th><th>Annual Ceded Flood Premium</th></tr></thead>
+      <tbody>
+        <tr><td>Band A</td><td>~£87</td></tr>
+        <tr><td>Band B</td><td>~£113</td></tr>
+        <tr><td>Band C</td><td>~£138</td></tr>
+        <tr><td>Band D</td><td>~£164</td></tr>
+        <tr><td>Band E</td><td>~£213</td></tr>
+        <tr><td>Band F</td><td>~£260</td></tr>
+        <tr><td>Band G</td><td>~£309</td></tr>
+        <tr><td>Band H</td><td>~£540</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px;"><strong>Excess:</strong> Flood Re sets a standard flood excess of £250 per claim, which the insurer must apply. Insurers can charge a higher excess if they wish. <span class="badge b-verified">VER</span></p>
+    <p style="margin-top:8px;"><strong>Transition to 2039:</strong> Flood Re's mandate requires it to transition to risk-reflective pricing by 2039 (as per Water Act 2014). From 2039, flood risk in high-flood-zone properties will increasingly be priced at actuarial cost, potentially making some properties uninsurable at affordable premiums. The Property Flood Resilience (PFR) programme is the government's primary mitigation strategy. <span class="badge b-verified">VER</span></p>
+  </div>
+
+  <div class="warn-box">
+    <h4>⚠️ Post-2009 Properties: No Flood Re Eligibility</h4>
+    <p>Properties built after 1 January 2009 are ineligible for Flood Re by statute. This means that new-build properties in flood zones must be rated at full actuarial flood cost. Developers have historically built in Flood Zone 2/3 areas post-2009 — particularly urban waterside developments — which can result in high flood loadings or market exclusion. Underwriters should verify build date from the Land Registry or planning records before assuming Flood Re eligibility.</p>
+  </div>
+
+  <h2>6. Quality Scoring Matrix</h2>
+  <p>The following Green/Amber/Red matrix is used by Lloyd's HP underwriters as a qualitative overlay on the quantitative premium calculation. A risk rated Amber or Red in multiple categories should attract additional premium loading or referral to a senior underwriter. <span class="badge b-illustrative">ILLUS</span></p>
+
+  <table class="matrix">
+    <thead>
+      <tr><th>Control Area</th><th style="text-align:center">Green ✅</th><th style="text-align:center">Amber ⚠️</th><th style="text-align:center">Red ❌</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Flood Risk &amp; Resilience</td>
+        <td class="green">Flood Zone 1; no prior flood claims; PFR measures in place</td>
+        <td class="amber">Zone 2; prior flood claim &gt;5 years ago; no PFR measures</td>
+        <td class="red">Zone 3; prior flood claim &lt;5 years; no resilience; post-2009 (no Flood Re)</td>
+      </tr>
+      <tr>
+        <td>Subsidence &amp; Ground Risk</td>
+        <td class="green">Low shrink-swell zone; no prior subsidence claim; no large trees within 5m</td>
+        <td class="amber">Medium shrink-swell; no prior claim; trees within 5–10m</td>
+        <td class="red">High/very high shrink-swell; prior subsidence claim; oak/willow/poplar within 3m</td>
+      </tr>
+      <tr>
+        <td>Construction &amp; Condition</td>
+        <td class="green">Standard masonry; good maintenance; surveyed within 5 years</td>
+        <td class="amber">Non-standard (timber/flat roof); no recent survey; deferred maintenance noted</td>
+        <td class="red">Designated defective (BISF/Airey); thatched; disrepair; occupied &lt;50% of year</td>
+      </tr>
+      <tr>
+        <td>Security</td>
+        <td class="green">Approved alarm (BS EN 50131); 5-lever mortice locks; Secured by Design status</td>
+        <td class="amber">Basic locks; no alarm; CCTV but not monitored</td>
+        <td class="red">No alarm, no deadlocks; prior burglary claims; rural isolated property with no security</td>
+      </tr>
+      <tr>
+        <td>Occupancy</td>
+        <td class="green">Principal private residence; owner-occupied full-time</td>
+        <td class="amber">Buy-to-let; holiday home occupied &gt;90 days/year</td>
+        <td class="red">Unoccupied &gt;30 consecutive days; holiday let via short-term platform; HMO</td>
+      </tr>
+      <tr>
+        <td>Claims History</td>
+        <td class="green">Nil claims in 5 years; or minor single claim &lt;£2,000</td>
+        <td class="amber">1–2 claims in 5 years; aggregate &lt;£25,000; no single large loss</td>
+        <td class="red">3+ claims in 5 years; prior large single loss &gt;£50,000; fraud referral on record</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7. Worked Examples</h2>
+
+  <div class="example-box">
+    <h3>Worked Example A — Standard HNW Rural Property</h3>
+    <div class="scenario">
+      <strong>Risk profile:</strong> Detached Grade II listed farmhouse, Oxfordshire. Stone/slate construction with thatched outbuilding (separate). Owner-occupied, principal residence. BGS medium shrink-swell zone. EA Flood Zone 1. Rebuilt value assessed by RICS surveyor at £1,200,000. Contents: £450,000 blanket + fine art scheduled at £220,000 + jewellery scheduled at £95,000.
+    </div>
+    <table>
+      <thead><tr><th>Element</th><th>Sum Insured / Value</th><th>Rate / Loading</th><th>Premium</th></tr></thead>
+      <tbody>
+        <tr><td>Buildings — listed stone construction</td><td>£1,200,000</td><td>£1.10/£1k × 1.40 (listed factor) × 1.20 (medium subsidence)</td><td>£2,217</td></tr>
+        <tr><td>Contents — blanket</td><td>£450,000</td><td>£0.65/£1k (new-for-old standard contents rate)</td><td>£293</td></tr>
+        <tr><td>Fine Art — scheduled, in-home</td><td>£220,000</td><td>0.55% p.a.</td><td>£1,210</td></tr>
+        <tr><td>Jewellery — scheduled, approved safe</td><td>£95,000</td><td>0.80% p.a.</td><td>£760</td></tr>
+        <tr><td>Employer's Liability (2 domestic staff)</td><td>£10m limit</td><td>Fixed add-on</td><td>£280</td></tr>
+        <tr><td>All-Risks extension (jewellery away from home)</td><td>£40,000</td><td>1.20% p.a.</td><td>£480</td></tr>
+        <tr class="total-row"><td colspan="3"><strong>Indicative Annual Premium (excl. IPT)</strong></td><td><strong>£5,240</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="premium-out">Indicative annual premium: <strong>~£5,240</strong> + 12% IPT = ~£5,870 <span class="badge b-illustrative">ILLUS</span></div>
+    <p style="font-size:0.84rem;color:var(--muted);margin-top:10px;">Note: Thatched outbuilding rated separately; listed building surveyor valuation overrides BCIS. Flood Re not invoked (Zone 1). No subsidence loading as BGS zone is medium (loading applied above is indicative).</p>
+  </div>
+
+  <div class="example-box hnw">
+    <h3>Worked Example B — Inner London Listed Townhouse</h3>
+    <div class="scenario">
+      <strong>Risk profile:</strong> 5-storey Grade II* listed Georgian townhouse, Kensington. Brick/stucco. BGS high shrink-swell zone (Central London Clay). EA Flood Zone 2 — Thames tidal tidal surge risk. Oak tree on pavement within 4m. Built 1820. RICS surveyor rebuild value: £3,500,000. Contents: £800,000 blanket + wine collection £180,000 + fine art £650,000. 3 live-in domestic staff (housekeeper, nanny, driver).
+    </div>
+    <table>
+      <thead><tr><th>Element</th><th>Sum Insured / Value</th><th>Rate / Loading</th><th>Premium</th></tr></thead>
+      <tbody>
+        <tr><td>Buildings — listed Georgian brick</td><td>£3,500,000</td><td>£1.20/£1k × 1.45 (listed) × 1.40 (high subsidence) × 1.35 (Zone 2 flood)</td><td>£11,985</td></tr>
+        <tr><td>Flood Re cession — Band H (estimated)</td><td>Flood element</td><td>Fixed cession to Flood Re</td><td>~£540 (ceded)</td></tr>
+        <tr><td>Contents — blanket</td><td>£800,000</td><td>£0.70/£1k</td><td>£560</td></tr>
+        <tr><td>Fine Art — scheduled, climate-controlled room</td><td>£650,000</td><td>0.50% p.a.</td><td>£3,250</td></tr>
+        <tr><td>Wine Collection — home cellar</td><td>£180,000</td><td>0.60% p.a.</td><td>£1,080</td></tr>
+        <tr><td>Employer's Liability (3 domestic staff)</td><td>£10m limit</td><td>Fixed add-on</td><td>£420</td></tr>
+        <tr><td>Personal Liability — enhanced</td><td>£20m limit</td><td>Fixed add-on</td><td>£380</td></tr>
+        <tr><td>All-Risks (jewellery, watches away from home)</td><td>£120,000</td><td>1.30% p.a.</td><td>£1,560</td></tr>
+        <tr class="total-row"><td colspan="3"><strong>Indicative Annual Premium (excl. IPT)</strong></td><td><strong>£19,235</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="premium-out">Indicative annual premium: <strong>~£19,235</strong> + 12% IPT = ~£21,540 <span class="badge b-illustrative">ILLUS</span></div>
+    <p style="font-size:0.84rem;color:var(--muted);margin-top:10px;">Note: Buildings premium is the dominant driver (62% of total). Oak tree proximity to high shrink-swell zone is a key referral flag — may require arborist survey. Property built 1820, therefore Flood Re eligible. Estimated cession ~£540 (Band H). Net retained flood premium remains within buildings rate.</p>
+  </div>
+
+  <h2>8. Key Exclusions &amp; Underwriting Restrictions</h2>
+  <table>
+    <thead><tr><th>Exclusion / Restriction</th><th>Standard Position</th><th>Lloyd's Flexibility</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Pre-existing Damage</strong></td><td>Excluded — all policies</td><td>Not coverable; survey may be required to confirm condition</td></tr>
+      <tr><td><strong>Gradual Deterioration / Wear &amp; Tear</strong></td><td>Excluded — all policies</td><td>Not coverable; maintenance obligation on insured</td></tr>
+      <tr><td><strong>Flood — Post-2009 Properties</strong></td><td>Flood Re ineligible; high load or declined</td><td>Some Lloyd's capacity for waterside developments with PFR measures; at market rates</td></tr>
+      <tr><td><strong>Unoccupancy &gt;30 Days</strong></td><td>Cover suspended or voidable under most standard policies</td><td>Lloyd's unoccupancy endorsements available; higher premium; inspections required</td></tr>
+      <tr><td><strong>Business Use / Commercial Activity</strong></td><td>Excluded beyond minor home office</td><td>Limited commercial extension possible; Airbnb/short-let use requires specialist wording</td></tr>
+      <tr><td><strong>Subsidence — Pre-existing Movement</strong></td><td>Prior subsidence excluded on renewal if undisclosed</td><td>Lloyd's may accept with engineering survey and increased excess; prior movement must be disclosed at inception</td></tr>
+      <tr><td><strong>EV Charging Equipment</strong></td><td>Often not explicitly covered in standard policies (gap risk)</td><td>EV charging point liability and damage emerging as scheduled cover item in specialist policies <span class="badge b-estimate">EST</span></td></tr>
+    </tbody>
+  </table>
+
+</main>
+<footer>Risk Code Hub · UK Household Property (HP) · Module 05: Underwriting · v2.0 — April 2026</footer>
+</body>
+</html>

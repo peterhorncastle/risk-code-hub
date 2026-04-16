@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UK Household – Global Programmes | Risk Code Hub</title>
+  <style>
+    :root { --navy:#0d2240;--house:#2d6a2d;--house-dark:#1a4a1a;--house-light:#e8f5e3;--accent:#c8a84b;--brick:#8b3a2a;--flood:#1565c0;--flood-light:#e3eeff;--slate:#5a6e7a;--light:#f4f7fb;--text:#1e2d3d;--muted:#6b7c93;--border:#c8d4e0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2240 0%,#2d6a2d 55%,#1a4a1a 100%); color:#fff; padding:40px; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8d4b8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    .breadcrumb { font-size:0.8rem; color:#b8d4b8; margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--navy); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--navy); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--house-dark); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    /* Programme tower */
+    .tower { display:flex; flex-direction:column; gap:0; max-width:780px; margin:24px auto; }
+    .tower-layer { padding:16px 24px; border-left:6px solid var(--border); margin-bottom:3px; border-radius:0 10px 10px 0; background:#fff; border:1px solid var(--border); }
+    .tower-layer.primary { border-left:6px solid var(--house); }
+    .tower-layer.xs1 { border-left:6px solid #2a7a9a; }
+    .tower-layer.xs2 { border-left:6px solid #1565c0; }
+    .tower-layer.xs3 { border-left:6px solid var(--accent); }
+    .tower-layer.sir { border-left:6px solid var(--brick); background:#fde8e8; }
+    .tower-layer.cat { border-left:6px solid #6a2d6a; background:#f5e8ff; }
+    .tower-layer h4 { font-size:0.9rem; font-weight:700; color:var(--navy); }
+    .tower-layer .layer-limit { font-size:0.82rem; font-weight:800; color:var(--house-dark); margin:2px 0 6px; }
+    .tower-layer.xs1 .layer-limit { color:#2a7a9a; }
+    .tower-layer.xs2 .layer-limit { color:var(--flood); }
+    .tower-layer.xs3 .layer-limit { color:#7a5200; }
+    .tower-layer.sir .layer-limit { color:var(--brick); }
+    .tower-layer.cat .layer-limit { color:#6a2d6a; }
+    .tower-layer p { font-size:0.84rem; margin:0; color:var(--muted); }
+
+    /* Jurisdiction cards */
+    .juris-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:18px; margin:24px 0; }
+    .juris-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:22px 24px; border-top:4px solid var(--navy); }
+    .juris-card h4 { font-size:0.95rem; font-weight:700; color:var(--navy); margin-bottom:10px; }
+    .juris-card .flag { font-size:1.3rem; margin-right:6px; }
+    .juris-card ul { padding-left:18px; }
+    .juris-card li { font-size:0.86rem; margin-bottom:6px; line-height:1.6; }
+    .juris-card .reg-tag { display:inline-block; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:8px; background:#e8f5e3; color:#1a5c28; margin:6px 4px 0 0; }
+
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.87rem; background:#fff; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
+    th { background:var(--navy); color:#fff; padding:10px 14px; text-align:left; font-size:0.82rem; }
+    td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tr:last-child td { border-bottom:none; }
+    tr:nth-child(even) td { background:#f8fafc; }
+    td strong { color:var(--navy); }
+
+    .case-box { background:#fff; border:2px solid var(--accent); border-radius:12px; padding:28px 32px; margin:28px 0; }
+    .case-box h3 { color:#7a5200; margin-top:0; font-size:1.05rem; }
+    .case-box .scenario { background:#fef8e8; border-radius:8px; padding:14px 18px; margin:14px 0; font-size:0.88rem; line-height:1.7; }
+    .case-box .total-row td { background:#fef3e2; font-weight:700; color:#7a5200; }
+
+    .warn-box { background:#fff8e1; border:2px solid #f59e0b; border-radius:12px; padding:22px 26px; margin:24px 0; }
+    .warn-box h4 { color:#7a4500; font-size:0.95rem; margin-bottom:8px; }
+    .warn-box p, .warn-box li { font-size:0.87rem; color:#5a3500; }
+    .warn-box ul { padding-left:18px; margin:8px 0; }
+    .warn-box li { margin-bottom:6px; }
+
+    .badge { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 7px; border-radius:10px; letter-spacing:0.5px; margin-left:4px; vertical-align:middle; }
+    .b-verified { background:#e6f4ea; color:#1a5c28; }
+    .b-estimate { background:#fef3e2; color:#7a4500; }
+    .b-illustrative { background:#e3eeff; color:#1a3a7a; }
+
+    footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="index.html">UK Household</a> › Global Programmes</div>
+  <div class="tag">Module 08 — Global Programmes</div>
+  <h1>UK Household Global Programme Structures</h1>
+  <p>Multi-property HNW programme architecture, landlord portfolio structures, overseas second homes and villas, captive applications for ultra-HNW, and Lloyd's programme advantages for complex household risks.</p>
+</header>
+<nav>
+  <a href="index.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+<main>
+
+  <h2>1. Why HNW Household Requires Programme Thinking</h2>
+  <p>Mass-market household insurance is a single-property, single-jurisdiction product. At the HNW level — and particularly for the ultra-high-net-worth (UHNW) clients served by Lloyd's HP syndicates — the risk portfolio is typically multi-property, multi-jurisdiction, and multi-line. A typical UHNW client may own a primary UK estate, a London townhouse, a villa in Tuscany or the South of France, a ski chalet in Switzerland, a New York apartment, and a Caribbean property. Each of these exposures sits in a different regulatory jurisdiction, has different local insurer requirements, and creates aggregate accumulation that a single policy cannot address efficiently. <span class="badge b-estimate">EST</span></p>
+  <p>Lloyd's HP syndicates — particularly through the major specialist HNW insurers (Hiscox, Chubb, AIG Private Client, Beazley) — have developed programme structures that provide:</p>
+  <ul style="padding-left:20px;line-height:2;">
+    <li>Single master policy with coordinated local policies (admitted/surplus lines) in each jurisdiction</li>
+    <li>Blanket contents and fine art cover across all properties under one valuation framework</li>
+    <li>Aggregate deductible structures and claims handling coordination via a single lead underwriter</li>
+    <li>Consolidated renewal and premium financing across the portfolio</li>
+  </ul>
+
+  <h2>2. Illustrative HNW Multi-Property Programme Structure</h2>
+
+  <div class="tower">
+    <div class="tower-layer cat">
+      <h4>Ultra-HNW Umbrella / Catastrophic Loss Layer</h4>
+      <div class="layer-limit">Excess of £10m — Aggregate catastrophic loss (e.g. estate fire, multiple-location nat cat)</div>
+      <p>Specialist market capacity; Lloyd's XL slip. Rarely triggered — provides UHNW peace of mind for total estate loss.</p>
+    </div>
+    <div class="tower-layer xs3">
+      <h4>Excess Layer 2 — All Properties</h4>
+      <div class="layer-limit">£5m xs £2m per occurrence</div>
+      <p>Covers major structural losses; large fine art / jewellery single losses. Lloyd's surplus lines capacity.</p>
+    </div>
+    <div class="tower-layer xs2">
+      <h4>Excess Layer 1 — All Properties</h4>
+      <div class="layer-limit">£1m xs £1m per occurrence</div>
+      <p>Second-tier excess; activated on major house fires, significant flood events, large contents losses.</p>
+    </div>
+    <div class="tower-layer xs1">
+      <h4>Primary Master Policy — UK Properties</h4>
+      <div class="layer-limit">£1m per occurrence buildings + contents; fine art / jewellery scheduled</div>
+      <p>Lead Lloyd's syndicate; covers UK primary residence and all UK properties. Flood Re eligible properties ceded where applicable. HNW agreed value basis.</p>
+    </div>
+    <div class="tower-layer primary">
+      <h4>Local Admitted Policies — Overseas Properties</h4>
+      <div class="layer-limit">Locally admitted cover per jurisdiction; difference-in-conditions (DIC) gap-filled by master</div>
+      <p>France, Italy, Switzerland, USA, Caribbean as applicable. Local regulation requires admitted insurer. Master policy provides DIC for gaps between local policy and master policy scope.</p>
+    </div>
+    <div class="tower-layer sir">
+      <h4>Self-Insured Retention / High Excess</h4>
+      <div class="layer-limit">£2,500 – £25,000 per claim depending on peril and property</div>
+      <p>UHNW clients often prefer significant self-insurance to reduce premium and avoid small-claims reporting. Aggregate deductible structures available for high-frequency, low-severity perils (escape of water, minor theft).</p>
+    </div>
+  </div>
+
+  <h2>3. Jurisdiction-Specific Considerations</h2>
+
+  <div class="juris-grid">
+    <div class="juris-card">
+      <h4><span class="flag">🇬🇧</span> United Kingdom (Primary Market)</h4>
+      <ul>
+        <li>FCA regulated; Lloyd's HP syndicates operate under Lloyd's franchise authorisation <span class="badge b-verified">VER</span></li>
+        <li>Flood Re scheme available for pre-2009 eligible properties</li>
+        <li>12% Insurance Premium Tax (IPT) on most household premiums <span class="badge b-verified">VER</span></li>
+        <li>FCA GIPP rules (January 2022): renewal pricing constraints apply</li>
+        <li>High-net-worth: specialist broker intermediation (Marsh Private Client, Aon Private Risk Management, broker networks)</li>
+      </ul>
+      <span class="reg-tag">FCA</span><span class="reg-tag">Lloyd's Franchise</span><span class="reg-tag">Flood Re</span>
+    </div>
+    <div class="juris-card">
+      <h4><span class="flag">🇫🇷</span> France</h4>
+      <ul>
+        <li>Insurance of immovable property (buildings) must typically be placed with an admitted insurer; EEA/UK post-Brexit position changed post-2021 — Lloyd's operates via Lloyd's Brussels for EEA business <span class="badge b-verified">VER</span></li>
+        <li>Natural catastrophe (Cat Nat) scheme: compulsory supplementary cover for nat cat losses (flood, earthquake, subsidence) funded by a levy on property policies <span class="badge b-verified">VER</span></li>
+        <li>Taxe d'Assurance applies; rates vary by cover type</li>
+        <li>French holiday villas: significant exposure to Var/Côte d'Azur wildfire risk (rising with climate change)</li>
+      </ul>
+      <span class="reg-tag">ACPR</span><span class="reg-tag">Lloyd's Brussels</span><span class="reg-tag">Cat Nat Scheme</span>
+    </div>
+    <div class="juris-card">
+      <h4><span class="flag">🇮🇹</span> Italy</h4>
+      <ul>
+        <li>Buildings insurance is NOT compulsory in Italy (unlike France, where mortgage requires it) — low market penetration historically</li>
+        <li>IVASS (Istituto per la Vigilanza sulle Assicurazioni) regulates; local admitted insurer required for property</li>
+        <li>Major earthquake risk — Italy has the highest seismic risk in Western Europe; most standard property policies exclude or heavily restrict earthquake <span class="badge b-estimate">EST</span></li>
+        <li>Tuscany/Umbria villas: stone construction typical; often unregistered improvements present</li>
+      </ul>
+      <span class="reg-tag">IVASS</span><span class="reg-tag">DIC Available</span>
+    </div>
+    <div class="juris-card">
+      <h4><span class="flag">🇨🇭</span> Switzerland</h4>
+      <ul>
+        <li>Cantonal monopoly system: most Swiss cantons have a state-monopoly building insurer (Kantonale Gebäudeversicherung — KGV) that is compulsory for buildings. Contents only placed with private insurers. <span class="badge b-verified">VER</span></li>
+        <li>Geneva and Wallis are the only cantons where private building insurance is permitted</li>
+        <li>KGV cover is compulsory and cannot be replaced by a Lloyd's master policy for Swiss buildings</li>
+        <li>Primary challenge: contents cover and liability layer where private market access is available</li>
+      </ul>
+      <span class="reg-tag">FINMA</span><span class="reg-tag">KGV Mandatory</span>
+    </div>
+    <div class="juris-card">
+      <h4><span class="flag">🇺🇸</span> United States</h4>
+      <ul>
+        <li>State-regulated market; surplus lines admitted in most states for non-standard HNW risks. Lloyd's surplus lines market well-established.</li>
+        <li>National Flood Insurance Program (NFIP): federally-backed flood insurance; private market alternatives growing. <span class="badge b-verified">VER</span></li>
+        <li>Wildfire risk: California and Western states have experienced dramatic premium increases and insurer withdrawals from 2023 onwards. <span class="badge b-estimate">EST</span></li>
+        <li>US vacation properties owned by UK UHNW: typically require local admitted or surplus lines placement; DIC from Lloyd's master policy possible</li>
+      </ul>
+      <span class="reg-tag">State-regulated</span><span class="reg-tag">Surplus Lines</span><span class="reg-tag">NFIP</span>
+    </div>
+    <div class="juris-card">
+      <h4><span class="flag">🌴</span> Caribbean &amp; Overseas Territories</h4>
+      <ul>
+        <li>Hurricane/tropical cyclone is the dominant peril; PML modelling essential</li>
+        <li>Some UK Overseas Territories (Cayman, BVI, Bermuda) have established sophisticated (re)insurance markets and Lloyd's approved fronting carriers</li>
+        <li>Demand surge post-hurricane (Irma 2017, Maria 2017) dramatically increased reconstruction costs and claims timelines <span class="badge b-verified">VER</span></li>
+        <li>Contents theft risk elevated in unoccupied/holiday-only properties; seasonal occupancy limits must be clear in policy wording</li>
+      </ul>
+      <span class="reg-tag">Lloyd's Approved Fronting</span><span class="reg-tag">Cat Modelling Required</span>
+    </div>
+  </div>
+
+  <h2>4. Landlord Portfolio Structures</h2>
+  <p>Buy-to-let landlord portfolios — ranging from single-property investors to professional landlords with 20–200+ properties — represent a distinct Lloyd's HP segment with different risk characteristics and programme considerations from HNW personal lines. <span class="badge b-estimate">EST</span></p>
+
+  <table>
+    <thead><tr><th>Segment</th><th>Structure</th><th>Key Risks</th><th>Lloyd's Angle</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Single BTL (1–3 properties)</strong></td><td>Individual property policies; standard admitted market in most cases</td><td>Standard household risks + tenant liability; escape of water frequency elevated vs OO</td><td>Non-standard construction or flood zone only</td></tr>
+      <tr><td><strong>Small Portfolio (4–20 properties)</strong></td><td>Fleet policy or portfolio policy via specialist landlord insurer</td><td>HMO risk within portfolio; mixed construction; tenant damage; void periods</td><td>HMOs, non-standard construction, mixed commercial/residential</td></tr>
+      <tr><td><strong>Medium Portfolio (20–100 properties)</strong></td><td>Block landlord policy; separate block/liability tower; excess structure</td><td>Concentration in one area (flood zone, subsidence zone); tenant mix; fire spread in terraces</td><td>XL structure for accumulation; specialist property management quality assessment</td></tr>
+      <tr><td><strong>Large Portfolio / Property Company (100+ properties)</strong></td><td>Captive or programme structure; Lloyd's XL for catastrophe; local admitted for standard perils</td><td>Aggregate flood accumulation; arson; asbestos legacy; cladding/fire safety post-Grenfell remediation costs</td><td>Specialist underwriting; captive feasibility; ESG/fire safety due diligence essential</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Captive Structures for Ultra-HNW</h2>
+  <p>For UHNW individuals with property portfolios exceeding £50–100m in total insured value, captive insurance arrangements may be cost-effective. A personal lines captive is unusual but not uncommon for family offices with diversified asset portfolios. <span class="badge b-estimate">EST</span></p>
+
+  <table>
+    <thead><tr><th>Structure</th><th>Mechanism</th><th>Threshold / Viability</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Segregated Account / Protected Cell</strong></td><td>The UHNW individual funds a cell within a Protected Cell Company (PCC) in an approved jurisdiction (Guernsey, BVI, Cayman). The cell acts as the first-loss layer; Lloyd's or reinsurance market provides XL above the cell retention.</td><td>Viable from ~£500k–£1m annual premium. Requires family office infrastructure and ongoing captive management.</td></tr>
+      <tr><td><strong>Single-Parent Captive</strong></td><td>Dedicated insurance entity owned by the UHNW individual or family trust. Writes all personal lines risks (homes, fine art, yachts, vehicles) and buys external reinsurance for catastrophic exposure.</td><td>Viable from ~£1m–£2m annual premium. Full captive management cost (domicile, audit, actuarial) ~£80k–£150k/year. <span class="badge b-estimate">EST</span></td></tr>
+      <tr><td><strong>Family Office Risk Pool</strong></td><td>Several UHNW individuals (e.g. through a private bank or wealth manager) share a captive structure to achieve scale. Risk pooling improves actuarial credibility.</td><td>Emerging model; requires trust between participants and carefully drafted loss-sharing agreement.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn-box">
+    <h4>⚠️ Captive Household Insurance: Tax and Regulatory Considerations</h4>
+    <ul>
+      <li><strong>HMRC scrutiny:</strong> Personal lines captives are subject to HMRC review to ensure premiums are arm's-length and the captive has genuine risk transfer. Premiums must not be treated as tax-sheltered personal expenditure.</li>
+      <li><strong>FCA notification:</strong> A captive writing UK personal lines must be authorised or exempt from authorisation under FSMA 2000. Offshore captives writing UK risk must comply with Solvency II / Overseas Insurer requirements post-Brexit.</li>
+      <li><strong>Claims service:</strong> Captive structures can complicate claims service — UHNW clients expecting concierge-level service should ensure captive arrangements do not create delays in loss settlement.</li>
+    </ul>
+  </div>
+
+  <h2>6. Worked Example — UHNW Multi-Property Programme</h2>
+
+  <div class="case-box">
+    <h3>Illustrative Case Study — UK-Based UHNW Portfolio</h3>
+    <div class="scenario">
+      <strong>Client profile:</strong> UK-resident UHNW individual; family office structure. Properties: (1) Grade II* Georgian country estate, Wiltshire — rebuild cost £6.5m, contents £2.2m, fine art £1.8m; (2) Kensington townhouse — rebuild £3.2m, contents £1.1m, jewellery £400k; (3) Chateau in Provence — rebuild equivalent £2.0m, contents £600k; (4) Villa in Sardinia — rebuild equivalent £1.5m, contents £400k; (5) New York apartment — rebuild equivalent $1.2m, contents $500k.
+    </div>
+    <table>
+      <thead><tr><th>Property / Element</th><th>Total Insured Value</th><th>Indicative Annual Premium</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>UK Country Estate (buildings)</td><td>£6.5m (agreed value)</td><td>~£9,100</td><td>Listed, rural; specialist underwriter; subsidence zone survey</td></tr>
+        <tr><td>UK Country Estate (contents + fine art)</td><td>£4.0m combined</td><td>~£16,000</td><td>Fine art 0.55%, blanket contents £0.65/£1k; climate-controlled gallery</td></tr>
+        <tr><td>Kensington Townhouse (buildings)</td><td>£3.2m</td><td>~£10,560</td><td>Listed; high shrink-swell; Flood Zone 2; Flood Re Band H cession ~£540</td></tr>
+        <tr><td>Kensington (contents + jewellery)</td><td>£1.5m combined</td><td>~£8,500</td><td>Jewellery 0.85% with monitored alarm; all-risks extension for travel</td></tr>
+        <tr><td>Provence Chateau (DIC via Lloyd's master)</td><td>£2.0m equiv</td><td>~£3,200</td><td>Local Cat Nat levy via French admitted insurer; DIC top-up via Lloyd's</td></tr>
+        <tr><td>Sardinia Villa (DIC via Lloyd's master)</td><td>£1.5m equiv</td><td>~£2,800</td><td>Italian admitted insurer for earthquake; DIC for all other perils</td></tr>
+        <tr><td>New York Apartment (surplus lines)</td><td>$1.7m</td><td>~$3,400</td><td>Lloyd's approved US surplus lines carrier; NFIP supplement if flood zone</td></tr>
+        <tr><td>Excess Layer 1 (£1m xs £1m — all UK props)</td><td>£2m aggregate</td><td>~£2,200</td><td>Lloyd's XL slip</td></tr>
+        <tr><td>Excess Layer 2 (£5m xs £2m — worldwide)</td><td>£7m aggregate</td><td>~£3,500</td><td>Lloyd's XL slip; catastrophic loss</td></tr>
+        <tr><td>Employer's Liability (6 domestic staff — UK)</td><td>£10m limit</td><td>~£840</td><td>3 at estate, 2 at London house, 1 part-time</td></tr>
+        <tr><td>Personal Liability — worldwide</td><td>£25m limit</td><td>~£1,200</td><td>Includes overseas villa incident cover; US liability extension</td></tr>
+        <tr class="total-row"><td colspan="2"><strong>Total Indicative Programme Premium</strong></td><td><strong>~£61,300 + USD premium</strong></td><td></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.84rem;color:var(--muted);margin-top:10px;">All figures are illustrative. <span class="badge b-illustrative">ILLUS</span> Actual premiums depend on claims history, exact valuations, risk improvements, and market conditions at renewal. Broker fee (Marsh Private Client, Aon, or equivalent) typically 10–15% of premium additional. IPT (12%) applies to UK policies. Non-UK premiums subject to local insurance tax rates.</p>
+  </div>
+
+  <h2>7. Difference-in-Conditions (DIC) Structuring</h2>
+  <p>DIC policies are critical in international household programme structures. Where local admitted policies are required (as in France, Italy, Switzerland) but provide narrower cover than the Lloyd's master policy standard, a DIC layer fills the gap. <span class="badge b-estimate">EST</span></p>
+
+  <table>
+    <thead><tr><th>DIC Application</th><th>What DIC Fills</th><th>Structuring Note</th></tr></thead>
+    <tbody>
+      <tr><td><strong>France — Cat Nat Gaps</strong></td><td>French Cat Nat scheme covers nat cat at standard indemnity. DIC fills: agreed value uplift, contents extensions, fine art cover beyond French policy limits, higher limits for overseas guests' belongings</td><td>Lloyd's DIC must specify exactly what gaps it fills; claims cooperation clause with French carrier essential</td></tr>
+      <tr><td><strong>Italy — Earthquake Exclusion</strong></td><td>If Italian admitted policy excludes earthquake (common), DIC can provide earthquake cover for the structure; SASE (specific all-risk seismic extension) format used</td><td>PML modelling for Italian seismic risk essential; Lloyd's ICA data</td></tr>
+      <tr><td><strong>US — Differences in Deductible</strong></td><td>US surplus lines policy may have hurricane/named-storm deductible of 2–5% of insured value. DIC can provide the deductible layer above the UK master policy level.</td><td>Careful coordination needed — US insurer must confirm acceptance of DIC arrangement</td></tr>
+      <tr><td><strong>Worldwide Fine Art / Jewellery Blanket</strong></td><td>Local policies rarely cover fine art and jewellery adequately. Master policy provides blanket worldwide fine art cover that sits above or alongside local policies in each jurisdiction</td><td>Scheduling and valuation management is the key challenge; consistent valuation methodology across jurisdictions</td></tr>
+    </tbody>
+  </table>
+
+  <h2>8. Lloyd's Programme Advantages for HP</h2>
+  <table>
+    <thead><tr><th>Advantage</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Single Lead Underwriter</strong></td><td>One Lloyd's syndicate leads the entire programme; consistent approach to coverage, claims, and risk management across all properties and jurisdictions</td></tr>
+      <tr><td><strong>Claims Coordination</strong></td><td>Lloyd's Claims Protocol ensures coordinated claims handling; for multi-property losses (e.g. simultaneous storm damage to UK estate and French chateau), a single claims handler manages the process</td></tr>
+      <tr><td><strong>Agreed Value (No Under-Insurance Risk)</strong></td><td>HNW Lloyd's policies typically provide agreed value basis — insurer, not insured, carries the risk of under-valuation. Post-BCIS inflation this is a significant advantage over standard policies.</td></tr>
+      <tr><td><strong>Bespoke Wording Flexibility</strong></td><td>Lloyd's HP wordings can be individually negotiated for UHNW clients — covering specific exclusions, extending to unusual risks (K&amp;R extension, nuclear liability exclusion override), or providing novel covers (EV charging liability, smart home cyber)</td></tr>
+      <tr><td><strong>Financial Security</strong></td><td>Lloyd's Central Fund (mutual guarantee) provides policyholders with security beyond individual syndicate solvency. Rated A (Excellent) by AM Best. <span class="badge b-verified">VER</span></td></tr>
+    </tbody>
+  </table>
+
+</main>
+<footer>Risk Code Hub · UK Household Property (HP) · Module 08: Global Programmes · v2.0 — April 2026</footer>
+</body>
+</html>
