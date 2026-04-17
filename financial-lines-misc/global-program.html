@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Programme Structuring — Mortgage, Title, Surety & Financial Guarantee</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --fin: #1a3a5c;
+      --fin-dark: #0d2035;
+      --mortgage: #c9963a;
+      --surety: #2d6b3a;
+      --title: #7b2533;
+      --fg: #5b21b6;
+      --risk: #c0572a;
+      --gold: #c9a84c;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1a2332;
+      --mid: #5a6a7a;
+      --card-border: #dce3ed;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0d2035 0%, #1a3a5c 50%, #0a1828 100%);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    nav {
+      background: #0d2035;
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #a8c4d8;
+      text-decoration: none;
+      font-size: 0.78rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .breadcrumb {
+      padding: 0.5rem 1.5rem;
+      background: #e8edf4;
+      font-size: 0.8rem;
+      color: #5a6a7a;
+    }
+
+    .breadcrumb a {
+      color: #1a3a5c;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      margin: 2rem 0 1rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--fin);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-left: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge.ver { background: #d1fae5; color: #065f46; }
+    .badge.est { background: #fef3c7; color: #92400e; }
+    .badge.illus { background: #dbeafe; color: #1e40af; }
+    .badge.gap { background: #ffe4e6; color: #9f1239; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.7;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: #e8edf4;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    th {
+      font-weight: 700;
+      color: var(--fin-dark);
+      font-size: 0.95rem;
+    }
+
+    tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    td {
+      font-size: 0.95rem;
+    }
+
+    .programme-tower {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .tower-layer {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      color: white;
+      text-align: center;
+    }
+    .tower-layer .lay-detail, .tower-layer span { color: #e8f0ff; }
+
+    .tower-1 { background: linear-gradient(135deg, #1a3a5c 0%, #0d2035 100%); }
+    .tower-2 { background: linear-gradient(135deg, #c9963a 0%, #b87a22 100%); }
+    .tower-3 { background: linear-gradient(135deg, #2d6b3a 0%, #1a3f23 100%); }
+    .tower-4 { background: linear-gradient(135deg, #7b2533 0%, #5a1a22 100%); }
+    .tower-5 { background: linear-gradient(135deg, #5b21b6 0%, #3f1484 100%); }
+
+    .case-study {
+      background: #f0f4ff;
+      border-left: 4px solid var(--fin);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+    }
+
+    .case-study h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--fin-dark);
+    }
+
+    .case-study-item {
+      margin: 0.8rem 0;
+      line-height: 1.8;
+    }
+
+    .case-study-item strong {
+      color: var(--fin);
+    }
+
+    footer {
+      background: #0d2035;
+      color: #a8c4d8;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Global Programme Structuring</h1>
+    <p>Mortgage, Title, Surety & Financial Guarantee</p>
+  </header>
+
+  <nav>
+    <a href="overview.html">Overview</a>
+    <a href="history.html">History</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="database.html">Database</a>
+    <a href="underwriting.html">Underwriting</a>
+    <a href="rates-analysis.html">Rates & ROE</a>
+    <a href="risk-mitigation.html">Risk Mitigation</a>
+    <a href="global-program.html" class="active">Global Programme</a>
+    <a href="references.html">References</a>
+    <a href="../index.html">← Hub Home</a>
+  </nav>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Financial Lines Miscellaneous › Global Programme
+  </div>
+
+  <div class="container">
+
+    <section>
+      <h2 class="section-title">Section A: Programme Structure by Product Line</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>MIG (FM)</th>
+            <th>Title (TT)</th>
+            <th>Surety (SB)</th>
+            <th>Financial Guarantee (FG)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Primary layer</strong></td>
+            <td>Lender captive or fronting insurer</td>
+            <td>Direct title insurer</td>
+            <td>Lead surety (50–70%)</td>
+            <td>Bond insurer / wrap provider</td>
+          </tr>
+          <tr>
+            <td><strong>Reinsurance</strong></td>
+            <td>Facultative / XOL per portfolio</td>
+            <td>Facultative R/I for large risks</td>
+            <td>Co-surety + treaty XOL</td>
+            <td>Reinsurance panel (pre-2008) / now limited</td>
+          </tr>
+          <tr>
+            <td><strong>Regulatory</strong></td>
+            <td>FCA/PRA (UK), state insurance (US)</td>
+            <td>State-filed rates (US), FCA (UK)</td>
+            <td>State/national licensing</td>
+            <td>NAIC, FSA (UK), ECB for EU</td>
+          </tr>
+          <tr>
+            <td><strong>Lloyd's market role</strong></td>
+            <td>Reinsurance capacity</td>
+            <td>Direct insurer for specialist risks</td>
+            <td>Co-surety, facultative</td>
+            <td>Minimal post-2008</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section B: Lloyd's Market Role — Firm/Segment Cards</h2>
+
+      <div class="cards-grid">
+        <div class="card">
+          <h3>1. UK Residential Title</h3>
+          <p>Lloyd's syndicates (Hiscox, CNA) provide capacity for specialist UK residential title risks (leasehold, BSA cladding, historic defects) not covered by standard Land Registry indemnity. Underwriting focuses on defect-specific risk assessment. ~£50–100m Lloyd's title GWP estimated. <span class="badge gap">GAP</span></p>
+        </div>
+
+        <div class="card">
+          <h3>2. Construction Surety Co-Surety</h3>
+          <p>Lloyd's participates as co-surety on large UK/European infrastructure bonds (HS2, Hinkley Point, Network Rail). Lead typically Zurich, Liberty, Aviva; Lloyd's joins as following market (10–20% lines). Specialist expertise in complex construction risks and novel contract forms. <span class="badge est">EST</span></p>
+        </div>
+
+        <div class="card">
+          <h3>3. International Surety</h3>
+          <p>Lloyd's active in markets where local capacity is thin: Middle East, Latin America, Africa. Cross-border infrastructure with political risk overlay. Provides currency and sovereign risk expertise. Often co-insures with local captives to manage political exposure. <span class="badge est">EST</span></p>
+        </div>
+
+        <div class="card">
+          <h3>4. Specialist MIG/PMI Reinsurance</h3>
+          <p>Lloyd's reinsurers provide excess-of-loss capacity above retained MIG layers for lender captives. Especially relevant for challenger banks and building societies without A-rated fronting insurer. Provides portfolio capacity for lenders with narrow capital bases. <span class="badge est">EST</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section C: Programme Tower Illustration</h2>
+
+      <p style="margin: 1rem 0; font-style: italic; color: #666;">Example 5-layer tower for a large construction surety programme <span class="badge illus">ILLUS</span>:</p>
+
+      <div class="programme-tower">
+        <div class="tower-layer tower-1">
+          <div>Layer 5: Facultative Reinsurance</div>
+          <div style="font-size: 0.85rem; margin-top: 0.3rem;">£10m+ (varies by placement)</div>
+        </div>
+        <div class="tower-layer tower-4">
+          <div>Layer 4: Lloyd's Co-Surety Line</div>
+          <div style="font-size: 0.85rem; margin-top: 0.3rem;">£10m</div>
+        </div>
+        <div class="tower-layer tower-3">
+          <div>Layer 3: Second Co-Surety</div>
+          <div style="font-size: 0.85rem; margin-top: 0.3rem;">£15m (Aspen / Tokio Marine)</div>
+        </div>
+        <div class="tower-layer tower-2">
+          <div>Layer 2: First Co-Surety</div>
+          <div style="font-size: 0.85rem; margin-top: 0.3rem;">£25m (AXA XL)</div>
+        </div>
+        <div class="tower-layer tower-1">
+          <div>Layer 1 (Base): Lead Surety Retention</div>
+          <div style="font-size: 0.85rem; margin-top: 0.3rem;">£50m (Zurich / Liberty / Aviva)</div>
+        </div>
+        <div style="text-align: center; margin-top: 1.5rem; font-weight: 600; color: var(--fin-dark);">
+          Total Programme Capacity: £110m
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section D: Jurisdiction Comparison Table</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Jurisdiction</th>
+            <th>Title System</th>
+            <th>Title Insurance Prevalence</th>
+            <th>Surety Requirement</th>
+            <th>MIG/PMI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>USA</strong></td>
+            <td>Abstract/Torrens mix</td>
+            <td>Near-universal for mortgages</td>
+            <td>Miller Act mandatory (federal)</td>
+            <td>PMI mandatory &gt; 80% LTV (FNMA/FHLMC) <span class="badge ver">VER</span></td>
+          </tr>
+          <tr>
+            <td><strong>UK</strong></td>
+            <td>Land Registration Act 2002</td>
+            <td>Growing (5–15% of transactions) <span class="badge est">EST</span></td>
+            <td>OJEU / standard form (JCT/NEC)</td>
+            <td>MIG selective; Help to Buy (state 2013–23) <span class="badge ver">VER</span></td>
+          </tr>
+          <tr>
+            <td><strong>Australia</strong></td>
+            <td>Torrens system</td>
+            <td>Low (strong LR guarantee) <span class="badge ver">VER</span></td>
+            <td>Contractor licensing bonds</td>
+            <td>LMI (Lenders Mortgage Insurance) standard &gt; 80% LTV <span class="badge ver">VER</span></td>
+          </tr>
+          <tr>
+            <td><strong>Germany</strong></td>
+            <td>Grundbuch (land register)</td>
+            <td>Very low</td>
+            <td>VOB/B bonds common</td>
+            <td>Baufinanzierung (bank retention)</td>
+          </tr>
+          <tr>
+            <td><strong>Canada</strong></td>
+            <td>Torrens/abstract varies by province</td>
+            <td>Significant (esp. Ontario/Quebec)</td>
+            <td>Federal/provincial requirements</td>
+            <td>CMHC guarantee mandatory &gt; 80% LTV <span class="badge ver">VER</span></td>
+          </tr>
+          <tr>
+            <td><strong>Middle East</strong></td>
+            <td>Country-specific</td>
+            <td>Growing — Lloyd's active</td>
+            <td>Performance bonds standard</td>
+            <td>Limited formal market</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section E: Case Study — Large UK Infrastructure Surety Programme</h2>
+
+      <div class="case-study">
+        <h3>Scenario <span class="badge illus">ILLUS</span></h3>
+        <p style="margin-bottom: 1rem;">£200m rail upgrade contract (NEC4 ECC), 3-year completion, public sector client (Network Rail), mid-tier UK contractor (annual turnover £180m, net worth £12m).</p>
+
+        <div class="case-study-item">
+          <strong>Contract Size Assessment:</strong> £200m contract is 111% of annual turnover — significant over-exposure flag. Requires senior management meeting, 3-year projected cash flows, detailed project plan review.
+        </div>
+
+        <div class="case-study-item">
+          <strong>Bond Structure:</strong> Performance bond amount = 10% of contract value = £20m. Payment bond also £20m (standard).
+        </div>
+
+        <div class="case-study-item">
+          <strong>Rating Factors:</strong>
+          <ul style="margin: 0.5rem 0 0 1.5rem;">
+            <li>Work type: Railway infrastructure (1.4% base — elevated risk vs standard building)</li>
+            <li>Size/turnover loading: 1.2× (contract exceeds 25% of turnover threshold)</li>
+            <li>First-time with principal: 1.1× (new client relationship, no track record)</li>
+          </ul>
+        </div>
+
+        <div class="case-study-item">
+          <strong>Premium Calculation:</strong> Performance bond premium = £20m × 1.4% × 1.2 × 1.1 = £369,600
+        </div>
+
+        <div class="case-study-item">
+          <strong>Payment Bond:</strong> £20m × 0.5% × 1.2 = £120,000
+        </div>
+
+        <div class="case-study-item">
+          <strong>Additional Requirements:</strong>
+          <ul style="margin: 0.5rem 0 0 1.5rem;">
+            <li>Personal indemnity: Directors and parent company (cross-guarantee)</li>
+            <li>Quarterly financial reporting covenant</li>
+            <li>Project bank account with restricted draw-down</li>
+            <li>Co-surety arranged for performance bond (contract exceeds single surety limit)</li>
+          </ul>
+        </div>
+
+        <div class="case-study-item" style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1rem; margin-top: 1rem;">
+          <strong>Total Annual Bonding Cost: ~£490,000</strong> (approximately 0.24% of contract value) <span class="badge illus">ILLUS</span>
+        </div>
+
+        <div class="case-study-item">
+          <strong>Lloyd's Participation:</strong> Second co-surety line of ~£5m (following market behind lead and first co-surety).
+        </div>
+
+        <div class="case-study-item">
+          <strong>Placement Summary:</strong> Lead surety retains £12m, first co-surety (AXA XL) £5m, Lloyd's syndicates £3m, facultative reinsurance £5m. Tight placement reflecting contractor's limited net worth relative to contract size and infrastructure sector risk.
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>Risk Code Hub | Financial Lines Miscellaneous | Lloyd's Market Intelligence</p>
+    <p style="font-size: 0.8rem; margin-top: 0.5rem;">Knowledge cutoff: May 2025</p>
+  </footer>
+</body>
+</html>

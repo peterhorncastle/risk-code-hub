@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technology & Telecom PI E&O – References | Risk Code Hub</title>
+  <style>
+    :root{
+      --tech:#0f4c75; --tech-dark:#0a2d45; --digital:#1b8a8a; --code:#5b21b6;
+      --risk:#c0572a; --warn:#d97706; --light:#f0f6fb; --mid:#d1e8f5;
+      --dark:#111; --red:#c0392b; --amber:#e67e22; --green:#27ae60;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--dark); }
+
+    header {
+      background:linear-gradient(135deg,#0a2d45 0%,#0f4c75 50%,#073352 100%);
+      color:#fff; padding:40px;
+      position:relative; overflow:hidden;
+    }
+    header::before {
+      content:''; position:absolute; top:-50%; right:-10%; width:500px; height:500px;
+      background:radial-gradient(circle, rgba(27,138,138,0.15) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    header > * { position:relative; z-index:1; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:#a8c4d8; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cce0; font-size:0.95rem; max-width:800px; line-height:1.7; }
+
+    .breadcrumb { font-size:0.8rem; color:#b8cce0; margin-bottom:6px; }
+    .breadcrumb a { color:#a8c4d8; text-decoration:none; }
+
+    nav { background:#fff; border-bottom:2px solid #d1e8f5; padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:#666; border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--tech); border-bottom-color:var(--tech); }
+
+    main { max-width:1060px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--tech); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--digital); }
+    h3 { font-size:1.05rem; color:var(--tech-dark); margin:28px 0 12px; }
+    p { line-height:1.8; color:var(--dark); margin-bottom:14px; font-size:0.95rem; }
+
+    /* Badge cards */
+    .badge-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px; margin:24px 0 40px; }
+    .badge-card { background:#fff; border:1px solid #d1e8f5; border-radius:10px; padding:20px; border-top:4px solid var(--tech); text-align:center; }
+    .badge-card .badge-sample { display:inline-block; font-size:0.7rem; font-weight:700; padding:6px 12px; border-radius:4px; letter-spacing:1px; margin:8px 0; }
+    .badge-card h4 { color:var(--tech); font-size:0.9rem; margin-bottom:8px; font-weight:700; }
+    .badge-card p { font-size:0.82rem; color:#666; line-height:1.6; }
+
+    .badge-ver { background:var(--green); color:#fff; }
+    .badge-est { background:var(--amber); color:#fff; }
+    .badge-illus { background:var(--digital); color:#fff; }
+    .badge-gap { background:var(--red); color:#fff; }
+
+    /* Info box */
+    .info-box { background:#f0f6fb; border:2px solid var(--digital); border-radius:10px; padding:24px 28px; margin:24px 0; }
+    .info-box h4 { color:var(--tech-dark); font-size:0.95rem; margin-bottom:10px; font-weight:700; }
+    .info-box p { font-size:0.88rem; color:var(--dark); margin-bottom:8px; line-height:1.6; }
+    .info-box p:last-child { margin:0; }
+
+    /* Source table */
+    .source-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.82rem; }
+    .source-table th { background:var(--tech); color:#fff; padding:12px 10px; text-align:left; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; }
+    .source-table td { padding:12px 10px; border-bottom:1px solid #d1e8f5; vertical-align:top; line-height:1.5; }
+    .source-table tr:nth-child(even) td { background:#f0f6fb; }
+    .source-table .col-num { text-align:center; font-weight:600; width:40px; }
+    .source-table .col-title { font-weight:600; color:var(--tech); }
+    .source-table .col-type { font-size:0.75rem; color:#999; }
+    .source-table .col-url { color:#0066cc; word-break:break-all; font-size:0.78rem; }
+    .source-table a { color:#0066cc; text-decoration:none; }
+    .source-table a:hover { text-decoration:underline; }
+
+    /* Confidence audit table */
+    .audit-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.82rem; }
+    .audit-table th { background:var(--code); color:#fff; padding:12px 10px; text-align:left; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; }
+    .audit-table td { padding:12px 10px; border-bottom:1px solid #d1e8f5; vertical-align:top; line-height:1.5; }
+    .audit-table tr:nth-child(even) td { background:#f0f6fb; }
+
+    /* Gap disclosure cards */
+    .gap-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; margin:24px 0 40px; }
+    .gap-card { background:#fff; border:2px solid var(--red); border-radius:10px; padding:22px; }
+    .gap-card .gap-num { display:inline-block; background:var(--red); color:#fff; font-weight:700; font-size:0.7rem; padding:4px 8px; border-radius:4px; margin-bottom:10px; }
+    .gap-card h4 { color:var(--tech-dark); font-size:0.93rem; margin:8px 0 10px 0; font-weight:700; }
+    .gap-card p { font-size:0.85rem; color:var(--dark); line-height:1.6; margin:0; }
+
+    /* Confidence badges */
+    .c-ver, .c-est, .c-illus, .c-gap { display:inline-block; font-size:0.7rem; font-weight:700; padding:4px 8px; border-radius:4px; letter-spacing:1px; margin:0 4px; }
+    .c-ver { background:var(--green); color:#fff; }
+    .c-est { background:var(--amber); color:#fff; }
+    .c-illus { background:var(--digital); color:#fff; }
+    .c-gap { background:var(--red); color:#fff; }
+
+    footer { background:var(--tech-dark); color:#a8c4d8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer a { color:#a8c4d8; text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Technology & Telecom PI E&O</div>
+  <div class="tag">Module 09 — References & Knowledge Sources</div>
+  <h1>References & Knowledge Sources</h1>
+  <p>Confidence badge legend, knowledge cutoff, primary sources and per-module data quality audit</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html" class="active">References</a>
+</nav>
+
+<main>
+
+  <h2>Confidence Badge Legend</h2>
+  <p>All data points in this hub are tagged with one of four confidence levels. Use these to assess data reliability and understand where verification or industry expertise may be required.</p>
+
+  <div class="badge-grid">
+    <div class="badge-card">
+      <h4>VER — Verified</h4>
+      <div class="badge-sample badge-ver">VER</div>
+      <p>From regulatory filings, published company reports, or court documents. Data is fact-checkable and subject to public disclosure or legal scrutiny.</p>
+    </div>
+
+    <div class="badge-card">
+      <h4>EST — Estimated</h4>
+      <div class="badge-sample badge-est">EST</div>
+      <p>From broker reports, analyst consensus, or calculated via reasonable market assumptions. Directionally reliable but subject to revision as markets evolve.</p>
+    </div>
+
+    <div class="badge-card">
+      <h4>ILLUS — Illustrative</h4>
+      <div class="badge-sample badge-illus">ILLUS</div>
+      <p>Worked example or case study for teaching purposes only. Numbers are plausible but not sourced from a specific insured's actual programme. Use for scenario planning, not as pricing guidance.</p>
+    </div>
+
+    <div class="badge-card">
+      <h4>GAP — Data Gap</h4>
+      <div class="badge-sample badge-gap">GAP</div>
+      <p>Known limitation: required data is unavailable, confidential, or rapidly evolving. Marked to flag where specialist advice is necessary.</p>
+    </div>
+  </div>
+
+  <h2>Knowledge Cutoff Warning</h2>
+
+  <div class="info-box">
+    <h4>May 2025 Knowledge Cutoff</h4>
+    <p>Technology and telecom PI E&O is the most rapidly evolving insurance class. Key areas most likely to have changed since this hub was created:</p>
+    <p><strong>CrowdStrike Litigation Outcomes:</strong> Delta lawsuit ongoing as of May 2025. Actual policy claim payouts and settlement patterns will reshape market expectations.</p>
+    <p><strong>EU AI Act Implementation:</strong> Regulatory framework is being operationalised. AI E&O policy language and exclusion patterns are expected to shift.</p>
+    <p><strong>AI E&O Coverage Language:</strong> No market-standard tech E&O wording for AI/generative AI liability yet exists. Insurer-specific endorsements are developing rapidly.</p>
+    <p><strong>MSP and Supply-Chain Exclusions:</strong> Exclusion wording and prevalence are evolving. Check current market papers for latest restrictions.</p>
+    <p><strong>CrowdStrike-Related Market Pricing:</strong> Post-July 2024, premium and underwriting appetite changes are still in motion.</p>
+    <p style="margin-bottom:0;"><strong>Always consult a specialist technology PI broker for current market terms.</strong></p>
+  </div>
+
+  <h2>Primary Sources</h2>
+  <p>The following 18 sources underpin claims and figures throughout this hub. All are publicly accessible or are standard industry references.</p>
+
+  <table class="source-table">
+    <thead>
+      <tr>
+        <th class="col-num">#</th>
+        <th>Source</th>
+        <th>Type</th>
+        <th>Relevance</th>
+        <th>URL / Reference</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-num">1</td>
+        <td class="col-title">CrowdStrike: Preliminary Post Incident Review 2024</td>
+        <td class="col-type">Incident Report</td>
+        <td>CrowdStrike Falcon update basis</td>
+        <td class="col-url"><a href="https://www.crowdstrike.com/blog/falcon-content-update-remediation-and-guidance/" target="_blank">crowdstrike.com/blog/falcon-content-update-remediation-and-guidance/</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">2</td>
+        <td class="col-title">Delta Air Lines SEC Filings 2024 Q3</td>
+        <td class="col-type">Company Filing</td>
+        <td>Delta $500m loss claim verification</td>
+        <td class="col-url"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=DAL" target="_blank">sec.gov/cgi-bin/browse-edgar (DAL)</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">3</td>
+        <td class="col-title">FCA: TSB Final Notice 2023</td>
+        <td class="col-type">Regulatory</td>
+        <td>TSB £48.6m fine basis</td>
+        <td class="col-url"><a href="https://www.fca.org.uk/publication/final-notices/tsb-bank-plc-2023.pdf" target="_blank">fca.org.uk/publication/final-notices/tsb-bank-plc-2023.pdf</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">4</td>
+        <td class="col-title">NIST: Secure Software Development Framework (SSDF) SP 800-218</td>
+        <td class="col-type">Standards</td>
+        <td>SDL controls guidance</td>
+        <td class="col-url"><a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-218.pdf" target="_blank">nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-218.pdf</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">5</td>
+        <td class="col-title">EU AI Act (Regulation 2024/1689)</td>
+        <td class="col-type">Legislative</td>
+        <td>AI liability framework</td>
+        <td class="col-url"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank">eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">6</td>
+        <td class="col-title">Ofcom: General Conditions of Entitlement 2022</td>
+        <td class="col-type">Regulatory</td>
+        <td>F5 telecom obligations (UK)</td>
+        <td class="col-url"><a href="https://www.ofcom.org.uk/phones-and-broadband/advice-for-consumers/general-conditions" target="_blank">ofcom.org.uk/phones-and-broadband/advice-for-consumers/general-conditions</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">7</td>
+        <td class="col-title">FCC: 911 Reliability Rules (47 CFR Part 12)</td>
+        <td class="col-type">Regulatory</td>
+        <td>F5 US emergency services</td>
+        <td class="col-url"><a href="https://www.fcc.gov/consumers/guides/911-services-your-area" target="_blank">fcc.gov/consumers/guides/911-services-your-area</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">8</td>
+        <td class="col-title">ISO/IEC 27001:2022</td>
+        <td class="col-type">Standards</td>
+        <td>ISMS basis for tech risk management</td>
+        <td class="col-url"><a href="https://www.iso.org/standard/82875.html" target="_blank">iso.org/standard/82875.html</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">9</td>
+        <td class="col-title">OWASP Top 10 2021</td>
+        <td class="col-type">Standards</td>
+        <td>Web application security basis</td>
+        <td class="col-url"><a href="https://owasp.org/www-project-top-ten/" target="_blank">owasp.org/www-project-top-ten/</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">10</td>
+        <td class="col-title">SEC: SolarWinds CISO Charges 2023</td>
+        <td class="col-type">Regulatory</td>
+        <td>Supply chain software liability</td>
+        <td class="col-url"><a href="https://www.sec.gov/news/press-release/2023-227" target="_blank">sec.gov/news/press-release/2023-227</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">11</td>
+        <td class="col-title">IC3 (FBI Internet Crime Report 2023)</td>
+        <td class="col-type">Government</td>
+        <td>Tech-related cybercrime losses</td>
+        <td class="col-url"><a href="https://www.ic3.gov/Media/PDF/AnnualReport/2023_IC3Report.pdf" target="_blank">ic3.gov/Media/PDF/AnnualReport/2023_IC3Report.pdf</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">12</td>
+        <td class="col-title">Merck v Chubb (NJ Superior Court, 2023)</td>
+        <td class="col-type">Case Law</td>
+        <td>NotPetya war exclusion ruling</td>
+        <td class="col-url"><a href="https://www.courtlistener.com/" target="_blank">courtlistener.com/</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">13</td>
+        <td class="col-title">UK Post Office / Horizon — Hansard (2024)</td>
+        <td class="col-type">Government</td>
+        <td>Fujitsu Horizon tech E&O basis</td>
+        <td class="col-url"><a href="https://hansard.parliament.uk/" target="_blank">hansard.parliament.uk/</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">14</td>
+        <td class="col-title">NHS Digital: NPfIT Post-Implementation Review</td>
+        <td class="col-type">Government</td>
+        <td>NHS IT failure basis</td>
+        <td class="col-url"><a href="https://digital.nhs.uk/" target="_blank">digital.nhs.uk/</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">15</td>
+        <td class="col-title">Knight Capital Group SEC Filing 2012</td>
+        <td class="col-type">Company Filing</td>
+        <td>Knight Capital $440m loss verification</td>
+        <td class="col-url"><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=KNGT" target="_blank">sec.gov/cgi-bin/browse-edgar (KNGT)</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">16</td>
+        <td class="col-title">Marsh: Technology E&O Market Update 2024</td>
+        <td class="col-type">Broker Report</td>
+        <td>Market conditions and rates</td>
+        <td class="col-url"><a href="https://www.marsh.com" target="_blank">marsh.com</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">17</td>
+        <td class="col-title">Beazley: Tech Risk Report 2024</td>
+        <td class="col-type">Carrier Report</td>
+        <td>Tech PI claims trends</td>
+        <td class="col-url"><a href="https://www.beazley.com" target="_blank">beazley.com</a></td>
+      </tr>
+      <tr>
+        <td class="col-num">18</td>
+        <td class="col-title">CISA: Software Supply Chain Security Guidance 2023</td>
+        <td class="col-type">Government</td>
+        <td>MSP and supply chain PI controls</td>
+        <td class="col-url"><a href="https://www.cisa.gov/resources-tools/resources/software-supply-chain-security" target="_blank">cisa.gov/resources-tools/resources/software-supply-chain-security</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Per-Module Confidence Audit</h2>
+  <p>This table summarises the data quality and confidence level of key claims in each module. Use to prioritise which sections require specialist broker validation.</p>
+
+  <table class="audit-table">
+    <thead>
+      <tr>
+        <th>Module</th>
+        <th>Highest Confidence</th>
+        <th>Key EST Claims</th>
+        <th>Data Gaps</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>01 Overview</strong></td>
+        <td>CrowdStrike/Knight Capital/TSB losses VER; GWP figures EST</td>
+        <td>Global tech E&O GWP ~$15bn</td>
+        <td>Actual Lloyd's F4/F5 GWP split</td>
+      </tr>
+      <tr>
+        <td><strong>02 History</strong></td>
+        <td>Regulatory/company events VER; market estimates EST</td>
+        <td>Market rate levels pre-2000; dot-com aggregate claims</td>
+        <td>Pre-1999 tech E&O premium data</td>
+      </tr>
+      <tr>
+        <td><strong>03 Timeline</strong></td>
+        <td>Most events VER (filings/news); market impact EST</td>
+        <td>Aggregate dot-com claims; Log4Shell remediation cost</td>
+        <td>Individual settlement amounts — nearly all confidential</td>
+      </tr>
+      <tr>
+        <td><strong>04 Database</strong></td>
+        <td>Company disclosures/regulatory actions VER; project failures EST</td>
+        <td>NHS NPfIT total cost; aggregate industry losses</td>
+        <td>Individual policy claim data not public</td>
+      </tr>
+      <tr>
+        <td><strong>05 Underwriting</strong></td>
+        <td>Rate ranges EST; contract analysis principled; worked examples ILLUS</td>
+        <td>Specific rate multipliers; LoL clause prevalence</td>
+        <td>Insurer-specific rate cards; actual book loss ratios</td>
+      </tr>
+      <tr>
+        <td><strong>06 Rates & ROE</strong></td>
+        <td>Market cycles directionally correct; absolute levels EST</td>
+        <td>Rate index values; combined ratios</td>
+        <td>Syndicate-level F4/F5 combined ratio data</td>
+      </tr>
+      <tr>
+        <td><strong>07 Risk Mitigation</strong></td>
+        <td>Standards VER; SDL best practice EST; AI section developing fast</td>
+        <td>Premium impact of specific controls</td>
+        <td>Post-CrowdStrike insurer requirements (still evolving)</td>
+      </tr>
+      <tr>
+        <td><strong>08 Global Programme</strong></td>
+        <td>Market structure EST; regulatory comparison correct; ILLUS case study</td>
+        <td>Hyperscaler captive structures</td>
+        <td>Actual BigTech PI programme costs</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Data Gap Disclosures</h2>
+  <p>The following six areas represent known limitations in data availability, confidentiality constraints, or rapid evolution. These are flagged throughout the hub with <span class="c-gap">GAP</span> badges.</p>
+
+  <div class="gap-grid">
+    <div class="gap-card">
+      <div class="gap-num">1</div>
+      <h4>F4/F5 GWP Breakdown</h4>
+      <p>No published data splits Lloyd's tech PI between F4 (technology) and F5 (telecom). Market-wide estimates of $15bn+ global tech E&O GWP include US admitted and surplus lines markets — not separately verified. <span class="c-gap">GAP</span></p>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-num">2</div>
+      <h4>CrowdStrike Insured Losses</h4>
+      <p>The $800m–$1bn insured loss estimate for CrowdStrike July 2024 is from analyst and broker reports. Delta litigation is ongoing; actual policy claim payouts across the market will not be known for years. The $10bn total economic loss is widely cited but methodologically variable. <span class="c-gap">GAP</span></p>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-num">3</div>
+      <h4>Delta v CrowdStrike Outcome</h4>
+      <p>As of May 2025 knowledge cutoff, Delta Air Lines' $500m lawsuit against CrowdStrike was active. Outcome unknown. CrowdStrike's contract LoL clause (liability capped at fees paid — approximately $10m) is central to the dispute. <span class="c-gap">GAP</span></p>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-num">4</div>
+      <h4>NHS NPfIT Contractor Liability</h4>
+      <p>NHS NPfIT total cost (~£9.8bn wasted) is publicly reported, but individual contractor liability settlements (iSOFT, Fujitsu, BT, CSC) are almost entirely confidential under commercial settlement agreements. <span class="c-gap">GAP</span></p>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-num">5</div>
+      <h4>AI E&O Policy Language</h4>
+      <p>As of May 2025, there was no market-standard tech E&O wording for AI/generative AI liability. Insurer-specific endorsements were developing rapidly. The coverage position for AI hallucination errors, bias claims and EU AI Act non-compliance is unsettled. <span class="c-gap">GAP</span></p>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-num">6</div>
+      <h4>MSP Supply Chain Exclusions</h4>
+      <p>Post-Kaseya and post-CrowdStrike, many insurers added MSP supply-chain software exclusions. The specific wording, scope and prevalence of these exclusions varies significantly between insurers and is not standardised. <span class="c-gap">GAP</span></p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Risk Code Hub v2.5 — Technology &amp; Telecom PI E&O (F4/F5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Underwriting Methodology — Mortgage, Title, Surety & Financial Guarantee</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --fin: #1a3a5c;
+      --fin-dark: #0d2035;
+      --mortgage: #c9963a;
+      --surety: #2d6b3a;
+      --title: #7b2533;
+      --fg: #5b21b6;
+      --risk: #c0572a;
+      --gold: #c9a84c;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1a2332;
+      --mid: #5a6a7a;
+      --card-border: #dce3ed;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0d2035 0%, #1a3a5c 50%, #0a1828 100%);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    nav {
+      background: #0d2035;
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #a8c4d8;
+      text-decoration: none;
+      font-size: 0.78rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .breadcrumb {
+      padding: 0.5rem 1.5rem;
+      background: #e8edf4;
+      font-size: 0.8rem;
+      color: #5a6a7a;
+    }
+
+    .breadcrumb a {
+      color: #1a3a5c;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      margin: 2rem 0 1rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--fin);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-left: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge.ver { background: #d1fae5; color: #065f46; }
+    .badge.est { background: #fef3c7; color: #92400e; }
+    .badge.illus { background: #dbeafe; color: #1e40af; }
+    .badge.gap { background: #ffe4e6; color: #9f1239; }
+
+    .formula-panel {
+      background: #f8f9fa;
+      border-left: 4px solid var(--fin);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .formula-panel strong {
+      display: block;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .formula-item {
+      margin: 0.8rem 0;
+      line-height: 1.8;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .card.mortgage { border-left: 4px solid var(--mortgage); }
+    .card.title { border-left: 4px solid var(--title); }
+    .card.surety { border-left: 4px solid var(--surety); }
+    .card.fg { border-left: 4px solid var(--fg); }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: #e8edf4;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    th {
+      font-weight: 700;
+      color: var(--fin-dark);
+    }
+
+    tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    .worked-example {
+      background: #f0f4ff;
+      border-left: 4px solid var(--fg);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+    }
+
+    .worked-example h4 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--fin-dark);
+    }
+
+    .example-item {
+      margin: 0.8rem 0;
+      line-height: 1.8;
+    }
+
+    .example-item strong {
+      color: var(--fin);
+    }
+
+    footer {
+      background: #0d2035;
+      color: #a8c4d8;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Underwriting Methodology</h1>
+    <p>Mortgage, Title, Surety & Financial Guarantee</p>
+  </header>
+
+  <nav>
+    <a href="overview.html">Overview</a>
+    <a href="history.html">History</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="database.html">Database</a>
+    <a href="underwriting.html" class="active">Underwriting</a>
+    <a href="rates-analysis.html">Rates & ROE</a>
+    <a href="risk-mitigation.html">Risk Mitigation</a>
+    <a href="global-program.html">Global Programme</a>
+    <a href="references.html">References</a>
+    <a href="../index.html">← Hub Home</a>
+  </nav>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Financial Lines Miscellaneous › Underwriting
+  </div>
+
+  <div class="container">
+
+    <section>
+      <h2 class="section-title">Section A: MIG/FM Underwriting</h2>
+
+      <div class="formula-panel">
+        <strong>MIG Premium Rating Formula</strong>
+        <div class="formula-item">MIG Premium = LTV Excess Amount × Base Rate × Property Risk Factor × Portfolio Adjustment</div>
+      </div>
+
+      <div style="margin: 1.5rem 0;">
+        <h3>Rating Components</h3>
+        <div class="formula-item">
+          <strong>LTV Excess:</strong> Amount of loan above lender threshold (e.g. above 75%) <span class="badge ver">VER</span>
+        </div>
+        <div class="formula-item">
+          <strong>Base Rate:</strong> 0.25–2.5% of excess per annum <span class="badge est">EST</span>
+        </div>
+        <div class="formula-item">
+          <strong>Property Risk Factor:</strong> 0.8–1.5× (property type, location, new-build premium) <span class="badge est">EST</span>
+        </div>
+        <div class="formula-item">
+          <strong>Portfolio Adjustment:</strong> 0.85–1.2× (lender quality, arrears history, mix) <span class="badge est">EST</span>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card mortgage">
+          <h3>LTV Band</h3>
+          <p><strong>75–80%:</strong> Standard rate, minimal premium.</p>
+          <p><strong>80–90%:</strong> Elevated risk; rate loading 1.2–1.5×.</p>
+          <p><strong>90–95%:</strong> High risk; rate loading 1.8–2.5×. Tighter lender approval.</p>
+        </div>
+
+        <div class="card mortgage">
+          <h3>Property Type</h3>
+          <p><strong>Standard residential:</strong> 1.0× factor.</p>
+          <p><strong>New-build:</strong> 1.1–1.3× premium (completion risk, defect risk).</p>
+          <p><strong>Flats & ex-RTB:</strong> 1.2–1.5× (collective leasehold risk, older defects).</p>
+        </div>
+
+        <div class="card mortgage">
+          <h3>Borrower Quality</h3>
+          <p><strong>Income verification:</strong> PAYE vs self-employed; recent payslips required.</p>
+          <p><strong>Credit score:</strong> Minimum floor typically 620–680.</p>
+          <p><strong>Affordability:</strong> Stress-rate test; debt-to-income ratio limits.</p>
+        </div>
+
+        <div class="card mortgage">
+          <h3>Regional Market</h3>
+          <p><strong>London/SE:</strong> Lower long-run default; 0.85–0.95× factor.</p>
+          <p><strong>Northern regions:</strong> Higher price volatility; 1.0–1.2× factor.</p>
+          <p><strong>Portfolio limits:</strong> Geographic concentration caps (e.g. max 30% in single region).</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section B: Title Insurance (TT) Underwriting</h2>
+
+      <p style="margin: 1rem 0; font-size: 0.95rem;">Title insurance is fundamentally different from risk-rated products: premiums are one-time, paid at close, and based on property or loan value rather than annual risk assessment.</p>
+
+      <div class="formula-panel">
+        <strong>Title Insurance Premium Formula</strong>
+        <div class="formula-item">Title Premium = (Property or Loan Value / 1,000) × Rate per $1,000</div>
+      </div>
+
+      <div style="margin: 1.5rem 0;">
+        <h3>Rate Guidance</h3>
+        <div class="formula-item">
+          <strong>Owner's policy (USA):</strong> $3.00–6.00 per $1,000 (varies by state) <span class="badge ver">VER</span>
+        </div>
+        <div class="formula-item">
+          <strong>Lender's policy (USA):</strong> $1.50–4.00 per $1,000 <span class="badge ver">VER</span>
+        </div>
+        <div class="formula-item">
+          <strong>UK premium:</strong> typically 0.1–0.5% of property value <span class="badge est">EST</span>
+        </div>
+        <div class="formula-item">
+          <strong>Simultaneous issue discount:</strong> typically 20–30% when both purchased together <span class="badge ver">VER</span>
+        </div>
+      </div>
+
+      <h3 style="margin: 1.5rem 0 1rem 0;">Title Risk Assessment</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Risk Factor</th>
+            <th>Low Risk</th>
+            <th>Higher Risk</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Title history</strong></td>
+            <td>Clean registered title</td>
+            <td>Unregistered, multiple transfers</td>
+          </tr>
+          <tr>
+            <td><strong>Property type</strong></td>
+            <td>Standard freehold residential</td>
+            <td>Leasehold, listed building, flying freehold</td>
+          </tr>
+          <tr>
+            <td><strong>Transaction type</strong></td>
+            <td>Straightforward purchase</td>
+            <td>Remortgage after recent sale, developer transfer</td>
+          </tr>
+          <tr>
+            <td><strong>Fraud indicators</strong></td>
+            <td>Verified ownership, physical inspection</td>
+            <td>Remote transaction, urgent sale, below-market price</td>
+          </tr>
+          <tr>
+            <td><strong>Planning/building regs</strong></td>
+            <td>Fully permitted</td>
+            <td>Retrospective permissions, extensions without consent</td>
+          </tr>
+          <tr>
+            <td><strong>Cladding/BSA 2022</strong></td>
+            <td>EWS1 certificate obtained</td>
+            <td>No EWS1, unknown cladding type</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="formula-panel">
+        <strong>UK-Specific Title Risks</strong>
+        <div class="formula-item">
+          • <strong>Conveyancing fraud:</strong> Wire transfer hijacking, spoofed emails from solicitors, diverted payments
+        </div>
+        <div class="formula-item">
+          • <strong>Leasehold reform uncertainty:</strong> Leasehold reform bill (2024) introduces new statutory rights; existing deed restrictions may become unenforceable
+        </div>
+        <div class="formula-item">
+          • <strong>Restrictive covenant defects:</strong> Historic covenants (e.g. "no trade use") may reactivate with new owner; indemnity insurance required
+        </div>
+        <div class="formula-item">
+          • <strong>Missing planning consents:</strong> Extensions or conversions executed without consent; enforcement action possible up to 10 years
+        </div>
+        <div class="formula-item">
+          • <strong>Chancel repair liability:</strong> Ancient obligation to fund parish church repairs; affects older properties in some regions
+        </div>
+        <div class="formula-item">
+          • <strong>HS2 compulsory purchase zones:</strong> Properties in CPO routes face uncertainty; title insurance exclusion common
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section C: Surety (SB) Underwriting</h2>
+
+      <p style="margin: 1rem 0; font-size: 0.95rem;">Surety is fundamentally a credit analysis product, not a risk-rated insurance product. Surety underwriters assess contractor/principal financial strength first; pricing follows from credit tier.</p>
+
+      <div class="formula-panel">
+        <strong>Bond Premium Formula</strong>
+        <div class="formula-item">Bond Premium = Contract Value × Rate × Tenor Factor</div>
+      </div>
+
+      <div style="margin: 1.5rem 0;">
+        <h3>Premium Components</h3>
+        <div class="formula-item">
+          <strong>Performance bond rate:</strong> 0.5–3.0% of contract value <span class="badge ver">VER</span>
+        </div>
+        <div class="formula-item">
+          <strong>Payment bond (typically alongside):</strong> additional 0.2–0.75% <span class="badge ver">VER</span>
+        </div>
+        <div class="formula-item">
+          <strong>Tenor factor:</strong> 1.0 (1 year), 1.4–1.6 (2 years), 1.8–2.2 (3+ years) <span class="badge est">EST</span>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card surety">
+          <h3>1. Financial Strength</h3>
+          <p>Net worth, working capital, backlog-to-equity ratio, current ratio. Key ratio: backlog/equity &lt; 10:1 <span class="badge est">EST</span></p>
+        </div>
+
+        <div class="card surety">
+          <h3>2. Work Type</h3>
+          <p><strong>Building:</strong> Low risk 0.5–0.8%. <strong>Civil/Infrastructure:</strong> Medium 0.8–1.5%. <strong>Process/Industrial:</strong> Higher 1.2–2.0%. <strong>Specialist/International:</strong> Highest 1.5–3.0% <span class="badge est">EST</span></p>
+        </div>
+
+        <div class="card surety">
+          <h3>3. Completion Record</h3>
+          <p>% projects completed on time, prior bond losses, references from principals. Strong track record reduces rate.</p>
+        </div>
+
+        <div class="card surety">
+          <h3>4. Management Quality</h3>
+          <p>Experience, succession planning, key-person dependency, subcontractor management. Weak management triggers rate loading or declination.</p>
+        </div>
+
+        <div class="card surety">
+          <h3>5. Project-Specific Risks</h3>
+          <p>Size vs annual turnover (&lt; 25% safer), fixed-price vs cost-plus, design responsibility, supply chain dependencies <span class="badge est">EST</span></p>
+        </div>
+
+        <div class="card surety">
+          <h3>6. Co-Surety/Reinsurance</h3>
+          <p>Large bonds often co-sured; lead surety typically 50–70% with one or two co-sureties. Reinsurance obligatory above single risk retention limits <span class="badge est">EST</span></p>
+        </div>
+      </div>
+
+      <h3 style="margin: 1.5rem 0 1rem 0;">4-Class Risk Matrix (Contractor Quality vs Project Complexity)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Contractor / Project Complexity</th>
+            <th>Low Complexity</th>
+            <th>High Complexity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Low Quality (higher risk contractor)</strong></td>
+            <td>1.0–1.5%</td>
+            <td>2.0–3.0%+</td>
+          </tr>
+          <tr>
+            <td><strong>High Quality (strong contractor)</strong></td>
+            <td>0.5–0.7%</td>
+            <td>0.8–1.2%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin: 1.5rem 0 1rem 0;">8-Step Surety Underwriting Process</h3>
+      <ol style="line-height: 2; margin: 1rem 0;">
+        <li><strong>Financial analysis:</strong> 3 years audited accounts, management accounts, tax returns. Ratio analysis and trend.</li>
+        <li><strong>Work program review:</strong> Current backlog, pipeline contracts, projected cash flows, project-to-turnover concentration.</li>
+        <li><strong>Reference checks:</strong> Prior bond experience with other sureties, principal feedback on contractor performance.</li>
+        <li><strong>Contract review:</strong> Fixed-price risk, design liability, liquidated damages caps, subcontracting limits.</li>
+        <li><strong>Site visit:</strong> Conducted for major bonds (&gt; £5m). Assess site management, safety culture, resource allocation.</li>
+        <li><strong>Principal indemnity agreement:</strong> Personal indemnity from directors and shareholders. Cross-guarantees within group.</li>
+        <li><strong>Rating & pricing:</strong> Credit tier assigned; rate set per tier and project factors. Co-surety placement if required.</li>
+        <li><strong>Co-surety/reinsurance placement:</strong> For bonds exceeding lead surety single risk limit. Negotiate lead/co-surety split, lines, and commissions.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section D: Financial Guarantee (FG) Underwriting</h2>
+
+      <p style="margin: 1rem 0; font-size: 0.95rem;">Financial Guarantee is structurally different from traditional insurance: it wraps a specific debt obligation. Underwriting focuses on credit analysis of the underlying issuer and obligation structure.</p>
+
+      <div class="formula-panel">
+        <strong>Financial Guarantee Annual Premium Formula</strong>
+        <div class="formula-item">FG Annual Premium = Insured Par × (Credit Spread − AAA Reference Rate) × Coverage Fraction</div>
+      </div>
+
+      <div style="margin: 1.5rem 0;">
+        <h3>Pricing Guidance</h3>
+        <div class="formula-item">
+          <strong>Infrastructure FG:</strong> Typically 20–60 bps per annum of insured par <span class="badge est">EST</span>
+        </div>
+        <div class="formula-item">
+          <strong>Tenor:</strong> 10–30 years common for infrastructure <span class="badge est">EST</span>
+        </div>
+        <div class="formula-item">
+          <strong>Payment structure:</strong> Up-front or annual premium depending on contract structure <span class="badge ver">VER</span>
+        </div>
+      </div>
+
+      <h3 style="margin: 1.5rem 0 1rem 0;">Key Underwriting Criteria</h3>
+      <ul style="line-height: 2; margin: 1rem 0;">
+        <li><strong>Issuer credit quality:</strong> Investment-grade minimum (BBB− floor); sovereign or quasi-sovereign support preferred.</li>
+        <li><strong>Security structure:</strong> Revenue pledge, reserve fund requirements, debt service coverage ratio covenants (DSCR ≥ 1.2×).</li>
+        <li><strong>Legal opinion:</strong> Validity and enforceability of underlying obligation; strength of security package.</li>
+        <li><strong>Monitoring rights:</strong> Ongoing covenant compliance reporting; trigger events for enhanced monitoring or cure rights.</li>
+        <li><strong>Portfolio concentration limits:</strong> Geographic concentration (no single country &gt; 20% of insured par); sector concentration (no single sector &gt; 25%).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section E: Quality Scoring Matrix</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Criterion</th>
+            <th>Excellent (✓)</th>
+            <th>Good</th>
+            <th>Acceptable</th>
+            <th>Decline (✗)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Financial Strength</strong></td>
+            <td>Net worth &gt; 10% contract; CR &gt; 2.0</td>
+            <td>Net worth 5–10%; CR 1.5–2.0</td>
+            <td>Net worth 2–5%; CR 1.2–1.5</td>
+            <td>Net worth &lt; 2%; CR &lt; 1.2</td>
+          </tr>
+          <tr>
+            <td><strong>Track Record</strong></td>
+            <td>10+ yrs, zero claims, A-rated principals</td>
+            <td>5–10 yrs, rare claims, established principals</td>
+            <td>2–5 yrs, isolated losses, reasonable refs</td>
+            <td>&lt; 2 yrs or significant losses</td>
+          </tr>
+          <tr>
+            <td><strong>Project Complexity</strong></td>
+            <td>&lt; 10% of turnover, proven type</td>
+            <td>10–20% of turnover, similar experience</td>
+            <td>20–30% of turnover, limited experience</td>
+            <td>&gt; 30% or entirely new type</td>
+          </tr>
+          <tr>
+            <td><strong>Contract Terms</strong></td>
+            <td>Cost-plus or variable price, design by principal</td>
+            <td>Fixed-price with escalation, shared design risk</td>
+            <td>Fixed-price, contractor design liability</td>
+            <td>Fixed-price, full design + completion risk</td>
+          </tr>
+          <tr>
+            <td><strong>Co-Surety Availability</strong></td>
+            <td>Multiple A-rated options willing</td>
+            <td>1–2 A-rated co-sureties available</td>
+            <td>B-rated co-sureties or limited lines</td>
+            <td>No co-surety available; market capacity gap</td>
+          </tr>
+          <tr>
+            <td><strong>Indemnity Support</strong></td>
+            <td>Directors + parent company indemnity, collateral</td>
+            <td>Directors indemnity only</td>
+            <td>Directors indemnity, weak parents</td>
+            <td>No indemnity or unsecured personal guarantee</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section F: Worked Examples</h2>
+
+      <div class="worked-example">
+        <h4>Example 1: Performance Bond (Surety) <span class="badge illus">ILLUS</span></h4>
+        <div class="example-item">
+          <strong>Contract:</strong> £8m hospital wing construction, 18-month completion
+        </div>
+        <div class="example-item">
+          <strong>Contractor:</strong> Mid-tier regional contractor, net worth £2.5m, 8-year trading history, no prior bond claims
+        </div>
+        <div class="example-item">
+          <strong>Rating analysis:</strong>
+          <ul style="margin: 0.5rem 0 0 1.5rem;">
+            <li>Work type: Building (0.8% base rate)</li>
+            <li>Complexity factor: Medium (×1.1)</li>
+            <li>Track record discount: Clean history (×0.9)</li>
+          </ul>
+        </div>
+        <div class="example-item">
+          <strong>Bond sizing:</strong> Performance bond = 10% of contract = £800,000
+        </div>
+        <div class="example-item">
+          <strong>Performance bond premium:</strong> £800,000 × 0.8% × 1.1 × 0.9 = <strong>~£6,336</strong> (approx 0.08% of contract value)
+        </div>
+        <div class="example-item">
+          <strong>Payment bond:</strong> £800,000 × 0.3% = <strong>£2,400</strong>
+        </div>
+        <div class="example-item" style="margin-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1rem;">
+          <strong>Total bonding cost: ~£8,736</strong> for full performance + payment package
+        </div>
+      </div>
+
+      <div class="worked-example">
+        <h4>Example 2: Title Insurance (Title) <span class="badge illus">ILLUS</span></h4>
+        <div class="example-item">
+          <strong>Property:</strong> £650,000 residential property in London, leasehold flat, recent change in ground rent structure, no EWS1 for external wall system
+        </div>
+        <div class="example-item">
+          <strong>Owner's policy:</strong> £650,000 / 1,000 × £4.50 = <strong>£2,925</strong>
+        </div>
+        <div class="example-item">
+          <strong>Lender's policy (simultaneous issue):</strong> £520,000 loan / 1,000 × £2.50 × 0.75 (discount) = <strong>£975</strong>
+        </div>
+        <div class="example-item">
+          <strong>Leasehold/cladding risk loading:</strong> +30% on combined = <strong>+£1,170</strong>
+        </div>
+        <div class="example-item" style="margin-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1rem;">
+          <strong>Total: ~£5,070</strong> for combined owner's + lender's cover package with risk loading
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>Risk Code Hub | Financial Lines Miscellaneous | Lloyd's Market Intelligence</p>
+    <p style="font-size: 0.8rem; margin-top: 0.5rem;">Knowledge cutoff: May 2025 | All premiums illustrative</p>
+  </footer>
+</body>
+</html>

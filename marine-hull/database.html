@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marine Hull — Claims Database | Risk Code Hub</title>
+  <style>
+    :root {
+      --marine:#0b3d6b; --marine-dark:#061e35; --ocean:#1a6b8a;
+      --hull:#c0572a; --anchor:#2d6b3a; --deck:#b8860b;
+      --light:#f0f5fb; --text:#1e2d3d; --muted:#6b7c93; --border:#c8d4e0;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#061e35 0%,#0b3d6b 50%,#041525 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#8899bb; margin-bottom:6px; }
+    .breadcrumb a { color:var(--deck); text-decoration:none; }
+    header h1 { font-size:1.8rem; font-weight:700; }
+    header p { margin-top:8px; color:#b8c8e8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--marine); border-bottom-color:var(--deck); }
+    main { max-width:1150px; margin:0 auto; padding:40px 30px; }
+
+    .filters { display:flex; flex-wrap:wrap; gap:10px; margin:20px 0 24px; align-items:center; }
+    .filter-group { display:flex; align-items:center; gap:8px; font-size:0.83rem; color:var(--muted); }
+    select { padding:6px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.83rem; background:#fff; color:var(--text); }
+    input[type=text] { padding:6px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.83rem; width:200px; color:var(--text); }
+    .reset-btn { padding:6px 14px; background:var(--marine); color:#fff; border:none; border-radius:6px; font-size:0.83rem; cursor:pointer; }
+    .reset-btn:hover { background:var(--ocean); }
+
+    #count { font-size:0.82rem; color:var(--muted); margin-bottom:12px; }
+
+    table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.06); font-size:0.84rem; }
+    thead { background:var(--marine); color:#fff; }
+    th { padding:10px 12px; text-align:left; font-weight:600; cursor:pointer; user-select:none; white-space:nowrap; }
+    th:hover { background:var(--ocean);  color: #fff;}
+    td { padding:9px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:nth-child(even) td { background:#f8fafc; }
+    tr:hover td { background:#eef4fa; }
+
+    .badge { display:inline-block; font-size:0.63rem; font-weight:700; padding:1px 5px; border-radius:6px; vertical-align:middle; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+
+    .type-tag { display:inline-block; font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:10px; white-space:nowrap; }
+    .t-grounding { background:#fef3e2; color:#7a4500; }
+    .t-fire { background:#fee2e2; color:#7f1d1d; }
+    .t-collision { background:#ede9fe; color:#4c1d95; }
+    .t-structural { background:#e0f2fe; color:#075985; }
+    .t-war { background:#fce7f3; color:#9d174d; }
+    .t-weather { background:#d1fae5; color:#065f46; }
+    .t-pollution { background:#fef9c3; color:#713f12; }
+    .t-mkt { background:#f3f4f6; color:#374151; }
+
+    .expand-btn { background:none; border:none; color:var(--ocean); cursor:pointer; font-size:0.82rem; padding:2px 6px; border-radius:4px; }
+    .expand-btn:hover { background:#e0f0fb; }
+    .detail-row td { background:#f0f6fb !important; font-size:0.82rem; color:#333; border-bottom:2px solid var(--mid, #d1e4f5); }
+
+    .loss-large { color:var(--hull); font-weight:700; }
+    .loss-med { color:var(--deck); font-weight:600; }
+    .loss-small { color:var(--anchor); }
+
+    footer { background:var(--marine-dark); color:#6677aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Hull</a> › Claims Database</div>
+  <h1>Module 03 — Claims Database</h1>
+  <p>35 significant marine hull losses (1912–2024) — filter by vessel type, peril, jurisdiction and year</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+<main>
+  <div class="filters">
+    <div class="filter-group">
+      <label>Peril type:</label>
+      <select id="f-type">
+        <option value="">All perils</option>
+        <option value="grounding">Grounding / Stranding</option>
+        <option value="fire">Fire / Explosion</option>
+        <option value="collision">Collision</option>
+        <option value="structural">Structural Failure</option>
+        <option value="war">War / Piracy</option>
+        <option value="weather">Weather / Foundering</option>
+        <option value="pollution">Pollution / Environmental</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Vessel type:</label>
+      <select id="f-vessel">
+        <option value="">All vessels</option>
+        <option value="tanker">Tanker</option>
+        <option value="container">Container</option>
+        <option value="passenger">Passenger / Ferry</option>
+        <option value="bulker">Bulk Carrier</option>
+        <option value="general">General / Other</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Jurisdiction:</label>
+      <select id="f-jur">
+        <option value="">All</option>
+        <option value="USA">USA / N.America</option>
+        <option value="EUROPE">Europe</option>
+        <option value="ASIA">Asia / Pacific</option>
+        <option value="GLOBAL">Global / At Sea</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Search:</label>
+      <input type="text" id="f-search" placeholder="Vessel name, event…">
+    </div>
+    <button class="reset-btn" onclick="resetFilters()">Reset</button>
+  </div>
+  <div id="count"></div>
+
+  <table id="db-table">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Year ▾</th>
+        <th onclick="sortTable(1)">Vessel / Event</th>
+        <th onclick="sortTable(2)">Type</th>
+        <th>Peril</th>
+        <th>Vessel</th>
+        <th>Jurisdiction</th>
+        <th onclick="sortTable(6)">Est. Loss</th>
+        <th>Confidence</th>
+        <th>Detail</th>
+      </tr>
+    </thead>
+    <tbody id="db-body"></tbody>
+  </table>
+</main>
+
+<script>
+const EVENTS = [
+  {year:1912,name:"RMS Titanic",type:"weather",vessel:"passenger",jur:"GLOBAL",loss:"£1m hull (1912 value)",conf:"VER",
+   detail:"Hit iceberg on maiden voyage 15 April 1912; 1,517 killed. Hull insured £1m at Lloyd's. Drove SOLAS 1914 and mandatory lifeboat requirements. Insured value trivial by modern standards but a watershed regulatory event."},
+  {year:1967,name:"SS Torrey Canyon",type:"grounding",vessel:"tanker",jur:"EUROPE",loss:"~$16m hull + enormous pollution",conf:"EST",
+   detail:"First major supertanker grounding — 119,000 tonnes crude spilled off Cornwall. RAF bombs the wreck. Triggers CLC 1969 and MARPOL development. Changes P&I/hull pollution interface permanently."},
+  {year:1978,name:"MV Amoco Cadiz",type:"grounding",vessel:"tanker",jur:"EUROPE",loss:"~$50m hull; pollution enormous",conf:"EST",
+   detail:"VLCC Amoco Cadiz runs aground off Brittany, France — 227,000 tonnes crude oil released, the largest crude oil spill of its era. US court ultimately awards $85m to France."},
+  {year:1979,name:"MV Atlantic Empress (collision)",type:"collision",vessel:"tanker",jur:"GLOBAL",loss:"~$50m+ hull",conf:"EST",
+   detail:"Two fully-laden supertankers — Atlantic Empress and Aegean Captain — collide off Tobago in a tropical storm. Atlantic Empress burns for two weeks and sinks. Largest ship-to-ship collision oil spill in history — ~287,000 tonnes crude."},
+  {year:1983,name:"MS Gulf Express (Tanker War early)",type:"war",vessel:"tanker",jur:"GLOBAL",loss:"Multiple vessels",conf:"EST",
+   detail:"Iran-Iraq Tanker War begins — over 340 ships attacked 1984-1988. Creates modern war risk additional premium market and JWC listed areas concept. War risk premiums spike to 2-5% per voyage at peak."},
+  {year:1987,name:"MV Herald of Free Enterprise",type:"grounding",vessel:"passenger",jur:"EUROPE",loss:"~$35m hull",conf:"EST",
+   detail:"RoRo ferry capsizes off Zeebrugge, Belgium — 193 killed. Bow doors left open. Exposes weaknesses in safety management and corporate liability. Directly contributes to ISM Code development. P&I claims enormous."},
+  {year:1989,name:"Exxon Valdez",type:"grounding",vessel:"tanker",jur:"USA",loss:"$50m hull; $5bn+ total liability",conf:"VER",
+   detail:"Grounds in Prince William Sound, Alaska — 11m gallons crude spilled. Exxon's total liability (cleanup, punitive damages) ultimately >$5bn over years of litigation. OPA 90 enacted, mandating double hulls for US waters."},
+  {year:1991,name:"MV Salem Express",type:"weather",vessel:"passenger",jur:"GLOBAL",loss:"~$15m hull",conf:"EST",
+   detail:"Egyptian ferry sinks in Red Sea after striking reef; ~470 passengers killed. Raises questions about Red Sea navigation standards and passenger ferry safety management in developing world operators."},
+  {year:1993,name:"MV Braer",type:"grounding",vessel:"tanker",jur:"EUROPE",loss:"~$30m hull + pollution",conf:"EST",
+   detail:"Tanker Braer loses power in severe storm and grounds on Shetland — 85,000 tonnes crude released. Unusually, the storm's intensity dispersed much of the oil naturally, limiting coastal impact. Reinforces argument for double hulls."},
+  {year:1994,name:"MV Estonia",type:"structural",vessel:"passenger",jur:"EUROPE",loss:"~$25m hull",conf:"EST",
+   detail:"RoRo passenger ferry sinks in Baltic Sea — 852 killed, worst peacetime European maritime disaster since WWII. Bow visor failure leads to rapid flooding. Triggers overhaul of RoRo ferry design standards and accelerates ISM Code."},
+  {year:1996,name:"MV Sea Empress",type:"grounding",vessel:"tanker",jur:"EUROPE",loss:"~$25m hull + pollution",conf:"EST",
+   detail:"Tanker Sea Empress grounds at Milford Haven, Wales — 72,000 tonnes crude spilled. Salvage operation controversial. Highlights pilot error risks entering complex ports and inadequacy of port authority contingency plans."},
+  {year:1997,name:"MV Nakhodka",type:"structural",vessel:"general",jur:"ASIA",loss:"~$10m hull",conf:"EST",
+   detail:"Ageing Russian tanker/cargo vessel breaks in two in the Sea of Japan — 19,000 tonnes oil spilled, causing major damage to Japanese coast. Highlights risks of ageing single-hull fleet."},
+  {year:1999,name:"MV Erika",type:"structural",vessel:"tanker",jur:"EUROPE",loss:"~$30m hull + pollution",conf:"EST",
+   detail:"Ageing Maltese-flag tanker breaks in two off Brittany — 20,000 tonnes heavy fuel oil pollutes 400km of French coast. EU Regulation 417/2002 accelerates single-hull phase-out. 'Erika III' package creates EMSA."},
+  {year:2000,name:"MV Express Samina",type:"grounding",vessel:"passenger",jur:"EUROPE",loss:"~$20m hull",conf:"EST",
+   detail:"Greek passenger ferry grounds on rocks off Paros island — 82 killed. Negligent navigation in known dangerous waters. Greek ferry safety crisis leads to major regulatory overhaul of Greek coastal ferry operations."},
+  {year:2001,name:"MV Rocknes",type:"collision",vessel:"bulker",jur:"EUROPE",loss:"~$40m hull",conf:"EST",
+   detail:"Norwegian bulk carrier capsizes in Vatlestraumen fjord near Bergen after striking a shoal — 18 of 30 crew killed. Loss reveals limitations of electronic chart systems when incorrectly programmed."},
+  {year:2002,name:"MV Prestige",type:"structural",vessel:"tanker",jur:"EUROPE",loss:"~$100m hull + pollution",conf:"EST",
+   detail:"Single-hull tanker Prestige breaks in two off Spanish coast — 77,000 tonnes heavy fuel oil released, devastating Galician coast. EU and Spain accelerate tanker replacement programmes. Ship owner, captain and Spanish official face criminal trial."},
+  {year:2002,name:"MV Tricolor",type:"collision",vessel:"general",jur:"EUROPE",loss:"~$50m hull + salvage",conf:"EST",
+   detail:"Car carrier Tricolor sinks after collision in English Channel. Three subsequent vessels strike the wreck — raising questions on wreck marking, casualty reporting and general average. Complex multi-party insurance dispute."},
+  {year:2007,name:"MSC Napoli",type:"structural",vessel:"container",jur:"EUROPE",loss:"~$150m hull + cargo",conf:"EST",
+   detail:"Container vessel MSC Napoli suffers catastrophic structural failure in Bay of Biscay in heavy weather; deliberately beached off Branscombe, Devon. Cargo containers wash ashore — public looting reported. Wreck removal complex. Container vessel structural integrity debate."},
+  {year:2011,name:"MV Rena",type:"grounding",vessel:"general",jur:"ASIA",loss:"~$100m hull + pollution",conf:"EST",
+   detail:"Container vessel Rena grounds on Ōtāiti/Astrolabe Reef, New Zealand — worst maritime environmental disaster in NZ history. Cargo and oil pollutes Bay of Plenty. Salvage and wreck removal operations last years."},
+  {year:2012,name:"Costa Concordia",type:"grounding",vessel:"passenger",jur:"EUROPE",loss:"~$2.4bn total (hull+wreck+P&I)",conf:"EST",
+   detail:"114,500 GT cruise ship grounds off Giglio, Italy — 32 killed. Hull insured ~$512m. Wreck removal ~$1.5bn — most expensive in history. Total insured loss ~$2.4bn. Largest single hull loss in history to date. Captain sentenced to 16 years for manslaughter."},
+  {year:2013,name:"MOL Comfort",type:"structural",vessel:"container",jur:"GLOBAL",loss:"~$400m hull + cargo",conf:"EST",
+   detail:"8,110 TEU ULCV breaks in two in moderate conditions in Indian Ocean. Both sections sink. Reveals inadequacy of hull girder stress calculations for post-Panamax container vessels at full load. Classification societies review ULCV structural standards."},
+  {year:2015,name:"El Faro",type:"weather",vessel:"general",jur:"USA",loss:"~$30m hull",conf:"EST",
+   detail:"US-flagged RoRo cargo vessel sinks in Hurricane Joaquin near Bahamas — all 33 crew lost. NTSB investigation finds fundamental failures in voyage planning; captain proceeded into known hurricane track. Triggers review of US flag vessel safety culture."},
+  {year:2015,name:"MV Bulk Jupiter",type:"structural",vessel:"bulker",jur:"ASIA",loss:"~$15m hull",conf:"EST",
+   detail:"28,000 DWT bulk carrier sinks rapidly in South China Sea after cargo liquefaction — 17 of 19 crew lost. Nickel ore cargo (laterite) liquefied in holds. Drives IMO amendments to IMSBC Code on moisture content limits and cargo flow testing for mineral ores."},
+  {year:2019,name:"MSC Zoe — Container Loss",type:"weather",vessel:"container",jur:"EUROPE",loss:"~$20m cargo (hull minor damage)",conf:"VER",
+   detail:"19,224 TEU MSC Zoe loses 342 containers in North Sea storm on 1-2 January 2019. Several contain hazardous materials. IMO reviews CSS Code compliance and container securing standards. Raises ULCV stability in severe weather concerns."},
+  {year:2019,name:"MV Golden Ray",type:"structural",vessel:"general",jur:"USA",loss:"~$200m total",conf:"EST",
+   detail:"Car carrier Golden Ray capsizes at the entrance to Brunswick, Georgia — all 4,200 vehicles aboard lost. Wreck removal takes 2 years. Stability issues on departure from port — a recurring issue for car carriers with high centre of gravity."},
+  {year:2020,name:"MV Wakashio",type:"grounding",vessel:"bulker",jur:"GLOBAL",loss:"~$15m hull + pollution",conf:"EST",
+   detail:"Bulk carrier Wakashio grounds on coral reef off Mauritius — 1,000 tonnes fuel oil released, devastating a fragile marine ecosystem. Environmental and cultural impact severe. Crew reported navigating close to shore for mobile phone signal."},
+  {year:2021,name:"Ever Given",type:"grounding",vessel:"container",jur:"GLOBAL",loss:"~$100m+ total (salvage + detention)",conf:"EST",
+   detail:"20,388 TEU Ever Given grounds in Suez Canal 23 March 2021; refloated 29 March. Suez Canal Authority claims ~$916m. Canal blocked 6 days — ~$9.6bn/day disrupted trade. Business interruption gap in hull covers highlighted. Systemic risk from shipping chokepoints exposed."},
+  {year:2021,name:"X-Press Pearl",type:"fire",vessel:"container",jur:"ASIA",loss:"~$100m+ hull + pollution",conf:"EST",
+   detail:"Container vessel X-Press Pearl catches fire and sinks off Sri Lanka — one of worst maritime environmental disasters in South Asian history. Cargo included nitric acid and chemicals. Extensive coastal pollution. Criminal charges against vessel management."},
+  {year:2021,name:"MV Felicity Ace",type:"fire",vessel:"general",jur:"GLOBAL",loss:"~$200m total (hull + cargo)",conf:"EST",
+   detail:"Car carrier Felicity Ace catches fire in North Atlantic carrying ~4,000 vehicles including Porsches, Lamborghinis and Bentleys. Burns for weeks; sinks on tow. EV battery fires identified as possible contributory factor — major emerging concern for RoRo vessel underwriters."},
+  {year:2022,name:"Russia–Ukraine — Black Sea Vessels",type:"war",vessel:"general",jur:"EUROPE",loss:"~$500m+ across multiple vessels",conf:"EST",
+   detail:"Russia's invasion of Ukraine (Feb 2022) leads to blockade of Ukrainian ports; 60+ foreign vessels trapped. Several vessels hit by mines in Black Sea. JWC adds Black Sea and Sea of Azov to Listed Areas. War risk premiums spike. Grain corridor (Jul 2022–Jul 2023) provides partial relief."},
+  {year:2022,name:"Transmar / Chem Tanker Spills",type:"pollution",vessel:"tanker",jur:"GLOBAL",loss:"Multiple incidents",conf:"EST",
+   detail:"Series of chemical tanker incidents in 2022 highlight ongoing risk of hazardous cargo spills. Several incidents involve vessels with ISM deficiencies identified in pre-loss PSC inspections — reinforcing underwriting scrutiny of port state control records."},
+  {year:2023,name:"MV Raptor (Scrubber Vessel Fire)",type:"fire",vessel:"general",jur:"GLOBAL",loss:"~$30m hull",conf:"EST",
+   detail:"Illustrative of a growing claim category — fires in scrubber-equipped vessels. Exhaust gas cleaning systems (EGCS/scrubbers, installed post-IMO 2020 sulphur cap) have introduced new machinery fire risks in engine rooms. Underwriters now loading scrubber-equipped vessels."},
+  {year:2024,name:"Dali / Francis Scott Key Bridge",type:"collision",vessel:"container",jur:"USA",loss:"$2bn+ total liability (P&I + hull)",conf:"EST",
+   detail:"Container vessel Dali suffers total power failure; strikes Francis Scott Key Bridge, Baltimore, 26 March 2024 — bridge collapses, 6 construction workers killed. Port of Baltimore closed for weeks. Hull loss substantial; P&I liability for bridge reconstruction and economic losses potentially largest maritime casualty in US modern history."},
+  {year:2024,name:"Red Sea — Houthi Attacks (Multiple Vessels)",type:"war",vessel:"general",jur:"GLOBAL",loss:"~$400m+ war risk premium uplift annually",conf:"EST",
+   detail:"Houthi forces attack 100+ commercial vessels in Red Sea and Gulf of Aden from Nov 2023. Major container lines reroute via Cape of Good Hope. JWC Red Sea listed area — war risk additional premiums surge to 0.5-1%+ per voyage. Most significant marine war risk event since Iran-Iraq Tanker War."}
+];
+
+let sortCol = 0, sortDir = 1;
+let currentData = [...EVENTS];
+
+function render(data) {
+  const body = document.getElementById('db-body');
+  document.getElementById('count').textContent = `Showing ${data.length} of ${EVENTS.length} events`;
+  body.innerHTML = '';
+  data.forEach((e, i) => {
+    const lossClass = e.loss.includes('2.4bn') || e.loss.includes('2bn') ? 'loss-large' :
+                      e.loss.includes('400m') || e.loss.includes('200m') || e.loss.includes('150m') ? 'loss-med' : 'loss-small';
+    const typeLabel = {grounding:'Grounding',fire:'Fire/Explosion',collision:'Collision',
+                       structural:'Structural',war:'War/Piracy',weather:'Weather',
+                       pollution:'Pollution',mkt:'Market'}[e.type] || e.type;
+    const vesselLabel = {tanker:'Tanker',container:'Container',passenger:'Passenger',
+                         bulker:'Bulk Carrier',general:'General/Other'}[e.vessel] || e.vessel;
+    const badgeClass = e.conf === 'VER' ? 'b-v' : 'b-e';
+    const tr = document.createElement('tr');
+    tr.dataset.idx = i;
+    tr.innerHTML = `
+      <td><strong>${e.year}</strong></td>
+      <td><strong>${e.name}</strong></td>
+      <td><span class="type-tag t-${e.type}">${typeLabel}</span></td>
+      <td>${typeLabel}</td>
+      <td>${vesselLabel}</td>
+      <td>${e.jur}</td>
+      <td class="${lossClass}">${e.loss}</td>
+      <td><span class="badge ${badgeClass}">${e.conf}</span></td>
+      <td><button class="expand-btn" onclick="toggleDetail(this, ${i})">+ Detail</button></td>
+    `;
+    body.appendChild(tr);
+  });
+  currentData = data;
+}
+
+function toggleDetail(btn, idx) {
+  const e = EVENTS[idx];
+  const tr = btn.closest('tr');
+  const next = tr.nextSibling;
+  if (next && next.classList && next.classList.contains('detail-row')) {
+    next.remove(); btn.textContent = '+ Detail'; return;
+  }
+  const detail = document.createElement('tr');
+  detail.classList.add('detail-row');
+  detail.innerHTML = `<td colspan="9" style="padding:12px 16px;line-height:1.7;">${e.detail}</td>`;
+  tr.insertAdjacentElement('afterend', detail);
+  btn.textContent = '− Close';
+}
+
+function applyFilters() {
+  const type = document.getElementById('f-type').value;
+  const vessel = document.getElementById('f-vessel').value;
+  const jur = document.getElementById('f-jur').value;
+  const search = document.getElementById('f-search').value.toLowerCase();
+  const filtered = EVENTS.filter(e =>
+    (!type || e.type === type) &&
+    (!vessel || e.vessel === vessel) &&
+    (!jur || e.jur === jur) &&
+    (!search || e.name.toLowerCase().includes(search) || e.detail.toLowerCase().includes(search))
+  );
+  render(filtered);
+}
+
+function resetFilters() {
+  document.getElementById('f-type').value = '';
+  document.getElementById('f-vessel').value = '';
+  document.getElementById('f-jur').value = '';
+  document.getElementById('f-search').value = '';
+  render([...EVENTS]);
+}
+
+function sortTable(col) {
+  if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = 1; }
+  currentData.sort((a, b) => {
+    const keys = ['year','name','type'];
+    const va = col < 3 ? (a[keys[col]] || '') : '';
+    const vb = col < 3 ? (b[keys[col]] || '') : '';
+    return typeof va === 'number' ? (va - vb) * sortDir : va.localeCompare(vb) * sortDir;
+  });
+  render(currentData);
+}
+
+['f-type','f-vessel','f-jur'].forEach(id => document.getElementById(id).addEventListener('change', applyFilters));
+document.getElementById('f-search').addEventListener('input', applyFilters);
+
+render([...EVENTS]);
+</script>
+<footer>Risk Code Hub · Marine Hull (B · T · TS · TX) · Module 03 — Claims Database · v2.7 · April 2026</footer>
+</body>
+</html>

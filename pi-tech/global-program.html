@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technology & Telecom PI E&O – Global Programmes | Risk Code Hub</title>
+  <style>
+    :root{
+      --tech:#0f4c75; --tech-dark:#0a2d45; --digital:#1b8a8a; --code:#5b21b6;
+      --risk:#c0572a; --warn:#d97706; --light:#f0f6fb; --mid:#d1e8f5;
+      --dark:#111; --red:#c0392b; --amber:#e67e22; --green:#27ae60;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--dark); }
+
+    header {
+      background:linear-gradient(135deg,#0a2d45 0%,#0f4c75 50%,#073352 100%);
+      color:#fff; padding:40px;
+      position:relative; overflow:hidden;
+    }
+    header::before {
+      content:''; position:absolute; top:-50%; right:-10%; width:500px; height:500px;
+      background:radial-gradient(circle, rgba(27,138,138,0.15) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    header > * { position:relative; z-index:1; }
+    header .tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:#a8c4d8; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8cce0; font-size:0.95rem; max-width:800px; line-height:1.7; }
+
+    .breadcrumb { font-size:0.8rem; color:#b8cce0; margin-bottom:6px; }
+    .breadcrumb a { color:#a8c4d8; text-decoration:none; }
+
+    nav { background:#fff; border-bottom:2px solid #d1e8f5; padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:#666; border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--tech); border-bottom-color:var(--tech); }
+
+    main { max-width:1060px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--tech); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--digital); }
+    h3 { font-size:1.05rem; color:var(--tech-dark); margin:28px 0 12px; }
+    p { line-height:1.8; color:var(--dark); margin-bottom:14px; font-size:0.95rem; }
+
+    /* Tower visualization */
+    .tower { margin:28px 0 40px; display:flex; flex-direction:column; gap:6px; max-width:700px; }
+    .tower-layer { display:flex; align-items:stretch; border-radius:8px; overflow:hidden; border:1px solid #d1e8f5; }
+    .tower-layer .lay-detail, .tower-layer span { color: #e8f0ff; }
+    .layer-label { background:var(--tech); color:#fff; padding:14px 20px; font-size:0.82rem; font-weight:700; min-width:200px; display:flex; align-items:center; line-height:1.4; }
+    .layer-content { background:#fff; padding:12px 18px; flex:1; }
+    .layer-content strong { display:block; font-size:0.9rem; color:var(--tech); margin-bottom:3px; }
+    .layer-content span { font-size:0.82rem; color:#666; line-height:1.5; }
+
+    .tower-layer.cat .layer-label { background:var(--risk); }
+    .tower-layer.upper .layer-label { background:var(--digital); }
+    .tower-layer.middle .layer-label { background:var(--code); }
+    .tower-layer.first .layer-label { background:var(--warn); }
+    .tower-layer.primary .layer-label { background:var(--tech); }
+    .tower-layer.sir .layer-label { background:var(--tech-dark); }
+
+    /* Comparison table */
+    .comp-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.85rem; }
+    .comp-table th { background:var(--tech); color:#fff; padding:12px 14px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; font-weight:600; }
+    .comp-table td { padding:12px 14px; border-bottom:1px solid #d1e8f5; vertical-align:top; line-height:1.5; }
+    .comp-table tr:nth-child(even) td { background:#f0f6fb; }
+
+    /* Firm type cards */
+    .firm-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px; margin:24px 0 40px; }
+    .firm-card { background:#fff; border:1px solid #d1e8f5; border-radius:10px; padding:24px; border-top:4px solid var(--tech); }
+    .firm-card.bigtech { border-top-color:var(--tech); }
+    .firm-card.saas { border-top-color:var(--digital); }
+    .firm-card.govit { border-top-color:var(--code); }
+    .firm-card.telco { border-top-color:var(--risk); }
+    .firm-card h3 { font-size:0.95rem; color:var(--tech); margin:0 0 10px 0; }
+    .firm-card p { font-size:0.87rem; line-height:1.6; margin-bottom:8px; color:var(--dark); }
+    .firm-card p:last-child { margin:0; }
+
+    /* Scenario table */
+    .scenario-table { width:100%; border-collapse:collapse; margin:22px 0 36px; font-size:0.85rem; }
+    .scenario-table th { background:var(--code); color:#fff; padding:12px 14px; text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; }
+    .scenario-table td { padding:12px 14px; border-bottom:1px solid #d1e8f5; vertical-align:center; text-align:center; font-size:0.82rem; }
+    .scenario-table td:first-child { text-align:left; }
+    .scenario-table tr:nth-child(even) td { background:#f0f6fb; }
+    .scenario-table .yes { color:var(--green); font-weight:600; }
+    .scenario-table .no { color:var(--red); font-weight:600; }
+    .scenario-table .maybe { color:var(--warn); font-weight:600; }
+
+    /* Info/Case boxes */
+    .info-box { background:#f0f6fb; border:2px solid var(--digital); border-radius:10px; padding:24px 28px; margin:24px 0; }
+    .info-box h4 { color:var(--tech-dark); font-size:0.95rem; margin-bottom:10px; font-weight:700; }
+    .info-box p { font-size:0.88rem; color:var(--dark); margin-bottom:8px; line-height:1.6; }
+    .info-box p:last-child { margin:0; }
+
+    .case-box { background:var(--tech-dark); color:#fff; border-radius:12px; padding:32px; margin:32px 0; }
+    .case-box .case-tag { font-size:0.72rem; text-transform:uppercase; letter-spacing:3px; color:#a8c4d8; margin-bottom:10px; }
+    .case-box h3 { color:#fff; font-size:1.1rem; margin:0 0 14px 0; }
+    .case-box p { color:#b8cce0; font-size:0.88rem; line-height:1.7; margin-bottom:10px; }
+    .case-box p:last-child { margin:0; }
+
+    /* Confidence badges */
+    .c-ver, .c-est, .c-illus, .c-gap { display:inline-block; font-size:0.7rem; font-weight:700; padding:4px 8px; border-radius:4px; letter-spacing:1px; margin:0 4px; }
+    .c-ver { background:var(--green); color:#fff; }
+    .c-est { background:var(--amber); color:#fff; }
+    .c-illus { background:var(--digital); color:#fff; }
+    .c-gap { background:var(--red); color:#fff; }
+
+    footer { background:var(--tech-dark); color:#a8c4d8; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer a { color:#a8c4d8; text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Technology & Telecom PI E&O</div>
+  <div class="tag">Module 08 — Global Programme Structuring</div>
+  <h1>Global Programme Structuring</h1>
+  <p>Tech E&O tower design, US vs UK market differences, BigTech captives, CrowdStrike-type systemic risk structures</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+</nav>
+
+<main>
+
+  <h2>Tech E&O Programme Tower</h2>
+  <p>A typical technology professional indemnity programme is structured in layers from top (catastrophe reinsurance) to bottom (insured's deductible). Each layer has distinct placement logic, market, and pricing relative to the primary rate.</p>
+
+  <div class="tower">
+    <div class="tower-layer cat">
+      <div class="layer-label">Layer 1: Catastrophe XL / Top Excess</div>
+      <div class="layer-content">
+        <strong>$50–500m+ | Reinsurance-backed</strong>
+        <span>Large tech vendors and critical infrastructure providers only. Negotiated terms; post-CrowdStrike pricing reset.</span>
+      </div>
+    </div>
+    <div class="tower-layer upper">
+      <div class="layer-label">Layer 2: Upper Excess Layers</div>
+      <div class="layer-content">
+        <strong>$25m xs $25m → $50m xs $50m</strong>
+        <span>Lloyd's follow market. Rate: 20–35% of primary rate per layer.</span>
+      </div>
+    </div>
+    <div class="tower-layer middle">
+      <div class="layer-label">Layer 3: Middle Excess Layers</div>
+      <div class="layer-content">
+        <strong>$10m xs $15m → $15m xs $25m</strong>
+        <span>Lloyd's lead + follow. Rate: 35–55% of primary.</span>
+      </div>
+    </div>
+    <div class="tower-layer first">
+      <div class="layer-label">Layer 4: First Excess Layer</div>
+      <div class="layer-content">
+        <strong>$5m xs $5m → $10m xs $10m</strong>
+        <span>Lloyd's or admitted carrier. Rate: 55–70% of primary.</span>
+      </div>
+    </div>
+    <div class="tower-layer primary">
+      <div class="layer-label">Layer 5: Primary Layer</div>
+      <div class="layer-content">
+        <strong>$1–10m</strong>
+        <span>Admitted carrier (US) or Lloyd's/London (UK/global). All underwriting conditions set; sub-limits for specific perils.</span>
+      </div>
+    </div>
+    <div class="tower-layer sir">
+      <div class="layer-label">Layer 6: SIR / Deductible</div>
+      <div class="layer-content">
+        <strong>$25k–$500k+ (varies by firm size)</strong>
+        <span>Buyer's first loss. No insurance; insured absorbs.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>Tech E&O Tower Sizing Logic</h4>
+    <p>Tech E&O towers are sized relative to the insured's <strong>largest single client exposure</strong>, not total revenue. A $50m revenue SaaS business serving a single $500m banking client may need a $25m+ programme. Post-CrowdStrike (July 2024), catastrophic/systemic update risk is being specifically underwritten — vendors with auto-update mechanisms face mandatory risk management questionnaires.</p>
+  </div>
+
+  <h2>US vs UK/Lloyd's Market Comparison</h2>
+  <p>Tech E&O underwriting differs significantly between admitted US markets and the London market. Understanding these differences is critical for risk placement and claims outcomes.</p>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>US Tech E&O (Admitted)</th>
+        <th>Lloyd's / London Market</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Market Basis</strong></td>
+        <td>Admitted — state-licensed (surplus lines for larger risks)</td>
+        <td>Non-admitted / excess & surplus</td>
+      </tr>
+      <tr>
+        <td><strong>Dominant Carriers</strong></td>
+        <td>Travelers, Chubb, AIG, Beazley, Markel</td>
+        <td>Beazley, CNA, QBE + Lloyd's syndicates</td>
+      </tr>
+      <tr>
+        <td><strong>Typical Primary Limit</strong></td>
+        <td>$1–10m (most US SME tech)</td>
+        <td>£/$5–50m (larger/complex risks)</td>
+      </tr>
+      <tr>
+        <td><strong>Combined Tech E&O + Cyber</strong></td>
+        <td>Common for US SME market</td>
+        <td>Separate products preferred for larger risks</td>
+      </tr>
+      <tr>
+        <td><strong>Policy Form</strong></td>
+        <td>Standard ISO + insurer manuscript</td>
+        <td>Manuscript; London market wordings</td>
+      </tr>
+      <tr>
+        <td><strong>Governing Law</strong></td>
+        <td>New York/Delaware (most US)</td>
+        <td>English law</td>
+      </tr>
+      <tr>
+        <td><strong>SIR / Deductible</strong></td>
+        <td>$10k–$250k common</td>
+        <td>£/$25k–$500k</td>
+      </tr>
+      <tr>
+        <td><strong>Premium Basis</strong></td>
+        <td>Revenue (most common)</td>
+        <td>Revenue or flat premium</td>
+      </tr>
+      <tr>
+        <td><strong>Retention in Supply Chain</strong></td>
+        <td>Standard — vendors buy US paper</td>
+        <td>Lloyd's follow excess above US admitted</td>
+      </tr>
+      <tr>
+        <td><strong>Post-CrowdStrike Focus</strong></td>
+        <td>Vendor auto-update exclusions added</td>
+        <td>Systemic update risk underwriting questionnaire</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Firm Type Programme Structures</h2>
+  <p>Programme design varies significantly by firm size, client concentration, sector, and regulatory exposure. Below are four archetypal structures.</p>
+
+  <div class="firm-grid">
+    <div class="firm-card bigtech">
+      <h3>Big Tech Vendor</h3>
+      <p><strong>Profile:</strong> Hyperscalers (AWS, Azure, GCP), major software vendors (Microsoft, Oracle, Salesforce).</p>
+      <p><strong>Limits:</strong> $100m–$1bn+ — primarily captive/self-insured. Lloyd's market provides: top excess layers ($100m–$500m+); finite risk structures; catastrophe covers.</p>
+      <p><strong>Post-CrowdStrike:</strong> Vendors with large auto-update install bases face specific systemic loss modelling.</p>
+      <p><strong>Programme:</strong> Captive ($50m SIR) → Lloyd's excess $50m xs $50m → CAT XL → reinsurance.</p>
+    </div>
+
+    <div class="firm-card saas">
+      <h3>Mid-Size SaaS/Software Firm</h3>
+      <p><strong>Profile:</strong> Revenue $10–100m; 50–500 enterprise clients; limited captive capacity.</p>
+      <p><strong>Standard Programme:</strong> US admitted primary $5m (Travelers/Beazley) + Lloyd's first excess $5m xs $5m + second excess $10m xs $10m. Combined tech E&O + cyber growing in this segment.</p>
+      <p><strong>SIR:</strong> $50k–$250k. Annual premium: $80k–$500k depending on sector.</p>
+      <p><strong>Key Issue:</strong> Contract LoL alignment — policy limit should exceed largest single contract value.</p>
+    </div>
+
+    <div class="firm-card govit">
+      <h3>Government IT Contractor</h3>
+      <p><strong>Profile:</strong> Accenture, IBM, DXC, Fujitsu-type firms. Government contracts: large absolute values; limited LoL; long project tails.</p>
+      <p><strong>Programmes:</strong> Very large limits ($50–250m+); specific project professional indemnity.</p>
+      <p><strong>Lloyd's Market:</strong> Specialist government contractor PI facilities. Run-off: government projects create long-tail exposure requiring extended reporting periods.</p>
+      <p><strong>Case Examples:</strong> NHS NPfIT / Post Office Horizon illustrate catastrophic long-tail potential.</p>
+    </div>
+
+    <div class="firm-card telco">
+      <h3>Telecoms Operator (F5)</h3>
+      <p><strong>Profile:</strong> Mobile network operators, ISPs, MVNOs. F5 PI typically written alongside F4 if tech services also provided.</p>
+      <p><strong>Emergency Services:</strong> Emergency services liability (999/112/911) requires specific sublimit or dedicated layer.</p>
+      <p><strong>Regulatory:</strong> Regulatory exposure (Ofcom/FCC fines) generally excluded from PI; separate D&O/regulatory coverage needed.</p>
+      <p><strong>Lloyd's Facility:</strong> Experienced PI syndicates with F5 expertise. MVNO note: MVNO has limited control over underlying network — policy coordination with host MNO critical.</p>
+    </div>
+  </div>
+
+  <h2>Cyber & Tech E&O Programme Coordination</h2>
+  <p>The cyber/tech E&O interface requires careful programme design. The same event can trigger both policies simultaneously — or fall between them.</p>
+
+  <div class="info-box" style="border-color:var(--code);">
+    <h4>Coverage Coordination</h4>
+    <p>Best practice: separate tech E&O and cyber policies with explicit coordination clause defining which policy pays first in dual-trigger scenarios. Avoid 'combined' products for risks over $10m.</p>
+  </div>
+
+  <table class="scenario-table">
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Tech E&O (F4) Responds?</th>
+        <th>Cyber (CY) Responds?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Software bug causes client financial loss</strong></td>
+        <td class="yes">✓ Yes</td>
+        <td class="no">✗ No</td>
+      </tr>
+      <tr>
+        <td>Professional negligence | No external attack</td>
+        <td colspan="2" style="font-size:0.8rem; color:#666;"></td>
+      </tr>
+      <tr>
+        <td><strong>Malicious hacker exploits software vulnerability</strong></td>
+        <td class="maybe">✗ Maybe</td>
+        <td class="yes">✓ Yes</td>
+      </tr>
+      <tr>
+        <td>If negligent security architecture | External cyber attack</td>
+        <td colspan="2" style="font-size:0.8rem; color:#666;"></td>
+      </tr>
+      <tr>
+        <td><strong>Cloud provider misconfiguration exposes client data</strong></td>
+        <td class="yes">✓ Yes</td>
+        <td class="yes">✓ Potentially</td>
+      </tr>
+      <tr>
+        <td>Negligent configuration | Data breach notification costs</td>
+        <td colspan="2" style="font-size:0.8rem; color:#666;"></td>
+      </tr>
+      <tr>
+        <td><strong>Vendor update crashes client systems (CrowdStrike)</strong></td>
+        <td class="yes">✓ Yes</td>
+        <td class="no">✗ Debated</td>
+      </tr>
+      <tr>
+        <td>Defective update delivery | No external actor</td>
+        <td colspan="2" style="font-size:0.8rem; color:#666;"></td>
+      </tr>
+      <tr>
+        <td><strong>Ransomware via MSP (Kaseya)</strong></td>
+        <td class="maybe">✓ Potentially</td>
+        <td class="yes">✓ Yes</td>
+      </tr>
+      <tr>
+        <td>MSP negligence | External ransomware attack</td>
+        <td colspan="2" style="font-size:0.8rem; color:#666;"></td>
+      </tr>
+      <tr>
+        <td><strong>Insider employee sabotage</strong></td>
+        <td class="maybe">✗ Maybe</td>
+        <td class="yes">✓ Yes</td>
+      </tr>
+      <tr>
+        <td>With specific employee dishonesty extension | Insider threat</td>
+        <td colspan="2" style="font-size:0.8rem; color:#666;"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Illustrative Case Study: US Healthcare SaaS Provider</h2>
+
+  <div class="case-box">
+    <div class="case-tag"><span class="c-illus">ILLUS</span> Case Study</div>
+    <h3>$60m ARR Healthcare SaaS Provider</h3>
+
+    <p><strong>Profile:</strong> US-based clinical decision support SaaS; $60m annual recurring revenue; 85 hospital clients; largest client = 22% of ARR; Microsoft Azure cloud-hosted; contracts have $5m LoL cap per incident; HIPAA-compliant; SOC 2 Type II certified; 3-year clean history; automated CI/CD with full test coverage.</p>
+
+    <p><strong>Programme Structure:</strong></p>
+    <p style="margin-left:20px; margin-bottom:14px; line-height:1.7;">
+      • <strong>Primary Tech E&O (F4):</strong> $10m — Beazley (US admitted) | Premium: ~$432,000 <span class="c-illus">ILLUS</span><br>
+      Calculation: $60m × 1.2% × healthcare sector × certification discount<br><br>
+      • <strong>First Excess Tech E&O:</strong> $10m xs $10m — Lloyd's | ~$180,000 <span class="c-illus">ILLUS</span><br><br>
+      • <strong>Cyber (CY):</strong> $15m — CNA (coordinated with tech E&O) | ~$280,000 <span class="c-illus">ILLUS</span><br><br>
+      • <strong>SIR:</strong> $100,000 (all policies)<br><br>
+      • <strong>Total Programme:</strong> ~$892,000 <span class="c-illus">ILLUS</span> for $25m combined limit
+    </p>
+
+    <p><strong>Lloyd's Advantages:</strong></p>
+    <ul style="margin-left:20px; font-size:0.88rem; color:#b8cce0; line-height:1.8;">
+      <li>Largest tech PI excess capacity globally — single syndicate lines to $25m; towers to $250m+ for hyperscalers</li>
+      <li>Specialist underwriters: dedicated tech E&O teams with sector expertise (fintech, health tech, critical infrastructure)</li>
+      <li>Speed: Lloyd's electronic placement (PPL) enables same-day binding for clean tech E&O risks under $10m</li>
+      <li>Post-CrowdStrike expertise: Lloyd's market has developed systemic update risk questionnaires and specific coverage frameworks faster than admitted market</li>
+      <li>Cross-class: F4/F5 alongside CY/CZ under coordinated financial lines programme — single claims team, no coverage gap</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer>
+  Risk Code Hub v2.5 — Technology &amp; Telecom PI E&O (F4/F5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+</footer>
+
+</body>
+</html>

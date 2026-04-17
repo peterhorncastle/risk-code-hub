@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claims & Event Database | Technology & Telecom PI E&O (F4/F5) | Risk Code Hub</title>
+  <style>
+    :root {
+      --tech: #0f4c75;
+      --tech-dark: #0a2d45;
+      --digital: #1b8a8a;
+      --code: #5b21b6;
+      --risk: #c0572a;
+      --warn: #d97706;
+      --light: #f0f6fb;
+      --mid: #d1e8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--dark);
+      background: #f9fbfc;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #0a2d45 0%, #0f4c75 50%, #073352 100%);
+      color: #fff;
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    header .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.95;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      background: #fff;
+      padding: 1rem 2rem;
+      font-size: 0.95rem;
+      border-bottom: 1px solid #e0e7ff;
+    }
+
+    .breadcrumb a {
+      color: var(--tech);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    /* NAV */
+    .nav-tabs {
+      background: #fff;
+      padding: 0 2rem;
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #e0e7ff;
+      flex-wrap: wrap;
+      overflow-x: auto;
+    }
+
+    .nav-tabs a {
+      padding: 1rem 1.5rem;
+      text-decoration: none;
+      color: #666;
+      font-size: 0.95rem;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-tabs a:hover {
+      color: var(--tech);
+    }
+
+    .nav-tabs a.active {
+      color: var(--tech);
+      border-bottom-color: var(--tech);
+      font-weight: 600;
+    }
+
+    /* MAIN CONTENT */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* FILTERS */
+    .filter-section {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e5e7eb;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-group label {
+      font-weight: 600;
+      color: var(--tech);
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+      outline: none;
+      border-color: var(--tech);
+      box-shadow: 0 0 0 3px rgba(15, 76, 117, 0.1);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--tech);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--tech-dark);
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: var(--dark);
+    }
+
+    .btn-secondary:hover {
+      background: #d1d5db;
+    }
+
+    /* TABLE */
+    .table-wrapper {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e5e7eb;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: var(--light);
+      border-bottom: 2px solid #d1e8f5;
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--tech);
+      font-size: 0.95rem;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    th:hover {
+      background: #e8f2f9;
+     color: #fff;}
+
+    th.sortable::after {
+      content: ' ⇅';
+      opacity: 0.4;
+      font-size: 0.85rem;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+    }
+
+    tbody tr:hover {
+      background: #f9fbfc;
+    }
+
+    /* TYPE BADGES */
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .badge.software {
+      background: var(--tech);
+    }
+
+    .badge.project {
+      background: var(--digital);
+    }
+
+    .badge.saas {
+      background: var(--code);
+    }
+
+    .badge.telecom {
+      background: var(--risk);
+    }
+
+    .badge.regulatory {
+      background: var(--warn);
+    }
+
+    .badge.market {
+      background: var(--green);
+    }
+
+    /* CONFIDENCE BADGES */
+    .conf {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+    }
+
+    .c-ver {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .c-est {
+      background: var(--amber);
+      color: #fff;
+    }
+
+    .c-illus {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .c-gap {
+      background: #ec4899;
+      color: #fff;
+    }
+
+    /* INFO BOX */
+    .info-box {
+      background: #fef3c7;
+      border-left: 4px solid var(--warn);
+      padding: 1.5rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #78350f;
+      margin-bottom: 2rem;
+    }
+    .info-box p, .info-box li, .info-box ul { color: #c8d8f0; }
+
+    .info-box strong {
+      color: #92400e;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--tech-dark);
+      color: #a8c4d8;
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #a8c4d8;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+      color: #c8dce8;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      .filter-row {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-tabs {
+        padding: 0 1rem;
+      }
+
+      .nav-tabs a {
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th, td {
+        padding: 0.75rem 0.5rem;
+      }
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>Claims & Event Database</h1>
+    <p class="subtitle">Searchable repository of technology E&O losses, IT project failures and telecom PI events 1988–2024</p>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Technology & Telecom PI E&O
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-tabs">
+    <a href="overview.html">Overview</a>
+    <a href="history.html">History</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="database.html" class="active">Claims Database</a>
+    <a href="underwriting.html">Underwriting</a>
+    <a href="rates-analysis.html">Rates & ROE</a>
+    <a href="risk-mitigation.html">Risk Mitigation</a>
+    <a href="global-program.html">Global Programme</a>
+    <a href="references.html">References</a>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <!-- FILTERS -->
+    <div class="filter-section">
+      <div class="filter-row">
+        <div class="filter-group">
+          <label for="filter-type">Type</label>
+          <select id="filter-type">
+            <option value="">All</option>
+            <option value="software">Software/System Failure (F4)</option>
+            <option value="project">IT Project Failure (F4)</option>
+            <option value="saas">SaaS/Cloud E&O (F4)</option>
+            <option value="telecom">Telecom PI (F5)</option>
+            <option value="regulatory">Regulatory</option>
+            <option value="market">Market Event</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-jurisdiction">Jurisdiction</label>
+          <select id="filter-jurisdiction">
+            <option value="">All</option>
+            <option value="USA">USA</option>
+            <option value="UK">UK</option>
+            <option value="Europe">Europe</option>
+            <option value="Global">Global</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-year">Year Band</label>
+          <select id="filter-year">
+            <option value="">All</option>
+            <option value="1988-1999">1988–1999</option>
+            <option value="2000-2009">2000–2009</option>
+            <option value="2010-2019">2010–2019</option>
+            <option value="2020-2024">2020–2024</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-loss">Min Loss ($m)</label>
+          <select id="filter-loss">
+            <option value="0">0</option>
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="250">250</option>
+            <option value="500">500</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-keyword">Keyword Search</label>
+          <input type="text" id="filter-keyword" placeholder="e.g., Cloud, Ransomware, Bank...">
+        </div>
+      </div>
+
+      <div class="filter-buttons">
+        <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+        <button class="btn btn-secondary" onclick="resetFilters()">Reset</button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+      <table id="events-table">
+        <thead>
+          <tr>
+            <th class="sortable" onclick="sortTable('year')">Year</th>
+            <th class="sortable" onclick="sortTable('name')">Event</th>
+            <th class="sortable" onclick="sortTable('type')">Type</th>
+            <th class="sortable" onclick="sortTable('jur')">Jurisdiction</th>
+            <th class="sortable" onclick="sortTable('loss')">Loss ($m)</th>
+            <th class="sortable" onclick="sortTable('conf')">Confidence</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+      </table>
+      <div id="no-results-msg" class="no-results" style="display:none;">
+        No events match the selected filters.
+      </div>
+    </div>
+
+    <!-- INFO BOX -->
+    <div class="info-box">
+      <strong>Data Quality & Sources:</strong> Technology E&O claims data presents significant challenges. Most large corporate losses (NHS NPfIT, government IT contracts) involve confidential settlements under public procurement rules. Market-wide aggregate loss data is rarely published. Figures marked <span class="c-ver">VER</span> are drawn from public regulatory decisions, court filings, company accounts or official reports. <span class="c-est">EST</span> figures are reconstructed from press reports, industry analyses and academic research. Individual policy claim data is not publicly disclosed.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    Risk Code Hub v2.5 — Technology & Telecom PI E&O (F4/F5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+  </footer>
+
+  <script>
+    // EVENT DATA
+    const EVENTS = [
+      {year:1994, name:"Intel Pentium FDIV Floating-Point Bug — $475m Recall", type:"software", jur:"USA", desc:"Intel Pentium processor floating-point division bug. Recall and replacement programme cost ~$475m. Paradigm example: hardware/software defect → systemic financial loss to manufacturer. Establishes tech defect liability principle.", loss:475, conf:"ver"},
+      {year:1999, name:"Y2K Insurance Claims — ~$1bn Industry-Wide", type:"software", jur:"Global", desc:"Global Y2K remediation ($600bn+ spent) results in ~$1bn insured claims — far below feared losses. Mostly date-processing errors, minor system outages. Tech E&O hard market 1999–2001.", loss:1000, conf:"ver"},
+      {year:2000, name:"Dot-Com IT Project Failures Wave", type:"project", jur:"Global", desc:"Dot-com bust (March 2000) triggers wave of abandoned e-commerce implementations and failed IT builds. Tech E&O market faces first significant claims cycle. Aggregate estimated $2–5bn in economic losses across market.", loss:500, conf:"est"},
+      {year:2001, name:"UK Passport Agency IT Failure — Siemens/ICL", type:"project", jur:"UK", desc:"UK Passport Agency new IT system (Siemens/ICL) fails catastrophically at launch — 500,000 passport applications delayed; emergency processing. Compensation and additional costs ~£13m. Government contractor PI template case.", loss:13, conf:"ver"},
+      {year:2002, name:"UK Child Support Agency IT Failure — EDS", type:"project", jur:"UK", desc:"Child Support Agency new IT system (EDS, ~£456m contract) fails — £539m written off by 2006; 250,000 families affected. Major government IT contractor E&O exposure. EDS fined and contract restructured.", loss:539, conf:"ver"},
+      {year:2003, name:"NHS NPfIT Launched — £12.4bn Contract", type:"project", jur:"UK", desc:"NHS National Programme for IT (NPfIT) — £12.4bn contract. Largest civilian IT project in history. Intended national electronic patient record system. Ultimately abandoned 2011 with £9.8bn wasted. Multiple contractor PI claims.", loss:9800, conf:"ver"},
+      {year:2003, name:"Toronto Stock Exchange System Failure", type:"software", jur:"USA", desc:"Toronto Stock Exchange trading system failure — market suspended. Technology E&O claims from traders for lost opportunity. Early example of exchange/trading platform PI exposure.", loss:30, conf:"est"},
+      {year:2004, name:"HMRC Tax Credits IT Errors — EDS", type:"project", jur:"UK", desc:"EDS (later HP Enterprise Services) operates HMRC Tax Credit system. Systematic errors in payment calculations — £2bn overpaid to 1.9m claimants. Government contractor PI; EDS repays £71m under settlement.", loss:71, conf:"ver"},
+      {year:2006, name:"Accenture/Sainsbury's Supply Chain System Failure", type:"project", jur:"UK", desc:"Sainsbury's writes off £260m IT investment in automated supply chain system built by Accenture. System fails to handle store replenishment — empty shelves, market share loss. Accenture eventually paid £3.4m settlement.", loss:260, conf:"ver"},
+      {year:2009, name:"T-Mobile UK Data Breach — Customer Data Sold", type:"telecom", jur:"UK", desc:"T-Mobile UK: rogue employee sells customer data (around 15m records) to third parties. ICO investigation; £500k fine. Telecom PI exposure: duty to protect customer data under Data Protection Act.", loss:10, conf:"ver"},
+      {year:2012, name:"Knight Capital Group — $440m Algorithmic Trading Loss", type:"software", jur:"USA", desc:"Knight Capital: defective SMARS algorithm deployed in live environment. 45 minutes of erroneous trading = $440m loss; company sold to Getco. Paradigm tech E&O event — software defect → corporate-level financial loss.", loss:440, conf:"ver"},
+      {year:2012, name:"RBS / NatWest IT Meltdown — CA Technologies", type:"software", jur:"UK", desc:"RBS/NatWest banking systems failure (June 2012) — 6 million customers unable to access accounts for several days. CA Technologies upgrade to batch processing software implicated. FCA fine £56m; customer compensation £175m+.", loss:175, conf:"ver"},
+      {year:2013, name:"Healthcare.gov Launch Failure — CGI Federal", type:"project", jur:"USA", desc:"Healthcare.gov (ACA insurance exchange) crashes on launch (October 2013). CGI Federal (lead contractor) and other vendors implicated. $500m+ spent on remediation; CGI contract terminated. Classic government tech E&O scenario.", loss:500, conf:"ver"},
+      {year:2014, name:"Heartbleed OpenSSL Vulnerability — Patching Costs", type:"software", jur:"Global", desc:"Heartbleed bug (CVE-2014-0160) in OpenSSL — two-thirds of internet's web servers affected. Emergency patching costs estimated $500m+ globally. Tech E&O debate: who is liable for OpenSSL Foundation's defect?", loss:500, conf:"est"},
+      {year:2016, name:"DXC Technology / UK Police IT Failures", type:"project", jur:"UK", desc:"Multiple UK police forces experience IT failures on DXC (formerly HP Enterprise) managed contracts. Humberside Police data loss; Northamptonshire Police system unavailability. Public sector PI exposure; contract disputes.", loss:25, conf:"est"},
+      {year:2017, name:"NotPetya — $10bn Losses, Cyber/Tech Boundary", type:"market", jur:"Global", desc:"NotPetya (June 2017) causes $10bn+ economic damage. Merck sues Chubb over cyber exclusion (war exclusion) — wins $1.4bn (2023). Tests whether tech E&O/cyber policies respond to destructive malware. Market develops specific tech/cyber coordination clauses.", loss:10000, conf:"ver"},
+      {year:2018, name:"TSB Banking IT Migration — £330m Customer Impact", type:"project", jur:"UK", desc:"TSB migration from Lloyds Banking Group to Proteo4UK (Sabadell IT arm). April 2018: catastrophic failure — 1.9m customers locked out. £330m total cost: compensation, rectification, additional staffing. FCA £48.6m fine. IBM-Sabis consulting implicated.", loss:330, conf:"ver"},
+      {year:2019, name:"Capital One Data Breach — AWS Misconfiguration", type:"saas", jur:"USA", desc:"Capital One data breach (July 2019): 106m customer records exposed via misconfigured AWS WAF. Former AWS engineer responsible. Capital One: $190m class action settlement, $80m OCC fine. AWS misconfiguration = tech E&O at cloud infrastructure layer.", loss:270, conf:"ver"},
+      {year:2020, name:"SolarWinds Supply Chain Attack", type:"saas", jur:"Global", desc:"SolarWinds Orion update compromised by Russian SVR. 18,000+ organisations receive malicious update. SolarWinds: $26m shareholder settlement, FTC consent order. SEC charges SolarWinds CISO for disclosure failures. Supply chain software liability paradigm.", loss:100, conf:"ver"},
+      {year:2020, name:"Zoom Security Vulnerabilities — Remote Work Surge", type:"saas", jur:"Global", desc:"Zoom usage surges 2,000%+ during COVID. Multiple security vulnerabilities discovered (end-to-end encryption claims challenged, 'Zoom-bombing'). $85m class action settlement (2021). SaaS platform E&O for security claims against false marketing.", loss:85, conf:"ver"},
+      {year:2021, name:"Kaseya VSA Attack — 1,500 Businesses via MSPs", type:"saas", jur:"Global", desc:"Kaseya VSA (MSP management software) compromised by REvil. 1,500 businesses downstream via ~60 MSPs. Kaseya settles with clients; MSPs face PI claims from their own clients. MSP supply-chain liability crystallises.", loss:200, conf:"est"},
+      {year:2021, name:"Log4Shell — Emergency Patching and Response Costs", type:"software", jur:"Global", desc:"Log4j vulnerability (Dec 2021) — critical flaw in Apache logging library used by billions of devices. Emergency patching response costs globally estimated $10bn+. Tech E&O debate: liability of firms that incorporated Log4j without audit.", loss:500, conf:"est"},
+      {year:2022, name:"Microsoft Azure Outage — Global Disruption", type:"saas", jur:"Global", desc:"Multiple Microsoft Azure outages 2022 affecting Teams, Exchange, Azure AD. Major clients (including government agencies) lose access to critical systems. SLA breach — service credits paid; broader E&O exposure debated.", loss:50, conf:"est"},
+      {year:2022, name:"Southwest Airlines IT Meltdown — $825m Loss", type:"software", jur:"USA", desc:"Southwest Airlines: outdated crew scheduling software fails during December 2022 winter storm. 16,700 flights cancelled; $825m total cost (compensation, lost revenue). DOT investigation; class action; technology E&O — internal system failure.", loss:825, conf:"ver"},
+      {year:2023, name:"MOVEit Transfer Software Breach — Cl0p Ransomware", type:"software", jur:"Global", desc:"MOVEit (Progress Software) SQL injection vulnerability exploited by Cl0p group. 2,600+ organisations affected; 620m+ records exposed. Progress Software faces multiple class actions. Supply-chain software defect → mass data exposure → E&O/cyber crossover.", loss:1000, conf:"est"},
+      {year:2023, name:"IBM Consulting — UK Post Office Horizon (Context)", type:"project", jur:"UK", desc:"Fujitsu (not IBM) delivered Horizon Post Office IT system. 700+ sub-postmasters wrongly prosecuted 1999–2015 based on Horizon software errors. £1.1bn+ compensation announced 2024. Largest miscarriage of justice in UK history — tech E&O liability on Fujitsu.", loss:1100, conf:"ver"},
+      {year:2023, name:"Salesforce Outage — CRM Data Exposure", type:"saas", jur:"Global", desc:"Salesforce platform outages and data visibility errors in 2023 expose some organisations' customer data to other tenants. SaaS multi-tenancy E&O — data isolation failure at platform layer. PI claims from affected enterprise clients.", loss:30, conf:"est"},
+      {year:2024, name:"AT&T Network Outage — $9m FCC Fine, Emergency Call Impact", type:"telecom", jur:"USA", desc:"AT&T 12-hour network outage (February 2024) — ~70,000 emergency (911) calls affected. FCC $9m fine agreed. Telecom PI (F5) paradigm: network failure → emergency services disruption → regulatory penalty + PI exposure from affected parties.", loss:20, conf:"ver"},
+      {year:2024, name:"CrowdStrike Falcon Update — 8.5 Million Devices Crashed", type:"software", jur:"Global", desc:"CrowdStrike defective content update (19 July 2024) crashes 8.5m Windows devices globally. Delta: $500m loss + lawsuit. Airlines, hospitals, banks grounded. Estimated $10bn+ total economic loss; insured ~$800m–1bn. Largest single tech E&O event on record.", loss:10000, conf:"ver"},
+      {year:2024, name:"Change Healthcare Ransomware — $872m Recovery Costs", type:"saas", jur:"USA", desc:"Change Healthcare (UnitedHealth Group) ransomware attack (Feb 2024). $872m recovery costs declared; $22bn total impact estimated. Largest US healthcare IT disruption. Tech E&O/cyber boundary: inadequate security architecture = E&O; ransomware delivery = cyber.", loss:872, conf:"ver"},
+      {year:2024, name:"UK Post Office / Fujitsu Horizon — £1.1bn Compensation", type:"project", jur:"UK", desc:"UK government announces £1.1bn+ compensation for sub-postmasters wrongly prosecuted due to Fujitsu Horizon IT errors (1999–2015). Inquiry ongoing; Fujitsu liability being assessed. Tech E&O on defective accounting software causing criminal injustice.", loss:1100, conf:"ver"},
+      {year:2024, name:"Delta Airlines v CrowdStrike — $500m Lawsuit", type:"software", jur:"USA", desc:"Delta Air Lines files $500m lawsuit against CrowdStrike following July 2024 outage. First major litigation from CrowdStrike event. Tests: did CrowdStrike breach its professional duty in update deployment and testing? Contract limitation of liability clauses central to dispute.", loss:500, conf:"ver"},
+      {year:2024, name:"EU AI Act — High-Risk AI Liability", type:"regulatory", jur:"Europe", desc:"EU AI Act (2024) imposes conformity requirements on high-risk AI systems (healthcare, employment, credit scoring, law enforcement). Tech providers deploying non-compliant high-risk AI face fines up to 3% of global turnover. New PI/E&O exposure for AI product/service providers.", loss:0, conf:"ver"},
+      {year:2024, name:"Telecom Security Breach — Salt Typhoon/AT&T/Verizon", type:"telecom", jur:"USA", desc:"Chinese state-linked Salt Typhoon group breaches multiple US telecoms (AT&T, Verizon, T-Mobile) accessing call metadata and wiretap infrastructure. FCC/CISA alerts. F5 telecom PI exposure: carriers face claims for inadequate network security and failure to protect lawful intercept systems.", loss:100, conf:"ver"},
+      {year:2024, name:"Microsoft CoPilot AI Hallucinations — Professional Liability", type:"saas", jur:"Global", desc:"Microsoft 365 Copilot (AI assistant) generates incorrect legal, financial and regulatory summaries for enterprise users. Law firms and financial advisers face PI claims for relying on AI output without verification. Tech E&O + professional PI overlap — novel exposure area.", loss:20, conf:"est"}
+    ];
+
+    let filteredEvents = [...EVENTS];
+    let sortColumn = 'year';
+    let sortAsc = false;
+
+    // RENDER TABLE
+    function renderTable(events) {
+      const tbody = document.getElementById('table-body');
+      const noResults = document.getElementById('no-results-msg');
+
+      if (events.length === 0) {
+        tbody.innerHTML = '';
+        noResults.style.display = 'block';
+        return;
+      }
+
+      noResults.style.display = 'none';
+
+      tbody.innerHTML = events.map(e => `
+        <tr>
+          <td>${e.year}</td>
+          <td title="${e.desc}">${e.name}</td>
+          <td><span class="badge ${e.type}">${e.type.charAt(0).toUpperCase() + e.type.slice(1)}</span></td>
+          <td>${e.jur}</td>
+          <td>${e.loss === 0 ? '—' : '$' + e.loss + 'm'}</td>
+          <td><span class="conf c-${e.conf}">${e.conf.toUpperCase()}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // APPLY FILTERS
+    function applyFilters() {
+      const type = document.getElementById('filter-type').value;
+      const jurisdiction = document.getElementById('filter-jurisdiction').value;
+      const yearBand = document.getElementById('filter-year').value;
+      const minLoss = parseInt(document.getElementById('filter-loss').value) || 0;
+      const keyword = document.getElementById('filter-keyword').value.toLowerCase();
+
+      filteredEvents = EVENTS.filter(e => {
+        let match = true;
+
+        if (type && e.type !== type) match = false;
+        if (jurisdiction && e.jur !== jurisdiction) match = false;
+
+        if (yearBand) {
+          const [start, end] = yearBand.split('-').map(Number);
+          if (e.year < start || e.year > end) match = false;
+        }
+
+        if (e.loss < minLoss) match = false;
+
+        if (keyword) {
+          const text = (e.name + ' ' + e.desc).toLowerCase();
+          if (!text.includes(keyword)) match = false;
+        }
+
+        return match;
+      });
+
+      sortTable(sortColumn);
+    }
+
+    // SORT TABLE
+    function sortTable(column) {
+      sortColumn = column;
+      sortAsc = !sortAsc;
+
+      filteredEvents.sort((a, b) => {
+        let aVal = a[column];
+        let bVal = b[column];
+
+        if (typeof aVal === 'string') {
+          aVal = aVal.toLowerCase();
+          bVal = bVal.toLowerCase();
+          return sortAsc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+        }
+
+        return sortAsc ? aVal - bVal : bVal - aVal;
+      });
+
+      renderTable(filteredEvents);
+    }
+
+    // RESET FILTERS
+    function resetFilters() {
+      document.getElementById('filter-type').value = '';
+      document.getElementById('filter-jurisdiction').value = '';
+      document.getElementById('filter-year').value = '';
+      document.getElementById('filter-loss').value = '0';
+      document.getElementById('filter-keyword').value = '';
+
+      filteredEvents = [...EVENTS];
+      sortColumn = 'year';
+      sortAsc = false;
+      sortTable('year');
+    }
+
+    // INITIAL RENDER
+    renderTable(filteredEvents.sort((a, b) => b.year - a.year));
+  </script>
+</body>
+</html>

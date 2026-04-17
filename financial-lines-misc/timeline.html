@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timeline — Financial Lines – Misc – Risk Code Hub</title>
+  <style>
+    :root {
+      --fin:#1a3a5c; --fin-dark:#0d2035; --mortgage:#c9963a; --surety:#2d6b3a;
+      --title:#7b2533; --fg:#5b21b6; --risk:#c0572a; --gold:#c9a84c;
+      --bg:#f4f6f9; --card:#ffffff; --text:#1a2332; --mid:#5a6a7a;
+      --card-border:#dce3ed;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2035 0%,#1a3a5c 50%,#0a1828 100%); color:#fff; padding:40px; }
+    header .breadcrumb { font-size:0.8rem; color:#a8c4d8; margin-bottom:6px; }
+    header .breadcrumb a { color:var(--gold); text-decoration:none; }
+    header .tag { font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; margin-bottom:10px; }
+    header p { color:#a8c4d8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--card-border); padding:0 40px; display:flex; gap:0; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--mid); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--fin); border-bottom-color:var(--gold); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+
+    .badge { display:inline-block; font-size:0.6rem; font-weight:700; padding:1px 5px; border-radius:3px; vertical-align:middle; margin-left:3px; letter-spacing:0.5px; }
+    .badge.ver { background:#d1fae5; color:#065f46; }
+    .badge.est { background:#fef3c7; color:#92400e; }
+    .badge.illus { background:#dbeafe; color:#1e40af; }
+    .badge.gap { background:#ffe4e6; color:#9f1239; }
+
+    .filter-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px; }
+    .filter-btn { background:var(--card); border:1px solid var(--card-border); padding:8px 14px; border-radius:6px; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.2s; color:var(--mid); }
+    .filter-btn:hover { border-color:var(--gold); color:var(--fin); }
+    .filter-btn.active { background:var(--fin); color:#fff; border-color:var(--fin); }
+
+    .timeline { position:relative; margin:40px 0; }
+    .timeline::before { content:''; position:absolute; left:50%; top:0; bottom:0; width:2px; background:var(--card-border); }
+    @media(max-width:768px) { .timeline::before { left:20px; } }
+
+    .timeline-event { margin-bottom:40px; }
+    .timeline-event.hidden { display:none; }
+    .timeline-event.left { padding-right:calc(50% + 20px); }
+    .timeline-event.right { margin-left:50%; padding-left:40px; }
+    @media(max-width:768px) {
+      .timeline-event.left { padding-right:0; padding-left:60px; }
+      .timeline-event.right { margin-left:0; padding-left:60px; }
+    }
+
+    .timeline-marker { position:absolute; left:calc(50% - 8px); top:0; width:16px; height:16px; background:#fff; border:3px solid var(--fin); border-radius:50%; }
+    .timeline-event.right .timeline-marker { left:12px; }
+    @media(max-width:768px) { .timeline-marker, .timeline-event.right .timeline-marker { left:12px; } }
+
+    .timeline-event.type-mortgage .timeline-marker { border-color:var(--mortgage); }
+    .timeline-event.type-title .timeline-marker { border-color:var(--title); }
+    .timeline-event.type-surety .timeline-marker { border-color:var(--surety); }
+    .timeline-event.type-fg .timeline-marker { border-color:var(--fg); }
+    .timeline-event.type-regulatory .timeline-marker { border-color:var(--fin); }
+
+    .timeline-card { background:var(--card); border:1px solid var(--card-border); border-radius:8px; padding:20px; }
+    .timeline-card .year-badge { display:inline-block; font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:4px; background:var(--fin); color:#fff; margin-bottom:8px; }
+    .timeline-event.type-mortgage .timeline-card .year-badge { background:var(--mortgage); }
+    .timeline-event.type-title .timeline-card .year-badge { background:var(--title); }
+    .timeline-event.type-surety .timeline-card .year-badge { background:var(--surety); }
+    .timeline-event.type-fg .timeline-card .year-badge { background:var(--fg); }
+
+    .timeline-card h4 { font-size:0.95rem; font-weight:700; color:var(--fin); margin-bottom:8px; }
+    .timeline-card p { font-size:0.85rem; line-height:1.6; color:var(--text); margin:0; }
+
+    footer { background:var(--fin); color:#7a9bb5; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Financial Lines – Misc</a> › Timeline</div>
+  <div class="tag">Lloyd's Codes FM · TT · SB · FG</div>
+  <h1>Major Events Timeline</h1>
+  <p>20 milestone events from 1876 title insurance origins through 2024 AI fraud emergence</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Database</a>
+  <a href="../index.html">← Hub Home</a>
+</nav>
+
+<main>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterTimeline('all')">ALL</button>
+    <button class="filter-btn" onclick="filterTimeline('mortgage')">MORTGAGE</button>
+    <button class="filter-btn" onclick="filterTimeline('title')">TITLE</button>
+    <button class="filter-btn" onclick="filterTimeline('surety')">SURETY</button>
+    <button class="filter-btn" onclick="filterTimeline('fg')">FINANCIAL GUARANTEE</button>
+    <button class="filter-btn" onclick="filterTimeline('regulatory')">REGULATORY</button>
+  </div>
+
+  <div class="timeline" id="timeline"></div>
+
+</main>
+
+<footer>
+  Risk Code Hub — Financial Lines – Misc | Last updated April 2026
+</footer>
+
+<script>
+const events = [
+  {year:1876, type:"title", title:"First Title Insurance Company Founded", desc:"Law Title Insurance Company of Pennsylvania established in Philadelphia — the world's first title insurance company, created in response to Watson v Muirhead (1868) establishing that abstract searchers had no negligence liability. Marked the birth of title insurance as a formal product.", badge:"VER"},
+  {year:1884, type:"surety", title:"Commercial Surety Industry Emerges", desc:"American Surety Company founded in New York, joining Fidelity & Casualty (1876) as the first corporate sureties — replacing individual guarantors for public officials and contractors. Created the infrastructure for the modern surety market.", badge:"VER"},
+  {year:1894, type:"regulatory", title:"Heard Act — First Federal Bonding Requirement", desc:"US Congress passed the Heard Act requiring surety bonds on federal construction contracts over $5,000. First time government mandated performance security on public works, establishing the legal foundation for construction bonding.", badge:"VER"},
+  {year:1935, type:"regulatory", title:"Miller Act — Cornerstone of US Construction Surety", desc:"Miller Act replaced the Heard Act, requiring both performance bonds and payment bonds on all federal construction contracts over $100,000. The payment bond provision — protecting subcontractors and suppliers — became the template for state Little Miller Acts adopted over subsequent decades.", badge:"VER"},
+  {year:1957, type:"mortgage", title:"MGIC Founded — First Modern Private Mortgage Insurance", desc:"Mortgage Guaranty Insurance Corporation (MGIC) founded in Milwaukee by Max Karl — first modern private mortgage insurance (PMI) company. Created the model for private MIG that now underpins high-LTV residential lending in the US and UK.", badge:"VER"},
+  {year:1971, type:"fg", title:"AMBAC Founded — Bond Insurance Born", desc:"American Municipal Bond Assurance Corporation (AMBAC) established as the world's first bond insurance company. The AAA-wrap model — guaranteeing timely payment of principal and interest on municipal bonds — allowed lower-rated issuers to access capital markets at investment-grade rates.", badge:"VER"},
+  {year:1974, type:"fg", title:"MBIA Formed", desc:"Municipal Bond Insurance Association (MBIA) formed, becoming AMBAC's primary competitor. By the 1990s, MBIA and AMBAC together dominated the municipal bond insurance market, between them guaranteeing trillions in outstanding par.", badge:"VER"},
+  {year:1989, type:"mortgage", title:"UK Property Crash — MIG Losses Mount", desc:"UK residential property prices fell 20–30% in London and South East from 1989 peak, triggering large-scale MIG claims as repossessed properties sold for less than outstanding mortgages. Several reinsurers exited the UK MIG market. Forced a restructuring of high-LTV lending practices.", badge:"VER"},
+  {year:1994, type:"title", title:"Title Insurance Expands as Fraud Increases", desc:"Rise of mortgage fraud and title defects in the 1990s drove title insurance adoption beyond traditional US urban markets. UK residential title insurance began growing as conveyancing fraud — particularly involving property sold without owner knowledge — increased.", badge:"EST"},
+  {year:2001, type:"surety", title:"Enron/WorldCom Corporate Surety Losses", desc:"Corporate accounting scandals (Enron 2001, WorldCom 2002) triggered surety bond claims on performance obligations and trade credit arrangements. Surety market hardened; underwriters tightened contractor financial analysis requirements.", badge:"VER"},
+  {year:2005, type:"fg", title:"Monoline FG Peaks — ABS/CDO Wrap Era", desc:"AMBAC, MBIA, FGIC and FSA all reporting record profits wrapping ABS/CDO/RMBS structures. Monolines had collectively guaranteed over $2.3 trillion of structured credit. Rating agencies maintained AAA ratings despite concerns about correlation risk in the underlying pools.", badge:"EST"},
+  {year:2007, type:"fg", title:"Sub-prime Crisis Begins — FG Model Unravels", desc:"Rising US sub-prime mortgage defaults triggered losses in the RMBS and CDO pools wrapped by monolines. AMBAC and MBIA began disclosing billion-dollar write-downs on their structured credit books. The AAA assumptions underpinning their ratings proved fatally wrong.", badge:"VER"},
+  {year:2008, type:"fg", title:"Monoline Collapse and Financial Crisis", desc:"AMBAC and MBIA lost their AAA ratings in January 2008. Bear Stearns and Lehman Brothers failures in March and September 2008 exposed full monoline counterparty risk. FSA was acquired by Assured Guaranty. Bond insurance for structured finance effectively ceased.", badge:"VER"},
+  {year:2010, type:"fg", title:"AMBAC Files for Bankruptcy", desc:"AMBAC Financial Group filed for Chapter 11 bankruptcy protection in November 2010, with $1.7bn in liabilities. MBIA split its municipal business (National Public Finance Guarantee) from its structured finance book, which entered managed run-off.", badge:"VER"},
+  {year:2010, type:"title", title:"Robo-Signing Scandal — Title Defects Wave", desc:"The US robo-signing foreclosure scandal — where banks processed foreclosures without proper documentation review — created a wave of defective title and chain-of-title claims. Title insurers faced significant exposure on properties sold from improper foreclosures.", badge:"VER"},
+  {year:2013, type:"mortgage", title:"UK Help to Buy — Government Takes MIG Risk", desc:"UK government launched Help to Buy mortgage guarantee scheme, effectively substituting government backing for private MIG on high-LTV mortgages. Reduced the private MIG market but enabled return of 95% LTV residential lending after the 2008 pullback.", badge:"VER"},
+  {year:2020, type:"title", title:"Wire Fraud / Conveyancing Hijacking Surge", desc:"Cyber-enabled wire fraud targeting property transactions — intercepting conveyancing emails and redirecting completion funds — drove a surge in title insurance claims in the UK. CLLS and CILEx data confirmed material increase in conveyancing-related fraud losses.", badge:"VER"},
+  {year:2022, type:"title", title:"UK Building Safety Act — Cladding and Title Claims", desc:"Building Safety Act 2022 imposed new liability on developers and landlords for cladding remediation costs. Properties with unsafe cladding became unmortgageable without EWS1 certificates — driving title insurance demand to protect lenders and buyers against latent defect liabilities.", badge:"VER"},
+  {year:2023, type:"surety", title:"Infrastructure Investment Boom — Surety Capacity Demand", desc:"US Infrastructure Investment and Jobs Act ($1.2tn) and UK HS2/NSIP pipeline drove unprecedented surety demand. Construction cost inflation post-COVID increased contract values — and bond amounts — while contractor financial stress elevated default risk. Surety capacity tightened.", badge:"EST"},
+  {year:2024, type:"title", title:"AI/Deepfake Title Fraud Emerging", desc:"Fraudsters began using AI-generated documentation and deepfake identity verification to impersonate property owners — enabling title fraud without physical documentation forgery. Title insurers and Land Registry bodies introduced enhanced identity verification protocols.", badge:"VER"}
+];
+
+let currentFilter = 'all';
+
+function filterTimeline(type) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  renderTimeline();
+}
+
+function renderTimeline() {
+  const container = document.getElementById('timeline');
+  container.innerHTML = '';
+
+  let alternate = true;
+  events.forEach((ev, i) => {
+    if (currentFilter !== 'all' && ev.type !== currentFilter) return;
+
+    const eventEl = document.createElement('div');
+    eventEl.className = `timeline-event type-${ev.type} ${alternate ? 'left' : 'right'}`;
+    eventEl.innerHTML = `
+      <div class="timeline-marker"></div>
+      <div class="timeline-card">
+        <span class="year-badge">${ev.year}</span>
+        <h4>${ev.title}</h4>
+        <p>${ev.desc} <span class="badge ${ev.badge.toLowerCase()}">${ev.badge}</span></p>
+      </div>
+    `;
+    container.appendChild(eventEl);
+    alternate = !alternate;
+  });
+}
+
+renderTimeline();
+</script>
+
+</body>
+</html>

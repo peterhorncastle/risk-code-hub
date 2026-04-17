@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marine Hull — References | Risk Code Hub</title>
+  <style>
+    :root {
+      --marine:#0b3d6b; --marine-dark:#061e35; --ocean:#1a6b8a;
+      --hull:#c0572a; --anchor:#2d6b3a; --deck:#b8860b;
+      --light:#f0f5fb; --text:#1e2d3d; --muted:#6b7c93; --border:#c8d4e0;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#061e35 0%,#0b3d6b 50%,#041525 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#8899bb; margin-bottom:6px; }
+    .breadcrumb a { color:var(--deck); text-decoration:none; }
+    header h1 { font-size:1.8rem; font-weight:700; }
+    header p { margin-top:8px; color:#b8c8e8; font-size:0.92rem; }
+    .badge-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .hbadge { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); color:#fff; padding:3px 12px; border-radius:20px; font-size:0.78rem; font-weight:600; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--marine); border-bottom-color:var(--deck); }
+    main { max-width:1050px; margin:0 auto; padding:50px 30px; }
+
+    section { background:#fff; border-radius:10px; padding:28px; margin-bottom:24px; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    h2 { font-size:1.2rem; font-weight:700; color:var(--marine); margin-bottom:16px; padding-bottom:8px; border-bottom:2px solid var(--deck); }
+    h3 { font-size:1rem; font-weight:700; color:var(--ocean); margin:18px 0 8px; }
+    p { font-size:0.88rem; color:#444; line-height:1.75; margin-bottom:10px; }
+
+    .badge-legend { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; margin-top:12px; }
+    .bl-card { border-radius:8px; padding:14px; border-left:5px solid #ccc; }
+    .bl-card.ver { border-left-color:var(--anchor); background:#d4edda; }
+    .bl-card.est { border-left-color:var(--deck); background:#fff3cd; }
+    .bl-card.illus { border-left-color:var(--ocean); background:#cce5ff; }
+    .bl-card.gap { border-left-color:var(--hull); background:#f8d7da; }
+    .bl-card h4 { font-size:0.85rem; font-weight:700; margin-bottom:5px; }
+    .bl-card p { font-size:0.8rem; color:#333; margin:0; }
+
+    .c-ver { background:#d4edda; color:#155724; border-radius:4px; padding:.1rem .35rem; font-size:.7rem; font-weight:700; }
+    .c-est { background:#fff3cd; color:#856404; border-radius:4px; padding:.1rem .35rem; font-size:.7rem; font-weight:700; }
+    .c-illus { background:#cce5ff; color:#004085; border-radius:4px; padding:.1rem .35rem; font-size:.7rem; font-weight:700; }
+    .c-gap { background:#f8d7da; color:#721c24; border-radius:4px; padding:.1rem .35rem; font-size:.7rem; font-weight:700; }
+
+    .cutoff-box { background:linear-gradient(90deg,#061e35,#0b3d6b); color:#fff; border-radius:8px; padding:16px 20px; margin:12px 0; }
+    .cutoff-box h4 { color:var(--deck); margin-bottom:6px; font-size:0.92rem; }
+    .cutoff-box p { font-size:0.84rem; opacity:0.9; margin:0; }
+
+    table { width:100%; border-collapse:collapse; font-size:0.84rem; margin-top:12px; }
+    th { background:var(--marine); color:#fff; padding:8px 12px; text-align:left; font-weight:600; }
+    td { padding:8px 12px; border-bottom:1px solid #e0e4ef; vertical-align:top; }
+    tr:nth-child(even) td { background:#f7f9fc; }
+    a { color:var(--ocean); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    .audit-table th { font-size:0.78rem; }
+    .audit-table td { font-size:0.78rem; }
+    .at-green { color:#155724; font-weight:700; }
+    .at-amber { color:#856404; font-weight:700; }
+
+    .gap-box { border-left:4px solid var(--hull); background:#fef0ef; padding:12px 16px; border-radius:0 6px 6px 0; margin:10px 0; }
+    .gap-box h4 { font-size:0.87rem; font-weight:700; color:var(--hull); margin-bottom:4px; }
+    .gap-box p { font-size:0.83rem; color:#333; margin:0; }
+
+    footer { background:var(--marine-dark); color:#6677aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:40px; }
+    footer a { color:#a8c4e8; text-decoration:none; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Hull</a> › References</div>
+  <h1>Module 09 — References &amp; Data Quality</h1>
+  <p>Sources, confidence badges, knowledge cutoff and data gap disclosures for the Marine Hull hub</p>
+  <div class="badge-row">
+    <span class="hbadge">B · T · TS · TX</span>
+    <span class="hbadge">Confidence Framework v2.0</span>
+    <span class="hbadge">Knowledge Cutoff: May 2025</span>
+  </div>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html" class="active">References</a>
+</nav>
+<main>
+
+  <!-- 1. Badge Framework -->
+  <section>
+    <h2>1. Confidence Badge Framework</h2>
+    <p>Every factual claim in this hub carries an inline confidence badge. The framework is consistent across all Risk Code Hub modules (introduced v2.0).</p>
+    <div class="badge-legend">
+      <div class="bl-card ver">
+        <h4><span class="c-ver">VER</span> — Verified</h4>
+        <p>Sourced from primary documentation: IMO Convention text, UK statute (MIA 1906), Lloyd's Acts, Lloyd's Register publications, class society rules, PSC MOU official reports, or industry treaty text. High confidence.</p>
+      </div>
+      <div class="bl-card est">
+        <h4><span class="c-est">EST</span> — Estimate</h4>
+        <p>Derived from market reports (IUMI, Swiss Re, Marsh/Aon annual reviews), broker commentary, industry conferences, or cross-referenced secondary sources. Directionally reliable; not primary-sourced.</p>
+      </div>
+      <div class="bl-card illus">
+        <h4><span class="c-illus">ILLUS</span> — Illustrative</h4>
+        <p>Constructed for training purposes to demonstrate underwriting, programme or claims concepts. Based on plausible market parameters but NOT actual placement data. Do not cite commercially.</p>
+      </div>
+      <div class="bl-card gap">
+        <h4><span class="c-gap">GAP</span> — Data Gap</h4>
+        <p>Identified area where reliable public data is unavailable. Noted at source; professional market data or Lloyd's internal data required for precision.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Knowledge Cutoff -->
+  <section>
+    <h2>2. Knowledge Cutoff &amp; Currency</h2>
+    <div class="cutoff-box">
+      <h4>⏱️ Knowledge Cutoff: May 2025</h4>
+      <p>This hub was compiled using information available to Claude (Anthropic) through May 2025. The marine hull market is dynamic — the following categories are particularly time-sensitive and should be verified against current sources before professional use.</p>
+    </div>
+    <ul style="font-size:0.85rem;color:#333;padding-left:1.5rem;margin-top:10px;line-height:2.1;">
+      <li>Red Sea / Houthi war risk situation — JWC listed area status, current additional premium levels</li>
+      <li>Black Sea war risk — Russia-Ukraine conflict status; vessel seizure / mine risk</li>
+      <li>LMA/JWC cyber exclusion clause developments post-May 2025</li>
+      <li>EV battery fire regulatory requirements for RoRo/car carrier underwriting</li>
+      <li>Lloyd's Decile 10 / market remediation outcomes for marine hull lines</li>
+      <li>Final Dali / Francis Scott Key Bridge insurance settlement figures</li>
+      <li>Autonomous vessel / smart shipping regulatory developments (IMO MSC)</li>
+      <li>MARPOL Annex VI CII (Carbon Intensity Indicator) implementation and underwriting impact</li>
+      <li>Any IMO amendments to SOLAS or ISM Code</li>
+      <li>PSC blacklist / whitelist changes (Paris MOU, Tokyo MOU annual reports)</li>
+    </ul>
+  </section>
+
+  <!-- 3. Primary Sources -->
+  <section>
+    <h2>3. Primary Sources</h2>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Source</th><th>Jurisdiction / Issuer</th><th>Key Content Used</th><th>URL</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Marine Insurance Act 1906</strong></td>
+          <td>UK Parliament</td>
+          <td>Foundational statute: total loss, CTL, insurable interest, GA, sue &amp; labour, utmost good faith, warranties, subrogation. Still the governing statute for London market hull policies.</td>
+          <td><a href="https://www.legislation.gov.uk/ukpga/Edw7/6/41/contents" target="_blank">legislation.gov.uk</a></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>International Convention for the Safety of Life at Sea (SOLAS) — Consolidated Edition</strong></td>
+          <td>IMO</td>
+          <td>SOLAS Chapters: II-1 (construction), II-2 (fire), III (life-saving), IV (radio), V (navigation), IX (ISM Code), XI-1 (safety measures), XII (bulk carriers)</td>
+          <td><a href="https://www.imo.org/en/About/Conventions/Pages/International-Convention-for-the-Safety-of-Life-at-Sea-(SOLAS),-1974.aspx" target="_blank">imo.org</a></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>International Safety Management (ISM) Code (SOLAS Chapter IX)</strong></td>
+          <td>IMO</td>
+          <td>Full ISM Code text: SMS requirements, DOC, SMC, DPA, incident reporting, internal audit</td>
+          <td><a href="https://www.imo.org/en/OurWork/HumanElement/Pages/ISMCode.aspx" target="_blank">imo.org</a></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>MARPOL 73/78 — International Convention for the Prevention of Pollution from Ships</strong></td>
+          <td>IMO</td>
+          <td>Annex I (oil), Annex II (NLS), Annex V (garbage), Annex VI (air emissions, 0.5% global sulphur cap 2020, CII from 2023)</td>
+          <td><a href="https://www.imo.org/en/About/Conventions/Pages/International-Convention-for-the-Prevention-of-Pollution-from-Ships-(MARPOL).aspx" target="_blank">imo.org</a></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>STCW Convention — Standards of Training, Certification and Watchkeeping for Seafarers (as amended, 2010 Manila)</strong></td>
+          <td>IMO</td>
+          <td>Minimum certification requirements for officers and ratings; watchkeeping hours; basic safety training</td>
+          <td><a href="https://www.imo.org/en/About/Conventions/Pages/International-Convention-on-Standards-of-Training,-Certification-and-Watchkeeping-for-Seafarers-(STCW).aspx" target="_blank">imo.org</a></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Institute Time Clauses (Hulls) 1/11/83 (ITC 1983)</strong></td>
+          <td>Institute of London Underwriters / JHC</td>
+          <td>Standard H&amp;M policy wording: insured perils, 3/4 RDC, sistership clause, GA, sue &amp; labour, deductibles, war exclusion (FC&amp;S Clause), nuclear exclusion</td>
+          <td><a href="https://www.lmalloyds.com/LMA/Market_Processes/Marine_Clauses/LMA_Marine_Clauses.aspx" target="_blank">lmalloyds.com</a></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>International Hull Clauses 2003 (IHC 1/11/03)</strong></td>
+          <td>Joint Hull Committee (JHC — Lloyd's &amp; IUA)</td>
+          <td>Modernised hull wording: updated machinery damage provisions, war/terrorism exclusions, GA provisions (York-Antwerp 2004), cyber interface</td>
+          <td><a href="https://www.lmalloyds.com/LMA/Market_Processes/Marine_Clauses/LMA_Marine_Clauses.aspx" target="_blank">lmalloyds.com</a></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>York-Antwerp Rules 2016</strong></td>
+          <td>Comité Maritime International (CMI) / BIMCO</td>
+          <td>Rules governing General Average adjustment and apportionment between hull and cargo underwriters; Rule VI (salvage), Rule XI (wages), Rule XX (provision of funds)</td>
+          <td><a href="https://comitemaritime.org/work/york-antwerp-rules/" target="_blank">comitemaritime.org</a></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>Paris MOU on Port State Control — Annual Report</strong></td>
+          <td>Paris MOU Secretariat</td>
+          <td>Flag state White/Grey/Black List; detention rates by flag; deficiency statistics; vessel targeting criteria</td>
+          <td><a href="https://www.parismou.org/publications-and-information/publications/annual-reports" target="_blank">parismou.org</a></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>International Convention on Civil Liability for Oil Pollution Damage (CLC 1969, Protocol 1992)</strong></td>
+          <td>IMO</td>
+          <td>Strict liability for tanker owners for oil pollution; compulsory insurance requirement; IOPC Fund contribution</td>
+          <td><a href="https://www.imo.org/en/About/Conventions/Pages/International-Convention-on-Civil-Liability-for-Oil-Pollution-Damage-(CLC).aspx" target="_blank">imo.org</a></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><strong>BIMCO Cyber Security Clause for Vessel Management Agreements (2019, revised 2023)</strong></td>
+          <td>BIMCO (Baltic and International Maritime Council)</td>
+          <td>Standard cyber security obligations; network segmentation; patch management; incident reporting; hull cyber coverage interface</td>
+          <td><a href="https://www.bimco.org/contracts-and-clauses/bimco-clauses/current/bimco-cyber-security-clause" target="_blank">bimco.org</a></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><strong>IMO Resolution MSC-FAL.1/Circ.3 — Maritime Cyber Risk Management in Safety Management Systems (2017, revised 2021)</strong></td>
+          <td>IMO</td>
+          <td>Guidelines for integration of cyber risk management into ISM Code SMS; recommended cyber risk management framework</td>
+          <td><a href="https://www.imo.org/en/OurWork/Security/Pages/Cyber-security.aspx" target="_blank">imo.org</a></td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><strong>OCIMF TMSA (Tanker Management and Self-Assessment) — 3rd Edition</strong></td>
+          <td>Oil Companies International Marine Forum (OCIMF)</td>
+          <td>13 KPIs for tanker operator safety management; self-assessment scoring; used by oil majors for vessel vetting</td>
+          <td><a href="https://www.ocimf.org/publications/tmsa" target="_blank">ocimf.org</a></td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><strong>IUMI Ocean Hull Report (International Union of Marine Insurance)</strong></td>
+          <td>IUMI</td>
+          <td>Global ocean hull GWP statistics; combined ratio analysis; market cycle commentary; claims data by vessel type</td>
+          <td><a href="https://iumi.com/reports/facts-and-figures" target="_blank">iumi.com</a></td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><strong>UNCTAD Review of Maritime Transport (Annual)</strong></td>
+          <td>United Nations Conference on Trade and Development</td>
+          <td>Global fleet statistics by vessel type and DWT; seaborne trade volumes; port throughput; fleet ownership data</td>
+          <td><a href="https://unctad.org/topic/transport-and-trade-logistics/review-of-maritime-transport" target="_blank">unctad.org</a></td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><strong>Allianz Global Corporate &amp; Specialty (AGCS) — Safety &amp; Shipping Review (Annual)</strong></td>
+          <td>AGCS (Allianz)</td>
+          <td>Annual shipping loss statistics by vessel type, peril and area; total losses by year; emerging risk analysis (EV fires, cyber, Red Sea)</td>
+          <td><a href="https://www.agcs.allianz.com/news-and-insights/reports/shipping-safety.html" target="_blank">agcs.allianz.com</a></td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><strong>JWC (Joint War Committee) — Hull War, Strikes, Terrorism and Related Perils Listed Areas</strong></td>
+          <td>Lloyd's Market Association / IUA</td>
+          <td>Current JWC listed areas; war risk additional premium triggers; 7-day cancellation notice provisions</td>
+          <td><a href="https://www.lmalloyds.com/LMA/Market_Processes/Marine_Clauses/Joint_War_Committee.aspx" target="_blank">lmalloyds.com</a></td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><strong>NTSB Marine Accident Investigation Reports (El Faro, Dali/FSK Bridge)</strong></td>
+          <td>US National Transportation Safety Board</td>
+          <td>El Faro (2015): voyage planning failures, Hurricane Joaquin. Dali/Francis Scott Key Bridge (2024): power failure causation, navigational alerts, salvage</td>
+          <td><a href="https://www.ntsb.gov/investigations/Pages/marine.aspx" target="_blank">ntsb.gov</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 4. Per-Module Audit -->
+  <section>
+    <h2>4. Per-Module Confidence Audit</h2>
+    <p>Summary of confidence level distribution by module. VER = primary-sourced; EST = estimated / secondary; ILLUS = illustrative training figures; GAP = data gap identified.</p>
+    <table class="audit-table">
+      <thead>
+        <tr><th>Module</th><th>VER</th><th>EST</th><th>ILLUS Items</th><th>Data Gaps</th><th>Primary Sources</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>01 — Overview</strong></td><td class="at-green">~10</td><td class="at-amber">~8</td><td>0</td><td>1 (GWP precision)</td><td>IUMI, UNCTAD, IMO</td></tr>
+        <tr><td><strong>02 — History</strong></td><td class="at-green">~22</td><td class="at-amber">~6</td><td>0</td><td>0</td><td>MIA 1906, IMO, SOLAS, ITC 1983</td></tr>
+        <tr><td><strong>03 — Timeline</strong></td><td class="at-green">~18</td><td class="at-amber">~6</td><td>0</td><td>1 (settlement amounts)</td><td>IMO, press records, NTSB</td></tr>
+        <tr><td><strong>04 — Claims Database</strong></td><td class="at-green">~12</td><td class="at-amber">~23</td><td>0</td><td>3 (final insured amounts)</td><td>AGCS, press, regulatory filings</td></tr>
+        <tr><td><strong>05 — Underwriting</strong></td><td class="at-green">~8</td><td class="at-amber">~20</td><td>4 (worked examples)</td><td>2 (actual rate benchmarks)</td><td>Paris MOU, TMSA, IACS rules</td></tr>
+        <tr><td><strong>06 — Rates Analysis</strong></td><td class="at-green">~4</td><td class="at-amber">~18</td><td>5 (charts, ROE table)</td><td>2 (Lloyd's hull GWP split)</td><td>IUMI, AGCS, JWC</td></tr>
+        <tr><td><strong>07 — Risk Mitigation</strong></td><td class="at-green">~26</td><td class="at-amber">~10</td><td>0</td><td>1 (cyber hull coverage scope)</td><td>IMO, BIMCO, OCIMF, Paris MOU</td></tr>
+        <tr><td><strong>08 — Global Programmes</strong></td><td class="at-green">~8</td><td class="at-amber">~20</td><td>7 (tower, case study, war risk table)</td><td>2 (actual fleet premium data)</td><td>JWC, MIA 1906, ITC 1983, IG P&amp;I</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 5. Data Gap Disclosures -->
+  <section>
+    <h2>5. Data Gap Disclosures</h2>
+    <p>Identified areas where public data is insufficient to support VER-level claims. Professional market sources or Lloyd's internal data are required.</p>
+
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 01</span> — Lloyd's Marine Hull GWP by Risk Code (B / T / TS / TX)</h4>
+      <p>Lloyd's does not publish granular GWP breakdowns by individual marine risk code. The total global ocean hull market GWP (~$7bn) is an IUMI estimate aggregated from member returns. The Lloyd's market share and the split between codes T, TS and TX cannot be precisely stated from public sources. Used in: Overview (Module 01), Rates Analysis (Module 05).</p>
+    </div>
+
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 02</span> — Actual Hull Rate on Line Benchmarks</h4>
+      <p>Hull rate on line (ROL) data is commercially sensitive and not published by Lloyd's, syndicates or brokers. The benchmark rates presented in the Underwriting and Rates modules (e.g. VLCC 0.25–0.45%) are derived from broker market commentary, IUMI/AGCS reports and practitioner interviews reported in trade press (Lloyd's List, Marine Insurance International). Actual rates at placement will differ materially based on fleet quality, market conditions, and negotiation.</p>
+    </div>
+
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 03</span> — Costa Concordia Final Insured Loss Breakdown</h4>
+      <p>The total insured loss from Costa Concordia (hull + wreck removal + P&amp;I + third-party liability) is widely cited at approximately $2.0–2.5 billion but no audited final settlement figure is publicly available. The hull value ($512m) is better documented; the wreck removal figure (~$1.5bn) is from Costa Cruises press releases and Italian government announcements. The split between hull and P&amp;I at final settlement is not publicly available. Used in: History (Module 02), Timeline (Module 03), Claims Database (Module 04).</p>
+    </div>
+
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 04</span> — Red Sea War Risk — Final 2024 Premium Volume</h4>
+      <p>The total additional war risk premium generated by the Red Sea crisis in 2024 (~$400m annualised estimate) is based on market commentary and broker estimates. No audited premium data has been published. The JWC listed area additional premium rates (0.5–1%+ per voyage) are from broker market reports and trade press, not from JWC official publications. The situation remains dynamic; premiums have fluctuated significantly with each incident.</p>
+    </div>
+
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 05</span> — Dali / Francis Scott Key Bridge — Final Insurance Settlement</h4>
+      <p>The Francis Scott Key Bridge collapse (26 March 2024) is one of the most complex maritime casualty events in US modern history. At the knowledge cutoff (May 2025), litigation is ongoing between the Dali's owners/P&amp;I club and various claimants including the State of Maryland (bridge reconstruction) and commercial interests affected by port closure. Final settlement figures are unknown. The $2bn+ total liability figure referenced in this hub is based on media reports and analyst estimates, not court findings.</p>
+    </div>
+
+    <div class="gap-box">
+      <h4><span class="c-gap">GAP 06</span> — EV Battery Fire — Underwriting Loading Data for Car Carriers</h4>
+      <p>Following the Felicity Ace (2022) and increasing EV vehicle volumes on RoRo vessels, underwriters have applied significant loadings to car carrier hull rates. The specific quantum of the EV-related loading (cited as 15–30% in this hub) is based on trade press reports and broker commentary rather than published tariff data. Individual underwriter loadings vary significantly; no industry-wide standardised EV surcharge exists. This is a rapidly evolving underwriting issue.</p>
+    </div>
+  </section>
+
+  <!-- 6. Methodology -->
+  <section>
+    <h2>6. Methodology &amp; Disclaimer</h2>
+    <p>This hub was compiled by Claude (Anthropic) as a training resource for Lloyd's market insurance professionals. It is intended to support the education of trainee underwriters and is not a substitute for professional market guidance, primary treaty / regulatory texts, or syndicate-specific underwriting authorities.</p>
+    <p><strong>Marine hull insurance is a specialist class with significant individual underwriter judgement.</strong> Rates, limits, deductibles, wordings and appetite vary substantially between Lloyd's syndicates and across the market cycle. Any figures marked <span class="c-illus">ILLUS</span> are constructed for illustrative/training purposes and must not be used as reference rates for actual placements. Figures marked <span class="c-est">EST</span> are estimates from secondary or market commentary sources and carry meaningful uncertainty.</p>
+    <p>This resource is maintained as a living document. Users are encouraged to verify all time-sensitive data — war risk listed areas, hull rates, PSC statistics, IMO regulatory developments — against current sources before use. The Risk Code Hub carries a version date; refer to the build tracker for the current version.</p>
+    <p style="font-size:0.84rem;color:#777;margin-top:12px;">
+      Hub version: v2.7 · Marine Hull hub compiled: April 2026 ·
+      <a href="../build-tracker.html">View build tracker</a> ·
+      <a href="../CHANGELOG.md">View changelog</a>
+    </p>
+  </section>
+
+</main>
+<footer>
+  <p>Risk Code Hub · Marine Hull (B · T · TS · TX) · Module 09 – References · v2.7 · April 2026</p>
+  <p style="margin-top:6px;font-size:0.76rem;">
+    <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp;
+    <a href="overview.html">Marine Hull Overview</a>
+  </p>
+</footer>
+</body>
+</html>

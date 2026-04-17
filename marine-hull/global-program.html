@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marine Hull — Global Programmes | Risk Code Hub</title>
+  <style>
+    :root {
+      --marine:#0b3d6b; --marine-dark:#061e35; --ocean:#1a6b8a;
+      --hull:#c0572a; --anchor:#2d6b3a; --deck:#b8860b;
+      --light:#f0f5fb; --text:#1e2d3d; --muted:#6b7c93; --border:#c8d4e0;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#061e35 0%,#0b3d6b 50%,#041525 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#8899bb; margin-bottom:6px; }
+    .breadcrumb a { color:var(--deck); text-decoration:none; }
+    header h1 { font-size:1.8rem; font-weight:700; }
+    header p { margin-top:8px; color:#b8c8e8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--marine); border-bottom-color:var(--deck); }
+    main { max-width:1050px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.28rem; color:var(--marine); margin:40px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--deck); }
+    h3 { font-size:1rem; color:var(--ocean); margin:22px 0 10px; }
+    p { line-height:1.82; color:var(--text); margin-bottom:14px; font-size:0.93rem; }
+
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; vertical-align:middle; margin-left:3px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    /* Tower diagram */
+    .tower { display:flex; flex-direction:column; gap:4px; margin:24px 0; max-width:700px; }
+    .tower-layer { border-radius:8px; padding:14px 20px; color:#fff; }
+    .tower-layer .lay-detail, .tower-layer span { color: #e8f0ff; }
+    .t-xs { background:#5b21b6; }
+    .t-x3 { background:var(--hull); }
+    .t-x2 { background:var(--ocean); }
+    .t-x1 { background:#1a5c28; }
+    .t-prim { background:var(--marine); }
+    .t-ded { background:#4b5563; }
+    .tower-layer .lay-label { font-size:0.7rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:0.8; margin-bottom:3px; }
+    .tower-layer .lay-detail { font-size:0.88rem; line-height:1.5; }
+
+    /* Programme structure table */
+    .prog-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:22px 0; }
+    .prog-table table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+    .prog-table th { background:var(--marine); color:#fff; padding:9px 14px; text-align:left; }
+    .prog-table td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .prog-table tr:last-child td { border-bottom:none; }
+    .prog-table tr:nth-child(even) td { background:#f8fafc; }
+
+    /* Fleet type cards */
+    .fleet-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; margin:22px 0; }
+    .fleet-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--marine); }
+    .fleet-card.f2 { border-top-color:var(--ocean); }
+    .fleet-card.f3 { border-top-color:var(--hull); }
+    .fleet-card.f4 { border-top-color:var(--anchor); }
+    .fleet-card h4 { font-size:0.9rem; font-weight:700; color:var(--marine); margin-bottom:10px; }
+    .fleet-card ul { padding-left:17px; }
+    .fleet-card li { font-size:0.84rem; line-height:1.7; margin-bottom:5px; }
+
+    /* War risk table */
+    .war-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:22px 0; }
+    .war-table table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+    .war-table th { background:#7b2533; color:#fff; padding:9px 14px; text-align:left; }
+    .war-table td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .war-table tr:last-child td { border-bottom:none; }
+    .war-table tr:nth-child(even) td { background:#fff5f6; }
+
+    /* Case study */
+    .case-study { background:#fff; border:2px solid var(--marine); border-radius:12px; padding:28px 30px; margin:28px 0; }
+    .case-study h3 { font-size:1.05rem; color:var(--marine); margin-bottom:6px; }
+    .case-study .cs-tag { display:inline-block; background:var(--marine); color:#fff; font-size:0.75rem; padding:2px 10px; border-radius:10px; margin-bottom:14px; }
+    .case-study table { width:100%; border-collapse:collapse; font-size:0.86rem; margin:14px 0; }
+    .case-study th { background:#f0f5fb; padding:7px 12px; text-align:left; color:var(--marine); font-weight:700; }
+    .case-study td { padding:7px 12px; border-bottom:1px solid var(--border); }
+    .case-study tr:last-child td { border-bottom:none; }
+    .result-box { background:var(--marine-dark); color:#fff; padding:14px 18px; border-radius:8px; font-size:0.9rem; margin-top:14px; line-height:1.7; }
+    .result-box p, .result-box span { color: #c8d8f0; }
+    .result-box strong { color:var(--deck); }
+
+    .info-box { background:var(--marine-dark); color:#c8d8f0; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:var(--deck); margin-bottom:12px; font-size:1rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    footer { background:var(--marine-dark); color:#6677aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Hull</a> › Global Programmes</div>
+  <h1>Module 07 — Global Programme Structuring</h1>
+  <p>Fleet insurance towers, H&amp;M / war risk / LOH coordination, P&amp;I club interface, and an illustrative large fleet case study</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+<main>
+
+  <h2>Programme Architecture — Layers of a Fleet Hull Programme</h2>
+  <p>Large shipping fleets typically purchase layered hull programmes rather than single-carrier coverage. A layered structure allows the insured to optimise cost by using self-insurance (deductibles / captives) at the lower end, and spreading catastrophic capacity across multiple markets at the top. The London Lloyd's market typically leads or co-leads the upper layers for complex global fleets. <span class="badge b-e">EST</span></p>
+
+  <div class="tower">
+    <div class="tower-layer t-xs">
+      <div class="lay-label">Excess Layer 3 — Catastrophe / Top Cover</div>
+      <div class="lay-detail">$200m xs $100m — Specialist catastrophe capacity; Lloyd's syndicates and Bermuda market; responds only on total loss or near-total loss events. Very limited claims frequency. Annual premium low relative to capacity. <span class="badge b-i">ILLUS</span></div>
+    </div>
+    <div class="tower-layer t-x3">
+      <div class="lay-label">Excess Layer 2</div>
+      <div class="lay-detail">$50m xs $50m — Lloyd's syndicate panel and European insurer co-insurance; larger partial losses and CTL claims. Responds on major machinery damage, stranding and collision events. <span class="badge b-i">ILLUS</span></div>
+    </div>
+    <div class="tower-layer t-x2">
+      <div class="lay-label">Excess Layer 1</div>
+      <div class="lay-detail">$25m xs $25m — Lloyd's H&amp;M market; responds on significant partial losses above the primary layer. Most active on larger hull partial loss events (propeller damage, grounding, fire). <span class="badge b-i">ILLUS</span></div>
+    </div>
+    <div class="tower-layer t-x1">
+      <div class="lay-label">Primary Layer</div>
+      <div class="lay-detail">$25m xs $500,000 deductible — Lead Lloyd's syndicate sets the rate and conditions; following market subscribes at agreed terms. Handles the majority of attritional partial losses, machinery claims, and moderate groundings. 3/4 RDC included. <span class="badge b-i">ILLUS</span></div>
+    </div>
+    <div class="tower-layer t-ded">
+      <div class="lay-label">Deductible / Self-Retention / Captive</div>
+      <div class="lay-detail">$500,000 each and every loss — Large fleet operators often run a captive insurer for this layer. Absorbs attritional claims (crew negligence, minor machinery, small groundings). Captive may reinsure into the primary market above the fleet aggregate. <span class="badge b-i">ILLUS</span></div>
+    </div>
+  </div>
+
+  <p style="font-size:0.85rem;color:var(--muted);margin-top:-8px;">Tower structure is illustrative only. Actual programme design depends on fleet size, vessel values, loss history, market appetite and insured's risk appetite. <span class="badge b-i">ILLUS</span></p>
+
+  <h2>H&amp;M / War Risk / LOH Programme Coordination</h2>
+  <div class="prog-table">
+    <table>
+      <thead><tr><th>Cover Type</th><th>Lloyd's Code</th><th>Policy Basis</th><th>Key Interaction</th><th>Typical Structure</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Hull &amp; Machinery (H&amp;M)</strong></td>
+          <td>T</td>
+          <td>ITC Hulls 1983 or IHC 2003; annual; each vessel scheduled</td>
+          <td>Primary marine cover; excludes war/strikes (FC&amp;S Clause); coordinates with LOH and P&amp;I on large losses; GA with cargo underwriters</td>
+          <td>Layered fleet programme; Lloyd's lead + London and international co-insurers</td>
+        </tr>
+        <tr>
+          <td><strong>War Risk (hull war)</strong></td>
+          <td>W / WB (separate code — Marine Hull War)</td>
+          <td>Institute War and Strikes Clauses (Hulls — Time); annual cancellable at 7 days' notice in listed areas</td>
+          <td>Separate policy from H&amp;M — the FC&amp;S ("Free of Capture and Seizure") Clause in H&amp;M excludes all war perils; war policy picks up. JWC listed areas: additional premium per transit. Must ensure no gap between H&amp;M war exclusion and war risk cover.</td>
+          <td>Placed with specialist war risk market (Lloyd's war syndicates); fleet-wide; annual base + voyage additional for listed areas</td>
+        </tr>
+        <tr>
+          <td><strong>Total Loss Only (TLO)</strong></td>
+          <td>TS</td>
+          <td>ITC TLO Clauses; annual; covers only ATL / CTL</td>
+          <td>Alternative to full H&amp;M for older vessels where full cover is uneconomic. TLO can be combined with a separate machinery breakdown policy. LOH on TLO basis also available — only responds if vessel becomes a TL.</td>
+          <td>Single carrier or small panel; often for vessels 15+ years old or non-standard types</td>
+        </tr>
+        <tr>
+          <td><strong>Loss of Hire (LOH)</strong></td>
+          <td>TX</td>
+          <td>ITC LOH Clauses 20/7/87; annual slip parallel to H&amp;M</td>
+          <td>Must use same insured perils as H&amp;M policy — LOH only responds if H&amp;M pays. Deductible: waiting period (14–30 days). Maximum: daily rate × 90–180 days. LOH deductible days are separate from H&amp;M monetary deductible.</td>
+          <td>Often placed with same lead as H&amp;M for alignment of peril trigger; Scandinavian clubs also major LOH providers</td>
+        </tr>
+        <tr>
+          <td><strong>Builders' Risk</strong></td>
+          <td>B</td>
+          <td>All-risks; period = construction + sea trials; scheduled on contract value</td>
+          <td>Separate from operational H&amp;M; no P&amp;I club involvement during build (P&amp;I picks up on delivery). Yard's own liability is a separate tower. Advance Loss of Hire (ALOH) available for delivery delay caused by an insured peril.</td>
+          <td>Lloyd's specialist builders' risk syndicates lead; international co-insurers. Separate third-party liability tower for yard damage.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Fleet Owner Programme Profiles</h2>
+  <div class="fleet-grid">
+    <div class="fleet-card">
+      <h4>🛢️ Major Tanker Fleet (VLCC/Suezmax)</h4>
+      <ul>
+        <li>30–80 vessels; hull values $40–120m each; fleet IV $2–6bn</li>
+        <li>Full layered H&amp;M programme; war risk fleet policy + voyage additional premiums for Middle East Gulf, Red Sea, Black Sea</li>
+        <li>TMSA 3 compliance shared with oil major customers</li>
+        <li>SIRE 2.0 inspection programme; class survey tracking system</li>
+        <li>LOH at $50–100,000/day for top vessels; 14-day deductible</li>
+        <li>Captive insurer absorbs deductible layer</li>
+        <li>P&amp;I: International Group club (Gard, UK Club, Steamship); pooling for large pollution claims</li>
+        <li>MARPOL compliance critical — IOPP breach voids both hull and P&amp;I cover</li>
+      </ul>
+    </div>
+    <div class="fleet-card f2">
+      <h4>📦 Container Line (ULCV Fleet)</h4>
+      <ul>
+        <li>20–150 vessels including ULCVs (18,000–24,000 TEU); values $100–200m each</li>
+        <li>Wreck removal exposure is the key underwriting concern (Ever Given, MOL Comfort precedents)</li>
+        <li>Hull programme includes wreck removal endorsement — cost can dwarf hull value</li>
+        <li>Structural monitoring systems (hull stress sensors) increasingly required by class and underwriters</li>
+        <li>Red Sea war risk (2024): full fleet rerouted via Cape; war risk additional premiums material</li>
+        <li>Cyber: ECDIS and cargo planning systems are high-risk targets; BIMCO clauses attached</li>
+        <li>LOH critical: ULCV earning $100,000+/day; 30-day deductible typical</li>
+      </ul>
+    </div>
+    <div class="fleet-card f3">
+      <h4>🚗 Car Carrier (PCTC) Operator</h4>
+      <ul>
+        <li>10–30 vessels; values $50–150m each; high risk post-EV battery fire era</li>
+        <li>H&amp;M rates hardened 15–30%+ in 2023–2024 following Felicity Ace, Golden Ray <span class="badge b-e">EST</span></li>
+        <li>Underwriters now require: CO₂ / high-expansion foam systems; EV pre-loading screening (SOC, battery health checks); thermal imaging on loading ramps</li>
+        <li>RoRo stability: high centre of gravity; GM management critical</li>
+        <li>GA risk: any fire on a car carrier results in enormous cargo GA claims (thousands of vehicles)</li>
+        <li>P&amp;I: pollution from burning vehicle fluids; passenger / driver liability</li>
+        <li>War risk: 2024 Red Sea diversion adds 14+ days per voyage; operational cost impact significant</li>
+      </ul>
+    </div>
+    <div class="fleet-card f4">
+      <h4>⚓ Single-Vessel SPV Owner</h4>
+      <ul>
+        <li>Single vessel; no fleet; hull IV $5–30m (often older tonnage)</li>
+        <li>H&amp;M or TLO depending on vessel age and market appetite</li>
+        <li>No captive — deductible self-funded from vessel earnings</li>
+        <li>P&amp;I: likely fixed-premium P&amp;I (non-IG club) for smaller vessels; mutual IG club for larger</li>
+        <li>Broker role critical — must navigate Lloyd's market with no incumbent advantage</li>
+        <li>Voyage trading restrictions common — limited to specific routes</li>
+        <li>LOH: often not purchased — vessel owner cannot sustain daily hire rate cover cost</li>
+        <li>War risk: purchased voyage-by-voyage as required</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3>⚓ P&amp;I Club Interface — How H&amp;M and P&amp;I Work Together on a Major Casualty</h3>
+    <p>When a major casualty occurs (e.g. a VLCC grounds and causes oil pollution), multiple parties are involved simultaneously:</p>
+    <ul>
+      <li><strong>Hull underwriters (T):</strong> Pay for physical damage to the vessel — hull plating, machinery, equipment. Also respond to 3/4 collision liability (RDC) if the vessel collides with another ship. Sue &amp; Labour charges (reasonable steps to avert or minimise loss) are covered.</li>
+      <li><strong>P&amp;I club:</strong> Pays the remaining 1/4 collision liability; cargo damage/shortage; crew claims; wreck removal (if not on the hull policy); pollution liability (CLC / MARPOL — can run to hundreds of millions for a VLCC spill); passenger/third-party bodily injury.</li>
+      <li><strong>War risk underwriters:</strong> If the grounding was caused by a war peril (e.g. a mine, missile strike), war risk pays instead of H&amp;M. The FC&amp;S Clause in the H&amp;M policy excludes this.</li>
+      <li><strong>LOH underwriters (TX):</strong> Pay the daily charter rate while the vessel is off-hire for repairs — subject to the waiting period deductible. LOH only triggers if H&amp;M first pays the underlying physical damage claim.</li>
+      <li><strong>General Average:</strong> If cargo is jettisoned or a deliberate sacrifice is made to save the common venture, the GA Adjuster (specialist firm — Richards Hogg Lindley, Stichting) apportions the costs between hull and cargo underwriters per the York-Antwerp Rules 2016.</li>
+      <li><strong>Reinsurance:</strong> Above the retention/deductible, each market participant passes claims to their reinsurers. The International Group (IG) of P&amp;I Clubs operates a pooling arrangement — individual clubs pool losses above $10m; above $100m, the IG purchases excess-of-loss reinsurance in the commercial market. <span class="badge b-v">VER</span></li>
+    </ul>
+  </div>
+
+  <h2>War Risk — JWC Listed Areas &amp; Additional Premium Structure</h2>
+  <div class="war-table">
+    <table>
+      <thead><tr><th>Area / Region</th><th>JWC Status (2024)</th><th>War Risk Add. Premium</th><th>Key Peril</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Red Sea / Gulf of Aden</strong></td><td>Listed Area — High Risk <span class="badge b-v">VER</span></td><td>0.50–1.00%+ per voyage <span class="badge b-e">EST</span></td><td>Houthi missile/drone attacks on commercial vessels (2024)</td></tr>
+        <tr><td><strong>Black Sea / Sea of Azov</strong></td><td>Listed Area — War Zone <span class="badge b-v">VER</span></td><td>1.00–3.00%+ per voyage <span class="badge b-e">EST</span></td><td>Russia-Ukraine conflict; naval mines; vessel seizures</td></tr>
+        <tr><td><strong>Middle East Gulf (Hormuz)</strong></td><td>Listed Area — Periodic <span class="badge b-v">VER</span></td><td>0.05–0.25% per voyage <span class="badge b-e">EST</span></td><td>Iran-related tensions; tanker seizures (2019 Stena Impero)</td></tr>
+        <tr><td><strong>Gulf of Guinea</strong></td><td>Listed Area — Piracy <span class="badge b-v">VER</span></td><td>0.10–0.30% per voyage <span class="badge b-e">EST</span></td><td>Piracy / armed robbery against vessels; kidnap and ransom</td></tr>
+        <tr><td><strong>East Africa / Somali Basin</strong></td><td>Reduced risk (BMP5 effective) <span class="badge b-v">VER</span></td><td>0.05–0.15% per voyage <span class="badge b-e">EST</span></td><td>Residual Somali piracy risk — reduced significantly since 2012 naval patrolling</td></tr>
+        <tr><td><strong>Malacca Strait</strong></td><td>Watch area — lower risk <span class="badge b-e">EST</span></td><td>Nominal / nil</td><td>Historical piracy; now well-patrolled; very low additional premium</td></tr>
+        <tr><td><strong>Standard ocean-going (worldwide excl. above)</strong></td><td>Standard</td><td>Annual war risk base premium: 0.03–0.10% p.a. <span class="badge b-e">EST</span></td><td>Background war/strikes risk; piracy; political violence</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.85rem;color:var(--muted);">JWC = Joint War Committee (Lloyd's Market Association / International Underwriting Association). Listed Areas can be added or removed at 7 days' notice. War risk policy cancellable at 48 hours' notice in listed areas for new transits. <span class="badge b-v">VER</span></p>
+
+  <h2>Illustrative Case Study — Greek Tanker Fleet (25 Vessels)</h2>
+  <div class="case-study">
+    <h3>Programme Design: Mid-Size Greek Tanker Owner</h3>
+    <div class="cs-tag">Code T · TS · TX · War Risk · Builders' Risk — Fleet Programme</div>
+    <table>
+      <tr><th>Fleet Composition</th><th>Detail</th></tr>
+      <tr><td>Fleet size</td><td>25 vessels — 10 VLCCs, 8 Suezmax, 7 MR product tankers</td></tr>
+      <tr><td>Average vessel age</td><td>9 years</td></tr>
+      <tr><td>Classification</td><td>Mixed: Lloyd's Register (12 vessels), DNV (10 vessels), BV (3 vessels) — all IACS top tier</td></tr>
+      <tr><td>Flag state</td><td>Liberia, Marshall Islands (both Paris MOU White List)</td></tr>
+      <tr><td>Total hull insured value</td><td>$1.85 billion (fleet aggregate)</td></tr>
+      <tr><td>PSC record (3yr)</td><td>Zero detentions; 12 minor deficiencies across fleet</td></tr>
+      <tr><td>TMSA</td><td>TMSA 3 — average score 3.2/4.0 across KPIs</td></tr>
+      <tr><td>5-year claims</td><td>Total claims: $12.4m — 3 machinery claims, 1 grounding (minor). No TL.</td></tr>
+      <tr><th>Programme Structure</th><th>Detail</th></tr>
+      <tr><td>Deductible / self-retention</td><td>$750,000 each and every loss (fleet captive absorbs)</td></tr>
+      <tr><td>Primary H&amp;M layer</td><td>$50m xs $750,000 — Lloyd's lead (Brit 2987) + 8-syndicate panel</td></tr>
+      <tr><td>Excess Layer 1</td><td>$100m xs $50m — Lloyd's + 3 European insurers</td></tr>
+      <tr><td>Excess Layer 2 (Cat / TL)</td><td>$250m xs $150m — Bermuda + Lloyd's specialist capacity</td></tr>
+      <tr><td>War risk (hull)</td><td>Fleet annual base policy; voyage additional premium for Red Sea (0.65% per transit), Black Sea (excluded — no trading)</td></tr>
+      <tr><td>Loss of Hire (TX)</td><td>$65,000/day × 120 days max; 14-day waiting period; placed alongside H&amp;M panel</td></tr>
+      <tr><td>P&amp;I</td><td>Gard (International Group) — full P&amp;I, FD&amp;D</td></tr>
+      <tr><th>Indicative Premium</th><th>Detail</th></tr>
+      <tr><td>H&amp;M base rate (fleet average)</td><td>0.32% (good quality fleet; clean PSC; low claims) <span class="badge b-e">EST</span></td></tr>
+      <tr><td>H&amp;M annual premium</td><td>$1,850,000,000 × 0.32% = ~$5,920,000 <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>War risk annual base premium</td><td>~$370,000 (0.02% on fleet IV) <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>War risk — Red Sea voyages (est. 60 transits × $3.5m avg vessel IV × 0.65%)</td><td>~$1,365,000 additional <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>Loss of Hire annual premium</td><td>~$480,000 (fleet aggregate; $65,000/day × 120 days × fleet) <span class="badge b-i">ILLUS</span></td></tr>
+    </table>
+    <div class="result-box">
+      Estimated total hull programme cost: <strong>~$8.1m per annum</strong> <span class="badge b-i">ILLUS</span>
+      <br><br>
+      <span style="font-size:0.84rem;opacity:0.9;">
+        Key programme conditions: (a) TMSA 3 score maintained ≥ 3.0; (b) no vessels to enter Black Sea without prior underwriter consent and war risk endorsement; (c) all PSC detentions to be reported within 14 days; (d) BIMCO cyber clauses attached; (e) annual ISM/DOC certificate provision. Red Sea war risk additional premium is the most volatile cost item — 2024 uplift added approximately $1.4m to fleet cost versus prior year.
+      </span>
+    </div>
+  </div>
+
+</main>
+<footer>Risk Code Hub · Marine Hull (B · T · TS · TX) · Module 07 — Global Programmes · v2.7 · April 2026</footer>
+</body>
+</html>

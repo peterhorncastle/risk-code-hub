@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claims & Events Database — Financial Lines – Misc – Risk Code Hub</title>
+  <style>
+    :root {
+      --fin:#1a3a5c; --fin-dark:#0d2035; --mortgage:#c9963a; --surety:#2d6b3a;
+      --title:#7b2533; --fg:#5b21b6; --risk:#c0572a; --gold:#c9a84c;
+      --bg:#f4f6f9; --card:#ffffff; --text:#1a2332; --mid:#5a6a7a;
+      --card-border:#dce3ed;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2035 0%,#1a3a5c 50%,#0a1828 100%); color:#fff; padding:40px; }
+    header .breadcrumb { font-size:0.8rem; color:#a8c4d8; margin-bottom:6px; }
+    header .breadcrumb a { color:var(--gold); text-decoration:none; }
+    header .tag { font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; margin-bottom:10px; }
+    header p { color:#a8c4d8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--card-border); padding:0 40px; display:flex; gap:0; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--mid); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--fin); border-bottom-color:var(--gold); }
+    main { max-width:1200px; margin:0 auto; padding:50px 30px; }
+
+    .badge { display:inline-block; font-size:0.6rem; font-weight:700; padding:1px 5px; border-radius:3px; vertical-align:middle; margin-left:3px; letter-spacing:0.5px; }
+    .badge.ver { background:#d1fae5; color:#065f46; }
+    .badge.est { background:#fef3c7; color:#92400e; }
+    .badge.illus { background:#dbeafe; color:#1e40af; }
+    .badge.gap { background:#ffe4e6; color:#9f1239; }
+
+    .controls { display:grid; gap:16px; margin-bottom:32px; }
+    .search-box { background:var(--card); border:1px solid var(--card-border); padding:12px 16px; border-radius:6px; font-size:0.9rem; width:100%; }
+    .search-box::placeholder { color:#aaa; }
+
+    .filter-group { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
+    .filter-set { display:flex; flex-direction:column; gap:6px; }
+    .filter-set label { font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--mid); letter-spacing:0.5px; }
+    .filter-set select { background:var(--card); border:1px solid var(--card-border); padding:8px 12px; border-radius:4px; font-size:0.85rem; cursor:pointer; }
+
+    .table-wrapper { background:var(--card); border:1px solid var(--card-border); border-radius:8px; overflow:hidden; }
+    table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+    thead { background:var(--fin); color:#fff; }
+    th { padding:12px 14px; text-align:left; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; font-weight:700; cursor:pointer; user-select:none; }
+    th:hover { background:var(--fin-dark);  color: #fff;}
+    th.sortable::after { content:' ↕'; opacity:0.5; }
+    th.sort-asc::after { content:' ↑'; opacity:1; }
+    th.sort-desc::after { content:' ↓'; opacity:1; }
+    td { padding:12px 14px; border-bottom:1px solid var(--card-border); vertical-align:top; }
+    tr:hover { background:#f8fafc; }
+    tbody tr:last-child td { border-bottom:none; }
+
+    .year { font-weight:700; color:var(--fin); }
+    .type-market { color:var(--fin); }
+    .type-mortgage { color:var(--mortgage); }
+    .type-title { color:var(--title); }
+    .type-surety { color:var(--surety); }
+    .type-fg { color:var(--fg); }
+    .type-regulatory { color:#666; }
+
+    .hidden-row { display:none; }
+
+    .row-details { display:none; background:#f8fafc; border-top:1px solid var(--card-border); }
+    .row-details.expanded { display:table-row; }
+    .row-details td { padding:16px 14px; font-size:0.85rem; line-height:1.6; }
+
+    .result-count { color:var(--mid); font-size:0.85rem; margin-bottom:12px; }
+
+    footer { background:var(--fin); color:#7a9bb5; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Financial Lines – Misc</a> › Database</div>
+  <div class="tag">Lloyd's Codes FM · TT · SB · FG</div>
+  <h1>Claims &amp; Events Database</h1>
+  <p>Searchable database of 35 major events spanning market development, losses, regulatory milestones, and emerging risks</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Database</a>
+  <a href="../index.html">← Hub Home</a>
+</nav>
+
+<main>
+
+  <div class="controls">
+    <input type="text" id="searchBox" class="search-box" placeholder="Search events by title, year, jurisdiction..." oninput="filterDatabase()">
+    <div class="filter-group">
+      <div class="filter-set">
+        <label for="typeFilter">Event Type</label>
+        <select id="typeFilter" onchange="filterDatabase()">
+          <option value="">ALL TYPES</option>
+          <option value="market">Market Development</option>
+          <option value="mortgage">Mortgage Insurance</option>
+          <option value="title">Title Insurance</option>
+          <option value="surety">Surety Bonds</option>
+          <option value="fg">Financial Guarantee</option>
+          <option value="regulatory">Regulatory</option>
+        </select>
+      </div>
+      <div class="filter-set">
+        <label for="jurisdictionFilter">Jurisdiction</label>
+        <select id="jurisdictionFilter" onchange="filterDatabase()">
+          <option value="">ALL</option>
+          <option value="USA">USA</option>
+          <option value="UK">UK</option>
+          <option value="EUROPE">EUROPE</option>
+          <option value="GLOBAL">GLOBAL</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-count" id="resultCount"></div>
+
+  <div class="table-wrapper">
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th class="sortable" onclick="sortTable('year')">Year</th>
+          <th class="sortable" onclick="sortTable('title')">Event</th>
+          <th class="sortable" onclick="sortTable('type')">Type</th>
+          <th class="sortable" onclick="sortTable('jurisdiction')">Jurisdiction</th>
+          <th class="sortable" onclick="sortTable('loss')">Loss / Impact</th>
+          <th>Badge</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  Risk Code Hub — Financial Lines – Misc | Last updated April 2026
+</footer>
+
+<script>
+const events = [
+  {year:1876, type:"market", title:"Law Title Insurance Company of Pennsylvania founded", jurisdiction:"USA", loss:"Nil", badge:"VER", desc:"World's first title insurance company established in Philadelphia."},
+  {year:1894, type:"regulatory", title:"Heard Act — federal surety bonding introduced", jurisdiction:"USA", loss:"Nil", badge:"VER", desc:"First US federal requirement for performance bonds on government construction contracts."},
+  {year:1935, type:"regulatory", title:"Miller Act — performance and payment bonds mandated", jurisdiction:"USA", loss:"Nil", badge:"VER", desc:"Replaced Heard Act; required both performance and payment bonds on federal contracts >$100k."},
+  {year:1957, type:"market", title:"MGIC founded — private mortgage insurance born", jurisdiction:"USA", loss:"Nil", badge:"VER", desc:"First modern private mortgage insurance company established in Milwaukee."},
+  {year:1971, type:"market", title:"AMBAC founded — bond insurance market created", jurisdiction:"USA", loss:"Nil", badge:"VER", desc:"First bond insurance company; AAA-wrap model for municipal bonds established."},
+  {year:1974, type:"market", title:"MBIA formed — bond insurance competition grows", jurisdiction:"USA", loss:"Nil", badge:"VER", desc:"MBIA formed alongside AMBAC to dominate US municipal bond insurance."},
+  {year:1983, type:"market", title:"FGIC and FSA launch — monoline market matures", jurisdiction:"USA", loss:"Nil", badge:"VER", desc:"Financial Guarantee Insurance Company and Financial Security Assurance expand the monoline sector."},
+  {year:1989, type:"mortgage", title:"UK property crash — MIG losses", jurisdiction:"UK", loss:"£2–4bn est", badge:"EST", desc:"20–30% London property price decline triggered large-scale MIG claims. Several reinsurers exited UK."},
+  {year:1994, type:"regulatory", title:"UK Land Registration Act reform", jurisdiction:"UK", loss:"Nil", badge:"VER", desc:"Modernisation of land registration system; highlighted title defect risks and boosted title insurance take-up."},
+  {year:1997, type:"surety", title:"Asian financial crisis — emerging market surety losses", jurisdiction:"GLOBAL", loss:"$1–3bn est", badge:"EST", desc:"Infrastructure project failures across SE Asia triggered performance bond claims on Korean and Indonesian contracts."},
+  {year:2001, type:"surety", title:"Enron collapse — corporate surety losses", jurisdiction:"USA", loss:"$500m+ est", badge:"EST", desc:"Enron's bankruptcy triggered surety obligations across energy trading performance guarantees and trade bonds."},
+  {year:2002, type:"surety", title:"WorldCom bankruptcy — bonded obligations triggered", jurisdiction:"USA", loss:"$200m+ est", badge:"EST", desc:"Corporate fraud at WorldCom led to claims on performance bonds and various surety obligations."},
+  {year:2004, type:"title", title:"Title fraud: property hijacking cases emerge UK", jurisdiction:"UK", loss:"£50–150m est", badge:"EST", desc:"Wave of UK cases where fraudsters forged deeds and sold properties they didn't own. Land Registry tightened ID checks."},
+  {year:2005, type:"fg", title:"Monoline peak — $2.3tn structured credit wrapped", jurisdiction:"USA", loss:"Nil", badge:"EST", desc:"AMBAC, MBIA, FGIC and FSA collectively wrap over $2.3tn of ABS, CDO, RMBS at peak. Rating agencies maintain AAA."},
+  {year:2005, type:"surety", title:"Hurricane Katrina — surety and title claims", jurisdiction:"USA", loss:"$1–2bn est", badge:"EST", desc:"Katrina triggered performance bond claims on post-storm reconstruction projects and title claims on flooded properties with unclear ownership."},
+  {year:2008, type:"fg", title:"AMBAC AAA rating lost — bond insurance model fails", jurisdiction:"USA", loss:"$11bn+ losses", badge:"VER", desc:"AMBAC reported $11.5bn in write-downs on structured credit; AAA rating stripped January 2008. Model proven non-viable."},
+  {year:2008, type:"fg", title:"MBIA downgraded — structured book collapse", jurisdiction:"USA", loss:"$8bn+ losses", badge:"VER", desc:"MBIA wrote down billions on CDO/RMBS wraps; later split into municipal and structured entities. Structured book in permanent run-off."},
+  {year:2008, type:"mortgage", title:"US sub-prime crisis — PMI market devastated", jurisdiction:"USA", loss:"$40bn+ industry", badge:"EST", desc:"Sub-prime mortgage defaults caused catastrophic PMI losses. PMI Group, RADIAN, MGIC, Genworth all required capital raises or failed."},
+  {year:2010, type:"fg", title:"AMBAC Chapter 11 filing", jurisdiction:"USA", loss:"$1.7bn liabilities", badge:"VER", desc:"AMBAC Financial Group filed for bankruptcy protection, becoming the highest-profile casualty of the financial crisis in the bond insurance sector."},
+  {year:2010, type:"title", title:"Robo-signing scandal — title defect wave", jurisdiction:"USA", loss:"$5–10bn est", badge:"EST", desc:"Banks' robosigning of foreclosure documents without review created defective title chains. Title insurers faced extensive claims on properties sold from improper foreclosures."},
+  {year:2011, type:"mortgage", title:"PMI Group fails", jurisdiction:"USA", loss:"$6bn+ losses", badge:"VER", desc:"PMI Group placed into receivership by Arizona regulator — first major US mortgage insurer to fail post-crisis. Genworth and RADIAN required significant capital support."},
+  {year:2013, type:"mortgage", title:"UK Help to Buy mortgage guarantee scheme", jurisdiction:"UK", loss:"Nil", badge:"VER", desc:"Government effectively replaced private MIG for 5-15% LTV excess on 95% LTV mortgages. Reduced private MIG market but restored high-LTV lending."},
+  {year:2017, type:"surety", title:"Carillion collapse — bonded contract losses", jurisdiction:"UK", loss:"£500m+ est", badge:"EST", desc:"Carillion's January 2018 liquidation triggered performance bond claims across NHS, Highways England and HS2 construction contracts. Exposed surety underwriting of major contractors."},
+  {year:2018, type:"surety", title:"Interserve financial distress — surety exposure", jurisdiction:"UK", loss:"£100–200m est", badge:"EST", desc:"Interserve's financial difficulties forced surety underwriters to review contractor financial strength analysis. Reinforced need for forward-looking financial assessment beyond P&L."},
+  {year:2020, type:"title", title:"COVID-19 — conveyancing fraud surge", jurisdiction:"UK", loss:"£100m+ est", badge:"EST", desc:"UK conveyancing fraud losses escalated during COVID as remote working disrupted identity verification processes. Wire fraud targeting property transactions increased significantly."},
+  {year:2020, type:"surety", title:"COVID-19 — construction surety losses", jurisdiction:"GLOBAL", loss:"$2–5bn est", badge:"EST", desc:"COVID-19 supply chain disruption, material cost inflation and project delays caused contractor defaults on bonded construction projects globally."},
+  {year:2021, type:"title", title:"US title premium peaks at $26bn — refinance boom", jurisdiction:"USA", loss:"Nil", badge:"VER", desc:"Record-low mortgage rates drove unprecedented US refinance volume, pushing title insurance premium to all-time high of ~$26bn. Rapid reversal followed as rates rose."},
+  {year:2022, type:"title", title:"UK Building Safety Act — cladding title claims", jurisdiction:"UK", loss:"£500m+ est", badge:"EST", desc:"BSA 2022 imposed developer/landlord liability for cladding remediation. Properties with unsafe cladding unmortgageable without EWS1 certificates — driving title insurance for lender protection."},
+  {year:2022, type:"title", title:"US title market contraction — rate rises", jurisdiction:"USA", loss:"Nil", badge:"VER", desc:"Federal Reserve rate rises collapsed refinance activity; US title premium fell from $26bn (2021) to ~$16bn (2022). Title companies implemented major cost reductions."},
+  {year:2023, type:"surety", title:"Infrastructure boom — surety capacity strain", jurisdiction:"USA", loss:"Nil", badge:"EST", desc:"US IIJA ($1.2tn) and UK NSIP pipeline created surety capacity demand exceeding market supply. Large contracts required co-surety arrangements and alternative risk solutions."},
+  {year:2023, type:"mortgage", title:"UK mortgage stress — high LTV claims rising", jurisdiction:"UK", loss:"£50–200m est", badge:"EST", desc:"Rising UK mortgage rates (5%+) increased arrears on high-LTV loans originated 2020-22. MIG claims began increasing from near-zero post-Help to Buy to more normalised levels."},
+  {year:2023, type:"fg", title:"Assured Guaranty — dominant surviving bond insurer", jurisdiction:"USA", loss:"Nil", badge:"VER", desc:"Assured Guaranty remained the sole investment-grade active bond insurer, maintaining ~$270bn insured par in force. Focused on US municipal, Puerto Rico restructuring and infrastructure."},
+  {year:2024, type:"title", title:"AI deepfake property fraud — emerging threat", jurisdiction:"GLOBAL", loss:"Unknown", badge:"VER", desc:"Fraudsters using AI-generated documentation and deepfake video to impersonate property owners during remote ID verification. Multiple UK and US cases reported; Land Registry and title insurers strengthening controls."},
+  {year:2024, type:"regulatory", title:"UK Leasehold and Freehold Reform Act — title implications", jurisdiction:"UK", loss:"Unknown", badge:"VER", desc:"Leasehold reform creating uncertainty over ground rent values, enfranchisement rights and title to freehold reversions. Title insurers developing new products covering transitional risks."},
+  {year:2024, type:"surety", title:"Contractor insolvency wave — bonded defaults increase", jurisdiction:"UK", loss:"£200–400m est", badge:"EST", desc:"UK construction insolvencies at 20-year high in 2023-24 driven by fixed-price contract losses and inflation. Performance bond claims material increase across public sector contracts."}
+];
+
+let sortColumn = 'year';
+let sortOrder = 'asc';
+
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  let visibleCount = 0;
+
+  events.forEach((ev, idx) => {
+    if (shouldShowRow(ev)) {
+      visibleCount++;
+      const typeClass = `type-${ev.type}`;
+      const badgeClass = `badge ${ev.badge.toLowerCase()}`;
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="year">${ev.year}</td>
+        <td><strong>${ev.title}</strong></td>
+        <td class="${typeClass}">${ev.type.replace(/([A-Z])/g, ' $1').trim()}</td>
+        <td>${ev.jurisdiction}</td>
+        <td>${ev.loss}</td>
+        <td><span class="${badgeClass}">${ev.badge}</span></td>
+      `;
+      row.style.cursor = 'pointer';
+      row.onclick = () => toggleDetails(idx);
+      tbody.appendChild(row);
+
+      const detailsRow = document.createElement('tr');
+      detailsRow.className = `row-details`;
+      detailsRow.id = `details-${idx}`;
+      detailsRow.innerHTML = `<td colspan="6"><strong>Details:</strong> ${ev.desc}</td>`;
+      tbody.appendChild(detailsRow);
+    }
+  });
+
+  document.getElementById('resultCount').textContent = `Showing ${visibleCount} of ${events.length} events`;
+}
+
+function shouldShowRow(ev) {
+  const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+  const typeFilter = document.getElementById('typeFilter').value;
+  const jurisdictionFilter = document.getElementById('jurisdictionFilter').value;
+
+  const matchesSearch = !searchTerm ||
+    ev.title.toLowerCase().includes(searchTerm) ||
+    ev.year.toString().includes(searchTerm) ||
+    ev.jurisdiction.toLowerCase().includes(searchTerm);
+
+  const matchesType = !typeFilter || ev.type === typeFilter;
+  const matchesJurisdiction = !jurisdictionFilter || ev.jurisdiction === jurisdictionFilter;
+
+  return matchesSearch && matchesType && matchesJurisdiction;
+}
+
+function toggleDetails(idx) {
+  const details = document.getElementById(`details-${idx}`);
+  details.classList.toggle('expanded');
+}
+
+function filterDatabase() {
+  renderTable();
+}
+
+function sortTable(column) {
+  const headers = document.querySelectorAll('th.sortable');
+  headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+
+  if (sortColumn === column) {
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortColumn = column;
+    sortOrder = 'asc';
+  }
+
+  events.sort((a, b) => {
+    let aVal = a[column];
+    let bVal = b[column];
+    if (typeof aVal === 'string') {
+      aVal = aVal.toLowerCase();
+      bVal = bVal.toLowerCase();
+    }
+    if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
+    if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const headerIdx = Array.from(document.querySelectorAll('th.sortable')).findIndex(h =>
+    h.textContent.toLowerCase().includes(column)
+  );
+  if (headerIdx >= 0) {
+    document.querySelectorAll('th.sortable')[headerIdx].classList.add(sortOrder === 'asc' ? 'sort-asc' : 'sort-desc');
+  }
+
+  renderTable();
+}
+
+renderTable();
+</script>
+
+</body>
+</html>

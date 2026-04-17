@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mortgage, Title, Surety & Financial Guarantee – Risk Code Hub</title>
+  <style>
+    :root {
+      --fin:#1a3a5c; --fin-dark:#0d2035; --mortgage:#c9963a; --surety:#2d6b3a;
+      --title:#7b2533; --fg:#5b21b6; --risk:#c0572a; --gold:#c9a84c;
+      --bg:#f4f6f9; --card:#ffffff; --text:#1a2332; --mid:#5a6a7a;
+      --card-border:#dce3ed;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2035 0%,#1a3a5c 50%,#0a1828 100%); color:#fff; padding:40px; }
+    header .breadcrumb { font-size:0.8rem; color:#a8c4d8; margin-bottom:6px; }
+    header .breadcrumb a { color:var(--gold); text-decoration:none; }
+    header .tag { font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; margin-bottom:10px; }
+    header p { color:#a8c4d8; font-size:0.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--card-border); padding:0 40px; display:flex; gap:0; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--mid); border-bottom:3px solid transparent; white-space:nowrap; transition:all 0.2s; }
+    nav a:hover, nav a.active { color:var(--fin); border-bottom-color:var(--gold); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.4rem; color:var(--fin); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--gold); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:14px; margin:28px 0 36px; }
+    .stat-box { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:18px; text-align:center; }
+    .stat-box .num { font-size:1.55rem; font-weight:800; color:var(--fin); }
+    .stat-box .label { font-size:0.74rem; color:var(--mid); margin-top:4px; line-height:1.4; }
+
+    .badge { display:inline-block; font-size:0.6rem; font-weight:700; padding:1px 5px; border-radius:3px; vertical-align:middle; margin-left:3px; letter-spacing:0.5px; }
+    .badge.ver { background:#d1fae5; color:#065f46; }
+    .badge.est { background:#fef3c7; color:#92400e; }
+    .badge.illus { background:#dbeafe; color:#1e40af; }
+    .badge.gap { background:#ffe4e6; color:#9f1239; }
+
+    .code-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.88rem; }
+    .code-table th { background:var(--fin); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .code-table td { padding:10px 14px; border-bottom:1px solid var(--card-border); vertical-align:top; line-height:1.5; }
+    .code-table tr:nth-child(even) td { background:#f8fafc; }
+    .code-pill { display:inline-block; background:var(--fin); color:#fff; font-size:0.72rem; font-weight:700; padding:3px 8px; border-radius:4px; letter-spacing:1px; }
+    .code-pill.mortgage { background:var(--mortgage); }
+    .code-pill.title { background:var(--title); }
+    .code-pill.surety { background:var(--surety); }
+    .code-pill.fg { background:var(--fg); }
+
+    .coverage-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin:22px 0 36px; }
+    .cov-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:20px; border-left:4px solid var(--fin); }
+    .cov-card.mortgage { border-left-color:var(--mortgage); }
+    .cov-card.title { border-left-color:var(--title); }
+    .cov-card.surety { border-left-color:var(--surety); }
+    .cov-card.fg { border-left-color:var(--fg); }
+    .cov-card h4 { font-size:0.92rem; font-weight:700; color:var(--fin); margin-bottom:8px; }
+    .cov-card p { font-size:0.82rem; color:var(--mid); margin:0; line-height:1.5; }
+
+    .info-box { background:#e8f0f8; border:1px solid #c8d9ed; border-radius:10px; padding:26px 30px; margin:26px 0; }
+    .info-box h4 { color:var(--fin); font-size:0.95rem; margin-bottom:12px; font-weight:700; }
+    .info-box p { font-size:0.88rem; color:var(--text); line-height:1.6; margin-bottom:8px; }
+
+    .market-table { width:100%; border-collapse:collapse; margin:20px 0 36px; font-size:0.88rem; }
+    .market-table th { background:var(--fin); color:#fff; padding:10px 14px; text-align:left; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; }
+    .market-table td { padding:10px 14px; border-bottom:1px solid var(--card-border); vertical-align:top; }
+    .market-table tr:nth-child(even) td { background:#f8fafc; }
+
+    footer { background:var(--fin); color:#7a9bb5; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Financial Lines – Misc</div>
+  <div class="tag">Lloyd's Codes FM · TT · SB · FG</div>
+  <h1>Mortgage, Title, Surety & Financial Guarantee</h1>
+  <p>Four distinct guarantee mechanisms protecting lenders, property owners, project principals and capital market investors against financial default and title defect</p>
+</header>
+
+<nav>
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Database</a>
+  <a href="../index.html">← Hub Home</a>
+</nav>
+
+<main>
+
+  <h2>Key Market Metrics</h2>
+  <div class="stats-row">
+    <div class="stat-box"><div class="num">$16bn</div><div class="label">US title insurance GWP (2022) <span class="badge est">EST</span></div></div>
+    <div class="stat-box"><div class="num">$15–17bn</div><div class="label">Global surety market GWP <span class="badge est">EST</span></div></div>
+    <div class="stat-box"><div class="num">0.5–3%</div><div class="label">Typical surety bond premium <span class="badge ver">VER</span></div></div>
+    <div class="stat-box"><div class="num">~0</div><div class="label">New standalone FG issuance post-2008 <span class="badge ver">VER</span></div></div>
+  </div>
+
+  <h2>Lloyd's Risk Codes</h2>
+  <table class="code-table">
+    <thead>
+      <tr><th>Lloyd's Code</th><th>Product Line</th><th>Primary Insured</th><th>Key Risk</th><th>Policy Basis</th><th>Typical Limit</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="code-pill mortgage">FM</span></td>
+        <td>Mortgage Indemnity Guarantee (MIG)</td>
+        <td>Mortgage lender</td>
+        <td>Borrower default + property shortfall</td>
+        <td>Per-loan / portfolio</td>
+        <td>LTV excess amount</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill title">TT</span></td>
+        <td>Title Insurance</td>
+        <td>Property buyer / lender</td>
+        <td>Defective title, fraud, unknown liens</td>
+        <td>One-time premium</td>
+        <td>Property / loan value</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill surety">SB</span></td>
+        <td>Surety Bonds</td>
+        <td>Project principal / obligee</td>
+        <td>Contractor default, non-performance</td>
+        <td>Per-bond / annual</td>
+        <td>Contract value</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill fg">FG</span></td>
+        <td>Financial Guarantee</td>
+        <td>Bond / note holders</td>
+        <td>Issuer default on scheduled payments</td>
+        <td>Per-issue</td>
+        <td>Par + interest</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Coverage Types</h2>
+  <div class="coverage-grid">
+    <div class="cov-card mortgage">
+      <h4>🏠 Mortgage Indemnity Guarantee (FM)</h4>
+      <p>Protects mortgage lenders when a borrower defaults and the property sale proceeds fall short of the outstanding loan. Typically triggered on LTV &gt; 75–80%. Once paid by insurer, subrogation rights against borrower.</p>
+    </div>
+    <div class="cov-card title">
+      <h4>📋 Title Insurance — Owner's Policy (TT)</h4>
+      <p>Protects property buyers against title defects existing at the date of policy: unknown liens, encumbrances, boundary disputes, deed forgery, missing heir claims. One-time premium; coverage for as long as owner holds interest.</p>
+    </div>
+    <div class="cov-card title">
+      <h4>🏦 Title Insurance — Lender's Policy (TT)</h4>
+      <p>Required by most mortgage lenders. Covers the lender's interest up to the loan amount. Typically purchased alongside owner's policy at discounted simultaneous issue rate. Coverage reduces as loan is paid down.</p>
+    </div>
+    <div class="cov-card surety">
+      <h4>🔨 Performance &amp; Payment Bonds (SB)</h4>
+      <p>Guarantees contract completion and payment to subcontractors/suppliers. Performance bond: principal obligated to complete or pay damages. Payment bond: protects sub-tier against non-payment. Core to public procurement (Miller Act US, OJEU EU).</p>
+    </div>
+    <div class="cov-card surety">
+      <h4>📄 Licence, Court &amp; Misc Surety (SB)</h4>
+      <p>Wide range including: licence bonds (professional/trade), court bonds (appeals, guardianship), customs bonds, environmental closure bonds, oil &amp; gas plugging bonds, tax bonds. Typically shorter-term, lower premium intensity.</p>
+    </div>
+    <div class="cov-card fg">
+      <h4>🏛️ Financial Guarantee / Bond Insurance (FG)</h4>
+      <p>Unconditional guarantee of timely principal and interest payments on debt instruments. Used historically on municipal bonds (AAA-wrap), ABS, CDOs. Near-extinct for structured finance post-2008; surviving on infrastructure and public finance.</p>
+    </div>
+  </div>
+
+  <h2>Product Differentiation</h2>
+  <div class="info-box">
+    <h4>Key Distinctions Within This Hub</h4>
+    <p><strong>MIG (FM)</strong> is credit insurance for lenders on residential mortgages; charged upfront or built into mortgage rate.</p>
+    <p><strong>Title (TT)</strong> is a legal indemnity product covering pre-existing defects rather than future risks; unique in that it covers known threats (fraud, forged deeds) and unknown threats (missing heirs, undiscovered liens).</p>
+    <p><strong>Surety (SB)</strong> is a three-party obligation (principal–obligee–surety), not traditional insurance; the surety can pursue the principal for recovery after paying a claim.</p>
+    <p><strong>Financial Guarantee (FG)</strong> is an unconditional wrap of scheduled debt payments; historically used to upgrade credit ratings, now mostly confined to public finance and infrastructure.</p>
+    <p>Each has distinct regulatory, reserving and capital treatment under IFRS, IASB, and local regulators.</p>
+  </div>
+
+  <h2>Global Market Overview</h2>
+  <table class="market-table">
+    <thead>
+      <tr><th>Segment</th><th>Approx. GWP</th><th>Key Lloyd's Carriers</th><th>Trend</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>US Title Insurance</td>
+        <td>~$16bn (2022) <span class="badge est">EST</span></td>
+        <td>Hiscox, CNA, Fidelity (non-Lloyd's dominant)</td>
+        <td>Falling from $26bn 2021 peak <span class="badge ver">VER</span></td>
+      </tr>
+      <tr>
+        <td>Global Surety</td>
+        <td>~$15–17bn <span class="badge est">EST</span></td>
+        <td>Zurich, AXA XL, Travelers, Liberty</td>
+        <td>Growing with infrastructure spend <span class="badge est">EST</span></td>
+      </tr>
+      <tr>
+        <td>UK/European MIG</td>
+        <td>~£200–400m <span class="badge gap">GAP</span></td>
+        <td>Arch, Genworth (Enact), NatWest captive</td>
+        <td>Declining post-2008 <span class="badge ver">VER</span></td>
+      </tr>
+      <tr>
+        <td>UK/European Title</td>
+        <td>~£300–600m <span class="badge gap">GAP</span></td>
+        <td>Aviva, CNA, First American, Stewart</td>
+        <td>Growing: fraud, leasehold, HS2 <span class="badge est">EST</span></td>
+      </tr>
+      <tr>
+        <td>Financial Guarantee</td>
+        <td>Residual <span class="badge ver">VER</span></td>
+        <td>Assured Guaranty (dominant), MBIA runoff</td>
+        <td>Effectively closed for new structured finance <span class="badge ver">VER</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  Risk Code Hub — Financial Lines – Misc | Last updated April 2026
+</footer>
+
+</body>
+</html>

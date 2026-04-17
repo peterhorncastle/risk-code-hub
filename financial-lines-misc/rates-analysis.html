@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rates & ROE Analysis — Mortgage, Title, Surety & Financial Guarantee</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --fin: #1a3a5c;
+      --fin-dark: #0d2035;
+      --mortgage: #c9963a;
+      --surety: #2d6b3a;
+      --title: #7b2533;
+      --fg: #5b21b6;
+      --risk: #c0572a;
+      --gold: #c9a84c;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1a2332;
+      --mid: #5a6a7a;
+      --card-border: #dce3ed;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0d2035 0%, #1a3a5c 50%, #0a1828 100%);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    nav {
+      background: #0d2035;
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #a8c4d8;
+      text-decoration: none;
+      font-size: 0.78rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .breadcrumb {
+      padding: 0.5rem 1.5rem;
+      background: #e8edf4;
+      font-size: 0.8rem;
+      color: #5a6a7a;
+    }
+
+    .breadcrumb a {
+      color: #1a3a5c;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      margin: 2rem 0 1rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--fin);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-left: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge.ver { background: #d1fae5; color: #065f46; }
+    .badge.est { background: #fef3c7; color: #92400e; }
+    .badge.illus { background: #dbeafe; color: #1e40af; }
+    .badge.gap { background: #ffe4e6; color: #9f1239; }
+
+    .chart-container {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      position: relative;
+      height: 400px;
+    }
+
+    .chart-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--fin-dark);
+    }
+
+    .chart-note {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 1rem;
+      font-style: italic;
+    }
+
+    .timeline-container {
+      margin: 2rem 0;
+    }
+
+    .timeline-item {
+      background: var(--card);
+      border-left: 4px solid var(--fin);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .timeline-item h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--fin-dark);
+      font-size: 1.1rem;
+    }
+
+    .timeline-item p {
+      margin: 0.5rem 0;
+      line-height: 1.7;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: #e8edf4;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    th {
+      font-weight: 700;
+      color: var(--fin-dark);
+      font-size: 0.95rem;
+    }
+
+    tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    td {
+      font-size: 0.95rem;
+    }
+
+    footer {
+      background: #0d2035;
+      color: #a8c4d8;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Rates & ROE Analysis</h1>
+    <p>Mortgage, Title, Surety & Financial Guarantee</p>
+  </header>
+
+  <nav>
+    <a href="overview.html">Overview</a>
+    <a href="history.html">History</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="database.html">Database</a>
+    <a href="underwriting.html">Underwriting</a>
+    <a href="rates-analysis.html" class="active">Rates & ROE</a>
+    <a href="risk-mitigation.html">Risk Mitigation</a>
+    <a href="global-program.html">Global Programme</a>
+    <a href="references.html">References</a>
+    <a href="../index.html">← Hub Home</a>
+  </nav>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Financial Lines Miscellaneous › Rates & ROE
+  </div>
+
+  <div class="container">
+
+    <section>
+      <h2 class="section-title">Section A: Title Insurance Rate Index</h2>
+      <p style="margin: 1rem 0;">US title insurance premium volume indexed to 1999 = 100. Chart shows dramatic expansion during refinance booms (2001–2003, 2020–2021) and contraction during rate-rise cycles.</p>
+
+      <div class="chart-container">
+        <div class="chart-title">US Title Insurance Premium Index (1999–2026)</div>
+        <canvas id="titleChart"></canvas>
+      </div>
+      <div class="chart-note">
+        <strong>Key annotations:</strong> 2001–2003 refi boom (index 135 → 225). 2007–2008 crisis trough (index 160 → 120). 2021 peak $26bn market (index 390). 2022–2026 normalization collapse (index 240 → 170).
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section B: Surety Rate Cycle</h2>
+      <p style="margin: 1rem 0;">Surety combined ratio index (2005–2026). Note: surety is historically very profitable (CR typically 65–85%), with spikes in recessions (2008–2009, 2020). Contractor insolvency wave 2023–24 shows modest CR uptick but limited claims materialization in published data.</p>
+
+      <div class="chart-container">
+        <div class="chart-title">Surety Combined Ratio Index (2005–2026)</div>
+        <canvas id="suretyCRChart"></canvas>
+      </div>
+      <div class="chart-note">
+        <strong>Key insights:</strong> 2008–2009 recession spike (CR 88 → 102). COVID-19 temporary volatility (2020 CR 92). 2023–2024 contractor insolvency wave has moderated CR slightly (83–85 range) — early warning period before major loss development.
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section C: Market Cycle Narrative</h2>
+
+      <div class="timeline-container">
+        <div class="timeline-item">
+          <h3>1. 1999–2003: US Refi Boom</h3>
+          <p>Low interest rates drove unprecedented refinance volume. Title premium volume nearly doubled (index 100 → 225). Surety remained stable during housing construction boom. Title insurers expanded rapidly; premium competition intensified.</p>
+        </div>
+
+        <div class="timeline-item">
+          <h3>2. 2003–2007: Housing Bubble</h3>
+          <p>Title market stabilised at elevated levels (index 220–232). Surety highly profitable (CR 65–72%) from construction demand. MIG/PMI grew rapidly as lenders pushed higher LTVs and stated-income lending. Underwriting standards deteriorated across all lines.</p>
+        </div>
+
+        <div class="timeline-item">
+          <h3>3. 2007–2010: Financial Crisis</h3>
+          <p>FG monolines (AMBAC, MBIA) collapsed on RMBS exposure. PMI/MIG suffered catastrophic losses on housing downturn. Title declined sharply with transaction volume collapse (index 160 → 120). Surety CR spiked (2009: 102) as contractor defaults surged.</p>
+        </div>
+
+        <div class="timeline-item">
+          <h3>4. 2010–2015: Slow Recovery</h3>
+          <p>Title recovered with housing market stabilisation (index 120 → 168). Surety CR returned to 65–70% range (very profitable). FG market remained dormant; only Assured Guaranty survived as active municipal monoline. MIG cautious recovery; lender LTV discipline tightened.</p>
+        </div>
+
+        <div class="timeline-item">
+          <h3>5. 2016–2021: Bull Market Peak</h3>
+          <p>Surety benefited from construction boom and infrastructure investment. Title reached 2021 peak (index 390, ~$26bn market) from unprecedented refi volume. MIG stabilised at modest LTV thresholds; arrears rates remained low. FG limited to municipal guarantee business.</p>
+        </div>
+
+        <div class="timeline-item">
+          <h3>6. 2022–Present: Normalisation</h3>
+          <p>Title contracted sharply on rate rises and mortgage volume collapse (index 390 → 170). Surety: infrastructure boom vs contractor insolvency risk tension. CR pressured by 2023–24 contractor failures but not yet at crisis levels. MIG UK cautious due to rising arrears; FG minimal new issuance.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section D: Sector Rate Grid</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Rate / Premium Basis</th>
+            <th>Current Level</th>
+            <th>Trend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>US Owner's Title</strong></td>
+            <td>$3–6 per $1,000 property value</td>
+            <td>Stable</td>
+            <td>Flat / declining volume</td>
+          </tr>
+          <tr>
+            <td><strong>UK Residential Title</strong></td>
+            <td>0.1–0.4% of property value</td>
+            <td>Increasing</td>
+            <td>Growing (fraud, BSA 2022)</td>
+          </tr>
+          <tr>
+            <td><strong>Construction Surety (SB)</strong></td>
+            <td>0.5–2.0% of contract value</td>
+            <td>Hardening</td>
+            <td>+15–25% 2023–24 <span class="badge est">EST</span></td>
+          </tr>
+          <tr>
+            <td><strong>Specialist/Process Surety</strong></td>
+            <td>1.5–3.5% of contract value</td>
+            <td>Hard</td>
+            <td>Capacity constrained</td>
+          </tr>
+          <tr>
+            <td><strong>MIG/PMI UK</strong></td>
+            <td>0.25–1.5% LTV excess p.a.</td>
+            <td>Stable-slightly hard</td>
+            <td>Rising arrears caution <span class="badge est">EST</span></td>
+          </tr>
+          <tr>
+            <td><strong>FG — Infrastructure</strong></td>
+            <td>20–50 bps p.a. of insured par</td>
+            <td>Tight</td>
+            <td>Very limited market</td>
+          </tr>
+          <tr>
+            <td><strong>FG — Municipal (US)</strong></td>
+            <td>30–100 bps p.a.</td>
+            <td>Moderate</td>
+            <td>Assured Guaranty dominant</td>
+          </tr>
+          <tr>
+            <td><strong>Miscellaneous Surety</strong></td>
+            <td>0.5–1.5% p.a.</td>
+            <td>Stable</td>
+            <td>Gradual growth</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section E: ROE Analysis</h2>
+      <p style="margin: 1rem 0;">Three scenarios on a combined $500m hypothetical book (mix of title, surety, MIG, FG). All figures illustrative <span class="badge illus">ILLUS</span>.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Bull Scenario</th>
+            <th>Base Scenario</th>
+            <th>Bear Scenario</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Gross Written Premium (GWP)</strong></td>
+            <td>$500m</td>
+            <td>$500m</td>
+            <td>$500m</td>
+          </tr>
+          <tr>
+            <td><strong>Loss Ratio</strong></td>
+            <td>45%</td>
+            <td>60%</td>
+            <td>85%</td>
+          </tr>
+          <tr>
+            <td><strong>Expense Ratio</strong></td>
+            <td>32%</td>
+            <td>34%</td>
+            <td>34%</td>
+          </tr>
+          <tr>
+            <td><strong>Combined Ratio</strong></td>
+            <td>77%</td>
+            <td>94%</td>
+            <td>119%</td>
+          </tr>
+          <tr>
+            <td><strong>Investment Income</strong></td>
+            <td>8% of premium</td>
+            <td>7% of premium</td>
+            <td>6% of premium</td>
+          </tr>
+          <tr>
+            <td><strong>Pre-tax ROE</strong></td>
+            <td><strong>+24%</strong></td>
+            <td><strong>+11%</strong></td>
+            <td><strong>−15%</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Scenario Note</strong></td>
+            <td>Title low-claims year, surety profitable</td>
+            <td>Base cycle mid-market</td>
+            <td>Contractor default wave + title fraud spike</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="margin: 1.5rem 0 0 0; font-size: 0.85rem;">
+        <strong>Bull scenario (CR 77%):</strong> Achieves when surety backlog strong, title refi volume recovers, and MIG arrears stay benign. Requires market tailwind on rates and housing sentiment. Pre-tax ROE of 24% is near peak-cycle return.
+      </p>
+      <p style="margin: 1rem 0 0 0; font-size: 0.85rem;">
+        <strong>Base scenario (CR 94%):</strong> Typical mid-cycle outcome. Title and surety each profitable; MIG stable. Investment income offsets modest underwriting losses. 11% pre-tax ROE is acceptable but below cost of capital for most institutions.
+      </p>
+      <p style="margin: 1rem 0 0 0; font-size: 0.85rem;">
+        <strong>Bear scenario (CR 119%):</strong> Triggers during contractor insolvency wave + conveyancing fraud spike. FG exposure to credit events also assumes losses. Negative ROE implies capital erosion; business model stress-tested to breaking point.
+      </p>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>Risk Code Hub | Financial Lines Miscellaneous | Lloyd's Market Intelligence</p>
+    <p style="font-size: 0.8rem; margin-top: 0.5rem;">Knowledge cutoff: May 2025 | All data illustrative</p>
+  </footer>
+
+  <script>
+    // Title Insurance Rate Index Chart
+    const titleCtx = document.getElementById('titleChart').getContext('2d');
+    new Chart(titleCtx, {
+      type: 'bar',
+      data: {
+        labels: ['1999','2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'],
+        datasets: [{
+          label: 'Index (1999 = 100)',
+          data: [100,108,135,178,225,232,220,190,160,120,115,130,128,142,152,158,168,178,192,198,210,258,390,240,195,185,175,170],
+          backgroundColor: '#7b2533',
+          borderColor: '#5a1a22',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 420,
+            ticks: { color: '#5a6a7a' },
+            grid: { color: '#e8edf4' }
+          },
+          x: {
+            ticks: { color: '#5a6a7a' },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Surety Combined Ratio Chart
+    const suretyCRCtx = document.getElementById('suretyCRChart').getContext('2d');
+    new Chart(suretyCRCtx, {
+      type: 'line',
+      data: {
+        labels: ['2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'],
+        datasets: [{
+          label: 'Combined Ratio (%)',
+          data: [72,68,70,88,102,95,88,78,72,68,65,66,68,78,72,92,88,82,90,88,85,83],
+          borderColor: '#2d6b3a',
+          backgroundColor: 'rgba(45, 107, 58, 0.1)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#2d6b3a',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'top' }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 110,
+            ticks: { color: '#5a6a7a' },
+            grid: { color: '#e8edf4' }
+          },
+          x: {
+            ticks: { color: '#5a6a7a' },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

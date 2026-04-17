@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marine Hull — Underwriting | Risk Code Hub</title>
+  <style>
+    :root {
+      --marine:#0b3d6b; --marine-dark:#061e35; --ocean:#1a6b8a;
+      --hull:#c0572a; --hull-light:#fff0ea; --anchor:#2d6b3a;
+      --deck:#b8860b; --light:#f0f5fb; --text:#1e2d3d; --muted:#6b7c93; --border:#c8d4e0;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#061e35 0%,#0b3d6b 50%,#041525 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#8899bb; margin-bottom:6px; }
+    .breadcrumb a { color:var(--deck); text-decoration:none; }
+    header h1 { font-size:1.8rem; font-weight:700; }
+    header p { margin-top:8px; color:#b8c8e8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--marine); border-bottom-color:var(--deck); }
+    main { max-width:1050px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.28rem; color:var(--marine); margin:40px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--deck); }
+    h3 { font-size:1rem; color:var(--ocean); margin:24px 0 10px; }
+    p { line-height:1.82; color:var(--text); margin-bottom:14px; font-size:0.93rem; }
+
+    .formula-box { background:var(--marine-dark); color:#c8d8f0; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .formula-box p, .formula-box .formula-note { color: #c8d8f0; }
+    .formula-box h3 { color:var(--deck); margin-bottom:12px; font-size:1rem; }
+    .formula { font-family:monospace; font-size:1rem; background:rgba(255,255,255,0.08); padding:14px 18px; border-radius:8px; margin:14px 0; color:#e8f0ff; letter-spacing:0.3px; }
+    .formula-note { font-size:0.84rem; opacity:0.85; margin-top:8px; }
+
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:22px 0; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-top:4px solid var(--marine); }
+    .factor-card.f2 { border-top-color:var(--ocean); }
+    .factor-card.f3 { border-top-color:var(--hull); }
+    .factor-card.f4 { border-top-color:var(--anchor); }
+    .factor-card.f5 { border-top-color:var(--deck); }
+    .factor-card.f6 { border-top-color:#7b2533; }
+    .factor-card h4 { font-size:0.9rem; font-weight:700; color:var(--marine); margin-bottom:10px; }
+    .factor-card table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+    .factor-card th { background:#f0f5fb; padding:5px 8px; text-align:left; font-size:0.78rem; }
+    .factor-card td { padding:5px 8px; border-bottom:1px solid var(--border); }
+    .factor-card tr:last-child td { border-bottom:none; }
+
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; vertical-align:middle; margin-left:3px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .class-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:22px 0; }
+    .class-table table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+    .class-table th { background:var(--marine); color:#fff; padding:9px 14px; text-align:left; }
+    .class-table td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .class-table tr:last-child td { border-bottom:none; }
+    .class-table tr:nth-child(even) td { background:#f8fafc; }
+
+    .quality-matrix { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:22px 0; }
+    .quality-matrix table { width:100%; border-collapse:collapse; font-size:0.84rem; }
+    .quality-matrix th { background:var(--ocean); color:#fff; padding:8px 12px; text-align:left; }
+    .quality-matrix td { padding:8px 12px; border-bottom:1px solid var(--border); }
+    .quality-matrix tr:last-child td { border-bottom:none; }
+    .q-green { background:#e6f4ea; color:#1a5c28; font-weight:700; text-align:center; }
+    .q-amber { background:#fef3e2; color:#7a4500; font-weight:700; text-align:center; }
+    .q-red { background:#fee2e2; color:#7f1d1d; font-weight:700; text-align:center; }
+
+    .worked { background:#fff; border:1px solid var(--border); border-radius:12px; padding:28px 30px; margin:28px 0; }
+    .worked h3 { color:var(--marine); font-size:1.05rem; margin-bottom:6px; }
+    .worked .vessel-tag { display:inline-block; background:var(--marine); color:#fff; font-size:0.75rem; padding:2px 10px; border-radius:10px; margin-bottom:14px; }
+    .worked table { width:100%; border-collapse:collapse; font-size:0.86rem; margin:14px 0; }
+    .worked th { background:#f0f5fb; padding:7px 12px; text-align:left; color:var(--marine); font-weight:700; }
+    .worked td { padding:7px 12px; border-bottom:1px solid var(--border); }
+    .worked tr:last-child td { border-bottom:none; }
+    .worked .result { background:var(--marine-dark); color:#fff; padding:14px 18px; border-radius:8px; font-size:0.92rem; margin-top:14px; }
+    .worked .result strong { color:var(--deck); font-size:1.1rem; }
+
+    footer { background:var(--marine-dark); color:#6677aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Hull</a> › Underwriting</div>
+  <h1>Module 04 — Underwriting Methodology</h1>
+  <p>Hull rating factors, classification society assessment, port state control records, and worked premium examples for VLCC and container vessel risks</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+<main>
+
+  <h2>Hull &amp; Machinery (T) Rating Formula</h2>
+  <p>Marine hull (T) premium is calculated as a rate applied to the agreed hull insured value (IV). The rate reflects vessel-specific risk factors including age, vessel type, classification society, trading area, claims experience and management quality. Unlike most other insurance classes, hull underwriting retains significant individual judgement — there is no standard actuarial model.</p>
+
+  <div class="formula-box">
+    <h3>🧮 Hull Premium Formula — H&amp;M (Code T)</h3>
+    <div class="formula">
+      Annual Premium = Insured Value × Base Rate × Age Factor × Type Factor × Class Factor × Trading Area Factor × Claims Factor
+    </div>
+    <p class="formula-note">Base Rate: market benchmark rate for the vessel segment (typically 0.20–0.80% for standard tonnage) <span class="badge b-e">EST</span></p>
+    <p class="formula-note">All adjustments are multiplicative. Final rate is subject to market conditions and underwriter judgement. Lloyd's hull underwriters typically quote on a rate-on-line (ROL) basis — annual premium as a % of hull insured value.</p>
+  </div>
+
+  <div class="factor-grid">
+    <div class="factor-card">
+      <h4>📅 Factor 1 — Vessel Age</h4>
+      <table>
+        <tr><th>Age Band</th><th>Multiplier</th></tr>
+        <tr><td>0–5 years</td><td>0.85–1.00×</td></tr>
+        <tr><td>6–10 years</td><td>1.00–1.15×</td></tr>
+        <tr><td>11–15 years</td><td>1.15–1.40×</td></tr>
+        <tr><td>16–20 years</td><td>1.40–1.80×</td></tr>
+        <tr><td>20+ years</td><td>1.80–3.00×</td></tr>
+      </table>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Hull condition deteriorates with age; machinery becomes less reliable; class survey regime becomes more demanding. Older vessels also less likely to have upgraded safety systems. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="factor-card f2">
+      <h4>🚢 Factor 2 — Vessel Type</h4>
+      <table>
+        <tr><th>Vessel Type</th><th>Multiplier vs Base</th></tr>
+        <tr><td>Standard bulk carrier</td><td>1.00× (base)</td></tr>
+        <tr><td>VLCC / suezmax tanker</td><td>0.90–1.10×</td></tr>
+        <tr><td>Chemical tanker</td><td>1.10–1.40×</td></tr>
+        <tr><td>Container (feeder)</td><td>1.00–1.20×</td></tr>
+        <tr><td>ULCV container (15k+ TEU)</td><td>1.15–1.50×</td></tr>
+        <tr><td>Cruise / passenger vessel</td><td>1.20–1.80×</td></tr>
+        <tr><td>Car carrier (PCTC/RoRo)</td><td>1.30–2.00×</td></tr>
+        <tr><td>Offshore supply vessel</td><td>1.30–2.50×</td></tr>
+      </table>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Car carrier / RoRo loading reflects EV battery fire risk (post-2022) and structural complexity. Cruise vessels carry largest wreck removal liability exposure. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="factor-card f3">
+      <h4>🏛️ Factor 3 — Classification Society</h4>
+      <table>
+        <tr><th>Society</th><th>Standing</th><th>Adj.</th></tr>
+        <tr><td>Lloyd's Register, DNV GL, ABS, Bureau Veritas, Class NK (IACS full members)</td><td>Top tier</td><td>0.90–1.00×</td></tr>
+        <tr><td>KR, RINA, CCS, IRS (IACS full members)</td><td>Standard</td><td>1.00–1.10×</td></tr>
+        <tr><td>Non-IACS classification (ITF)</td><td>Sub-standard</td><td>1.30–2.00×</td></tr>
+        <tr><td>Classed in poor condition (IOPP expired, etc.)</td><td>Declined</td><td>N/A</td></tr>
+      </table>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">IACS (International Association of Classification Societies) membership is the baseline quality threshold. Non-IACS class is a significant red flag — many underwriters will decline. <span class="badge b-v">VER</span></p>
+    </div>
+    <div class="factor-card f4">
+      <h4>🗺️ Factor 4 — Trading Area</h4>
+      <table>
+        <tr><th>Area</th><th>Multiplier</th></tr>
+        <tr><td>Standard ocean-going (IWL)</td><td>1.00×</td></tr>
+        <tr><td>Coastal / restricted waters</td><td>0.90–1.10×</td></tr>
+        <tr><td>Ice-class / Arctic trading</td><td>1.30–2.00×</td></tr>
+        <tr><td>High-risk area (JWC listed — Red Sea 2024)</td><td>+war risk separate premium</td></tr>
+        <tr><td>Tanker War / conflict zone</td><td>+additional war risk</td></tr>
+        <tr><td>Single voyage to breaking yard (India/Bangladesh)</td><td>Specific rate</td></tr>
+      </table>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Institute Warranty Limits (IWL) define the baseline trading area. Breach of IWL (e.g. entering Arctic waters without endorsement) voids hull cover. War risk is always a separate premium/policy. <span class="badge b-v">VER</span></p>
+    </div>
+    <div class="factor-card f5">
+      <h4>📊 Factor 5 — Claims History</h4>
+      <table>
+        <tr><th>Claims Record (5-year)</th><th>Multiplier</th></tr>
+        <tr><td>No claims (clean)</td><td>0.85–0.95×</td></tr>
+        <tr><td>Minor claims only (&lt;5% IV total)</td><td>0.95–1.05×</td></tr>
+        <tr><td>Moderate claims (5–15% IV total)</td><td>1.10–1.35×</td></tr>
+        <tr><td>Significant claims (&gt;15% IV)</td><td>1.40–2.00×</td></tr>
+        <tr><td>Total loss in fleet (same type)</td><td>1.50–3.00×</td></tr>
+      </table>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">5-year claims history (all vessels in the fleet, not just the specific vessel) is presented to underwriters on renewal. Frequency claims (many small losses) are often as penalised as a single large loss. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="factor-card f6">
+      <h4>⚓ Factor 6 — PSC / Management Quality</h4>
+      <table>
+        <tr><th>PSC / Management Factor</th><th>Adj.</th></tr>
+        <tr><td>No PSC detentions, ISM compliant</td><td>0.90–1.00×</td></tr>
+        <tr><td>Minor PSC deficiencies (no detention)</td><td>1.00–1.10×</td></tr>
+        <tr><td>1–2 PSC detentions in 3 years</td><td>1.20–1.60×</td></tr>
+        <tr><td>3+ PSC detentions or USCG ban</td><td>Declined or referral</td></tr>
+        <tr><td>Flag state high-risk (Paris MOU blacklist)</td><td>+0.10–0.30×</td></tr>
+        <tr><td>ISM Document of Compliance expired</td><td>Declined</td></tr>
+      </table>
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:8px;">Port State Control (PSC) inspection records are publicly available (Paris MOU, Tokyo MOU, USCG). Multiple detentions are a strong indicator of poor safety culture and management quality. <span class="badge b-v">VER</span></p>
+    </div>
+  </div>
+
+  <h2>Classification Society Assessment</h2>
+  <p>The classification society's role is to establish and maintain technical standards for hull structural integrity and machinery. Classification is a prerequisite for hull insurance — most Lloyd's underwriters will not quote for unclassed vessels or vessels classed with non-IACS societies. <span class="badge b-v">VER</span></p>
+  <div class="class-table">
+    <table>
+      <thead><tr><th>Society</th><th>HQ</th><th>IACS?</th><th>Key Specialisms</th><th>Underwriter View</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Lloyd's Register (LR)</strong></td><td>London, UK</td><td>✅ Full</td><td>Tankers, LNG, offshore, naval; global inspection network</td><td>Top-tier; strong brand recognition in London market</td></tr>
+        <tr><td><strong>DNV (Det Norske Veritas)</strong></td><td>Høvik, Norway</td><td>✅ Full</td><td>Largest society by tonnage; bulk, tanker, offshore; sustainability/EEDI focus</td><td>Top-tier; preferred for Scandinavian owners; strong technical depth</td></tr>
+        <tr><td><strong>Bureau Veritas (BV)</strong></td><td>Paris, France</td><td>✅ Full</td><td>French/Mediterranean owners; cruise; industrial inspection</td><td>Top-tier; strong European market acceptance</td></tr>
+        <tr><td><strong>American Bureau of Shipping (ABS)</strong></td><td>Houston, USA</td><td>✅ Full</td><td>US-flag, offshore, LNG; strong USCG relationship</td><td>Top-tier; required for many US-flag and USCG purposes</td></tr>
+        <tr><td><strong>ClassNK (NKK)</strong></td><td>Tokyo, Japan</td><td>✅ Full</td><td>Japanese-built tonnage; bulk, container, LPG; largest by fleet count</td><td>Top-tier; dominant for Japanese owners and newbuilds</td></tr>
+        <tr><td><strong>RINA</strong></td><td>Genoa, Italy</td><td>✅ Full</td><td>Mediterranean owners; yachts; cruise; industrial</td><td>Standard-tier; accepted across London market</td></tr>
+        <tr><td><strong>Korean Register (KR)</strong></td><td>Busan, Korea</td><td>✅ Full</td><td>Korean-built tonnage; bulk, container, LNG</td><td>Standard-tier; growing international recognition</td></tr>
+        <tr><td><strong>China Classification Society (CCS)</strong></td><td>Beijing, China</td><td>✅ Full</td><td>Chinese-built and owned tonnage; bulk, container</td><td>Standard-tier; underwriters may apply additional scrutiny post-2022 for sanctions-related vessels</td></tr>
+        <tr><td><strong>Non-IACS Societies</strong></td><td>Various</td><td>❌</td><td>Various; often flag-of-convenience registries</td><td>Significant underwriting concern; many syndicates decline; others apply 30–100%+ loading</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Quality Scoring Matrix</h2>
+  <div class="quality-matrix">
+    <table>
+      <thead><tr><th>Category</th><th>Low Risk (Green)</th><th>Medium Risk (Amber)</th><th>High Risk (Red)</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Vessel Age</strong></td>
+          <td class="q-green">&lt;10 years</td>
+          <td class="q-amber">10–18 years</td>
+          <td class="q-red">18+ years</td>
+        </tr>
+        <tr>
+          <td><strong>Classification</strong></td>
+          <td class="q-green">Top 5 IACS society; surveys current</td>
+          <td class="q-amber">Full IACS; minor survey overdue</td>
+          <td class="q-red">Non-IACS or surveys expired</td>
+        </tr>
+        <tr>
+          <td><strong>Flag State</strong></td>
+          <td class="q-green">Paris MOU White List (UK, Norway, Singapore, Japan)</td>
+          <td class="q-amber">Grey List flag (e.g. some Caribbean, Oceania flags)</td>
+          <td class="q-red">Paris MOU Black List flag</td>
+        </tr>
+        <tr>
+          <td><strong>PSC Record (3yr)</strong></td>
+          <td class="q-green">Zero detentions; &lt;3 deficiencies</td>
+          <td class="q-amber">1 detention or 5–10 deficiencies</td>
+          <td class="q-red">2+ detentions or USCG ban</td>
+        </tr>
+        <tr>
+          <td><strong>Claims History (5yr)</strong></td>
+          <td class="q-green">No H&amp;M claims; clean record</td>
+          <td class="q-amber">&lt;10% IV in claims; no TL</td>
+          <td class="q-red">&gt;15% IV in claims; prior TL</td>
+        </tr>
+        <tr>
+          <td><strong>Owner / Manager Quality</strong></td>
+          <td class="q-green">ISM certified; TMSA 3+ (tankers); established ISM track record</td>
+          <td class="q-amber">ISM compliant; new entrant manager</td>
+          <td class="q-red">ISM non-compliant; unknown manager; USCG port ban</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Builders' Risk (B) — Special Considerations</h2>
+  <p>Builders' risk (code B) follows the vessel from keel-laying through sea trials and delivery. It is rated on the contract price of the vessel (not market value) and typically placed at the shipyard's location. Key underwriting factors differ from operational hull:</p>
+  <div class="factor-grid">
+    <div class="factor-card">
+      <h4>🏗️ Shipyard Quality</h4>
+      <p style="font-size:0.84rem;line-height:1.7;">Yard track record, capacity utilisation, workforce experience, quality control systems, financial stability of builder. Korean, Japanese and Chinese mega-yards (DSME, HHI, CSSC) are preferred; smaller or financially stressed yards attract loading. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="factor-card f2">
+      <h4>⚓ Vessel Complexity</h4>
+      <p style="font-size:0.84rem;line-height:1.7;">Standard bulk carrier at an established yard — low builders' risk rate. LNG carrier, floating storage unit (FSRU), naval vessel, or large cruise ship — significantly higher rate. LNG membrane tank installation is a specialist builders' risk exposure. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="factor-card f3">
+      <h4>📅 Construction Period</h4>
+      <p style="font-size:0.84rem;line-height:1.7;">Longer construction = greater cumulative exposure. A VLCC may take 24–30 months; a large cruise ship 36–48 months. Rate is applied to the value at risk (accumulated cost of construction), which increases through the build period. Monthly reporting of accumulated value required. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="factor-card f4">
+      <h4>🌊 Launching &amp; Sea Trials</h4>
+      <p style="font-size:0.84rem;line-height:1.7;">Launching (float-out from dry dock) and sea trials represent the highest-risk phases of the builders' risk period. Full machinery and navigation systems are operational for the first time under real conditions. Premium rate often stepped up for these phases by endorsement. <span class="badge b-e">EST</span></p>
+    </div>
+  </div>
+
+  <h2>Worked Examples</h2>
+
+  <div class="worked">
+    <h3>Example A — VLCC Tanker (Very Large Crude Carrier)</h3>
+    <div class="vessel-tag">Code T — H&amp;M Time Policy · VLCC</div>
+    <table>
+      <tr><th>Parameter</th><th>Detail</th></tr>
+      <tr><td>Vessel type</td><td>Very Large Crude Carrier (VLCC) — 300,000 DWT</td></tr>
+      <tr><td>Year built</td><td>2018 (6 years old at renewal)</td></tr>
+      <tr><td>Classification</td><td>Lloyd's Register — all surveys current</td></tr>
+      <tr><td>Flag</td><td>Liberia (Paris MOU White List) <span class="badge b-v">VER</span></td></tr>
+      <tr><td>Owner / manager</td><td>Established Greek shipping group; ISM DOC current</td></tr>
+      <tr><td>Trading area</td><td>Worldwide (IWL — Arabian Gulf / Far East / Europe)</td></tr>
+      <tr><td>PSC record (3yr)</td><td>Zero detentions; 2 minor deficiencies</td></tr>
+      <tr><td>Claims history (5yr)</td><td>One machinery claim — $180,000 (2022); otherwise clean</td></tr>
+      <tr><td>Hull insured value (IV)</td><td>$90,000,000</td></tr>
+      <tr><td>Deductible</td><td>$150,000 each and every loss</td></tr>
+      <tr><td>Base rate (VLCC segment)</td><td>0.30% (market benchmark) <span class="badge b-e">EST</span></td></tr>
+      <tr><td>Age factor (6 years)</td><td>1.05×</td></tr>
+      <tr><td>Vessel type factor (VLCC)</td><td>0.95× (high value, well-maintained segment)</td></tr>
+      <tr><td>Classification factor (LR top tier)</td><td>0.92×</td></tr>
+      <tr><td>Trading area factor (worldwide)</td><td>1.00×</td></tr>
+      <tr><td>Claims factor (minor claim)</td><td>1.05×</td></tr>
+      <tr><td>Management / PSC factor</td><td>0.95×</td></tr>
+      <tr><td><strong>Composite rate</strong></td><td><strong>0.30% × 1.05 × 0.95 × 0.92 × 1.00 × 1.05 × 0.95 = 0.285%</strong></td></tr>
+    </table>
+    <div class="result">
+      Annual H&amp;M Premium: $90,000,000 × 0.285% = <strong>~$256,500</strong> <span class="badge b-i">ILLUS</span>
+      <br><br>
+      <span style="font-size:0.84rem;opacity:0.9;">War risk: separate policy. Loss of Hire (TX): additional premium of ~$30–50,000 per annum at a 14-day deductible for $40,000/day × 90 days LOH cover. Increased Value: 25% of IV = $22.5m IV cover at approximately 0.15% = ~$33,750 p.a.</span>
+    </div>
+  </div>
+
+  <div class="worked">
+    <h3>Example B — Older Bulk Carrier (Panamax)</h3>
+    <div class="vessel-tag">Code T — H&amp;M Time Policy · Bulk Carrier</div>
+    <table>
+      <tr><th>Parameter</th><th>Detail</th></tr>
+      <tr><td>Vessel type</td><td>Panamax bulk carrier — 75,000 DWT</td></tr>
+      <tr><td>Year built</td><td>2006 (18 years old at renewal)</td></tr>
+      <tr><td>Classification</td><td>RINA — special survey overdue by 3 months</td></tr>
+      <tr><td>Flag</td><td>Panama (Paris MOU — Grey List) <span class="badge b-e">EST</span></td></tr>
+      <tr><td>Owner / manager</td><td>Single-vessel SPV; third-party manager; ISM DOC current</td></tr>
+      <tr><td>Trading area</td><td>Worldwide — including occasional Black Sea transit</td></tr>
+      <tr><td>PSC record (3yr)</td><td>1 detention (2023 — crew welfare); 8 deficiencies</td></tr>
+      <tr><td>Claims history (5yr)</td><td>Machinery claim $350,000 (2021); cargo claim $80,000 (2022)</td></tr>
+      <tr><td>Hull insured value (IV)</td><td>$12,000,000</td></tr>
+      <tr><td>Deductible</td><td>$100,000 each and every loss</td></tr>
+      <tr><td>Base rate (Panamax bulker)</td><td>0.45% <span class="badge b-e">EST</span></td></tr>
+      <tr><td>Age factor (18 years)</td><td>1.60×</td></tr>
+      <tr><td>Vessel type factor (standard bulker)</td><td>1.00×</td></tr>
+      <tr><td>Classification factor (RINA, survey overdue)</td><td>1.20×</td></tr>
+      <tr><td>Trading area factor (Black Sea — war risk endorsement required)</td><td>1.05× H&amp;M; +war risk separately</td></tr>
+      <tr><td>Claims factor (two claims)</td><td>1.25×</td></tr>
+      <tr><td>Management / PSC factor (1 detention)</td><td>1.30×</td></tr>
+      <tr><td><strong>Composite rate</strong></td><td><strong>0.45% × 1.60 × 1.00 × 1.20 × 1.05 × 1.25 × 1.30 = 1.46%</strong></td></tr>
+    </table>
+    <div class="result">
+      Annual H&amp;M Premium: $12,000,000 × 1.46% = <strong>~$175,200</strong> <span class="badge b-i">ILLUS</span>
+      <br><br>
+      <span style="font-size:0.84rem;opacity:0.9;">Underwriter would likely condition placement on: (a) special survey completion within 60 days, (b) copy of class certificate confirming surveys current, (c) exclusion of Black Sea trading in H&amp;M (war risk additional premium required). TLO-only alternative if H&amp;M market appetite limited.</span>
+    </div>
+  </div>
+
+</main>
+<footer>Risk Code Hub · Marine Hull (B · T · TS · TX) · Module 04 — Underwriting · v2.7 · April 2026</footer>
+</body>
+</html>

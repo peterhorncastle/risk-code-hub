@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marine Hull — Rates &amp; ROE | Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --marine:#0b3d6b; --marine-dark:#061e35; --ocean:#1a6b8a;
+      --hull:#c0572a; --anchor:#2d6b3a; --deck:#b8860b;
+      --light:#f0f5fb; --text:#1e2d3d; --muted:#6b7c93; --border:#c8d4e0;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#061e35 0%,#0b3d6b 50%,#041525 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#8899bb; margin-bottom:6px; }
+    .breadcrumb a { color:var(--deck); text-decoration:none; }
+    header h1 { font-size:1.8rem; font-weight:700; }
+    header p { margin-top:8px; color:#b8c8e8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--marine); border-bottom-color:var(--deck); }
+    main { max-width:1050px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.28rem; color:var(--marine); margin:40px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--deck); }
+    p { line-height:1.82; color:var(--text); margin-bottom:14px; font-size:0.93rem; }
+
+    .chart-box { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; margin:24px 0; }
+    .chart-box h3 { font-size:0.95rem; color:var(--marine); margin-bottom:16px; }
+    canvas { max-height:320px; }
+
+    .cycle-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:16px; margin:22px 0; }
+    .cycle-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-left:5px solid var(--marine); }
+    .cycle-card.soft { border-left-color:var(--anchor); }
+    .cycle-card.hard { border-left-color:var(--hull); }
+    .cycle-card.flat { border-left-color:var(--ocean); }
+    .cycle-card h4 { font-size:0.9rem; font-weight:700; color:var(--marine); margin-bottom:6px; }
+    .cycle-card.soft h4 { color:var(--anchor); }
+    .cycle-card.hard h4 { color:var(--hull); }
+    .cycle-card p { font-size:0.84rem; line-height:1.7; color:#444; margin:0; }
+
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; vertical-align:middle; margin-left:3px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .rate-grid { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:22px 0; }
+    .rate-grid table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+    .rate-grid th { background:var(--marine); color:#fff; padding:9px 14px; text-align:left; }
+    .rate-grid td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    .rate-grid tr:last-child td { border-bottom:none; }
+    .rate-grid tr:nth-child(even) td { background:#f8fafc; }
+
+    .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:22px 0; }
+    .roe-card { border-radius:12px; padding:24px; text-align:center; color:#fff; }
+    .roe-card.bull { background:linear-gradient(135deg,#1a5c28,#27ae60); }
+    .roe-card.base { background:linear-gradient(135deg,#0b3d6b,#1a6b8a); }
+    .roe-card.bear { background:linear-gradient(135deg,#7f1d1d,#c0572a); }
+    .roe-card h4 { font-size:1rem; margin-bottom:8px; opacity:0.9; }
+    .roe-card .roe-val { font-size:2.4rem; font-weight:800; line-height:1; margin:10px 0; }
+    .roe-card p { font-size:0.8rem; opacity:0.85; line-height:1.6; }
+
+    .roe-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:22px 0; }
+    .roe-table table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .roe-table th { background:var(--ocean); color:#fff; padding:9px 14px; text-align:left; }
+    .roe-table td { padding:9px 14px; border-bottom:1px solid var(--border); }
+    .roe-table tr:last-child td { border-bottom:none; }
+    .roe-table .bull { color:#1a5c28; font-weight:700; }
+    .roe-table .base { color:var(--ocean); font-weight:700; }
+    .roe-table .bear { color:var(--hull); font-weight:700; }
+
+    footer { background:var(--marine-dark); color:#6677aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Hull</a> › Rates &amp; ROE</div>
+  <h1>Module 05 — Rates &amp; ROE Analysis</h1>
+  <p>Marine hull pricing cycle 1995–2026, war risk premium surge, sector rate benchmarks and return on equity scenarios</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+<main>
+
+  <h2>Market Pricing Cycle — H&amp;M Rate Index</h2>
+  <p>Marine hull rates have historically been highly cyclical — driven by catastrophic loss events, market capacity, and competitive pressure from Scandinavian mutual clubs. The market experienced a structural shift from 2018 onwards after an extended and damaging soft market, and saw further uplift from the Red Sea war risk crisis in 2024. <span class="badge b-e">EST</span></p>
+
+  <div class="chart-box">
+    <h3>Marine Hull H&amp;M Rate Index — Standard Tonnage (1999 = 100) <span class="badge b-e">EST</span> <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="rateChart"></canvas>
+  </div>
+
+  <div class="cycle-grid">
+    <div class="cycle-card hard">
+      <h4>📈 1997–2002 — Hard Market (Post-1990s Loss Years)</h4>
+      <p>A series of major losses (Sea Empress 1996, Erika 1999, MV Prestige 2002, earlier ferry disasters) combined with 9/11 war risk impact drove a meaningful hardening in hull rates through the late 1990s and early 2000s. Some single-hull tanker rates doubled as regulators accelerated phase-out. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="cycle-card soft">
+      <h4>📉 2003–2011 — Prolonged Soft Market</h4>
+      <p>Excess global shipping capacity and fierce competition from Norwegian hull clubs drove sustained rate softening. The commodity supercycle (2003–2008) inflated vessel values while rates fell — temporarily masking the deterioration in loss ratios. IHC 2003 adoption was slow; ITC 1983 remained the standard. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="cycle-card hard">
+      <h4>📈 2012 — Costa Concordia Shock</h4>
+      <p>The Costa Concordia grounding (January 2012, ~$2.4bn total insured loss) was a significant market shock. Passenger vessel rates hardened sharply — 30–50% in some cases. Cruise ship and RoRo rates saw the most pronounced movement. Dry bulk and tanker segments saw less impact. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="cycle-card soft">
+      <h4>📉 2013–2018 — Deepening Soft Market</h4>
+      <p>Despite the Costa Concordia, overcapacity drove rates lower throughout 2013–2018. Hull combined ratios for many Lloyd's syndicates exceeded 110–120%. Multiple syndicates exited or restricted marine hull. The IUMI Ocean Hull Report (2018) highlighted systemic unprofitability. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="cycle-card flat">
+      <h4>➡️ 2019–2022 — Market Correction</h4>
+      <p>Following years of poor results, Lloyd's mandated a remediation programme (Decile 10) which forced loss-making syndicates to restructure or exit. Marine hull rates began recovering from 2019 — 10–25% rate increases in 2019–2021 across most segments. Vessel values also inflated during the pandemic supply chain boom, supporting GWP growth. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="cycle-card hard">
+      <h4>📈 2023–2026 — Firming Market &amp; Red Sea War Risk</h4>
+      <p>H&amp;M rates continue to firm modestly — 5–15% in standard segments (2023–2024). The Red Sea crisis (2024) triggered a sharp war risk premium surge: JWC listed area additional premiums of 0.5–1% per voyage from near-zero. War risk market tightens; specialist capacity reduces. Balancing the H&amp;M and war risk market is the defining challenge of 2024–2025. <span class="badge b-e">EST</span></p>
+    </div>
+  </div>
+
+  <h2>Current Rate Benchmarks by Segment</h2>
+  <div class="rate-grid">
+    <table>
+      <thead><tr><th>Vessel Segment</th><th>H&amp;M Rate on Line (% IV)</th><th>Trend (2023–2024)</th><th>Key Driver</th></tr></thead>
+      <tbody>
+        <tr><td><strong>VLCC / Suezmax Tanker</strong></td><td>0.25–0.45% <span class="badge b-e">EST</span></td><td>+5–10% YoY</td><td>High vessel values; reasonable claims record; TMSA scrutiny</td></tr>
+        <tr><td><strong>MR / LR Product Tanker</strong></td><td>0.35–0.60%</td><td>+5–15%</td><td>More frequent machinery claims; Red Sea rerouting impact</td></tr>
+        <tr><td><strong>Chemical Tanker</strong></td><td>0.45–0.80%</td><td>+5–10%</td><td>Cargo contamination risk; specialist equipment; age loading</td></tr>
+        <tr><td><strong>ULCV Container (15k+ TEU)</strong></td><td>0.30–0.60%</td><td>+10–20%</td><td>Post-MOL Comfort structural concerns; fire risk; wreck removal cost</td></tr>
+        <tr><td><strong>Feeder Container (&lt;5,000 TEU)</strong></td><td>0.40–0.75%</td><td>+5–10%</td><td>Older fleet; more frequent groundings in coastal waters</td></tr>
+        <tr><td><strong>Capesize / Panamax Bulker</strong></td><td>0.30–0.55%</td><td>+5–10%</td><td>Cargo liquefaction risk; hatch integrity; age profile</td></tr>
+        <tr><td><strong>Cruise / Passenger Vessel</strong></td><td>0.40–0.90%</td><td>+5–15%</td><td>Wreck removal costs (Costa Concordia precedent); passenger liability P&I</td></tr>
+        <tr><td><strong>Car Carrier (PCTC/RoRo)</strong></td><td>0.50–1.20%</td><td>+15–30%</td><td>EV battery fire risk (post-Felicity Ace 2022); stability; RoRo GA accumulation</td></tr>
+        <tr><td><strong>LNG Carrier</strong></td><td>0.20–0.40%</td><td>Stable</td><td>High value, well-maintained; specialist owners; low claims frequency</td></tr>
+        <tr><td><strong>War Risk — Standard Tonnage (Red Sea 2024)</strong></td><td>0.50–1.00%+ per voyage</td><td>Sharp increase</td><td>JWC Red Sea listed area; Houthi attacks; limited specialist capacity</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Combined Ratio Analysis</h2>
+  <div class="chart-box">
+    <h3>Marine Hull Combined Ratio (Market Estimate — All Lloyd's Hull Classes) 2010–2024 <span class="badge b-e">EST</span> <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="crChart"></canvas>
+  </div>
+
+  <h2>Return on Equity — Three Scenarios</h2>
+  <p>ROE calculated on a hypothetical $500m GWP marine hull portfolio (H&amp;M and war risk combined). Loss ratio, expense ratio and investment income assumptions vary by scenario. <span class="badge b-i">ILLUS</span></p>
+
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <h4>🐂 Bull Case</h4>
+      <div class="roe-val">+19%</div>
+      <p>Benign loss year (no major catastrophe); continued rate firming +10%; war risk premium income high; strong investment returns on float; expense ratio 30%. Combined ratio ~82%.</p>
+    </div>
+    <div class="roe-card base">
+      <h4>📊 Base Case</h4>
+      <div class="roe-val">+9%</div>
+      <p>Moderate losses (one $200–400m event); stable H&amp;M rates; war risk premium elevated but some capacity returning; expense ratio 32%. Combined ratio ~95%.</p>
+    </div>
+    <div class="roe-card bear">
+      <h4>🐻 Bear Case</h4>
+      <div class="roe-val">−14%</div>
+      <p>Multiple large losses (VLCC TL + ULCV structural failure + cruise ship grounding); war risk escalation; soft H&amp;M market pressure returns; expense ratio 34%. Combined ratio ~125%.</p>
+    </div>
+  </div>
+
+  <div class="roe-table">
+    <table>
+      <thead><tr><th>P&amp;L Component</th><th class="bull">Bull (+19%)</th><th class="base">Base (+9%)</th><th class="bear">Bear (−14%)</th></tr></thead>
+      <tbody>
+        <tr><td>Gross Written Premium</td><td>$500m</td><td>$500m</td><td>$500m</td></tr>
+        <tr><td>Net Earned Premium (after reinsurance)</td><td>$400m</td><td>$380m</td><td>$360m</td></tr>
+        <tr><td>Net Claims (losses + LAE)</td><td>$220m (55%)</td><td>$285m (75%)</td><td>$360m (100%)</td></tr>
+        <tr><td>Expenses (acquisition + admin)</td><td>$120m (30%)</td><td>$121m (32%)</td><td>$122m (34%)</td></tr>
+        <tr><td>Underwriting result</td><td>+$60m</td><td>−$26m</td><td>−$122m</td></tr>
+        <tr><td>Investment income (on $600m float)</td><td>+$30m (5%)</td><td>+$25m (4.2%)</td><td>+$20m (3.3%)</td></tr>
+        <tr><td>Pre-tax profit / (loss)</td><td>+$90m</td><td>−$1m</td><td>−$102m</td></tr>
+        <tr><td>Capital base</td><td>$475m</td><td>$475m</td><td>$475m</td></tr>
+        <tr><td><strong>ROE</strong></td><td class="bull">+19%</td><td class="base">+9% (near breakeven)</td><td class="bear">−14% (loss-making)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<script>
+// Rate index chart
+const rateCtx = document.getElementById('rateChart').getContext('2d');
+new Chart(rateCtx, {
+  type: 'line',
+  data: {
+    labels: ['1999','2001','2003','2005','2007','2009','2011','2013','2015','2017','2019','2021','2023','2024','2026'],
+    datasets: [{
+      label: 'H&M Rate Index (1999=100)',
+      data: [100, 110, 125, 115, 100, 88, 80, 72, 65, 60, 70, 85, 95, 102, 108],
+      borderColor: '#0b3d6b', backgroundColor: 'rgba(11,61,107,0.08)',
+      tension: 0.35, fill: true, pointRadius: 4, pointBackgroundColor: '#0b3d6b', borderWidth: 2.5
+    }, {
+      label: 'War Risk Premium Index (2020=100)',
+      data: [null, null, null, null, null, null, null, null, null, null, 100, 105, 110, 310, 250],
+      borderColor: '#c0572a', backgroundColor: 'rgba(192,87,42,0.06)',
+      tension: 0.35, fill: true, pointRadius: 4, pointBackgroundColor: '#c0572a', borderWidth: 2.5, borderDash: [5,3]
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    plugins: { legend: { position: 'top' }, tooltip: { mode: 'index', intersect: false } },
+    scales: {
+      y: { beginAtZero: false, min: 40, title: { display: true, text: 'Index (base year = 100)' },
+           grid: { color: 'rgba(0,0,0,0.05)' } },
+      x: { grid: { color: 'rgba(0,0,0,0.05)' } }
+    }
+  }
+});
+
+// Combined ratio chart
+const crCtx = document.getElementById('crChart').getContext('2d');
+new Chart(crCtx, {
+  type: 'bar',
+  data: {
+    labels: ['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+    datasets: [{
+      label: 'Combined Ratio (%)',
+      data: [95, 100, 115, 112, 108, 113, 118, 120, 115, 105, 98, 92, 94, 96, 98],
+      backgroundColor: [
+        '#27ae60','#e67e22','#c0392b','#c0392b','#c0392b','#c0392b','#c0392b','#c0392b','#c0392b',
+        '#e67e22','#27ae60','#27ae60','#27ae60','#27ae60','#27ae60'
+      ],
+      borderRadius: 4
+    }, {
+      label: 'Break-even (100%)',
+      data: Array(15).fill(100),
+      type: 'line', borderColor: '#0b3d6b', borderWidth: 2, borderDash: [6,3],
+      pointRadius: 0, fill: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    plugins: { legend: { position: 'top' }, tooltip: { mode: 'index', intersect: false } },
+    scales: {
+      y: { min: 80, max: 130, title: { display: true, text: 'Combined Ratio (%)' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+<footer>Risk Code Hub · Marine Hull (B · T · TS · TX) · Module 05 — Rates &amp; ROE · v2.7 · April 2026</footer>
+</body>
+</html>

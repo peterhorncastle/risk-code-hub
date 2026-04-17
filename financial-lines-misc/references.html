@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>References & Data Sources — Mortgage, Title, Surety & Financial Guarantee</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --fin: #1a3a5c;
+      --fin-dark: #0d2035;
+      --mortgage: #c9963a;
+      --surety: #2d6b3a;
+      --title: #7b2533;
+      --fg: #5b21b6;
+      --risk: #c0572a;
+      --gold: #c9a84c;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1a2332;
+      --mid: #5a6a7a;
+      --card-border: #dce3ed;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0d2035 0%, #1a3a5c 50%, #0a1828 100%);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    nav {
+      background: #0d2035;
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: #a8c4d8;
+      text-decoration: none;
+      font-size: 0.78rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .breadcrumb {
+      padding: 0.5rem 1.5rem;
+      background: #e8edf4;
+      font-size: 0.8rem;
+      color: #5a6a7a;
+    }
+
+    .breadcrumb a {
+      color: #1a3a5c;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      margin: 2rem 0 1rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--fin);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-left: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge.ver { background: #d1fae5; color: #065f46; }
+    .badge.est { background: #fef3c7; color: #92400e; }
+    .badge.illus { background: #dbeafe; color: #1e40af; }
+    .badge.gap { background: #ffe4e6; color: #9f1239; }
+
+    .badge-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .badge-item {
+      background: var(--card);
+      padding: 1rem;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+    }
+
+    .badge-item strong {
+      color: var(--fin-dark);
+    }
+
+    .research-note {
+      background: #f0f4ff;
+      border-left: 4px solid var(--fin);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+      line-height: 1.8;
+    }
+
+    .research-note p {
+      margin: 0.5rem 0;
+    }
+
+    .sources-list {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+
+    .sources-list li {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.7;
+    }
+
+    .sources-list strong {
+      color: var(--fin-dark);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .gap-disclosure {
+      background: #ffe4e6;
+      border-left: 4px solid #c0572a;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 4px;
+      line-height: 1.8;
+    }
+
+    .gap-disclosure strong {
+      color: #9f1239;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: #e8edf4;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    th {
+      font-weight: 700;
+      color: var(--fin-dark);
+      font-size: 0.95rem;
+    }
+
+    tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    td {
+      font-size: 0.95rem;
+    }
+
+    footer {
+      background: #0d2035;
+      color: #a8c4d8;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>References & Data Sources</h1>
+    <p>Mortgage, Title, Surety & Financial Guarantee</p>
+  </header>
+
+  <nav>
+    <a href="overview.html">Overview</a>
+    <a href="history.html">History</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="database.html">Database</a>
+    <a href="underwriting.html">Underwriting</a>
+    <a href="rates-analysis.html">Rates & ROE</a>
+    <a href="risk-mitigation.html">Risk Mitigation</a>
+    <a href="global-program.html">Global Programme</a>
+    <a href="references.html" class="active">References</a>
+    <a href="../index.html">← Hub Home</a>
+  </nav>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Financial Lines Miscellaneous › References
+  </div>
+
+  <div class="container">
+
+    <section>
+      <h2 class="section-title">Section A: Citation Badge Legend</h2>
+
+      <div class="badge-legend">
+        <div class="badge-item">
+          <strong><span class="badge ver">VER</span> Verified</strong>
+          <p>Independently verifiable fact from regulatory filing, statutory text, or published data (e.g. Land Registry statute, ALTA annual report, Fed mortgage stats).</p>
+        </div>
+
+        <div class="badge-item">
+          <strong><span class="badge est">EST</span> Estimated</strong>
+          <p>Reasonable industry estimate based on partial data, interpolation, or expert consensus. Subject to wider confidence interval than VER.</p>
+        </div>
+
+        <div class="badge-item">
+          <strong><span class="badge illus">ILLUS</span> Illustrative</strong>
+          <p>Worked example or scenario for pedagogical purposes only. Not a data claim; numbers chosen to show methodology, not predict outcomes.</p>
+        </div>
+
+        <div class="badge-item">
+          <strong><span class="badge gap">GAP</span> Data Gap</strong>
+          <p>Known gap in publicly available data. Sourced from confidential filings, market intelligence, or expert interpolation. Flagged for transparency.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section B: Research Note</h2>
+
+      <div class="research-note">
+        <p>This hub draws on publicly available regulatory filings, industry association publications, and news reports. Data on insured losses, GWP figures, and premium rates are subject to significant opacity — particularly for MIG portfolios held by lenders, FG run-off portfolios, and private surety treaty arrangements.</p>
+
+        <p><strong>Knowledge cutoff:</strong> May 2025. Claims involving ongoing litigation use pre-settlement estimates only.</p>
+
+        <p><strong>Scope:</strong> Focus is Lloyd's market activity and UK/US regulatory context. International jurisdictions (EU, APAC, Middle East) covered selectively where Lloyd's participation is material.</p>
+
+        <p><strong>Confidence levels:</strong> All claims carry explicit confidence badges (VER/EST/ILLUS/GAP). Reader should adjust interpretation accordingly. VER claims are citable; EST claims are directional; ILLUS claims illustrate method only; GAP claims signal data limitations.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section C: Primary Sources</h2>
+
+      <ol class="sources-list">
+        <li>
+          <strong>US Land Title Association (ALTA) — Annual Market Share Analysis 2022/2023</strong>
+          <span class="badge ver">VER</span>
+          Annual US title insurance premium by company. Published premium volume, market concentration data, lender distribution analysis.
+        </li>
+
+        <li>
+          <strong>ALTA — Consumer Information Series: What is Title Insurance?</strong>
+          <span class="badge ver">VER</span>
+          Policy structure, premium methodology, owner's vs lender's policy explanation, policy coverage limits.
+        </li>
+
+        <li>
+          <strong>Surety & Fidelity Association of America (SFAA) — Surety Bond Industry Statistics</strong>
+          <span class="badge ver">VER</span>
+          Annual GWP by sector, combined ratios, loss rates, premium rate indices, underwriting authority guidance.
+        </li>
+
+        <li>
+          <strong>US Miller Act, 40 U.S.C. §§ 3131–3134</strong>
+          <span class="badge ver">VER</span>
+          Statutory text on federal performance and payment bonding requirements for federal construction contracts.
+        </li>
+
+        <li>
+          <strong>HM Land Registry — Practice Guide 67: Evidence of Identity</strong>
+          <span class="badge ver">VER</span>
+          Identity verification requirements for property transactions and registration. Government-issued ID standards, proof of address requirements.
+        </li>
+
+        <li>
+          <strong>HM Land Registry — Annual Report and Accounts 2022–23</strong>
+          <span class="badge ver">VER</span>
+          Title fraud statistics, indemnity fund payouts, fraud case analysis, registration activity data.
+        </li>
+
+        <li>
+          <strong>Financial Conduct Authority — MCOB 13 Sourcebook: Arrears, Payment Shortfalls and Repossessions</strong>
+          <span class="badge ver">VER</span>
+          MIG/mortgage conduct requirements, arrears handling protocols, SPOC (Single Point of Contact) mandate.
+        </li>
+
+        <li>
+          <strong>Building Safety Act 2022 (c.30)</strong>
+          <span class="badge ver">VER</span>
+          Statutory text; developer and landlord liability for building safety defects, cladding remediation obligations, EWS1 framework.
+        </li>
+
+        <li>
+          <strong>AMBAC Financial Group — Chapter 11 Bankruptcy Filing November 2010 (SDNY)</strong>
+          <span class="badge ver">VER</span>
+          Filed liabilities and loss disclosures. RMBS/CMBS portfolio impairment analysis. Monoline failure causation.
+        </li>
+
+        <li>
+          <strong>MBIA Inc — Annual Reports 2008–2012</strong>
+          <span class="badge ver">VER</span>
+          Structured finance write-down disclosures, business separation (public/segregated accounts), ultimate loss reserve development.
+        </li>
+
+        <li>
+          <strong>Assured Guaranty Ltd — Annual Report 2023</strong>
+          <span class="badge ver">VER</span>
+          Insured par in force, new business volumes, portfolio composition (municipal, infrastructure, structured finance), combined ratio.
+        </li>
+
+        <li>
+          <strong>Moody's — Special Comment: The Role of Bond Insurance in the US Municipal Market (2007/2010)</strong>
+          <span class="badge ver">VER</span>
+          Pre- and post-crisis analysis of FG market, monoline capacity loss, municipal credit deterioration.
+        </li>
+
+        <li>
+          <strong>Swiss Re — Sigma Report: Surety and Credit Insurance (2018)</strong>
+          <span class="badge ver">VER</span>
+          Global market size estimates, combined ratio history by line, cycle analysis, reinsurance market.
+        </li>
+
+        <li>
+          <strong>SRA (Solicitors Regulation Authority) — Warning Notice on Cybercrime and Conveyancing Fraud</strong>
+          <span class="badge ver">VER</span>
+          Controls for wire fraud prevention, firm-level risk mitigation standards, reported case summaries.
+        </li>
+
+        <li>
+          <strong>Council of Mortgage Lenders (now UK Finance) — Regulated Mortgage Survey</strong>
+          <span class="badge est">EST</span>
+          LTV distribution, arrears data, MIG usage estimates (aggregated, anonymised across lenders).
+        </li>
+
+        <li>
+          <strong>RICS — Red Book Global Standards (2022 edition)</strong>
+          <span class="badge ver">VER</span>
+          Valuation standards relevant to MIG and title underwriting, property type risk adjustments, new-build methodology.
+        </li>
+
+        <li>
+          <strong>European Surety Association (ESA) — European Surety Market Overview 2023</strong>
+          <span class="badge est">EST</span>
+          EU surety market size, regulatory environment by jurisdiction, premium rate trends.
+        </li>
+
+        <li>
+          <strong>Financial Crisis Inquiry Commission (FCIC) — Final Report (2011)</strong>
+          <span class="badge ver">VER</span>
+          Detailed account of monoline FG failure and sub-prime crisis causation. Systemic risk analysis. Correlation risk in structured finance.
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section D: Per-Module Data Audit</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Primary Sources Used</th>
+            <th>Data Confidence</th>
+            <th>Key Limitations</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Overview</strong></td>
+            <td>ALTA 2022, SFAA stats, Swiss Re Sigma</td>
+            <td>EST–VER mix</td>
+            <td>FG run-off data opaque; Lloyd's GWP only from aggregate market reports</td>
+          </tr>
+          <tr>
+            <td><strong>History</strong></td>
+            <td>FCIC Report, AMBAC/MBIA filings, UK Finance</td>
+            <td>VER for major events</td>
+            <td>Pre-1950 surety data sparse; monoline history limited to post-1980s</td>
+          </tr>
+          <tr>
+            <td><strong>Timeline</strong></td>
+            <td>Multiple news sources, regulatory filings</td>
+            <td>VER for named events</td>
+            <td>Loss quantum EST throughout; exact loss dates may differ from claim recognition</td>
+          </tr>
+          <tr>
+            <td><strong>Database</strong></td>
+            <td>ALTA, SFAA, FCIC, press reports</td>
+            <td>EST–VER mix</td>
+            <td>Private MIG losses undisclosed; reinsurer loss data proprietary</td>
+          </tr>
+          <tr>
+            <td><strong>Underwriting</strong></td>
+            <td>ALTA rate filings, SFAA guidelines, industry sources</td>
+            <td>EST for rates; VER for regulatory</td>
+            <td>Proprietary rating models not public; lender-specific underwriting varies widely</td>
+          </tr>
+          <tr>
+            <td><strong>Rates Analysis</strong></td>
+            <td>ALTA annual data, SFAA stats</td>
+            <td>VER for premium volume</td>
+            <td>CR data partially reconstructed from industry reports; precision ±5%</td>
+          </tr>
+          <tr>
+            <td><strong>Risk Mitigation</strong></td>
+            <td>Miller Act, FCA MCOB, HMLR PG67, SRA notices</td>
+            <td>VER for regulatory</td>
+            <td>Internal surety/MIG processes not public; practitioner guidance based on best practice</td>
+          </tr>
+          <tr>
+            <td><strong>Global Programme</strong></td>
+            <td>ESA, ALTA, industry knowledge</td>
+            <td>EST for Lloyd's GWP</td>
+            <td>Syndicate-level data not available; programme structures based on market precedent</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section E: Data Gap Disclosures</h2>
+
+      <div class="gap-disclosure">
+        <strong><span class="badge gap">GAP</span> UK MIG Portfolio Size & Aggregate Insured Exposure</strong>
+        <p>Lenders do not publicly disclose MIG programme details or reserve adequacy. GWP estimates based on interpolation from BoE mortgage statistics and LTV distribution data. Actual UK MIG market may be ±30% from published estimates.</p>
+      </div>
+
+      <div class="gap-disclosure">
+        <strong><span class="badge gap">GAP</span> Aggregate Losses from UK Conveyancing Wire Fraud</strong>
+        <p>No central database; CLLS (City of London Law Society) and Law Society publish only partial data. Title insurer loss experience confidential. Estimates of £50–300m p.a. vary widely; precision unknown.</p>
+      </div>
+
+      <div class="gap-disclosure">
+        <strong><span class="badge gap">GAP</span> FG/Monoline Run-Off Portfolio Ultimate Loss Quantum</strong>
+        <p>AMBAC and MBIA structured books remain in run-off with uncertain ultimate loss. Final settlement figures not yet available (as of May 2025). Historical claims paid understate ultimate reserve adequacy.</p>
+      </div>
+
+      <div class="gap-disclosure">
+        <strong><span class="badge gap">GAP</span> Lloyd's-Specific GWP Split for FM/TT/SB/FG</strong>
+        <p>Lloyd's Market Bulletin data does not disaggregate at this level. Estimates based on syndicate reports and market intelligence. Actual Lloyd's exposure may differ from hub estimates by ±20%.</p>
+      </div>
+
+      <div class="gap-disclosure">
+        <strong><span class="badge gap">GAP</span> Construction Surety Claims Data Post-2022</strong>
+        <p>Carillion, Interserve, and the 2023–24 contractor insolvency wave loss quantum not yet fully developed in public loss reserves. Claims are still emerging; SFAA data lags by 2–3 years.</p>
+      </div>
+
+      <div class="gap-disclosure">
+        <strong><span class="badge gap">GAP</span> AI/Deepfake Property Fraud Quantum</strong>
+        <p>Too recent (2023–24) for statistical loss data. Title insurer responses based on individual case reports and Land Registry alerts. Systemic impact unknown.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>Risk Code Hub | Financial Lines Miscellaneous | Lloyd's Market Intelligence</p>
+    <p style="font-size: 0.8rem; margin-top: 0.5rem;">Knowledge cutoff: May 2025 | Data sources verified as of publication date</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marine Hull (B · T · TS · TX) — Risk Code Hub</title>
+  <style>
+    :root {
+      --marine:#0b3d6b; --marine-dark:#061e35; --ocean:#1a6b8a;
+      --hull:#c0572a; --hull-light:#fff0ea; --anchor:#2d6b3a;
+      --deck:#b8860b; --light:#f0f5fb; --mid:#d1e4f5;
+      --text:#1e2d3d; --muted:#6b7c93; --border:#c8d4e0;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header {
+      background:linear-gradient(135deg,#061e35 0%,#0b3d6b 50%,#041525 100%);
+      color:#fff; padding:40px; position:relative; overflow:hidden;
+    }
+    header::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(26,107,138,0.22) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(184,134,11,0.12) 0%,transparent 50%);
+    }
+    header .inner { position:relative; z-index:1; }
+    .breadcrumb { font-size:0.8rem; color:#8899bb; margin-bottom:6px; }
+    .breadcrumb a { color:var(--deck); text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:var(--deck); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#b8c8e8; font-size:0.95rem; max-width:740px; line-height:1.7; }
+
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--marine); border-bottom-color:var(--deck); }
+
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--marine); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--deck); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; margin:28px 0; }
+    .stat-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; text-align:center; }
+    .stat-card .val { font-size:1.55rem; font-weight:800; color:var(--marine); line-height:1.1; }
+    .stat-card .val.hull { color:var(--hull); }
+    .stat-card .val.ocean { color:var(--ocean); }
+    .stat-card .val.gold { color:var(--deck); }
+    .stat-card .lbl { font-size:0.74rem; color:var(--muted); margin-top:5px; line-height:1.4; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin-top:4px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+    .b-g { background:#f8d7da; color:#721c24; }
+
+    .cov-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr)); gap:16px; margin:24px 0; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--marine); }
+    .cov-card.hull-top { border-top-color:var(--hull); }
+    .cov-card.ocean-top { border-top-color:var(--ocean); }
+    .cov-card.anchor-top { border-top-color:var(--anchor); }
+    .cov-card.deck-top { border-top-color:var(--deck); }
+    .cov-card h4 { font-size:0.9rem; font-weight:700; color:var(--marine); margin-bottom:8px; }
+    .cov-card ul { padding-left:16px; }
+    .cov-card li { font-size:0.84rem; margin-bottom:5px; line-height:1.5; }
+
+    .code-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:24px 0; }
+    .code-table table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .code-table th { background:var(--marine); color:#fff; padding:10px 16px; text-align:left; }
+    .code-table td { padding:10px 16px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .code-table tr:last-child td { border-bottom:none; }
+    .code-table tr:nth-child(even) td { background:#f8fafc; }
+    .code-chip { display:inline-block; font-weight:800; font-size:0.8rem; padding:2px 10px; border-radius:12px; letter-spacing:1px; margin-right:4px; color:#fff; }
+    .chip-b { background:var(--marine); }
+    .chip-t { background:var(--ocean); }
+    .chip-ts { background:var(--hull); }
+    .chip-tx { background:var(--anchor); }
+
+    .info-box { background:var(--marine-dark); color:#c8d8f0; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:var(--deck); margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .module-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:24px 0; }
+    .mod-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; text-decoration:none; color:var(--text); transition:box-shadow 0.2s,border-color 0.2s; display:block; }
+    .mod-card:hover { box-shadow:0 4px 16px rgba(11,61,107,0.12); border-color:var(--ocean); }
+    .mod-card .mod-num { font-size:0.7rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--ocean); margin-bottom:4px; }
+    .mod-card h4 { font-size:0.9rem; font-weight:700; color:var(--marine); margin-bottom:4px; }
+    .mod-card p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.4; }
+
+    .mkt-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:24px 0; }
+    .mkt-table table { width:100%; border-collapse:collapse; font-size:0.87rem; }
+    .mkt-table th { background:var(--ocean); color:#fff; padding:9px 14px; text-align:left; }
+    .mkt-table td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .mkt-table tr:last-child td { border-bottom:none; }
+    .mkt-table tr:nth-child(even) td { background:#f8fafc; }
+
+    footer { background:var(--marine-dark); color:#6677aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Marine Hull</div>
+    <div class="tag">Lloyd's Risk Codes B · T · TS · TX</div>
+    <h1>Marine Hull Insurance</h1>
+    <p>Physical damage cover for oceangoing vessels — tankers, bulk carriers, containerships, passenger ships and their machinery. Includes Builders' Risk (B), Hull Time (T), Total Loss Only (TS), and Loss of Hire / Additional Perils (TX). One of the oldest classes of insurance, governed by the Marine Insurance Act 1906 and the Institute Time Clauses (Hulls) 1983 / International Hull Clauses 2003.</p>
+  </div>
+</header>
+<nav>
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~$7bn</div>
+      <div class="lbl">Est. global marine hull GWP (2023)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val ocean">100,000+</div>
+      <div class="lbl">Vessels in global commercial fleet (IMO 2023)</div>
+      <span class="badge b-v">VER</span>
+    </div>
+    <div class="stat-card">
+      <div class="val hull">$2.4bn</div>
+      <div class="lbl">Costa Concordia (2012) — largest single hull loss</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val gold">0.25–0.55%</div>
+      <div class="lbl">Typical hull rate on line (VLCC / large bulk carrier)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val">1688</div>
+      <div class="lbl">Edward Lloyd's Coffee House — origins of Lloyd's market</div>
+      <span class="badge b-v">VER</span>
+    </div>
+    <div class="stat-card">
+      <div class="val ocean">$400m+</div>
+      <div class="lbl">Red Sea war-risk premium uplift (2024 est. annualised)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+  </div>
+
+  <h2>Lloyd's Risk Code Structure</h2>
+  <div class="code-table">
+    <table>
+      <thead><tr><th>Code</th><th>Class</th><th>Coverage Scope</th><th>Policy Basis</th><th>Typical Limit</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="code-chip chip-b">B</span></td>
+          <td><strong>Builders' Risk</strong></td>
+          <td>Physical damage to a vessel during construction at a shipyard. Covers hull plating, machinery, outfitting equipment from keel-laying through sea trials and delivery. Includes third-party liability for damage to dry-dock, yard equipment, or adjacent vessels. Also covers faulty workmanship damage to the vessel itself (subject to exclusions).</td>
+          <td>All-risks; typically on a "builder's risk" policy basis aligned to the shipbuilding contract value</td>
+          <td>$5m – $500m+ per vessel</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-t">T</span></td>
+          <td><strong>Hull &amp; Machinery (Time)</strong></td>
+          <td>All-risks physical damage cover for the hull, machinery and equipment of an operational vessel. Written on a time basis (typically 12 months). Principal perils: collision, grounding, stranding, fire, explosion, piracy, negligence of crew or master. Covers 3/4 collision liability (with P&amp;I covering the remaining 1/4). Standard Lloyd's hull slip; worded on ITC Hulls 1983 or IHC 2003 clauses.</td>
+          <td>Institute Time Clauses (Hulls) 1/11/83 or International Hull Clauses 1/11/03 (IHC 2003)</td>
+          <td>$10m – $500m+ per vessel</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-ts">TS</span></td>
+          <td><strong>Total Loss Only (TLO)</strong></td>
+          <td>Restricted form of hull cover paying only on total loss (actual or constructive). Does not respond to partial losses, machinery breakdown, or collision damage below CTL threshold. Typically used for older vessels where full H&amp;M cover is uneconomic or unavailable. May be combined with a separate machinery breakdown policy. Often written with a higher excess than full H&amp;M.</td>
+          <td>ITC Hulls TLO Clauses or manuscript basis; constructive total loss threshold typically &gt;75–100% insured value</td>
+          <td>$2m – $100m per vessel</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-tx">TX</span></td>
+          <td><strong>Loss of Hire / Additional Perils</strong></td>
+          <td>TX covers consequential losses arising from an insured hull event. Loss of Hire (LOH): daily hire rate for period vessel is off-hire due to an insured damage. Additional Perils: optional extensions to the standard H&amp;M policy — sue and labour, salvage, towage, scrap/wreck removal, freight interest. Cyber or parametric hull extensions also placed under TX in some syndicates.</td>
+          <td>ITC Loss of Hire Clauses 20/7/87; written as a separate slip supplementary to the H&amp;M policy</td>
+          <td>LOH: $5,000–$50,000/day × 90–180 days</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Coverage Architecture</h2>
+  <div class="cov-grid">
+    <div class="cov-card">
+      <h4>⚓ Hull &amp; Machinery (H&amp;M) — Core</h4>
+      <ul>
+        <li>Physical damage to hull, machinery and equipment</li>
+        <li>Collision (3/4 RDC — Running Down Clause)</li>
+        <li>Grounding, stranding, sinking</li>
+        <li>Fire, explosion, lightning</li>
+        <li>Perils of the sea — weather damage</li>
+        <li>Negligence of master, crew or pilots</li>
+        <li>Latent defect causing loss (Sue &amp; Labour)</li>
+      </ul>
+    </div>
+    <div class="cov-card hull-top">
+      <h4>🏗️ Builders' Risk (B)</h4>
+      <ul>
+        <li>All-risks during shipyard construction</li>
+        <li>Keel-laying through sea trials &amp; delivery</li>
+        <li>Third-party liability — yard / dry-dock damage</li>
+        <li>Faulty workmanship (to resultant damage only)</li>
+        <li>Launching accidents</li>
+        <li>Transit of components (pre-keel)</li>
+        <li>Typically follows Lloyds SG/MAR form + institute clauses</li>
+      </ul>
+    </div>
+    <div class="cov-card ocean-top">
+      <h4>📉 Total Loss Only (TS)</h4>
+      <ul>
+        <li>Actual total loss (ATL): vessel completely destroyed/lost</li>
+        <li>Constructive total loss (CTL): repair cost exceeds insured value</li>
+        <li>Missing vessel: presumed lost after reasonable time</li>
+        <li>No partial loss recovery</li>
+        <li>No machinery breakdown cover</li>
+        <li>More economic for older/smaller vessels</li>
+        <li>Often layered with separate P&amp;I and FD&amp;D</li>
+      </ul>
+    </div>
+    <div class="cov-card anchor-top">
+      <h4>⏱️ Loss of Hire (TX)</h4>
+      <ul>
+        <li>Daily hire rate while vessel under repair (insured peril)</li>
+        <li>Deductible: typically 14–30 day waiting period</li>
+        <li>Maximum indemnity: 90–180 days (typical)</li>
+        <li>Covers temporary repair delays</li>
+        <li>Complementary to H&amp;M — same insured peril trigger</li>
+        <li>Dry-dock delays at agreed daily rate</li>
+        <li>Parametric LOH structures emerging (post-2020)</li>
+      </ul>
+    </div>
+    <div class="cov-card deck-top">
+      <h4>💰 Increased Value (IV)</h4>
+      <ul>
+        <li>Covers difference between insured value and market value</li>
+        <li>Responds only on total loss (actual or constructive)</li>
+        <li>Separate policy supplementary to H&amp;M</li>
+        <li>Freight interest IV also available</li>
+        <li>Typically 25% of H&amp;M insured value maximum</li>
+        <li>Important for vessels with strong second-hand market</li>
+      </ul>
+    </div>
+    <div class="cov-card hull-top">
+      <h4>🔧 Additional Perils (AP)</h4>
+      <ul>
+        <li>Extends ITC/IHC cover for excluded perils</li>
+        <li>Breakdown of machinery / boiler explosion</li>
+        <li>Crew negligence extensions</li>
+        <li>Wreck removal / scrap costs</li>
+        <li>Towage and salvage extensions</li>
+        <li>Cyber risk extensions (post-BIMCO 2019)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3>⚓ The P&amp;I Club Interface — What Hull Does NOT Cover</h3>
+    <p>Marine hull (T/TS/TX) and Protection &amp; Indemnity (P&amp;I) club cover are complementary and deliberately non-overlapping. Understanding the boundary is critical for underwriters and brokers:</p>
+    <ul>
+      <li><strong>Hull covers:</strong> Physical damage to the insured vessel; 3/4 collision liability (Running Down Clause — RDC); salvage of the vessel; Sue &amp; Labour charges; GA (General Average) contributions.</li>
+      <li><strong>P&amp;I covers:</strong> 1/4 collision liability (not in hull); cargo damage/shortage liability; crew injury/death/repatriation; wreck removal and pollution (MARPOL); passenger and stevedore liability; war/strike-related crew liability.</li>
+      <li><strong>General Average (GA):</strong> When a deliberate sacrifice saves the common venture (e.g. jettisoning cargo), costs are shared between hull and cargo underwriters according to GA rules (York-Antwerp Rules 2016). <span class="badge b-v" style="font-size:0.65rem;">VER</span></li>
+      <li><strong>The 1/4 collision issue:</strong> Standard ITC Hull only covers 3/4 of collision liability for damage to third-party vessels. The remaining 1/4 sits with P&amp;I. Some hull policies extend to 4/4 RDC by endorsement — critical to check on large container vessel covers.</li>
+    </ul>
+  </div>
+
+  <h2>Market Participants</h2>
+  <p>The Lloyd's marine hull market is one of the oldest and most internationally competitive insurance markets. London remains a dominant pricing centre for large, complex and unusual tonnage, but faces competition from Scandinavian and Asian markets for standard tonnage. <span class="badge b-e">EST</span></p>
+
+  <div class="mkt-table">
+    <table>
+      <thead><tr><th>Segment</th><th>Lloyd's / London Codes</th><th>Global GWP Est.</th><th>Key Players</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Ocean Hull (H&amp;M)</strong></td>
+          <td>T</td>
+          <td>~$4.5–5bn <span class="badge b-e">EST</span></td>
+          <td>Lloyd's syndicates (Brit, Atrium, Ascot, Chaucer), Norwegian hull clubs (Gard, Skuld, Norwegian Hull Club), AGCS (Allianz), XL Catlin</td>
+        </tr>
+        <tr>
+          <td><strong>Builders' Risk</strong></td>
+          <td>B</td>
+          <td>~$500m–1bn <span class="badge b-e">EST</span></td>
+          <td>Lloyd's specialist syndicates, Korean/Japanese domestic insurers, specialist marine markets (Hamburg, Oslo)</td>
+        </tr>
+        <tr>
+          <td><strong>TLO / Specialist</strong></td>
+          <td>TS</td>
+          <td>~$300–500m <span class="badge b-e">EST</span></td>
+          <td>Lloyd's syndicates, smaller specialist markets; often for older/non-standard tonnage</td>
+        </tr>
+        <tr>
+          <td><strong>Loss of Hire / AP</strong></td>
+          <td>TX</td>
+          <td>~$500–700m <span class="badge b-e">EST</span></td>
+          <td>Follows H&amp;M leaders; Scandinavian hull clubs dominant for LOH on major fleets</td>
+        </tr>
+        <tr>
+          <td><strong>P&amp;I (adjacent)</strong></td>
+          <td>Separate — non-Lloyd's</td>
+          <td>~$4bn <span class="badge b-e">EST</span></td>
+          <td>International Group P&amp;I Clubs (Gard, UK Club, Standard Club, West of England, Steamship Mutual etc.) — 13 IG clubs cover ~90% of world ocean-going fleet <span class="badge b-v">VER</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Hub Modules</h2>
+  <div class="module-grid">
+    <a href="history.html" class="mod-card">
+      <div class="mod-num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From Lloyd's Coffee House 1688 to ITC Hulls 1983, ISM Code, CLC and the IHC 2003 reform era</p>
+    </a>
+    <a href="timeline.html" class="mod-card">
+      <div class="mod-num">Module 02</div>
+      <h4>Major Events Timeline</h4>
+      <p>20 defining events: Titanic 1912, Costa Concordia 2012, Ever Given 2021, Red Sea attacks 2024</p>
+    </a>
+    <a href="database.html" class="mod-card">
+      <div class="mod-num">Module 03</div>
+      <h4>Claims Database</h4>
+      <p>35 major hull losses — filterable by vessel type, peril, year and loss size</p>
+    </a>
+    <a href="underwriting.html" class="mod-card">
+      <div class="mod-num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>Hull rating methodology, classification society factors, vessel age/type loading, 2 worked examples</p>
+    </a>
+    <a href="rates-analysis.html" class="mod-card">
+      <div class="mod-num">Module 05</div>
+      <h4>Rates &amp; ROE</h4>
+      <p>Market pricing cycle 1990–2026, IHC rate trends, Red Sea war uplift 2024, 3 ROE scenarios</p>
+    </a>
+    <a href="risk-mitigation.html" class="mod-card">
+      <div class="mod-num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>ISM Code, SOLAS, MARPOL, class societies, PSC inspections, BIMCO cyber guidelines</p>
+    </a>
+    <a href="global-program.html" class="mod-card">
+      <div class="mod-num">Module 07</div>
+      <h4>Global Programmes</h4>
+      <p>Fleet programme structuring, layered towers, P&amp;I coordination, war risk, LOH stacking</p>
+    </a>
+    <a href="references.html" class="mod-card">
+      <div class="mod-num">Module 09</div>
+      <h4>References &amp; Sources</h4>
+      <p>18 primary sources, confidence audit, knowledge cutoff and data gap disclosures</p>
+    </a>
+  </div>
+
+</main>
+<footer>Risk Code Hub · Marine Hull (B · T · TS · TX) · v2.7 — April 2026</footer>
+</body>
+</html>

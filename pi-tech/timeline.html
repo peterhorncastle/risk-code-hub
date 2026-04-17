@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline — Technology & Telecom PI E&O (F4/F5) — Risk Code Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --tech: #0f4c75;
+            --tech-dark: #0a2d45;
+            --digital: #1b8a8a;
+            --code: #5b21b6;
+            --risk: #c0572a;
+            --warn: #d97706;
+            --light: #f0f6fb;
+            --mid: #d1e8f5;
+            --dark: #111;
+            --red: #c0392b;
+            --amber: #e67e22;
+            --green: #27ae60;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: #fafbfc;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0a2d45 0%, #0f4c75 50%, #073352 100%);
+            color: white;
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(15, 76, 117, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        header > * { position: relative; z-index: 1; }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 700px;
+        }
+
+        nav {
+            background: white;
+            border-bottom: 1px solid #e0e6ed;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav li {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        nav li a {
+            display: block;
+            padding: 1rem;
+            color: var(--dark);
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        nav li a:hover,
+        nav li a.active {
+            color: var(--tech);
+            border-bottom-color: var(--tech);
+        }
+
+        .breadcrumb {
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: var(--tech);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h2 {
+            color: var(--tech-dark);
+            border-bottom: 2px solid var(--tech);
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 1.6rem;
+        }
+
+        .c-ver, .c-est, .c-illus, .c-gap {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            margin-left: 0.3rem;
+            vertical-align: middle;
+        }
+
+        .c-ver { background: rgba(39, 174, 96, 0.15); color: var(--green); }
+        .c-est { background: rgba(230, 126, 34, 0.15); color: var(--amber); }
+        .c-illus { background: rgba(52, 152, 219, 0.15); color: #3498db; }
+        .c-gap { background: rgba(192, 57, 43, 0.15); color: var(--red); }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--tech) 0%, var(--digital) 25%, var(--code) 50%, var(--risk) 75%, var(--warn) 100%);
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+        }
+
+        .timeline-event .dot {
+            position: absolute;
+            left: -37px;
+            top: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-event:hover .dot {
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .dot-software { border-color: var(--tech); background: var(--tech); }
+        .dot-project { border-color: var(--digital); background: var(--digital); }
+        .dot-regulatory { border-color: var(--code); background: var(--code); }
+        .dot-claims { border-color: var(--risk); background: var(--risk); }
+        .dot-market { border-color: var(--warn); background: var(--warn); }
+        .dot-cyber { border-color: var(--green); background: var(--green); }
+
+        .timeline-content {
+            background: white;
+            border: 1px solid #e0e6ed;
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+
+        .timeline-year {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--tech-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--tech-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        footer {
+            background: var(--tech-dark);
+            color: #a8c4d8;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #a8c4d8;
+            text-decoration: none;
+        }
+
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            nav li { min-width: 80px; }
+            nav li a { padding: 0.8rem 0.5rem; font-size: 0.75rem; }
+            .timeline { padding-left: 35px; }
+            .timeline-event .dot { left: -33px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Major Events Timeline</h1>
+        <p class="subtitle">Software failures, IT project disasters and market inflections 1981–2024</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="overview.html">Overview</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="timeline.html" class="active">Timeline</a></li>
+            <li><a href="database.html">Claims Database</a></li>
+            <li><a href="underwriting.html">Underwriting</a></li>
+            <li><a href="rates-analysis.html">Rates & ROE</a></li>
+            <li><a href="risk-mitigation.html">Risk Mitigation</a></li>
+            <li><a href="global-program.html">Global Programme</a></li>
+            <li><a href="references.html">References</a></li>
+        </ul>
+    </nav>
+
+    <div class="breadcrumb">
+        <a href="../index.html">Risk Code Hub</a> › Technology & Telecom PI E&O
+    </div>
+
+    <main>
+
+        <h2>20 Major Events (1981–2024)</h2>
+
+        <div class="timeline">
+
+            <div class="timeline-event">
+                <div class="dot dot-market"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">1981</div>
+                    <div class="timeline-title">IBM PC Launches — Software Liability Era Begins</div>
+                    <div class="timeline-desc">IBM PC (August 1981) creates mass-market software industry. Courts begin grappling with software liability — product vs service distinction. First US technology E&O policies written by St Paul Companies. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-cyber"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">1988</div>
+                    <div class="timeline-title">Morris Worm — First Major Internet Incident</div>
+                    <div class="timeline-desc">Robert Morris worm (November 1988) infects ~6,000 Unix computers — first widely publicised internet security incident. Highlights connectivity risk. Early catalyst for what will become cyber/tech E&O convergence. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-software"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">1994</div>
+                    <div class="timeline-title">Intel Pentium FDIV Bug</div>
+                    <div class="timeline-desc">Intel Pentium processor floating-point division bug discovered. Recall cost ~$475m. Paradigm example of hardware/software defect causing systemic financial loss. Establishes principle: technology defects = quantifiable economic claims. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-project"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">1998</div>
+                    <div class="timeline-title">NHS/Government IT Outsourcing Wave</div>
+                    <div class="timeline-desc">UK government begins large-scale IT outsourcing contracts (NHS, HMRC, DWP). EDS, Accenture, CSC win billion-pound deals. Seeds of future NHS NPfIT and HMRC IT failures — largest tech E&O exposures in UK history. <span class="c-est">EST</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-claims"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">1999</div>
+                    <div class="timeline-title">Y2K — $600bn Remediation, ~$1bn Claims</div>
+                    <div class="timeline-desc">Global Y2K remediation programme: $600bn+ spent worldwide. Insurance claims ~$1bn — far below feared losses. Lloyd's tech PI hard market 1999–2001. Y2K exclusions become standard on new policies. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-claims"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2000</div>
+                    <div class="timeline-title">Dot-Com Bust — IT Project Claims Wave</div>
+                    <div class="timeline-desc">Dot-com collapse March 2000 triggers wave of failed IT project claims. Hundreds of e-commerce implementations abandoned mid-build. Tech E&O market faces first significant claims cycle. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-project"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2003</div>
+                    <div class="timeline-title">NHS National Programme for IT Launched</div>
+                    <div class="timeline-desc">NHS NPfIT — £12.4bn contract for national electronic patient record system. Largest civilian IT project in history. Ultimate failure (2011) with £9.8bn wasted — major tech E&O and public contract PI exposure. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-market"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2006</div>
+                    <div class="timeline-title">AWS Launch — Cloud E&O Era Begins</div>
+                    <div class="timeline-desc">Amazon Web Services launches (March 2006). Cloud computing transforms tech liability — from discrete project delivery to continuous service provision. Tech E&O evolves to cover ongoing SaaS/cloud service failures. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-claims"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2011</div>
+                    <div class="timeline-title">NHS NPfIT Abandoned — £9.8bn Wasted</div>
+                    <div class="timeline-desc">NHS National Programme for IT formally abandoned. £9.8bn of taxpayer money spent with no functioning national EPR. Largest public-sector IT failure — tech E&O / government contract PI claims; confidential settlements. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-claims"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2012</div>
+                    <div class="timeline-title">Knight Capital — $440m Algorithmic Trading Loss</div>
+                    <div class="timeline-desc">Knight Capital Group: defective market-making algorithm deployed in live environment (August 2012). 45 minutes of erroneous trades = $440m loss. Company sold within days. Paradigm tech E&O event — single software defect causes corporate-level financial loss. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-cyber"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2016</div>
+                    <div class="timeline-title">SWIFT Banking System Fraud — Bangladesh Bank</div>
+                    <div class="timeline-desc">Bangladesh Bank: $81m fraudulently transferred via SWIFT network. Exploits in SWIFT messaging software and bank security. Tech E&O/cyber interface debate: was it software vulnerability (F4) or security failure (CY)? <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-cyber"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2017</div>
+                    <div class="timeline-title">NotPetya — $10bn Losses, War Exclusion Dispute</div>
+                    <div class="timeline-desc">NotPetya cyberattack (June 2017): disguised as ransomware but destructive. Maersk, Merck, FedEx among victims; $10bn+ economic damage. Insurers invoke war exclusion. Merck wins $1.4bn insurance case 2023. Tests cyber/tech E&O boundary. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-claims"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2018</div>
+                    <div class="timeline-title">TSB Banking IT Migration Failure — £330m</div>
+                    <div class="timeline-desc">TSB migrates from Lloyds Banking Group platform to Proteo4UK (Sabadell). April 2018: migration fails catastrophically — 1.9m customers locked out; online banking down for weeks. £330m compensation, FCA £48.6m fine. IBM consulting firm Sabis implicated. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-regulatory"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2018</div>
+                    <div class="timeline-title">GDPR — Data Processing E&O Claims Emerge</div>
+                    <div class="timeline-desc">EU GDPR (May 2018). Technology firms advising on data architecture face PI claims for GDPR non-compliance advice. Data breach notifications surge — testing tech E&O/cyber boundary on data loss caused by misconfiguration vs attack. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-cyber"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2020</div>
+                    <div class="timeline-title">SolarWinds Supply Chain Attack</div>
+                    <div class="timeline-desc">SolarWinds Orion software update compromised by Russian state actor. 18,000+ organisations (including US Treasury, DHS) receive malicious update. Tech E&O/cyber crossover — compromise of legitimate software update = supply chain PI risk. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-cyber"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2021</div>
+                    <div class="timeline-title">Kaseya VSA Attack — MSP Supply Chain</div>
+                    <div class="timeline-desc">Kaseya VSA (IT management software for MSPs) compromised by REvil ransomware group. 1,500 businesses downstream via ~60 MSPs. Tests whether MSP E&O policy responds to upstream vendor compromise. Tech E&O market adds MSP supply-chain exclusions. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-software"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2021</div>
+                    <div class="timeline-title">Log4Shell — Emergency Patching Costs</div>
+                    <div class="timeline-desc">Log4j vulnerability (CVE-2021-44228, Dec 2021) — critical flaw in widely used Apache logging library. Billions of devices affected. Emergency patching costs borne by thousands of tech firms. Tech E&O PI debate: is patching cost a covered loss if client's system was compromised via Log4Shell? <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-claims"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-title">AT&T Network Outage — Emergency Services Disruption</div>
+                    <div class="timeline-desc">AT&T network outage (February 2024): 8-hour outage affecting ~70,000 emergency calls. FCC investigation; $9m penalty agreed. Telecom PI (F5) paradigm: network failure → emergency services disruption → regulatory/PI exposure. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-claims"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-title">CrowdStrike Falcon Update — 8.5 Million Devices Crashed</div>
+                    <div class="timeline-desc">CrowdStrike defective Falcon sensor content update (19 July 2024) crashes 8.5 million Windows devices globally. Airlines, hospitals, broadcasters, banks grounded. Delta Air Lines: $500m loss + lawsuit against CrowdStrike. Estimated $10bn+ total economic loss; insured ~$800m–1bn. Tech E&O paradigm event of the decade. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+            <div class="timeline-event">
+                <div class="dot dot-regulatory"></div>
+                <div class="timeline-content">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-title">EU AI Act — AI Liability Framework</div>
+                    <div class="timeline-desc">EU AI Act (2024) establishes risk-based regulatory framework for AI systems. High-risk AI systems face mandatory conformity assessments, documentation and oversight. Tech providers deploying AI in critical systems (healthcare, employment, credit) face new PI exposure. AI hallucination liability emerging in legal and financial contexts. <span class="c-ver">VER</span></div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        Risk Code Hub v2.5 — Technology & Telecom PI E&O (F4/F5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+    </footer>
+</body>
+</html>

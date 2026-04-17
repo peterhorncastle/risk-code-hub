@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rates & ROE Analysis — Tech & Telecom PI E&O (F4/F5) | Risk Code Hub</title>
+  <style>
+    :root {
+      --tech: #0f4c75;
+      --tech-dark: #0a2d45;
+      --digital: #1b8a8a;
+      --code: #5b21b6;
+      --risk: #c0572a;
+      --warn: #d97706;
+      --light: #f0f6fb;
+      --mid: #d1e8f5;
+      --dark: #111;
+      --red: #c0392b;
+      --amber: #e67e22;
+      --green: #27ae60;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--dark);
+      background: var(--light);
+    }
+
+    header {
+      background: linear-gradient(135deg, #0a2d45 0%, #0f4c75 50%, #073352 100%);
+      color: #fff;
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    header h1 {
+      position: relative;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      position: relative;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .breadcrumb {
+      background: var(--mid);
+      padding: 0.8rem 2rem;
+      font-size: 0.95rem;
+      color: var(--dark);
+    }
+
+    .breadcrumb a {
+      color: var(--tech);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    nav {
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+    }
+
+    nav a {
+      padding: 1rem 1.2rem;
+      text-decoration: none;
+      color: var(--dark);
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    nav a:hover {
+      background: var(--light);
+      border-bottom-color: var(--warn);
+    }
+
+    nav a.active {
+      color: var(--tech);
+      border-bottom-color: var(--tech);
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    h2 {
+      color: var(--tech);
+      margin: 2rem 0 1rem;
+      font-size: 1.8rem;
+      border-left: 4px solid var(--tech);
+      padding-left: 1rem;
+    }
+
+    h3 {
+      color: var(--dark);
+      margin: 1.5rem 0 0.8rem;
+      font-size: 1.3rem;
+    }
+
+    .chart-container {
+      position: relative;
+      background: #fff;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      height: 400px;
+    }
+
+    .market-cycle-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .cycle-card {
+      background: #fff;
+      border-radius: 6px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-top: 5px solid var(--tech);
+    }
+
+    .cycle-card.warn {
+      border-top-color: var(--warn);
+    }
+
+    .cycle-card.digital {
+      border-top-color: var(--digital);
+    }
+
+    .cycle-card.code {
+      border-top-color: var(--code);
+    }
+
+    .cycle-card.risk {
+      border-top-color: var(--risk);
+    }
+
+    .cycle-card.green {
+      border-top-color: var(--green);
+    }
+
+    .cycle-card h4 {
+      color: var(--dark);
+      font-size: 1.05rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .cycle-card p {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    th {
+      background: var(--tech);
+      color: #fff;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 0.95rem;
+    }
+
+    tr:hover {
+      background: var(--light);
+    }
+
+    .scenario-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .scenario-card {
+      background: #fff;
+      border-radius: 6px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-left: 4px solid var(--warn);
+    }
+
+    .scenario-card.bull {
+      border-left-color: var(--green);
+    }
+
+    .scenario-card.bear {
+      border-left-color: var(--red);
+    }
+
+    .scenario-card h4 {
+      color: var(--dark);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .scenario-detail {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .scenario-detail:last-child {
+      border-bottom: none;
+    }
+
+    .scenario-label {
+      font-weight: 500;
+      color: #555;
+    }
+
+    .scenario-value {
+      color: var(--dark);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .roe-result {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 2px solid var(--warn);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .roe-result.bull {
+      border-top-color: var(--green);
+      color: var(--green);
+    }
+
+    .roe-result.bear {
+      border-top-color: var(--red);
+      color: var(--red);
+    }
+
+    .note {
+      background: #f5f5f5;
+      border-left: 4px solid var(--warn);
+      padding: 1rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      margin-left: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    .c-ver {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .c-est {
+      background: var(--amber);
+      color: #fff;
+    }
+
+    .c-illus {
+      background: var(--code);
+      color: #fff;
+    }
+
+    .c-gap {
+      background: var(--red);
+      color: #fff;
+    }
+
+    footer {
+      background: var(--tech-dark);
+      color: #a8c4d8;
+      padding: 2rem;
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      nav {
+        flex-direction: column;
+      }
+
+      nav a {
+        padding: 0.8rem 1rem;
+      }
+
+      .market-cycle-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .scenario-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-container {
+        height: 300px;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      td, th {
+        padding: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Rates & ROE Analysis</h1>
+    <p>Tech E&O market cycles, rate index, combined ratio history and return on equity modelling</p>
+  </header>
+
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> › Technology & Telecom PI E&O
+  </div>
+
+  <nav>
+    <a href="overview.html">Overview</a>
+    <a href="history.html">History</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="database.html">Claims Database</a>
+    <a href="underwriting.html">Underwriting</a>
+    <a href="rates-analysis.html" class="active">Rates & ROE</a>
+    <a href="risk-mitigation.html">Risk Mitigation</a>
+    <a href="global-program.html">Global Programme</a>
+    <a href="references.html">References</a>
+  </nav>
+
+  <div class="container">
+
+    <h2>Premium Rate Index (1999–2026)</h2>
+    <div class="chart-container">
+      <canvas id="rateIndexChart"></canvas>
+    </div>
+    <p style="text-align: center; font-size: 0.95rem; color: #666; margin-top: -1rem;">
+      Tech E&O Premium Rate Index 1999–2026 (1999=100) <span class="badge c-est">EST</span>
+    </p>
+
+    <h2>Market Cycles</h2>
+    <div class="market-cycle-cards">
+      <div class="cycle-card">
+        <h4>Y2K Hard Market<br/>(1999–2002)</h4>
+        <p>
+          Y2K claims and dot-com IT failures harden market sharply. Capacity withdraws. Premiums peak at
+          ~65% above 1995 levels. Few specialist underwriters willing to write tech E&O above £5m limits.
+        </p>
+      </div>
+
+      <div class="cycle-card warn">
+        <h4>Post-Dot-Com Softening<br/>(2003–2010)</h4>
+        <p>
+          Claims resolve; new capacity enters; market softens consistently. US insurers (AIG, Chubb,
+          Travelers) compete for Lloyd's business. Premium falls ~40% from 2001 peak. Market increasingly
+          views tech E&O as benign class.
+        </p>
+      </div>
+
+      <div class="cycle-card digital">
+        <h4>SaaS/Cloud Disruption<br/>(2011–2018)</h4>
+        <p>
+          Cloud adoption creates new risk profile — ongoing service vs discrete project. Combined tech E&O +
+          cyber products emerge (SME market). Premium continues to soften. No systemic losses; market complacent.
+          Rate at historic low 2016–2018.
+        </p>
+      </div>
+
+      <div class="cycle-card code">
+        <h4>Cyber Interface Hardening<br/>(2019–2022)</h4>
+        <p>
+          Separation of tech E&O and cyber products. NotPetya/SolarWinds/Kaseya events drive awareness of
+          tech liability. Market hardens 25–40% 2020–2022. Specific exclusions added: cyber war, ransomware,
+          supply chain software.
+        </p>
+      </div>
+
+      <div class="cycle-card risk">
+        <h4>CrowdStrike Recalibration<br/>(2023–2025)</h4>
+        <p>
+          July 2024 CrowdStrike event forces market-wide recalibration of software update risk. Vendors with
+          auto-update mechanisms face significant reunderwriting. Market moderately hardens. AI/ML liability
+          exclusions under development.
+        </p>
+      </div>
+
+      <div class="cycle-card green">
+        <h4>AI Era — Emerging Underwriting<br/>(2025–)</h4>
+        <p>
+          EU AI Act and AI hallucination liability create new sub-class of tech PI. Insurers developing specific
+          AI E&O endorsements. Premium for AI-heavy tech firms expected to increase 20–40% over cycle. Market
+          actively developing policy language.
+        </p>
+      </div>
+    </div>
+
+    <h2>Service Segment Rate Grid</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Service Segment</th>
+          <th>Base Rate (% revenue)</th>
+          <th>Typical Limit</th>
+          <th>Key Claim Driver</th>
+          <th>Market Trend</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>IT staffing/body shop</td>
+          <td>0.3–0.6%</td>
+          <td>$1–5m</td>
+          <td>Minimal E&O; general liability dominant</td>
+          <td>Stable</td>
+        </tr>
+        <tr>
+          <td>IT consulting/advisory</td>
+          <td>0.5–1.0%</td>
+          <td>$2–10m</td>
+          <td>Negligent advice, wrong technology selection</td>
+          <td>Stable</td>
+        </tr>
+        <tr>
+          <td>Managed services (MSP)</td>
+          <td>0.8–1.5%</td>
+          <td>$5–25m</td>
+          <td>System failure, patch management, backup</td>
+          <td>Hardening</td>
+        </tr>
+        <tr>
+          <td>Custom software development</td>
+          <td>1.0–2.0%</td>
+          <td>$5–50m</td>
+          <td>Code defects, project failure</td>
+          <td>Hardening</td>
+        </tr>
+        <tr>
+          <td>SaaS/cloud platforms</td>
+          <td>0.8–1.5%</td>
+          <td>$5–50m</td>
+          <td>Outages, data loss, multi-tenant errors</td>
+          <td>Hardening post-CrowdStrike</td>
+        </tr>
+        <tr>
+          <td>Systems integration</td>
+          <td>1.2–2.5%</td>
+          <td>$10–100m</td>
+          <td>Integration failure, project overrun</td>
+          <td>Hard — financial services</td>
+        </tr>
+        <tr>
+          <td>Financial/trading software</td>
+          <td>2.0–4.0%+</td>
+          <td>$25–250m</td>
+          <td>Algorithmic error, market data</td>
+          <td>Hard</td>
+        </tr>
+        <tr>
+          <td>Telecom (F5) network</td>
+          <td>0.4–1.0%</td>
+          <td>£5–50m</td>
+          <td>Network outage, billing, 999 access</td>
+          <td>Stable with regulatory risk</td>
+        </tr>
+        <tr>
+          <td>AI/ML product providers</td>
+          <td>Emerging — 1.5–4.0%+</td>
+          <td>$5–50m</td>
+          <td>Hallucination, bias, decision errors</td>
+          <td>Developing</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">All rates <span class="badge c-est">EST</span></p>
+
+    <h2>Combined Ratio History (2015–2024)</h2>
+    <div class="chart-container">
+      <canvas id="crChart"></canvas>
+    </div>
+    <p style="text-align: center; font-size: 0.95rem; color: #666; margin-top: -1rem;">
+      Estimated Tech E&O Combined Ratio 2015–2024 <span class="badge c-est">EST</span>
+    </p>
+    <div class="note">
+      <strong>Note:</strong> Tech E&O has historically been one of the more benign financial lines classes — relatively low
+      and predictable frequency. The 2024 CrowdStrike event may reset combined ratio expectations for the sub-class.
+    </div>
+
+    <h2>ROE Scenarios — $250m Tech E&O GWP Portfolio</h2>
+    <p style="margin-bottom: 1.5rem; color: #666;">
+      Illustrative return on equity under three market scenarios <span class="badge c-illus">ILLUS</span>
+    </p>
+
+    <div class="scenario-cards">
+      <div class="scenario-card bull">
+        <h4>Bull Case (78% CR)</h4>
+        <div class="scenario-detail">
+          <span class="scenario-label">Premium:</span>
+          <span class="scenario-value">$250m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Claims (43%):</span>
+          <span class="scenario-value">$107.5m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Expenses (35%):</span>
+          <span class="scenario-value">$87.5m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Combined Ratio:</span>
+          <span class="scenario-value">78%</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Investment income:</span>
+          <span class="scenario-value">$10m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Underwriting profit:</span>
+          <span class="scenario-value">$55m</span>
+        </div>
+        <div class="roe-result bull">ROE: +26.0%</div>
+      </div>
+
+      <div class="scenario-card">
+        <h4>Base Case (92% CR)</h4>
+        <div class="scenario-detail">
+          <span class="scenario-label">Premium:</span>
+          <span class="scenario-value">$250m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Claims (52%):</span>
+          <span class="scenario-value">$130m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Expenses (40%):</span>
+          <span class="scenario-value">$100m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Combined Ratio:</span>
+          <span class="scenario-value">92%</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Investment income:</span>
+          <span class="scenario-value">$10m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Underwriting profit:</span>
+          <span class="scenario-value">$20m</span>
+        </div>
+        <div class="roe-result">ROE: +12.0%</div>
+      </div>
+
+      <div class="scenario-card bear">
+        <h4>Bear Case (120% CR)</h4>
+        <div class="scenario-detail">
+          <span class="scenario-label">Premium:</span>
+          <span class="scenario-value">$250m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Claims (72%):</span>
+          <span class="scenario-value">$180m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Expenses (48%):</span>
+          <span class="scenario-value">$120m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Combined Ratio:</span>
+          <span class="scenario-value">120%</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Investment income:</span>
+          <span class="scenario-value">$10m</span>
+        </div>
+        <div class="scenario-detail">
+          <span class="scenario-label">Underwriting loss:</span>
+          <span class="scenario-value">-$50m</span>
+        </div>
+        <div class="roe-result bear">ROE: -16.0%</div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Capital allocation note:</strong> CrowdStrike-type systemic event would drive single-year combined ratio to 150%+
+      for affected portfolios. Capital requirement: approximately 100% of gross written premium for claims-made long-tail tech E&O.
+    </div>
+
+  </div>
+
+  <footer>
+    Risk Code Hub v2.5 — Technology & Telecom PI E&O (F4/F5) | <a href="../index.html">← Back to Hub</a> | Educational use only. Not financial advice.
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <script>
+    // Rate Index Chart
+    const rateCtx = document.getElementById('rateIndexChart').getContext('2d');
+    new Chart(rateCtx, {
+      type: 'line',
+      data: {
+        labels: ['1999', '2001', '2003', '2005', '2007', '2009', '2011', '2013', '2015', '2017', '2019', '2020', '2021', '2022', '2023', '2024', '2026E'],
+        datasets: [{
+          label: 'Rate Index (1999=100)',
+          data: [100, 165, 145, 125, 110, 100, 90, 82, 75, 72, 78, 90, 105, 130, 120, 115, 110],
+          borderColor: '#0f4c75',
+          backgroundColor: 'rgba(27, 138, 138, 0.1)',
+          fill: true,
+          tension: 0.3,
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: '#0f4c75',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            min: 60,
+            max: 180,
+            title: {
+              display: true,
+              text: 'Index Level'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          }
+        }
+      }
+    });
+
+    // Combined Ratio Chart
+    const crCtx = document.getElementById('crChart').getContext('2d');
+    new Chart(crCtx, {
+      type: 'bar',
+      data: {
+        labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024E'],
+        datasets: [{
+          label: 'Combined Ratio (%)',
+          data: [72, 70, 75, 78, 82, 88, 92, 85, 90, 95],
+          backgroundColor: function(context) {
+            const value = context.parsed.y;
+            if (value < 85) return '#27ae60';
+            if (value < 95) return '#d97706';
+            return '#c0392b';
+          },
+          borderColor: '#333',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        indexAxis: undefined,
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 150,
+            title: {
+              display: true,
+              text: 'Combined Ratio (%)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
