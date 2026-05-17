@@ -53,14 +53,157 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/PF.json'
+  var schemas = [
+{
+  "riskCode": "PF",
+  "label": "Film & Entertainment Production",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "productionBudget",
+    "label": "Production Budget (£)",
+    "defaultValue": 10000000,
+    "hint": "Total production budget"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.015
+  },
+  "ratingFactors": [
+    {
+      "key": "productionType",
+      "label": "Production Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "feature",
+      "options": {
+        "feature": {
+          "label": "Feature Film",
+          "factor": 1
+        },
+        "tv_series": {
+          "label": "TV Series",
+          "factor": 0.9
+        },
+        "commercial": {
+          "label": "Commercial/Ad",
+          "factor": 0.75
+        },
+        "documentary": {
+          "label": "Documentary",
+          "factor": 0.8
+        },
+        "live_event": {
+          "label": "Live Event/Concert",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "territory",
+      "label": "Filming Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "uk": {
+          "label": "UK/Studio",
+          "factor": 1
+        },
+        "us": {
+          "label": "US",
+          "factor": 1.05
+        },
+        "eu": {
+          "label": "Europe",
+          "factor": 1
+        },
+        "developing": {
+          "label": "Developing Country",
+          "factor": 1.25
+        },
+        "remote": {
+          "label": "Remote/Extreme",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "stunts",
+      "label": "Stunts/Special Effects",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "minimal",
+      "options": {
+        "none": {
+          "label": "None",
+          "factor": 0.8
+        },
+        "minimal": {
+          "label": "Minimal",
+          "factor": 1
+        },
+        "moderate": {
+          "label": "Moderate",
+          "factor": 1.15
+        },
+        "heavy": {
+          "label": "Heavy/Pyrotechnics",
+          "factor": 1.35
+        },
+        "extreme": {
+          "label": "Extreme/Aerial",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "castDependency",
+      "label": "Cast Dependency",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "moderate",
+      "options": {
+        "ensemble": {
+          "label": "Ensemble (no key person)",
+          "factor": 0.85
+        },
+        "moderate": {
+          "label": "Moderate",
+          "factor": 1
+        },
+        "single_star": {
+          "label": "Single Star dependent",
+          "factor": 1.2
+        },
+        "irreplaceable": {
+          "label": "Irreplaceable talent",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 2000,
+    "claimsHandlingPerClaim": 10000,
+    "systemOverheadPerYear": 1000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.04,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

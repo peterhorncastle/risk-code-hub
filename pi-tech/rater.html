@@ -53,15 +53,363 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/F4.json',
-    'rate-tables/F5.json'
+  var schemas = [
+{
+  "riskCode": "F4",
+  "label": "PI — Technology (Primary)",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "limit",
+    "label": "Limit of Indemnity (£)",
+    "defaultValue": 5000000,
+    "hint": "PI/E&O limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.008
+  },
+  "ratingFactors": [
+    {
+      "key": "firmSize",
+      "label": "Firm Size",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "mid",
+      "options": {
+        "sole": {
+          "label": "Sole Practitioner",
+          "factor": 1.3
+        },
+        "small": {
+          "label": "Small (2-10)",
+          "factor": 1.1
+        },
+        "mid": {
+          "label": "Mid (11-50)",
+          "factor": 1
+        },
+        "large": {
+          "label": "Large (51-200)",
+          "factor": 0.9
+        },
+        "major": {
+          "label": "Major (200+)",
+          "factor": 0.85
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "specialty",
+      "label": "Specialty Area",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "software",
+      "options": {
+        "software": {
+          "label": "Software Development",
+          "factor": 1
+        },
+        "cloud_saas": {
+          "label": "Cloud/SaaS",
+          "factor": 1.1
+        },
+        "it_consulting": {
+          "label": "IT Consulting",
+          "factor": 0.9
+        },
+        "managed_services": {
+          "label": "Managed Services",
+          "factor": 1.05
+        },
+        "ai_ml": {
+          "label": "AI/ML",
+          "factor": 1.2
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "revenue",
+      "label": "Annual Revenue/Fee Income (£m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 5,
+      "bands": [
+        {
+          "min": 0,
+          "max": 1,
+          "factor": 0.8
+        },
+        {
+          "min": 1,
+          "max": 5,
+          "factor": 1
+        },
+        {
+          "min": 5,
+          "max": 20,
+          "factor": 1.1
+        },
+        {
+          "min": 20,
+          "max": 100,
+          "factor": 1.2
+        },
+        {
+          "min": 100,
+          "max": 99999,
+          "factor": 1.3
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "minor": {
+          "label": "Minor/reserved",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material claim",
+          "factor": 1.25
+        },
+        "severe": {
+          "label": "Multiple/severe",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Primary Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "uk": {
+          "label": "UK",
+          "factor": 1
+        },
+        "eu": {
+          "label": "EU",
+          "factor": 1.05
+        },
+        "us": {
+          "label": "US",
+          "factor": 1.3
+        },
+        "international": {
+          "label": "International/Multi",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 1500,
+    "claimsHandlingPerClaim": 12000,
+    "systemOverheadPerYear": 800,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "F5",
+  "label": "PI — Telecom",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "limit",
+    "label": "Limit of Indemnity (£)",
+    "defaultValue": 10000000,
+    "hint": "PI/E&O limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.007
+  },
+  "ratingFactors": [
+    {
+      "key": "firmSize",
+      "label": "Firm Size",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "mid",
+      "options": {
+        "sole": {
+          "label": "Sole Practitioner",
+          "factor": 1.3
+        },
+        "small": {
+          "label": "Small (2-10)",
+          "factor": 1.1
+        },
+        "mid": {
+          "label": "Mid (11-50)",
+          "factor": 1
+        },
+        "large": {
+          "label": "Large (51-200)",
+          "factor": 0.9
+        },
+        "major": {
+          "label": "Major (200+)",
+          "factor": 0.85
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "specialty",
+      "label": "Specialty Area",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "network",
+      "options": {
+        "network": {
+          "label": "Network Operator",
+          "factor": 1
+        },
+        "isp": {
+          "label": "ISP/Broadband",
+          "factor": 0.9
+        },
+        "mobile": {
+          "label": "Mobile/Wireless",
+          "factor": 1.05
+        },
+        "data_centre": {
+          "label": "Data Centre",
+          "factor": 1.1
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "revenue",
+      "label": "Annual Revenue/Fee Income (£m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 5,
+      "bands": [
+        {
+          "min": 0,
+          "max": 1,
+          "factor": 0.8
+        },
+        {
+          "min": 1,
+          "max": 5,
+          "factor": 1
+        },
+        {
+          "min": 5,
+          "max": 20,
+          "factor": 1.1
+        },
+        {
+          "min": 20,
+          "max": 100,
+          "factor": 1.2
+        },
+        {
+          "min": 100,
+          "max": 99999,
+          "factor": 1.3
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "minor": {
+          "label": "Minor/reserved",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material claim",
+          "factor": 1.25
+        },
+        "severe": {
+          "label": "Multiple/severe",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Primary Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "uk": {
+          "label": "UK",
+          "factor": 1
+        },
+        "eu": {
+          "label": "EU",
+          "factor": 1.05
+        },
+        "us": {
+          "label": "US",
+          "factor": 1.3
+        },
+        "international": {
+          "label": "International/Multi",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 1500,
+    "claimsHandlingPerClaim": 10000,
+    "systemOverheadPerYear": 800,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.025,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

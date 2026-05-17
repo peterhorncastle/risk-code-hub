@@ -53,14 +53,183 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/HP.json'
+  var schemas = [
+{
+  "riskCode": "HP",
+  "label": "UK Household Property",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "sumInsured",
+    "label": "Sum Insured — Buildings (£)",
+    "defaultValue": 350000,
+    "hint": "Rebuilding cost"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.0008
+  },
+  "ratingFactors": [
+    {
+      "key": "propertyType",
+      "label": "Property Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "semi_detached",
+      "options": {
+        "detached": {
+          "label": "Detached House",
+          "factor": 1.1
+        },
+        "semi_detached": {
+          "label": "Semi-Detached",
+          "factor": 1
+        },
+        "terraced": {
+          "label": "Terraced",
+          "factor": 0.95
+        },
+        "flat": {
+          "label": "Flat/Apartment",
+          "factor": 0.85
+        },
+        "bungalow": {
+          "label": "Bungalow",
+          "factor": 1.05
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "construction",
+      "label": "Construction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "standard": {
+          "label": "Standard Brick/Tile",
+          "factor": 1
+        },
+        "timber": {
+          "label": "Timber Frame",
+          "factor": 1.2
+        },
+        "stone": {
+          "label": "Stone",
+          "factor": 1.05
+        },
+        "flat_roof": {
+          "label": "Flat Roof",
+          "factor": 1.15
+        },
+        "listed": {
+          "label": "Listed Building",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "floodRisk",
+      "label": "Flood Risk",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "low",
+      "options": {
+        "very_low": {
+          "label": "Very Low",
+          "factor": 0.85
+        },
+        "low": {
+          "label": "Low",
+          "factor": 1
+        },
+        "moderate": {
+          "label": "Moderate",
+          "factor": 1.2
+        },
+        "high": {
+          "label": "High",
+          "factor": 1.5
+        },
+        "very_high": {
+          "label": "Very High (Flood Re)",
+          "factor": 1.8
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "subsidence",
+      "label": "Subsidence Risk",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "low",
+      "options": {
+        "low": {
+          "label": "Low (bedrock)",
+          "factor": 0.9
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "clay": {
+          "label": "Clay Soil",
+          "factor": 1.15
+        },
+        "high": {
+          "label": "High (mining/clay)",
+          "factor": 1.35
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "No claims",
+          "factor": 0.8
+        },
+        "one": {
+          "label": "1 claim",
+          "factor": 1
+        },
+        "two": {
+          "label": "2 claims",
+          "factor": 1.2
+        },
+        "three_plus": {
+          "label": "3+ claims",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 25,
+    "claimsHandlingPerClaim": 200,
+    "systemOverheadPerYear": 15,
+    "fraudReservePerClaim": 50,
+    "expectedClaimsPerYear": 0.06,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.3,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

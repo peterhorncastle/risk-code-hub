@@ -54,14 +54,161 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/PR.json'
+  var schemas = [
+{
+  "riskCode": "PR",
+  "label": "Political Risk",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "exposureValue",
+    "label": "Exposure Value ($)",
+    "defaultValue": 100000000,
+    "hint": "Investment/contract value at risk"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.003
+  },
+  "ratingFactors": [
+    {
+      "key": "peril",
+      "label": "Peril Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "expropriation",
+      "options": {
+        "expropriation": {
+          "label": "Expropriation/Confiscation",
+          "factor": 1
+        },
+        "cen": {
+          "label": "Contract/Export Non-payment",
+          "factor": 0.85
+        },
+        "currency": {
+          "label": "Currency Inconvertibility",
+          "factor": 0.8
+        },
+        "forced_divestiture": {
+          "label": "Forced Divestiture",
+          "factor": 1.1
+        },
+        "political_violence": {
+          "label": "Political Violence",
+          "factor": 1.2
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "country",
+      "label": "Country Risk Rating",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "moderate",
+      "options": {
+        "low": {
+          "label": "Low Risk (OECD)",
+          "factor": 0.7
+        },
+        "moderate": {
+          "label": "Moderate",
+          "factor": 1
+        },
+        "elevated": {
+          "label": "Elevated",
+          "factor": 1.3
+        },
+        "high": {
+          "label": "High (MIGA Category)",
+          "factor": 1.6
+        },
+        "extreme": {
+          "label": "Extreme",
+          "factor": 2
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "tenor",
+      "label": "Policy Tenor (years)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 3,
+      "bands": [
+        {
+          "min": 1,
+          "max": 3,
+          "factor": 1
+        },
+        {
+          "min": 3,
+          "max": 7,
+          "factor": 1.15
+        },
+        {
+          "min": 7,
+          "max": 15,
+          "factor": 1.35
+        },
+        {
+          "min": 15,
+          "max": 30,
+          "factor": 1.6
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "sector",
+      "label": "Investment Sector",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "infrastructure",
+      "options": {
+        "infrastructure": {
+          "label": "Infrastructure",
+          "factor": 1
+        },
+        "extractive": {
+          "label": "Extractive/Mining",
+          "factor": 1.2
+        },
+        "financial": {
+          "label": "Financial Services",
+          "factor": 0.9
+        },
+        "agriculture": {
+          "label": "Agriculture",
+          "factor": 1.05
+        },
+        "energy": {
+          "label": "Energy",
+          "factor": 1.1
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 8000,
+    "claimsHandlingPerClaim": 50000,
+    "systemOverheadPerYear": 3000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.01,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.18,
+    "reinsuranceRate": 0.1
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

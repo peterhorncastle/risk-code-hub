@@ -53,17 +53,709 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/E8.json',
-    'rate-tables/E9.json',
-    'rate-tables/ED.json',
-    'rate-tables/EE.json'
+  var schemas = [
+{
+  "riskCode": "E8",
+  "label": "PI — Media & Entertainment",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "limit",
+    "label": "Limit of Indemnity (£)",
+    "defaultValue": 3000000,
+    "hint": "PI limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.008
+  },
+  "ratingFactors": [
+    {
+      "key": "firmSize",
+      "label": "Firm Size",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "mid",
+      "options": {
+        "sole": {
+          "label": "Sole Practitioner",
+          "factor": 1.3
+        },
+        "small": {
+          "label": "Small (2-10)",
+          "factor": 1.1
+        },
+        "mid": {
+          "label": "Mid (11-50)",
+          "factor": 1
+        },
+        "large": {
+          "label": "Large (51-200)",
+          "factor": 0.9
+        },
+        "major": {
+          "label": "Major (200+)",
+          "factor": 0.85
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "specialty",
+      "label": "Specialty Area",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "standard": {
+          "label": "Standard Risk",
+          "factor": 1
+        },
+        "elevated": {
+          "label": "Elevated Risk",
+          "factor": 1.2
+        },
+        "specialist": {
+          "label": "Specialist/Niche",
+          "factor": 1.1
+        },
+        "low": {
+          "label": "Low Risk",
+          "factor": 0.8
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "revenue",
+      "label": "Annual Revenue/Fee Income (£m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 5,
+      "bands": [
+        {
+          "min": 0,
+          "max": 1,
+          "factor": 0.8
+        },
+        {
+          "min": 1,
+          "max": 5,
+          "factor": 1
+        },
+        {
+          "min": 5,
+          "max": 20,
+          "factor": 1.1
+        },
+        {
+          "min": 20,
+          "max": 100,
+          "factor": 1.2
+        },
+        {
+          "min": 100,
+          "max": 99999,
+          "factor": 1.3
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "minor": {
+          "label": "Minor/reserved",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material claim",
+          "factor": 1.25
+        },
+        "severe": {
+          "label": "Multiple/severe",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Primary Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "uk": {
+          "label": "UK",
+          "factor": 1
+        },
+        "eu": {
+          "label": "EU",
+          "factor": 1.05
+        },
+        "us": {
+          "label": "US",
+          "factor": 1.3
+        },
+        "international": {
+          "label": "International/Multi",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 1200,
+    "claimsHandlingPerClaim": 8000,
+    "systemOverheadPerYear": 600,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "E9",
+  "label": "PI — Miscellaneous Professions",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "limit",
+    "label": "Limit of Indemnity (£)",
+    "defaultValue": 3000000,
+    "hint": "PI limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.008
+  },
+  "ratingFactors": [
+    {
+      "key": "firmSize",
+      "label": "Firm Size",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "mid",
+      "options": {
+        "sole": {
+          "label": "Sole Practitioner",
+          "factor": 1.3
+        },
+        "small": {
+          "label": "Small (2-10)",
+          "factor": 1.1
+        },
+        "mid": {
+          "label": "Mid (11-50)",
+          "factor": 1
+        },
+        "large": {
+          "label": "Large (51-200)",
+          "factor": 0.9
+        },
+        "major": {
+          "label": "Major (200+)",
+          "factor": 0.85
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "specialty",
+      "label": "Specialty Area",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "standard": {
+          "label": "Standard Risk",
+          "factor": 1
+        },
+        "elevated": {
+          "label": "Elevated Risk",
+          "factor": 1.2
+        },
+        "specialist": {
+          "label": "Specialist/Niche",
+          "factor": 1.1
+        },
+        "low": {
+          "label": "Low Risk",
+          "factor": 0.8
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "revenue",
+      "label": "Annual Revenue/Fee Income (£m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 5,
+      "bands": [
+        {
+          "min": 0,
+          "max": 1,
+          "factor": 0.8
+        },
+        {
+          "min": 1,
+          "max": 5,
+          "factor": 1
+        },
+        {
+          "min": 5,
+          "max": 20,
+          "factor": 1.1
+        },
+        {
+          "min": 20,
+          "max": 100,
+          "factor": 1.2
+        },
+        {
+          "min": 100,
+          "max": 99999,
+          "factor": 1.3
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "minor": {
+          "label": "Minor/reserved",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material claim",
+          "factor": 1.25
+        },
+        "severe": {
+          "label": "Multiple/severe",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Primary Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "uk": {
+          "label": "UK",
+          "factor": 1
+        },
+        "eu": {
+          "label": "EU",
+          "factor": 1.05
+        },
+        "us": {
+          "label": "US",
+          "factor": 1.3
+        },
+        "international": {
+          "label": "International/Multi",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 1200,
+    "claimsHandlingPerClaim": 8000,
+    "systemOverheadPerYear": 600,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "ED",
+  "label": "PI — Design Professionals",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "limit",
+    "label": "Limit of Indemnity (£)",
+    "defaultValue": 3000000,
+    "hint": "PI limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.008
+  },
+  "ratingFactors": [
+    {
+      "key": "firmSize",
+      "label": "Firm Size",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "mid",
+      "options": {
+        "sole": {
+          "label": "Sole Practitioner",
+          "factor": 1.3
+        },
+        "small": {
+          "label": "Small (2-10)",
+          "factor": 1.1
+        },
+        "mid": {
+          "label": "Mid (11-50)",
+          "factor": 1
+        },
+        "large": {
+          "label": "Large (51-200)",
+          "factor": 0.9
+        },
+        "major": {
+          "label": "Major (200+)",
+          "factor": 0.85
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "specialty",
+      "label": "Specialty Area",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "standard": {
+          "label": "Standard Risk",
+          "factor": 1
+        },
+        "elevated": {
+          "label": "Elevated Risk",
+          "factor": 1.2
+        },
+        "specialist": {
+          "label": "Specialist/Niche",
+          "factor": 1.1
+        },
+        "low": {
+          "label": "Low Risk",
+          "factor": 0.8
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "revenue",
+      "label": "Annual Revenue/Fee Income (£m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 5,
+      "bands": [
+        {
+          "min": 0,
+          "max": 1,
+          "factor": 0.8
+        },
+        {
+          "min": 1,
+          "max": 5,
+          "factor": 1
+        },
+        {
+          "min": 5,
+          "max": 20,
+          "factor": 1.1
+        },
+        {
+          "min": 20,
+          "max": 100,
+          "factor": 1.2
+        },
+        {
+          "min": 100,
+          "max": 99999,
+          "factor": 1.3
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "minor": {
+          "label": "Minor/reserved",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material claim",
+          "factor": 1.25
+        },
+        "severe": {
+          "label": "Multiple/severe",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Primary Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "uk": {
+          "label": "UK",
+          "factor": 1
+        },
+        "eu": {
+          "label": "EU",
+          "factor": 1.05
+        },
+        "us": {
+          "label": "US",
+          "factor": 1.3
+        },
+        "international": {
+          "label": "International/Multi",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 1200,
+    "claimsHandlingPerClaim": 8000,
+    "systemOverheadPerYear": 600,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "EE",
+  "label": "PI — Environmental Consultants",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "limit",
+    "label": "Limit of Indemnity (£)",
+    "defaultValue": 3000000,
+    "hint": "PI limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.008
+  },
+  "ratingFactors": [
+    {
+      "key": "firmSize",
+      "label": "Firm Size",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "mid",
+      "options": {
+        "sole": {
+          "label": "Sole Practitioner",
+          "factor": 1.3
+        },
+        "small": {
+          "label": "Small (2-10)",
+          "factor": 1.1
+        },
+        "mid": {
+          "label": "Mid (11-50)",
+          "factor": 1
+        },
+        "large": {
+          "label": "Large (51-200)",
+          "factor": 0.9
+        },
+        "major": {
+          "label": "Major (200+)",
+          "factor": 0.85
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "specialty",
+      "label": "Specialty Area",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "standard": {
+          "label": "Standard Risk",
+          "factor": 1
+        },
+        "elevated": {
+          "label": "Elevated Risk",
+          "factor": 1.2
+        },
+        "specialist": {
+          "label": "Specialist/Niche",
+          "factor": 1.1
+        },
+        "low": {
+          "label": "Low Risk",
+          "factor": 0.8
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "revenue",
+      "label": "Annual Revenue/Fee Income (£m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 5,
+      "bands": [
+        {
+          "min": 0,
+          "max": 1,
+          "factor": 0.8
+        },
+        {
+          "min": 1,
+          "max": 5,
+          "factor": 1
+        },
+        {
+          "min": 5,
+          "max": 20,
+          "factor": 1.1
+        },
+        {
+          "min": 20,
+          "max": 100,
+          "factor": 1.2
+        },
+        {
+          "min": 100,
+          "max": 99999,
+          "factor": 1.3
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "minor": {
+          "label": "Minor/reserved",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material claim",
+          "factor": 1.25
+        },
+        "severe": {
+          "label": "Multiple/severe",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Primary Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "uk": {
+          "label": "UK",
+          "factor": 1
+        },
+        "eu": {
+          "label": "EU",
+          "factor": 1.05
+        },
+        "us": {
+          "label": "US",
+          "factor": 1.3
+        },
+        "international": {
+          "label": "International/Multi",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 1200,
+    "claimsHandlingPerClaim": 8000,
+    "systemOverheadPerYear": 600,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

@@ -53,18 +53,709 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/MF.json',
-    'rate-tables/MG.json',
-    'rate-tables/MH.json',
-    'rate-tables/MI.json',
-    'rate-tables/MP.json'
+  var schemas = [
+{
+  "riskCode": "MF",
+  "label": "Motor Int'l — Private",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "vehicleValue",
+    "label": "Vehicle Value ($)",
+    "defaultValue": 30000,
+    "hint": "Market value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.035
+  },
+  "ratingFactors": [
+    {
+      "key": "territory",
+      "label": "Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "eu",
+      "options": {
+        "eu": {
+          "label": "EU/EEA",
+          "factor": 1
+        },
+        "middle_east": {
+          "label": "Middle East",
+          "factor": 1.1
+        },
+        "asia": {
+          "label": "Asia",
+          "factor": 1.15
+        },
+        "latam": {
+          "label": "Latin America",
+          "factor": 1.25
+        },
+        "africa": {
+          "label": "Africa",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "vehicleType",
+      "label": "Vehicle Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "car",
+      "options": {
+        "car": {
+          "label": "Private Car",
+          "factor": 1
+        },
+        "lcv": {
+          "label": "LCV/Van",
+          "factor": 1.1
+        },
+        "hgv": {
+          "label": "HGV/Truck",
+          "factor": 1.3
+        },
+        "motorcycle": {
+          "label": "Motorcycle",
+          "factor": 1.2
+        },
+        "specialist": {
+          "label": "Specialist",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "use",
+      "label": "Use",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "private",
+      "options": {
+        "private": {
+          "label": "Private",
+          "factor": 1
+        },
+        "commercial": {
+          "label": "Commercial",
+          "factor": 1.15
+        },
+        "fleet": {
+          "label": "Fleet",
+          "factor": 0.9
+        },
+        "hire": {
+          "label": "Hire/Taxi",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "adverse": {
+          "label": "Adverse",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 25,
+    "claimsHandlingPerClaim": 400,
+    "systemOverheadPerYear": 15,
+    "fraudReservePerClaim": 50,
+    "expectedClaimsPerYear": 0.07,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.28,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "MG",
+  "label": "Motor Int'l — Commercial",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "vehicleValue",
+    "label": "Vehicle Value ($)",
+    "defaultValue": 30000,
+    "hint": "Market value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.03
+  },
+  "ratingFactors": [
+    {
+      "key": "territory",
+      "label": "Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "eu",
+      "options": {
+        "eu": {
+          "label": "EU/EEA",
+          "factor": 1
+        },
+        "middle_east": {
+          "label": "Middle East",
+          "factor": 1.1
+        },
+        "asia": {
+          "label": "Asia",
+          "factor": 1.15
+        },
+        "latam": {
+          "label": "Latin America",
+          "factor": 1.25
+        },
+        "africa": {
+          "label": "Africa",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "vehicleType",
+      "label": "Vehicle Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "car",
+      "options": {
+        "car": {
+          "label": "Private Car",
+          "factor": 1
+        },
+        "lcv": {
+          "label": "LCV/Van",
+          "factor": 1.1
+        },
+        "hgv": {
+          "label": "HGV/Truck",
+          "factor": 1.3
+        },
+        "motorcycle": {
+          "label": "Motorcycle",
+          "factor": 1.2
+        },
+        "specialist": {
+          "label": "Specialist",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "use",
+      "label": "Use",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "private",
+      "options": {
+        "private": {
+          "label": "Private",
+          "factor": 1
+        },
+        "commercial": {
+          "label": "Commercial",
+          "factor": 1.15
+        },
+        "fleet": {
+          "label": "Fleet",
+          "factor": 0.9
+        },
+        "hire": {
+          "label": "Hire/Taxi",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "adverse": {
+          "label": "Adverse",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 25,
+    "claimsHandlingPerClaim": 400,
+    "systemOverheadPerYear": 15,
+    "fraudReservePerClaim": 50,
+    "expectedClaimsPerYear": 0.07,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.28,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "MH",
+  "label": "Motor Int'l — Fleet",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "vehicleValue",
+    "label": "Vehicle Value ($)",
+    "defaultValue": 30000,
+    "hint": "Market value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.015
+  },
+  "ratingFactors": [
+    {
+      "key": "territory",
+      "label": "Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "eu",
+      "options": {
+        "eu": {
+          "label": "EU/EEA",
+          "factor": 1
+        },
+        "middle_east": {
+          "label": "Middle East",
+          "factor": 1.1
+        },
+        "asia": {
+          "label": "Asia",
+          "factor": 1.15
+        },
+        "latam": {
+          "label": "Latin America",
+          "factor": 1.25
+        },
+        "africa": {
+          "label": "Africa",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "vehicleType",
+      "label": "Vehicle Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "car",
+      "options": {
+        "car": {
+          "label": "Private Car",
+          "factor": 1
+        },
+        "lcv": {
+          "label": "LCV/Van",
+          "factor": 1.1
+        },
+        "hgv": {
+          "label": "HGV/Truck",
+          "factor": 1.3
+        },
+        "motorcycle": {
+          "label": "Motorcycle",
+          "factor": 1.2
+        },
+        "specialist": {
+          "label": "Specialist",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "use",
+      "label": "Use",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "private",
+      "options": {
+        "private": {
+          "label": "Private",
+          "factor": 1
+        },
+        "commercial": {
+          "label": "Commercial",
+          "factor": 1.15
+        },
+        "fleet": {
+          "label": "Fleet",
+          "factor": 0.9
+        },
+        "hire": {
+          "label": "Hire/Taxi",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "adverse": {
+          "label": "Adverse",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 25,
+    "claimsHandlingPerClaim": 400,
+    "systemOverheadPerYear": 15,
+    "fraudReservePerClaim": 50,
+    "expectedClaimsPerYear": 0.07,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.28,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "MI",
+  "label": "Motor Int'l — Specialist",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "vehicleValue",
+    "label": "Vehicle Value ($)",
+    "defaultValue": 30000,
+    "hint": "Market value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.025
+  },
+  "ratingFactors": [
+    {
+      "key": "territory",
+      "label": "Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "eu",
+      "options": {
+        "eu": {
+          "label": "EU/EEA",
+          "factor": 1
+        },
+        "middle_east": {
+          "label": "Middle East",
+          "factor": 1.1
+        },
+        "asia": {
+          "label": "Asia",
+          "factor": 1.15
+        },
+        "latam": {
+          "label": "Latin America",
+          "factor": 1.25
+        },
+        "africa": {
+          "label": "Africa",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "vehicleType",
+      "label": "Vehicle Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "car",
+      "options": {
+        "car": {
+          "label": "Private Car",
+          "factor": 1
+        },
+        "lcv": {
+          "label": "LCV/Van",
+          "factor": 1.1
+        },
+        "hgv": {
+          "label": "HGV/Truck",
+          "factor": 1.3
+        },
+        "motorcycle": {
+          "label": "Motorcycle",
+          "factor": 1.2
+        },
+        "specialist": {
+          "label": "Specialist",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "use",
+      "label": "Use",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "private",
+      "options": {
+        "private": {
+          "label": "Private",
+          "factor": 1
+        },
+        "commercial": {
+          "label": "Commercial",
+          "factor": 1.15
+        },
+        "fleet": {
+          "label": "Fleet",
+          "factor": 0.9
+        },
+        "hire": {
+          "label": "Hire/Taxi",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "adverse": {
+          "label": "Adverse",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 25,
+    "claimsHandlingPerClaim": 400,
+    "systemOverheadPerYear": 15,
+    "fraudReservePerClaim": 50,
+    "expectedClaimsPerYear": 0.07,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.28,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "MP",
+  "label": "Motor Int'l — Excess",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "vehicleValue",
+    "label": "Vehicle Value ($)",
+    "defaultValue": 30000,
+    "hint": "Market value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.01
+  },
+  "ratingFactors": [
+    {
+      "key": "territory",
+      "label": "Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "eu",
+      "options": {
+        "eu": {
+          "label": "EU/EEA",
+          "factor": 1
+        },
+        "middle_east": {
+          "label": "Middle East",
+          "factor": 1.1
+        },
+        "asia": {
+          "label": "Asia",
+          "factor": 1.15
+        },
+        "latam": {
+          "label": "Latin America",
+          "factor": 1.25
+        },
+        "africa": {
+          "label": "Africa",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "vehicleType",
+      "label": "Vehicle Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "car",
+      "options": {
+        "car": {
+          "label": "Private Car",
+          "factor": 1
+        },
+        "lcv": {
+          "label": "LCV/Van",
+          "factor": 1.1
+        },
+        "hgv": {
+          "label": "HGV/Truck",
+          "factor": 1.3
+        },
+        "motorcycle": {
+          "label": "Motorcycle",
+          "factor": 1.2
+        },
+        "specialist": {
+          "label": "Specialist",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "use",
+      "label": "Use",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "private",
+      "options": {
+        "private": {
+          "label": "Private",
+          "factor": 1
+        },
+        "commercial": {
+          "label": "Commercial",
+          "factor": 1.15
+        },
+        "fleet": {
+          "label": "Fleet",
+          "factor": 0.9
+        },
+        "hire": {
+          "label": "Hire/Taxi",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "adverse": {
+          "label": "Adverse",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 25,
+    "claimsHandlingPerClaim": 400,
+    "systemOverheadPerYear": 15,
+    "fraudReservePerClaim": 50,
+    "expectedClaimsPerYear": 0.07,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.28,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

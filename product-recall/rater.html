@@ -52,14 +52,175 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/PB.json'
+  var schemas = [
+{
+  "riskCode": "PB",
+  "label": "Product Recall",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "annualRevenue",
+    "label": "Annual Revenue (£)",
+    "defaultValue": 50000000,
+    "hint": "Revenue of insured manufacturer"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.0015
+  },
+  "ratingFactors": [
+    {
+      "key": "industry",
+      "label": "Industry Sector",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "food",
+      "options": {
+        "food": {
+          "label": "Food & Beverage",
+          "factor": 1
+        },
+        "pharma": {
+          "label": "Pharmaceutical",
+          "factor": 1.3
+        },
+        "automotive": {
+          "label": "Automotive",
+          "factor": 1.2
+        },
+        "consumer": {
+          "label": "Consumer Goods",
+          "factor": 0.9
+        },
+        "industrial": {
+          "label": "Industrial Products",
+          "factor": 0.8
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "haccp",
+      "label": "Food Safety System",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "certified",
+      "options": {
+        "certified": {
+          "label": "HACCP/BRC Certified",
+          "factor": 0.8
+        },
+        "partial": {
+          "label": "Partial Compliance",
+          "factor": 1
+        },
+        "none": {
+          "label": "No Certification",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "distribution",
+      "label": "Distribution Reach",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "national",
+      "options": {
+        "local": {
+          "label": "Local/Regional",
+          "factor": 0.75
+        },
+        "national": {
+          "label": "National",
+          "factor": 1
+        },
+        "international": {
+          "label": "International",
+          "factor": 1.2
+        },
+        "global": {
+          "label": "Global",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "recallHistory",
+      "label": "Prior Recalls (5yr)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 0,
+      "bands": [
+        {
+          "min": 0,
+          "max": 1,
+          "factor": 0.85
+        },
+        {
+          "min": 1,
+          "max": 3,
+          "factor": 1
+        },
+        {
+          "min": 3,
+          "max": 5,
+          "factor": 1.3
+        },
+        {
+          "min": 5,
+          "max": 99,
+          "factor": 1.7
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "coverScope",
+      "label": "Coverage Scope",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "basic": {
+          "label": "Recall Costs Only",
+          "factor": 0.7
+        },
+        "standard": {
+          "label": "Recall + BI",
+          "factor": 1
+        },
+        "broad": {
+          "label": "Recall + BI + 3rd Party",
+          "factor": 1.25
+        },
+        "comprehensive": {
+          "label": "All Perils incl. Contamination",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 3000,
+    "claimsHandlingPerClaim": 20000,
+    "systemOverheadPerYear": 1500,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.02,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

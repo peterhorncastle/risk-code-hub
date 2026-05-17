@@ -54,12 +54,100 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = ['rate-tables/WA.json'];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
-  });
+  var schemas = [
+{
+  "riskCode": "WA",
+  "label": "Extended Warranty — Electronic Devices",
+  "modelType": "frequency-severity",
+  "currency": "GBP",
+  "baseFrequency": 0.055,
+  "baseSeverity": 190,
+  "ratingFactors": [
+    {
+      "key": "deviceCategory",
+      "label": "Device Category",
+      "type": "categorical",
+      "appliesTo": "frequency",
+      "defaultValue": "smartphone",
+      "hint": "Type of device being covered",
+      "options": {
+        "smartphone":     { "label": "Smartphone",      "factor": 1.45 },
+        "tablet":         { "label": "Tablet",          "factor": 0.91 },
+        "laptop":         { "label": "Laptop / PC",     "factor": 1.09 },
+        "tv_av":          { "label": "TV / AV",         "factor": 0.64 },
+        "white_goods":    { "label": "White Goods",     "factor": 0.91 },
+        "gaming_console": { "label": "Gaming Console",  "factor": 1.09 },
+        "hvac":           { "label": "HVAC / Home",     "factor": 1.00 }
+      }
+    },
+    {
+      "key": "brandTier",
+      "label": "Brand Reliability Tier",
+      "type": "categorical",
+      "appliesTo": "frequency",
+      "defaultValue": "mid",
+      "options": {
+        "high": { "label": "High Reliability", "factor": 0.75 },
+        "mid":  { "label": "Mid Reliability",  "factor": 1.00 },
+        "low":  { "label": "Low Reliability",  "factor": 1.30 }
+      }
+    },
+    {
+      "key": "deviceAge",
+      "label": "Device Age (days)",
+      "type": "band",
+      "appliesTo": "frequency",
+      "defaultValue": 0,
+      "hint": "Days since purchase at policy inception",
+      "bands": [
+        { "min": 0,   "max": 30,  "label": "New (0-30 days)",  "factor": 1.00 },
+        { "min": 31,  "max": 90,  "label": "31-90 days",       "factor": 1.10 },
+        { "min": 91,  "max": 180, "label": "91-180 days",      "factor": 1.20 },
+        { "min": 181, "max": 365, "label": "181-365 days",     "factor": 1.40 }
+      ]
+    },
+    {
+      "key": "accidentalDamage",
+      "label": "Accidental Damage Cover",
+      "type": "categorical",
+      "appliesTo": "frequency",
+      "defaultValue": "excluded",
+      "options": {
+        "included": { "label": "Included", "factor": 1.80 },
+        "excluded": { "label": "Excluded", "factor": 1.00 }
+      }
+    },
+    {
+      "key": "devicePrice",
+      "label": "Device Price (£)",
+      "type": "band",
+      "appliesTo": "severity",
+      "defaultValue": 800,
+      "hint": "Original retail price of device",
+      "bands": [
+        { "min": 0,    "max": 250,   "label": "Under £250",      "factor": 0.85 },
+        { "min": 250,  "max": 500,   "label": "£250-500",        "factor": 1.00 },
+        { "min": 500,  "max": 1000,  "label": "£500-1000",       "factor": 1.10 },
+        { "min": 1000, "max": 2000,  "label": "£1000-2000",      "factor": 1.25 },
+        { "min": 2000, "max": 99999, "label": "Over £2000",      "factor": 1.40 }
+      ]
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 6.00,
+    "claimsHandlingPerClaim": 18.00,
+    "systemOverheadPerYear": 3.00,
+    "fraudReservePerClaim": 8.00,
+    "obsolescenceRate": 0.008
+  },
+  "variableCosts": {
+    "commissionRate": 0.30,
+    "reinsuranceRate": 0.02
+  },
+  "targetProfitMargin": 0.05
+}
+  ];
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

@@ -53,14 +53,137 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/DC.json'
+  var schemas = [
+{
+  "riskCode": "DC",
+  "label": "Difference in Conditions",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "tiv",
+    "label": "TIV (£)",
+    "defaultValue": 50000000,
+    "hint": "Total insured value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.0008
+  },
+  "ratingFactors": [
+    {
+      "key": "primaryProgramme",
+      "label": "Primary Programme Origin",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "local",
+      "options": {
+        "master": {
+          "label": "Master Programme (controlled)",
+          "factor": 0.85
+        },
+        "local": {
+          "label": "Local Market Programme",
+          "factor": 1
+        },
+        "freedom": {
+          "label": "Freedom of Service",
+          "factor": 1.05
+        },
+        "non_admitted": {
+          "label": "Non-Admitted",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "gapRisk",
+      "label": "DIC/DIL Gap Risk",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "moderate",
+      "options": {
+        "narrow": {
+          "label": "Narrow (minor differences)",
+          "factor": 0.8
+        },
+        "moderate": {
+          "label": "Moderate",
+          "factor": 1
+        },
+        "wide": {
+          "label": "Wide (significant gaps)",
+          "factor": 1.25
+        },
+        "unknown": {
+          "label": "Unknown/Unconfirmed",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "territory",
+      "label": "Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "international",
+      "options": {
+        "eu": {
+          "label": "EU (adequate regulation)",
+          "factor": 0.9
+        },
+        "international": {
+          "label": "International",
+          "factor": 1
+        },
+        "developing": {
+          "label": "Developing Markets",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "propertyType",
+      "label": "Property Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "commercial",
+      "options": {
+        "commercial": {
+          "label": "Commercial",
+          "factor": 1
+        },
+        "industrial": {
+          "label": "Industrial",
+          "factor": 1.1
+        },
+        "special": {
+          "label": "Special/Complex",
+          "factor": 1.2
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 3000,
+    "claimsHandlingPerClaim": 15000,
+    "systemOverheadPerYear": 1500,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.02,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

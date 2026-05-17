@@ -53,19 +53,641 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/H2.json',
-    'rate-tables/H3.json',
-    'rate-tables/L2.json',
-    'rate-tables/L3.json',
-    'rate-tables/AO.json',
-    'rate-tables/AP.json'
+  var schemas = [
+{
+  "riskCode": "H2",
+  "label": "Airline Hull — All Risks",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "fleetValue",
+    "label": "Total Fleet Agreed Value ($)",
+    "defaultValue": 3200000000,
+    "hint": "Aggregate agreed value of all insured aircraft"
+  },
+  "baseRate": {
+    "key": "baseROL",
+    "label": "Base Rate on Line (%)",
+    "value": 0.0030
+  },
+  "ratingFactors": [
+    {
+      "key": "fleetType",
+      "label": "Fleet Composition",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "narrow_body",
+      "hint": "Primary aircraft type in fleet",
+      "options": {
+        "wide_body":    { "label": "Wide Body (777/787/A350)", "factor": 0.85 },
+        "narrow_body":  { "label": "Narrow Body (737/A320)",   "factor": 1.00 },
+        "regional_jet": { "label": "Regional Jet (E-Jet/CRJ)", "factor": 1.15 },
+        "turboprop":    { "label": "Turboprop (ATR/Dash)",     "factor": 1.25 },
+        "helicopter":   { "label": "Helicopter",               "factor": 2.00 },
+        "piston_ga":    { "label": "Piston GA",                "factor": 2.50 }
+      }
+    },
+    {
+      "key": "fleetAge",
+      "label": "Average Fleet Age (years)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 8,
+      "hint": "Weighted average age of fleet",
+      "bands": [
+        { "min": 0,  "max": 5,  "label": "New (<5 yrs)",     "factor": 0.90 },
+        { "min": 5,  "max": 10, "label": "Mid (5-10 yrs)",   "factor": 1.00 },
+        { "min": 10, "max": 15, "label": "Mature (10-15 yrs)", "factor": 1.10 },
+        { "min": 15, "max": 20, "label": "Ageing (15-20 yrs)", "factor": 1.25 },
+        { "min": 20, "max": 50, "label": "Old (>20 yrs)",    "factor": 1.50 }
+      ]
+    },
+    {
+      "key": "safetyRating",
+      "label": "Safety / IOSA Status",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "iosa_certified",
+      "options": {
+        "iosa_certified":  { "label": "IOSA Certified (current)", "factor": 0.90 },
+        "bars_argus":      { "label": "BARS / ARGUS rated",       "factor": 0.95 },
+        "standard":        { "label": "Regulatory minimum only",  "factor": 1.00 },
+        "elevated_risk":   { "label": "Elevated Risk / findings", "factor": 1.30 },
+        "eu_banned":       { "label": "EU Air Safety List",       "factor": 2.00 }
+      }
+    },
+    {
+      "key": "lossHistory",
+      "label": "5-Year Loss Ratio (%)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 25,
+      "hint": "Average hull loss ratio over past 5 years",
+      "bands": [
+        { "min": 0,   "max": 20,  "label": "Excellent (<20%)",  "factor": 0.80 },
+        { "min": 20,  "max": 40,  "label": "Good (20-40%)",     "factor": 0.90 },
+        { "min": 40,  "max": 60,  "label": "Average (40-60%)",  "factor": 1.00 },
+        { "min": 60,  "max": 80,  "label": "Poor (60-80%)",     "factor": 1.20 },
+        { "min": 80,  "max": 120, "label": "Very Poor (80-120%)", "factor": 1.50 },
+        { "min": 120, "max": 999, "label": "Catastrophic (>120%)", "factor": 2.00 }
+      ]
+    },
+    {
+      "key": "routeRisk",
+      "label": "Route Network Risk",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "hint": "Primary operating environment",
+      "options": {
+        "low_risk":       { "label": "Developed markets only",     "factor": 0.90 },
+        "standard":       { "label": "Standard international",     "factor": 1.00 },
+        "challenging":    { "label": "Challenging terrain/airports", "factor": 1.15 },
+        "conflict_zone":  { "label": "Conflict zone transit",      "factor": 1.35 }
+      }
+    },
+    {
+      "key": "deductible",
+      "label": "Hull Deductible ($)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 1000000,
+      "hint": "Per occurrence deductible",
+      "bands": [
+        { "min": 0,       "max": 500000,   "label": "<$500k",    "factor": 1.10 },
+        { "min": 500000,  "max": 2000000,  "label": "$500k-$2m", "factor": 1.00 },
+        { "min": 2000000, "max": 5000000,  "label": "$2m-$5m",   "factor": 0.90 },
+        { "min": 5000000, "max": 20000000, "label": "$5m-$20m",  "factor": 0.80 },
+        { "min": 20000000,"max": 999999999,"label": ">$20m",     "factor": 0.65 }
+      ]
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 15000,
+    "claimsHandlingPerClaim": 75000,
+    "systemOverheadPerYear": 8000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.20,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "H3",
+  "label": "General Aviation Hull",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "agreedValue",
+    "label": "Aircraft Agreed Value ($)",
+    "defaultValue": 5000000,
+    "hint": "Agreed value of individual aircraft or fleet"
+  },
+  "baseRate": {
+    "key": "baseROL",
+    "label": "Base Rate on Line (%)",
+    "value": 0.012
+  },
+  "ratingFactors": [
+    {
+      "key": "aircraftType",
+      "label": "Aircraft Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "corporate_jet",
+      "options": {
+        "corporate_jet":   { "label": "Corporate Jet (Citation/Gulfstream)", "factor": 0.75 },
+        "turboprop_single":{ "label": "Turboprop Single (King Air)",         "factor": 1.00 },
+        "piston_single":   { "label": "Piston Single Engine",                "factor": 1.20 },
+        "piston_twin":     { "label": "Piston Twin Engine",                  "factor": 1.10 },
+        "helicopter_light":{ "label": "Light Helicopter",                    "factor": 1.50 },
+        "helicopter_medium":{ "label": "Medium Helicopter (offshore)",       "factor": 1.30 },
+        "uav_commercial":  { "label": "Commercial UAV/Drone",                "factor": 1.80 }
+      }
+    },
+    {
+      "key": "pilotExperience",
+      "label": "Pilot Experience",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "experienced",
+      "options": {
+        "atp_5000":    { "label": "ATP 5000+ hours",        "factor": 0.80 },
+        "experienced": { "label": "1000-5000 hours",        "factor": 1.00 },
+        "moderate":    { "label": "500-1000 hours",         "factor": 1.20 },
+        "low_time":    { "label": "<500 hours",             "factor": 1.50 },
+        "student":     { "label": "Student / PPL training", "factor": 2.00 }
+      }
+    },
+    {
+      "key": "aircraftAge",
+      "label": "Aircraft Age (years)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 8,
+      "bands": [
+        { "min": 0,  "max": 5,  "factor": 0.90 },
+        { "min": 5,  "max": 15, "factor": 1.00 },
+        { "min": 15, "max": 25, "factor": 1.20 },
+        { "min": 25, "max": 50, "factor": 1.50 }
+      ]
+    },
+    {
+      "key": "useType",
+      "label": "Use Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "private",
+      "options": {
+        "private":         { "label": "Private / Owner flown",  "factor": 1.00 },
+        "corporate":       { "label": "Corporate (pro pilots)", "factor": 0.85 },
+        "charter":         { "label": "Charter / Air Taxi",     "factor": 1.15 },
+        "flight_training": { "label": "Flight Training",        "factor": 1.60 },
+        "aerial_work":     { "label": "Aerial Work / Survey",   "factor": 1.30 }
+      }
+    },
+    {
+      "key": "territory",
+      "label": "Operating Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "developed",
+      "options": {
+        "developed":    { "label": "Developed (US/EU/Aus)",  "factor": 1.00 },
+        "mixed":        { "label": "Mixed territories",      "factor": 1.10 },
+        "challenging":  { "label": "Challenging (mountain/remote)", "factor": 1.25 },
+        "high_risk":    { "label": "High risk regions",      "factor": 1.50 }
+      }
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 2000,
+    "claimsHandlingPerClaim": 15000,
+    "systemOverheadPerYear": 1000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.04,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "L2",
+  "label": "Airline Liability — CSL",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "seatDepartures",
+    "label": "Annual Seat Departures",
+    "defaultValue": 15000000,
+    "hint": "Fleet seats × annual departures per aircraft"
+  },
+  "baseRate": {
+    "key": "baseRatePerSeat",
+    "label": "Base Rate per Seat Departure ($)",
+    "value": 0.035
+  },
+  "ratingFactors": [
+    {
+      "key": "cslLimit",
+      "label": "CSL Limit Purchased",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "1_5bn",
+      "hint": "Combined Single Limit for all third-party claims",
+      "options": {
+        "500m":  { "label": "$500m CSL",  "factor": 0.65 },
+        "750m":  { "label": "$750m CSL",  "factor": 0.80 },
+        "1bn":   { "label": "$1bn CSL",   "factor": 1.00 },
+        "1_5bn": { "label": "$1.5bn CSL", "factor": 1.25 },
+        "2bn":   { "label": "$2bn CSL",   "factor": 1.50 },
+        "2_5bn": { "label": "$2.5bn CSL", "factor": 1.75 }
+      }
+    },
+    {
+      "key": "routeType",
+      "label": "Route Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "international",
+      "hint": "Jurisdiction exposure from route network",
+      "options": {
+        "domestic_non_us": { "label": "Domestic (non-US)",      "factor": 0.80 },
+        "intra_eu":        { "label": "Intra-EU",               "factor": 0.90 },
+        "international":   { "label": "International standard", "factor": 1.00 },
+        "us_domestic":     { "label": "US Domestic",            "factor": 1.30 },
+        "us_international":{ "label": "US International",       "factor": 1.20 }
+      }
+    },
+    {
+      "key": "seatConfig",
+      "label": "Average Seats per Aircraft",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 180,
+      "hint": "Average seat count across fleet",
+      "bands": [
+        { "min": 0,   "max": 50,  "label": "Small (<50 seats)",     "factor": 0.70 },
+        { "min": 50,  "max": 100, "label": "Regional (50-100)",     "factor": 0.85 },
+        { "min": 100, "max": 180, "label": "Standard NB (100-180)", "factor": 1.00 },
+        { "min": 180, "max": 250, "label": "Large NB (180-250)",    "factor": 1.10 },
+        { "min": 250, "max": 400, "label": "Wide Body (250-400)",   "factor": 1.25 },
+        { "min": 400, "max": 999, "label": "Super Heavy (400+)",    "factor": 1.40 }
+      ]
+    },
+    {
+      "key": "safetyRecord",
+      "label": "Operator Safety Record",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "good",
+      "options": {
+        "excellent": { "label": "Excellent (zero incidents 10yr)", "factor": 0.80 },
+        "good":      { "label": "Good (IOSA, minor only)",         "factor": 0.90 },
+        "standard":  { "label": "Standard",                        "factor": 1.00 },
+        "concerns":  { "label": "Concerns (incidents noted)",      "factor": 1.25 },
+        "poor":      { "label": "Poor (fatal accidents in window)", "factor": 1.60 }
+      }
+    },
+    {
+      "key": "cargoExposure",
+      "label": "Cargo Operations",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "belly_only",
+      "hint": "Extent of cargo operations",
+      "options": {
+        "passenger_only": { "label": "Passenger only (no cargo)", "factor": 0.90 },
+        "belly_only":     { "label": "Belly cargo only",          "factor": 1.00 },
+        "combi_freighter":{ "label": "Combi / dedicated freighter","factor": 1.15 },
+        "dg_specialist":  { "label": "DG / hazmat specialist",    "factor": 1.30 }
+      }
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 12000,
+    "claimsHandlingPerClaim": 100000,
+    "systemOverheadPerYear": 5000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.01,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.20,
+    "reinsuranceRate": 0.08
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "L3",
+  "label": "GA / Corporate Liability",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "cslLimit",
+    "label": "CSL Limit Required ($)",
+    "defaultValue": 100000000,
+    "hint": "Combined Single Limit for liability coverage"
+  },
+  "baseRate": {
+    "key": "baseRateOnLimit",
+    "label": "Base Rate on Limit",
+    "value": 0.0025
+  },
+  "ratingFactors": [
+    {
+      "key": "aircraftType",
+      "label": "Aircraft Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "corporate_jet",
+      "options": {
+        "corporate_jet":    { "label": "Corporate Jet",          "factor": 0.85 },
+        "turboprop":        { "label": "Turboprop",              "factor": 1.00 },
+        "piston":           { "label": "Piston (single/twin)",   "factor": 1.10 },
+        "helicopter":       { "label": "Helicopter",             "factor": 1.30 },
+        "uav":              { "label": "UAV / Drone",            "factor": 1.50 }
+      }
+    },
+    {
+      "key": "passengerSeats",
+      "label": "Passenger Seats",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 8,
+      "bands": [
+        { "min": 0,  "max": 4,   "factor": 0.70 },
+        { "min": 4,  "max": 10,  "factor": 1.00 },
+        { "min": 10, "max": 20,  "factor": 1.20 },
+        { "min": 20, "max": 50,  "factor": 1.40 },
+        { "min": 50, "max": 100, "factor": 1.60 }
+      ]
+    },
+    {
+      "key": "annualHours",
+      "label": "Annual Flying Hours",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 400,
+      "hint": "Total annual flight hours",
+      "bands": [
+        { "min": 0,    "max": 200,  "factor": 0.80 },
+        { "min": 200,  "max": 500,  "factor": 1.00 },
+        { "min": 500,  "max": 1000, "factor": 1.15 },
+        { "min": 1000, "max": 5000, "factor": 1.30 }
+      ]
+    },
+    {
+      "key": "useType",
+      "label": "Use Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "corporate",
+      "options": {
+        "private":       { "label": "Private non-commercial",  "factor": 0.90 },
+        "corporate":     { "label": "Corporate transport",     "factor": 1.00 },
+        "charter":       { "label": "Charter / air taxi",      "factor": 1.20 },
+        "training":      { "label": "Flight training",         "factor": 1.50 },
+        "aerial_work":   { "label": "Aerial work / survey",    "factor": 1.25 }
+      }
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Primary Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "international",
+      "options": {
+        "non_us":        { "label": "Non-US only",        "factor": 0.85 },
+        "international": { "label": "International/mixed","factor": 1.00 },
+        "us_included":   { "label": "US routes included", "factor": 1.25 }
+      }
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 1500,
+    "claimsHandlingPerClaim": 20000,
+    "systemOverheadPerYear": 800,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.02,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "AO",
+  "label": "Aviation Products Liability",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "productsExposure",
+    "label": "Products Exposure Base ($)",
+    "defaultValue": 500000000,
+    "hint": "Fleet-in-service value × risk factor + deliveries exposure"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate on Exposure",
+    "value": 0.0008
+  },
+  "ratingFactors": [
+    {
+      "key": "productCriticality",
+      "label": "Product Criticality",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "flight_critical",
+      "hint": "Criticality of manufactured component",
+      "options": {
+        "flight_critical": { "label": "Flight Critical (engines, flight controls)", "factor": 1.50 },
+        "major":           { "label": "Major Systems (landing gear, avionics)",     "factor": 1.20 },
+        "minor":           { "label": "Minor Systems (cabin, galley, IFE)",         "factor": 0.70 },
+        "ground_support":  { "label": "Ground Support Equipment",                   "factor": 0.50 }
+      }
+    },
+    {
+      "key": "fleetInService",
+      "label": "Units in Service",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 5000,
+      "hint": "Number of aircraft/units in active service with this product",
+      "bands": [
+        { "min": 0,     "max": 100,   "factor": 0.70 },
+        { "min": 100,   "max": 1000,  "factor": 0.85 },
+        { "min": 1000,  "max": 5000,  "factor": 1.00 },
+        { "min": 5000,  "max": 15000, "factor": 1.15 },
+        { "min": 15000, "max": 99999, "factor": 1.30 }
+      ]
+    },
+    {
+      "key": "groundingSublimit",
+      "label": "Grounding Sublimit",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "hint": "Sub-limit for fleet grounding losses",
+      "options": {
+        "excluded":  { "label": "Grounding excluded",     "factor": 0.75 },
+        "sublimited":{ "label": "Sublimited ($100m)",     "factor": 0.90 },
+        "standard":  { "label": "Standard ($250m)",       "factor": 1.00 },
+        "full":      { "label": "Full limit ($500m+)",    "factor": 1.25 }
+      }
+    },
+    {
+      "key": "lossHistory",
+      "label": "Products Loss History (10yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean":        { "label": "No claims / minor only",     "factor": 0.85 },
+        "attritional":  { "label": "Attritional claims only",    "factor": 1.00 },
+        "significant":  { "label": "Significant claim history",  "factor": 1.40 },
+        "catastrophic": { "label": "Catastrophic loss (MAX-type)", "factor": 2.00 }
+      }
+    },
+    {
+      "key": "qualitySystem",
+      "label": "Quality / Certification",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "oem_certified",
+      "options": {
+        "oem_certified":   { "label": "OEM / Part 21 Design Org",  "factor": 0.90 },
+        "part145_approved":{ "label": "Part 145 MRO approved",      "factor": 1.00 },
+        "pma_supplier":    { "label": "PMA parts supplier",         "factor": 1.15 },
+        "non_certified":   { "label": "Non-certified / DER repairs","factor": 1.40 }
+      }
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 25000,
+    "claimsHandlingPerClaim": 250000,
+    "systemOverheadPerYear": 10000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.005,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.18,
+    "reinsuranceRate": 0.10
+  },
+  "targetProfitMargin": 0.05
+},
+{
+  "riskCode": "AP",
+  "label": "Airport Owners & Operators Liability",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "annualPassengers",
+    "label": "Annual Passenger Throughput",
+    "defaultValue": 30000000,
+    "hint": "Total annual passenger movements"
+  },
+  "baseRate": {
+    "key": "ratePerPax",
+    "label": "Base Rate per 1000 Passengers ($)",
+    "value": 0.0000012
+  },
+  "ratingFactors": [
+    {
+      "key": "airportCategory",
+      "label": "Airport Category",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "international_hub",
+      "options": {
+        "international_hub": { "label": "International Hub (>40m pax)", "factor": 1.20 },
+        "major_international":{ "label": "Major International (15-40m)", "factor": 1.00 },
+        "regional":          { "label": "Regional (5-15m pax)",         "factor": 0.85 },
+        "domestic_small":    { "label": "Small Domestic (<5m pax)",     "factor": 0.70 },
+        "cargo_hub":         { "label": "Cargo Hub (DHL/FedEx)",        "factor": 1.10 }
+      }
+    },
+    {
+      "key": "groundHandling",
+      "label": "Ground Handling Scope",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "third_party",
+      "hint": "Who provides ground handling services",
+      "options": {
+        "self_handle":  { "label": "Self-handling (all services)",   "factor": 1.25 },
+        "partial":      { "label": "Partial (fuelling only)",        "factor": 1.10 },
+        "third_party":  { "label": "Third-party handlers licensed",  "factor": 1.00 },
+        "minimal":      { "label": "Minimal ground ops",             "factor": 0.85 }
+      }
+    },
+    {
+      "key": "cslLevel",
+      "label": "CSL Limit",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "1bn",
+      "options": {
+        "250m": { "label": "$250m CSL",  "factor": 0.60 },
+        "500m": { "label": "$500m CSL",  "factor": 0.80 },
+        "1bn":  { "label": "$1bn CSL",   "factor": 1.00 },
+        "1_5bn":{ "label": "$1.5bn CSL", "factor": 1.20 },
+        "2bn":  { "label": "$2bn CSL",   "factor": 1.40 }
+      }
+    },
+    {
+      "key": "dgHandling",
+      "label": "Dangerous Goods Operations",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "none":     { "label": "No DG handling",          "factor": 0.85 },
+        "standard": { "label": "Standard DG (IATA DGR)", "factor": 1.00 },
+        "heavy":    { "label": "Heavy DG / fuel farm",    "factor": 1.20 },
+        "military": { "label": "Military / munitions",    "factor": 1.50 }
+      }
+    },
+    {
+      "key": "lossHistory",
+      "label": "Loss History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean":       { "label": "Clean (no claims)",          "factor": 0.85 },
+        "attritional": { "label": "Attritional only",           "factor": 1.00 },
+        "notable":     { "label": "Notable incidents",          "factor": 1.25 },
+        "major":       { "label": "Major loss (>$10m claim)",   "factor": 1.60 }
+      }
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 8000,
+    "claimsHandlingPerClaim": 40000,
+    "systemOverheadPerYear": 4000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.20,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

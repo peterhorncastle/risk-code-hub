@@ -53,14 +53,157 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/W3.json'
+  var schemas = [
+{
+  "riskCode": "W3",
+  "label": "Employers Liability — UK",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "annualWages",
+    "label": "Annual Wage Roll (£)",
+    "defaultValue": 10000000,
+    "hint": "Total annual payroll"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.002
+  },
+  "ratingFactors": [
+    {
+      "key": "industry",
+      "label": "Industry",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "commercial",
+      "options": {
+        "office": {
+          "label": "Office/Professional",
+          "factor": 0.6
+        },
+        "commercial": {
+          "label": "Commercial/Retail",
+          "factor": 1
+        },
+        "manufacturing": {
+          "label": "Manufacturing",
+          "factor": 1.3
+        },
+        "construction": {
+          "label": "Construction",
+          "factor": 1.6
+        },
+        "heavy_industry": {
+          "label": "Heavy Industry/Mining",
+          "factor": 2
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "employees",
+      "label": "Employee Count",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 200,
+      "bands": [
+        {
+          "min": 0,
+          "max": 50,
+          "factor": 0.85
+        },
+        {
+          "min": 50,
+          "max": 200,
+          "factor": 1
+        },
+        {
+          "min": 200,
+          "max": 1000,
+          "factor": 1.1
+        },
+        {
+          "min": 1000,
+          "max": 99999,
+          "factor": 1.2
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "safetyRecord",
+      "label": "Safety Record",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "good",
+      "options": {
+        "excellent": {
+          "label": "Excellent (zero RIDDOR 5yr)",
+          "factor": 0.8
+        },
+        "good": {
+          "label": "Good",
+          "factor": 0.9
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "concerns": {
+          "label": "HSE concerns/notices",
+          "factor": 1.25
+        },
+        "prosecution": {
+          "label": "HSE prosecution",
+          "factor": 1.6
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "minor": {
+          "label": "Minor bodily injury",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material claims",
+          "factor": 1.25
+        },
+        "disease": {
+          "label": "Disease claims (asbestos/noise)",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 1500,
+    "claimsHandlingPerClaim": 10000,
+    "systemOverheadPerYear": 800,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.04,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.28,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>

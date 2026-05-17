@@ -53,14 +53,137 @@
 <script src="../shared/rater-ui.js"></script>
 <script>
 (function () {
-  var schemaFiles = [
-    'rate-tables/LE.json'
+  var schemas = [
+{
+  "riskCode": "LE",
+  "label": "Legal Expenses Insurance",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "policyLimit",
+    "label": "Policy Limit (£)",
+    "defaultValue": 100000,
+    "hint": "Legal costs limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.01
+  },
+  "ratingFactors": [
+    {
+      "key": "clientType",
+      "label": "Client Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "sme",
+      "options": {
+        "individual": {
+          "label": "Individual/Consumer",
+          "factor": 0.8
+        },
+        "sme": {
+          "label": "SME",
+          "factor": 1
+        },
+        "corporate": {
+          "label": "Corporate",
+          "factor": 1.1
+        },
+        "commercial": {
+          "label": "Commercial Fleet/Block",
+          "factor": 0.9
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "coverScope",
+      "label": "Coverage Scope",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "employment": {
+          "label": "Employment Only",
+          "factor": 0.75
+        },
+        "standard": {
+          "label": "Standard (employment + contract + property)",
+          "factor": 1
+        },
+        "comprehensive": {
+          "label": "Comprehensive (all disputes)",
+          "factor": 1.25
+        },
+        "commercial": {
+          "label": "Commercial Disputes",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "territory",
+      "label": "Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "uk": {
+          "label": "UK",
+          "factor": 1
+        },
+        "eu": {
+          "label": "EU",
+          "factor": 1.05
+        },
+        "international": {
+          "label": "International",
+          "factor": 1.2
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "frequent": {
+          "label": "Frequent",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 200,
+    "claimsHandlingPerClaim": 2000,
+    "systemOverheadPerYear": 100,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.06,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.3,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+}
   ];
-  Promise.all(schemaFiles.map(function (f) {
-    return fetch(f).then(function (r) { return r.json(); });
-  })).then(function (schemas) {
-    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
-  });
+  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
 })();
 </script>
 </body>
