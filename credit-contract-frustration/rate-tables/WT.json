@@ -1,0 +1,140 @@
+{
+  "riskCode": "WT",
+  "label": "Whole Turnover Credit",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "creditExposure",
+    "label": "Credit Exposure ($)",
+    "defaultValue": 50000000,
+    "hint": "Total credit limit/contract value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.003
+  },
+  "ratingFactors": [
+    {
+      "key": "buyerRating",
+      "label": "Buyer/Debtor Rating",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "investment_grade",
+      "options": {
+        "aaa_aa": {
+          "label": "AAA-AA",
+          "factor": 0.6
+        },
+        "investment_grade": {
+          "label": "Investment Grade (A-BBB)",
+          "factor": 1
+        },
+        "sub_ig": {
+          "label": "Sub-IG (BB-B)",
+          "factor": 1.5
+        },
+        "unrated": {
+          "label": "Unrated",
+          "factor": 1.3
+        },
+        "distressed": {
+          "label": "Distressed (CCC+)",
+          "factor": 2.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "territory",
+      "label": "Buyer Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "developed",
+      "options": {
+        "developed": {
+          "label": "Developed (OECD)",
+          "factor": 0.85
+        },
+        "emerging": {
+          "label": "Emerging",
+          "factor": 1
+        },
+        "frontier": {
+          "label": "Frontier",
+          "factor": 1.2
+        },
+        "high_risk": {
+          "label": "High Risk",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "sector",
+      "label": "Industry Sector",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "general",
+      "options": {
+        "general": {
+          "label": "General Commercial",
+          "factor": 1
+        },
+        "construction": {
+          "label": "Construction",
+          "factor": 1.2
+        },
+        "commodities": {
+          "label": "Commodities/Trading",
+          "factor": 1.15
+        },
+        "technology": {
+          "label": "Technology",
+          "factor": 1.05
+        },
+        "retail": {
+          "label": "Retail",
+          "factor": 1.1
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "tenor",
+      "label": "Credit Tenor",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "short",
+      "options": {
+        "short": {
+          "label": "Short-term (<1yr)",
+          "factor": 1
+        },
+        "medium": {
+          "label": "Medium (1-3yr)",
+          "factor": 1.15
+        },
+        "long": {
+          "label": "Long-term (3-7yr)",
+          "factor": 1.35
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 3000,
+    "claimsHandlingPerClaim": 20000,
+    "systemOverheadPerYear": 1500,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.02,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.2,
+    "reinsuranceRate": 0.08
+  },
+  "targetProfitMargin": 0.05
+}

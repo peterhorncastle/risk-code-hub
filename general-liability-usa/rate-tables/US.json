@@ -1,0 +1,170 @@
+{
+  "riskCode": "US",
+  "label": "GL USA — Surplus Lines",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "policyLimit",
+    "label": "Policy Limit ($)",
+    "defaultValue": 5000000,
+    "hint": "GL limit of liability"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.006
+  },
+  "ratingFactors": [
+    {
+      "key": "sector",
+      "label": "Industry Sector",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "general",
+      "options": {
+        "manufacturing": {
+          "label": "Manufacturing",
+          "factor": 1.1
+        },
+        "construction": {
+          "label": "Construction",
+          "factor": 1.3
+        },
+        "retail": {
+          "label": "Retail/Hospitality",
+          "factor": 1.15
+        },
+        "general": {
+          "label": "General Commercial",
+          "factor": 1
+        },
+        "professional": {
+          "label": "Professional Services",
+          "factor": 0.85
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "revenue",
+      "label": "Annual Revenue ($m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 50,
+      "bands": [
+        {
+          "min": 0,
+          "max": 10,
+          "factor": 0.8
+        },
+        {
+          "min": 10,
+          "max": 50,
+          "factor": 1
+        },
+        {
+          "min": 50,
+          "max": 200,
+          "factor": 1.1
+        },
+        {
+          "min": 200,
+          "max": 99999,
+          "factor": 1.25
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "jurisdiction",
+      "label": "US Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "mixed",
+      "options": {
+        "favorable": {
+          "label": "Favorable (Delaware/VA)",
+          "factor": 0.85
+        },
+        "mixed": {
+          "label": "Mixed/National",
+          "factor": 1
+        },
+        "adverse": {
+          "label": "Adverse (NY/CA/FL)",
+          "factor": 1.2
+        },
+        "judicial_hellhole": {
+          "label": "Judicial Hellhole",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "attritional": {
+          "label": "Attritional only",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material claim",
+          "factor": 1.25
+        },
+        "poor": {
+          "label": "Poor/litigious",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "products",
+      "label": "Products Exposure",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "low",
+      "options": {
+        "none": {
+          "label": "None/minimal",
+          "factor": 0.8
+        },
+        "low": {
+          "label": "Low",
+          "factor": 1
+        },
+        "moderate": {
+          "label": "Moderate",
+          "factor": 1.15
+        },
+        "high": {
+          "label": "High (consumer-facing)",
+          "factor": 1.35
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 3000,
+    "claimsHandlingPerClaim": 20000,
+    "systemOverheadPerYear": 1500,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.04,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

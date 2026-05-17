@@ -1,0 +1,174 @@
+{
+  "riskCode": "D2",
+  "label": "D&O — Side B",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "towerLimit",
+    "label": "Tower Limit ($)",
+    "defaultValue": 25000000,
+    "hint": "D&O limit of indemnity"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.006
+  },
+  "ratingFactors": [
+    {
+      "key": "companyType",
+      "label": "Company Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "private",
+      "options": {
+        "public_us": {
+          "label": "US Public",
+          "factor": 1.5
+        },
+        "public_uk": {
+          "label": "UK/EU Public",
+          "factor": 1.2
+        },
+        "private": {
+          "label": "Private",
+          "factor": 1
+        },
+        "nonprofit": {
+          "label": "Non-Profit",
+          "factor": 0.8
+        },
+        "ipo": {
+          "label": "Pre-IPO / SPV",
+          "factor": 1.6
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "revenue",
+      "label": "Annual Revenue ($m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 500,
+      "bands": [
+        {
+          "min": 0,
+          "max": 100,
+          "factor": 0.8
+        },
+        {
+          "min": 100,
+          "max": 500,
+          "factor": 1
+        },
+        {
+          "min": 500,
+          "max": 2000,
+          "factor": 1.15
+        },
+        {
+          "min": 2000,
+          "max": 99999,
+          "factor": 1.3
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "sector",
+      "label": "Industry Sector",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "general",
+      "options": {
+        "financial": {
+          "label": "Financial Services",
+          "factor": 1.3
+        },
+        "tech": {
+          "label": "Technology",
+          "factor": 1.15
+        },
+        "pharma": {
+          "label": "Pharmaceutical/Biotech",
+          "factor": 1.25
+        },
+        "general": {
+          "label": "General Commercial",
+          "factor": 1
+        },
+        "energy": {
+          "label": "Energy/Mining",
+          "factor": 1.1
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "litigation",
+      "label": "Litigation History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean (no SCA/derivative)",
+          "factor": 0.85
+        },
+        "minor": {
+          "label": "Minor claims only",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material litigation",
+          "factor": 1.3
+        },
+        "severe": {
+          "label": "Severe (SEC/SFO investigation)",
+          "factor": 1.7
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "governance",
+      "label": "Corporate Governance",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "strong",
+      "options": {
+        "excellent": {
+          "label": "Excellent (independent board majority)",
+          "factor": 0.85
+        },
+        "strong": {
+          "label": "Strong",
+          "factor": 0.95
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "weak": {
+          "label": "Weak (governance concerns)",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 5000,
+    "claimsHandlingPerClaim": 40000,
+    "systemOverheadPerYear": 3000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.015,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

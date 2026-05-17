@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <title>Professional Indemnity E&O — Rater | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #2c4a7a;
+      --hub-dark:      #1a2d4a;
+      --hub-light:     #f0f4f8;
+      --hub-accent:    #c8a84b;
+      --header-gradient: linear-gradient(135deg,#1a2d4a 0%,#2c4a7a 55%,#1a3d5a 100%);
+      --header-sub:    #b0c4de;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> ›
+    <a href="overview.html">PI E&O</a> ›
+    Rater
+  </div>
+  <div class="tag">Lloyd's Risk Codes E2 · E3 · E4 · E5</div>
+  <h1>Professional Indemnity E&O — Rating Tool</h1>
+  <p>Factor-based rating engine for professional indemnity e&o insurance products. Base vs proposed comparison with P&amp;L waterfall analysis.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div id="rater-root"></div>
+
+<footer>
+  <p>Professional Indemnity E&O Risk Code Hub — Rating Tool &copy; 2026</p>
+</footer>
+
+<script src="../shared/rater-engine.js"></script>
+<script src="../shared/rater-ui.js"></script>
+<script>
+(function () {
+  var schemaFiles = [
+    'rate-tables/E2.json',
+    'rate-tables/E3.json',
+    'rate-tables/E4.json',
+    'rate-tables/E5.json'
+  ];
+  Promise.all(schemaFiles.map(function (f) {
+    return fetch(f).then(function (r) { return r.json(); });
+  })).then(function (schemas) {
+    RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);
+  });
+})();
+</script>
+</body>
+</html>
