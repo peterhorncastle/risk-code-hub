@@ -1,0 +1,140 @@
+{
+  "riskCode": "W4",
+  "label": "Workers Comp — International",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "payroll",
+    "label": "Annual Payroll (£)",
+    "defaultValue": 15000000,
+    "hint": "Total payroll for covered territories"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.0025
+  },
+  "ratingFactors": [
+    {
+      "key": "territory",
+      "label": "Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "eu",
+      "options": {
+        "eu": {
+          "label": "EU/EEA",
+          "factor": 1
+        },
+        "asia": {
+          "label": "Asia",
+          "factor": 1.1
+        },
+        "latam": {
+          "label": "Latin America",
+          "factor": 1.2
+        },
+        "middle_east": {
+          "label": "Middle East",
+          "factor": 1.05
+        },
+        "africa": {
+          "label": "Africa",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "industry",
+      "label": "Industry",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "commercial",
+      "options": {
+        "office": {
+          "label": "Office/Professional",
+          "factor": 0.7
+        },
+        "commercial": {
+          "label": "Commercial",
+          "factor": 1
+        },
+        "manufacturing": {
+          "label": "Manufacturing",
+          "factor": 1.25
+        },
+        "construction": {
+          "label": "Construction",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "employees",
+      "label": "Headcount",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 200,
+      "bands": [
+        {
+          "min": 0,
+          "max": 50,
+          "factor": 0.85
+        },
+        {
+          "min": 50,
+          "max": 200,
+          "factor": 1
+        },
+        {
+          "min": 200,
+          "max": 1000,
+          "factor": 1.1
+        },
+        {
+          "min": 1000,
+          "max": 99999,
+          "factor": 1.2
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "adverse": {
+          "label": "Adverse",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 2000,
+    "claimsHandlingPerClaim": 12000,
+    "systemOverheadPerYear": 1000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.04,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

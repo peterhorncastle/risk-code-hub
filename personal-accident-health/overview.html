@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+<title>Personal Accident & Health — Overview | Risk Code Hub</title>
+<style>
+:root{
+  --pah:#00695c;--pah-dark:#003d33;--acc:#c62828;--med:#1565c0;
+  --travel:#e65100;--sport:#6a1b9a;--warn:#f57f17;--cred:#2e7d32;
+  --bg:#f5f7fa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;
+  --border:#e5e7eb;--radius:10px;
+    /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #00695c;
+    --hub-dark:      #003d33;
+    --hub-light:     #e8f5f2;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #1565c0;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#003d33 0%,#00695c 50%,#00796b 100%);
+    --header-sub:    #b8ddd8;
+  }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+header{background:linear-gradient(135deg,#003d33 0%,#00695c 50%,#00796b 100%);color:#fff;padding:2rem 1.5rem 1.5rem;}
+.hub-label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75;margin-bottom:.4rem;}
+header h1{font-size:2rem;font-weight:700;margin-bottom:.3rem;}
+header p{opacity:.85;font-size:1rem;max-width:700px;}
+.codes-strip{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.9rem;}
+.code-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:4px;padding:.2rem .55rem;font-size:.78rem;font-weight:600;letter-spacing:.04em;}
+nav.breadcrumb{background:#fff;border-bottom:1px solid var(--border);padding:.6rem 1.5rem;font-size:.82rem;color:var(--muted);}
+nav.breadcrumb a{color:var(--pah);text-decoration:none;}
+.container{max-width:1100px;margin:0 auto;padding:1.5rem;}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.8rem;}
+.stat-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:1.1rem 1.2rem;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.stat-val{font-size:1.7rem;font-weight:700;color:var(--pah);margin-bottom:.2rem;}
+.stat-lbl{font-size:.78rem;color:var(--muted);line-height:1.3;}
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:1.4rem;margin-bottom:1.4rem;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.card h2{font-size:1.15rem;font-weight:700;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--pah);color:var(--pah-dark);}
+.card h3{font-size:.95rem;font-weight:700;margin:1rem 0 .5rem;color:var(--pah-dark);}
+table{width:100%;border-collapse:collapse;font-size:.88rem;}
+th{background:var(--pah-dark);color:#fff;padding:.55rem .7rem;text-align:left;font-weight:600;}
+td{padding:.5rem .7rem;border-bottom:1px solid var(--border);}
+tr:nth-child(even) td{background:#f9fafb;}
+.badge{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.72rem;font-weight:700;letter-spacing:.04em;white-space:nowrap;}
+.ver{background:#e6f4ea;color:#1b5e20;}.est{background:#fef3e2;color:#e65100;}
+.illus{background:#cce5ff;color:#1565c0;}.gap{background:#fdecea;color:#c62828;}
+.cov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin-top:1rem;}
+.cov-card{border-radius:8px;padding:1rem;border-left:4px solid;}
+.cov-acc{border-color:var(--acc);background:#fff5f5;}
+.cov-med{border-color:var(--med);background:#f0f4ff;}
+.cov-travel{border-color:var(--travel);background:#fff8f0;}
+.cov-sport{border-color:var(--sport);background:#f8f0ff;}
+.cov-group{border-color:var(--cred);background:#f0fff4;}
+.cov-cred{border-color:var(--warn);background:#fffdf0;}
+.cov-card h4{font-size:.88rem;font-weight:700;margin-bottom:.5rem;}
+.cov-card ul{list-style:none;font-size:.8rem;color:var(--muted);}
+.cov-card ul li::before{content:"✓ ";color:var(--pah);}
+.def-box{background:#e8f5e9;border-left:4px solid var(--pah);border-radius:6px;padding:1rem 1.2rem;margin:.8rem 0;font-size:.88rem;}
+.def-box strong{display:block;margin-bottom:.3rem;color:var(--pah-dark);}
+.participant-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.9rem;margin-top:.8rem;}
+.part-card{background:#f9fafb;border:1px solid var(--border);border-radius:8px;padding:.9rem;}
+.part-card h4{font-size:.85rem;font-weight:700;color:var(--pah-dark);margin-bottom:.4rem;}
+.part-card p{font-size:.8rem;color:var(--muted);}
+.nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.7rem;margin-top:1rem;}
+.nav-btn{display:block;background:var(--pah-dark);color:#fff;text-decoration:none;border-radius:7px;padding:.7rem 1rem;text-align:center;font-size:.83rem;font-weight:600;transition:opacity .2s;}
+.nav-btn:hover{opacity:.85;}
+.nav-btn span{display:block;font-size:.68rem;opacity:.75;margin-bottom:.15rem;}
+footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem;}
+</style>
+</head>
+<body>
+<header>
+  <div class="hub-label">Lloyd's Risk Code Hub · Accident &amp; Health</div>
+  <h1>Personal Accident &amp; Health</h1>
+  <p>Covering accidental death &amp; dismemberment, disability income, medical expenses, travel, sports, creditor protection and group A&amp;H schemes across Lloyd's K-series codes.</p>
+  <div class="codes-strip">
+    <span class="code-badge">KA – Personal Accident</span>
+    <span class="code-badge">KB – PA Binder</span>
+    <span class="code-badge">KC – Contingency / Med Expenses</span>
+    <span class="code-badge">KG – Group A&amp;H</span>
+    <span class="code-badge">KM – Maritime PA &amp; K&amp;R</span>
+    <span class="code-badge">KP – Creditor Protection</span>
+    <span class="code-badge">KS – Sports Disability</span>
+    <span class="code-badge">KT – Travel Insurance</span>
+    <span class="code-badge">KX – Miscellaneous A&amp;H</span>
+  </div>
+</header>
+<nav class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Personal Accident &amp; Health › Overview  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val">~$130bn</div><div class="stat-lbl">Global PA&amp;H GWP<br><span class="badge est">EST</span></div></div>
+    <div class="stat-card"><div class="stat-val">~£4bn</div><div class="stat-lbl">Lloyd's A&amp;H GWP<br><span class="badge est">EST</span></div></div>
+    <div class="stat-card"><div class="stat-val">9</div><div class="stat-lbl">Lloyd's K-series codes<br><span class="badge ver">VER</span></div></div>
+    <div class="stat-card"><div class="stat-val">~40%</div><div class="stat-lbl">Post-COVID mental health<br>claims frequency increase<br><span class="badge est">EST</span></div></div>
+    <div class="stat-card"><div class="stat-val">8–10%</div><div class="stat-lbl">UK medical inflation p.a.<br><span class="badge est">EST</span></div></div>
+  </div>
+
+  <!-- Code definitions -->
+  <div class="card">
+    <h2>Lloyd's K-Series Code Definitions</h2>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.9rem;">Code descriptions are industry-standard interpretations. <span class="badge est">EST</span> where Lloyd's internal code definitions are not publicly published.</p>
+    <table>
+      <thead><tr><th>Code</th><th>Class</th><th>Scope &amp; Typical Insureds</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td><strong>KA</strong></td><td>Personal Accident (Individual)</td><td>Accidental death, dismemberment and disability for individuals. Direct-written fac risks. Executives, high-net-worth individuals, occupational PA schemes.</td><td><span class="badge est">EST</span></td></tr>
+        <tr><td><strong>KB</strong></td><td>Personal Accident (Binder)</td><td>PA written under binding authority / delegated underwriting arrangements. MGAs, coverholders and affinity group schemes producing KA-type risks.</td><td><span class="badge est">EST</span></td></tr>
+        <tr><td><strong>KC</strong></td><td>Contingency &amp; Medical Expenses</td><td>Event cancellation, non-appearance, prize indemnity and medical expense reimbursement. Overlaps with travel medical in certain MGA schemes.</td><td><span class="badge est">EST</span></td></tr>
+        <tr><td><strong>KG</strong></td><td>Group A&amp;H</td><td>Group personal accident and/or group medical expenses for employer-sponsored employee benefit schemes. Includes group life and income protection elements.</td><td><span class="badge est">EST</span></td></tr>
+        <tr><td><strong>KM</strong></td><td>Maritime PA &amp; Crew K&amp;R</td><td>Crew personal accident, marine medical expenses and maritime kidnap &amp; ransom (piracy, crew detention). Offshore workers, seafarers, fishing vessels.</td><td><span class="badge est">EST</span></td></tr>
+        <tr><td><strong>KP</strong></td><td>Creditor Protection Insurance</td><td>Payment protection insurance (PPI) and creditor life/disability products covering loan repayment obligations on death, disability or involuntary unemployment.</td><td><span class="badge est">EST</span></td></tr>
+        <tr><td><strong>KS</strong></td><td>Sports Disability</td><td>Career-ending disability and loss of earnings for professional athletes, sports teams and governing bodies. Rugby, football, cricket, motorsport, combat sports.</td><td><span class="badge est">EST</span></td></tr>
+        <tr><td><strong>KT</strong></td><td>Travel Insurance</td><td>All-risks travel covering trip cancellation/curtailment, medical expenses abroad, emergency repatriation, baggage and travel delay. Consumer and corporate.</td><td><span class="badge est">EST</span></td></tr>
+        <tr><td><strong>KX</strong></td><td>Miscellaneous A&amp;H</td><td>Residual A&amp;H classes including niche disability products, war PA, political violence PA and specialist personal accident not elsewhere classified.</td><td><span class="badge est">EST</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Coverage types -->
+  <div class="card">
+    <h2>Coverage Architecture</h2>
+    <div class="cov-grid">
+      <div class="cov-card cov-acc">
+        <h4 style="color:var(--acc);">Accidental Death &amp; Dismemberment (AD&amp;D)</h4>
+        <ul>
+          <li>Accidental death (capital sum)</li>
+          <li>Loss of limb / eyesight</li>
+          <li>Permanent total disability (PTD)</li>
+          <li>Permanent partial disability (PPD)</li>
+          <li>Temporary total disability (TTD)</li>
+        </ul>
+      </div>
+      <div class="cov-card cov-med">
+        <h4 style="color:var(--med);">Medical Expenses</h4>
+        <ul>
+          <li>In-patient / out-patient treatment</li>
+          <li>Surgery and specialist fees</li>
+          <li>Diagnostic tests (MRI, CT)</li>
+          <li>Emergency repatriation</li>
+          <li>Mental health (increasingly covered)</li>
+        </ul>
+      </div>
+      <div class="cov-card cov-travel">
+        <h4 style="color:var(--travel);">Travel Insurance (KT)</h4>
+        <ul>
+          <li>Trip cancellation / curtailment</li>
+          <li>Medical abroad and repatriation</li>
+          <li>Baggage &amp; personal effects</li>
+          <li>Travel delay / missed departure</li>
+          <li>24/7 assistance services</li>
+        </ul>
+      </div>
+      <div class="cov-card cov-sport">
+        <h4 style="color:var(--sport);">Sports Disability (KS)</h4>
+        <ul>
+          <li>Career-ending disability lump sum</li>
+          <li>Loss of earnings (temporary / permanent)</li>
+          <li>Ransom (kidnap of sports stars)</li>
+          <li>Contract frustration (player injury)</li>
+          <li>Amateur sports PA extensions</li>
+        </ul>
+      </div>
+      <div class="cov-card cov-group">
+        <h4 style="color:var(--cred);">Group A&amp;H (KG)</h4>
+        <ul>
+          <li>Employer-funded PA for staff</li>
+          <li>Group private medical insurance (PMI)</li>
+          <li>Group income protection (IP)</li>
+          <li>International group medical schemes</li>
+          <li>Employee assistance programmes (EAP)</li>
+        </ul>
+      </div>
+      <div class="cov-card cov-cred">
+        <h4 style="color:var(--warn);">Creditor Protection (KP)</h4>
+        <ul>
+          <li>Life cover for mortgage / loan balance</li>
+          <li>Disability: meets monthly repayments</li>
+          <li>Involuntary unemployment cover</li>
+          <li>Regulated as pure protection (FCA)</li>
+          <li>Critical illness extension (CI)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key definitions -->
+  <div class="card">
+    <h2>Key Definitions &amp; Concepts</h2>
+    <div class="def-box">
+      <strong>Own Occupation vs. Any Occupation (Disability Definition)</strong>
+      "Own occupation" — claimant cannot perform their specific job — is more favourable to the insured and commands higher premium. "Any occupation" — claimant cannot perform any job for which they are suited — is harder to satisfy and more common in creditor protection products. Definition of disability is the single most contentious wording element in PA&amp;H.
+    </div>
+    <div class="def-box">
+      <strong>Aggregate Deductible (Medical Expenses)</strong>
+      An annual excess applied to the total of all claims in a policy year rather than per-claim. Encourages cost control and reduces frequency; common in group PMI schemes. Distinct from a per-claim excess / co-payment.
+    </div>
+    <div class="def-box">
+      <strong>Pre-Existing Condition (PEC) Exclusion</strong>
+      Standard exclusion for medical conditions existing at inception. Three approaches: full exclusion (MORI / moratorium UW), individual medical underwriting (IMU — accepted or excluded per condition), and group continuation/transfer without PEC carryover (where eligible).
+    </div>
+    <div class="def-box">
+      <strong>Morbidity vs. Mortality</strong>
+      PA&amp;H pricing is driven by <em>morbidity</em> (rate of sickness, injury and disability claims) rather than <em>mortality</em> (death rates alone). Morbidity data — especially mental health trends, long-COVID duration and musculoskeletal claims — drives reserve adequacy and re-rate decisions.
+    </div>
+    <div class="def-box">
+      <strong>General Average (Maritime PA — KM)</strong>
+      Where a crew member is injured during a declared General Average act, personal accident coverage under KM coordinates with P&amp;I (Protection &amp; Indemnity) club coverage. KM is primary for crew PA claims; P&amp;I covers third-party employer liability where applicable.
+    </div>
+  </div>
+
+  <!-- Market participants -->
+  <div class="card">
+    <h2>Market Participants</h2>
+    <div class="participant-grid">
+      <div class="part-card">
+        <h4>Lloyd's Syndicates</h4>
+        <p>Accident &amp; health syndicates writing direct PA, group schemes, travel and sports disability. Key syndicates historically include those specialising in A&amp;H treaty as well as direct/fac.</p>
+      </div>
+      <div class="part-card">
+        <h4>MGAs &amp; Coverholders</h4>
+        <p>Significant portion of Lloyd's A&amp;H written via delegated authority under KB/KG binders. MGAs often distribute through affinity groups, employers, banks and travel agents.</p>
+      </div>
+      <div class="part-card">
+        <h4>Specialist Reinsurers</h4>
+        <p>Munich Re, Swiss Re and Hannover Re are dominant in PA&amp;H treaty reinsurance. Quota share and stop-loss XL structures common for high-frequency/low-severity travel and group PMI books.</p>
+      </div>
+      <div class="part-card">
+        <h4>Assistance Companies</h4>
+        <p>Europ Assistance, AXA Partners, Mondial Assistance (AXA), International SOS. Provide the 24/7 medical helplines, emergency repatriation logistics and case management that underpin travel (KT) and KM products.</p>
+      </div>
+      <div class="part-card">
+        <h4>Employee Benefit Brokers</h4>
+        <p>Aon, WTW, Mercer and Gallagher dominate multinational group A&amp;H (KG) placement. Typically combine group PMI, group income protection and group life in packaged employee benefit tenders.</p>
+      </div>
+      <div class="part-card">
+        <h4>Regulatory &amp; Rating Bodies</h4>
+        <p>FCA (consumer A&amp;H — IPID requirement, pricing regulation); CMI (Continuous Mortality Investigation — morbidity data); Swiss Re sigma; IUMI; Munich Re A&amp;H publications.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="card">
+    <h2>Hub Modules</h2>
+    <div class="nav-grid">
+      <a class="nav-btn" href="overview.html"><span>Module 00</span>Overview</a>
+      <a class="nav-btn" href="history.html"><span>Module 01</span>History &amp; Origins</a>
+      <a class="nav-btn" href="timeline.html"><span>Module 02</span>Major Events Timeline</a>
+      <a class="nav-btn" href="database.html"><span>Module 03</span>Claims Database</a>
+      <a class="nav-btn" href="underwriting.html"><span>Module 04</span>Underwriting</a>
+      <a class="nav-btn" href="rates-analysis.html"><span>Module 05</span>Rates &amp; ROE</a>
+      <a class="nav-btn" href="risk-mitigation.html"><span>Module 06</span>Risk Mitigation</a>
+      <a class="nav-btn" href="global-program.html"><span>Module 07</span>Global Programme</a>
+      <a class="nav-btn" href="references.html"><span>Module 08</span>References</a>
+    </div>
+  </div>
+
+</div>
+<footer>Risk Code Hub · Personal Accident &amp; Health (KA/KB/KC/KG/KM/KP/KS/KT/KX) · Lloyd's market reference · <span class="badge est">EST</span> = estimated/interpreted · Not for regulatory use</footer>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Crime / Fidelity Commercial (BC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --bc:#1a5c2a; --bc-dark:#0b2e14; --bc-light:#edf7f0;
+      --bc-accent:#c8a84b; --bc-mid:#c8e6c9;
+      --hub-primary:#1a5c2a; --hub-dark:#0b2e14; --hub-light:#edf7f0;
+      --hub-accent:#c8a84b; --hub-secondary:#1565c0; --hub-secondary2:#6a1b9a;
+      --header-gradient:linear-gradient(135deg,#0b2e14 0%,#1a5c2a 55%,#2e7d32 100%);
+      --header-sub:#a5d6a7;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bc-light);color:#1e2e1e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#a5d6a7;margin-bottom:6px;}
+    .breadcrumb a{color:var(--bc-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--bc-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#0b2e14;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#a5d6a7;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--bc-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--bc-accent);font-weight:600;}
+    main{max-width:1000px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--bc-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+    .filters button{padding:6px 14px;border-radius:20px;border:2px solid var(--bc);background:#fff;color:var(--bc);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filters button.active,.filters button:hover{background:var(--bc);color:#fff;}
+    .filters button[data-t="bec"]{border-color:#e65100;}
+    .filters button[data-t="bec"].active,.filters button[data-t="bec"]:hover{background:#e65100;border-color:#e65100;color:#fff;}
+    .filters button[data-t="internal"]{border-color:#1a5c2a;}
+    .filters button[data-t="internal"].active,.filters button[data-t="internal"]:hover{background:#1a5c2a;border-color:#1a5c2a;color:#fff;}
+    .filters button[data-t="regulatory"]{border-color:#c62828;}
+    .filters button[data-t="regulatory"].active,.filters button[data-t="regulatory"]:hover{background:#c62828;border-color:#c62828;color:#fff;}
+    .filters button[data-t="legal"]{border-color:#1565c0;}
+    .filters button[data-t="legal"].active,.filters button[data-t="legal"]:hover{background:#1565c0;border-color:#1565c0;color:#fff;}
+    .filters button[data-t="market"]{border-color:#6a1b9a;}
+    .filters button[data-t="market"].active,.filters button[data-t="market"]:hover{background:#6a1b9a;border-color:#6a1b9a;color:#fff;}
+    .filters button[data-t="tech"]{border-color:#00695c;}
+    .filters button[data-t="tech"].active,.filters button[data-t="tech"]:hover{background:#00695c;border-color:#00695c;color:#fff;}
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--bc-mid);}
+    .tl-item{position:relative;margin-bottom:24px;display:none;}
+    .tl-item.show{display:block;}
+    .dot{position:absolute;left:-28px;top:4px;width:16px;height:16px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--bc);}
+    .dot.bec{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .dot.internal{background:#1a5c2a;box-shadow:0 0 0 2px #1a5c2a;}
+    .dot.regulatory{background:#c62828;box-shadow:0 0 0 2px #c62828;}
+    .dot.legal{background:#1565c0;box-shadow:0 0 0 2px #1565c0;}
+    .dot.market{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .dot.tech{background:#00695c;box-shadow:0 0 0 2px #00695c;}
+    .tl-card{background:#fff;border-radius:8px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card .yr{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--bc-accent);margin-bottom:4px;}
+    .tl-card h4{font-size:0.92rem;font-weight:700;color:var(--bc-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.84rem;color:#444;line-height:1.5;}
+    .type-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;}
+    .tag-bec{background:#fbe9e7;color:#e65100;}
+    .tag-internal{background:#e8f5e9;color:#1a5c2a;}
+    .tag-regulatory{background:#ffebee;color:#c62828;}
+    .tag-legal{background:#e3f2fd;color:#1565c0;}
+    .tag-market{background:#f3e5f5;color:#6a1b9a;}
+    .tag-tech{background:#e0f2f1;color:#00695c;}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#555;}
+    .legend-dot{width:12px;height:12px;border-radius:50%;}
+    footer{background:#0b2e14;color:#a5d6a7;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--bc-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Crime Commercial (BC)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key commercial crime events 1970–2024</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100;"></div> BEC / Social Engineering</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1a5c2a;"></div> Internal / Employee Fraud</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#c62828;"></div> Regulatory</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1565c0;"></div> Legal / Coverage</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6a1b9a;"></div> Market Structural</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00695c;"></div> Technology Shift</div>
+  </div>
+
+  <div class="filters">
+    <button class="active" onclick="filterTL('all',this)">All Events</button>
+    <button data-t="bec" onclick="filterTL('bec',this)">BEC / Social Engineering</button>
+    <button data-t="internal" onclick="filterTL('internal',this)">Internal / Employee</button>
+    <button data-t="regulatory" onclick="filterTL('regulatory',this)">Regulatory</button>
+    <button data-t="legal" onclick="filterTL('legal',this)">Legal / Coverage</button>
+    <button data-t="market" onclick="filterTL('market',this)">Market Structural</button>
+    <button data-t="tech" onclick="filterTL('tech',this)">Technology Shift</button>
+  </div>
+
+  <div class="timeline" id="tl">
+
+    <div class="tl-item show" data-t="regulatory">
+      <div class="dot regulatory"></div>
+      <div class="tl-card">
+        <div class="yr">1974</div>
+        <span class="type-tag tag-regulatory">Regulatory</span>
+        <h4>ERISA Creates Mandatory Fidelity Bond Requirement</h4>
+        <p>The Employee Retirement Income Security Act (ERISA) §412 mandates fidelity bonding for all persons who handle funds or property of an employee benefit plan. Minimum bond: 10% of plan assets up to $500,000 ($1m for plans holding employer securities). Creates a compulsory sub-market within commercial crime that persists today. <sup>[L4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="tech">
+      <div class="dot tech"></div>
+      <div class="tl-card">
+        <div class="yr">1986</div>
+        <span class="type-tag tag-tech">Technology Shift</span>
+        <h4>ISO Commercial Crime Policy Standardised</h4>
+        <p>Insurance Services Office publishes the standardised Commercial Crime Policy (ISO CR 00 21), providing a unified framework covering employee dishonesty, forgery/alteration, computer fraud, funds transfer fraud, money &amp; securities, and counterfeit currency. Discovery basis trigger standardised. <sup>[L2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="internal">
+      <div class="dot internal"></div>
+      <div class="tl-card">
+        <div class="yr">1987</div>
+        <span class="type-tag tag-internal">Internal / Employee</span>
+        <h4>ZZZZ Best Carpet Cleaning — $100m+ Fraud</h4>
+        <p>Barry Minkow's ZZZZ Best carpet cleaning empire collapses after investigators discover the company was largely fictitious. Insurance restoration contracts were fabricated. Highlights the risk of CEO-level fraud and the limitations of audit processes in detecting sophisticated deception. Losses exceed $100m.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="regulatory">
+      <div class="dot regulatory"></div>
+      <div class="tl-card">
+        <div class="yr">2002</div>
+        <span class="type-tag tag-regulatory">Regulatory</span>
+        <h4>Sarbanes-Oxley Act — Internal Controls Mandated</h4>
+        <p>SOX §302/404 requires CEO/CFO personal certification of internal controls over financial reporting. Dramatically raises the cost of senior management fraud and improves detection capability at public companies. Whistleblower protections (SOX §806) incentivise employee reporting of financial fraud. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="market">
+      <div class="dot market"></div>
+      <div class="tl-card">
+        <div class="yr">2002</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>ACFE Report to the Nations — First Global Fraud Study</h4>
+        <p>Association of Certified Fraud Examiners publishes the first comprehensive global study of occupational fraud. Median fraud loss $90k; median duration 18 months; 42% detected by tip-off. Becomes the defining reference document for commercial crime underwriting. Published biennially; 2024 edition reports median loss rising to $145k. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="internal">
+      <div class="dot internal"></div>
+      <div class="tl-card">
+        <div class="yr">2008</div>
+        <span class="type-tag tag-internal">Internal / Employee</span>
+        <h4>Société Générale — Jérôme Kerviel €4.9bn Rogue Trading</h4>
+        <p>Though a BB/financial institution loss, the SocGen rogue trading scandal had profound implications for commercial crime underwriting: it demonstrated that a single employee can conceal massive losses for extended periods through systematic override of controls. The event drove re-examination of "employee" definitions and approval authority limits in commercial crime policies globally.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="tech">
+      <div class="dot tech"></div>
+      <div class="tl-card">
+        <div class="yr">2013</div>
+        <span class="type-tag tag-tech">Technology Shift</span>
+        <h4>BEC Emerges as a Distinct Fraud Category</h4>
+        <p>Business Email Compromise fraud is first formally identified and tracked by the FBI. Early cases involve spoofed emails from the "CEO" instructing urgent wire transfers to overseas suppliers. No malware or hacking required — the employee acts voluntarily based on social deception. Commercial crime policies are untested on whether the "computer fraud" insuring agreement responds. <sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="bec">
+      <div class="dot bec"></div>
+      <div class="tl-card">
+        <div class="yr">2015</div>
+        <span class="type-tag tag-bec">BEC / Social Engineering</span>
+        <h4>Ubiquiti Networks — $46.7m BEC Loss</h4>
+        <p>Ubiquiti Networks discloses a $46.7m loss from BEC fraud: attackers impersonated company employees and executives by email, directing finance staff to transfer funds to attacker-controlled overseas accounts. One of the first large public BEC disclosures. Tests insurance coverage terms: the company's computer crime policy responds but at lower limits than the total loss.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="bec">
+      <div class="dot bec"></div>
+      <div class="tl-card">
+        <div class="yr">2015</div>
+        <span class="type-tag tag-bec">BEC / Social Engineering</span>
+        <h4>Mattel — $3m Fake CEO Wire Transfer</h4>
+        <p>Mattel's finance department wires $3m to a bank account in China following a spoofed email purportedly from the incoming CEO. The fraud is discovered within hours; Mattel works with FBI and Chinese authorities to recover the funds — one of the rare BEC recoveries. The incident highlights the importance of callback verification procedures for high-value wire transfers.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="legal">
+      <div class="dot legal"></div>
+      <div class="tl-card">
+        <div class="yr">2016</div>
+        <span class="type-tag tag-legal">Legal / Coverage</span>
+        <h4>Apache Corp v OneBeacon — Computer Fraud Dispute</h4>
+        <p>5th Circuit rules that OneBeacon's computer fraud coverage does NOT respond to a BEC loss where Apache Corp was deceived by email into changing supplier payment details and transferring $7m. Court holds that loss was not "directly" caused by use of a computer — there was human intervention between the email and the transfer. Significant blow to BEC coverage under computer fraud insuring agreements. <sup>[I6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="legal">
+      <div class="dot legal"></div>
+      <div class="tl-card">
+        <div class="yr">2018</div>
+        <span class="type-tag tag-legal">Legal / Coverage</span>
+        <h4>Medidata v Federal Insurance — BEC Coverage Confirmed (2nd Cir.)</h4>
+        <p>Second Circuit holds that Federal Insurance's computer fraud coverage responds to a $4.8m BEC loss at Medidata Solutions: fraudsters spoofed the CEO's email, causing an employee to transfer funds. Court distinguishes Apache (5th Cir.): the email contained computer-generated fraudulent instructions that directly caused the loss. Creates circuit split on BEC coverage that remains unresolved. <sup>[I6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="legal">
+      <div class="dot legal"></div>
+      <div class="tl-card">
+        <div class="yr">2019</div>
+        <span class="type-tag tag-legal">Legal / Coverage</span>
+        <h4>American Tooling Center v Travelers — BEC Not Covered (6th Cir.)</h4>
+        <p>6th Circuit reaches opposite conclusion to Medidata on nearly identical BEC facts. American Tooling Center loses $834k after being deceived into redirecting supplier payments. Travelers' computer fraud coverage does not respond because the loss was not "directly" caused by fraudulent computer use. US circuit split on BEC coverage deepens; social engineering endorsements become essential. <sup>[I6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="market">
+      <div class="dot market"></div>
+      <div class="tl-card">
+        <div class="yr">2019</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>Lloyd's Market Bulletin — Crime/Cyber Boundary Clarification</h4>
+        <p>Lloyd's issues guidance on the interface between commercial crime policies and cyber policies, noting the risk of coverage gaps and overlaps on BEC/funds transfer fraud claims. Syndicates are encouraged to clarify coverage intent at placement. Social engineering endorsements and standalone cyber social engineering covers proliferate. <sup>[I8]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="internal">
+      <div class="dot internal"></div>
+      <div class="tl-card">
+        <div class="yr">2020</div>
+        <span class="type-tag tag-internal">Internal / Employee</span>
+        <h4>COVID-19 — Fraud Surge in Remote Working Environment</h4>
+        <p>ACFE and insurer loss data show a significant increase in employee fraud and BEC losses during COVID-19 lockdowns. Remote working reduces supervisory oversight, informal control mechanisms and physical mail controls. Accounts payable fraud, payroll manipulation and vendor impersonation all increase materially. Commercial crime insurers report elevated claims frequency from 2020–2022. <sup>[I9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="bec">
+      <div class="dot bec"></div>
+      <div class="tl-card">
+        <div class="yr">2020</div>
+        <span class="type-tag tag-bec">BEC / Social Engineering</span>
+        <h4>Toyota Boshoku — $37m BEC Wire Fraud</h4>
+        <p>Toyota Boshoku, a Toyota Group supplier, loses $37m to BEC fraud. Attackers impersonate a business partner via email, convincing a finance executive to change bank account details for a payment. The loss is among the largest disclosed single-incident BEC frauds at the time. Highlights inadequacy of email-only authentication for high-value payment changes.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="regulatory">
+      <div class="dot regulatory"></div>
+      <div class="tl-card">
+        <div class="yr">2021</div>
+        <span class="type-tag tag-regulatory">Regulatory</span>
+        <h4>US Treasury FinCEN — BEC SAR Filings Surge</h4>
+        <p>US Financial Crimes Enforcement Network (FinCEN) reports a record surge in Suspicious Activity Reports (SARs) related to BEC fraud. FinCEN guidance highlights the use of money mule accounts, cryptocurrency conversion and overseas wire routing to obscure BEC proceeds. SAR data becomes a key insurer subrogation tool. <sup>[I10]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="tech">
+      <div class="dot tech"></div>
+      <div class="tl-card">
+        <div class="yr">2022</div>
+        <span class="type-tag tag-tech">Technology Shift</span>
+        <h4>AI Voice Cloning Used in Corporate Fraud</h4>
+        <p>First documented cases of AI-generated voice cloning used in commercial fraud: attackers clone the voice of a CEO using deepfake audio generated from publicly available recordings, then call finance staff to authorise urgent wire transfers. The technology crosses from research to criminal deployment. Market begins reviewing policy wording adequacy for AI-enabled social engineering.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="bec">
+      <div class="dot bec"></div>
+      <div class="tl-card">
+        <div class="yr">2024</div>
+        <span class="type-tag tag-bec">BEC / Social Engineering</span>
+        <h4>Arup — $25m Deepfake Video Call Fraud</h4>
+        <p>UK engineering firm Arup confirms a Hong Kong employee transferred $25m after being deceived by a deepfake video call in which all participants — including a convincing AI avatar of the company's CFO — were fabricated. The employee believed the call to be legitimate. Considered the most sophisticated commercial BEC incident disclosed to date. Triggers market-wide policy wording review for AI-enabled fraud coverage. <sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="market">
+      <div class="dot market"></div>
+      <div class="tl-card">
+        <div class="yr">2024</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>ACFE 2024 Report — Median Fraud Loss Rises to $145k</h4>
+        <p>The ACFE's 2024 Report to the Nations shows median occupational fraud loss has risen to $145k (from $117k in 2022), duration remains ~18 months, and tips remain the primary detection method at 42% of cases. Technology-enabled fraud (AI, deepfake, BEC) is identified as the fastest-growing category. The report underlines continuing relevance of commercial crime insurance for businesses of all sizes. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="regulatory">
+      <div class="dot regulatory"></div>
+      <div class="tl-card">
+        <div class="yr">2024</div>
+        <span class="type-tag tag-regulatory">Regulatory</span>
+        <h4>UK Economic Crime and Corporate Transparency Act 2023 — Failure to Prevent Fraud</h4>
+        <p>The UK Economic Crime and Corporate Transparency Act 2023 introduces a new corporate criminal offence of failure to prevent fraud by an associated person, in force from September 2025. Large organisations must have reasonable fraud prevention procedures or face unlimited fines. Directly increases the value of commercial crime insurance and risk management frameworks for UK corporates. <sup>[L5]</sup></p>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Crime / Fidelity Commercial (BC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filterTL(type, btn) {
+  document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tl-item').forEach(el => {
+    el.classList.toggle('show', type === 'all' || el.dataset.t === type);
+  });
+}
+</script>
+</body>
+</html>

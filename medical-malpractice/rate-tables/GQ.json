@@ -1,0 +1,182 @@
+{
+  "riskCode": "GQ",
+  "label": "MedMal — Excess",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "limit",
+    "label": "Limit of Indemnity (£)",
+    "defaultValue": 5000000,
+    "hint": "PI/medmal limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.004
+  },
+  "ratingFactors": [
+    {
+      "key": "specialty",
+      "label": "Medical Specialty",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "general",
+      "options": {
+        "general": {
+          "label": "General Practice/Primary",
+          "factor": 1
+        },
+        "surgical": {
+          "label": "Surgical",
+          "factor": 1.4
+        },
+        "obstetrics": {
+          "label": "Obstetrics/Gynaecology",
+          "factor": 1.6
+        },
+        "anaesthesia": {
+          "label": "Anaesthesia",
+          "factor": 1.25
+        },
+        "radiology": {
+          "label": "Radiology/Diagnostics",
+          "factor": 1.1
+        },
+        "psychiatry": {
+          "label": "Psychiatry",
+          "factor": 0.8
+        },
+        "dental": {
+          "label": "Dental",
+          "factor": 0.7
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "facilityType",
+      "label": "Facility Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "hospital",
+      "options": {
+        "hospital": {
+          "label": "Hospital/Acute",
+          "factor": 1.2
+        },
+        "clinic": {
+          "label": "Clinic/Outpatient",
+          "factor": 1
+        },
+        "care_home": {
+          "label": "Care/Nursing Home",
+          "factor": 1.1
+        },
+        "gp": {
+          "label": "GP Surgery",
+          "factor": 0.85
+        },
+        "pharmacy": {
+          "label": "Pharmacy",
+          "factor": 0.75
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "beds",
+      "label": "Bed Count / Practitioners",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 200,
+      "bands": [
+        {
+          "min": 0,
+          "max": 50,
+          "factor": 0.8
+        },
+        {
+          "min": 50,
+          "max": 200,
+          "factor": 1
+        },
+        {
+          "min": 200,
+          "max": 500,
+          "factor": 1.15
+        },
+        {
+          "min": 500,
+          "max": 99999,
+          "factor": 1.3
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "uk": {
+          "label": "UK (NHS/Private)",
+          "factor": 1
+        },
+        "eu": {
+          "label": "EU",
+          "factor": 1.05
+        },
+        "us": {
+          "label": "United States",
+          "factor": 1.5
+        },
+        "international": {
+          "label": "International",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "clean": {
+          "label": "Clean (5yr)",
+          "factor": 0.8
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "adverse": {
+          "label": "Adverse",
+          "factor": 1.3
+        },
+        "severe": {
+          "label": "Severe/never events",
+          "factor": 1.6
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 2000,
+    "claimsHandlingPerClaim": 15000,
+    "systemOverheadPerYear": 1000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

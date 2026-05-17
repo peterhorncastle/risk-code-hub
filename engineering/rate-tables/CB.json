@@ -1,0 +1,166 @@
+{
+  "riskCode": "CB",
+  "label": "Construction All Risks (CAR)",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "projectValue",
+    "label": "Project Value (£)",
+    "defaultValue": 50000000,
+    "hint": "Total contract value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.0025
+  },
+  "ratingFactors": [
+    {
+      "key": "projectType",
+      "label": "Project Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "commercial",
+      "options": {
+        "residential": {
+          "label": "Residential",
+          "factor": 0.85
+        },
+        "commercial": {
+          "label": "Commercial",
+          "factor": 1
+        },
+        "infrastructure": {
+          "label": "Infrastructure/Civil",
+          "factor": 1.15
+        },
+        "industrial": {
+          "label": "Industrial",
+          "factor": 1.1
+        },
+        "renovation": {
+          "label": "Renovation/Refurb",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "contractValue",
+      "label": "Contract Value (£m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 20,
+      "bands": [
+        {
+          "min": 0,
+          "max": 5,
+          "factor": 0.85
+        },
+        {
+          "min": 5,
+          "max": 20,
+          "factor": 1
+        },
+        {
+          "min": 20,
+          "max": 100,
+          "factor": 1.1
+        },
+        {
+          "min": 100,
+          "max": 99999,
+          "factor": 1.2
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "groundConditions",
+      "label": "Ground Conditions",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "normal",
+      "options": {
+        "good": {
+          "label": "Good/known",
+          "factor": 0.85
+        },
+        "normal": {
+          "label": "Normal",
+          "factor": 1
+        },
+        "difficult": {
+          "label": "Difficult (water table)",
+          "factor": 1.2
+        },
+        "unknown": {
+          "label": "Unknown/challenging",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "contractor",
+      "label": "Main Contractor Grade",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "tier1",
+      "options": {
+        "tier1": {
+          "label": "Tier 1 (major)",
+          "factor": 0.85
+        },
+        "tier2": {
+          "label": "Tier 2 (regional)",
+          "factor": 1
+        },
+        "tier3": {
+          "label": "Tier 3 (local)",
+          "factor": 1.15
+        },
+        "unrated": {
+          "label": "Unrated",
+          "factor": 1.35
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "dsp",
+      "label": "DSU/BI Included",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "excluded",
+      "options": {
+        "excluded": {
+          "label": "Excluded",
+          "factor": 1
+        },
+        "12m": {
+          "label": "12 months DSU",
+          "factor": 1.15
+        },
+        "24m": {
+          "label": "24 months DSU",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 5000,
+    "claimsHandlingPerClaim": 30000,
+    "systemOverheadPerYear": 2000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Underwriting — Workers Compensation USA (W5/W6) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #1a237e;
+      --hub-dark:      #0d1257;
+      --hub-light:     #e8eaf6;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #b71c1c;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#0d1257 0%,#1a237e 55%,#283593 100%);
+      --header-sub:    #9fa8da;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#9fa8da;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#0d1257;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#9fa8da;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #c5cae9;}
+    .factors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .factor{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);}
+    .factor.high{border-left-color:#b71c1c;}
+    .factor.med{border-left-color:#e65100;}
+    .factor.low{border-left-color:#1a5c2a;}
+    .factor .impact{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .factor h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .factor p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .factor .rate{font-size:0.78rem;font-weight:700;color:#b71c1c;margin-top:6px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #e8eaf6;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f0f2ff;}
+    .formula-box{background:#0d1257;color:#9fa8da;border-radius:8px;padding:20px 24px;font-family:monospace;font-size:0.88rem;line-height:1.8;margin-bottom:24px;}
+    .formula-box .comment{color:#7986cb;}
+    .worked{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px;border-top:4px solid var(--hub-primary);}
+    .worked.alt{border-top-color:var(--hub-accent);}
+    .worked h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .worked table{box-shadow:none;margin-bottom:0;}
+    .worked th{background:#1a237e;}
+    .info-box{background:#e8eaf6;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a1a3e;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    footer{background:#0d1257;color:#9fa8da;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> &rsaquo; <a href="overview.html">Workers Comp USA (W5/W6)</a> &rsaquo; Underwriting</div>
+    <div class="tag">Module 04</div>
+    <h1>Underwriting Methodology</h1>
+    <div class="sub">NCCI class codes, EMR formula, state analysis, worked examples &amp; key exclusions</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- High impact factors -->
+  <div class="section-title">Rating Factors — High Impact</div>
+  <div class="factors-grid">
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Industry Classification — NCCI Class Code</h4>
+      <p>The fundamental WC rating unit. NCCI maintains over 700 class codes, each with a manual rate expressed as $ per $100 of payroll. Rates range from approximately $0.30 per $100 (clerical — code 8810) to $30+ per $100 for the most hazardous operations (logging code 2702, roofing code 5551). Class code assignment is auditable and requires review of actual duties performed. <sup>[L9]</sup></p>
+      <div class="rate">Rate range: 0.3× (clerical) → 8.0× (logging/roofing vs clerical baseline)</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Payroll by Class Code</h4>
+      <p>WC premium is calculated as (manual rate per $100) × (payroll ÷ 100) for each class code. Estimated payroll at inception is audited at policy expiry; premium adjusts upward or downward. Payroll audits are a critical revenue protection mechanism — misclassification and payroll understatement are the primary WC premium fraud vectors. Multi-state employers require payroll allocation by state of employment. <sup>[L9]</sup></p>
+      <div class="rate">Audit adjustment: +20% to −15% typical variance on complex accounts</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Experience Modification Factor (EMR)</h4>
+      <p>3-year weighted actual vs expected loss calculation, credibility-weighted by payroll size. EMR of 1.00 = average for class; EMR &lt;1.00 = better than average (credit); EMR &gt;1.00 = worse than average (debit). Applies as a direct multiplier to manual premium. For large accounts, EMR can swing ±40% of premium. Minimum payroll threshold for experience rating (approximately $10,000 standard premium) — smaller accounts are class-rated only. <sup>[L9]</sup></p>
+      <div class="rate">EMR range in practice: 0.50 (excellent) → 2.00+ (poor); 1.15 = significant debit</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>State of Domicile &amp; Exposure States</h4>
+      <p>WC rates and benefit structures vary dramatically by state. New York, California and New Jersey are consistently the highest-cost states; southern states (TX, FL, AL) have typically lower manual rates but complex regulatory environments. Multi-state employers must list all states of operation — the "all-states" endorsement provides residual coverage for states not individually listed. Monopolistic states (OH, WY, ND, WA) require state fund placement for Part One; stop-gap EL endorsement essential. <sup>[L1]</sup></p>
+      <div class="rate">NY manual rate (clerical): ~$1.20/$100 vs national avg ~$0.60/$100</div>
+    </div>
+  </div>
+
+  <!-- Medium impact factors -->
+  <div class="section-title">Rating Factors — Medium Impact</div>
+  <div class="factors-grid">
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Payroll Audit Provisions</h4>
+      <p>Premium audit at policy expiry adjusts for actual payroll vs estimated. Audit disputes are common in rapidly growing businesses and seasonal operations. Retrospective rating plans (retro) offer large employers premium adjustment based on actual losses — aligning insured incentives with loss prevention. Min-max retro premiums (typically 50%–175% of standard premium) are used for large self-funded employers.</p>
+      <div class="rate">Retro premium range: 50%–175% of standard; SIR structures for EMR &gt;1.00 risks</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Interstate Exposure — Multi-State Endorsement</h4>
+      <p>Employers operating in multiple states need coverage in each jurisdiction. WC policies must specifically list the states where coverage applies; the all-states endorsement adds a residual catch-all for unlisted states but is not a substitute for proper state listing. State-specific loss costs and assessments complicate multi-state premium calculation. <sup>[L1]</sup></p>
+      <div class="rate">Multi-state loading: +5–15% for administrative and state assessment complexity</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>USL&amp;H Exposure — Maritime Payroll Surcharge</h4>
+      <p>Employers with payroll subject to the LHWCA (dock workers, ship repairers, offshore platform workers) require W6 USL&H coverage, rated separately from standard WC. USL&H rates are typically 2–4x the standard WC rate for equivalent job categories, reflecting higher benefit levels (no state caps), Jones Act tort exposure via Part Two, and higher claim severity. DBA (overseas contractors) also carries a surcharge for war-zone deployments. <sup>[L2]</sup></p>
+      <div class="rate">USL&amp;H surcharge: 2–4× standard WC rate; DBA war-zone: +50–100% on USL&amp;H rate</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Stop-Gap / EL Limit Selected</h4>
+      <p>The EL Part Two limit protects against common law suits that breach the exclusive remedy shield. Standard limits ($1m / $1m / $1m) are adequate for most employers; high-hazard industries with aggressive plaintiff bars (TX, NY, IL) may warrant $2m or $5m EL limits. Excess EL (umbrella / excess casualty) provides additional protection. Stop-gap endorsements in monopolistic states should mirror the EL limit on the WC/EL policy.</p>
+      <div class="rate">EL limit uplift ($1m → $2m): +8–12% additional premium</div>
+    </div>
+  </div>
+
+  <!-- Lower impact factors -->
+  <div class="section-title">Rating Factors — Lower Impact</div>
+  <div class="factors-grid">
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Safety Programme Documentation</h4>
+      <p>Written OSHA-compliant safety programme, OSHA 300 log review, DART rate vs BLS industry average. Best-in-class safety programmes (VPP Star status, industry safety awards) may support schedule credit. Absence of documented safety programme is a red flag for high-hazard accounts. <sup>[L4]</sup></p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Claims Management Quality</h4>
+      <p>In-house risk management / claims coordination vs no formal claims contact; designated medical provider relationship; historical claims closure patterns. Rapid initial contact (3-day contact rule) and active return-to-work coordination correlate with significantly lower claim severity — typically 30–50% lower average claim cost. <sup>[I2]</sup></p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Return-to-Work Programme</h4>
+      <p>Formal modified/transitional duty programme allows injured workers to return in a limited capacity before full recovery, dramatically reducing temporary disability duration and overall claim cost. Light-duty job bank and designated physician partnerships are key components. NCCI data shows employers with RTW programmes have 20–30% lower total WC claim costs. <sup>[I2]</sup></p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Drug Testing Policy</h4>
+      <p>Post-accident drug testing (where state law permits) provides two benefits: it deters impaired working and may limit WC benefit eligibility where intoxication contributed to the accident (many states reduce or deny benefits for positive tests). DOT-regulated employers (transportation) have mandatory drug testing requirements that also function as WC risk controls. <sup>[L4]</sup></p>
+    </div>
+  </div>
+
+  <!-- EMR formula -->
+  <div class="section-title">Experience Modification Factor (EMR) — Formula Explained<span class="badge b-v">VER</span></div>
+  <div class="formula-box">
+    <span class="comment">// NCCI Experience Rating — simplified formula structure</span><br>
+    <br>
+    EMR = (Actual Primary Losses + Ballast) + Z × (Actual Excess Losses)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ÷ (Expected Primary Losses + Ballast) + Z × (Expected Excess Losses)<br>
+    <br>
+    <span class="comment">// Where:</span><br>
+    Primary Loss &nbsp;&nbsp;= Per-claim losses up to the primary threshold (typically $17,500)<br>
+    Excess Loss &nbsp;&nbsp;&nbsp;= Per-claim losses above the primary threshold<br>
+    Ballast &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Credibility stabiliser based on expected losses (reduces volatility for small accounts)<br>
+    Z &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Credibility factor (0–1.0; higher for larger payroll — full credibility at ~$2m+ std premium)<br>
+    <br>
+    <span class="comment">// Key implications:</span><br>
+    High-frequency small claims &nbsp;= full primary loss credit (maximum EMR impact)<br>
+    Single catastrophic loss &nbsp;&nbsp;&nbsp;&nbsp;= partially discounted via excess threshold (partial EMR protection)<br>
+    Large employers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= near-full credibility (EMR closely tracks actual experience)<br>
+    Small employers &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= low credibility (EMR moves less from 1.00; heavy ballast weight)<br>
+  </div>
+
+  <!-- Benchmark table -->
+  <div class="section-title">Benchmark Combined Ratios by Industry Segment<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Industry Segment</th><th>NCCI Class Examples</th><th>Manual Rate ($/100 payroll)</th><th>Typical Combined Ratio</th><th>Primary Perils</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Clerical / Administrative</td><td>8810, 8742</td><td>$0.30–$0.70</td><td>65–80%</td><td>Slip/trip, stress, RSI</td></tr>
+      <tr><td>Retail / Wholesale</td><td>8006, 8018, 8017</td><td>$1.50–$3.50</td><td>72–88%</td><td>Manual handling, robbery injury</td></tr>
+      <tr><td>Healthcare</td><td>8834, 8835, 8832</td><td>$2.00–$5.50</td><td>75–90%</td><td>Patient handling MSK, needle-stick</td></tr>
+      <tr><td>Manufacturing (light)</td><td>3400–3600</td><td>$3.00–$7.00</td><td>78–95%</td><td>Machine contact, ergonomics</td></tr>
+      <tr><td>Transportation / Trucking</td><td>7231, 7230, 7228</td><td>$5.00–$12.00</td><td>82–100%</td><td>Motor accidents, cumulative trauma</td></tr>
+      <tr><td>Construction (general)</td><td>5403, 5645, 6951</td><td>$8.00–$18.00</td><td>85–110%</td><td>Falls, struck-by, electrical</td></tr>
+      <tr><td>Mining / Excavation</td><td>1430, 1620, 1710</td><td>$10.00–$22.00</td><td>88–115%</td><td>Cave-in, explosion, black lung</td></tr>
+      <tr><td>Roofing / Iron Workers</td><td>5551, 5040, 5057</td><td>$15.00–$35.00</td><td>95–130%</td><td>Falls from height (fatal/catastrophic)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Worked Example A -->
+  <div class="worked">
+    <h3>Worked Example A — Multi-State Logistics Company (W5 Standard WC)</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Employer</td><td>Regional logistics company; 320 drivers + 80 warehouse staff; IL/TX/FL exposure</td><td>—</td></tr>
+        <tr><td>Payroll — Drivers</td><td>320 drivers × $65k avg; NCCI code 7230 (trucking)</td><td>$20.8m</td></tr>
+        <tr><td>Payroll — Warehouse</td><td>80 staff × $45k avg; NCCI code 8232 (warehousing)</td><td>$3.6m</td></tr>
+        <tr><td>Manual Rate — Drivers (IL blended)</td><td>$9.50 per $100 payroll</td><td>$19,760</td></tr>
+        <tr><td>Manual Rate — Warehouse (IL blended)</td><td>$5.80 per $100 payroll</td><td>$2,088</td></tr>
+        <tr><td>Manual Premium (IL base)</td><td>—</td><td>$21,848</td></tr>
+        <tr><td>Multi-State Loading</td><td>TX (15% of payroll) + FL (12% of payroll); blended state rate adjustment</td><td>+$4,200</td></tr>
+        <tr><td>EMR Applied</td><td>EMR 0.95 — 3-year below-average losses; strong RTW programme</td><td>×0.95</td></tr>
+        <tr><td>Adjusted Standard Premium</td><td>(Manual + multi-state) × EMR</td><td>$24,738</td></tr>
+        <tr><td>Schedule Credit</td><td>Safety programme, designated physician, drug testing</td><td>−10% = −$2,474</td></tr>
+        <tr><td>EL Limit</td><td>$1m/$1m/$1m standard; no uplift required</td><td>Included</td></tr>
+        <tr><td><strong>Indicative GWP</strong></td><td>—</td><td><strong>~$244,000 annualised</strong></td></tr>
+        <tr><td>Expected Loss Ratio</td><td>Transportation segment benchmark</td><td>88%</td></tr>
+        <tr><td>Estimated Claims</td><td>$244k × 88%</td><td>$214,720</td></tr>
+        <tr><td>Commission (15%)</td><td>—</td><td>$36,600</td></tr>
+        <tr><td>Expenses (10%)</td><td>—</td><td>$24,400</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>−$31,720 (−13% — borderline at benchmark LR)</strong></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.8rem;color:#666;margin-top:12px;">Note: Transportation is a challenged class. Positive EMR (0.95) and schedule credits are critical to achieving underwriting profitability at benchmark loss ratios. Rate adequacy review required at renewal.</p>
+  </div>
+
+  <!-- Worked Example B -->
+  <div class="worked alt">
+    <h3>Worked Example B — Offshore Marine Contractor (W6 USL&amp;H / Maritime)</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Employer</td><td>Gulf of Mexico offshore marine construction; 120 workers including 80 maritime crew (LHWCA) and 40 onshore office staff</td><td>—</td></tr>
+        <tr><td>Maritime Payroll (W6)</td><td>80 marine crew × $90k avg; subject to LHWCA</td><td>$7.2m</td></tr>
+        <tr><td>Onshore Payroll (W5 Louisiana)</td><td>40 office/yard staff × $55k avg; standard WC</td><td>$2.2m</td></tr>
+        <tr><td>W6 USL&amp;H Manual Rate</td><td>Marine construction code; $18.50 per $100 payroll (incl. USL&amp;H surcharge)</td><td>$133,200</td></tr>
+        <tr><td>W5 LA Standard Rate</td><td>$4.20 per $100 payroll (clerical/yard)</td><td>$9,240</td></tr>
+        <tr><td>Combined Manual Premium</td><td>—</td><td>$142,440</td></tr>
+        <tr><td>EMR Applied</td><td>EMR 1.15 — two lost-time injuries including one permanent partial disability in 3-year window</td><td>×1.15</td></tr>
+        <tr><td>Adjusted Standard Premium</td><td>—</td><td>$163,806</td></tr>
+        <tr><td>DBA Endorsement</td><td>3 workers periodically deployed overseas on US government contract (DBA coverage required)</td><td>+$12,000</td></tr>
+        <tr><td>EL Uplift</td><td>$2m EL limit selected given Jones Act and maritime tort exposure</td><td>+$8,500</td></tr>
+        <tr><td>Schedule Debit</td><td>EMR &gt;1.00; no formal RTW programme; limited SIU</td><td>+8% = +$14,753</td></tr>
+        <tr><td><strong>Indicative GWP</strong></td><td>—</td><td><strong>~$199,000 annualised</strong></td></tr>
+        <tr><td>Expected Loss Ratio</td><td>Offshore maritime benchmark — high severity, moderate frequency</td><td>75%</td></tr>
+        <tr><td>Estimated Claims</td><td>$199k × 75%</td><td>$149,250</td></tr>
+        <tr><td>Commission (12%)</td><td>Surplus lines broker</td><td>$23,880</td></tr>
+        <tr><td>Expenses (10%)</td><td>—</td><td>$19,900</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>$5,970 (3.0% margin — thin; EMR improvement critical at renewal)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Exclusions -->
+  <div class="section-title">Key Exclusions</div>
+  <table>
+    <thead>
+      <tr><th>Exclusion</th><th>Rationale</th><th>Alternative / Endorsement</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Intentional self-inflicted injury</td><td>Statutory exclusion in most states; injury must be accidental</td><td>Not available</td></tr>
+      <tr><td>Contractual liability (beyond statute)</td><td>WC pays statutory benefits only; enhanced contractual obligations require separate cover</td><td>Contractual liability endorsement (EL enhancement)</td></tr>
+      <tr><td>Employers outside USA (W4 needed)</td><td>W5/W6 apply only to US workers under US statutes; overseas US contractors need DBA or W4</td><td>W4 Overseas WC; DBA endorsement under W6</td></tr>
+      <tr><td>War / nuclear / terrorism (WC Part Two)</td><td>Standard exclusion on EL Part Two; Part One statutory benefits may not be excludable</td><td>TRIA coverage for terrorism events on Part Two</td></tr>
+      <tr><td>Monopolistic state WC (Part One)</td><td>OH/WY/ND/WA — state fund only; private insurer cannot write Part One</td><td>Stop-gap EL endorsement for Part Two equivalent</td></tr>
+      <tr><td>Workers' comp for independent contractors</td><td>IC classification means no WC obligation (state-specific; see gig economy risk)</td><td>Voluntary compensation endorsement where required</td></tr>
+      <tr><td>Punitive damages (some states)</td><td>EL Part Two typically excludes punitive damages; some states prohibit punitive damages in WC context</td><td>Endorsed punitive damages coverage where commercially available</td></tr>
+      <tr><td>ERISA benefit plan obligations</td><td>WC covers injury benefits, not pension/health plan obligations under ERISA</td><td>Separate ERISA compliance; ERISA fidelity bond</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn-box">
+    <strong>Texas Non-Subscriber Alert:</strong> Texas is the only state where WC is elective for most private employers. Non-subscriber employers that opt out of WC lose their exclusive remedy protection and face uncapped common law tort suits — including pain and suffering, punitive damages and wrongful death — in which they cannot assert assumption of risk, contributory negligence or fellow-servant defences. A single serious injury against a Texas non-subscriber can generate verdicts of $5m–$25m or more. Lloyd's EL underwriters should specifically identify Texas payroll and non-subscriber status. Stop-gap EL does not replace WC for non-subscribers — a voluntary WC programme or Texas non-subscriber occupational accident policy is required.<sup>[L1]</sup>
+  </div>
+
+  <div class="info-box">
+    <strong>NCCI Basic Manual — ADA &amp; FMLA Coordination:</strong> The ADA (42 U.S.C. §12101)<sup>[L7]</sup> and FMLA (29 U.S.C. §2601)<sup>[L8]</sup> interact with WC in return-to-work programmes. Employers must coordinate WC restrictions with FMLA leave entitlement and ADA reasonable accommodation requirements — failure to accommodate a disabled worker returning from WC may generate a separate ADA claim. Modified duty offers that do not constitute reasonable accommodation under ADA may also be challenged. Underwriters should ask about RTW coordinator capability and ADA/FMLA interaction protocols.
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation USA (W5 / W6) &nbsp;|&nbsp; <a href="../index.html">&#8592; Hub Index</a> &nbsp;|&nbsp; <a href="rates-analysis.html">Next: Rates &amp; ROE &#8594;</a></p>
+</footer>
+
+</body>
+</html>

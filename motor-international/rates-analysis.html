@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Motor International (MF/MG/MH/MI/MP) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b0020;
+      --hub-dark:      #4a0010;
+      --hub-light:     #fce4ec;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#4a0010 0%,#7b0020 55%,#9c0027 100%);
+      --header-sub:    #ef9a9a;
+      --hub-mid:       #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0010;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#4a0010;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    canvas{max-width:100%;height:280px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #fce4ec;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fff0f3;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #1a5c2a;}
+    .roe-card.base{border-top:4px solid var(--hub-accent);}
+    .roe-card.bear{border-top:4px solid #c62828;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#1a5c2a;}
+    .roe-card.base .val{color:var(--hub-accent);}
+    .roe-card.bear .val{color:#c62828;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:240px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:var(--hub-primary);}
+    .bar-out{background:#c62828;}
+    .bar-profit{background:var(--hub-accent);color:#000;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    footer{background:#4a0010;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Motor International</a> › Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">Market cycle, rate index by region, ROE scenarios &amp; P&amp;L waterfall</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Charts -->
+  <div class="section-title">Rate Index &amp; Loss Ratio Trends<span class="badge b-e">EST</span></div>
+  <div class="chart-wrap">
+    <h3>Chart 1 — International Motor Rate Index 2010–2026 by Region (2010 = 100)</h3>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Gross Loss Ratio by Territory / Class (Illustrative, 2024)</h3>
+    <canvas id="chartLR"></canvas>
+  </div>
+
+  <!-- Market cycle table -->
+  <div class="section-title">Market Cycle History<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Driver</th><th>Rate Movement</th><th>Lloyd's Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2010–2015</td><td>Soft / Benign</td><td>Post-GFC recovery; benign frequency; competitive market for delegated motor business</td><td>−2 to −4% p.a.</td><td>Capacity readily available; broad territorial extensions granted</td></tr>
+      <tr><td>2015–2017</td><td>Softening Slows</td><td>Australian hail events; South Africa claims inflation; first ADAS repair cost data emerging</td><td>Flat to +3%</td><td>Coverholder scrutiny increases; hail aggregate limits reviewed</td></tr>
+      <tr><td>2018–2019</td><td>Hardening Begins</td><td>Repair cost inflation; EV emergence; South Africa/EM market stress; Lloyd's Decile 10 programme</td><td>+8 to +18%</td><td>Some unprofitable binders cancelled; territorial scope tightened</td></tr>
+      <tr><td>2020</td><td>COVID Frequency Dip</td><td>Lockdowns reduce vehicle usage; frequency falls 30–50%; short-term LR improvement</td><td>+5 to +12% (maintained)</td><td>Pandemic clauses reviewed; future pandemic frequency uncertainty noted</td></tr>
+      <tr><td>2021–2023</td><td>Hard Market</td><td>Parts scarcity, semiconductor shortage, OEM supply disruption, vehicle value inflation, repair labour shortage</td><td>+15 to +35%</td><td>EV severity loadings introduced; ADAS repair cost modelling updated</td></tr>
+      <tr><td>2024–2026</td><td>Selective Stabilisation</td><td>Supply chains recovering; EV severity risk crystalising; NatCat-exposed territories still hard</td><td>Flat to +10%</td><td>EV fleet underwriting criteria formalised; hail aggregate managed actively</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative £25m International Motor Binder Portfolio<span class="badge b-e">EST</span></div>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+18%</div>
+      <div class="detail">Combined Ratio 76%<br>Favourable NatCat; hard rates sustained; strong coverholder selection; EV severity contained</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+10%</div>
+      <div class="detail">Combined Ratio 88%<br>Moderate NatCat burden; repair cost inflation stabilising; mixed territory performance</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−4%</div>
+      <div class="detail">Combined Ratio 106%<br>Major hail/flood event; EV severity spike; South Africa LR deterioration; FX headwinds</div>
+    </div>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (£25m GWP International Motor Binder, illustrative)</h3>
+    <div class="wf-row"><div class="wf-label">Gross Written Premium</div><div class="wf-bar bar-in" style="width:100%;">£25m</div><div class="wf-val">£25.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Coverholder Commission (22%)</div><div class="wf-bar bar-out" style="width:44%;">−£5.5m</div><div class="wf-val">−£5.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance Premium (quota share/XL)</div><div class="wf-bar bar-out" style="width:18%;">−£2.2m</div><div class="wf-val">−£2.2m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Earned Premium</div><div class="wf-bar bar-in" style="width:69%;background:#9c0027;">£17.3m</div><div class="wf-val">£17.3m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Third-Party Liability</div><div class="wf-bar bar-out" style="width:28%;">−£3.5m</div><div class="wf-val">−£3.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Accidental Damage / OD</div><div class="wf-bar bar-out" style="width:36%;">−£4.5m</div><div class="wf-val">−£4.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Theft &amp; Fire (incl. EV)</div><div class="wf-bar bar-out" style="width:18%;">−£2.2m</div><div class="wf-val">−£2.2m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — NatCat (hail/flood)</div><div class="wf-bar bar-out" style="width:14%;">−£1.8m</div><div class="wf-val">−£1.8m</div></div>
+    <div class="wf-row"><div class="wf-label">IBNR Reserve Strengthening</div><div class="wf-bar bar-out" style="width:7%;">−£0.9m</div><div class="wf-val">−£0.9m</div></div>
+    <div class="wf-row"><div class="wf-label">Expenses / Overhead (11%)</div><div class="wf-bar bar-out" style="width:11%;">−£2.75m</div><div class="wf-val">−£2.75m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (est. 4.5% float)</div><div class="wf-bar bar-in" style="width:6%;background:var(--hub-accent);color:#000;">+£0.75m</div><div class="wf-val">+£0.75m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Profit</strong></div><div class="wf-bar bar-profit" style="width:23%;"><strong>£2.4m</strong></div><div class="wf-val"><strong>£2.4m (9.6% ROE)</strong></div></div>
+  </div>
+
+  <!-- IBNR table -->
+  <div class="section-title">IBNR &amp; Development Considerations</div>
+  <table>
+    <thead><tr><th>Factor</th><th>Impact on Reserves</th></tr></thead>
+    <tbody>
+      <tr><td>Long-tail BI claims — injury severity development</td><td>Third-party BI claims in some jurisdictions (South Africa RAF, certain EM markets) can take 3–7 years to reach final settlement — IBNR loading essential for BI-heavy territory exposure</td></tr>
+      <tr><td>NatCat aggregate tail — total loss settlements</td><td>After major hailstorm or flood events, the shortage of replacement vehicles and supply chain delays extends total loss claim settlement timelines — IBNR must reflect claims lifecycle, not just damage assessment date</td></tr>
+      <tr><td>EV battery fire repair uncertainty</td><td>No established actuarial data on EV battery fire repair cost distributions; prudent underwriters apply +15–25% severity uplift IBNR for EV-inclusive portfolios pending 5+ years of development data</td></tr>
+      <tr><td>Currency and inflation development</td><td>International motor claims in EM currencies with high inflation (Turkey, Argentina) can develop materially in GBP/USD terms after initial reserve setting — consider currency hedging or reserve in local currency with reviewed FX conversion</td></tr>
+      <tr><td>Fraud reserve adjustment</td><td>In high-fraud territories (South Africa, parts of MENA), applying a "fraud reserve credit" to IBNR requires evidence of systematic SIU activity and recovery — prudent to reserve gross until fraud is confirmed and denied</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Motor International (MF/MG/MH/MI/MP) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation →</a></p>
+</footer>
+
+<script>
+// Chart 1 — International Motor Rate Index 2010–2026 by Region
+const years = [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type:'line',
+  data:{
+    labels: years,
+    datasets:[
+      {
+        label:'Western Europe',
+        data:[100,98,96,94,93,92,91,93,100,112,118,138,162,178,185,190,193],
+        borderColor:'#7b0020',backgroundColor:'rgba(123,0,32,0.08)',tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'MENA',
+        data:[100,99,97,96,94,93,92,94,102,115,120,140,165,180,188,192,195],
+        borderColor:'#c8a84b',backgroundColor:'rgba(200,168,75,0.08)',tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'APAC (Australia / SE Asia)',
+        data:[100,100,101,103,104,105,108,112,122,138,145,168,196,215,225,230,235],
+        borderColor:'#1a237e',backgroundColor:'rgba(26,35,126,0.06)',tension:0.3,pointRadius:3
+      },
+      {
+        label:'LatAm',
+        data:[100,102,105,108,112,116,120,128,140,155,162,188,215,235,248,255,260],
+        borderColor:'#1a5c2a',backgroundColor:'rgba(26,92,42,0.06)',tension:0.3,pointRadius:3
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom'}},
+    scales:{y:{title:{display:true,text:'Rate Index (2010=100)'},beginAtZero:false}}
+  }
+});
+
+// Chart 2 — Gross LR by Territory/Class
+new Chart(document.getElementById('chartLR'), {
+  type:'bar',
+  data:{
+    labels:[
+      'W.Europe Fleet','S.Africa Private','S.Africa HGV','MENA Private UBI',
+      'Australia (no NatCat)','Australia (hail-exp)','EU HGV (CMR)','UAE/GCC Commercial'
+    ],
+    datasets:[{
+      label:'Gross Loss Ratio % (midpoint, illustrative)',
+      data:[72,80,85,63,65,90,70,59],
+      backgroundColor:[
+        '#7b0020','#9c0027','#c62828','#c8a84b',
+        '#1a5c2a','#e65100','#1a237e','#4a0010'
+      ]
+    }]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{y:{title:{display:true,text:'Gross Loss Ratio (%)'},max:120,beginAtZero:true}}
+  }
+});
+</script>
+</body>
+</html>

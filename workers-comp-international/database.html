@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Workers Compensation International (W4) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #00575c;
+      --hub-dark:      #002c30;
+      --hub-light:     #e0f4f5;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#7b5e00;
+      --header-gradient:linear-gradient(135deg,#002c30 0%,#00575c 55%,#00838f 100%);
+      --header-sub:    #80deea;
+      --hub-mid:       #b2ebf2;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2e30;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#80deea;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#002c30;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#80deea;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #e0f4f5;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f0fbfc;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-combat{background:#ffebee;color:#c62828;}
+    .tp-accident{background:#fff3e0;color:#e65100;}
+    .tp-disease{background:#e0f2f1;color:#00695c;}
+    .tp-repatriation{background:#e8eaf6;color:#1a237e;}
+    .tp-mass{background:#fce4ec;color:#880e4f;}
+    .tp-occup{background:#f3e5f5;color:#6a1b9a;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#00575c;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#f0fbfc;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#002c30;color:#80deea;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Workers Comp International (W4)</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>International WC / DBA Loss Database</h1>
+    <div class="sub">35 notable W4 / DBA loss events 1991–2024 — filter by type, sector &amp; geography</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Loss Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="combat">Combat / Hostile Act</option>
+        <option value="accident">Accident / Injury</option>
+        <option value="disease">Disease / Illness</option>
+        <option value="repatriation">Repatriation Event</option>
+        <option value="mass">Mass Casualty</option>
+        <option value="occup">Occupational Disease</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="us-military-contractor">US Military Contractor</option>
+        <option value="oil-gas">Oil &amp; Gas</option>
+        <option value="construction">Construction</option>
+        <option value="ngo-humanitarian">NGO / Humanitarian</option>
+        <option value="mining">Mining</option>
+        <option value="aviation-support">Aviation Support</option>
+        <option value="security">Security / PMC</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2003" min="1991" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 10" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Name, country…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event / Entity</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Value ($m est.)</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation International (W4) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1991,n:"Kuwait Liberation — Desert Storm Contractor Deaths",t:"combat",s:"us-military-contractor",desc:"US civilian contractors supporting Desert Storm operations suffer fatalities and serious injuries from Iraqi attacks on logistics facilities and airfields. First major DBA mass-casualty event since Vietnam. War Hazards Compensation Act backstop activated for war-related deaths. Establishes key precedents for WHCA reimbursement claims administration.",v:15,sev:"maj",geo:"Kuwait/Iraq"},
+  {y:1995,n:"Saudi Arabia SANG Bombing — Riyadh",t:"combat",s:"us-military-contractor",desc:"Bombing of the Saudi National Guard training facility in Riyadh kills 7 US military trainers (not DBA, as US government employees) but injures several civilian contractor personnel providing support services. Tests DBA coverage for contractor personnel in non-LOGCAP advisory roles.",v:5,sev:"mod",geo:"Saudi Arabia"},
+  {y:1996,n:"Khobar Towers Bombing — DBA Claims",t:"combat",s:"us-military-contractor",desc:"Truck bomb attack on Khobar Towers accommodation complex in Saudi Arabia kills 19 US servicemen and injures 498 personnel, including civilian contractor support staff. DBA claims filed for injured and killed contractors on site. One of the first large-scale DBA mass-casualty events from terrorism. WHCA backstop claimed.",v:25,sev:"maj",geo:"Saudi Arabia"},
+  {y:1998,n:"Somali Piracy — Crew WC/PA Claims",t:"accident",s:"oil-gas",desc:"Rising Somali piracy in the late 1990s (escalating significantly post-2005) generates crew kidnap, ransom and injury claims under international WC/PA programmes for merchant vessels and offshore support vessel crews. Tests the boundary between K&R cover and WC for seafarers in hostile waters.",v:8,sev:"mod",geo:"Somalia/Indian Ocean"},
+  {y:2000,n:"USS Cole Bombing — Contractor Personnel",t:"combat",s:"us-military-contractor",desc:"Bombing of USS Cole in Aden harbour (Yemen) kills 17 US sailors but also injures civilian contractor maintenance personnel aboard the vessel. DBA coverage questions arise around contractors working on US naval vessels in foreign ports. WHCA backstop activated for war hazard injuries.",v:6,sev:"mod",geo:"Yemen"},
+  {y:2003,n:"Iraq Invasion Phase — Mass Contractor Deployment, Early Casualties",t:"mass",s:"us-military-contractor",desc:"Operation Iraqi Freedom initial phase. Rapid deployment of KBR/Halliburton LOGCAP workforce alongside US forces. Early contractor casualties from IEDs, ambushes and hostile fire. DOL/OWCP processes first wave of Iraq DBA death and disability claims. TCN (Third-Country National) workforce predominantly Filipinos, Indians and Nepalis — benefit calculations for TCN families create complex DOL/OWCP administration challenges.",v:120,sev:"cat",geo:"Iraq"},
+  {y:2004,n:"KBR Burn Pit Occupational Disease — Iraq",t:"occup",s:"us-military-contractor",desc:"KBR contractors at Joint Base Balad and other Iraq installations allege long-term respiratory and oncological disease from exposure to open-air burn pits used to dispose of military waste. Class action DBA and tort litigation. Burn pit exposure becomes one of the largest DBA occupational disease controversies; DOL/OWCP faces thousands of delayed-onset disease claims years later. Estimated eventual DBA claims value substantial.",v:200,sev:"cat",geo:"Iraq"},
+  {y:2005,n:"Iraq IED Campaign — Contractor Casualty Surge",t:"combat",s:"us-military-contractor",desc:"Insurgent IED campaign in Iraq reaches peak frequency in 2005–2006. Contractor convoys are primary targets. Vehicle-borne IEDs, roadside bombs and suicide attacks generate the highest single-year volume of DBA death and disability claims in the Act's history. KBR and subcontractor DBA programmes sustain catastrophic aggregate losses. Lloyd's hostile zone rate hardening peaks.",v:350,sev:"cat",geo:"Iraq"},
+  {y:2006,n:"Philippines OFW — Qatar Construction Deaths",t:"accident",s:"construction",desc:"Multiple Philippine Overseas Filipino Worker (OFW) deaths on Qatar construction sites. POEA compulsory insurance (separate from W4 but relevant to international WC framework) activated. Raises global awareness of TCN worker safety standards and the gap between statutory minimum benefits and actual compensation for families in labour-exporting countries. <sup>[L6]</sup>",v:4,sev:"mod",geo:"Qatar/Philippines"},
+  {y:2007,n:"Afghanistan — Contractor Casualties at Kandahar and Bagram",t:"combat",s:"us-military-contractor",desc:"Taliban IED and suicide attack campaign generates significant contractor casualties at Kandahar Air Field and Bagram Air Base — the two primary US contractor hubs. DBA claims filed; WHCA backstop applied to war hazard deaths. Contractor casualty rate in Afghanistan begins to exceed Iraq rate per deployed capita.",v:80,sev:"maj",geo:"Afghanistan"},
+  {y:2008,n:"Nigeria — Shell Oil Workers Kidnap and Injury",t:"accident",s:"oil-gas",desc:"MEND (Movement for the Emancipation of the Niger Delta) militants conduct repeated attacks and kidnappings of Shell and Chevron oil workers in the Niger Delta. International expat and TCN workers sustain injuries and are held hostage. W4 war risk extensions and K&R policies both triggered. Demonstrates the complex multi-cover interface in conflict-adjacent oil operations.",v:20,sev:"mod",geo:"Nigeria"},
+  {y:2009,n:"Kabul Embassy Attack — Contractor Security Personnel",t:"combat",s:"security",desc:"Taliban attack on the US Embassy in Kabul. Private security contractor (ArmorGroup/MPRI) personnel providing perimeter security are killed and injured. DBA coverage applies to security contractor personnel on US government diplomatic premises overseas. Highlights DBA coverage scope: any US government contract, not just military.",v:12,sev:"mod",geo:"Afghanistan"},
+  {y:2010,n:"Deepwater Horizon — International Crew WC/DBA Interface",t:"accident",s:"oil-gas",desc:"Deepwater Horizon blowout and explosion kills 11 workers including Transocean crew (non-US nationals on MODU in US Gulf of Mexico waters). USL&H and LHWCA coverage applies to maritime workers on the vessel. International crew members' claims navigate the intersection of USL&H, maritime law, and their home country WC schemes. Total WC/EL claims element estimated at $150m+ across all parties.",v:150,sev:"cat",geo:"Gulf of Mexico/USA"},
+  {y:2011,n:"Libya Mass Evacuation — European Contractor W4 Claims",t:"repatriation",s:"oil-gas",desc:"Civil war following Gaddafi fall triggers mass evacuation of European energy and construction contractor workforces. BP, ENI, Total and major construction companies activate W4 war risk endorsements and emergency evacuation benefits. Workers injured during chaotic evacuation, held by militias or suffering psychological trauma generate W4 claims. Estimated total W4 market loss event $40–80m (est.).",v:60,sev:"maj",geo:"Libya"},
+  {y:2012,n:"In Amenas Hostage Crisis — BP Algeria",t:"combat",s:"oil-gas",desc:"Jihadist attack on the In Amenas gas facility in Algeria kills 39 foreign workers from 8 countries (BP, Statoil, JGC employees). International WC/EL and K&R policies both triggered. BP's global W4 programme sustains significant losses. Demonstrates that W4 war risk extension is essential for North African energy operations. Multi-jurisdiction claims across UK, Japan, Norway, Ireland.",v:85,sev:"cat",geo:"Algeria"},
+  {y:2013,n:"Bangladesh Rana Plaza — Supply Chain WC",t:"mass",s:"construction",desc:"Rana Plaza garment factory collapse kills 1,134 workers and injures 2,500. While primarily a local Bangladesh WC matter, the incident exposes the international supply chain WC gap: Western brands' sourcing obligations and UN Guiding Principles on Business and Human Rights. W4 underwriters begin scrutinising supply chain WC obligations for multinational retail clients.",v:40,sev:"cat",geo:"Bangladesh"},
+  {y:2014,n:"Ebola — West Africa NGO and Contractor Repatriation",t:"disease",s:"ngo-humanitarian",desc:"Ebola outbreak in West Africa (Guinea, Sierra Leone, Liberia) triggers emergency medical repatriation of affected NGO workers and international medical contractors. MSF, WHO and US CDC contractor staff require air medical evacuation. W4 and international PA policies cover medical evacuation and disease treatment costs. Average cost per medevac case exceeds $200,000.",v:15,sev:"mod",geo:"West Africa"},
+  {y:2015,n:"Saudi Arabia Crane Collapse — Mecca",t:"accident",s:"construction",desc:"Construction crane collapse at the Grand Mosque in Mecca during Hajj kills 107 people including foreign construction workers on Saudi Binladin Group projects. International WC claims for TCN and expat construction workers. Saudi WC statutory scheme (under Saudi Labour Law) applies alongside W4 cover for expat supervisory staff.",v:22,sev:"maj",geo:"Saudi Arabia"},
+  {y:2016,n:"Turkey Coup Attempt — Contractor Evacuation",t:"repatriation",s:"construction",desc:"Failed military coup in Turkey triggers emergency evacuation of international contractors and expat employees from major construction projects around Istanbul and Ankara. W4 emergency evacuation benefits activated. Business interruption and contract frustration losses arise alongside WC/PA claims for injured contractor personnel caught in the violence.",v:8,sev:"mod",geo:"Turkey"},
+  {y:2017,n:"Papua New Guinea LNG — Contractor Injury Series",t:"accident",s:"oil-gas",desc:"Series of serious contractor injuries at the Exxon/PNG LNG project during construction and early operations phases. Remote jungle terrain makes medical evacuation extremely challenging and costly. Average medevac cost per serious injury case exceeds $120,000. W4 underwriters scrutinise medevac SLA quality for remote PNG operations. Occupational health standards in remote PNG sites under review.",v:18,sev:"mod",geo:"Papua New Guinea"},
+  {y:2018,n:"KBR LOGCAP IV — Iraq Burn Pit Disease Claims Development",t:"occup",s:"us-military-contractor",desc:"US DOL/OWCP begins processing large volumes of delayed-onset DBA disease claims from Iraq and Afghanistan veterans citing burn pit exposure. KBR's DBA insurers face IBNR development significantly exceeding initial reserves. Burn pit litigation in federal courts (tort) runs in parallel with DBA administrative claims. PACT Act 2022 (US veterans benefit law) later addresses some claims but DBA civilian contractor claims process separately.",v:300,sev:"cat",geo:"Iraq/USA"},
+  {y:2019,n:"Chad Basin NGO Worker Abductions",t:"combat",s:"ngo-humanitarian",desc:"Multiple NGO and humanitarian workers abducted in the Lake Chad Basin (Nigeria, Niger, Cameroon, Chad) by Boko Haram and ISWAP. W4 and K&R policies jointly triggered. Average hostage negotiation and recovery operation costs exceed $500,000 per incident. W4 psychological trauma benefits activated for released hostages. MSF, IRC and World Food Programme personnel affected.",v:12,sev:"mod",geo:"Nigeria/Niger/Chad"},
+  {y:2020,n:"COVID-19 — Offshore Oil Worker Mass Repatriation",t:"repatriation",s:"oil-gas",desc:"COVID-19 pandemic forces emergency repatriation of offshore oil platform workers globally — North Sea, West Africa, Middle East, Gulf of Mexico. Border closures trap workers on platforms and on vessels. W4 and maritime WC programmes activate emergency medical and repatriation benefits. Average per-person repatriation cost $8,000–25,000. W4 disease coverage disputed for COVID cases contracted on overseas work assignments.",v:90,sev:"maj",geo:"Global"},
+  {y:2020,n:"COVID-19 — Construction Worker Repatriation Middle East",t:"repatriation",s:"construction",desc:"Qatar, UAE and Saudi Arabia construction sites house hundreds of thousands of TCN workers from Philippines, India, Bangladesh, Nepal. COVID-19 triggers border closures and repatriation demands. Workers stranded on construction sites face accommodation and medical care shortfalls. International WC/PA programmes and POEA compulsory insurance both invoked. Repatriation logistics costs are enormous.",v:45,sev:"maj",geo:"Middle East"},
+  {y:2021,n:"Afghanistan Withdrawal — US Contractor Evacuation",t:"repatriation",s:"us-military-contractor",desc:"Chaotic US military withdrawal from Afghanistan (August 2021). US government contractors scramble to evacuate Afghan national employees, TCN workers and expat staff. DBA claims for contractor personnel injured during the final days of Kabul evacuation. Contractor companies face W4 emergency repatriation cost claims. Local national Afghan employees (DBA-covered on US contracts) left behind — benefit calculation and DOL/OWCP claims procedures tested.",v:35,sev:"maj",geo:"Afghanistan"},
+  {y:2022,n:"Ukraine — European Contractor War Risk Claims",t:"combat",s:"construction",desc:"Russia's full-scale invasion of Ukraine (February 2022) forces mass withdrawal of European construction, energy and infrastructure contractors. Workers in Ukraine — including local Ukrainians, TCNs and expat supervisors — sustain injuries. W4 war risk endorsements activated. Multiple UK, German, French and Polish companies activate W4 emergency response. Estimated W4 market loss event from Ukrainian contractor exposures $20–50m (est.).",v:35,sev:"maj",geo:"Ukraine"},
+  {y:2022,n:"Saudi Aramco Drone Attacks — Contractor Personnel",t:"combat",s:"oil-gas",desc:"Houthi drone and missile attacks on Saudi Aramco facilities continue in 2022, affecting contractor personnel (Aramco and its engineering/construction contractors) at Abqaiq and other major installations. W4 war risk endorsements contested — does standard war exclusion apply to Yemeni Houthi attacks on Saudi territory? Coverage disputes litigated.",v:20,sev:"mod",geo:"Saudi Arabia"},
+  {y:2022,n:"Mozambique LNG — Security Crisis Contractor Evacuation",t:"combat",s:"oil-gas",desc:"Islamist insurgency in Cabo Delgado, Mozambique forces evacuation and suspension of TotalEnergies' Mozambique LNG project. International contractor personnel (several thousand workers) are evacuated. W4 war risk and emergency repatriation claims filed. TotalEnergies invokes force majeure on contracts. W4 war risk extension for northern Mozambique operations debated.",v:30,sev:"maj",geo:"Mozambique"},
+  {y:2023,n:"Niger Coup — French and European Contractor Evacuation",t:"repatriation",s:"mining",desc:"Military coup in Niger (July 2023) triggers evacuation of French, European and other international contractors from uranium mines (Orano) and infrastructure projects. W4 emergency evacuation and repatriation benefits activated. Orano suspends uranium mining operations; contractor workforce repatriated. W4 political violence extension and war risk endorsements reviewed for sub-Saharan Africa mining operations.",v:12,sev:"mod",geo:"Niger"},
+  {y:2023,n:"Sudan Civil War — NGO Worker Evacuation",t:"repatriation",s:"ngo-humanitarian",desc:"Sudan civil war outbreak (April 2023) triggers mass evacuation of UN, INGO and bilateral aid agency contractor and employee workforces from Khartoum and Darfur. W4 emergency evacuation benefits activated for humanitarian organisations. Multiple workers sustain injuries; several fatalities among NGO/UN affiliated contractor personnel. W4 psychological trauma and PTSD benefits significant.",v:18,sev:"mod",geo:"Sudan"},
+  {y:2023,n:"Gaza Conflict — UN and NGO Worker Deaths",t:"combat",s:"ngo-humanitarian",desc:"Conflict in Gaza from October 2023 results in deaths of UN, UNRWA and INGO contractor and employee personnel (World Central Kitchen and others). International WC/EL and K&R claims filed. Debate over DBA applicability for USAID-funded humanitarian contractors. UK and European EL policies (W4) respond for European NGO worker casualties. Most significant NGO/humanitarian WC mass-casualty event since 2000s.",v:25,sev:"maj",geo:"Gaza/Middle East"},
+  {y:2024,n:"Red Sea Houthi Attacks — Maritime Crew WC",t:"combat",s:"oil-gas",desc:"Houthi drone and missile attacks on commercial shipping in the Red Sea trigger maritime crew injury and death claims under WC/PA programmes. USL&H interface for US-nexus vessels. International seafarer WC claims across multiple flag states. Vessels detoured around Cape of Good Hope; maritime insurer war risk charges rise sharply. W4/maritime WC interface for affected crew members tested.",v:22,sev:"mod",geo:"Red Sea/Yemen"},
+  {y:2024,n:"Haiti — UN Mission Contractor Security Personnel",t:"combat",s:"security",desc:"UN Multinational Security Support Mission to Haiti (MSS) deploys security contractors alongside Kenyan-led forces. US and other international security contractor personnel face hostile fire, kidnap and injury risks. DBA potentially applicable for US government-linked contractor elements. W4 war risk for non-US security contractor personnel from Kenya, Bahamas and other contributing nations.",v:10,sev:"mod",geo:"Haiti"},
+  {y:2024,n:"Myanmar — Expat Worker Trapped in Conflict",t:"repatriation",s:"construction",desc:"Ongoing civil conflict in Myanmar traps international contractor and NGO personnel. Several expat construction and engineering workers unable to exit due to airport closures and road blockages. W4 emergency repatriation costs incurred. Psychological trauma claims filed for workers trapped in conflict zones for extended periods. Security evacuation contractors commissioned.",v:8,sev:"mod",geo:"Myanmar"}
+];
+
+const typeLabels = {
+  combat:"Combat / Hostile Act",accident:"Accident / Injury",disease:"Disease / Illness",
+  repatriation:"Repatriation Event",mass:"Mass Casualty",occup:"Occupational Disease"
+};
+const typeClass = {
+  combat:"tp-combat",accident:"tp-accident",disease:"tp-disease",
+  repatriation:"tp-repatriation",mass:"tp-mass",occup:"tp-occup"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+const sectorLabels = {
+  "us-military-contractor":"US Military Contractor",
+  "oil-gas":"Oil &amp; Gas",
+  "construction":"Construction",
+  "ngo-humanitarian":"NGO / Humanitarian",
+  "mining":"Mining",
+  "aviation-support":"Aviation Support",
+  "security":"Security / PMC"
+};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${sectorLabels[d.s]||d.s}</td>
+      <td>${d.v>=1000?'$'+(d.v/1000).toFixed(1)+'bn':'$'+d.v+'m'}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">&#9660; Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Motor – UK: Global Programme | Risk Code Hub</title>
+  <style>
+    :root {
+      --motor:#c0392b; --motor-dark:#7b1010; --road:#263238;
+      --signal:#e67e22; --speed:#1565c0; --go:#2e7d32;
+      --light:#fdf5f5; --text:#1e2a2e; --muted:#6b7280; --border:#e0cece;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #c0392b;
+    --hub-dark:      #7b1010;
+    --hub-light:     #fdecea;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #e67e22;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#1a0808 0%,#c0392b 50%,#7b1010 100%);
+    --header-sub:    #f0c8c8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#1a0808 0%,#c0392b 50%,#7b1010 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#c8a090; margin-bottom:6px; }
+    .breadcrumb a { color:var(--signal); text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#f0c8c8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--motor); border-bottom-color:var(--signal); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--motor); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--signal); }
+    h3 { font-size:1.05rem; color:var(--road); margin:24px 0 12px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .tower { max-width:600px; margin:28px auto; }
+    .tower-layer { border-radius:8px; padding:14px 20px; color:#fff; margin-bottom:8px; }
+    .tower-layer.t-cat { background:linear-gradient(90deg,#6a0dad,#8b1a9e); }
+    .tower-layer.t-xs2 { background:linear-gradient(90deg,var(--motor-dark),#c0392b); }
+    .tower-layer.t-xs1 { background:linear-gradient(90deg,var(--signal),#d35400); }
+    .tower-layer.t-primary { background:linear-gradient(90deg,var(--speed),#0d47a1); }
+    .tower-layer.t-retain { background:linear-gradient(90deg,var(--go),#1b5e20); }
+    .tower-layer p, .tower-layer li { color:#e8f0ff; font-size:0.84rem; line-height:1.6; }
+    .tower-label { font-size:0.72rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; opacity:0.8; margin-bottom:2px; }
+    .tower-layer h4 { font-size:0.95rem; font-weight:700; margin-bottom:4px; }
+    .tower-layer .t-details { font-size:0.82rem; opacity:0.9; }
+
+    .profile-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:24px 0; }
+    .profile-card { background:#fff; border-radius:10px; padding:20px 22px; border-top:4px solid var(--motor); box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .profile-card.amber { border-top-color:var(--signal); }
+    .profile-card.blue { border-top-color:var(--speed); }
+    .profile-card.green { border-top-color:var(--go); }
+    .profile-card h4 { font-size:0.9rem; font-weight:700; color:var(--motor); margin-bottom:10px; }
+    .profile-card.amber h4 { color:var(--signal); }
+    .profile-card.blue h4 { color:var(--speed); }
+    .profile-card.green h4 { color:var(--go); }
+    .profile-card table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+    .profile-card td { padding:5px 0; border-bottom:1px solid var(--border); }
+    .profile-card tr:last-child td { border-bottom:none; }
+    .profile-card td:first-child { color:var(--muted); width:55%; }
+
+    .dark-box { background:var(--road); color:#c8d8e0; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .dark-box h3 { color:var(--signal); margin-bottom:12px; font-size:1.05rem; }
+    .dark-box p, .dark-box li { font-size:0.9rem; line-height:1.7; color:#c8d8e0; }
+    .dark-box ul { padding-left:20px; margin:8px 0; }
+    .dark-box li { margin-bottom:7px; }
+
+    .coord-tbl { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.05); margin:24px 0; }
+    .coord-tbl table { width:100%; border-collapse:collapse; font-size:0.84rem; }
+    .coord-tbl th { background:var(--road); color:#fff; padding:10px 14px; text-align:left; }
+    .coord-tbl th:hover { background:#1a2328; color:#fff; }
+    .coord-tbl td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .coord-tbl tr:last-child td { border-bottom:none; }
+    .coord-tbl tr:nth-child(even) td { background:#f8fafa; }
+
+    .case-study { background:#fff; border-radius:12px; padding:28px; box-shadow:0 3px 12px rgba(0,0,0,.08); margin:24px 0; border-left:6px solid var(--motor); }
+    .case-study h3 { font-size:1.05rem; color:var(--motor); margin-bottom:16px; }
+    .case-study table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .case-study td { padding:8px 12px; border-bottom:1px solid var(--border); }
+    .case-study tr:last-child td { border-bottom:none; }
+    .case-study td:first-child { color:var(--muted); width:40%; font-weight:500; }
+    .case-study .total { background:var(--motor); color:#fff; font-weight:800; font-size:1rem; padding:12px 16px; border-radius:8px; text-align:center; margin-top:16px; }
+
+    footer { background:var(--road); color:#aabbc4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Motor – UK</a> › Global Programme</div>
+  <h1>Global Programme Structuring — UK Motor (M2–M6)</h1>
+  <p>Multinational fleet programme architecture, captive arrangements, fronting, territory coordination and a worked fleet case study.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates & ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Multinational Motor Fleet Programme Architecture</h2>
+  <p>Large multinational corporations with vehicle fleets across multiple countries require coordinated motor insurance programmes. UK (M5) often forms the master programme jurisdiction where the UK fleet is the largest or the programme is placed at Lloyd's. International fleet programmes involve local admitted policies in each operating territory, with a master policy (typically non-admitted) providing difference-in-conditions/limits (DIC/DIL) cover above local policies.</p>
+
+  <div class="tower">
+    <div class="tower-layer t-cat">
+      <div class="tower-label">Layer 4 — Catastrophe / Clash</div>
+      <h4>Cat XL — Fleet Catastrophe (Hail, Flood, Fire)</h4>
+      <div class="t-details">Aggregate event cover: £50m xs £25m. For hailstorm, flood or fire events affecting multiple fleet vehicles simultaneously. Annual aggregate deductible. Lloyd's syndicate capacity. <span class="badge b-i">ILLUS</span></div>
+    </div>
+    <div class="tower-layer t-xs2">
+      <div class="tower-label">Layer 3 — XS 2</div>
+      <h4>Third-Party Liability XS 2: £20m xs £10m</h4>
+      <div class="t-details">Third-party bodily injury and property damage. Large single incident — mass casualty RTA, bridge strike, multi-vehicle collision. Lloyd's or London market. <span class="badge b-i">ILLUS</span></div>
+    </div>
+    <div class="tower-layer t-xs1">
+      <div class="tower-label">Layer 2 — XS 1</div>
+      <h4>Third-Party Liability XS 1: £7m xs £3m</h4>
+      <div class="t-details">Mid-layer TPL. Fatalities, severe injuries, property damage from commercial vehicle incidents. Several reinsurers / Lloyd's syndicates. <span class="badge b-i">ILLUS</span></div>
+    </div>
+    <div class="tower-layer t-primary">
+      <div class="tower-label">Layer 1 — Primary</div>
+      <h4>Primary Fleet Policy: £3m including excess</h4>
+      <div class="t-details">Own damage (comprehensive); third-party up to £3m; goods in transit; replacement vehicle; breakdown. Lead Lloyd's syndicate with co-insurers. <span class="badge b-i">ILLUS</span></div>
+    </div>
+    <div class="tower-layer t-retain">
+      <div class="tower-label">Retained / Captive</div>
+      <h4>Deductible / Captive Retention: £50,000 per vehicle / £500,000 any one event</h4>
+      <div class="t-details">Fleet operator absorbs frequency via deductible or captive. Reduces premium load; aligns insured incentives with loss prevention. Captive reinsures into parent programme. <span class="badge b-i">ILLUS</span></div>
+    </div>
+  </div>
+
+  <h2>Programme Coordination by Cover Type</h2>
+  <div class="coord-tbl">
+    <table>
+      <thead><tr><th>Cover Element</th><th>UK M5 Policy</th><th>Overseas Local Policy</th><th>DIC/DIL Master</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Own Damage — UK vehicles</strong></td>
+          <td>Primary — comprehensive</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>UK fleet on UK M5 policy; overseas fleet on local admitted policies</td>
+        </tr>
+        <tr>
+          <td><strong>Third-Party Liability — UK</strong></td>
+          <td>Minimum TPL (unlimited by statute) + XS layers</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>UK RTA 1988 minimum is unlimited for personal injury — structure above this commercially</td>
+        </tr>
+        <tr>
+          <td><strong>Third-Party Liability — Overseas</strong></td>
+          <td>Green Card for EEA driving</td>
+          <td>Local admitted TPL — statutory minimum per territory</td>
+          <td>DIC/DIL above local limits</td>
+          <td>Local statutory minimums vary enormously (e.g. USA unlimited vs some developing markets)</td>
+        </tr>
+        <tr>
+          <td><strong>Own Damage — Overseas Fleet</strong></td>
+          <td>N/A</td>
+          <td>Local comprehensive where available</td>
+          <td>DIC/DIL fills gaps</td>
+          <td>Some markets: comprehensive unavailable or uneconomical — DIC provides uplift</td>
+        </tr>
+        <tr>
+          <td><strong>Goods in Transit</strong></td>
+          <td>GIT endorsement on UK M5</td>
+          <td>Local cargo policy</td>
+          <td>Cargo master coordinates</td>
+          <td>Often separate cargo programme; motor policy should specify whether GIT included or excluded to avoid overlap or gap</td>
+        </tr>
+        <tr>
+          <td><strong>Employer's Liability / Employers' Driving</strong></td>
+          <td>EL extension on fleet policy</td>
+          <td>Local employers' liability / workers' comp</td>
+          <td>EL programme separate</td>
+          <td>Key interface: driving incidents during course of employment may trigger EL in addition to motor TPL</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Captive and Self-Insurance Structures</h2>
+  <div class="dark-box">
+    <h3>When Does a Captive Make Sense for Motor Fleet?</h3>
+    <p>Large fleet operators — typically 500+ vehicles with stable, predictable loss histories — may benefit from a captive reinsurance structure where the frequency tier of the fleet programme is retained in a captive insurance company (typically Guernsey, Isle of Man, Cayman, Bermuda or Luxembourg for UK/European multinationals). The captive writes a reinsurance of the Lloyd's fronting policy, retaining frequency claims and ceding severe losses above the captive's retention to the external market.</p>
+    <ul>
+      <li><strong>Benefit 1 — Cost reduction:</strong> Frequency claims (high volume, low-value) are retained in-house at cost. Premium paid to external market covers only severity — lower overall cost where loss experience is favourable. <span class="badge b-i">ILLUS</span></li>
+      <li><strong>Benefit 2 — Cashflow:</strong> Captive retains float on claim reserves; investment income belongs to the group rather than the insurer. For very large fleets, this is material.</li>
+      <li><strong>Benefit 3 — Alignment:</strong> Captive ownership aligns fleet management incentives — the fleet operator directly bears cost of poor driving. Supports investment in telematics and training programmes.</li>
+      <li><strong>Requirement:</strong> Fronting insurer (typically Lloyd's syndicate) issues admitted policy; captive reinsures. Lloyd's acting as fronting insurer for motor captive arrangements requires regulatory sign-off (PRA/FCA); Lloyd's market has established fronting protocols. <span class="badge b-v">VER</span></li>
+      <li><strong>Minimum size for viability:</strong> Generally accepted that captive motor programmes become economical above ~£3m annual premium retention. Smaller fleets better served by deductible buydown and risk management. <span class="badge b-e">EST</span></li>
+    </ul>
+  </div>
+
+  <h2>Fleet Profile Case Studies</h2>
+  <div class="profile-grid">
+    <div class="profile-card">
+      <h4>UK Logistics Company — 1,200 Van Fleet</h4>
+      <table>
+        <tr><td>Vehicles</td><td>1,200 LCVs/vans; 15% EV</td></tr>
+        <tr><td>Fleet value</td><td>£24m</td></tr>
+        <tr><td>Annual mileage</td><td>~25m miles</td></tr>
+        <tr><td>Sector</td><td>Last-mile delivery</td></tr>
+        <tr><td>Deductible</td><td>£5,000 any one incident</td></tr>
+        <tr><td>Telematics</td><td>100% (speed + camera)</td></tr>
+        <tr><td>Key risk</td><td>Urban cycle/pedestrian TPL; cat conv theft</td></tr>
+        <tr><td>Indicative premium</td><td>~£1.8m pa <span class="badge b-i">ILLUS</span></td></tr>
+      </table>
+    </div>
+    <div class="profile-card amber">
+      <h4>Professional Services Firm — 800 Car Fleet</h4>
+      <table>
+        <tr><td>Vehicles</td><td>800 company cars; 30% BEV/PHEV</td></tr>
+        <tr><td>Fleet value</td><td>£20m</td></tr>
+        <tr><td>Annual mileage</td><td>~8m miles</td></tr>
+        <tr><td>Sector</td><td>Consulting / financial services</td></tr>
+        <tr><td>Deductible</td><td>£2,500 any one incident</td></tr>
+        <tr><td>Telematics</td><td>Partial (40%)</td></tr>
+        <tr><td>Key risk</td><td>Motorway high-speed BI; EV write-off</td></tr>
+        <tr><td>Indicative premium</td><td>~£700k pa <span class="badge b-i">ILLUS</span></td></tr>
+      </table>
+    </div>
+    <div class="profile-card blue">
+      <h4>HNW Classic Car Collection (Lloyd's M2)</h4>
+      <table>
+        <tr><td>Vehicles</td><td>12 classics; 2 supercars</td></tr>
+        <tr><td>Agreed value</td><td>£8.4m</td></tr>
+        <tr><td>Mileage</td><td>&lt;4,000 pa (low-mileage)</td></tr>
+        <tr><td>Storage</td><td>Climate-controlled, alarmed</td></tr>
+        <tr><td>Track endorsement</td><td>2 vehicles — 6 days pa</td></tr>
+        <tr><td>Key risk</td><td>Theft to order; track incident; fire</td></tr>
+        <tr><td>Indicative premium</td><td>~£35,000 pa <span class="badge b-i">ILLUS</span></td></tr>
+      </table>
+    </div>
+    <div class="profile-card green">
+      <h4>Ride-Hail / PHV Operator (M3)</h4>
+      <table>
+        <tr><td>Vehicles</td><td>250 PHV (mostly Toyota Prius / EV)</td></tr>
+        <tr><td>Fleet value</td><td>£3.5m</td></tr>
+        <tr><td>Annual mileage</td><td>~10m miles</td></tr>
+        <tr><td>Sector</td><td>Private hire vehicle (London)</td></tr>
+        <tr><td>Deductible</td><td>£1,000 OD; £5,000 BI</td></tr>
+        <tr><td>Key risk</td><td>Passenger BI; high mileage wear; urban RTA</td></tr>
+        <tr><td>Indicative premium</td><td>~£850k pa <span class="badge b-i">ILLUS</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2>Worked Case Study — UK Multinational Fleet Programme</h2>
+  <div class="case-study">
+    <h3>Case Study: Manufacturing Group — 3,500-Vehicle UK &amp; European Fleet</h3>
+    <table>
+      <tr><td>UK fleet (M5)</td><td>2,000 vehicles — mixed cars/LCVs/HGVs; £45m fleet value; London placing lead Lloyd's</td></tr>
+      <tr><td>EU fleet</td><td>1,500 vehicles across Germany, France, Italy, Poland; local admitted policies each territory</td></tr>
+      <tr><td>Master DIC/DIL</td><td>Non-admitted master policy (Lloyd's): fills gaps above local limits and covers territory gaps</td></tr>
+      <tr><td>UK premium</td><td>Rate 1.6% × £45m = £720k gross; captive retention £350k; net to market £370k <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>EU local premiums</td><td>~£480k total across 4 territories (varies by statutory requirements) <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>DIC/DIL master premium</td><td>£85k for DIC/DIL layer above local limits globally <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>Captive XoL protection</td><td>Captive cedes £100k xs £50k per event to Lloyd's market — annual premium £65k <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>TPL XS layers</td><td>£10m xs £3m (Layer 1) + £20m xs £10m (Layer 2): combined £180k <span class="badge b-i">ILLUS</span></td></tr>
+    </table>
+    <div class="total">Total Programme Cost (Gross): ~£1.48m p.a. — Net to External Market (post-captive): ~£1.13m <span class="badge b-i">ILLUS</span></div>
+  </div>
+
+  <h2>Green Card System — EU/EEA Territorial Coverage</h2>
+  <p>UK motor policies covering EU/EEA driving use the Green Card system — an international certificate of insurance enabling vehicles to travel and be covered for statutory third-party liability in signatory countries. Post-Brexit, UK insurers issue Green Cards separately from the UK certificate of insurance for EU travel. <span class="badge b-v">VER</span> Fleet programmes regularly covering EU territory should have pre-arranged Green Card issuance protocols with their insurer — typically digital/electronic Green Cards now accepted in most EEA states. For large fleets with frequent EU cross-border operations, a blanket territorial extension to the fleet policy (covering EU under UK policy rather than requiring individual Green Cards) may be preferable and is available from Lloyd's market. <span class="badge b-e">EST</span></p>
+
+</main>
+<footer>Risk Code Hub v2.8 · Motor – UK (M2/M3/M4/M5/M6) · For educational use</footer>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>PI Construction: Timeline | Risk Code Hub</title>
+  <style>
+    :root {
+      --pi:#37474f; --pi-dark:#102027; --arch:#795548; --eng:#1565c0;
+      --bsact:#6a1b9a; --warn:#e65100; --go:#2e7d32;
+      --light:#f5f7f8; --text:#1a2530; --muted:#5a6a72; --border:#c8d4d8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #37474f;
+    --hub-dark:      #102027;
+    --hub-light:     #eceff1;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #795548;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%);
+    --header-sub:    #cfd8dc;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90a4ae; margin-bottom:6px; }
+    .breadcrumb a { color:#b0bec5; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#cfd8dc; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pi); border-bottom-color:var(--warn); }
+    main { max-width:1050px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pi); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+
+    /* Legend */
+    .legend { display:flex; flex-wrap:wrap; gap:10px; margin:20px 0 32px; }
+    .leg { display:flex; align-items:center; gap:6px; font-size:0.78rem; font-weight:600; color:var(--muted); }
+    .leg-dot { width:12px; height:12px; border-radius:50%; }
+
+    /* Timeline */
+    .timeline { position:relative; padding-left:40px; }
+    .timeline::before { content:''; position:absolute; left:14px; top:0; bottom:0; width:3px; background:var(--border); border-radius:2px; }
+    .event { position:relative; margin-bottom:32px; }
+    .event::before { content:''; position:absolute; left:-33px; top:6px; width:14px; height:14px; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px var(--pi); background:var(--pi); }
+    .event.case::before { background:var(--arch); box-shadow:0 0 0 2px var(--arch); }
+    .event.reg::before { background:var(--eng); box-shadow:0 0 0 2px var(--eng); }
+    .event.loss::before { background:var(--warn); box-shadow:0 0 0 2px var(--warn); }
+    .event.bsact::before { background:var(--bsact); box-shadow:0 0 0 2px var(--bsact); }
+    .event.mkt::before { background:var(--go); box-shadow:0 0 0 2px var(--go); }
+    .event-inner { background:#fff; border-radius:10px; padding:18px 22px; box-shadow:0 2px 6px rgba(0,0,0,.05); }
+    .event-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+    .year { font-size:0.75rem; font-weight:800; color:var(--muted); background:var(--light); border-radius:5px; padding:2px 8px; }
+    .type-tag { font-size:0.64rem; font-weight:700; padding:2px 7px; border-radius:8px; }
+    .tt-case { background:#fdf3ea; color:#7a4500; }
+    .tt-reg { background:#e3f2fd; color:#0d47a1; }
+    .tt-loss { background:#fff3e0; color:#bf360c; }
+    .tt-bsact { background:#f3e5f5; color:#4a148c; }
+    .tt-mkt { background:#e8f5e9; color:#1b5e20; }
+    .event-inner h4 { font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:6px; }
+    .event-inner p { font-size:0.85rem; margin-bottom:0; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    footer { background:var(--pi-dark); color:#90a4ae; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">PI E&amp;O Construction</a> › Timeline</div>
+  <h1>Timeline — PI E&amp;O Construction &amp; Engineering</h1>
+  <p>20 key events in construction professional liability, 1963–2024: case law, regulation, major losses and market turning points.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:var(--arch)"></div> CASE — Court Decision</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--eng)"></div> REG — Regulation / Standard</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--warn)"></div> LOSS — Major PI Loss Event</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--bsact)"></div> BSA — Building Safety Act / Reform</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--go)"></div> MKT — Market Development</div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="event case">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">1964</span><span class="type-tag tt-case">CASE</span></div>
+        <h4>Hedley Byrne &amp; Co Ltd v Heller &amp; Partners Ltd [1964] AC 465</h4>
+        <p>House of Lords establishes liability for negligent misstatement where a special relationship exists (voluntary assumption of responsibility + reliance). <span class="badge b-v">VER</span> Foundational case for all construction professional PI — creates the duty of care for architects, engineers, surveyors giving professional advice to clients.</p>
+      </div>
+    </div>
+
+    <div class="event loss">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">1968</span><span class="type-tag tt-loss">LOSS</span></div>
+        <h4>Ronan Point Collapse</h4>
+        <p>Ronan Point, a 22-storey tower block in Newham, London, suffered a progressive partial collapse following a gas explosion on the 18th floor. <span class="badge b-v">VER</span> Structural design relied on large panel system (LPS) construction with inadequate connections. Major driver of structural engineering PI awareness and large panel system regulatory restrictions.</p>
+      </div>
+    </div>
+
+    <div class="event reg">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">1972</span><span class="type-tag tt-reg">REG</span></div>
+        <h4>Defective Premises Act 1972</h4>
+        <p>Section 1 imposes a duty on anyone who does work in connection with the provision of a dwelling to ensure it is fit for habitation. <span class="badge b-v">VER</span> Original 6-year limitation from completion. Extended to 30 years by Building Safety Act 2022 (s.135) for new dwellings, and 15 years for existing dwellings — retroactive effect creates historic tail risk for construction professionals.</p>
+      </div>
+    </div>
+
+    <div class="event case">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">1978</span><span class="type-tag tt-case">CASE</span></div>
+        <h4>Anns v Merton London Borough Council [1978] AC 728</h4>
+        <p>House of Lords (Lord Wilberforce) establishes local authority liability for negligent foundation inspection; duty of care owed to building occupiers even after property transfer. <span class="badge b-v">VER</span> "Anns era" expands construction PI exposure dramatically — professionals face liability to subsequent owners for latent structural defects. Major driver of PI premium growth 1978–1991.</p>
+      </div>
+    </div>
+
+    <div class="event case">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">1989</span><span class="type-tag tt-case">CASE</span></div>
+        <h4>D&amp;F Estates Ltd v Church Commissioners [1989] 1 AC 177</h4>
+        <p>House of Lords: contractor not liable in tort to third party for cost of repairing defective plaster. <span class="badge b-v">VER</span> Pure economic loss not recoverable in tort for defective structures — precursor to Murphy v Brentwood. Narrows construction professional tort exposure for pure building defect costs.</p>
+      </div>
+    </div>
+
+    <div class="event case">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">1991</span><span class="type-tag tt-case">CASE</span></div>
+        <h4>Murphy v Brentwood District Council [1991] 1 AC 398</h4>
+        <p>House of Lords overrules Anns v Merton. <span class="badge b-v">VER</span> Pure economic loss (cost of repairing defective building) not recoverable in tort. Construction PI scope substantially narrowed — professionals' tort liability to third parties significantly reduced. Latent defects insurance (NHBC Buildmark) expands to fill gap. Market adjusts pricing downward; run-off reserving challenged.</p>
+      </div>
+    </div>
+
+    <div class="event mkt">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">1995</span><span class="type-tag tt-mkt">MKT</span></div>
+        <h4>NHBC Buildmark 10-Year Structural Warranty Standard</h4>
+        <p>NHBC Buildmark 10-year warranty becomes near-universal for new residential construction, providing structural insurance to homebuyers independent of professional PI. <span class="badge b-e">EST</span> Separates latent defects insurance (LDI) from PI market — construction PI focuses on professional advice/design liability rather than pure structural defect risk.</p>
+      </div>
+    </div>
+
+    <div class="event reg">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2003</span><span class="type-tag tt-reg">REG</span></div>
+        <h4>RICS Homebuyer Survey Reform &amp; Valuer PI Requirements</h4>
+        <p>RICS strengthens professional standards and PI requirements for valuers and building surveyors following increased frequency of homebuyer survey claims. <span class="badge b-e">EST</span> Surveyor PI becomes a significant premium line in Lloyd's E6 book; SAAMCO cap (South Australia Asset Management Corp v York Montague [1997]) limits valuation claim quantum but does not eliminate frequency.</p>
+      </div>
+    </div>
+
+    <div class="event reg">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2011</span><span class="type-tag tt-reg">REG</span></div>
+        <h4>UK Government BIM Mandate — Level 2 by 2016</h4>
+        <p>UK Government Construction Strategy 2011 mandates fully collaborative BIM Level 2 on all centrally procured government projects by 2016. <span class="badge b-v">VER</span> Creates new professional liability exposure: BIM coordination failures, clash detection errors, COBie data handover defects. ISO 19650 series subsequently developed as international BIM standard.</p>
+      </div>
+    </div>
+
+    <div class="event reg">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2015</span><span class="type-tag tt-reg">REG</span></div>
+        <h4>CDM 2015 — Principal Designer Role Created</h4>
+        <p>Construction (Design and Management) Regulations 2015 replace CDM 2007. <span class="badge b-v">VER</span> New statutory role: Principal Designer — responsible for pre-construction health and safety. Creates new PI exposure for architects and engineers appointed as Principal Designer; distinguishable from BSA 2022 Principal Designer role introduced later.</p>
+      </div>
+    </div>
+
+    <div class="event loss">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2017</span><span class="type-tag tt-loss">LOSS</span></div>
+        <h4>Grenfell Tower Fire — 72 Deaths</h4>
+        <p>14 June 2017. Fire in Grenfell Tower, Kensington. 72 deaths. Cladding system — Arconic Reynobond PE ACM panels and Celotex RS5000 insulation — failed to resist fire spread. <span class="badge b-v">VER</span> Studio E Architects (design consultant), Rydon (D&B principal contractor), Harley Facades (cladding subcontractor). The most significant single event in UK construction PI history. Products and PI liability; long-term Inquiry; criminal investigations ongoing as of 2024.</p>
+      </div>
+    </div>
+
+    <div class="event bsact">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2018</span><span class="type-tag tt-bsact">BSA</span></div>
+        <h4>Hackitt Review — Independent Review of Building Regulations and Fire Safety</h4>
+        <p>Dame Judith Hackitt. <span class="badge b-v">VER</span> Final report May 2018. Finds "systemic failure" in UK building regulatory system — inadequate oversight, fragmented responsibility, lack of competence. Recommends Gateway process, dutyholders, "golden thread" of building information. Blueprint for Building Safety Act 2022.</p>
+      </div>
+    </div>
+
+    <div class="event mkt">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2019</span><span class="type-tag tt-mkt">MKT</span></div>
+        <h4>Cladding Exclusions Become Near-Universal in Architect PI</h4>
+        <p>Following Grenfell and the scale of potential legacy liability, Lloyd's and London company market underwriters introduce cladding and external wall fire safety exclusions into architect, fire engineer, and high-rise specialist PI policies. <span class="badge b-v">VER</span> (Market-wide practice). Premiums increase 25–40% for affected professions. EWS1 form introduced — creates new PI exposure for assessing fire engineers.</p>
+      </div>
+    </div>
+
+    <div class="event reg">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2021</span><span class="type-tag tt-reg">REG</span></div>
+        <h4>Fire Safety Act 2021</h4>
+        <p>Extends Fire Safety Order 2005 to include external walls, balconies, and flat entrance doors of multi-occupied residential buildings. <span class="badge b-v">VER</span> Increases responsible person obligations; creates new compliance audit requirements; further drives EWS1 assessment demand.</p>
+      </div>
+    </div>
+
+    <div class="event bsact">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2022</span><span class="type-tag tt-bsact">BSA</span></div>
+        <h4>Building Safety Act 2022 Enacted</h4>
+        <p>The most significant reform to UK building safety law since the Building Act 1984. <span class="badge b-v">VER</span> Key provisions: Higher Risk Buildings (HRBs) defined (>18m / 7+ storeys residential); mandatory Gateway 1/2/3 process; Building Safety Regulator (BSR) established within HSE; 30-year retrospective limitation for fire safety claims under s.135; Building Liability Orders enabling parent company liability; Principal Designer (BSA) new competence regime. Creates the longest actuarial tail in UK construction PI history.</p>
+      </div>
+    </div>
+
+    <div class="event bsact">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2022</span><span class="type-tag tt-bsact">BSA</span></div>
+        <h4>Defective Premises Act 1972 Limitation Extended</h4>
+        <p>Building Safety Act 2022 s.135 extends Defective Premises Act 1972 limitation from 6 years to 30 years for new dwellings and 15 years for existing dwellings — retroactively. <span class="badge b-v">VER</span> Historic construction PI policies potentially on risk for claims from work completed decades ago — fundamental tail extension for E6 residential architects and structural engineers.</p>
+      </div>
+    </div>
+
+    <div class="event reg">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2023</span><span class="type-tag tt-reg">REG</span></div>
+        <h4>Building Safety Regulator (BSR) Operational</h4>
+        <p>BSR operational within HSE from April 2023. <span class="badge b-v">VER</span> Gateway 2 (before construction) and Gateway 3 (before occupation) now mandatory for all new HRBs. Competence requirements for Principal Designer (BSA) and Principal Contractor (BSA). Existing HRBs must register with BSR by October 2023. New enforcement powers including stop notices and prosecution.</p>
+      </div>
+    </div>
+
+    <div class="event mkt">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2023</span><span class="type-tag tt-mkt">MKT</span></div>
+        <h4>Construction PI Market: Partial Stabilisation for Non-Cladding Risks</h4>
+        <p>After 4 years of severe rate increases and capacity withdrawal (2019–2022), the Lloyd's construction PI market shows partial stabilisation for non-residential architects and structural engineers without significant HRB exposure. <span class="badge b-e">EST</span> Cladding-exposed practices and HRB specialists continue to face very difficult market conditions. BSA 2022 tail uncertainty prevents full normalisation.</p>
+      </div>
+    </div>
+
+    <div class="event bsact">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2024</span><span class="type-tag tt-bsact">BSA</span></div>
+        <h4>Grenfell Tower Inquiry Phase 2 Report</h4>
+        <p>Phase 2 Report published September 2024. <span class="badge b-v">VER</span> Findings include systemic failures by manufacturers, contractors, regulators, and government. Studio E Architects and Rydon criticised. Potential for criminal prosecutions; further civil liability claims expected to follow. Government response and further regulatory change anticipated. Ongoing PI tail development.</p>
+      </div>
+    </div>
+
+    <div class="event reg">
+      <div class="event-inner">
+        <div class="event-header"><span class="year">2024</span><span class="type-tag tt-reg">REG</span></div>
+        <h4>ISO 19650 BIM Standard — Full Implementation &amp; AI Design Risk Emerging</h4>
+        <p>ISO 19650 information management standard widely adopted across UK and major international markets. <span class="badge b-e">EST</span> AI-assisted design tools (generative design, AI structural optimisation) begin entering professional practice — creates new PI exposure for professionals relying on AI outputs without adequate checking. Lloyd's market discussions on AI design liability underway as of 2024.</p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.9 · PI E&amp;O – Construction &amp; Engineering (E6/E7) · For educational use</footer>
+</body>
+</html>

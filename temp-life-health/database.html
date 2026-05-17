@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Temporary Life &amp; Permanent Health (TL) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a1a7b;
+      --hub-dark:      #250a45;
+      --hub-light:     #f3e5ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #00796b;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#250a45 0%,#4a1a7b 55%,#6a1b9a 100%);
+      --header-sub:    #ce93d8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a0a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ce93d8;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#250a45;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ce93d8;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e1bee7;}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #f3e5ff;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#faf0ff;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-pandemic{background:#fff3e0;color:#e65100;}
+    .tp-mass-disability{background:#fce4ec;color:#880e4f;}
+    .tp-mis-selling{background:#e3f2fd;color:#1565c0;}
+    .tp-claims-surge{background:#f3e5ff;color:#4a1a7b;}
+    .tp-reinsurer{background:#fff8e1;color:#795548;}
+    .tp-regulatory{background:#e0f2f1;color:#00796b;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#4a1a7b;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#faf0ff;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    .info-box{background:#f3e5ff;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:20px;font-size:0.85rem;color:#1a0a2e;line-height:1.6;}
+    footer{background:#250a45;color:#ce93d8;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Temporary Life &amp; Permanent Health (TL)</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>Systemic Loss &amp; Mortality Shock Database</h1>
+    <div class="sub">35 notable systemic events, mortality shocks &amp; book-level losses 1985–2024 — filter by type, sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="info-box">
+    <strong>Note on Data:</strong> Individual life and health insurance claims are confidential. This database records <strong>systemic events, mortality shocks, book-level loss episodes and regulatory actions</strong> that materially affected the TL market. Values are industry-wide insured loss estimates where available, or total economic impact where insured figures are not disclosed. All figures are estimates (EST) unless marked verified.
+  </div>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Event Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="pandemic-mortality">Pandemic / Mortality Shock</option>
+        <option value="mass-disability">Mass Disability / Claims Surge</option>
+        <option value="mis-selling">Product Mis-selling</option>
+        <option value="claims-surge">Systemic Claims Surge</option>
+        <option value="reinsurer">Reinsurer / Market Failure</option>
+        <option value="regulatory">Regulatory Action</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="group-life">Group Life</option>
+        <option value="individual-term">Individual Term</option>
+        <option value="income-protection">Income Protection</option>
+        <option value="critical-illness">Critical Illness</option>
+        <option value="international-life">International Life</option>
+        <option value="group-health">Group Health</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2000" min="1985" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 100" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Event, country…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Value (est.)</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Temporary Life &amp; Permanent Health (TL) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1985,n:"AIDS/HIV Epidemic — Life Book Impact Phase 1",t:"pandemic-mortality",s:"individual-term",desc:"HIV antibody test becomes available 1985. US and UK life books experience anti-selection as high-risk individuals seek term life cover. Insurers implement HIV testing requirements above sum assured thresholds. UK AIDS deaths peak ~1994-95 at ~1,700 p.a. Lloyd's life syndicates exposed through impaired life books. Reinsurers review AIDS excess treaty loadings. Financial impact on UK life market estimated £hundreds of millions over 10-year period.",v:500,sev:"cat",geo:"UK/USA/Global"},
+  {y:1987,n:"UK Stock Market Crash — With-Profits Life Reserves",t:"reinsurer",s:"individual-term",desc:"Black Monday (October 1987) causes 26% one-day FTSE fall. With-profits life offices hold significant equity reserves; market crash reduces asset values and creates mismatch with guaranteed benefit obligations. Not a direct mortality loss, but exposes systemic investment risk in long-term life business. Forerunner of Equitable Life crisis.",v:2000,sev:"maj",geo:"UK"},
+  {y:1990,n:"Gulf War — Group Life International Schemes",t:"pandemic-mortality",s:"group-life",desc:"First Gulf War (1990-91) triggers elevated claims on group life schemes covering military and civilian contractors in the region. Exclusions for war and active military service are standard in group life policies; however international expatriate group schemes with civilian contractors — oil, construction, logistics — face increased mortality claims. Lloyd's international life market reviews war exclusion scope.",v:100,sev:"mod",geo:"Middle East"},
+  {y:1994,n:"UK Pension Misselling Scandal — Personal Pensions vs Occupational",t:"mis-selling",s:"individual-term",desc:"FCA (then SIB) identifies systematic misselling of personal pension products to individuals who were better served by employer occupational pension schemes, including death-in-service benefits. Life offices required to review 1.5m cases; compensation payments estimated at £11bn+ over subsequent decade. Damages confidence in life insurance distribution. Group life industry largely unaffected but reputational spillover affects sector.",v:11000,sev:"cat",geo:"UK"},
+  {y:1995,n:"Barings Bank Collapse — Group Life / Key Person Claims",t:"reinsurer",s:"group-life",desc:"Barings Bank collapse (Nick Leeson, £827m losses) triggers group life claims for Barings employees made redundant as well as key person life claims on certain executives. More significant as a case study in group life catastrophe concentration risk — Barings had employees concentrated in Singapore and London. Highlighted need for catastrophe XL on group life for concentrated employee locations.",v:50,sev:"min",geo:"UK/Singapore"},
+  {y:1995,n:"HIV Antiretroviral Therapy — Mortality Improvement Windfall",t:"mass-disability",s:"individual-term",desc:"Highly Active Antiretroviral Therapy (HAART) transforms HIV from a near-certain death sentence to a manageable chronic condition from 1995-96. Life insurers holding reserves for anticipated AIDS deaths experience unexpected mortality improvement. HIV-positive lives who had purchased term life cover now require reclassification. Long-term: HIV+ lives with controlled viral load become insurable in the standard market at rated premium — a positive underwriting development.",v:200,sev:"mod",geo:"Global"},
+  {y:1997,n:"CMI Report — Accelerating Longevity Improvement",t:"claims-surge",s:"income-protection",desc:"CMI report confirms accelerating longevity improvement in UK population — life expectancy at 65 rising significantly. For life insurers: positive for term life books (lower mortality claims). For annuity and pension providers: major adverse impact. For group IP: longer claims duration to retirement age as lifespan extends. PHI/IP books must recalibrate reserves for longer-duration claims.",v:500,sev:"mod",geo:"UK"},
+  {y:2000,n:"Equitable Life Closure — £4.5bn Policyholder Losses",t:"reinsurer",s:"individual-term",desc:"Equitable Life closes to new business December 2000 following House of Lords ruling on guaranteed annuity rates (GARs). Estimated £4.5bn in policyholder losses. Though primarily a with-profits investment scandal, Equitable held significant term life and PHI books; closure creates uncertainty for policyholders regarding in-force guarantees. Parliamentary Ombudsman report (2008) finds systematic maladministration across FCA, GAD and DTI. Compensation scheme established by government.",v:4500,sev:"cat",geo:"UK"},
+  {y:2001,n:"9/11 World Trade Center — Group Life Catastrophe Claims",t:"pandemic-mortality",s:"group-life",desc:"September 11 attacks kill approximately 3,000 people, a significant proportion employed in financial services in the WTC. Insured group life losses estimated at $3.5bn globally. Individual term life claims from WTC-based employees add further losses. Lloyd's group life syndicates exposed to concentration risk. Aftermath: reinsurers introduce group life catastrophe XL carve-outs for terrorism; Lloyd's reviews group life accumulation. War exclusions reviewed across TL market.",v:3500,sev:"cat",geo:"USA/Global"},
+  {y:2003,n:"SARS Epidemic — Asian Group Life &amp; International Schemes",t:"pandemic-mortality",s:"international-life",desc:"SARS (Severe Acute Respiratory Syndrome) epidemic in Hong Kong, mainland China, Singapore and Canada causes approximately 800 deaths globally. Impact on international group life and health schemes relatively modest in total quantum, but prompts reinsurers and Lloyd's to begin modelling pandemic scenarios for group life portfolios. First major modern pandemic test of international life insurance exposure.",v:150,sev:"mod",geo:"Asia/Canada"},
+  {y:2004,n:"UK Endowment Mortgage Misselling — Term Life Ancillary Claims",t:"mis-selling",s:"individual-term",desc:"FCA-mandated review of endowment mortgage misselling results in £3bn+ in compensation payments across UK life industry. Many endowment policies included term life assurance riders; the misselling review exposes systemic weaknesses in life product distribution, disclosure and advice processes. Drives shift from endowment to repayment mortgages with separate term life cover.",v:3000,sev:"maj",geo:"UK"},
+  {y:2005,n:"Hurricane Katrina — Group Life &amp; Accident Catastrophe",t:"pandemic-mortality",s:"group-life",desc:"Hurricane Katrina (August 2005) kills approximately 1,800 people; insured life and accident claims estimated at $600m. Group life claims from employers in New Orleans and Gulf Coast region. Highlights geographic concentration risk in group life portfolios. Catastrophe XL for group life with natural hazard triggers reviewed across Lloyd's TL market.",v:600,sev:"mod",geo:"USA"},
+  {y:2007,n:"Income Protection — Musculoskeletal Claims Peak",t:"claims-surge",s:"income-protection",desc:"Musculoskeletal conditions (back pain, repetitive strain injury, soft tissue injuries) become the leading cause of IP claims in the UK — estimated 40-45% of new long-term IP claims. Group IP providers report significant increases in claim duration as occupational health interventions fail to achieve return to work. Rehabilitation programmes and early intervention strategies are prioritised by Lloyd's and London market IP underwriters.",v:300,sev:"mod",geo:"UK"},
+  {y:2008,n:"Global Financial Crisis — Unemployment, IP Waiver Claims",t:"claims-surge",s:"income-protection",desc:"GFC (2008-09) causes surge in unemployment and redundancy. IP/PHI policies include 'waiver of premium' benefits that activate on incapacity — not unemployment — so direct IP claims impact is modest. However, group IP schemes see increased claims from employees suffering stress-related mental health conditions triggered by workplace restructuring, redundancy threat and financial anxiety. Life reinsurers note increased depression/anxiety claims from 2008-10.",v:400,sev:"mod",geo:"UK/Global"},
+  {y:2010,n:"UK Government — State Disability Benefits Reform (ESA/WCA)",t:"regulatory",s:"income-protection",desc:"UK government introduces Employment Support Allowance (ESA), replacing Incapacity Benefit, with new Work Capability Assessment (WCA). Controversial assessments result in many claimants moving from state disability support to employment. Knock-on effect on private IP: some IP claimants who would previously have supplemented state incapacity benefit are now pursuing IP claims more aggressively as state support is reduced. IP insurers note increased claim frequency following ESA changes.",v:200,sev:"mod",geo:"UK"},
+  {y:2011,n:"Fukushima Nuclear Disaster — International Life Catastrophe",t:"pandemic-mortality",s:"international-life",desc:"Tōhoku earthquake and tsunami (March 2011) kills approximately 20,000 people and triggers Fukushima nuclear disaster. International group life schemes covering expatriate and Japanese-resident employees are exposed. Total insured life claims from the Tōhoku event estimated at $3bn globally. Lloyd's international life exposure relatively limited but catastrophe accumulation modelling reviewed.",v:3000,sev:"maj",geo:"Japan"},
+  {y:2012,n:"UK PHI Regulatory Review — FCA ICOBS Guidance Update",t:"regulatory",s:"income-protection",desc:"FCA publishes updated ICOBS guidance on income protection insurance following review of non-disclosure practices and claims handling. Requirements for enhanced disclosure at point of sale, clearer definition of 'own occupation' vs 'any occupation' policy terms, and standardised claims communications. Impact on Lloyd's TL: syndicate underwriters reviewing PHI policy wordings for regulatory compliance.",v:50,sev:"min",geo:"UK"},
+  {y:2014,n:"Critical Illness — Condition Definition Disputes",t:"claims-surge",s:"critical-illness",desc:"Wave of CI claim disputes around narrowly defined conditions — particularly 'specific severity' of heart attack and stroke definitions where measurable criteria (troponin levels, neurological deficit duration) are borderline. Life insurers face FCA scrutiny of claim declinatures. ABI conducts market-wide review of CI definitions; subsequent publication of updated model definitions with clearer clinical criteria reduces ambiguity and improves consumer outcomes.",v:200,sev:"mod",geo:"UK"},
+  {y:2015,n:"UK Pension Freedoms — Group Life &amp; Annuity Interface",t:"regulatory",s:"group-life",desc:"Pension Freedoms Act (Finance Act 2015) allows over-55s to draw defined contribution pension savings flexibly. Impact on group life: employer group life schemes (death-in-service) interface with pension auto-enrolment; Pension Act 2008 auto-enrolment drives growth in workplace pension schemes, raising awareness of life cover within benefit packages. Group life GWP grows as employer awareness and workforce participation increase.",v:100,sev:"min",geo:"UK"},
+  {y:2016,n:"Zika Virus — International Life &amp; Health Concerns",t:"pandemic-mortality",s:"international-life",desc:"Zika virus epidemic in Brazil and Latin America (2015-16) raises concerns about international group health schemes covering expatriates and local employees in affected regions. Pregnancy-related complications (microcephaly) generate health insurance claims. Life and disability implications relatively modest; incident prompts Lloyd's to review pandemic language in international life/health policy exclusions.",v:80,sev:"min",geo:"Latin America"},
+  {y:2017,n:"Grenfell Tower Fire — Group Life &amp; Accident Concentration",t:"pandemic-mortality",s:"group-life",desc:"Grenfell Tower fire (June 2017) kills 72 people in a single residential building. A proportion of victims are employed; group life claims filed through employer schemes. Incident reinforces catastrophe XL importance for group life schemes with employees in high-concentration residential and workplace locations. Lloyd's TL market reviews group life accumulation monitoring in urban high-rise settings.",v:50,sev:"min",geo:"UK"},
+  {y:2018,n:"Mental Health — IP Claims Become Dominant Cause",t:"claims-surge",s:"income-protection",desc:"Mental health conditions overtake musculoskeletal as the leading cause of long-term IP claims by duration. Unum and Zurich report mental health responsible for over 40% of new long-term IP claims in 2018. ABI Mental Health Working Group established. Lloyd's TL underwriters begin applying mental health premium loading, reviewing deferred period structures, and requiring EAP programme evidence from group IP cedants.",v:500,sev:"maj",geo:"UK"},
+  {y:2019,n:"FCA Protection Market Study — Value Concerns",t:"regulatory",s:"individual-term",desc:"FCA publishes findings from General Insurance Market Study and preliminary work on protection products. Identifies concerns about value in some protection markets — high commissions, low claim rates in certain CI and IP products. Signals forthcoming Consumer Duty requirements for fair value assessment. Life insurers begin reviewing product design, pricing and distribution practices ahead of regulatory action.",v:100,sev:"mod",geo:"UK"},
+  {y:2020,n:"COVID-19 Pandemic — Group Life Catastrophe Claims",t:"pandemic-mortality",s:"group-life",desc:"COVID-19 pandemic causes approximately 200,000 UK excess deaths in 2020-21. Group life schemes covering healthcare workers (NHS, care homes), transport workers and other frontline sectors experience concentrated mortality. UK group life market estimated total excess claims of £1-2bn above expected mortality. Individual term life claims surge. Reinsurers activate pandemic exclusion reviews for new treaties. Lloyd's TL syndicates suspend or review new group life capacity for high-concentration risks.",v:2000,sev:"cat",geo:"UK/Global"},
+  {y:2020,n:"COVID-19 — CI &amp; Income Protection Claims Surge",t:"pandemic-mortality",s:"critical-illness",desc:"COVID-19 generates significant critical illness claims where claimants survive hospitalisation with specified CI conditions (respiratory failure, heart attack secondary to COVID). Income protection claims for long-term COVID-related incapacity begin emerging in late 2020. Waiver of premium claims activate on incapacity from COVID infection. Lloyd's TL: IP books see elevated claim frequency; CI books review COVID-triggered cardiac events.",v:500,sev:"maj",geo:"UK"},
+  {y:2021,n:"Long-COVID — New IP Claim Category Emerges",t:"mass-disability",s:"income-protection",desc:"Long-COVID (persistent symptoms >12 weeks: fatigue, breathlessness, 'brain fog', pain) creates significant new income protection claim category from 2021. ONS estimates 2.5m UK long-COVID sufferers as of 2023. IP and group IP providers receive increasing volume of long-COVID disability claims. Clinical pathways for assessment and rehabilitation are under-developed; functional assessments challenging. Reserve adequacy a significant concern for TL books with pre-COVID IP policies.",v:800,sev:"maj",geo:"UK/Global"},
+  {y:2021,n:"US Life Market — COVID Excess Mortality Book Loss",t:"pandemic-mortality",s:"individual-term",desc:"US life insurance market reports $5.5bn in excess COVID-19 death claims in 2021 — the largest single-year mortality increase since the 1918 influenza. Reinsurers Lincoln National, Reinsurance Group of America (RGA), and SCOR report significant excess mortality claims. Lloyd's TL international treaties exposed. Pandemic modelling assumptions fundamentally revised across all life markets.",v:5500,sev:"cat",geo:"USA"},
+  {y:2021,n:"South Africa COVID — Mass Mortality Event",t:"pandemic-mortality",s:"international-life",desc:"South Africa's COVID-19 Delta wave (June-August 2021) causes catastrophic excess mortality — estimated 300,000 excess deaths in 2021, among the world's highest per capita excess mortality rates. International group life schemes and Lloyd's international TL treaties face significant claims from South African-employed lives. Reinsurers with Sub-Saharan Africa group life exposure experience major claims development.",v:1000,sev:"cat",geo:"South Africa"},
+  {y:2022,n:"Post-COVID Excess Cardiovascular Mortality — UK",t:"medical-mortality",s:"individual-term",desc:"UK ONS and CMI data confirms sustained post-COVID excess mortality driven primarily by cardiovascular disease (heart disease, stroke) and secondary COVID effects. Excess deaths approximately 10-15% above expected for 2022. Life insurers across term life, CI and group life books report adverse mortality experience relative to pre-2020 assumptions. CMI revises longevity improvement assumptions downward.",v:400,sev:"mod",geo:"UK"},
+  {y:2022,n:"Ukraine War — International Group Life Exclusions",t:"pandemic-mortality",s:"international-life",desc:"Russian invasion of Ukraine (February 2022) triggers war exclusion clauses in international group life and IP schemes covering Ukrainian-resident employees of multinational companies. Lloyd's TL market reviews war exclusion language in international schemes; some global employers seek humanitarian extensions for Ukrainian employees. Underwriters clarify scope of war exclusions across Lloyd's international life treaties.",v:200,sev:"mod",geo:"Ukraine/Europe"},
+  {y:2022,n:"Mental Health Claims — Duration Extension &amp; Reserve Strain",t:"claims-surge",s:"income-protection",desc:"IP and group IP providers report substantial extension in mental health claim durations post-COVID — average mental health IP claim lasting 3-4 years vs pre-COVID 2-3 years. Vocational rehabilitation services overwhelmed; therapist-led rehabilitation pathways under capacity pressure. Lloyd's TL underwriters review reserve adequacy for IP books with high mental health claim concentrations; pricing corrected upward across group IP market.",v:600,sev:"maj",geo:"UK"},
+  {y:2023,n:"FCA Consumer Duty — Protection Product Fair Value Review",t:"regulatory",s:"individual-term",desc:"FCA Consumer Duty (August 2023) requires protection product manufacturers and distributors to demonstrate fair value to retail consumers. Initial reviews target high-commission CI and IP products with low historical claim rates. Life insurers conduct systematic value assessments; some products repriced or discontinued. Lloyd's syndicates selling protection products through retail intermediaries complete Consumer Duty implementation reviews.",v:100,sev:"mod",geo:"UK"},
+  {y:2023,n:"Group IP — Mental Health Loading Becomes Standard",t:"claims-surge",s:"income-protection",desc:"UK group income protection market formally incorporates mental health claim loading into standard group IP pricing from 2023. Grid/Group Risk Development data confirms mental health responsible for majority of new IP claims by duration. Underwriters require evidence of employer EAP programmes, mental health first aid training, and return-to-work policies as prerequisites for preferred rates. Lloyd's group IP treaty market adjusts cedant commission structures to reflect improved claims management expectations.",v:300,sev:"mod",geo:"UK"},
+  {y:2023,n:"ABI Genetics Moratorium — Pre-Expiry Review",t:"regulatory",s:"individual-term",desc:"ABI conducts pre-expiry review of Genetics and Insurance Concordat moratorium (due to lapse 2025). Genomic testing has advanced dramatically since 2018 — polygenic risk scores (PRS) now provide actionable predictive data on cardiovascular disease, cancer predisposition and other TL-relevant conditions. Government considering legislative option to replace voluntary moratorium. Significant market uncertainty about post-2025 framework for genetic information in life underwriting.",v:50,sev:"mod",geo:"UK"},
+  {y:2024,n:"Post-COVID CMI 2023 Mortality Tables — Revised Assumptions",t:"claims-surge",s:"group-life",desc:"CMI publishes 2023 longevity improvement model incorporating COVID excess mortality data. Model shows partial recovery of pre-COVID longevity improvement trend but at lower rate than pre-pandemic projections. Life insurers revise long-term mortality assumptions for pricing and reserving. Group life: beneficial (lower expected mortality). Group IP and annuities: concern about long-COVID-driven morbidity sustaining higher-than-expected claim frequencies into the 2030s.",v:200,sev:"mod",geo:"UK"},
+  {y:2024,n:"Long-COVID Disability — First Wave of Settled IP Claims",t:"mass-disability",s:"income-protection",desc:"First wave of long-COVID IP claims reach the end of their deferred periods and enter payment from 2024 (assuming 2-year deferred periods for those infected in early 2022). IP providers and Lloyd's TL books begin settling long-COVID claims at scale. Functional assessment frameworks for long-COVID published by ABI in conjunction with clinical bodies. Rehabilitation programme referrals overwhelm specialist capacity. Reserve development for long-COVID IP claims accelerates.",v:500,sev:"maj",geo:"UK/Global"}
+];
+
+const typeLabels = {
+  "pandemic-mortality":"Pandemic / Mortality",
+  "mass-disability":"Mass Disability",
+  "mis-selling":"Product Mis-selling",
+  "claims-surge":"Systemic Claims Surge",
+  "reinsurer":"Market / Reinsurer Failure",
+  "regulatory":"Regulatory Action",
+  "medical-mortality":"Medical / Mortality"
+};
+const typeClass = {
+  "pandemic-mortality":"tp-pandemic",
+  "mass-disability":"tp-mass-disability",
+  "mis-selling":"tp-mis-selling",
+  "claims-surge":"tp-claims-surge",
+  "reinsurer":"tp-reinsurer",
+  "regulatory":"tp-regulatory",
+  "medical-mortality":"tp-pandemic"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function formatVal(v) {
+  if(v>=1000) return '£'+(v/1000).toFixed(1)+'bn';
+  return '£'+v+'m';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]||d.t}</span></td>
+      <td>${d.s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</td>
+      <td>${formatVal(d.v)} <span style="font-size:0.68rem;color:#888;">est.</span></td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">&#9660; Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

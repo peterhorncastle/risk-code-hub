@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Engineering &amp; Construction (CB/CC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #37474f;
+      --hub-dark:      #1c2b31;
+      --hub-light:     #eceff1;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #e65100;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1c2b31 0%,#37474f 55%,#546e7a 100%);
+      --header-sub:    #b0bec5;
+      --hub-mid:       #cfd8dc;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2327;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#b0bec5;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1c2b31;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#b0bec5;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+    .leg-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#444;}
+    .leg-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+    .tl{position:relative;padding-left:32px;}
+    .tl::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--hub-mid);}
+    .tl-event{position:relative;margin-bottom:20px;}
+    .tl-event::before{content:'';position:absolute;left:-26px;top:16px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--hub-mid);}
+    .tl-event.natcat::before{background:#c62828;box-shadow:0 0 0 2px #c62828;}
+    .tl-event.defect::before{background:#1565c0;box-shadow:0 0 0 2px #1565c0;}
+    .tl-event.market::before{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .tl-event.regulatory::before{background:#1a5c2a;box-shadow:0 0 0 2px #1a5c2a;}
+    .tl-event.technology::before{background:#00796b;box-shadow:0 0 0 2px #00796b;}
+    .tl-event.project::before{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .tl-card{background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-mid);}
+    .tl-event.natcat .tl-card{border-left-color:#c62828;}
+    .tl-event.defect .tl-card{border-left-color:#1565c0;}
+    .tl-event.market .tl-card{border-left-color:#6a1b9a;}
+    .tl-event.regulatory .tl-card{border-left-color:#1a5c2a;}
+    .tl-event.technology .tl-card{border-left-color:#00796b;}
+    .tl-event.project .tl-card{border-left-color:#e65100;}
+    .tl-year{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .tl-type{font-size:0.68rem;font-weight:700;padding:1px 7px;border-radius:10px;display:inline-block;margin-bottom:8px;}
+    .type-natcat{background:#fbe9e7;color:#c62828;}
+    .type-defect{background:#e3f2fd;color:#1565c0;}
+    .type-market{background:#f3e5f5;color:#6a1b9a;}
+    .type-regulatory{background:#e8f5e9;color:#1a5c2a;}
+    .type-technology{background:#e0f2f1;color:#00796b;}
+    .type-project{background:#fff3e0;color:#e65100;}
+    .tl-card h4{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.83rem;color:#444;line-height:1.55;}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    footer{background:#1c2b31;color:#b0bec5;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Engineering &amp; Construction (CB/CC)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key engineering &amp; construction loss and market events 1970–2024</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter Timeline</div>
+  <div class="filter-bar">
+    <div>
+      <label>Event Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="natcat">NatCat Loss</option>
+        <option value="defect">Defects / Coverage</option>
+        <option value="market">Market Structural</option>
+        <option value="regulatory">Regulatory / Contract</option>
+        <option value="technology">Technology</option>
+        <option value="project">Major Project</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <select id="fYear">
+        <option value="0">All Years</option>
+        <option value="1980">From 1980</option>
+        <option value="1990">From 1990</option>
+        <option value="2000">From 2000</option>
+        <option value="2010">From 2010</option>
+        <option value="2020">From 2020</option>
+      </select>
+    </div>
+    <div><button onclick="applyFilter()">Apply</button></div>
+    <div><button onclick="resetFilter()" style="background:#546e7a;">Reset</button></div>
+  </div>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#c62828;"></div> NatCat Loss</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1565c0;"></div> Defects / Coverage</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#6a1b9a;"></div> Market Structural</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1a5c2a;"></div> Regulatory / Contract</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#00796b;"></div> Technology</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#e65100;"></div> Major Project</div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <div class="tl" id="timeline"></div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Engineering &amp; Construction (CB/CC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+const EVENTS = [
+  {y:1970,t:"defect",title:"West Gate Bridge Collapse — Melbourne",text:"Partially constructed West Gate Bridge collapses during erection, killing 35 workers. Investigation reveals design error and inadequate temporary works — a landmark construction defect liability case. Royal Commission findings directly influence CAR temporary works design requirements and contributed to later LEG clause development. <sup>[L8]</sup>"},
+  {y:1974,t:"natcat",title:"Cyclone Tracy — Darwin Infrastructure Destruction",text:"Cyclone Tracy destroys 70% of Darwin's built environment on Christmas Day 1974. Insured losses significant for Australian construction and property markets. Triggers review of wind loading standards and cyclone zone CAR pricing in Australia and the Pacific."},
+  {y:1978,t:"regulatory",title:"ICE Conditions of Contract — 5th Edition",text:"Institution of Civil Engineers publishes revised Conditions of Contract (5th Ed.), standardising insurance clauses and indemnity requirements for UK civil engineering contracts. Sets baseline CAR coverage obligations for contractor and employer that persist in substance through subsequent editions."},
+  {y:1981,t:"defect",title:"Hyatt Regency Walkway Collapse — Kansas City",text:"Two suspended walkways collapse at the Hyatt Regency Hotel, killing 114 people. Engineering investigation reveals design defect in rod-hanger connection — a classic CAR third-party liability and defects claim. Case becomes a fundamental example in engineering insurance defects clause analysis."},
+  {y:1985,t:"market",title:"LEG Clauses Established — London Engineering Group",text:"London Engineering Group (LEG) publishes LEG 1, 2 and 3 clauses to standardise defects coverage under CAR/EAR policies. Resolution of longstanding coverage uncertainty around design defects, faulty materials and workmanship. LEG 3 (full defects cover) becomes the benchmark for sophisticated contractor-driven programmes. <sup>[I5]</sup>"},
+  {y:1988,t:"natcat",title:"Piper Alpha Platform Explosion — North Sea",text:"Piper Alpha offshore platform explosion kills 167 workers, generating estimated insured losses of $1.4bn. Though predominantly an energy/offshore claim, the event drives fundamental review of offshore construction and operational engineering insurance, fire suppression requirements, and evacuation procedures for offshore platforms under construction."},
+  {y:1992,t:"natcat",title:"Hurricane Andrew — US Construction Losses",text:"Hurricane Andrew makes landfall in Florida with insured losses of approximately $15bn (1992 prices). Construction project losses — from projects under way across Florida — contribute to overall NatCat losses. Event triggers a generation of windstorm pricing reform and drives reinsurers to impose NatCat sublimits in CAR programmes."},
+  {y:1994,t:"project",title:"Eurotunnel Opens — Landmark PFI Engineering Cover",text:"Channel Tunnel opens after one of the most complex engineering insurance programmes ever assembled. Multi-billion pound CAR programme layered across Lloyd's and international markets, with DSU cover for the critical revenue-generating infrastructure. Establishes template for PFI/PPP construction insurance. <sup>[I6]</sup>"},
+  {y:1999,t:"regulatory",title:"FIDIC 1999 Contract Suite Published",text:"FIDIC publishes the 1999 suite: Red Book (construction), Yellow Book (plant & design-build), Silver Book (EPC turnkey), and Gold Book (O&M). Clause 18 (Risk and Responsibility) and Clause 19 (Force Majeure) set the international standard for construction insurance requirements. Widely adopted on World Bank, ADB and African Development Bank funded projects. <sup>[L2]</sup>"},
+  {y:2002,t:"natcat",title:"Elbe and Danube Floods — European Infrastructure Losses",text:"Major flooding across Central Europe inundates infrastructure and construction projects. Czech Republic, Germany, Austria and Hungary all affected. CAR flood losses from projects in progress are significant, triggering market review of flood zone pricing and the introduction of mandatory flood risk assessments for CAR submissions."},
+  {y:2006,t:"defect",title:"Boston Big Dig Ceiling Collapse",text:"Concrete ceiling panels in a connecting tunnel of the Central Artery/Tunnel Project (Big Dig) collapse, killing one person. Investigation reveals epoxy bolt failure — a latent defect in the anchoring system. The $15bn project was already complete, generating complex EL/PI/CAR interface analysis. Defects exclusion and post-completion maintenance period issues tested. <sup>[I8]</sup>"},
+  {y:2010,t:"natcat",title:"Christchurch Earthquake — New Zealand NZ$40bn",text:"Canterbury earthquake sequence (September 2010 and February 2011) causes massive infrastructure damage across Christchurch, New Zealand. NZ$40bn+ total economic loss, with significant CAR losses from projects under construction and major operational plant damage. Drives substantial market hardening for NatCat zones. <sup>[I1]</sup>"},
+  {y:2011,t:"natcat",title:"Thai Floods — Automotive and Industrial CAR Losses",text:"Severe flooding across central Thailand including industrial estates inundates major automotive, electronics and food manufacturing facilities under construction and expansion. Seven major industrial estates flooded; estimated CAR and operational losses across construction projects significant. Reinforces flood accumulation risk in industrial construction. <sup>[I1]</sup>"},
+  {y:2011,t:"defect",title:"Fukushima Daiichi — DSU and EAR Implications",text:"Tsunami triggers meltdown at Fukushima Daiichi Nuclear Power Plant. Though primarily an operational event, the disaster highlights DSU exposure for power generation projects and drives re-evaluation of combined event scenarios in EAR/DSU pricing models. Global nuclear new-build programmes delayed, impacting CAR/EAR new business pipeline."},
+  {y:2013,t:"technology",title:"Offshore Wind Construction — Monopile Installation Losses",text:"Growing frequency of offshore wind foundation and turbine installation losses — monopile installation vessel incidents, crane collapses, blade damage during installation — generates a body of specialist EAR claims. Market develops bespoke offshore wind construction covers with specialist vessel schedules, T&C provisions and weather-window warranties. <sup>[I6]</sup>"},
+  {y:2017,t:"regulatory",title:"Grenfell Tower Fire — Building Safety Implications",text:"Grenfell Tower fire kills 72 residents. Investigation reveals fire-stopping failures and cladding defects. Triggers the Building Safety Act 2022, creating new duty holders (principal designers, principal contractors) and 30-year latent defect liability for higher-risk residential buildings. Fundamentally reshapes UK CAR coverage requirements for multi-storey residential projects. <sup>[L5]</sup>"},
+  {y:2017,t:"natcat",title:"Hurricane Harvey — US Infrastructure",text:"Hurricane Harvey produces record rainfall across Houston, Texas. Infrastructure under construction flooded; industrial facility losses generate significant CAR claims. Total insured losses approximately $30bn. Triggers review of flood zone definitions and storm surge coverage in US domestic and Lloyd's CAR programmes. <sup>[I1]</sup>"},
+  {y:2020,t:"market",title:"COVID-19 — Project Delays and Supply Chain Disruption",text:"Global pandemic causes construction site closures, supply chain failures, and project schedule extensions across all sectors. Pure delay losses (without physical damage trigger) generally not covered under CAR/EAR. Force majeure provisions in FIDIC contracts activated; DSU claims arise only where physical damage co-exists with delay. Exposes major coverage gap for pandemic-related construction risk. <sup>[I4]</sup>"},
+  {y:2021,t:"natcat",title:"European Floods — Germany and Belgium Infrastructure Damage",text:"Severe flooding in the Ahr Valley (Germany), Belgium and the Netherlands causes catastrophic infrastructure damage. Bridges, roads, railway lines and utilities destroyed or damaged. CAR losses significant for projects under construction in affected areas. Economic losses estimated at €40bn+. Drives re-pricing of flood risk across European construction insurance. <sup>[I1]</sup>"},
+  {y:2023,t:"natcat",title:"Kahramanmaras Earthquake — Turkey $6bn+ Engineering Losses",text:"Twin earthquakes (7.8 and 7.7 magnitude) in south-east Turkey and northern Syria on 6 February 2023. Over 55,000 fatalities; massive destruction of building stock, infrastructure and operational plant. Estimated insured engineering losses exceed $6bn — the largest single NatCat event for construction insurance to date. Drives significant market hardening for earthquake zones and review of earthquake sub-limits in CAR programmes. <sup>[I1]</sup>"}
+];
+
+const typeLabel = {natcat:"NatCat Loss",defect:"Defects / Coverage",market:"Market Structural",regulatory:"Regulatory / Contract",technology:"Technology",project:"Major Project"};
+let filtered = [...EVENTS];
+
+function applyFilter(){
+  const tp = document.getElementById('fType').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  filtered = EVENTS.filter(e=>(!tp||e.t===tp)&&(e.y>=yr));
+  render();
+}
+function resetFilter(){
+  document.getElementById('fType').value='';
+  document.getElementById('fYear').value='0';
+  filtered=[...EVENTS];
+  render();
+}
+function render(){
+  document.getElementById('results-info').textContent=`Showing ${filtered.length} of ${EVENTS.length} events`;
+  document.getElementById('timeline').innerHTML = filtered.map(e=>`
+    <div class="tl-event ${e.t}">
+      <div class="tl-card">
+        <div class="tl-year">${e.y}</div>
+        <span class="tl-type type-${e.t}">${typeLabel[e.t]}</span>
+        <h4>${e.title}</h4>
+        <p>${e.text}</p>
+      </div>
+    </div>
+  `).join('');
+}
+render();
+</script>
+</body>
+</html>

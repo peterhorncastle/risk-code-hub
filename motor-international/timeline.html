@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Motor International (MF/MG/MH/MI/MP) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b0020;
+      --hub-dark:      #4a0010;
+      --hub-light:     #fce4ec;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#4a0010 0%,#7b0020 55%,#9c0027 100%);
+      --header-sub:    #ef9a9a;
+      --hub-mid:       #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0010;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#4a0010;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    .filter-bar span{font-size:0.82rem;font-weight:600;color:#555;margin-right:6px;}
+    .filter-btn{padding:6px 14px;border-radius:20px;border:2px solid #ddd;background:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.18s;}
+    .filter-btn:hover{border-color:var(--hub-primary);color:var(--hub-primary);}
+    .filter-btn.active{background:var(--hub-primary);color:#fff;border-color:var(--hub-primary);}
+    .filter-btn.all{border-color:var(--hub-accent);color:var(--hub-accent);}
+    .filter-btn.all.active{background:var(--hub-accent);color:#fff;}
+    .timeline{position:relative;padding-left:36px;}
+    .timeline::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:3px;background:var(--hub-mid);}
+    .tl-item{position:relative;margin-bottom:22px;display:none;}
+    .tl-item.show{display:block;}
+    .tl-item::before{content:'';position:absolute;left:-30px;top:8px;width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--hub-primary);}
+    .tl-item.t-legislative::before{box-shadow:0 0 0 2px #c62828;background:#c62828;}
+    .tl-item.t-technology::before{box-shadow:0 0 0 2px #00838f;background:#00838f;}
+    .tl-item.t-market::before{box-shadow:0 0 0 2px #6a1b9a;background:#6a1b9a;}
+    .tl-item.t-natcat::before{box-shadow:0 0 0 2px #1a5c2a;background:#1a5c2a;}
+    .tl-item.t-fraud::before{box-shadow:0 0 0 2px #e65100;background:#e65100;}
+    .tl-item.t-caselaw::before{box-shadow:0 0 0 2px #1a237e;background:#1a237e;}
+    .tl-card{background:#fff;border-radius:8px;padding:14px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card .tl-year{font-size:1rem;font-weight:700;color:var(--hub-primary);margin-bottom:2px;}
+    .tl-card .tl-type{font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:6px;}
+    .tp-legislative{background:#ffebee;color:#c62828;}
+    .tp-technology{background:#e0f7fa;color:#00838f;}
+    .tp-market{background:#f3e5f5;color:#6a1b9a;}
+    .tp-natcat{background:#e8f5e9;color:#1a5c2a;}
+    .tp-fraud{background:#fff3e0;color:#e65100;}
+    .tp-caselaw{background:#e8eaf6;color:#1a237e;}
+    .tl-card h3{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    footer{background:#4a0010;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Motor International</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key international motor events 1930–2024 — legislative, technology, market, NatCat, fraud &amp; case law</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+  <div class="filter-bar">
+    <span>Show:</span>
+    <button class="filter-btn all active" onclick="filterTimeline('all')">All Events</button>
+    <button class="filter-btn" onclick="filterTimeline('legislative')" style="border-color:#c62828;color:#c62828;">Legislative</button>
+    <button class="filter-btn" onclick="filterTimeline('technology')" style="border-color:#00838f;color:#00838f;">Technology Shift</button>
+    <button class="filter-btn" onclick="filterTimeline('market')" style="border-color:#6a1b9a;color:#6a1b9a;">Market Structural</button>
+    <button class="filter-btn" onclick="filterTimeline('natcat')" style="border-color:#1a5c2a;color:#1a5c2a;">NatCat / Weather</button>
+    <button class="filter-btn" onclick="filterTimeline('fraud')" style="border-color:#e65100;color:#e65100;">Fraud / Reform</button>
+    <button class="filter-btn" onclick="filterTimeline('caselaw')" style="border-color:#1a237e;color:#1a237e;">Case Law</button>
+  </div>
+
+  <div class="section-title">Timeline 1930–2024</div>
+  <div class="timeline" id="timeline">
+
+    <div class="tl-item t-legislative show" data-type="legislative">
+      <div class="tl-card">
+        <div class="tl-year">1930</div>
+        <span class="tl-type tp-legislative">Legislative</span>
+        <h3>UK Road Traffic Act 1930 — Compulsory MTPL Introduced</h3>
+        <p>The United Kingdom becomes one of the first nations to introduce compulsory motor third-party liability insurance for all motorists. The Act set the template for international MTPL legislation that spread globally over subsequent decades. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-legislative show" data-type="legislative">
+      <div class="tl-card">
+        <div class="tl-year">1949</div>
+        <span class="tl-type tp-legislative">Legislative</span>
+        <h3>Green Card System Framework Agreed (Geneva)</h3>
+        <p>UNECE Geneva agreement on the international motor insurance certificate (Green Card system) — bureau-to-bureau claim settlement mechanism for cross-border motor accidents. Formally launched 1953. Now covers 48 countries including all EU member states, non-EU European countries and several Middle East nations. <sup>[L4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-legislative show" data-type="legislative">
+      <div class="tl-card">
+        <div class="tl-year">1972</div>
+        <span class="tl-type tp-legislative">Legislative</span>
+        <h3>First EU Motor Insurance Directive (72/166/EEC)</h3>
+        <p>Abolishes Green Card check requirements at internal EEC borders. Domestic motor insurance automatically extends to cover MTPL across all EEC member states. A transformational step for European motor insurance market integration. Supplemented by the UK Road Traffic Act 1972 introducing direct victim rights. <sup>[L1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-legislative show" data-type="legislative">
+      <div class="tl-card">
+        <div class="tl-year">1984</div>
+        <span class="tl-type tp-legislative">Legislative</span>
+        <h3>Second EU Motor Directive — Minimum Limits and Guarantee Funds</h3>
+        <p>84/5/EEC sets minimum MTPL limits across member states and requires national guarantee funds to compensate victims of uninsured or unidentified vehicles. Forces harmonisation of national guarantee fund structures that had previously varied enormously, and creates direct compensation rights for victims. <sup>[L1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-market show" data-type="market">
+      <div class="tl-card">
+        <div class="tl-year">1990</div>
+        <span class="tl-type tp-market">Market Structural</span>
+        <h3>Lloyd's International Motor Binder Market Expands</h3>
+        <p>The 1990s see rapid growth in Lloyd's motor delegated authority schemes across Australia, South Africa and the Gulf states. Specialist MGAs granted binding authorities to write local motor programmes on behalf of Lloyd's syndicates — establishing the distribution architecture that underpins the MF/MG/MH/MI/MP class to this day. <sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-legislative show" data-type="legislative">
+      <div class="tl-card">
+        <div class="tl-year">1990</div>
+        <span class="tl-type tp-legislative">Legislative</span>
+        <h3>Third EU Motor Directive — Passenger Cover Made Compulsory</h3>
+        <p>90/232/EEC extends compulsory MTPL to cover passengers in the insured vehicle as standard, closing a gap where passengers could be left uncompensated. Also begins harmonising territorial coverage within Europe. <sup>[L1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-natcat show" data-type="natcat">
+      <div class="tl-card">
+        <div class="tl-year">1999</div>
+        <span class="tl-type tp-natcat">NatCat / Weather</span>
+        <h3>Sydney Hailstorm — A$1.7bn Vehicle Losses</h3>
+        <p>April 1999 Sydney hailstorm causes an estimated A$1.7bn in insured losses including a large proportion of motor vehicle total losses. First major demonstration of catastrophic hail exposure in Australian motor portfolios. Triggers review of Australian fleet aggregation accumulation for Lloyd's international motor binders. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-technology show" data-type="technology">
+      <div class="tl-card">
+        <div class="tl-year">2002</div>
+        <span class="tl-type tp-technology">Technology Shift</span>
+        <h3>Italy Launches First Mass-Market Vehicle Telematics</h3>
+        <p>Italian motor insurers launch box-based telematics under industry agreements — the world's first mass commercial telematics deployment. By 2010, over 1 million Italian policies had telematics devices. Demonstrates viability of UBI (usage-based insurance) and inspires global adoption in South Africa, Australia, UK and MENA markets. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-legislative show" data-type="legislative">
+      <div class="tl-card">
+        <div class="tl-year">2009</div>
+        <span class="tl-type tp-legislative">Legislative</span>
+        <h3>EU Consolidated Motor Insurance Directive (2009/103/EC)</h3>
+        <p>Consolidates the five preceding EU motor directives into a single instrument. Standardises minimum MTPL at EUR 1m per victim / EUR 1m property damage. Introduces habitual residence provisions so EEC residents injured abroad can access their home member state's bureau. Foundation of current EU motor insurance framework. <sup>[L1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-caselaw show" data-type="caselaw">
+      <div class="tl-card">
+        <div class="tl-year">2014</div>
+        <span class="tl-type tp-caselaw">Case Law</span>
+        <h3>Vnuk v Zavarovalnica Triglav — ECJ Expands MTPL Scope</h3>
+        <p>C-162/13: European Court of Justice holds that MTPL must cover any use of a vehicle "consistent with its function as a vehicle," including on private land. Threatens to extend compulsory insurance to agricultural machinery, fork-lift trucks and industrial vehicles. Creates major uncertainty for Lloyd's international motor underwriters across EU-exposed portfolios. <sup>[L8]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-technology show" data-type="technology">
+      <div class="tl-card">
+        <div class="tl-year">2015</div>
+        <span class="tl-type tp-technology">Technology Shift</span>
+        <h3>ADAS Penetration Accelerates — Frequency Falls, Severity Rises</h3>
+        <p>Automatic emergency braking, lane-keep assist, and autonomous emergency braking become standard in new vehicles across major markets. Thatcham Research documents 27% reduction in injury accidents for ADAS-equipped vehicles but notes repair cost inflation — sensors in bumpers, windscreens and mirrors are expensive to replace and recalibrate after even minor impacts. <sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-market show" data-type="market">
+      <div class="tl-card">
+        <div class="tl-year">2016</div>
+        <span class="tl-type tp-market">Market Structural</span>
+        <h3>Ride-Sharing TNC Liability Gap Exposed (Uber/Lyft Period)</h3>
+        <p>The rise of transportation network companies (TNCs) such as Uber and Lyft creates a three-period liability gap: between trips, available on the app, and during a trip. Standard personal motor policies exclude commercial use; TNC platform insurance is inconsistent. Lloyd's international motor underwriters writing hire-car and ride-sharing programmes must assess TNC endorsement structures carefully. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-technology show" data-type="technology">
+      <div class="tl-card">
+        <div class="tl-year">2017</div>
+        <span class="tl-type tp-technology">Technology Shift</span>
+        <h3>Tesla Autopilot — First High-Profile AV Accident Scrutiny</h3>
+        <p>The 2016 Tesla Autopilot fatality in Florida and subsequent NHTSA investigations bring autonomous vehicle liability to the forefront of the motor insurance agenda. Who is liable — driver, manufacturer, software provider — when an SAE Level 2/3 vehicle is involved in an accident? International motor insurers begin reviewing AV policy language and liability allocation clauses. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-natcat show" data-type="natcat">
+      <div class="tl-card">
+        <div class="tl-year">2017</div>
+        <span class="tl-type tp-natcat">NatCat / Weather</span>
+        <h3>Hurricane Harvey — 500,000 Vehicle Total Losses, Houston</h3>
+        <p>Hurricane Harvey flooding of the Houston metropolitan area results in approximately 500,000 vehicle total losses — one of the largest single motor NatCat events ever recorded. Demonstrates the catastrophic aggregation risk in flood-exposed vehicle portfolios. Lloyd's international motor syndicates with USA-exposed binders review flood accumulation exposure post-Harvey. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-fraud show" data-type="fraud">
+      <div class="tl-card">
+        <div class="tl-year">2018</div>
+        <span class="tl-type tp-fraud">Fraud / Reform</span>
+        <h3>South African Motor Fraud — Syndicated Accident Staging Ring</h3>
+        <p>South African insurance regulators and the Insurance Crime Bureau expose a syndicated accident staging network operating across multiple provinces, involving fake accident scenes, corrupt assessors, and fictitious injury claims. Estimated losses exceed ZAR 200m over the scheme's lifespan. Triggers enhanced fraud analytics requirements for Lloyd's South Africa motor binders. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-legislative show" data-type="legislative">
+      <div class="tl-card">
+        <div class="tl-year">2019</div>
+        <span class="tl-type tp-legislative">Legislative</span>
+        <h3>UK Automated and Electric Vehicles Act 2018 — AV Insurance Framework</h3>
+        <p>UK's Automated and Electric Vehicles Act 2018 (in force 2019) creates the first legislative framework for autonomous vehicle insurance: the insured vehicle's insurer is liable when the vehicle is in autonomous mode — with rights of subrogation against the manufacturer. Influences international debates on AV liability in Lloyd's motor-writing countries. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-market show" data-type="market">
+      <div class="tl-card">
+        <div class="tl-year">2020</div>
+        <span class="tl-type tp-market">Market Structural</span>
+        <h3>COVID-19 — Frequency Collapse Then Claims Inflation Surge</h3>
+        <p>Global lockdowns reduce vehicle usage dramatically — motor claim frequency falls 30–50% in many markets in Q2 2020, generating exceptional loss ratios. However, the subsequent correction from 2021 is severe: semiconductor shortages, supply chain disruption, OEM parts scarcity and labour market tightness drive average claim costs 30–40% above pre-pandemic levels, creating underwriting pressure across international motor portfolios. <sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-natcat show" data-type="natcat">
+      <div class="tl-card">
+        <div class="tl-year">2023</div>
+        <span class="tl-type tp-natcat">NatCat / Weather</span>
+        <h3>Australian Eastern Seaboard Hailstorms — A$1.1bn Vehicle Losses</h3>
+        <p>A series of hailstorm events across Australia's eastern seaboard in late 2022 / early 2023 generate an estimated A$1.1bn in insured motor losses, a significant portion attributable to fleet and comprehensive motor portfolios. Confirms hail as a systemic aggregate peril for Lloyd's Australian motor binders. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-legislative show" data-type="legislative">
+      <div class="tl-card">
+        <div class="tl-year">2023</div>
+        <span class="tl-type tp-legislative">Legislative</span>
+        <h3>EU Motor Insurance Directive Amendment — Minimum Limits Raised</h3>
+        <p>Revised EU Motor Insurance Directive raises MTPL minimum limits to EUR 6.45m per incident (BI) and EUR 1.22m (PD) — the first significant increase since the 2009 consolidation. Also clarifies AV coverage obligations under compulsory MTPL. Impacts Lloyd's international motor programmes with EU territorial exposure. <sup>[L2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-technology show" data-type="technology">
+      <div class="tl-card">
+        <div class="tl-year">2024</div>
+        <span class="tl-type tp-technology">Technology Shift</span>
+        <h3>EU AI Act 2024 — Implications for AV Systems</h3>
+        <p>The EU Artificial Intelligence Act (2024) classifies autonomous driving systems as high-risk AI, requiring conformity assessments, transparency obligations and human oversight mechanisms. AV insurers and Lloyd's international motor underwriters must review how the Act's liability allocation provisions interact with existing MTPL frameworks and the 2018 UK AV Act model. <sup>[L2]</sup></p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Motor International (MF/MG/MH/MI/MP) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filterTimeline(type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.tl-item').forEach(item => {
+    if (type === 'all' || item.dataset.type === type) {
+      item.classList.add('show');
+    } else {
+      item.classList.remove('show');
+    }
+  });
+}
+</script>
+</body>
+</html>

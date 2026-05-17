@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Global Programme — Event Cancellation &amp; Contingency — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b005a;
+      --hub-dark:      #450030;
+      --hub-light:     #fce4f4;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#450030 0%,#7b005a 55%,#a0007a 100%);
+      --header-sub:    #f48fb1;
+      --bc:            #7b005a;
+      --bc-dark:       #450030;
+      --bc-light:      #fce4f4;
+      --bc-accent:     #c8a84b;
+      --bc-mid:        #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0020;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#f48fb1;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#450030;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#f48fb1;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--bc-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .layer-stack{margin-bottom:24px;}
+    .layer{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:6px solid var(--bc);display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center;}
+    .layer.l2{border-left-color:#1a237e;}
+    .layer.l3{border-left-color:#c8a84b;}
+    .layer.l4{border-left-color:#1a5c2a;}
+    .layer .lnum{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);}
+    .layer h4{font-size:0.9rem;font-weight:700;color:var(--bc-dark);margin-bottom:4px;}
+    .layer p{font-size:0.82rem;color:#444;line-height:1.45;}
+    .jur-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:28px;}
+    .jur{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid var(--bc);}
+    .jur.blue{border-top-color:#1a237e;}
+    .jur.green{border-top-color:#1a5c2a;}
+    .jur.teal{border-top-color:#00695c;}
+    .jur.gold{border-top-color:#c8a84b;}
+    .jur.purple{border-top-color:#6a1b9a;}
+    .jur .jur-flag{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .jur h4{font-size:0.9rem;font-weight:700;color:var(--bc-dark);margin-bottom:6px;}
+    .jur p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .case-study{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;border-top:4px solid var(--hub-accent);}
+    .case-study h3{font-size:1rem;font-weight:700;color:var(--bc-dark);margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--bc-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #fce4f4;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fdf0f8;}
+    .info-box{background:#fce4f4;border-left:4px solid var(--bc);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3b0028;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    footer{background:#450030;color:#f48fb1;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Event Cancellation (PC/PA/PN/PU/PZ)</a> › Global Programme</div>
+    <div class="tag">Module 07</div>
+    <h1>Global Programme Structure</h1>
+    <div class="sub">Touring artists, mega-events, IOC/FIFA insurance model, jurisdiction profiles &amp; case study</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Why global is different -->
+  <div class="info-box">
+    <strong>Why Global EC Programmes Are Different:</strong> A touring artist, global sporting body or international event organiser faces EC exposure in multiple jurisdictions simultaneously. The insurance challenge is (a) ensuring coverage applies across all territories where events take place; (b) complying with local admitted insurance requirements where they exist; (c) coordinating non-appearance, terrorism and EC covers written across different markets; and (d) managing the follow-the-leader/follow-the-settlements dynamics across a syndicated programme. Lloyd's is uniquely positioned for this market due to its global licences and acceptance of complex, bespoke risks. <sup>[I3]</sup>
+  </div>
+
+  <!-- 4-layer structure -->
+  <div class="section-title">Typical Global EC Programme — 4-Layer Structure</div>
+  <div class="layer-stack">
+    <div class="layer">
+      <div>
+        <div class="lnum">Layer 4 — Top</div>
+        <h4>Excess of Loss Reinsurance</h4>
+      </div>
+      <p>Catastrophe XL reinsurance purchased by the EC insurer(s) to protect against large single-event or aggregated losses. For a £100m+ global touring programme, XL RI may be placed on a per-risk or per-occurrence basis. Reinsurance terms significantly influence the primary insurer's pricing and capacity availability.</p>
+    </div>
+    <div class="layer l2">
+      <div>
+        <div class="lnum">Layer 3</div>
+        <h4>Lloyd's Global EC Master Policy</h4>
+      </div>
+      <p>The Lloyd's-led EC master policy provides the primary global event cancellation, non-appearance (PN), terrorism (where purchased), and weather coverage across all event territories. Written on a "worldwide including USA/Canada" basis. The lead Lloyd's syndicate acts as claims leader. <sup>[I3]</sup></p>
+    </div>
+    <div class="layer l3">
+      <div>
+        <div class="lnum">Layer 2</div>
+        <h4>Local Admitted Policies (Where Required)</h4>
+      </div>
+      <p>Certain jurisdictions require locally admitted insurance for events taking place there — notably some US states, Brazil, and certain Asian markets. A locally admitted policy (often a fronting arrangement where the Lloyd's market is the reinsurer) satisfies local regulatory requirements. <sup>[I3]</sup></p>
+    </div>
+    <div class="layer l4">
+      <div>
+        <div class="lnum">Layer 1 — Base</div>
+        <h4>Broadcaster / Media Rights Separate Layer</h4>
+      </div>
+      <p>For events with significant broadcast rights values, a separate broadcast rights cancellation policy is typically placed as a standalone cover — often with specialist media insurers alongside Lloyd's. The broadcast rights layer has different coverage triggers (full event non-broadcast vs partial broadcast) and requires separate claims adjustment expertise. <sup>[2]</sup></p>
+    </div>
+  </div>
+
+  <!-- Jurisdiction profiles -->
+  <div class="section-title">Key Jurisdiction Profiles</div>
+  <div class="jur-grid">
+    <div class="jur">
+      <div class="jur-flag">United Kingdom</div>
+      <h4>UK — Lloyd's Home Market; Pool Re for Terrorism</h4>
+      <p>The UK is the deepest and most sophisticated EC market globally. Lloyd's provides EC, PN, pluvius and all contingency classes. Pool Re covers UK property terrorism losses — but event cancellation terrorism is NOT covered by Pool Re; it requires a Lloyd's terrorism extension. The Insurance Act 2015 fair presentation obligation applies to all commercial EC placements. <sup>[L1]</sup></p>
+    </div>
+    <div class="jur blue">
+      <div class="jur-flag">United States</div>
+      <h4>USA — TRIA Does Not Apply to EC; Lloyd's Surplus Lines</h4>
+      <p>The Terrorism Risk Insurance Act (TRIA) applies to commercial property and liability lines in the US — it does not apply to event cancellation insurance. US EC terrorism coverage must be arranged through Lloyd's surplus lines market. Admitted US EC capacity is limited; Lloyd's surplus lines placement is the dominant channel for complex US events. <sup>[I3]</sup></p>
+    </div>
+    <div class="jur green">
+      <div class="jur-flag">France / EU</div>
+      <h4>France — GAREAT for Adjacent Property; EC Separate</h4>
+      <p>GAREAT (French terrorism reinsurance pool) covers property losses adjacent to terror events but does NOT cover event cancellation losses directly. French EC terrorism must be placed commercially. EU Solvency II rules require locally admitted insurance for some large events. The Paris Olympics 2024 involved a complex multi-layer public/private insurance programme. <sup>[I3]</sup></p>
+    </div>
+    <div class="jur teal">
+      <div class="jur-flag">Australia</div>
+      <h4>Australia — Summer Outdoor Season; Weather-Heavy</h4>
+      <p>Australia's summer outdoor event season (November–March) coincides with extreme weather risk — tropical cyclones in the north, severe thunderstorms and heat waves in the south. Australian outdoor events attract significant pluvius and weather EC premium loadings. The Cricket Australia insurance structure is one of the most studied EC programmes in the Asia-Pacific market. <sup>[I5]</sup></p>
+    </div>
+    <div class="jur gold">
+      <div class="jur-flag">Middle East</div>
+      <h4>Middle East — Indoor Events Predominate; Political Stability Risk</h4>
+      <p>The Middle East has developed a significant event market (Formula 1, world boxing, international concerts) predominantly in climate-controlled indoor venues — reducing weather EC risk substantially. Political stability risk (government order cancellation arising from regional political events) is the primary additional peril. Qatar World Cup 2022 and Saudi Arabia GP are notable examples. <sup>[I1]</sup></p>
+    </div>
+    <div class="jur purple">
+      <div class="jur-flag">Global Touring</div>
+      <h4>Multi-Territory Touring — Follow-the-Leader Structure</h4>
+      <p>Multi-territory touring programmes (artists, F1, tennis Grand Slams) typically use a follow-the-leader structure with one lead insurer (usually Lloyd's) and co-insurers following. Claims leadership by the primary Lloyd's syndicate; co-insurers follow settlements. The global tour PN cover for the artist is the most critical and complex element — visa denial perils require careful wording for multi-territory tours. <sup>[I3]</sup></p>
+    </div>
+  </div>
+
+  <!-- IOC/FIFA structure -->
+  <div class="section-title">Olympic / World Cup Mega-Event Insurance Structure</div>
+  <table>
+    <thead>
+      <tr><th>Component</th><th>Structure</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Host-city government indemnity</td><td>Host city / national government provides primary indemnity to IOC/FIFA for event cancellation losses up to agreed limit</td><td>IOC host city contract requires government guarantee; financial burden on host taxpayer <sup>[I1]</sup></td></tr>
+      <tr><td>Commercial EC insurance layer</td><td>Lloyd's and commercial market provide insurance above government indemnity layer for extreme events</td><td>Written by specialist Lloyd's syndicates; significant premium for multi-billion exposure <sup>[I3]</sup></td></tr>
+      <tr><td>Terrorism insurance</td><td>Government security indemnity (host country) + commercial terrorism extension from Lloyd's</td><td>TRIA does not apply; Pool Re not applicable outside UK; commercial market must respond <sup>[L3]</sup></td></tr>
+      <tr><td>Broadcast rights layer</td><td>Separate broadcast interruption cover for IOC/FIFA broadcast rights revenue</td><td>Broadcast rights can exceed $3bn for Summer Olympics; requires standalone specialist cover</td></tr>
+      <tr><td>Athlete non-appearance</td><td>Not typically insured at athlete level — event is insured as a whole; individual NOCs may purchase PN for flagship athletes</td><td>Team sport distributes PN risk; individual athlete PN available at additional premium</td></tr>
+      <tr><td>Pandemic exclusion</td><td>Universal since 2021 — pandemic scenario is government-indemnity exposed, not commercially insured</td><td>Tokyo 2020 postponement exposed inadequacy of government indemnity for pandemic costs <sup>[I2]</sup></td></tr>
+    </tbody>
+  </table>
+
+  <!-- Case study -->
+  <div class="case-study">
+    <h3>Case Study — 20-Date Global Music Tour: Lloyd's EC + PN + Terrorism Programme</h3>
+    <table>
+      <thead><tr><th>Programme Element</th><th>Detail</th><th>Sum Insured / Premium (est.)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tour profile</strong></td><td>20 dates; USA (8), Europe (7), Australia (3), Asia (2); 500,000 tickets sold; $80m gross projected revenue</td><td>—</td></tr>
+        <tr><td>Total Revenue Insured (TRI)</td><td>$80m gross revenue across all dates; unrecoverable advance costs $12m (production, venue deposits)</td><td>TRI: $92m</td></tr>
+        <tr><td>Base EC Premium</td><td>Mixed indoor/outdoor venues; named perils; rate 0.40% of TRI</td><td>$368,000</td></tr>
+        <tr><td>Non-Appearance — Lead Artist</td><td>Age 42; known prior vocal cord surgery (disclosed); PN sum $92m; rate 0.35% (health loading for prior surgery)</td><td>$322,000</td></tr>
+        <tr><td>Non-Appearance — Support Act</td><td>Age 31; clean bill of health; PN sum $20m; rate 0.15%</td><td>$30,000</td></tr>
+        <tr><td>Terrorism Extension</td><td>All territories; rate 0.06% of TRI; Pool Re N/A (non-UK perils); Lloyd's writes all territories</td><td>$55,200</td></tr>
+        <tr><td>Weather — Australia Dates</td><td>3 outdoor Sydney dates in February; parametric pluvius at 10mm/2hr threshold; $8m Australian revenue insured</td><td>$28,000</td></tr>
+        <tr><td>Visa Denial Extension (PN)</td><td>Asia dates (Japan, South Korea) require visa; extension covers visa denial for all named individuals</td><td>$12,000</td></tr>
+        <tr><td><strong>Total Programme GWP</strong></td><td>—</td><td><strong>~$815,200</strong></td></tr>
+        <tr><td>Rate on TRI</td><td>$815,200 / $92m</td><td>0.89%</td></tr>
+        <tr><td>Lloyd's structure</td><td>Lead Lloyd's syndicate 65%; 3 following Lloyd's syndicates 35%; follow-the-leader claims management</td><td>—</td></tr>
+        <tr><td>Key disclosure requirements</td><td>Artist medical records for prior vocal cord surgery; all venue contracts; tour schedule; ticket sales status at inception; sponsor obligations</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.82rem;color:#444;margin-top:12px;line-height:1.5;"><em>Note: the prior vocal cord surgery is a material fact requiring full disclosure under the Insurance Act 2015. Failure to disclose would entitle the insurer to a proportionate remedy including potential voidance of the PN cover. The underwriter applies a health loading of +0.15% on the PN rate in response to this disclosed condition. <sup>[L1]</sup></em></p>
+  </div>
+
+  <!-- IOC note -->
+  <div class="warn-box">
+    <strong>&#9888; IOC and FIFA Host-City Indemnity Warning:</strong> The government indemnity provided by Olympic and World Cup host cities is a sovereign guarantee, not commercial insurance. The Tokyo 2020 postponement demonstrated that these indemnities were not designed to cover pandemic scenarios — the Japanese government bore approximately ¥200bn+ ($1.5bn+) in additional costs beyond any insurance recovery. For future mega-events, host-city governments and event bodies should review whether government indemnity language adequately covers force majeure events that fall outside commercial insurance (pandemic, extended political crisis) and ensure appropriate national reserve provisions or contingency budgets are in place. <sup>[I1]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Event Cancellation &amp; Contingency (PC/PA/PN/PU/PZ) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Next: References →</a></p>
+</footer>
+
+</body>
+</html>

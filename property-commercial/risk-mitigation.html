@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Risk Mitigation — Commercial Property — Risk Code Hub</title>
+  <style>
+    :root {
+      --prop:#5d4037; --prop-dark:#3e2723; --fire:#c62828;
+      --flood:#0277bd; --bi:#2e7d32; --cat:#6a1b9a;
+      --warn:#e65100; --light:#fdf6f0; --border:#d7ccc8;
+      --text:#2c1810; --muted:#7a5c52;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #5d4037;
+    --hub-dark:      #3e2723;
+    --hub-light:     #efebe9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#0277bd;
+    --header-gradient:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%);
+    --header-sub:    #d7ccc8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#bcaaa4; margin-bottom:6px; }
+    .breadcrumb a { color:#d7ccc8; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#bcaaa4; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#d7ccc8; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--prop); border-bottom-color:var(--fire); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--prop); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .mit-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr)); gap:16px; margin:24px 0; }
+    .mit-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--prop); }
+    .mit-card.fire-top { border-top-color:var(--fire); }
+    .mit-card.flood-top { border-top-color:var(--flood); }
+    .mit-card.bi-top { border-top-color:var(--bi); }
+    .mit-card.cat-top { border-top-color:var(--cat); }
+    .mit-card.warn-top { border-top-color:var(--warn); }
+    .mit-card h4 { font-size:0.9rem; font-weight:700; color:var(--prop); margin-bottom:8px; }
+    .mit-card.fire-top h4 { color:var(--fire); }
+    .mit-card.flood-top h4 { color:var(--flood); }
+    .mit-card.bi-top h4 { color:var(--bi); }
+    .mit-card.cat-top h4 { color:var(--cat); }
+    .mit-card.warn-top h4 { color:var(--warn); }
+    .mit-card ul { padding-left:16px; }
+    .mit-card li { font-size:0.84rem; margin-bottom:5px; line-height:1.5; }
+
+    .info-box { background:var(--prop-dark); color:#d7c4bb; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#efebe9; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#d7c4bb; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .action-list { counter-reset:action; list-style:none; padding:0; margin:20px 0; }
+    .action-list li { counter-increment:action; display:flex; gap:14px; align-items:flex-start; background:#fff; border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:10px; }
+    .action-list li::before { content:counter(action); font-size:0.9rem; font-weight:800; color:var(--fire); min-width:24px; }
+    .action-list li .al-text { font-size:0.88rem; line-height:1.6; }
+    .action-list li strong { color:var(--prop); }
+
+    .reg-table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; margin:20px 0; font-size:0.86rem; }
+    .reg-table th { background:var(--prop); color:#fff; padding:10px 14px; text-align:left; }
+    .reg-table td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .reg-table tr:last-child td { border-bottom:none; }
+    .reg-table tr:nth-child(even) td { background:#fdf0eb; }
+
+    footer { background:var(--prop-dark); color:#bcaaa4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Commercial Property</a> › Risk Mitigation</div>
+  <div class="tag">Lloyd's Codes · P2 · P3 · P4 · P5 · P6 · P7 · B2 · B3 · B4 · B5</div>
+  <h1>Risk Mitigation</h1>
+  <p>Fire suppression, flood resilience, nat cat hardening, business continuity planning and the top underwriter actions for improving commercial property risk quality.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Fire Risk Controls</h2>
+  <div class="mit-grid">
+    <div class="mit-card fire-top">
+      <h4>🔥 Fire Suppression Systems</h4>
+      <ul>
+        <li>NFPA 13 / BS EN 12845 automatic sprinklers — most effective single risk improvement (reduces fire loss by 60–90%) <span class="badge b-v">VER</span></li>
+        <li>System design: wet pipe (standard), dry pipe (cold zones), deluge (high hazard), foam (chemicals/aviation fuels)</li>
+        <li>Annual BS 9251 / NFPA 25 maintenance; BAFE SP203-1 contractor required for Lloyd's discount eligibility</li>
+        <li>Sprinkler impairment procedures: isolations &gt;4hrs require hot-work permit and fire watch</li>
+        <li>Fire detection: Addressable fire alarm (category L1) linked to central monitoring station (Grade A, BS 5839-1)</li>
+      </ul>
+    </div>
+    <div class="mit-card fire-top">
+      <h4>🏗️ Fire Compartmentation &amp; Construction</h4>
+      <ul>
+        <li>Compartmentation: maximum 2,000m² fire compartments in warehouses without suppression</li>
+        <li>Fire doors: FD30S (30-min) for corridors; FD60S (60-min) on stairwells and protected routes</li>
+        <li>Cavity barriers in voids and roof spaces — especially critical for post-2000 commercial builds with large unchecked voids</li>
+        <li>ACM cladding remediation: EWS1 forms now required for mortgaged commercial buildings &gt;11m (UK)</li>
+        <li>Smoke extraction systems: BS EN 12101 compliant for covered malls and large industrial spaces</li>
+      </ul>
+    </div>
+    <div class="mit-card warn-top">
+      <h4>🔧 Hot Works &amp; Ignition Control</h4>
+      <ul>
+        <li>Hot-work permit system mandatory for welding, cutting, grinding — most common cause of large commercial fire losses</li>
+        <li>30-minute fire watch after hot work completion; 1-hour for high-risk areas</li>
+        <li>Electrical testing: EICR (Electrical Installation Condition Report) every 5 years for commercial premises</li>
+        <li>PAT testing: portable appliance testing annually for higher-risk occupancies</li>
+        <li>Arson prevention: CCTV, perimeter security lighting, vacant-area management</li>
+      </ul>
+    </div>
+    <div class="mit-card cat-top">
+      <h4>⚡ EV / Battery Storage — Emerging Fire Risk</h4>
+      <ul>
+        <li>Lithium-ion battery thermal runaway: uncontrollable and highly toxic; sprinklers cannot suppress — only contain and cool</li>
+        <li>EV charging in carparks: Lloyd's market applying +50–200% loading or exclusion depending on construction and suppression</li>
+        <li>BESS (Battery Energy Storage Systems): dedicated fire suppression (gaseous or water mist); NFPA 855 standard</li>
+        <li>Insurers increasingly requiring thermal management system certificates and separation distances for BESS risks</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Flood Risk Controls</h2>
+  <div class="mit-grid">
+    <div class="mit-card flood-top">
+      <h4>🌊 Physical Flood Barriers</h4>
+      <ul>
+        <li>Demountable flood barriers (FloodSax, AquaFence): effective for short-term flood defence of known entry points</li>
+        <li>Door guards and threshold barriers: prevent surface water entry; must seal to 30cm above design flood level</li>
+        <li>Flood-resistant construction: suspended ground floors; waterproof render to DPC; flood-resistant insulation</li>
+        <li>Sump pumps: should be on separate power circuits with backup generator in flood-prone zones</li>
+        <li>Environment Agency/SEPA flood warning registration: FWD (Flood Warning Direct) 24hr advance notice</li>
+      </ul>
+    </div>
+    <div class="mit-card flood-top">
+      <h4>📋 Business Continuity — Flood Response</h4>
+      <ul>
+        <li>Property-level flood response plan (PFRP): pre-identified actions, contact lists, movable asset schedule</li>
+        <li>Stock elevation: ground-floor stock moved 600mm+ above design flood level or stored in mezzanine</li>
+        <li>Server/electrical panel elevation: critical IT above flood level; waterproofed electrical distribution boards</li>
+        <li>Salvage contractors: pre-arrangement with Polygon/ServiceMaster or equivalent; reduces BI indemnity period by weeks</li>
+        <li>Flood risk assessment (FRA): required for any new build or extension in EA Zone 2 or 3 (NPPF)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Nat Cat Resilience — Wind, Earthquake, Wildfire</h2>
+  <div class="mit-grid">
+    <div class="mit-card cat-top">
+      <h4>🌀 Hurricane / Windstorm Hardening</h4>
+      <ul>
+        <li>Impact-resistant glazing (ASTM E1996 / Miami-Dade TAS): significant loss reduction on US coastal risks</li>
+        <li>Hurricane straps and tie-downs on roof structure: prevents uplift; Florida Building Code requirements</li>
+        <li>Roof covering rated for 150mph+ (Owens Corning Duration / GAF Timberline) for Florida E&amp;S placement</li>
+        <li>Roof age &lt;10 years: generally required for preferred terms on FL coastal risks; &gt;20yr roof: declination or ACV basis</li>
+        <li>Opening protection plan: inventory of all openings; pre-storm plywood/shutter deployment procedure</li>
+      </ul>
+    </div>
+    <div class="mit-card">
+      <h4>🏚️ Earthquake Seismic Risk Controls</h4>
+      <ul>
+        <li>Seismic retrofit: soft-story buildings (California) require mandatory retrofit by 2040; significant loss reduction</li>
+        <li>Anchoring: water heaters, racking, plant machinery secured to prevent fall/tip damage</li>
+        <li>Non-structural mitigation: securing suspended ceilings, IT equipment, shelving — often exceeds structural damage</li>
+        <li>Post-earthquake inspection protocol: do not re-enter until structural engineer clearance</li>
+        <li>USGS ShakeMap: real-time shaking intensity; enables immediate triage of affected portfolio locations</li>
+      </ul>
+    </div>
+    <div class="mit-card warn-top">
+      <h4>🔥 Wildfire Defensible Space</h4>
+      <ul>
+        <li>Zone 0–5ft: ember-resistant vents; non-combustible materials immediately against structure</li>
+        <li>Zone 1 (0–30ft): clearance of combustible vegetation; no wood mulch within 5ft of building</li>
+        <li>Zone 2 (30–100ft): 10ft spacing between tree crowns; horizontal clearance under canopies</li>
+        <li>Ember exposure: NFPA 1144 — most structures ignited by ember accumulation, not direct flame contact</li>
+        <li>Metal or Class A roof covering: single most effective structural wildfire mitigation measure <span class="badge b-v">VER</span></li>
+        <li>Verisk FireLine score &gt;15: triggers Lloyd's underwriter referral; &gt;24: significant loading or declination</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3>Business Interruption — Resilience Planning (Post-COVID Rewriting)</h3>
+    <ul>
+      <li><strong>Supply chain mapping:</strong> Identify single-source suppliers and geographic concentration. Post-Thailand 2011 and COVID, tier-2 and tier-3 supplier concentration in single flood/quake zones is a material BI aggregation risk.</li>
+      <li><strong>Maximum Indemnity Period (MIP):</strong> Must reflect realistic rebuild, regulatory approval and refit time — not aspirational recovery time. UK commercial builds now average 24–36 months with planning consent. MIP of 12 months almost certainly inadequate for any complex occupancy.</li>
+      <li><strong>Contingent BI triggers:</strong> Post-COVID, insurers require explicit named-location contingent BI triggers. Unnamed/blanket contingent BI extensions are being removed or priced as standalone covers.</li>
+      <li><strong>Non-damage BI:</strong> Access denial without physical damage; denial of access by authority — these triggers remain contentious. Explicit wording required; pandemic and communicable disease excluded universally since 2021.</li>
+      <li><strong>Alternative trading:</strong> Pre-agreed alternative trading locations, remote working capability, and dual-source supply agreements reduce BI loss and shorten indemnity period. Underwriters grant credit for documented BCM (Business Continuity Management) — BS ISO 22301.</li>
+    </ul>
+  </div>
+
+  <h2>Top 10 Underwriter Actions — Property Risk Improvement</h2>
+  <ol class="action-list">
+    <li><div class="al-text"><strong>Require independent reinstatement valuation:</strong> Construction cost inflation 2020–2024 has created endemic underinsurance. Day-One reinstatement clause election should be mandatory for UK commercial risks &gt;£1m TIV.</div></li>
+    <li><div class="al-text"><strong>Verify NFPA 13 / BS EN 12845 sprinkler coverage:</strong> Confirm scope, test records and last impairment log. Partial coverage is rated as unsprinklered for uncovered areas — ensure policy wording reflects this accurately.</div></li>
+    <li><div class="al-text"><strong>Attach cyber physical damage exclusion:</strong> Lloyd's mandatory since 1 Jan 2023. Confirm LMA5564 or equivalent wording. Do not bind without it.</div></li>
+    <li><div class="al-text"><strong>Attach communicable disease BI exclusion:</strong> FCA test case wording post-2021. Confirm disease clause and denial of access wording excludes communicable disease / pandemic.</div></li>
+    <li><div class="al-text"><strong>Review BI indemnity period vs rebuild time:</strong> Obtain realistic rebuild estimate from a quantity surveyor; compare to elected MIP. Flag underinsurance risk to insured and document.</div></li>
+    <li><div class="al-text"><strong>Assess flood zone and request PFRP:</strong> For EA Zone 2 or 3 / FEMA AE zone risks, require Property Flood Resilience Plan and evidence of barrier maintenance. Confirm sump pumps are operational.</div></li>
+    <li><div class="al-text"><strong>Check hot-work permit procedures:</strong> Most common ignition source for large commercial fire losses. Require sight of permit system, evidence of BAFE contractor maintenance, and last fire alarm test certificate.</div></li>
+    <li><div class="al-text"><strong>Apply CRESTA zone cat model loading:</strong> Do not rate US cat-exposed risks without obtaining RMS/AIR PML outputs. Florida CRESTA zone PML should drive rating not generic loadings.</div></li>
+    <li><div class="al-text"><strong>Review ACM / cladding for UK commercial:</strong> Post-Grenfell, ACM cladding on buildings &gt;11m requires EWS1 assessment. Loading of 15–40% for unresolved cladding or apply exclusion.</div></li>
+    <li><div class="al-text"><strong>EV / BESS fire risk assessment:</strong> Ask insureds about EV charging installations and battery energy storage. Apply loading or exclusion for BESS without dedicated gaseous suppression or NFPA 855 compliance.</div></li>
+  </ol>
+
+  <h2>Regulatory Compliance Framework</h2>
+  <table class="reg-table">
+    <thead><tr><th>Standard / Regulation</th><th>Jurisdiction</th><th>Relevance to Property UW</th><th>Confidence</th></tr></thead>
+    <tbody>
+      <tr><td>BS 9999 / BS EN 1991 (Fire Safety)</td><td>UK</td><td>Benchmark for fire strategy in buildings; compartmentation, sprinkler design, escape routes</td><td><span class="badge b-v">VER</span></td></tr>
+      <tr><td>NFPA 1 / NFPA 13 / NFPA 25</td><td>USA / Global</td><td>US standard for fire prevention; sprinkler installation and testing; widely adopted internationally</td><td><span class="badge b-v">VER</span></td></tr>
+      <tr><td>NPPF / PPG — Flood Risk</td><td>UK</td><td>National Planning Policy Framework; flood risk assessment (FRA) required for new builds in Zone 2/3</td><td><span class="badge b-v">VER</span></td></tr>
+      <tr><td>FEMA NFIP / Flood Insurance Rate Maps</td><td>USA</td><td>FEMA flood maps define Special Flood Hazard Areas (Zone AE); drives deductible and coverage terms on P5</td><td><span class="badge b-v">VER</span></td></tr>
+      <tr><td>ISO 22301 — Business Continuity</td><td>Global</td><td>BCM standard; certified entities get BI premium credit; reduces MIP duration in practice</td><td><span class="badge b-v">VER</span></td></tr>
+      <tr><td>Terrorism Risk Insurance Act (TRIA)</td><td>USA</td><td>Federal backstop for certified terrorism losses; mandatory P5 policy language; co-share 20% above deductible</td><td><span class="badge b-v">VER</span></td></tr>
+      <tr><td>Pool Reinsurance Company (Pool Re)</td><td>UK</td><td>Government-backed terrorism reinsurer; Lloyd's syndicates cede UK terrorism risk to Pool Re; premium = 0.0082% of TIV standard rate</td><td><span class="badge b-v">VER</span></td></tr>
+      <tr><td>LMA5564 — Cyber Physical Damage Exclusion</td><td>Lloyd's</td><td>Mandatory from 1 Jan 2023; removes silent cyber from property portfolio; standalone cyber market fills gap</td><td><span class="badge b-v">VER</span></td></tr>
+    </tbody>
+  </table>
+
+</main>
+<footer>
+  Risk Code Hub — Commercial Property (P2–P7 · B2–B5) · Lloyd's Market Intelligence · v3.1 April 2026
+</footer>
+</body>
+</html>

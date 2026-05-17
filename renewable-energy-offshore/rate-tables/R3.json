@@ -1,0 +1,158 @@
+{
+  "riskCode": "R3",
+  "label": "Renewable — Offshore Construction",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "projectValue",
+    "label": "Project Value (£)",
+    "defaultValue": 800000000,
+    "hint": "Total construction value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.0035
+  },
+  "ratingFactors": [
+    {
+      "key": "technology",
+      "label": "Technology Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "offshore_wind",
+      "options": {
+        "offshore_wind": {
+          "label": "Offshore Wind (fixed)",
+          "factor": 1
+        },
+        "floating_wind": {
+          "label": "Floating Offshore Wind",
+          "factor": 1.3
+        },
+        "tidal": {
+          "label": "Tidal/Wave",
+          "factor": 1.5
+        },
+        "substation": {
+          "label": "Offshore Substation",
+          "factor": 0.85
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "capacity",
+      "label": "Capacity (MW)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 500,
+      "bands": [
+        {
+          "min": 0,
+          "max": 100,
+          "factor": 0.8
+        },
+        {
+          "min": 100,
+          "max": 500,
+          "factor": 1
+        },
+        {
+          "min": 500,
+          "max": 1000,
+          "factor": 1.1
+        },
+        {
+          "min": 1000,
+          "max": 5000,
+          "factor": 1.2
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "phase",
+      "label": "Project Phase",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "operational",
+      "options": {
+        "construction": {
+          "label": "Construction",
+          "factor": 1.4
+        },
+        "commissioning": {
+          "label": "Commissioning",
+          "factor": 1.2
+        },
+        "operational": {
+          "label": "Operational",
+          "factor": 1
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "oem",
+      "label": "OEM / Turbine Brand",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "tier1",
+      "options": {
+        "tier1": {
+          "label": "Tier 1 (Vestas/Siemens Gamesa)",
+          "factor": 0.9
+        },
+        "tier2": {
+          "label": "Tier 2 (GE/Goldwind)",
+          "factor": 1
+        },
+        "tier3": {
+          "label": "Tier 3 / Prototype",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "geography",
+      "label": "Location",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "north_sea",
+      "options": {
+        "north_sea": {
+          "label": "North Sea",
+          "factor": 1
+        },
+        "baltic": {
+          "label": "Baltic",
+          "factor": 0.9
+        },
+        "asia": {
+          "label": "Asia Pacific",
+          "factor": 1.1
+        },
+        "us_atlantic": {
+          "label": "US Atlantic",
+          "factor": 1.05
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 10000,
+    "claimsHandlingPerClaim": 60000,
+    "systemOverheadPerYear": 4000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.2,
+    "reinsuranceRate": 0.08
+  },
+  "targetProfitMargin": 0.05
+}

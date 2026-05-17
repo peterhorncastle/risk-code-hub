@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Risk Mitigation — Marine Cargo — Risk Code Hub</title>
+  <style>
+    :root {
+      --mc:#1565c0; --mc-dark:#0d2137; --icc:#00695c;
+      --fire:#c62828; --ga:#6a1b9a; --warn:#e65100;
+      --light:#e3f2fd; --border:#bbdefb; --text:#0d1b2e; --muted:#546e7a;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1565c0;
+    --hub-dark:      #0d2137;
+    --hub-light:     #e8f0fa;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #00695c;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%);
+    --header-sub:    #bbdefb;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90caf9; margin-bottom:6px; }
+    .breadcrumb a { color:#bbdefb; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#90caf9; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#bbdefb; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--mc); border-bottom-color:var(--fire); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--mc); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:20px; margin:24px 0; }
+    .card { background:#fff; border-radius:12px; padding:22px; border-top:4px solid var(--mc); box-shadow:0 1px 3px rgba(0,0,0,0.07); }
+    .card.icc { border-top-color:var(--icc); }
+    .card.fire { border-top-color:var(--fire); }
+    .card.ga { border-top-color:var(--ga); }
+    .card.warn { border-top-color:var(--warn); }
+    .card-label { font-size:0.68rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--mc); margin-bottom:6px; }
+    .card.icc .card-label { color:var(--icc); }
+    .card.fire .card-label { color:var(--fire); }
+    .card.ga .card-label { color:var(--ga); }
+    .card.warn .card-label { color:var(--warn); }
+    .card h3 { font-size:0.97rem; margin-bottom:10px; }
+    .card ul { padding-left:17px; }
+    .card li { font-size:0.84rem; margin-bottom:6px; line-height:1.55; }
+
+    .info-box { background:var(--mc-dark); color:#bbdefb; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#e3f2fd; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .top10-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:24px 0; }
+    .top10-table th { background:var(--mc); color:#fff; padding:11px 14px; font-size:0.8rem; text-align:left; }
+    .top10-table td { padding:10px 14px; font-size:0.84rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .top10-table tr:last-child td { border-bottom:none; }
+    .top10-table tr:hover td { background:#e8f4fd; }
+    .num { font-size:1.1rem; font-weight:700; color:var(--mc); }
+    .priority { font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:8px; }
+    .p-high { background:#fdecea; color:#b71c1c; }
+    .p-med { background:#fff3e0; color:#e65100; }
+    .p-low { background:#e8f5e9; color:#1b5e20; }
+
+    .std-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:20px 0; font-size:0.83rem; }
+    .std-table th { background:var(--icc); color:#fff; padding:10px 13px; text-align:left; }
+    .std-table td { padding:9px 13px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .std-table tr:last-child td { border-bottom:none; }
+    .std-table tr:hover td { background:#e8f5e9; }
+
+    footer { background:var(--mc-dark); color:#90caf9; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Cargo</a> › Risk Mitigation</div>
+  <div class="tag">Lloyd's Codes · V · Q · VL · VX</div>
+  <h1>Risk Mitigation</h1>
+  <p>Packing standards, dangerous goods compliance, carrier vetting, temperature monitoring, theft prevention, accumulation control, and the underwriter's pre-binding checks for quality cargo business.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>Marine cargo claims prevention is fundamentally an operational discipline — the physical condition of the goods at packing, the quality of the container and securing, the professionalism of the carriers chosen, and the consistency of handling throughout the transit chain. Unlike property insurance, where risk mitigation acts on a fixed location, cargo risk management must function across multiple jurisdictions, handover points, and transport modes. Underwriters who understand these measures write better risks; insureds who implement them have fewer claims, lower premiums, and faster settlements.</p>
+
+  <h2>1. Packing &amp; Container Preparation</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">Packing Standards</div>
+      <h3>CTU Code Compliance</h3>
+      <ul>
+        <li><strong>CTU Code (IMO/ILO/UNECE):</strong> The Container/Cargo Transport Unit Code provides comprehensive guidance on packing containers, road vehicles, and freight containers. Compliance is not legally mandatory but is the industry standard — breach can void coverage in some policy wordings. <span class="badge b-v">VER</span></li>
+        <li>Key requirements: correct weight distribution (floor loading), proper securing/dunnaging, ventilation for moisture-sensitive goods, temperature management for sensitive cargo</li>
+        <li><strong>Weight distribution:</strong> Maximum gross weight of container (typically 24,000kg for standard ISO) must not be exceeded; distribute weight evenly to prevent tipping</li>
+        <li><strong>Dunnage:</strong> Use adequate dunnage (airbags, timber bracing, stretch wrap) to prevent shifting during transit — cargo shifting is a leading cause of damage claims</li>
+        <li><strong>Professional packing:</strong> Factory-packing by trained operatives, or professional packing by the freight forwarder, substantially reduces claims frequency vs. self-packing by untrained warehouse staff</li>
+      </ul>
+    </div>
+    <div class="card icc">
+      <div class="card-label">Moisture &amp; Condensation</div>
+      <h3>Preventing Water Damage</h3>
+      <ul>
+        <li><strong>Container inspection:</strong> Inspect containers for holes, rust, and seal integrity before loading — a compromised door seal can allow sea water entry in rough seas</li>
+        <li><strong>Desiccants:</strong> Silica gel desiccant bags absorb moisture and prevent condensation damage ("container rain") — particularly important for hygroscopic goods (coffee, cocoa, textiles, paper)</li>
+        <li><strong>Ventilation:</strong> Ventilated containers for goods that produce moisture (fresh vegetables, green coffee); closed containers risk condensation from temperature cycling between port climates</li>
+        <li><strong>Moisture-Indicating Cards:</strong> Include moisture indicator cards to evidence whether a container was entered or suffered water ingress — aids claims investigation</li>
+        <li><strong>ISPM 15:</strong> All wood packaging materials (pallets, crates) must be heat-treated or fumigated to prevent phytosanitary risk — non-compliance can result in cargo rejection at destination <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="card fire">
+      <div class="card-label">Dangerous Goods</div>
+      <h3>IMDG Compliance &amp; Misdeclaration Prevention</h3>
+      <ul>
+        <li><strong>IMDG Code:</strong> International Maritime Dangerous Goods Code — mandatory for all sea shipments of dangerous goods. Classifies DG into 9 classes (explosives, gases, flammables, oxidisers, toxic, radioactive etc.). Proper declaration, packaging, labelling and stowage position required. <span class="badge b-v">VER</span></li>
+        <li><strong>Misdeclaration crisis:</strong> Industry estimates that 10%+ of container shipments declared as non-hazardous contain undeclared dangerous goods. Fires on Maersk Honam (2018), X-Press Pearl (2021) linked to misdeclared DG</li>
+        <li><strong>Shipper DG screening:</strong> Underwriters should require evidence that the insured has a formal DG screening procedure — shipper questionnaire, IMDG training for logistics staff, documentary checks before accepting cargo</li>
+        <li><strong>Lithium battery declaration:</strong> IATA Dangerous Goods Regulations require declaration of lithium batteries — Section II (small quantities) vs. Section I (large quantities) thresholds. Undeclared EV batteries on vehicle carriers are a current market concern</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>2. Temperature Control — Cold Chain Integrity</h2>
+
+  <div class="info-box">
+    <h3>Cold Chain Risk Management — Pharmaceuticals &amp; Perishables</h3>
+    <p>Temperature-sensitive cargo (vaccines, biologics, fresh produce, frozen food) requires continuous monitoring and documented GDP (Good Distribution Practice) compliance. A single temperature excursion during transit can render an entire pharmaceutical consignment valueless — cargo claim values of $5m–$50m+ for pharmaceutical cold chain failures are not uncommon.</p>
+    <ul>
+      <li><strong>GDP compliance:</strong> EU GDP Guidelines (2013) and WHO GDP for pharmaceutical products require qualification of transport routes, validated temperature control equipment, and continuous temperature data logging with alarm alerting</li>
+      <li><strong>Data loggers:</strong> Electronic temperature data loggers (calibrated, tamper-evident) placed inside pharmaceutical shipments; data reviewed at receipt; excursion reports retained as claims evidence. Bluetooth/IoT loggers enable real-time monitoring during transit</li>
+      <li><strong>Reefer container monitoring:</strong> Modern reefer containers transmit real-time temperature data via satellite — cargo owners and insurers can monitor critical shipments continuously. Alarm response protocols must be pre-agreed (and documented) with the carrier</li>
+      <li><strong>Lane qualification:</strong> For repeat pharmaceutical lanes, conduct lane qualification studies — statistical temperature monitoring across multiple actual shipments to validate that the lane consistently stays within temperature range</li>
+      <li><strong>Contingency planning:</strong> What happens if a reefer breaks down mid-ocean? Pre-agreed diversion protocols, backup carriers, qualified re-packing facilities at major hub ports — all relevant to claims handling and mitigation obligations under the Sue and Labour clause</li>
+    </ul>
+  </div>
+
+  <h2>3. Theft Prevention</h2>
+  <div class="card-grid">
+    <div class="card warn">
+      <div class="card-label">High-Risk Routes</div>
+      <h3>Cargo Theft Hotspots</h3>
+      <ul>
+        <li><strong>UK domestic (road, Q code):</strong> M1/M6 motorway corridors; electronics and tobacco most targeted; lay-by rip-offs and truck park hijacks</li>
+        <li><strong>West Africa (Lagos port):</strong> High-value cargo theft from port; container seals compromised and replaced; pilferage during customs delays</li>
+        <li><strong>South America (Santos, Buenos Aires):</strong> Organised criminal gangs targeting electronics and pharmaceutical cargo in transit; road cargo hijacking</li>
+        <li><strong>South Africa (Johannesburg):</strong> Transit crime on N3 route; armed cargo hijacking of high-value vehicles and electronics</li>
+        <li><strong>India (selected routes):</strong> Pilferage in transit; short-landing at destination</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Preventive Measures</div>
+      <h3>Anti-Theft Controls</h3>
+      <ul>
+        <li><strong>High-security seals:</strong> ISO 17712 high-security (bolt) seals on all loaded containers carrying high-value or theft-attractive cargo; seal numbers recorded at loading and verified at delivery</li>
+        <li><strong>GPS tracking:</strong> Real-time GPS tracking on containers or pallets (IoT devices inside container); geofence alerts for unexpected deviations from planned route</li>
+        <li><strong>Route control:</strong> Approved carrier lists; vehicle tracking; driver vetting; two-driver requirement on high-value overnight road moves</li>
+        <li><strong>Secure parking:</strong> Pre-approved secure parking facilities only for overnight stops on road cargo moves; no informal truck stops on high-theft corridors</li>
+        <li><strong>Low-profile marking:</strong> Avoid visually identifying high-value contents on container exterior markings; plain, unlabelled container preferred for electronics</li>
+        <li><strong>Alarm at destination:</strong> High-value cargo survey appointment before discharge; discrepancy reported immediately to carrier and insurer</li>
+      </ul>
+    </div>
+    <div class="card ga">
+      <div class="card-label">Port Security</div>
+      <h3>ISPS Code &amp; Port Controls</h3>
+      <ul>
+        <li><strong>ISPS Code compliance:</strong> International Ship and Port Facility Security Code — mandatory for commercial ports and vessels on international voyages since 2004. ISPS-compliant ports have controlled access, cargo manifests, vessel and crew security plans <span class="badge b-v">VER</span></li>
+        <li>Non-ISPS compliant intermediate ports: higher theft risk; vessel calling at non-ISPS port may breach warranty requiring specific agreement</li>
+        <li><strong>Container tracking:</strong> Container tracking numbers enable cargo owners to follow container movement through port handling — verify container is on expected vessel, at expected terminal, in expected discharge order</li>
+        <li><strong>Survey at risk ports:</strong> Independent cargo survey at loading and/or discharge in high-theft port reduces disputes about origin of shortage or damage</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>4. Carrier Vetting &amp; Vessel Quality</h2>
+  <div class="card-grid">
+    <div class="card icc">
+      <div class="card-label">Vessel Quality</div>
+      <h3>Institute Classification Clause</h3>
+      <ul>
+        <li>The <strong>Institute Classification Clause</strong> (incorporated into most open covers) requires that the carrying vessel be classified by a recognised classification society (Lloyd's Register, DNV, BV, ABS, ClassNK, RINA, KR) and not exceed a specified age — typically 25 years for container vessels</li>
+        <li><strong>Port State Control (PSC):</strong> PSC inspections by flag state or port authorities can result in vessel detention. The Paris MOU / Tokyo MOU detention records are publicly available — check any vessel's PSC history before agreeing to accept undeclared vessels</li>
+        <li><strong>ISM Code:</strong> International Safety Management Code — mandatory for vessels over 500 GT on international voyages. ISM SMS (Safety Management System) certificates evidence organisational safety management. Non-ISM vessels are a red flag <span class="badge b-v">VER</span></li>
+        <li><strong>Flag state:</strong> Paris MOU white list (compliant flag states) vs. grey/black list. Consider flag state enforcement capability alongside open registry use (Panama, Liberia, Marshall Islands are generally well-run despite being open registries)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Carrier Insolvency</div>
+      <h3>Hanjin Lessons — Carrier Default Risk</h3>
+      <ul>
+        <li>Hanjin Shipping bankruptcy (Sep 2016) left $14bn of cargo at sea — 88 vessels refused port entry for weeks. Cargo owners could not recover their goods without paying emergency costs (port fees, transshipment, storage)</li>
+        <li>Cargo insurance (ICC A) does not typically cover: additional charges incurred to recover stranded cargo; commercial loss from missed delivery windows; or insolvency of carrier as a direct covered peril</li>
+        <li><strong>Mitigation:</strong> Use financially stable carriers; diversify across carriers on major trades; include in open cover a "change of voyage" clause permitting transshipment and additional costs if carrier defaults</li>
+        <li><strong>Termination of contract of carriage clause</strong> (ICC A 2009, Clause 10): covers the situation where the transit terminates other than at the named destination — extends cover for the additional costs and/or time needed to continue to destination</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>5. Accumulation Control — Per-Vessel &amp; Port PML</h2>
+
+  <div class="info-box">
+    <h3>Managing Cargo Accumulation in the ULCV Era</h3>
+    <p>The growth of ultra-large container vessels (ULCVs) — from 5,000 TEU in 2000 to 24,000 TEU in 2023 — has dramatically increased the potential accumulation loss from a single vessel incident. A cargo insurer writing multiple open covers each with a $5m automatic limit may have $100m+ of exposure on a single vessel without realising it.</p>
+    <ul>
+      <li><strong>Automatic limit control:</strong> The per-vessel automatic limit in an open cover policy is the first line of accumulation defence. Underwriters must set realistic limits that reflect actual shipment values and monitor declaration patterns to detect accumulation above the automatic limit</li>
+      <li><strong>Vessel declaration:</strong> For shipments above the automatic limit, the insured must specifically declare the vessel and obtain underwriter agreement — this enables accumulation monitoring</li>
+      <li><strong>Lloyd's RDS — Mega-Vessel Sinking:</strong> Lloyd's requires syndicates to model a Realistic Disaster Scenario of a ULCV fire/sinking. The scenario typically assumes 50–80% cargo constructive total loss on a 20,000+ TEU vessel carrying $500m–$1bn in cargo value</li>
+      <li><strong>Port accumulation:</strong> Cargo in port storage (pre-loading and post-discharge) can accumulate massively at hub ports. Key ports: Rotterdam (world's largest European port), Singapore (second-largest global), Jebel Ali (Middle East hub), LA/Long Beach (US West Coast). Model maximum value at each key port and apply port limit sub-limits in open covers if aggregate is material</li>
+      <li><strong>Reinsurance:</strong> Cargo-specific reinsurance (per-vessel excess of loss, per-location excess of loss) is the ultimate accumulation management tool. Most Lloyd's cargo syndicates purchase both per-risk (vessel) and per-occurrence reinsurance to protect against ULCV or port catastrophe scenarios</li>
+    </ul>
+  </div>
+
+  <h2>6. Top-10 Underwriter Pre-Binding Checks</h2>
+  <div class="top10-table">
+    <table>
+      <thead>
+        <tr><th style="width:40px">#</th><th>Check</th><th>What to Verify</th><th>Priority</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="num">1</span></td><td><strong>Commodity &amp; DG Screening</strong></td><td>What is being shipped? Any dangerous goods — IMDG class? Li-ion batteries — class and quantity? Insured's DG screening procedures documented?</td><td><span class="priority p-high">HIGH</span></td></tr>
+        <tr><td><span class="num">2</span></td><td><strong>Trade Lanes &amp; JWC HRA</strong></td><td>Does any trade lane transit a JWC High Risk Area (Red Sea, Gulf of Guinea, Black Sea)? War risk clause required? Additional premium agreed?</td><td><span class="priority p-high">HIGH</span></td></tr>
+        <tr><td><span class="num">3</span></td><td><strong>Annual Value &amp; Per-Sending Limit</strong></td><td>Is the estimated annual cargo value realistic (cross-check against turnover)? Does the automatic per-vessel/sending limit match actual shipment profile?</td><td><span class="priority p-high">HIGH</span></td></tr>
+        <tr><td><span class="num">4</span></td><td><strong>5-Year Loss Record</strong></td><td>Full claims history including frequency claims. Loss ratio calculation. Any large single losses? Claims trend improving or deteriorating?</td><td><span class="priority p-high">HIGH</span></td></tr>
+        <tr><td><span class="num">5</span></td><td><strong>ICC Clause Appropriateness</strong></td><td>Is ICC (A) correct for the commodity, or does ICC (B)/(C) match the risk profile better? Specific endorsements required (reefer, contamination, strikes)?</td><td><span class="priority p-high">HIGH</span></td></tr>
+        <tr><td><span class="num">6</span></td><td><strong>Vessel Quality Check</strong></td><td>Institute Classification Clause in wording? Named vessels or open — if open, age/class limits specified? ISM compliance warranted?</td><td><span class="priority p-med">MED</span></td></tr>
+        <tr><td><span class="num">7</span></td><td><strong>Packing Standards</strong></td><td>Factory-packed or self-packed? Use of professional freight forwarders? CTU Code awareness? ISPM 15 for timber packaging?</td><td><span class="priority p-med">MED</span></td></tr>
+        <tr><td><span class="num">8</span></td><td><strong>Storage Section</strong></td><td>Does the open cover include storage? Where — owned or third-party warehouses? Duration? Per-location sub-limit adequate for accumulation exposure?</td><td><span class="priority p-med">MED</span></td></tr>
+        <tr><td><span class="num">9</span></td><td><strong>Bank / Trade Finance Interest</strong></td><td>Is a bank named as loss payee? Does policy need to be endorsed to meet lender's insurance requirements? Cancellation notice period for lender?</td><td><span class="priority p-med">MED</span></td></tr>
+        <tr><td><span class="num">10</span></td><td><strong>Claims Reporting Procedure</strong></td><td>Does insured understand survey appointment requirement? Notification obligation within 3–7 days of discovery? Sue and Labour obligations (mitigation of loss)?</td><td><span class="priority p-low">LOW</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>7. Standards &amp; Regulatory Framework</h2>
+  <table class="std-table">
+    <thead>
+      <tr><th>Standard / Regulation</th><th>Scope</th><th>Relevance to Cargo Underwriting</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>IMDG Code (IMO)</strong></td><td>Dangerous goods classification, packing, marking, documentation for sea transport</td><td>DG declaration compliance; misdeclaration exclusion in policy; fire risk assessment for DG cargo</td></tr>
+      <tr><td><strong>CTU Code (IMO/ILO/UNECE)</strong></td><td>Container packing guidance — weight, securing, ventilation, DG</td><td>Packing quality assessment; compliance evidences good risk management; breach may affect coverage</td></tr>
+      <tr><td><strong>ISPM 15 (IPPC)</strong></td><td>Phytosanitary treatment of wood packaging materials (pallets, crates, dunnage)</td><td>Non-compliance causes cargo rejection at destination — claims for stranded/destroyed cargo</td></tr>
+      <tr><td><strong>ISPS Code (IMO)</strong></td><td>Security requirements for ships and port facilities on international voyages</td><td>ISPS-compliant ports: reduced theft risk; non-ISPS intermediate ports: warranty consideration</td></tr>
+      <tr><td><strong>ISM Code (IMO)</strong></td><td>Safety management systems for vessels over 500 GT on international voyages</td><td>ISM compliance indicates operational safety standards; non-ISM vessels are underwriting red flag</td></tr>
+      <tr><td><strong>EU GDP Guidelines (2013)</strong></td><td>Good Distribution Practice for medicinal products in the EU</td><td>Pharmaceutical cargo — compliance required for coverage continuity; breach voids temperature excursion claims</td></tr>
+      <tr><td><strong>IATA DGR</strong></td><td>Dangerous Goods Regulations for air transport — including lithium battery sections</td><td>Air cargo DG compliance; li-ion battery Section I/II thresholds; misdeclaration exclusion</td></tr>
+      <tr><td><strong>IMO SOLAS (Chapter VI/VII)</strong></td><td>Safety of Life at Sea — carriage of cargoes and DG at sea</td><td>Cargo declarations, stowage, segregation requirements; ongoing SOLAS amendments on li-ion battery risk (active 2024)</td></tr>
+    </tbody>
+  </table>
+
+</main>
+<footer>
+  Risk Code Hub — Marine Cargo (V/Q/VL/VX) · Lloyd's Market Intelligence · v3.3 April 2026
+</footer>
+</body>
+</html>

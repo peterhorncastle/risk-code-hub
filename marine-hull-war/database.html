@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+<title>Marine Hull War — Claims Database | Risk Code Hub</title>
+<style>
+:root{--war:#1a237e;--war-dark:#0d1442;--danger:#c62828;--mine:#e65100;--piracy:#6a1b9a;--jwc:#00695c;--warn:#f57f17;--bg:#f5f7fa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--radius:10px;    /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1a237e;
+    --hub-dark:      #0d1442;
+    --hub-light:     #e8ebf8;
+    --hub-accent:    #f57f17;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#e65100;
+    --header-gradient:linear-gradient(135deg,#0d1442 0%,#1a237e 50%,#283593 100%);
+    --header-sub:    #b8c8e8;
+  }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+header{background:linear-gradient(135deg,#0d1442 0%,#1a237e 50%,#283593 100%);color:#fff;padding:2rem 1.5rem 1.5rem;}
+.hub-label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75;margin-bottom:.4rem;}
+header h1{font-size:1.8rem;font-weight:700;}
+header p{opacity:.85;font-size:.95rem;}
+nav.tabs{background:#fff;border-bottom:2px solid var(--border);display:flex;flex-wrap:wrap;gap:0;overflow-x:auto}
+nav.tabs a{padding:.65rem 1.1rem;text-decoration:none;color:var(--muted);font-size:.82rem;font-weight:600;white-space:nowrap;border-bottom:3px solid transparent;transition:color .2s}
+nav.tabs a:hover{color:var(--war)}
+nav.tabs a.active{color:var(--war);border-bottom-color:var(--war)}
+.container{max-width:1100px;margin:0 auto;padding:1.5rem;}
+.controls{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.controls select,.controls input{padding:.5rem .8rem;border:1px solid var(--border);border-radius:6px;font-size:.85rem;background:#fff;color:var(--text);}
+.controls input{min-width:220px;}
+#count{font-size:.83rem;color:var(--muted);align-self:center;}
+.badge{display:inline-block;padding:.13rem .48rem;border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.04em;white-space:nowrap;}
+.ver{background:#e6f4ea;color:#1b5e20;}.est{background:#fef3e2;color:#e65100;}.illus{background:#cce5ff;color:#1565c0;}.gap{background:#fdecea;color:#c62828;}
+table{width:100%;border-collapse:collapse;font-size:.84rem;background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+th{background:var(--war-dark);color:#fff;padding:.55rem .7rem;text-align:left;font-weight:600;cursor:pointer;}
+th:hover{background:#1a237e;}
+td{padding:.5rem .7rem;border-bottom:1px solid var(--border);vertical-align:top;}
+tr:nth-child(even) td{background:#f9fafb;}
+tr.detail-row td{background:#eef0fb;border-bottom:2px solid var(--war);}
+.sev{border-radius:4px;padding:.12rem .45rem;font-size:.7rem;font-weight:700;}
+.sev-major{background:#fdecea;color:#c62828;}
+.sev-sig{background:#fff3e0;color:#e65100;}
+.sev-mod{background:#e3f2fd;color:#1565c0;}
+.type-tag{border-radius:4px;padding:.12rem .45rem;font-size:.68rem;font-weight:700;}
+.T-WAR{background:#fdecea;color:#c62828;}
+.T-PIR{background:#f3e5f5;color:#6a1b9a;}
+.T-MINE{background:#fff3e0;color:#e65100;}
+.T-AV{background:#e8eaf6;color:#1a237e;}
+.T-CONF{background:#e8f5e9;color:#1b5e20;}
+.T-REG{background:#e3f2fd;color:#1565c0;}
+.expander{cursor:pointer;color:var(--war);font-size:.8rem;font-weight:600;background:none;border:none;padding:0;}
+.detail-content{font-size:.82rem;color:var(--muted);padding:.3rem 0;}
+.hidden{display:none;}
+.nav-strip{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem;}
+.nav-btn{display:inline-block;background:var(--war-dark);color:#fff;text-decoration:none;border-radius:6px;padding:.5rem 1rem;font-size:.82rem;font-weight:600;}
+footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem;}
+</style>
+</head>
+<body>
+<header>
+  <div class="hub-label">Lloyd's Risk Code Hub · Marine</div>
+  <h1>Marine Hull War — Claims Database</h1>
+  <p>35 significant marine war risk events and losses (1980–2024). All Lloyd's figures are estimates unless noted. Click rows for detail.</p>
+</header>
+<nav class="tabs">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+  <div class="controls">
+    <select id="typeFilter">
+      <option value="">All types</option>
+      <option value="WAR">War/Conflict (W)</option>
+      <option value="PIR">Piracy (W)</option>
+      <option value="MINE">Mine/Munitions (W)</option>
+      <option value="AV">Aviation War (AW)</option>
+      <option value="CONF">Confiscation (W)</option>
+      <option value="REG">Regulatory/Market</option>
+    </select>
+    <select id="sevFilter">
+      <option value="">All severities</option>
+      <option value="Major">Major</option>
+      <option value="Significant">Significant</option>
+      <option value="Moderate">Moderate</option>
+    </select>
+    <input type="text" id="search" placeholder="Search vessel, year, region…">
+    <span id="count"></span>
+  </div>
+
+  <table id="db">
+    <thead><tr><th>Year</th><th>Event / Vessel</th><th>Type</th><th>Severity</th><th>Est. Insured Loss</th><th>Detail</th></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <div class="nav-strip">
+    <a class="nav-btn" href="timeline.html">← Timeline</a>
+    <a class="nav-btn" href="underwriting.html">Underwriting →</a>
+  </div>
+</div>
+
+<script>
+const events=[
+  {year:1980,event:"Iran–Iraq Tanker War Begins",type:"WAR",sev:"Major",loss:"400+ vessels attacked over 8 years; billions across Lloyd's market <span class='badge ver'>VER</span>",detail:"The Iran–Iraq war (1980–88) saw both nations attack neutral merchant shipping. Over 400 vessels were attacked in declared exclusion zones in the Persian Gulf. Losses defined modern war risk underwriting and led to the 1983 CL.280 Institute War Clauses. AWRP for Gulf transits reached 0.5–1.0%+ per voyage at peak."},
+  {year:1987,event:"USS Stark / Bridgeton — Tanker Attacks in Persian Gulf",type:"MINE",sev:"Major",loss:"Multiple vessels; market-wide AWRP impact <span class='badge est'>EST</span>",detail:"The Iran–Iraq Tanker War peaked in 1987. The US frigate USS Stark was struck by Iraqi Exocet missiles; the re-flagged US tanker MV Bridgeton struck an Iranian mine. The Bridgeton mine incident — a visible hit on a US-flag vessel — triggered immediate pressure on the war risk market and led to the US Navy convoy escort programme. Mine strikes are covered under CL.280 Clause 1.3."},
+  {year:1990,event:"Iraq Invades Kuwait — Gulf War I Vessel Detentions",type:"CONF",sev:"Major",loss:"Vessels trapped; CTL/detention claims <span class='badge est'>EST</span>",detail:"Iraq's August 1990 invasion of Kuwait trapped numerous vessels in Kuwaiti ports. War risk underwriters faced detention and CTL claims. UN sanctions imposed on Iraq and vessels trading with Iraq were subject to confiscation risk. AWRP for Persian Gulf transits spiked dramatically; US-led coalition operations disrupted commercial shipping through to 1991."},
+  {year:2000,event:"USS Cole Attack — Aden Harbour (Terrorism Maritime)",type:"WAR",sev:"Significant",loss:"USS Cole (Navy vessel — not commercial loss)",detail:"The al-Qaeda suicide boat attack on USS Cole in Aden harbour on 12 October 2000 killed 17 US sailors. While USS Cole was a Navy vessel (not a commercial hull war loss), the attack demonstrated the vulnerability of vessels in anchorage and triggered elevated war risk premiums for Aden port calls — foreshadowing the Limburg attack 2 years later."},
+  {year:2001,event:"9/11 — Aviation War Market Collapses (AW)",type:"AV",sev:"Major",loss:"~$2bn+ aviation hull war (4 aircraft) <span class='badge est'>EST</span>",detail:"September 11 2001 destroyed four commercial aircraft used as missiles. Total aviation hull losses ~$2bn. Aviation war (AW) capacity evaporated globally within 24 hours. Government guarantee schemes were established in the US, UK and EU. Marine war (W) tightened simultaneously. Post-9/11 terrorism exclusion language was overhauled across all war risk lines; standalone terrorism product markets developed."},
+  {year:2002,event:"MV Limburg — VLCC Terrorist Attack (Gulf of Aden)",type:"WAR",sev:"Significant",loss:"~$35m insured hull; ~90,000 bbls oil spilled <span class='badge ver'>VER</span>",detail:"The French VLCC Limburg was struck by an al-Qaeda explosive-laden dhow off Yemen on 6 October 2002. One crew member killed; the vessel was seriously damaged and leaked ~90,000 barrels of crude. Lloyd's war risk underwriters paid the hull war claim under CL.280 Clause 1.5 (terrorism). AWRP for Gulf of Aden transits increased immediately."},
+  {year:2005,event:"MV Feisty Gas — Somali Piracy Begins (Gulf of Aden)",type:"PIR",sev:"Moderate",loss:"Ransom paid; hull unharmed <span class='badge est'>EST</span>",detail:"Early Somali piracy incidents in 2005 targeted smaller dhows and fishing vessels. By 2005–06 larger merchant vessels began being targeted. Piracy is covered under CL.280 Clause 1.5 (persons acting from political motive — piracy is classified as a war peril, not an H&M peril under Lloyd's market practice). War risk underwriters absorbed early piracy claims as JWC began monitoring the Gulf of Aden situation."},
+  {year:2008,event:"MV Sirius Star — VLCC Seized (Somalia)",type:"PIR",sev:"Major",loss:"~$3m ransom paid; hull value ~$150m+ <span class='badge ver'>VER</span>",detail:"The 330,000 DWT VLCC Sirius Star (Saudi Aramco) was seized 450 miles SE of Kenya on 15 November 2008 — the largest vessel ever taken by pirates. Laden with $100m crude oil. Held for 57 days; $3m ransom secured release. The capture, seizure and detention is a textbook CL.280 Clause 1.2 claim. The hijacking triggered JWC zone expansion and maximum AWRP for Indian Ocean transits."},
+  {year:2009,event:"MV Faina — Ukrainian Cargo Ship with Arms Seized",type:"PIR",sev:"Significant",loss:"~$3.2m ransom; Ukraine MoD cargo exposed <span class='badge ver'>VER</span>",detail:"The Belize-flagged MV Faina was seized by Somali pirates on 25 September 2008 carrying 33 T-72 tanks and ammunition destined for Kenya (or, allegedly, South Sudan). Held for 134 days; $3.2m ransom paid. The shipment of military equipment highlighted the vulnerability of arms cargoes to piracy and the reputational risk to war risk insurers covering such voyages."},
+  {year:2010,event:"MV Rak Afrikana — Piracy Peak Statistics",type:"PIR",sev:"Major",loss:"49 vessels hijacked in 2010; 1,181 hostages <span class='badge ver'>VER</span>",detail:"2010 was the statistical peak of Somali piracy. 49 vessels successfully hijacked; 1,181 seafarers taken hostage. Total ransoms paid globally (not all Lloyd's insured) estimated at $238m in 2010. <span class='badge est'>EST</span> Lloyd's war risk (W) claims under CL.280 Clause 1.2 (capture/seizure/detention) were at maximum levels. AWRP for High Risk Area transits were at multi-year highs."},
+  {year:2011,event:"BMP4 Published — Piracy Countermeasures Codified",type:"REG",sev:"Significant",loss:"Market-wide risk reduction",detail:"Best Management Practice Version 4 (BMP4) published 2011 by BIMCO and industry bodies, codifying: vessel hardening (razor wire, fire hoses, citadels), speed protocols (>18 knots recommended in HRA), UKMTO reporting on entry/exit, avoiding specific high-risk areas at night, watch-keeping protocols. Lloyd's war underwriters endorsed BMP4 compliance as a quasi-warranty; non-compliant vessels faced AWRP loading."},
+  {year:2012,event:"Somali Piracy Collapses — PCASP / BMP / Naval Success",type:"REG",sev:"Significant",loss:"Market-wide rate decline post-2012",detail:"Combined effect of BMP-compliant vessel hardening, PCASP armed guards (no BMP+PCASP vessel ever successfully hijacked) and naval interdiction operations (EU NavFor Atalanta, US CTF 151, NATO OAS) collapsed Somali piracy from 2012. Successful hijackings fell to near-zero. AWRP for Indian Ocean transits declined from peak levels. The war risk market entered a soft cycle lasting until 2022."},
+  {year:2013,event:"Gulf of Guinea Piracy Escalates (West Africa)",type:"PIR",sev:"Significant",loss:"~$800m global annual piracy cost (all losses) <span class='badge est'>EST</span>",detail:"As Somali piracy collapsed, Nigerian-centred Gulf of Guinea piracy escalated. West African pirates differed from Somali pirates: shorter-range, faster vessels; targets for cargo theft and crew kidnap-for-ransom (not vessel seizure). AWRP for West African port calls and coastal transits increased. JWC listed Gulf of Guinea as a Listed Area. Lloyd's war risk underwriters faced different claims profile: crew kidnap costs, short-term vessel detention."},
+  {year:2014,event:"MH17 — Malaysia Airlines B777 Shot Down (AW — Ukraine)",type:"AV",sev:"Major",loss:"~$97m hull war loss (AW) <span class='badge ver'>VER</span>",detail:"Malaysia Airlines MH17 shot down 17 July 2014 by Russian BUK missile over eastern Ukraine. All 298 killed. Aviation war (AW) hull claim ~$97m. JIT investigation confirmed Russian state involvement. The incident foreshadowed the full-scale Ukraine war and led to immediate airspace closures over eastern Ukraine. AW underwriters increased premiums for Ukrainian airspace. Illustrates government/state actor attribution challenge in AW policies."},
+  {year:2014,event:"Libya — Vessel Confiscation by Militia Groups",type:"CONF",sev:"Significant",loss:"Multiple vessels; individual losses not publicly disclosed <span class='badge est'>EST</span>",detail:"Libya's post-Gaddafi collapse left armed militias controlling ports. Several commercial vessels were detained or confiscated by militia factions rather than a recognised government — testing the Clause 1.6 (confiscation) coverage under CL.280. The question of whether militia confiscation equals governmental confiscation was the central underwriting debate. Lloyd's war risk underwriters paid claims on a case-by-case basis depending on wording and circumstances."},
+  {year:2015,event:"Yemen War — Houthi Attacks on Vessels Begin",type:"WAR",sev:"Significant",loss:"Elevated AWRP from 2017; individual vessel losses <span class='badge est'>EST</span>",detail:"Yemen civil war commenced March 2015. Houthi rebel forces, Iranian-backed, conducted missile and drone attacks on Saudi-coalition ships and infrastructure. From 2016, commercial vessels were increasingly affected. Lloyd's war risk underwriters began loading AWRP for Red Sea and Bab-el-Mandeb transits from 2017 onwards. The Houthi attacks escalated significantly in 2023–24 (see Red Sea crisis)."},
+  {year:2017,event:"NotPetya Cyberattack — Maersk (Marine War/Cyber Intersection)",type:"WAR",sev:"Significant",loss:"~$300m Maersk direct loss <span class='badge ver'>VER</span>",detail:"NotPetya cyberattack attributed to Russian GRU caused ~$300m in losses to Maersk Line. Maersk's war risk (W) and cyber policies both faced coverage questions. The US and UK governments attributed NotPetya to Russia — potentially bringing it within war peril definitions. UK Supreme Court in Merck v Zurich (2023) ruled a government exclusion did not apply to NotPetya in pharmaceutical context. The marine war market closely monitors cyberattack attribution and coverage boundaries."},
+  {year:2019,event:"MT Stena Impero — Iran Seizes UK-Flagged Tanker (Hormuz)",type:"CONF",sev:"Significant",loss:"~$30m hull (released after 10 weeks) <span class='badge est'>EST</span>",detail:"Iran's IRGC seized the British-flagged MT Stena Impero in the Strait of Hormuz on 19 July 2019 using fast-attack vessels and a helicopter. Held for 10 weeks; released without ransom in September 2019. Classic CL.280 Clause 1.2 (capture, seizure, arrest, restraint, detainment). Lloyd's war (W) underwriters paid holding costs and any damage claims. AWRP for Hormuz transits increased sharply; Iran demonstrated willingness to use vessel seizure as a geopolitical tool."},
+  {year:2019,event:"Saudi Aramco Facilities Attack (Near-Miss for Marine)",type:"WAR",sev:"Moderate",loss:"No direct marine hull loss; AWRP loading impact",detail:"Drone and cruise missile attacks on Saudi Aramco's Abqaiq and Khurais oil processing facilities on 14 September 2019 (attributed to Iran/Houthis) disrupted ~5% of global oil supply briefly. While no vessels were directly attacked, the proximity to key tanker terminals and Ras Tanura caused AWRP loading for vessels calling at Saudi Red Sea and Gulf terminals. The incident demonstrated escalation risk to marine assets from infrastructure attacks."},
+  {year:2020,event:"Gulf of Oman — Tanker Limpet Mine Attacks (Iran)",type:"MINE",sev:"Significant",loss:"6 vessels damaged; individual hull claims <span class='badge est'>EST</span>",detail:"Series of limpet mine attacks attributed to Iran in 2019–20 damaged multiple tankers in the Gulf of Oman: MT Front Altair, MT Kokuka Courageous, MV Andrea Victory, MV A Michel and others. Mines attached at waterline detonated causing hull damage. CL.280 Clause 1.3 (mines, torpedoes, derelict weapons) clearly covers naval mine/limpet attacks. AWRP for Gulf of Oman and Hormuz transit increased significantly."},
+  {year:2020,event:"PS752 — Ukraine International Airlines Shot Down (Iran, AW)",type:"AV",sev:"Major",loss:"~$43m hull war (AW) <span class='badge ver'>VER</span>",detail:"UIA Flight PS752 shot down by Iranian Revolutionary Guard on 8 January 2020, killing all 176. Iran admitted responsibility after initial denial. AW hull claim ~$43m. The incident occurred amid US-Iran tensions following the killing of Soleimani. NOTAM issued for Iranian airspace; airlines diverted. Aviation war (AW) underwriters faced renewed questions about civilian airspace vulnerability near active conflicts."},
+  {year:2022,event:"Ukraine — 64+ Vessels Trapped Black Sea (February 2022)",type:"WAR",sev:"Major",loss:"$1bn+ combined marine war losses (hull, cargo) <span class='badge est'>EST</span>",detail:"Russia's invasion trapped approximately 64 commercial vessels in Ukrainian ports. JWC immediately designated Black Sea as High Risk Area. 48-hour war cancellation notices issued. Vessels in Mariupol, Mykolaiv and Odessa were variously bombed, sunk, detained or abandoned. Some vessels were declared constructive total losses (CTL). Ukraine military used some commercial vessels for coastal defence activities — raising questions of Government use exclusion under CL.280."},
+  {year:2022,event:"Russia Retains Leased Aircraft — Largest AW Confiscation Event (AW)",type:"AV",sev:"Major",loss:"~$10–15bn aviation hull (AW confiscation) <span class='badge est'>EST</span>",detail:"Following sanctions, Russia refused to return approximately 400–500 leased Western aircraft to their lessors. Total hull value ~$10–15bn. Aviation war (AW) confiscation/expropriation claims (equivalent to CL.280 Clause 1.6) were triggered. Claims disputes between lessors, AW underwriters and Russian airlines are ongoing — the largest single aviation war event in history by hull value. The outcome will reshape AW confiscation cover for years."},
+  {year:2022,event:"Black Sea Mine Drift — Commercial Shipping Lanes",type:"MINE",sev:"Significant",loss:"Multiple vessels damaged <span class='badge est'>EST</span>",detail:"Naval mines laid by both Russian and Ukrainian forces in the Black Sea drifted into commercial shipping lanes, threatening vessels in the western Black Sea and Turkish Straits approaches. Several commercial vessels reported mine contacts; Turkish Navy conducted emergency mine-clearance operations. Mine strike claims were covered under CL.280 Clause 1.3. The situation demonstrated that mine warfare creates residual hazard for civilian vessels long after tactical deployment."},
+  {year:2022,event:"Black Sea Grain Corridor — War-Insured Humanitarian Shipping",type:"WAR",sev:"Significant",loss:"No major losses during corridor operation <span class='badge est'>EST</span>",detail:"UN-brokered Black Sea Grain Initiative (July 2022–July 2023) enabled 33 million tonnes of Ukrainian grain to be exported via a controlled corridor. Bespoke war risk cover was arranged for participating vessels — a unique market solution providing coverage in an active conflict zone. Lloyd's war market provided hull war and cargo war cover; P&I clubs provided war P&I for the corridor vessels. Russia's withdrawal in July 2023 ended the initiative."},
+  {year:2023,event:"MV Galaxy Leader — Vessel Seized by Houthis (Red Sea)",type:"PIR",sev:"Major",loss:"Vessel detained; crew held; hull value ~$30m <span class='badge est'>EST</span>",detail:"The car carrier MV Galaxy Leader — allegedly Israel-linked — was seized by Houthi forces using a helicopter boarding on 19 November 2023, triggering the Red Sea crisis. The vessel and its 25-person crew were held in Hodeida, Yemen. The seizure was the direct catalyst for the JWC Listed Area designation of the Red Sea in December 2023. Classic CL.280 Clause 1.2 capture/seizure claim — though the political/war nature of the seizure complicated straightforward claims resolution."},
+  {year:2023,event:"JWC Red Sea Listed Area — December 2023",type:"REG",sev:"Major",loss:"AWRP surge 10-fold; market structural change",detail:"The Joint War Committee formally designated the Red Sea, Gulf of Aden and Bab-el-Mandeb Strait as a Listed Area in December 2023 — triggering mandatory AWRP for all vessels transiting the area. This was the most significant JWC designation since the Black Sea designation in February 2022. War risk rates for Red Sea transits surged from approximately 0.07% to 0.5–1.0%+ per transit. Lloyd's war risk syndicates moved to per-transit pricing rather than annual AWRP for the Red Sea."},
+  {year:2024,event:"MV Marlin Luanda — Tanker Set Ablaze (Houthi Missile)",type:"WAR",sev:"Major",loss:"Significant hull damage; fire on board <span class='badge ver'>VER</span>",detail:"The Marshall Islands-flagged chemical/product tanker MV Marlin Luanda was struck by a Houthi anti-ship ballistic missile on 26 January 2024, causing a major fire that required crew evacuation. The vessel was seriously damaged. Classic W-code CL.280 Clause 1.1 (hostile act by armed group/belligerent). US and UK naval forces conducted retaliatory strikes on Houthi positions. The attack confirmed that advanced anti-ship ballistic missiles (ASBMs) represent a qualitatively new threat to commercial shipping vs. previous drone/mine attacks."},
+  {year:2024,event:"MV True Confidence — Bulk Carrier Hit; Three Crew Killed",type:"WAR",sev:"Major",loss:"Vessel sunk; three crew killed <span class='badge ver'>VER</span>",detail:"The Barbados-flagged bulk carrier MV True Confidence was struck by a Houthi missile on 6 March 2024, causing a fire that sank the vessel. Three crew members were killed — the first fatalities from a Houthi commercial vessel attack. The sinking was a total loss for the hull war (W) underwriters; cargo war and crew PA claims also triggered. The loss of the vessel demonstrated that Houthi attacks had reached a lethality threshold that mandated Cape rerouting for commercial operators."},
+  {year:2024,event:"MV Rubymar — Vessel Sunk (Houthi Attack, Red Sea)",type:"WAR",sev:"Major",loss:"CTL — vessel sunk; ~20,000 tonnes fertiliser cargo lost <span class='badge ver'>VER</span>",detail:"The Belize-flagged MV Rubymar was struck by Houthi missiles on 18 February 2024 and abandoned by crew; the vessel sank on 2 March 2024. Total loss for W-code hull war underwriters. ~20,000 tonnes of ammonium phosphate cargo lost — cargo war claim for VL/V code holders. The vessel was also reported to have torn up undersea cables as it sank. First confirmed vessel total loss from Houthi attacks."},
+  {year:2024,event:"Cape Rerouting — Commercial Shipping Avoids Red Sea",type:"REG",sev:"Major",loss:"~$1bn+ additional annual shipping costs (industry-wide) <span class='badge est'>EST</span>",detail:"By Q1 2024, the overwhelming majority of major container lines (Maersk, MSC, CMA CGM, Evergreen, Hapag-Lloyd) had suspended Red Sea transits and rerouted around the Cape of Good Hope — adding 10–14 days per voyage and increasing fuel costs significantly. Freight rates surged. For the war risk market, Cape rerouting reduced vessel exposure in the HRA but removed the flow of AWRP income from per-transit pricing on vessels that no longer transited."},
+  {year:2024,event:"Red Sea — AWRP Stabilises; War Market Profitability",type:"MKT",sev:"Significant",loss:"War market GWP estimated 30–50% higher YoY <span class='badge est'>EST</span>",detail:"By mid-2024, Red Sea AWRP stabilised at 0.3–1.0%+ per transit for vessels choosing to transit (mostly bulk carriers and tankers accepting the risk premium). Container lines rerouting Cape paid no AWRP but faced higher voyage costs. The war market entered its most profitable cycle since peak Somali piracy. Lloyd's war syndicates benefited from the combination of elevated AWRP and (despite individual losses) a loss ratio supportable by the enhanced premium income. <span class='badge est'>EST</span>"},
+  {year:2024,event:"Gulf of Guinea — Piracy Reduction (Nigerian Crackdown)",type:"PIR",sev:"Moderate",loss:"Piracy incidents reducing from 2023 peak <span class='badge est'>EST</span>",detail:"Nigerian maritime security improvements — including the Deep Blue Project (naval vessels, surveillance aircraft, interceptor boats) — drove a significant reduction in Gulf of Guinea piracy incidents from 2023–24. Successful piracy incidents fell from ~130 per year at peak to significantly lower levels. JWC monitoring of West African waters continued; AWRP for Gulf of Guinea port calls reduced modestly but remained positive given residual risk."},
+  {year:2024,event:"Cyber/War Attribution — Merck v Zurich (UK Supreme Court Implications)",type:"REG",sev:"Significant",loss:"Coverage boundary question; no direct marine loss",detail:"The UK Supreme Court in Merck Sharp & Dohme v Zurich [2023] ruled that a government exclusion in Zurich's policy did not prevent coverage for NotPetya losses, despite the attack's attribution to Russia. While a property (not marine war) case, the judgment has implications for CL.280's war/cyber intersection. Marine war underwriters are monitoring whether state-attributed cyberattacks on vessel navigation/control systems could trigger W-code coverage, and updating exclusion language accordingly."},
+];
+
+const types={WAR:"T-WAR",PIR:"T-PIR",MINE:"T-MINE",AV:"T-AV",CONF:"T-CONF",REG:"T-REG",MKT:"T-REG"};
+const typeLabels={WAR:"War/Conflict",PIR:"Piracy",MINE:"Mine/Munition",AV:"Aviation War",CONF:"Confiscation",REG:"Regulatory",MKT:"Market"};
+function render(){
+  const tv=document.getElementById('typeFilter').value;
+  const sv=document.getElementById('sevFilter').value;
+  const kw=document.getElementById('search').value.toLowerCase();
+  const filtered=events.filter(e=>{
+    if(tv&&e.type!==tv)return false;
+    if(sv&&e.sev!==sv)return false;
+    if(kw&&!(e.event.toLowerCase().includes(kw)||e.detail.toLowerCase().includes(kw)||String(e.year).includes(kw)||e.loss.toLowerCase().includes(kw)))return false;
+    return true;
+  });
+  document.getElementById('count').textContent=filtered.length+' of '+events.length+' events';
+  const tb=document.getElementById('tbody');tb.innerHTML='';
+  filtered.forEach((e,i)=>{
+    const tc=types[e.type]||'T-REG';const tl=typeLabels[e.type]||e.type;
+    const sc=e.sev==='Major'?'sev-major':e.sev==='Significant'?'sev-sig':'sev-mod';
+    const id='r'+i;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${e.year}</td><td><strong>${e.event}</strong></td><td><span class="type-tag ${tc}">${tl}</span></td><td><span class="sev ${sc}">${e.sev}</span></td><td>${e.loss}</td><td><button class="expander" onclick="toggle('${id}')">▶ Detail</button></td>`;
+    tb.appendChild(tr);
+    const dr=document.createElement('tr');dr.id=id;dr.className='detail-row hidden';
+    dr.innerHTML=`<td colspan="6"><div class="detail-content">${e.detail}</div></td>`;
+    tb.appendChild(dr);
+  });
+}
+function toggle(id){const r=document.getElementById(id);const btn=r.previousElementSibling.querySelector('.expander');if(r.classList.toggle('hidden')){btn.textContent='▶ Detail';}else{btn.textContent='▼ Hide';}}
+['typeFilter','sevFilter','search'].forEach(id=>document.getElementById(id).addEventListener('input',render));
+render();
+</script>
+<footer>Risk Code Hub · Marine Hull War · Claims Database · All loss figures are estimates unless marked VER · Not for regulatory use</footer>
+</body>
+</html>

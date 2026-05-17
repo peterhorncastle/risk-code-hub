@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Underwriting — Livestock &amp; Bloodstock (NB/NX) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4e342e;
+      --hub-dark:      #260f0a;
+      --hub-light:     #fbe9e7;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#1a237e;
+      --header-gradient:linear-gradient(135deg,#260f0a 0%,#4e342e 55%,#6d4c41 100%);
+      --header-sub:    #ffccbc;
+      --hub-mid:       #d7ccc8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1209;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ffccbc;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#260f0a;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ffccbc;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .factors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .factor{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);}
+    .factor.high{border-left-color:#c62828;}
+    .factor.med{border-left-color:#e65100;}
+    .factor.low{border-left-color:var(--hub-secondary);}
+    .factor .impact{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .factor .code-tag{font-size:0.65rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+    .tag-nb{background:#fbe9e7;color:#4e342e;}
+    .tag-nx{background:#e8eaf6;color:#1a237e;}
+    .tag-both{background:#e8f5e9;color:#1a5c2a;}
+    .factor h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .factor p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .factor .rate{font-size:0.78rem;font-weight:700;color:#c62828;margin-top:6px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #f3e8e6;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fdf0ee;}
+    .formula-box{background:#260f0a;color:#ffccbc;border-radius:8px;padding:20px 24px;font-family:monospace;font-size:0.88rem;line-height:1.8;margin-bottom:24px;}
+    .formula-box .comment{color:#c8a84b;}
+    .worked{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px;border-top:4px solid var(--hub-primary);}
+    .worked.alt{border-top-color:var(--hub-accent);}
+    .worked h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .worked table{box-shadow:none;margin-bottom:0;}
+    .worked th{background:var(--hub-primary);}
+    .info-box{background:#fbe9e7;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#260f0a;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    footer{background:#260f0a;color:#ffccbc;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Livestock &amp; Bloodstock (NB/NX)</a> › Underwriting</div>
+    <div class="tag">Module 04</div>
+    <h1>Underwriting Methodology</h1>
+    <div class="sub">Rating factors, rate benchmarks, worked examples &amp; key exclusions — NB livestock and NX bloodstock</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- NX High Impact -->
+  <div class="section-title">Rating Factors — High Impact (NX Bloodstock)</div>
+  <div class="factors-grid">
+    <div class="factor high">
+      <div class="impact">High Impact <span class="code-tag tag-nx">NX</span></div>
+      <h4>Individual Horse Value (Agreed Value Basis)</h4>
+      <p>Agreed value is the single most critical NX underwriting factor. The insured and insurer agree the value at inception — this becomes the sum payable on death or confirmed permanent infertility without depreciation. For horses above £50,000 agreed value, veterinary examination is required. Above £500,000, a specialist equine insurance veterinarian must provide a health certificate and confirmation of suitability for the proposed use (racing, breeding, competition).<sup>[I5]</sup></p>
+      <div class="rate">Rate range: 1.5–4.0% of agreed value per annum (est.)</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact <span class="code-tag tag-nx">NX</span></div>
+      <h4>Age and Use of Animal</h4>
+      <p>A stallion actively at stud covering 100+ mares per season is rated very differently from a 2-year-old in flat race training or a 15-year-old broodmare. Racing horses face acute injury risk; older mares face foaling complications. Covering stallions face permanent infertility risk. The expected remaining economic career must be assessed — a stallion at peak breeding demand commands the highest insured values and the most complex rating.<sup>[2]</sup></p>
+      <div class="rate">Age loading: +25–50% for active racehorses aged 2–4 vs breeding stock</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact <span class="code-tag tag-nx">NX</span></div>
+      <h4>Racing Schedule and Competition Level</h4>
+      <p>International competition — particularly jump racing (National Hunt) and high-intensity flat racing — carries significantly higher mortality risk than light flat racing or breeding activity. Travel to international race meetings adds transit risk. Horses entered for the Grand National or Cheltenham Gold Cup face statistically elevated mortality risk and attract rate loadings. Some underwriters apply course-specific loadings for known high-risk venues.<sup>[4]</sup></p>
+      <div class="rate">Competition loading: +10–30% for NH racing; +5–15% for international travel</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact <span class="code-tag tag-nx">NX</span></div>
+      <h4>Breeding Record and Stallion Book Size</h4>
+      <p>For covering stallions, the size and quality of the book of mares (mares to be covered each season) directly determines economic value and infertility risk exposure. A stallion covering 200 mares at £50,000 per covering generates £10m annual revenue — infertility is a £100m+ loss of future earnings. Annual fertility assessment (sperm motility, morphology, count) is a required condition for high-value stallion infertility cover.<sup>[3]</sup></p>
+      <div class="rate">Infertility premium: additional 0.5–1.5% of agreed value for permanent infertility extension</div>
+    </div>
+  </div>
+
+  <!-- NB High Impact -->
+  <div class="section-title">Rating Factors — High Impact (NB Livestock)</div>
+  <div class="factors-grid">
+    <div class="factor high">
+      <div class="impact">High Impact <span class="code-tag tag-nb">NB</span></div>
+      <h4>Species and Farm Type</h4>
+      <p>Species drives fundamentally different disease risk profiles. Poultry (particularly intensive egg and broiler units) face catastrophic single-event avian flu loss at scale. Pigs face ASF/PRRS/PED accumulation risk. Dairy cattle face individual mortality from clinical diseases (mastitis, milk fever, displacement of abomasum). Beef cattle face respiratory diseases. Each species has a distinct loss frequency and severity distribution requiring separate rating tables.<sup>[I7]</sup></p>
+      <div class="rate">Base rate by species: poultry 0.8–2.5%; pigs 0.5–1.5%; cattle 0.3–1.0%; sheep 0.4–1.2% (% of value)</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact <span class="code-tag tag-nb">NB</span></div>
+      <h4>Geographic Location — Disease Risk Zone</h4>
+      <p>Proximity to previous FMD, Avian Influenza or ASF outbreak zones is a critical rating factor. Farms in APHA-designated Temporary Control Zones or Surveillance Zones during active outbreaks may face movement restrictions that materially increase loss severity. Farms adjacent to wild bird habitats (estuaries, water bodies) carry elevated avian flu risk. Some underwriters apply postcode-level zoning surcharges based on historical outbreak mapping.<sup>[I2]</sup></p>
+      <div class="rate">Zone loading: +15–40% for farms within previous Restricted Zone perimeter</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact <span class="code-tag tag-nb">NB</span></div>
+      <h4>Herd / Flock Size and Accumulation</h4>
+      <p>Large intensive units create catastrophic single-event accumulation exposure. A 500,000-bird laying hen unit insured as a single risk represents a potentially total-loss accumulation if avian flu enters the unit. Conversely, smaller mixed farms have greater natural diversification. Underwriters must assess the maximum probable loss (MPL) for a single disease event — which may be 100% of insured animals for highly contagious diseases in intensive housing.<sup>[1]</sup></p>
+      <div class="rate">Accumulation loading: +20–60% for units above 100,000 birds or 1,000 cattle</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact <span class="code-tag tag-nb">NB</span></div>
+      <h4>Claims Experience (3–5 Year)</h4>
+      <p>Prior livestock mortality claims are the strongest predictor of future losses. A farm with repeated individual animal mortality claims may indicate poor herd health, inadequate veterinary care, or biosecurity failures. Pattern losses (multiple animals from the same disease in a single year) attract significant rate loadings. A clean 5-year record qualifies for the maximum merit credit across all NB livestock species classes.<sup>[I9]</sup></p>
+      <div class="rate">Loading: +30–100% for adverse prior loss pattern; credit: −10–15% for 5-year clean</div>
+    </div>
+  </div>
+
+  <!-- Medium Impact -->
+  <div class="section-title">Rating Factors — Medium Impact (NB &amp; NX)</div>
+  <div class="factors-grid">
+    <div class="factor med">
+      <div class="impact">Medium Impact <span class="code-tag tag-both">NB &amp; NX</span></div>
+      <h4>Veterinary Care Quality</h4>
+      <p>Regular veterinary oversight — herd health schemes, annual health checks, prompt attendance for sick animals — materially reduces mortality frequency. For NX bloodstock, the quality of the attending veterinary surgeon (and the racing yard's vet programme) is assessed. Farm assurance schemes (Red Tractor, QMS for Scottish beef) provide proxy quality signals. Absence of regular vet involvement is a negative indicator.<sup>[L8]</sup></p>
+      <div class="rate">Vet care credit: −5 to −15% for demonstrated best-practice health scheme participation</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact <span class="code-tag tag-nb">NB</span></div>
+      <h4>Biosecurity Measures</h4>
+      <p>APHA-compliant biosecurity — visitor controls, vehicle disinfection, footwear protocols, quarantine facilities for new arrivals — directly reduces disease ingress risk. Farms certified under APHA's Herd Health and Monitoring Scheme attract preferential terms. Poultry farms with indoor housing systems face lower avian flu transmission risk than free-range units during outbreak periods. Biosecurity attestation is increasingly a condition of cover.<sup>[I2]</sup></p>
+      <div class="rate">Biosecurity credit: −10 to −20% for APHA-compliant documented biosecurity programme</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact <span class="code-tag tag-nb">NB</span></div>
+      <h4>Disease Surveillance Participation</h4>
+      <p>Participation in BCMS cattle movement traceability, mandatory BVD testing programmes, avian influenza surveillance schemes and PRRS monitoring for pigs all demonstrate a proactive disease management culture. Movement records enable accurate head counts for claims verification and rapid assessment of exposure during outbreak. BCMS data access is now a standard claims documentation requirement for all UK cattle mortality claims.<sup>[L3]</sup></p>
+      <div class="rate">Surveillance credit: −5 to −10% for full BCMS participation and BVD-accredited status</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact <span class="code-tag tag-nx">NX</span></div>
+      <h4>Transit Risk (Air Transport)</h4>
+      <p>Air transport of thoroughbreds to international race meetings — Dubai, Hong Kong, the USA, Japan — carries specific mortality risk from hypoxia, shipping fever (travel stress-induced respiratory disease), transit injuries and in-flight veterinary emergencies. Air transit is one of the most hazardous phases of a racehorse's life — mortality rates are elevated in the 72 hours post-long-haul flight. Prior notification of transit and route approval are standard policy conditions.<sup>[4]</sup></p>
+      <div class="rate">Air transit premium: additional 0.25–0.75% for each international air transit notified</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact <span class="code-tag tag-nb">NB</span></div>
+      <h4>Vaccination Records</h4>
+      <p>Vaccination against preventable diseases (IBR — infectious bovine rhinotracheitis; BVD — bovine viral diarrhoea; Johne's disease; Maedi Visna in sheep) materially reduces disease mortality claims frequency. For NX bloodstock, equine influenza and tetanus vaccination records are required. Some underwriters mandate vaccination as a policy condition; others apply credits for voluntary vaccination programme participation.<sup>[I8]</sup></p>
+      <div class="rate">Vaccination credit: −5 to −12% for documented up-to-date vaccination programme</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact <span class="code-tag tag-nb">NB</span></div>
+      <h4>Imported Animal Quarantine Controls</h4>
+      <p>Importation of livestock (particularly cattle, sheep and pigs from disease-endemic regions) represents one of the highest-risk disease ingress pathways. APHA-compliant quarantine periods (21–30 days for most species) and pre-import health certification are required by UK law. Farms with documented import quarantine protocols attract credits; farms with recent import history from higher-risk jurisdictions attract loadings.<sup>[L6]</sup></p>
+      <div class="rate">Import loading: +10–25% for farms with recent importation history from higher-risk jurisdictions</div>
+    </div>
+  </div>
+
+  <!-- Lower Impact -->
+  <div class="section-title">Rating Factors — Lower Impact</div>
+  <div class="factors-grid">
+    <div class="factor low">
+      <div class="impact">Lower Impact <span class="code-tag tag-nb">NB</span></div>
+      <h4>Alarm and Security — Theft Prevention</h4>
+      <p>CCTV, perimeter fencing, lighting, and registered stock markers (ear tags, freeze brands) reduce livestock theft exposure. For high-value bloodstock, alarm systems for stabling and stud farms are a standard policy condition. Livestock identification technology (GPS tracking for high-value animals, RFID ear tags) assists post-theft recovery and claims verification.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact <span class="code-tag tag-nb">NB</span></div>
+      <h4>Farm Building Standards</h4>
+      <p>Well-maintained buildings — adequate ventilation, appropriate stocking densities, clean water supply, secure feed storage — reduce housing-related respiratory disease and ammonia toxicity in intensive livestock units. Farm assurance scheme audits provide a standardised assessment of building standards that underwriters can reference without individual site inspections.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact <span class="code-tag tag-both">NB &amp; NX</span></div>
+      <h4>Insurance Basis — Named Individual vs Unnamed Flock</h4>
+      <p>Named individual animals (always the case for NX, optional for high-value NB pedigree stock) require positive identification and agreed-value assessment but provide clarity on loss events. Unnamed flock or herd cover (standard for commercial livestock) requires accurate head counts at inception and periodic audit. Mixed approaches (named pedigree bulls, unnamed commercial cows) are common in dairy beef operations.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact <span class="code-tag tag-nx">NX</span></div>
+      <h4>Stallion Infertility Monitoring</h4>
+      <p>For covering stallions, annual pre-season fertility assessment (sperm motility, morphology, concentration) is a standard condition of permanent infertility cover. Mid-season monitoring requirements vary by underwriter and agreed value. A stallion with declining fertility indicators over consecutive seasons may face infertility cover withdrawal or significant premium loading — the horse may be a 'going concern risk' even before confirmed infertility.</p>
+    </div>
+  </div>
+
+  <!-- Rate table -->
+  <div class="section-title">Indicative Rate on Value Table<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Category</th><th>Animal Type / Class</th><th>Base Rate (% of agreed value p.a.)</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td rowspan="4" style="font-weight:700;color:var(--hub-secondary2);">NX Bloodstock</td><td>Active flat racehorse (2–4 yr)</td><td>2.5–4.0%</td><td>Higher risk — racing injury frequency</td></tr>
+      <tr><td>Active jump racehorse (National Hunt)</td><td>3.0–4.5%</td><td>Highest risk — falls, fractures</td></tr>
+      <tr><td>Covering stallion (at stud)</td><td>1.5–2.5% + infertility extension</td><td>Vet exam required above £50k</td></tr>
+      <tr><td>Broodmare / competition horse</td><td>1.5–2.5%</td><td>Prospective foal cover additional</td></tr>
+      <tr><td rowspan="5" style="font-weight:700;color:var(--hub-primary);">NB Livestock</td><td>Dairy cattle (individual or herd)</td><td>0.4–0.8%</td><td>Individual vet certification for high values</td></tr>
+      <tr><td>Beef cattle (commercial herd)</td><td>0.3–0.7%</td><td>Blanket herd cover; head count audit</td></tr>
+      <tr><td>Commercial poultry (broiler/layer)</td><td>0.8–2.5%</td><td>Disease risk zone surcharge applicable</td></tr>
+      <tr><td>Commercial pigs</td><td>0.5–1.5%</td><td>ASF biosecurity attestation required</td></tr>
+      <tr><td>Aquaculture (salmon, sea bass)</td><td>1.5–4.0%</td><td>Species, site and disease history driven</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Formula -->
+  <div class="section-title">Premium Rating Formula (NB Livestock — Illustrative)</div>
+  <div class="formula-box">
+    <span class="comment">// NB Livestock Mortality — indicative rating formula</span><br>
+    Base Premium = Insured Value (£000s) × Base Rate (% per £100)<br><br>
+    Adjusted Premium = Base Premium<br>
+    &nbsp;&nbsp;× Species / Farm Type Factor   <span class="comment">// poultry 1.5–3.0× vs cattle 1.0×</span><br>
+    &nbsp;&nbsp;× Geographic Zone Factor       <span class="comment">// disease zone surcharge 1.15–1.40×</span><br>
+    &nbsp;&nbsp;× Accumulation Loading         <span class="comment">// intensive unit size: +20–60%</span><br>
+    &nbsp;&nbsp;× Biosecurity Credit           <span class="comment">// APHA-compliant: −10 to −20%</span><br>
+    &nbsp;&nbsp;× Claims History Loading       <span class="comment">// −15% (5yr clean) → +100% (adverse)</span><br>
+    &nbsp;&nbsp;× Vaccination Credit           <span class="comment">// documented programme: −5 to −12%</span><br>
+    &nbsp;&nbsp;+ Disease Epidemic Extension   <span class="comment">// FMD/AI top-up: additional 0.2–0.8%</span>
+  </div>
+
+  <!-- Worked Example A -->
+  <div class="worked">
+    <h3>Worked Example A — Grade 1 Racehorse, All-Risks NX Policy (Active Flat Racing + Transit)</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Horse</td><td>3-year-old thoroughbred colt, Group 1 winner, in training with major Newmarket trainer</td><td>—</td></tr>
+        <tr><td>Agreed Value</td><td>Veterinary examination confirmed; syndicate value agreed</td><td>£2,500,000</td></tr>
+        <tr><td>Base Premium</td><td>Active flat racing base rate 2.8% of agreed value</td><td>£70,000</td></tr>
+        <tr><td>Racing Schedule Loading</td><td>Entered Royal Ascot, Goodwood and US (Breeders' Cup) — international competition loading</td><td>+15% = £10,500</td></tr>
+        <tr><td>Transit Extension</td><td>Air transit to Churchill Downs, USA (Breeders' Cup) — notified transit additional premium</td><td>+£4,000</td></tr>
+        <tr><td>Claims Loading</td><td>5-year clean (same ownership group)</td><td>−8% = −£5,600</td></tr>
+        <tr><td>Deductible</td><td>Nil deductible (standard for NX individual agreed-value covers)</td><td>—</td></tr>
+        <tr><td><strong>Indicative GWP</strong></td><td>—</td><td><strong>~£78,900 p.a.</strong></td></tr>
+        <tr><td>Assumed Gross LR</td><td>Active thoroughbred racing benchmark</td><td>60%</td></tr>
+        <tr><td>Claims Estimate</td><td>£78,900 × 60%</td><td>£47,340</td></tr>
+        <tr><td>Commission (17.5%)</td><td>Bloodstock broker commission (specialist market)</td><td>£13,808</td></tr>
+        <tr><td>Expenses (8%)</td><td>Lloyd's internal expenses / syndicate costs</td><td>£6,312</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>£11,440 (14.5% margin)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Worked Example B -->
+  <div class="worked alt">
+    <h3>Worked Example B — 500-Cow Dairy Herd, Cumbria (Adjacent Previous FMD Zone)</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Farm</td><td>Commercial dairy farm; 500 Holstein-Friesian milking cows; Cumbrian fell location</td><td>—</td></tr>
+        <tr><td>Total Insured Value</td><td>500 cows × £1,200 average value (all-in dairy cow)</td><td>£600,000</td></tr>
+        <tr><td>Base Premium</td><td>Dairy cattle base rate 0.6% of total value</td><td>£3,600</td></tr>
+        <tr><td>Geographic Loading</td><td>Farm within 10km of 2001 FMD Restricted Zone perimeter; Cumbria high-risk designation</td><td>+30% = £1,080</td></tr>
+        <tr><td>Biosecurity Credit</td><td>APHA-compliant biosecurity documentation; Red Tractor accredited; regular herd vet scheme</td><td>−15% = −£540</td></tr>
+        <tr><td>Disease Epidemic Extension</td><td>FMD and Avian Flu government compensation top-up — covers gap between DEFRA valuation and market value</td><td>+£1,200</td></tr>
+        <tr><td>Claims Loading</td><td>Two individual cow mortality claims in 3 years (mastitis, milk fever) — moderate adverse</td><td>+20% = £720</td></tr>
+        <tr><td>Vaccination Credit</td><td>IBR, BVD and Johne's vaccination programme documented</td><td>−8% = −£288</td></tr>
+        <tr><td><strong>Indicative GWP</strong></td><td>—</td><td><strong>~£5,772 p.a.</strong></td></tr>
+        <tr><td>Assumed Gross LR</td><td>Dairy cattle with disease top-up — moderate adverse benchmark</td><td>68%</td></tr>
+        <tr><td>Claims Estimate</td><td>£5,772 × 68%</td><td>£3,925</td></tr>
+        <tr><td>Commission (20%)</td><td>Agricultural insurance broker commission</td><td>£1,154</td></tr>
+        <tr><td>Expenses (12%)</td><td>—</td><td>£693</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>£0 (0% margin — marginal risk)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Key exclusions -->
+  <div class="section-title">Key Exclusions</div>
+  <table>
+    <thead>
+      <tr><th>Exclusion</th><th>Applies To</th><th>Rationale</th><th>Top-up / Endorsement Available</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Foot and Mouth Disease (government slaughter order)</td><td>NB</td><td>Government compensation applies under Animal Health Act 1981 — removes primary risk from commercial market</td><td>Yes — top-up endorsement for shortfall between government valuation and market value</td></tr>
+      <tr><td>Avian Influenza (government slaughter order)</td><td>NB — poultry</td><td>Government compensation applies; DEFRA APHA compensation scheme is primary layer</td><td>Yes — epidemic extension top-up increasingly standard for commercial poultry</td></tr>
+      <tr><td>Elective slaughter / culling</td><td>NB &amp; NX</td><td>Non-loss event — insured choice to slaughter healthy animals (e.g. end of production life) is not a mortality loss</td><td>Not available</td></tr>
+      <tr><td>Pre-existing conditions / known illness</td><td>NB &amp; NX</td><td>Adverse selection — conditions known at inception not covered without specific disclosure and agreement</td><td>Specific endorsement available with rate loading for known conditions</td></tr>
+      <tr><td>Inherent vice / natural deterioration</td><td>NB &amp; NX</td><td>Normal productive lifespan decline not a loss event — milk yield decline, reproductive aging</td><td>Not available</td></tr>
+      <tr><td>Racing breakdown (fractures) — unless endorsed</td><td>NX</td><td>Some policies exclude racing accidents; most active racing policies include by endorsement</td><td>Standard for active racing policies — mortality from racing accidents covered as standard in most NX policies</td></tr>
+      <tr><td>Wilful neglect or failure to provide veterinary care</td><td>NB &amp; NX</td><td>Breach of duty of care under Animal Welfare Act 2006 — insurer's policy condition</td><td>Not available</td></tr>
+      <tr><td>Consequential loss / lost profits</td><td>NB &amp; NX</td><td>Policy covers mortality value of animal, not loss of production income or racing prize money</td><td>Separate agricultural BI cover available for production loss</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Disease exclusion warning -->
+  <div class="warn-box">
+    <strong>Warning — FMD / Avian Influenza Government Compensation Shortfall:</strong> The most common source of dispute in NB livestock claims is the gap between DEFRA/APHA government compensation and the insured's actual market value for culled animals. Government valuations are typically based on "market value at time of slaughter order" — which may reflect a depressed market caused by the very outbreak that triggered the slaughter. Commercial insurance top-up cover must be explicitly endorsed, with agreed basis of valuation clearly defined (independent market value vs government valuation). Underwriters should confirm the valuation methodology in the policy schedule.<sup>[I1]</sup>
+  </div>
+
+  <!-- Info box -->
+  <div class="info-box">
+    <strong>NX Bloodstock — Agreed Value Basis:</strong> Unlike most property insurance (which operates on an indemnity / market value basis), NX bloodstock policies are written on an <strong>agreed value basis</strong> — the value stated in the schedule is the sum payable in full on death or confirmed permanent infertility. This reflects the difficulty of objectively valuing a thoroughbred racehorse after death — there is no established second-hand market for dead racehorses. The agreed value must be supported by veterinary examination, sale records, or professional valuation from a recognised bloodstock agent. For values above £1m, Lloyd's underwriters typically require a formal bloodstock agent's valuation letter at inception.<sup>[I6]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Livestock &amp; Bloodstock (NB / NX) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="rates-analysis.html">Next: Rates &amp; ROE →</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Nuclear (NP / NL / NV) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a4a00;
+      --hub-dark:      #252500;
+      --hub-light:     #f9f9e8;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#252500 0%,#4a4a00 55%,#6b6b00 100%);
+      --header-sub:    #e6e682;
+      --hub-mid:       #e8e8c0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1e1e0a;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#252500;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    .filter-bar label{font-size:0.78rem;font-weight:700;color:#444;}
+    .filter-btn{padding:6px 14px;border:2px solid #ddd;border-radius:20px;font-size:0.78rem;font-weight:600;cursor:pointer;background:#fff;transition:all 0.15s;}
+    .filter-btn:hover,.filter-btn.active{background:var(--hub-primary);color:#fff;border-color:var(--hub-primary);}
+    .filter-btn[data-type="incident"].active{background:#c62828;border-color:#c62828;}
+    .filter-btn[data-type="regulatory"].active{background:#1565c0;border-color:#1565c0;}
+    .filter-btn[data-type="market"].active{background:#6a1b9a;border-color:#6a1b9a;}
+    .filter-btn[data-type="newbuild"].active{background:#2e7d32;border-color:#2e7d32;}
+    .filter-btn[data-type="policy"].active{background:#e65100;border-color:#e65100;}
+    .filter-btn[data-type="legal"].active{background:#00695c;border-color:#00695c;}
+    .timeline{position:relative;padding-left:40px;}
+    .timeline::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:3px;background:var(--hub-mid);}
+    .tl-item{position:relative;margin-bottom:22px;background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-item::before{content:'';position:absolute;left:-32px;top:20px;width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--hub-primary);}
+    .tl-item.incident::before{box-shadow:0 0 0 2px #c62828;background:#c62828;}
+    .tl-item.regulatory::before{box-shadow:0 0 0 2px #1565c0;background:#1565c0;}
+    .tl-item.market::before{box-shadow:0 0 0 2px #6a1b9a;background:#6a1b9a;}
+    .tl-item.newbuild::before{box-shadow:0 0 0 2px #2e7d32;background:#2e7d32;}
+    .tl-item.policy::before{box-shadow:0 0 0 2px #e65100;background:#e65100;}
+    .tl-item.legal::before{box-shadow:0 0 0 2px #00695c;background:#00695c;}
+    .tl-item .tl-year{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .tl-item h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-item p{font-size:0.83rem;color:#444;line-height:1.5;}
+    .type-tag{display:inline-block;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+    .tt-incident{background:#fde8e8;color:#c62828;}
+    .tt-regulatory{background:#e3f2fd;color:#1565c0;}
+    .tt-market{background:#f3e5f5;color:#6a1b9a;}
+    .tt-newbuild{background:#e8f5e9;color:#2e7d32;}
+    .tt-policy{background:#fff3e0;color:#e65100;}
+    .tt-legal{background:#e0f2f1;color:#00695c;}
+    .legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#444;}
+    .legend-dot{width:10px;height:10px;border-radius:50%;}
+    footer{background:#252500;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Nuclear (NP/NL/NV)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key nuclear events 1956–2024 — incidents, conventions, market developments and new build</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+
+  <div class="filter-bar">
+    <label>Show:</label>
+    <button class="filter-btn active" data-type="all" onclick="filterTL(this,'all')">All Events</button>
+    <button class="filter-btn" data-type="incident" onclick="filterTL(this,'incident')">Incident / Accident</button>
+    <button class="filter-btn" data-type="regulatory" onclick="filterTL(this,'regulatory')">Regulatory / Convention</button>
+    <button class="filter-btn" data-type="market" onclick="filterTL(this,'market')">Market Structural</button>
+    <button class="filter-btn" data-type="newbuild" onclick="filterTL(this,'newbuild')">New Build / Technology</button>
+    <button class="filter-btn" data-type="policy" onclick="filterTL(this,'policy')">Government Policy</button>
+    <button class="filter-btn" data-type="legal" onclick="filterTL(this,'legal')">Liability / Legal</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#c62828;"></div>Incident / Accident</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1565c0;"></div>Regulatory / Convention</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6a1b9a;"></div>Market Structural</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2e7d32;"></div>New Build / Technology</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100;"></div>Government Policy</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00695c;"></div>Liability / Legal</div>
+  </div>
+
+  <div class="timeline" id="timeline">
+
+    <div class="tl-item newbuild" data-type="newbuild">
+      <div class="tl-year">1956</div>
+      <h3>Calder Hall — World's First Commercial Nuclear Power Station <span class="type-tag tt-newbuild">New Build</span></h3>
+      <p>The UK's Calder Hall (Sellafield, Cumbria) opens as the world's first commercial nuclear power station to supply electricity to a national grid. Magnox design; 200MW output. Launches the civilian nuclear era and immediately raises the question of nuclear insurance. <sup>[I1]</sup></p>
+    </div>
+
+    <div class="tl-item legal" data-type="legal">
+      <div class="tl-year">1957</div>
+      <h3>Price-Anderson Nuclear Industries Indemnity Act — USA <span class="type-tag tt-legal">Legal</span></h3>
+      <p>US Congress enacts Price-Anderson, capping nuclear operator liability at $60m (later increased to $450m post-2005) with an industry pooling mechanism and government indemnity backstop. The template for national nuclear liability frameworks globally. <sup>[L5]</sup></p>
+    </div>
+
+    <div class="tl-item incident" data-type="incident">
+      <div class="tl-year">1957</div>
+      <h3>Windscale Fire — UK (INES Level 5) <span class="type-tag tt-incident">Incident</span></h3>
+      <p>Fire in the Windscale Pile 1 (military plutonium production reactor, UK) releases radioactive contamination across the UK and parts of Europe. The most serious nuclear accident in UK history. The accident is initially suppressed; a declassified report is released in 1988. Prompts urgent redesign of UK reactor safety culture and independent regulation.</p>
+    </div>
+
+    <div class="tl-item incident" data-type="incident">
+      <div class="tl-year">1961</div>
+      <h3>SL-1 Accident — Idaho, USA (First Fatal US Reactor Accident) <span class="type-tag tt-incident">Incident</span></h3>
+      <p>Steam explosion at the SL-1 experimental reactor (Idaho National Laboratory) kills 3 operators — the first fatal nuclear reactor accident in US history. The cause: manual withdrawal of a control rod during maintenance. Leads to fundamental improvements in reactor safety procedures and interlocking systems.</p>
+    </div>
+
+    <div class="tl-item regulatory" data-type="regulatory">
+      <div class="tl-year">1960</div>
+      <h3>Paris Convention on Third Party Liability in Nuclear Energy <span class="type-tag tt-regulatory">Convention</span></h3>
+      <p>OECD Nuclear Energy Agency convention establishes Western European nuclear liability framework: strict liability on operators, channelling of liability to operators only, limited compensation, and mandatory insurance. Still the primary liability framework for France, UK, Germany and other Western European states. <sup>[L1]</sup></p>
+    </div>
+
+    <div class="tl-item regulatory" data-type="regulatory">
+      <div class="tl-year">1963</div>
+      <h3>Vienna Convention on Civil Liability for Nuclear Damage — IAEA <span class="type-tag tt-regulatory">Convention</span></h3>
+      <p>IAEA's Vienna Convention extends similar principles to non-Paris countries. Provides an alternative framework for developing countries and Eastern Europe. The 1997 Protocol to the Vienna Convention (Vienna Protocol) significantly increases liability limits and extends geographic coverage. <sup>[L3]</sup></p>
+    </div>
+
+    <div class="tl-item regulatory" data-type="regulatory">
+      <div class="tl-year">1963</div>
+      <h3>Brussels Supplementary Convention <span class="type-tag tt-regulatory">Convention</span></h3>
+      <p>Brussels Supplementary Convention 1963 adds a government-funded top-up layer above the operator's liability ceiling under the Paris Convention — recognising that private insurance alone cannot cover catastrophic scenarios. Signatory governments collectively provide additional compensation up to the Brussels ceiling. <sup>[L2]</sup></p>
+    </div>
+
+    <div class="tl-item legal" data-type="legal">
+      <div class="tl-year">1965</div>
+      <h3>Nuclear Installations Act 1965 (UK) <span class="type-tag tt-legal">Legal</span></h3>
+      <p>UK legislation giving domestic effect to the Paris/Brussels framework. Licenses nuclear operators, imposes strict liability for nuclear incidents, requires mandatory insurance through approved insurers, and establishes the Nuclear Installations Inspectorate (now ONR — Office for Nuclear Regulation). The cornerstone of UK nuclear law. <sup>[L4]</sup></p>
+    </div>
+
+    <div class="tl-item market" data-type="market">
+      <div class="tl-year">1968</div>
+      <h3>NRI — Nuclear Risk Insurers Pool Established (UK) <span class="type-tag tt-market">Market</span></h3>
+      <p>Nuclear Risk Insurers (NRI) established as the UK's national nuclear insurance pool, co-ordinating capacity from Lloyd's syndicates and company market participants. NRI becomes the approved insurer for all UK licensed nuclear sites. Lloyd's syndicates are founding members and remain core NRI participants. <sup>[I3]</sup></p>
+    </div>
+
+    <div class="tl-item incident" data-type="incident">
+      <div class="tl-year">1979</div>
+      <h3>Three Mile Island Accident — Pennsylvania, USA (INES Level 5) <span class="type-tag tt-incident">Incident</span></h3>
+      <p>Partial meltdown at TMI Unit 2 caused by cooling system failure and operator error. $150m insured property loss; no off-site fatalities. Public confidence in US nuclear power collapses. No new US nuclear reactor ordered for 30+ years. Triggers global nuclear safety review. <sup>[I7]</sup></p>
+    </div>
+
+    <div class="tl-item incident" data-type="incident">
+      <div class="tl-year">1986</div>
+      <h3>Chernobyl Disaster — USSR (INES Level 7) <span class="type-tag tt-incident">Incident</span></h3>
+      <p>Explosion and fire at RBMK-1000 reactor, Soviet Ukraine. 31 immediate deaths, 350,000 evacuated, $700bn+ total economic cost. Entirely uninsured — USSR not in convention system. Near-moratorium on new Western nuclear build. Defines the maximum credible nuclear loss scenario. <sup>[I7]</sup></p>
+    </div>
+
+    <div class="tl-item policy" data-type="policy">
+      <div class="tl-year">1989</div>
+      <h3>German Nuclear Phase-Out Begins — Political Response to Chernobyl <span class="type-tag tt-policy">Policy</span></h3>
+      <p>The German Green Party and social democratic parties begin the political campaign for nuclear exit following Chernobyl. The Atomausstieg (nuclear exit) legislation is eventually enacted in 2002 (Red-Green coalition), with reactors to close by 2022 — extended briefly and finally completed in April 2023. Removes Germany's large nuclear fleet from the European insurance market over time.</p>
+    </div>
+
+    <div class="tl-item incident" data-type="incident">
+      <div class="tl-year">1999</div>
+      <h3>Tokaimura Criticality Accident — Japan (INES Level 4) <span class="type-tag tt-incident">Incident</span></h3>
+      <p>Uranium processing plant criticality accident in Tokai-mura, Japan — 2 workers die from acute radiation syndrome, 667 people receive radiation doses. Caused by workers adding uranium solution to a precipitation tank using buckets, bypassing safety controls. Japan's worst nuclear accident prior to Fukushima.</p>
+    </div>
+
+    <div class="tl-item regulatory" data-type="regulatory">
+      <div class="tl-year">2004</div>
+      <h3>Paris Convention Protocol 2004 — Increased Liability Limits <span class="type-tag tt-regulatory">Convention</span></h3>
+      <p>The 2004 Protocol to the Paris Convention (not fully ratified by all signatories as of 2026) increases minimum operator liability to €700m, extends the definition of nuclear damage to include environmental and economic loss, and expands geographic scope of compensation. A significant modernisation of the 1960 framework. <sup>[L1]</sup></p>
+    </div>
+
+    <div class="tl-item incident" data-type="incident">
+      <div class="tl-year">2011</div>
+      <h3>Fukushima Daiichi Disaster — Japan (INES Level 7) <span class="type-tag tt-incident">Incident</span></h3>
+      <p>Tsunami-triggered station blackout causes meltdown at three reactors. 154,000 evacuated; $200bn total cost; ~$40bn insured est. Post-Fukushima: seismic/flood reassessment for all nuclear sites globally; Japan closes all reactors for review; Germany accelerates exit. <sup>[I7]</sup></p>
+    </div>
+
+    <div class="tl-item policy" data-type="policy">
+      <div class="tl-year">2013</div>
+      <h3>Japan Restarts Nuclear Safety Framework — NRA Established <span class="type-tag tt-policy">Policy</span></h3>
+      <p>Japan establishes the Nuclear Regulation Authority (NRA) with new, more stringent safety standards following Fukushima review. Gradual restart of Japanese reactors begins from 2015 under new NRA requirements including tsunami protection, filtered vented containment systems, and enhanced backup power.</p>
+    </div>
+
+    <div class="tl-item newbuild" data-type="newbuild">
+      <div class="tl-year">2016</div>
+      <h3>Hinkley Point C Investment Decision — UK (£25–33bn+) <span class="type-tag tt-newbuild">New Build</span></h3>
+      <p>UK government approves Final Investment Decision for Hinkley Point C (EDF, CGN) — two 1,630MW EPR reactors in Somerset. Budget has escalated from initial ~£18bn to £25–33bn+ by 2024. First new nuclear build in UK since Sizewell B (1995). First strike price contract-for-difference mechanism. New insurance programme required for construction phase. <sup>[I9]</sup></p>
+    </div>
+
+    <div class="tl-item market" data-type="market">
+      <div class="tl-year">2022</div>
+      <h3>Zaporizhzhia Nuclear Plant — Conflict Zone, War Exclusion Active <span class="type-tag tt-market">Market</span></h3>
+      <p>Russian military forces occupy and fire upon the Zaporizhzhia Nuclear Power Plant (Ukraine) — the largest nuclear plant in Europe (6 VVER reactors, 5,700MW). First time a large operating nuclear station has been in an active war zone. Standard nuclear insurance war exclusions apply. IAEA monitoring missions deployed. Unprecedented underwriting and geopolitical challenge. <sup>[I5]</sup></p>
+    </div>
+
+    <div class="tl-item newbuild" data-type="newbuild">
+      <div class="tl-year">2022</div>
+      <h3>NuScale SMR — First NRC Standard Design Approval (USA) <span class="type-tag tt-newbuild">New Build</span></h3>
+      <p>NuScale Power receives first NRC approval for a Small Modular Reactor design — a 77MW module (up to 12 per site). Milestone for the SMR industry, though subsequent project cost increases led NuScale's first US project to be cancelled in 2023. UK SMR competition (Rolls-Royce, GE-Hitachi, etc.) progresses in parallel.</p>
+    </div>
+
+    <div class="tl-item policy" data-type="policy">
+      <div class="tl-year">2023</div>
+      <h3>COP28 Nuclear Declaration — 22 Countries Pledge to Triple Nuclear by 2050 <span class="type-tag tt-policy">Policy</span></h3>
+      <p>At COP28 (Dubai), 22 nations including the USA, UK, France, Japan, Canada and South Korea sign a declaration to triple global nuclear power capacity by 2050 as part of net-zero strategies. The strongest multinational political endorsement of nuclear as a climate solution in decades — with major implications for future nuclear insurance capacity requirements. <sup>[I2]</sup></p>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Nuclear (NP / NL / NV) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filterTL(btn, type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tl-item').forEach(item => {
+    if (type === 'all' || item.dataset.type === type) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>

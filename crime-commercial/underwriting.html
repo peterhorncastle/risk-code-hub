@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Underwriting — Crime / Fidelity Commercial (BC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --bc:#1a5c2a; --bc-dark:#0b2e14; --bc-light:#edf7f0;
+      --bc-accent:#c8a84b; --bc-mid:#c8e6c9;
+      --hub-primary:#1a5c2a; --hub-dark:#0b2e14; --hub-light:#edf7f0;
+      --hub-accent:#c8a84b; --hub-secondary:#1565c0; --hub-secondary2:#6a1b9a;
+      --header-gradient:linear-gradient(135deg,#0b2e14 0%,#1a5c2a 55%,#2e7d32 100%);
+      --header-sub:#a5d6a7;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bc-light);color:#1e2e1e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#a5d6a7;margin-bottom:6px;}
+    .breadcrumb a{color:var(--bc-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--bc-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#0b2e14;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#a5d6a7;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--bc-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--bc-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--bc-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .factors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .factor{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--bc);}
+    .factor.high{border-left-color:#c62828;}
+    .factor.med{border-left-color:#e65100;}
+    .factor.low{border-left-color:#1a5c2a;}
+    .factor .impact{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--bc-accent);margin-bottom:4px;}
+    .factor h4{font-size:0.9rem;font-weight:700;color:var(--bc-dark);margin-bottom:6px;}
+    .factor p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .factor .rate{font-size:0.78rem;font-weight:700;color:#c62828;margin-top:6px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--bc-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #e8f5e9;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f1f8f2;}
+    .formula-box{background:#0b2e14;color:#a5d6a7;border-radius:8px;padding:20px 24px;font-family:monospace;font-size:0.88rem;line-height:1.8;margin-bottom:24px;}
+    .formula-box .comment{color:#4caf50;}
+    .worked{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px;border-top:4px solid var(--bc);}
+    .worked.alt{border-top-color:var(--bc-accent);}
+    .worked h3{font-size:1rem;font-weight:700;color:var(--bc-dark);margin-bottom:12px;}
+    .worked table{box-shadow:none;margin-bottom:0;}
+    .worked th{background:#1a5c2a;}
+    .info-box{background:#e8f5e9;border-left:4px solid var(--bc);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1b3a1b;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    footer{background:#0b2e14;color:#a5d6a7;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--bc-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Crime Commercial (BC)</a> › Underwriting</div>
+    <div class="tag">Module 04</div>
+    <h1>Underwriting Methodology</h1>
+    <div class="sub">Rating factors, loss benchmarks, worked examples &amp; key exclusions</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Rating factors -->
+  <div class="section-title">Rating Factors — High Impact</div>
+  <div class="factors-grid">
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Industry / Business Type</h4>
+      <p>The single most important rating factor. Retail, financial services and government entities face highest employee theft frequency. Manufacturing and professional services face high BEC severity. Construction faces high AP fraud and payroll ghost employee exposure.</p>
+      <div class="rate">Base rate loading: 0.6× (low-risk professional) to 3.0× (high-cash retail)</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Revenues / Employee Count</h4>
+      <p>Premium scales primarily with revenue (as a proxy for funds at risk and AP transaction volumes) and employee count (as a proxy for employee dishonesty frequency exposure). ACFE data confirms small businesses (&lt;100 employees) suffer proportionately higher losses. <sup>[I4]</sup></p>
+      <div class="rate">Base rate: £0.10–£0.35 per £1,000 revenue depending on class</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Internal Controls Quality</h4>
+      <p>Segregation of duties, dual authorisation for payments above threshold, independent bank reconciliations, mandatory annual leave, and IT access controls are the primary fraud deterrents. Absence of any of these materially increases expected loss frequency. SOX compliance (US public companies) is a strong positive indicator. <sup>[L3]</sup></p>
+      <div class="rate">Controls credit: −20 to −35% for best-in-class SOX/ISO 27001 environment</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Claims History (3–5 Year)</h4>
+      <p>Prior crime losses are the strongest predictor of future losses. Single large loss may reflect unusual circumstances; pattern of smaller losses indicates systemic control weakness. ACFE data shows organisations that have suffered fraud are more likely to suffer again within 2 years. <sup>[I4]</sup></p>
+      <div class="rate">Loading: +50% to +200% for adverse prior loss; credit: −10% for 5-year clean</div>
+    </div>
+  </div>
+
+  <div class="section-title">Rating Factors — Medium Impact</div>
+  <div class="factors-grid">
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Limit of Indemnity / Deductible</h4>
+      <p>Commercial crime limits range from £100k (SME) to £100m+ (multinational). Increased limit factors (ILFs) reflect the severity distribution of crime losses — the largest frauds are often at the tail. Deductibles of £25k–£250k are common for mid-market; they deter nuisance claims and reduce moral hazard.</p>
+      <div class="rate">ILF (£1m vs £250k): approx 1.8–2.2×; deductible £50k credit: −8 to −12%</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Social Engineering / BEC Sublimit</h4>
+      <p>Whether social engineering is covered within the policy limit or as a sublimit (typically £100k–£500k) significantly affects exposure. Full limit BEC cover is available for best-controlled risks; sublimits are standard for SME. AI-enabled deepfake coverage is an emerging negotiation point. <sup>[I7]</sup></p>
+      <div class="rate">Full-limit BEC endorsement: +15 to +30% additional premium</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Geographic Scope</h4>
+      <p>Worldwide cover increases exposure vs UK-only or US-only policies. High-risk jurisdictions (certain EM markets, countries with weak legal systems for recovery) attract surcharges. US exposure attracts ERISA bond compliance consideration. Multinational companies need master + local admitted structure consideration.</p>
+      <div class="rate">Loading: +15 to +40% for worldwide including high-risk jurisdictions</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Discovery Period / Extended Discovery</h4>
+      <p>Standard discovery period post-cancellation: 60–90 days. Extended discovery periods (180 days to 12 months) available at additional premium. Critical for M&amp;A situations (acquisition of entity with unreported ongoing fraud). Longer periods increase insurer's 'tail' exposure. <sup>[L2]</sup></p>
+      <div class="rate">180-day extended discovery: +5 to +10% of annual premium</div>
+    </div>
+  </div>
+
+  <div class="section-title">Rating Factors — Lower Impact</div>
+  <div class="factors-grid">
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>External Audit Quality</h4>
+      <p>Big Four / top-10 external auditors with strong fraud-risk procedures provide moderate assurance. However, auditors are not specifically tasked with detecting fraud, and several large frauds have passed undetected by major firms. Audit quality is a supportive but not determinative factor.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Whistleblower Programme</h4>
+      <p>ACFE reports that 42% of frauds are detected by tip. Anonymous hotlines and non-retaliation policies are among the most cost-effective fraud prevention measures. Their presence supports rate credit; their absence (particularly in large organisations) is a moderate negative indicator.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Background Screening</h4>
+      <p>Pre-employment background checks (criminal record, reference, financial credit) reduce the incidence of dishonest employees. Particularly relevant for roles with financial authority or cash/securities access. Not a standard underwriting requirement but cited as a positive control.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>IT Security / Cyber Controls</h4>
+      <p>Multi-factor authentication (MFA) on payment systems, email security (DMARC/SPF/DKIM), privileged access management and payment confirmation controls directly reduce BEC exposure. Strong IT security enables higher BEC sublimits or full-limit cover at competitive rates.</p>
+    </div>
+  </div>
+
+  <!-- Premium formula -->
+  <div class="section-title">Premium Rating Formula</div>
+  <div class="formula-box">
+    <span class="comment">// Commercial Crime BC — indicative rating formula</span><br>
+    Base Premium = Revenue (£000s) × Base Rate per £1,000 revenue<br><br>
+    Adjusted Premium = Base Premium<br>
+    &nbsp;&nbsp;× Industry Hazard Factor    <span class="comment">// 0.6× (low) → 3.0× (high-cash retail)</span><br>
+    &nbsp;&nbsp;× Employee Count Factor     <span class="comment">// scales with workforce size</span><br>
+    &nbsp;&nbsp;× Controls Loading          <span class="comment">// −35% (best-in-class) → +50% (weak)</span><br>
+    &nbsp;&nbsp;× Claims History Loading    <span class="comment">// −10% (5yr clean) → +200% (adverse)</span><br>
+    &nbsp;&nbsp;× Limit Factor (ILF)        <span class="comment">// scaled from base £250k limit</span><br>
+    &nbsp;&nbsp;× Deductible Credit         <span class="comment">// −8% to −20% depending on level</span><br>
+    &nbsp;&nbsp;× Geographic Scope Factor   <span class="comment">// 1.0× (UK only) → 1.4× (worldwide)</span><br>
+    &nbsp;&nbsp;+ BEC/SE Endorsement        <span class="comment">// +15–30% if full-limit social engineering</span>
+  </div>
+
+  <!-- Loss benchmarks -->
+  <div class="section-title">Loss Ratio Benchmarks by Segment<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Segment</th><th>Primary Peril</th><th>Gross Loss Ratio</th><th>Avg Claim ($)</th><th>Avg Duration to Detection</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>SME Retail (&lt;£10m rev)</td><td>Employee dishonesty / cash</td><td>45–65%</td><td>£50–150k</td><td>12–18 months</td></tr>
+      <tr><td>Mid-market Corporate</td><td>Employee dishonesty / BEC</td><td>35–55%</td><td>£200–500k</td><td>14–24 months</td></tr>
+      <tr><td>Large Corporate (&gt;£500m rev)</td><td>BEC / AP fraud / EFT</td><td>30–50%</td><td>£1–20m</td><td>6–18 months (SOX)</td></tr>
+      <tr><td>Manufacturing</td><td>AP vendor fraud / payroll</td><td>40–60%</td><td>£150–800k</td><td>18–30 months</td></tr>
+      <tr><td>Professional Services</td><td>BEC / employee dishonesty</td><td>35–55%</td><td>£100–2m</td><td>10–20 months</td></tr>
+      <tr><td>Government / Public Sector</td><td>Payroll fraud / EFT</td><td>50–70%</td><td>£100–500k</td><td>24–36 months</td></tr>
+      <tr><td>Healthcare</td><td>Billing fraud / AP diversion</td><td>55–75%</td><td>£75–400k</td><td>18–36 months</td></tr>
+      <tr><td>Non-Profit / Charity</td><td>Employee dishonesty / cash</td><td>60–80%</td><td>£30–200k</td><td>24–48 months</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Worked Example A -->
+  <div class="worked">
+    <h3>Worked Example A — Mid-Market UK Retailer (Controls: Adequate)</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td>£85m annual turnover, 650 employees</td><td>£85m</td></tr>
+        <tr><td>Base Premium</td><td>£85,000k × £0.18/£1k = industry hazard factor 1.4×</td><td>£21,420</td></tr>
+        <tr><td>Controls Loading</td><td>Dual payment auth >£10k; annual leave; no MFA on payments — moderate</td><td>+15% = £3,213</td></tr>
+        <tr><td>Claims Loading</td><td>One claim £45k in 3 years — moderate adverse</td><td>+30% = £7,389</td></tr>
+        <tr><td>Limit Factor</td><td>£1m limit (ILF 1.85× base £250k)</td><td>×1.85</td></tr>
+        <tr><td>Deductible Credit</td><td>£25k deductible</td><td>−8% = −(£2,958)</td></tr>
+        <tr><td>SE Endorsement</td><td>Social engineering sublimit £250k included</td><td>+£3,500</td></tr>
+        <tr><td><strong>Indicative GWP</strong></td><td>—</td><td><strong>~£58,500</strong></td></tr>
+        <tr><td>Assumed Gross LR</td><td>Mid-market retail benchmark</td><td>52%</td></tr>
+        <tr><td>Claims Estimate</td><td>£58,500 × 52%</td><td>£30,420</td></tr>
+        <tr><td>Commission (25%)</td><td>—</td><td>£14,625</td></tr>
+        <tr><td>Expenses (12%)</td><td>—</td><td>£7,020</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>£6,435 (11.0% margin)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Worked Example B -->
+  <div class="worked alt">
+    <h3>Worked Example B — Global Manufacturer (BEC Focus; High Limit)</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td>£450m global revenue; 2,800 employees; 12 countries</td><td>£450m</td></tr>
+        <tr><td>Base Premium</td><td>£450,000k × £0.12/£1k = industry hazard factor 1.3×</td><td>£70,200</td></tr>
+        <tr><td>Controls Loading</td><td>SOX-equivalent controls; MFA on ERP; DMARC email security — strong</td><td>−20% = −£14,040</td></tr>
+        <tr><td>Claims Loading</td><td>5-year clean</td><td>−10% = −£5,616</td></tr>
+        <tr><td>Limit Factor</td><td>£5m limit (ILF 2.8× base £250k)</td><td>×2.8</td></tr>
+        <tr><td>Geographic Scope</td><td>Worldwide including EM</td><td>+30% = £21,060</td></tr>
+        <tr><td>Full-limit BEC</td><td>Social engineering at full £5m limit</td><td>+25% = £17,550</td></tr>
+        <tr><td>Deductible Credit</td><td>£100k deductible</td><td>−15% = −£10,530</td></tr>
+        <tr><td><strong>Indicative GWP</strong></td><td>—</td><td><strong>~£242,000</strong></td></tr>
+        <tr><td>Assumed Gross LR</td><td>Large corporate manufacturing benchmark (strong controls)</td><td>38%</td></tr>
+        <tr><td>Claims Estimate</td><td>£242k × 38%</td><td>£91,960</td></tr>
+        <tr><td>Commission (22%)</td><td>—</td><td>£53,240</td></tr>
+        <tr><td>Expenses (10%)</td><td>—</td><td>£24,200</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>£72,600 (30.0% margin)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Key exclusions -->
+  <div class="section-title">Key Exclusions</div>
+  <table>
+    <thead>
+      <tr><th>Exclusion</th><th>Rationale</th><th>Potential Endorsement</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Inventory shortages / accounting errors</td><td>Theft vs unexplained loss distinction; moral hazard</td><td>Sometimes endorsed with evidence of dishonesty</td></tr>
+      <tr><td>Trading losses / market risk</td><td>Crime policy not a financial performance guarantee</td><td>Not available</td></tr>
+      <tr><td>Cyber / data breach losses</td><td>Interface with standalone cyber policy</td><td>Cyber crime endorsement available (coordinate with cyber)</td></tr>
+      <tr><td>War / government action</td><td>Standard exclusion</td><td>Not available</td></tr>
+      <tr><td>Known circumstances at inception</td><td>Adverse selection / moral hazard</td><td>Not available</td></tr>
+      <tr><td>Indirect / consequential loss</td><td>Business interruption from crime not covered</td><td>BI from crime available as separate cover</td></tr>
+      <tr><td>Acts of officers/directors (above bond)</td><td>Standard exclusion; CEO-level fraud often excluded</td><td>"Above-the-bond" D&O cover required for full protection</td></tr>
+      <tr><td>Voluntary parting (customer-directed)</td><td>Covers dishonest acts by employees — not policyholder decisions</td><td>Social engineering endorsement bridges this gap for BEC</td></tr>
+    </tbody>
+  </table>
+
+  <!-- BEC warn -->
+  <div class="warn-box">
+    <strong>⚠ BEC / Social Engineering Coverage Gap:</strong> The "voluntary parting" exclusion can bar BEC claims under standard commercial crime wordings — the employee's voluntary transfer of funds at the direction of a fraudster may be characterised as the insured's own authorised act. A dedicated <strong>social engineering endorsement</strong> (or standalone FTF cover) is essential to close this gap. Ensure policy wording uses "at the direction of a person impersonating" language to bridge the voluntary parting exclusion. Review after the Medidata/Apache circuit split. <sup>[I6]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Crime / Fidelity Commercial (BC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="rates-analysis.html">Next: Rates &amp; ROE →</a></p>
+</footer>
+
+</body>
+</html>

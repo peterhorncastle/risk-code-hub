@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Global Programme — Workers Compensation International (W4) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #00575c;
+      --hub-dark:      #002c30;
+      --hub-light:     #e0f4f5;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#7b5e00;
+      --header-gradient:linear-gradient(135deg,#002c30 0%,#00575c 55%,#00838f 100%);
+      --header-sub:    #80deea;
+      --hub-mid:       #b2ebf2;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2e30;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#80deea;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#002c30;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#80deea;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .tower{background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .tower h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    .layer{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .layer-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;color:#fff;flex-shrink:0;}
+    .layer-bar{flex:1;border-radius:6px;padding:10px 14px;}
+    .layer-bar strong{display:block;font-size:0.88rem;margin-bottom:2px;}
+    .layer-bar p{font-size:0.78rem;opacity:0.85;line-height:1.4;}
+    .l1{background:#002c30;} .l2{background:#00575c;} .l3{background:#c62828;}
+    .l4{background:#1a237e;} .l5{background:#e65100;} .l6{background:#c8a84b;color:#333!important;}
+    .l6 p{color:#333!important;}
+    .jur-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px;}
+    .jur-card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .jur-card.dba{border-left-color:#c62828;}
+    .jur-card.local{border-left-color:#1a237e;}
+    .jur-card.conflict{border-left-color:#e65100;}
+    .jur-card .jur-tag{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:6px;}
+    .jur-card h4{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .jur-card p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .jur-card .jur-detail{font-size:0.78rem;color:#00575c;font-weight:600;margin-top:8px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #e0f4f5;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f0fbfc;}
+    .case-study{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;border-top:4px solid var(--hub-accent);}
+    .case-study h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .case-study table{box-shadow:none;margin-bottom:0;}
+    .case-study th{background:#00575c;}
+    .info-box{background:#e0f4f5;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#002c30;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    footer{background:#002c30;color:#80deea;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Workers Comp International (W4)</a> › Global Programme</div>
+    <div class="tag">Module 07</div>
+    <h1>Global Programme Structure</h1>
+    <div class="sub">Multinational WC tower, fronting requirements by region, jurisdiction profiles &amp; UK oil services case study</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Programme tower -->
+  <div class="section-title">International WC / EL Multinational Programme — 6-Layer Tower</div>
+  <div class="tower">
+    <h3>Illustrative W4 Programme Tower — Top-Down View (highest priority layer first)</h3>
+    <div class="layer">
+      <div class="layer-num l1">1</div>
+      <div class="layer-bar l1" style="color:#fff;">
+        <strong>XL Aggregate Reinsurance</strong>
+        <p>Catastrophe excess of loss and aggregate stop-loss protecting the Lloyd's W4 portfolio against accumulation of Zone D/E losses. WHCA backstop provides supplementary government indemnification for war hazard injuries on DBA contracts. Typically arranged at syndicate level rather than per-programme.</p>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-num l2">2</div>
+      <div class="layer-bar l2" style="color:#fff;">
+        <strong>Lloyd's Excess EL — Master Policy</strong>
+        <p>Lloyd's W4 master policy providing excess employers liability (common law civil suits) above statutory WC benefits. Typically USD 5m–25m any one occurrence; worldwide coverage. Responds for expat and TCN workers across all territories. Central master policy issued from Lloyd's London; local admitted policies issued separately where required.</p>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-num l3">3</div>
+      <div class="layer-bar l3" style="color:#fff;">
+        <strong>Defence Base Act (DBA) — US Government Contract Requirement</strong>
+        <p>Mandatory statutory WC cover for US government contractors. Must be placed with a DBA-authorised carrier; most Lloyd's DBA paper placed through US domestics (AIG, Zurich, Chubb) with Lloyd's taking reinsurance. LHWCA benefit schedule applies. DOL/OWCP administers. WHCA backstop for war hazard injuries. Form LS-202 filing within 10 days. <sup>[L1]</sup></p>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-num l4">4</div>
+      <div class="layer-bar l4" style="color:#fff;">
+        <strong>Local Admitted WC — Host Country Statutory</strong>
+        <p>Locally admitted workers compensation policies in jurisdictions that require them (UAE, Saudi Arabia, Brazil, France, etc.). Issued by locally licensed insurer; reinsured (often 100%) to Lloyd's master programme. Fronting insurer issues the statutory policy certificate required for local regulatory compliance. Fronting fee: 2–8% of ceded premium. <sup>[L5]</sup></p>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-num l5">5</div>
+      <div class="layer-bar l5" style="color:#fff;">
+        <strong>War / Hostile Environment Endorsement</strong>
+        <p>Endorsement extending the master W4 policy to cover injuries, death and disability arising from war, hostile acts, terrorism, civil commotion and kidnap in designated Zone D/E territories. Subject to aggregate event limit and per-territory sublimits. War risk endorsement is a requirement for any Zone D/E deployment — standard WC policy excludes war. <sup>[L3]</sup></p>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-num l6">6</div>
+      <div class="layer-bar l6">
+        <strong>Self-Insured Retention (SIR)</strong>
+        <p>Employer's self-insured retention for attritional WC/EL losses below the insurance layer. Typical SIR: USD 50,000–$500,000 per occurrence for mid-to-large multinationals. SIR management requires internal claims administration capability for routine minor injuries and occupational health matters. SIR adequacy is reviewed at programme inception and renewal.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fronting requirement table -->
+  <div class="section-title">Fronting Requirement Analysis by Region</div>
+  <table>
+    <thead>
+      <tr><th>Region / Territory</th><th>Admitted Requirement</th><th>Fronting Approach</th><th>Lloyd's Acceptance</th><th>LOC Required</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>European Union</td><td>Most EU states require locally admitted WC/EL (statutory class)</td><td>EU admitted insurer fronts; 100% reinsured to Lloyd's master</td><td>Yes — via EU admitted fronter (e.g. XL Catlin, AXA, Zurich European entities)</td><td>Sometimes — depends on fronter credit requirements</td></tr>
+      <tr><td>UAE / Saudi Arabia (GCC)</td><td>Required — local WC/EL must be placed with UAE/Saudi licensed insurer</td><td>DIEDC (UAE) or Saudi admitted insurer fronts; 100% reinsured to Lloyd's</td><td>Yes — via local fronter; Letters of Credit typically required</td><td>Yes — LOC typically 25–50% of estimated annual premium</td></tr>
+      <tr><td>USA — DBA Contracts</td><td>DBA requires DOL-authorised carrier; W5/W6 for US domestic employees</td><td>US domestic carrier issues DBA policy; Lloyd's takes 100% reinsurance</td><td>Yes — Lloyd's is major DBA reinsurer behind US domestics</td><td>US statutory deposit requirements apply</td></tr>
+      <tr><td>Africa — Sub-Saharan</td><td>Most SSA states require locally admitted WC; some accept Lloyd's overseas policy on referral</td><td>Local admitted insurer fronts where required; Lloyd's overseas policy where accepted</td><td>Variable — Nigeria (NAICOM referral), Ghana, Kenya may accept Lloyd's direct</td><td>Varies by jurisdiction</td></tr>
+      <tr><td>Conflict Zones (Iraq, Afghanistan, Libya)</td><td>No viable local admitted market in most active conflict zones</td><td>Lloyd's direct W4 policy is often the only practical option</td><td>Yes — Lloyd's direct is standard for conflict zone W4</td><td>No — Lloyd's direct paper; WHCA backstop for DBA war hazard</td></tr>
+      <tr><td>Latin America (Brazil, Colombia)</td><td>Brazil requires locally admitted WC; Colombia and others vary</td><td>Brazilian insurer fronts; reinsured to Lloyd's. Colombia — Lloyd's often accepted on referral</td><td>Yes — with local fronter for Brazil; direct for some others</td><td>Yes — Brazil requires significant reserves / LOC</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Jurisdiction profiles -->
+  <div class="section-title">Jurisdiction Profiles — 6 Key Territories</div>
+  <div class="jur-grid">
+    <div class="jur-card">
+      <div class="jur-tag">Zone A–B</div>
+      <h4>United Kingdom — W3 Domestic + W4 for Expats</h4>
+      <p>UK domestic EL for UK-based employees is covered under W3 (Employers Liability (Compulsory Insurance) Act 1969). W4 applies to UK-domiciled employers whose employees work outside the UK. UK EL Act has limited extraterritorial scope; UK employees working temporarily overseas retain UK EL Act protection. Lloyd's W4 master policy supplements UK statutory EL for overseas deployments. <sup>[L4]</sup></p>
+      <div class="jur-detail">Fronting: Not required for Lloyd's W4 for overseas-deployed UK employees. UK EL Act policy required for UK-based workers.</div>
+    </div>
+    <div class="jur-card dba">
+      <div class="jur-tag">Zone E — War Zone</div>
+      <h4>Iraq / Afghanistan — DBA Required, War Risk Extension Mandatory</h4>
+      <p>All workers on US government contracts in Iraq and Afghanistan require DBA coverage — mandatory per 42 U.S.C. § 1651. War risk extension is mandatory; WHCA backstop reduces commercial war hazard exposure. DOL/OWCP Form LS-202 must be filed within 10 days of injury. TCN benefit calculations require specialist DBA claims management. No viable local admitted WC market in active conflict zones — Lloyd's direct or US domestic DBA carrier. <sup>[L1]</sup></p>
+      <div class="jur-detail">Fronting: Not applicable — Lloyd's direct or US DBA carrier. WHCA backstop for war hazard deaths essential.</div>
+    </div>
+    <div class="jur-card local">
+      <div class="jur-tag">Zone B — GCC</div>
+      <h4>UAE — Local Admitted Required; DIEDC Fronting</h4>
+      <p>UAE Federal Law No. 8 of 1980 and subsequent labour legislation require employers to maintain local WC cover. UAE Insurance Authority requires locally licensed insurers. Lloyd's W4 is placed through a DIEDC (Dubai International Financial Centre) admitted insurer or an onshore UAE insurer fronting the risk, with 100% reinsurance to Lloyd's. Letters of Credit (typically 25–50% of annual premium) are required by the fronting insurer. <sup>[L5]</sup></p>
+      <div class="jur-detail">Fronting: Mandatory. DIEDC fronter or UAE-licensed insurer. LOC required. Fronting fee: 3–6% of ceded premium.</div>
+    </div>
+    <div class="jur-card local">
+      <div class="jur-tag">Zone C</div>
+      <h4>Nigeria — NAICOM Admits Lloyd's on Referral; NLNG/Shell Precedents</h4>
+      <p>Nigeria's National Insurance Commission (NAICOM) generally requires local WC placement with NAICOM-licensed insurers (Workmen's Compensation Act / Employees Compensation Act 2010). However, Lloyd's has been admitted on referral for large multinational programmes (Shell NLNG precedent) where local market capacity is insufficient. Nigerian ECA 2010 benefits are materially lower than Lloyd's W4 scope — gap cover is a key added value. <sup>[L7]</sup></p>
+      <div class="jur-detail">Fronting: Often required — NAICOM-licensed fronter. Lloyd's admitted on referral for large accounts. LOC situation varies.</div>
+    </div>
+    <div class="jur-card conflict">
+      <div class="jur-tag">Zone E — War Zone</div>
+      <h4>Ukraine — Conflict Zone W4 Direct; War Exclusion Carve-Out Required</h4>
+      <p>Ukraine's conflict status since 2022 has made Lloyd's W4 direct paper the standard approach — no viable local admitted market for war risk WC. War exclusion carve-out is required in the W4 policy to restore coverage for injury or death arising from the Russian-Ukrainian conflict. Territorial definitions require careful drafting to distinguish between occupied and non-occupied territories. Reconstruction contractors entering Ukraine from 2023 onwards require bespoke Zone E underwriting. <sup>[I9]</sup></p>
+      <div class="jur-detail">Fronting: Not applicable — Lloyd's direct W4. War carve-out endorsement mandatory. Aggregate Zone E sublimit required.</div>
+    </div>
+    <div class="jur-card local">
+      <div class="jur-tag">Zone B</div>
+      <h4>Philippines — OFW System; POEA Compulsory Insurance; Separate Structure</h4>
+      <p>Philippine Overseas Employment Administration (POEA) mandates compulsory insurance for all Overseas Filipino Workers (OFWs) under the POEA Standard Employment Contract. The compulsory POEA insurance (minimum P100,000 death benefit) is separate from and in addition to any W4 cover under the overseas employer's programme. Large Philippine TCN employers use a layered structure: POEA compulsory base + employer W4 supplement. <sup>[L6]</sup></p>
+      <div class="jur-detail">Structure: POEA compulsory base (mandatory) + W4 supplement via employer's international programme. Two separate policies required.</div>
+    </div>
+  </div>
+
+  <!-- Case study -->
+  <div class="case-study">
+    <h3>Case Study: UK Oil Services Company — 600 Employees, Multi-Jurisdictional W4 Programme Restructure</h3>
+    <p style="font-size:0.85rem;color:#444;margin-bottom:16px;line-height:1.5;">A UK-headquartered oil services company with 600 employees across 5 countries had been operating with fragmented local WC/EL policies arranged independently in each jurisdiction — no consolidated Lloyd's master programme. Programme review revealed significant coverage gaps, compliance failures, and premium inefficiency. The restructure consolidated to a Lloyd's W4 master with local admitted fronting where required.</p>
+    <table>
+      <thead><tr><th>Territory</th><th>Employee Count</th><th>Zone</th><th>Previous Structure</th><th>Restructured Approach</th><th>Key Issues Resolved</th></tr></thead>
+      <tbody>
+        <tr><td>UK (HQ)</td><td>200</td><td>A</td><td>W3 EL policy (correct)</td><td>W3 EL retained; W4 master coordinates expat departures</td><td>EL Act compliance confirmed; expat departure protocol added</td></tr>
+        <tr><td>UAE (Dubai)</td><td>150</td><td>B</td><td>Local UAE WC policy — no Lloyd's master</td><td>DIEDC fronter + 100% Lloyd's reinsurance master</td><td>LOC arranged; excess EL layer added (previously gap); fronting fee agreed 4%</td></tr>
+        <tr><td>Nigeria (Lagos + Delta)</td><td>150</td><td>C–D</td><td>Local NAICOM insurer — low limits; no war risk</td><td>NAICOM fronter + Lloyd's W4 master; war risk extension added for Delta operations</td><td>Limit increased from ₦50m to USD 5m; war risk gap closed for Niger Delta operations</td></tr>
+        <tr><td>Iraq (Kurdistan/Baghdad)</td><td>100</td><td>E</td><td>No WC insurance — assumed US DBA but no USG contract</td><td>Lloyd's direct W4; war risk extension; medevac SLA (Healix); Zone E rate applied</td><td>Critical uninsured gap closed; HEAT training implemented; check-in protocol established</td></tr>
+        <tr><td>Various others</td><td>Various</td><td>Mixed</td><td>Uncoordinated spot covers</td><td>Lloyd's W4 master covers all remaining territories</td><td>Single point of claims notification; consolidated premium accounting</td></tr>
+        <tr><td><strong>Programme GWP</strong></td><td><strong>600 total</strong></td><td>—</td><td>Fragmented local: £280k (incomplete)</td><td>Consolidated Lloyd's W4 master: £420k (comprehensive)</td><td>Net benefit: £140k additional premium but all coverage gaps closed; potential uninsured loss eliminated</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DBA DOL note -->
+  <div class="warn-box">
+    <strong>US Department of Labor — DBA Filing Requirements Summary:</strong>
+    <br><br>
+    <strong>Form LS-202 (Employer's First Report of Injury or Occupational Illness):</strong> Must be filed by the employer with DOL/OWCP within <strong>10 days of knowledge</strong> of a work-related injury or occupational disease under DBA. Filed electronically via DOL's OWCP Data Interchange or by mail to the applicable OWCP district office.
+    <br><br>
+    <strong>Penalty for late filing:</strong> Up to $37,000 per violation (adjusted periodically for inflation under the Federal Civil Penalties Inflation Adjustment Act).
+    <br><br>
+    <strong>Form LS-203 (Employee's Claim for Compensation):</strong> Filed by the injured worker within 1 year of injury (2 years for occupational disease) to preserve DBA rights.
+    <br><br>
+    <strong>WHCA Reimbursement Claim:</strong> Filed by the DBA carrier following payment of a war hazard claim — government reimburses. Separate from the LS-202 process; filed with DOL OWCP Division of Federal Employees' Compensation (DFEC). <sup>[L9]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation International (W4) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Next: References →</a></p>
+</footer>
+
+</body>
+</html>

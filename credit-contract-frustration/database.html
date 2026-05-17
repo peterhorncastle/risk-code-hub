@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Credit & Contract Frustration — Loss Database | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:    #1a4a7a;
+      --hub-dark:       #0d2b4a;
+      --hub-light:      #e8f0f8;
+      --hub-accent:     #c8a84b;
+      --hub-secondary:  #c0392b;
+      --hub-secondary2: #2e7d32;
+      --header-gradient: linear-gradient(135deg,#0d2b4a 0%,#1a4a7a 50%,#2a5a8a 100%);
+      --header-sub:     #9ab8d8;
+    }
+    .filter-bar { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 10px; }
+    .filter-bar button { padding:5px 13px; border:2px solid var(--border); border-radius:20px; background:#fff; font-size:0.77rem; font-weight:600; cursor:pointer; }
+    .filter-bar button.active, .filter-bar button:hover { border-color:var(--hub-primary); background:var(--hub-light); }
+    .db-table { width:100%; border-collapse:collapse; font-size:0.81rem; margin:10px 0; }
+    .db-table th { background:var(--hub-dark); color:#fff; padding:9px 10px; text-align:left; font-weight:600; cursor:pointer; user-select:none; white-space:nowrap; }
+    .db-table th:hover { background:#1a3d5a; }
+    .db-table td { padding:7px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .db-table tr.main-row:nth-child(even) td { background:#f5f8fc; }
+    .db-table tr.main-row:hover td { background:var(--hub-light); cursor:pointer; }
+    .type-badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:2px 7px; border-radius:4px; white-space:nowrap; }
+    .tp-default { background:#e3eef8; color:#1a4a7a; }
+    .tp-sov     { background:#fdecea; color:#c0392b; }
+    .tp-cf      { background:#fff3e0; color:#e65100; }
+    .tp-fin     { background:#e0f2f1; color:#00695c; }
+    .tp-reg     { background:#e8f5e9; color:#2e7d32; }
+    .sv-cat { font-size:0.70rem; font-weight:700; }
+    .sv-cat1 { color:#8b0000; }
+    .sv-cat2 { color:#c0392b; }
+    .sv-cat3 { color:#c8a84b; }
+    .sv-cat4 { color:#2e7d32; }
+    .detail-row { display:none; background:#f9fbfd !important; }
+    .detail-row td { padding:10px 16px 14px; font-size:0.80rem; color:#333; line-height:1.6; border-bottom:2px solid var(--hub-primary); }
+    .detail-row.open { display:table-row; }
+    .expand-btn { float:right; font-size:0.72rem; color:var(--hub-primary); font-weight:700; border:1px solid var(--hub-primary); border-radius:4px; padding:1px 6px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Credit &amp; Contract Frustration (CR/CF/WT)</a> › Loss Database</div>
+  <div class="tag">Module 03 — Loss Database</div>
+  <h1>Credit &amp; Contract Frustration — Loss Database</h1>
+  <p>35 notable credit insurance loss events from 1982 to 2024 — buyer defaults, sovereign crises, contract frustration, and systemic credit events. Click any row to expand detail.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="filter-bar">
+    <button class="active" onclick="applyFilters('ALL','ALL',this)">All Events</button>
+    <button onclick="applyFilters('DEFAULT','ALL',this)">Buyer Default</button>
+    <button onclick="applyFilters('SOV','ALL',this)">Sovereign</button>
+    <button onclick="applyFilters('CF','ALL',this)">Contract Frustration</button>
+    <button onclick="applyFilters('FIN','ALL',this)">Fintech / Finance</button>
+    <button onclick="applyFilters('REG','ALL',this)">Regulation</button>
+    &nbsp;|&nbsp;
+    <button onclick="applyFilters('ALL','Catastrophic',this)">Catastrophic</button>
+    <button onclick="applyFilters('ALL','Major',this)">Major</button>
+    <button onclick="applyFilters('ALL','Moderate',this)">Moderate</button>
+    <button onclick="applyFilters('ALL','Minor',this)">Minor</button>
+  </div>
+
+  <table class="db-table" id="dbTable">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event</th>
+        <th>Country/Region</th>
+        <th>Type</th>
+        <th>Insured Loss (est.)</th>
+        <th>Severity</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- CATASTROPHIC -->
+      <tr class="main-row" data-type="SOV" data-sev="Catastrophic" onclick="toggle('d1')">
+        <td>1982–85</td><td>Latin American Debt Crisis — Mexico, Brazil, Argentina<button class="expand-btn">+</button></td><td>Latin America</td><td><span class="type-badge tp-sov">SOV</span></td><td>$5bn+ (ECAs); private multi-$bn</td><td><span class="sv-cat sv-cat1">Catastrophic</span></td>
+      </tr>
+      <tr class="detail-row" id="d1"><td colspan="6">Mexico's 1982 default cascaded into a 16-country debt crisis 1982–1985. ECAs (ECGD, COFACE, HERMES, EXIM) absorbed the bulk of medium-term losses; private market WT insurers suffered significant export buyer default losses across the region. Estimated combined ECA loss $5–8bn; private market losses not separately disclosed. CF claims on government-contract buyers formed a significant secondary layer. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="SOV" data-sev="Catastrophic" onclick="toggle('d2')">
+        <td>1997–98</td><td>Asian Financial Crisis — Korea, Indonesia, Thailand<button class="expand-btn">+</button></td><td>Asia Pacific</td><td><span class="type-badge tp-sov">SOV</span></td><td>$3–5bn est. (private + ECA)</td><td><span class="sv-cat sv-cat1">Catastrophic</span></td>
+      </tr>
+      <tr class="detail-row" id="d2"><td colspan="6">Currency collapses across Southeast Asia and Korea. Korean chaebol insolvencies and Indonesian rupiah collapse (-80%) triggered massive buyer default losses across European and US exporters. Berne Union members reported sharp claims increase 1998–2000. Credit insurers significantly tightened Asia credit limits. Daewoo's 1999 collapse ($78bn debt) generated significant CR claims from suppliers globally. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="CF" data-sev="Catastrophic" onclick="toggle('d3')">
+        <td>2001–02</td><td>Argentine Sovereign Default — Largest in History ($93bn)<button class="expand-btn">+</button></td><td>Argentina</td><td><span class="type-badge tp-cf">CF</span></td><td>$2bn+ est. (all markets)</td><td><span class="sv-cat sv-cat1">Catastrophic</span></td>
+      </tr>
+      <tr class="detail-row" id="d3"><td colspan="6">December 2001 — Argentina defaults on $93 billion of debt, the largest sovereign default in history at the time. Corralito (bank deposit freeze) and corralón (currency restrictions) imposed; peso convertibility suspended. State-owned enterprise contracts frustrated; import restrictions trigger CF claims. Total insurance market CF/CR losses estimated $2 billion+. Argentine market closes to open-account trade for years. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Catastrophic" onclick="toggle('d4')">
+        <td>2008–09</td><td>Global Financial Crisis — Systemic Credit Event<button class="expand-btn">+</button></td><td>Global</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>$10–15bn est. (all markets, all credit lines)</td><td><span class="sv-cat sv-cat1">Catastrophic</span></td>
+      </tr>
+      <tr class="detail-row" id="d4"><td colspan="6">Lehman Brothers collapse triggers global trade finance freeze and buyer insolvency surge across manufacturing, retail, construction, and commodities sectors. Whole turnover WT combined ratios exceed 100% for first time in modern era (2009). Credit insurers withdraw limits; policyholders cry foul. UK government Emergency Credit Guarantee scheme launched. Berne Union aggregate short-term credit losses peak 2009. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="FIN" data-sev="Catastrophic" onclick="toggle('d5')">
+        <td>2021</td><td>Greensill Capital Collapse — $5bn Credit Insurance Exposure<button class="expand-btn">+</button></td><td>Global</td><td><span class="type-badge tp-fin">FIN</span></td><td>~$5bn (claimed); disputed</td><td><span class="sv-cat sv-cat1">Catastrophic</span></td>
+      </tr>
+      <tr class="detail-row" id="d5"><td colspan="6">Greensill Capital — a supply chain finance platform — collapses in March 2021. Tokio Marine HCC had underwritten credit insurance on Greensill's SCF receivables; the exposure claimed totals ~$5 billion. TMHCC contests scope and validity of claims. Greensill's use of credit insurance to support financialised receivable structures raises regulatory and underwriting questions. Credit Suisse funds exposed to Greensill write down ~$3bn. Australian government investigation follows. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="REG" data-sev="Catastrophic" onclick="toggle('d6')">
+        <td>2020</td><td>COVID-19 — European Government Credit Guarantee Schemes (€180bn)<button class="expand-btn">+</button></td><td>Europe</td><td><span class="type-badge tp-reg">REG</span></td><td>State-guaranteed; private losses limited</td><td><span class="sv-cat sv-cat1">Catastrophic</span></td>
+      </tr>
+      <tr class="detail-row" id="d6"><td colspan="6">COVID lockdowns threaten to collapse trade credit markets as credit insurers reduce limits. UK Trade Credit Reinsurance scheme (£10bn guarantee), Germany Schutzschirm (up to €30bn), France and Netherlands create similar government backstops. Total EU government guarantee peak ~€180bn. Schemes successfully prevent a credit insurance market failure, but cost taxpayers significant contingent liability. Private market claims contained by government intervention. <span class="badge b-v">VER</span></td></tr>
+
+      <!-- MAJOR -->
+      <tr class="main-row" data-type="SOV" data-sev="Major" onclick="toggle('d7')">
+        <td>1998</td><td>Russian Sovereign Default — GKO Moratorium<button class="expand-btn">+</button></td><td>Russia</td><td><span class="type-badge tp-sov">SOV</span></td><td>$1bn+ est.</td><td><span class="sv-cat sv-cat2">Major</span></td>
+      </tr>
+      <tr class="detail-row" id="d7"><td colspan="6">Russia suspends GKO (rouble bond) payments and imposes debt moratorium August 1998. Rouble devalues 75%. Trade credit to Russian buyers crystallises in losses; CF claims filed for frustrated export contracts. Private credit market closes Russia limits across the board; ECAs similarly restrict. Recovery of Russian trade credit access took 2–3 years. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Major" onclick="toggle('d8')">
+        <td>1999</td><td>Daewoo Group Insolvency — $78bn Korean Chaebol Collapse<button class="expand-btn">+</button></td><td>Korea</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>$500m–$1bn est. insured</td><td><span class="sv-cat sv-cat2">Major</span></td>
+      </tr>
+      <tr class="detail-row" id="d8"><td colspan="6">Daewoo Group — conglomerate spanning automotive, heavy industry, and trading — files for restructuring with $78 billion of debt. Largest Korean corporate failure. Suppliers across Asia, Europe, and North America with WT credit limits on Daewoo entities face losses. Demonstrates single-name concentration risk in whole turnover policies. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="CF" data-sev="Major" onclick="toggle('d9')">
+        <td>2011–12</td><td>Arab Spring — Libya, Egypt, Syria Contract Frustrations<button class="expand-btn">+</button></td><td>MENA</td><td><span class="type-badge tp-cf">CF</span></td><td>$500m–$1.5bn est. (all markets)</td><td><span class="sv-cat sv-cat2">Major</span></td>
+      </tr>
+      <tr class="detail-row" id="d9"><td colspan="6">Arab Spring uprisings (2010–2012) frustrate infrastructure and capital goods export contracts across the MENA region. Libya civil war most acute — contracts abandoned, equipment destroyed, government counterparties collapse. Egypt political instability creates payment uncertainty. Syria sanctions frustrate all remaining contracts. CF claims flow through Lloyd's, ECAs (particularly SACE Italy, HERMES Germany, COFACE France), and the Berne Union network. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="SOV" data-sev="Major" onclick="toggle('d10')">
+        <td>2012</td><td>Greek PSI Restructuring — €206bn Haircut<button class="expand-btn">+</button></td><td>Greece</td><td><span class="type-badge tp-sov">SOV</span></td><td>$300–500m est. (WT + single-risk)</td><td><span class="sv-cat sv-cat2">Major</span></td>
+      </tr>
+      <tr class="detail-row" id="d10"><td colspan="6">Greek PSI (Private Sector Involvement) imposes ~53% haircut on €206bn of Greek government bonds — largest sovereign debt restructuring ever. Greek private sector buyer insolvencies surge post-restructuring. Specialist credit insurers significantly reduce Greek credit limits; WT policies tightened for Greek buyers. ECA programmes limited. Private market CR/WT losses estimated $300–500m across the European market. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="CF" data-sev="Major" onclick="toggle('d11')">
+        <td>2022</td><td>Russia/Ukraine War — CF &amp; Sanctions-Triggered Default Wave<button class="expand-btn">+</button></td><td>Russia / Ukraine</td><td><span class="type-badge tp-cf">CF</span></td><td>$1–2bn est. (all markets)</td><td><span class="sv-cat sv-cat2">Major</span></td>
+      </tr>
+      <tr class="detail-row" id="d11"><td colspan="6">February 2022 Russian invasion triggers SWIFT exclusion of Russian banks, asset freeze, and export embargo. Thousands of export contracts to Russian buyers frustrated. Ukrainian grain, steel, and commodity trade halted. Credit insurers with Russia WT exposure report significant claims 2022–2023. Commodity export frustration from Ukraine generates additional CF losses. Estimated industry-wide losses $1–2bn; actual figures not publicly disclosed. <span class="badge b-v">VER</span></td></tr>
+
+      <!-- MODERATE -->
+      <tr class="main-row" data-type="DEFAULT" data-sev="Moderate" onclick="toggle('d12')">
+        <td>2001–02</td><td>Enron Bankruptcy — US Energy Sector Credit Losses<button class="expand-btn">+</button></td><td>USA</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>$200–400m est. insured</td><td><span class="sv-cat sv-cat3">Moderate</span></td>
+      </tr>
+      <tr class="detail-row" id="d12"><td colspan="6">Enron Corporation's December 2001 bankruptcy — $63bn assets — generates credit insurance losses for energy sector suppliers with open-account credit exposure to Enron trading and services entities. The rapid collapse of an investment-grade rated company without warning demonstrates the limits of credit rating-based underwriting. Credit insurers' energy sector limit practices scrutinised. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Moderate" onclick="toggle('d13')">
+        <td>2002–03</td><td>WorldCom / Marconi / Global Crossing — Telecom Credit Cluster<button class="expand-btn">+</button></td><td>USA / UK</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>$150–300m est. insured</td><td><span class="sv-cat sv-cat3">Moderate</span></td>
+      </tr>
+      <tr class="detail-row" id="d13"><td colspan="6">Dot-com bust triggers cascade of telecom sector insolvencies: WorldCom ($107bn assets, 2002), Global Crossing (2002), and UK's Marconi (2002). Telecom equipment suppliers and service providers with WT credit insurance file significant claims. Concentration of credit insurer exposure to the telecom sector — which had been AAA/AA-rated just years earlier — reveals the speed at which entire sectors can deteriorate. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="CF" data-sev="Moderate" onclick="toggle('d14')">
+        <td>2007–08</td><td>Iran Sanctions — Contract Frustration &amp; Banking Isolation<button class="expand-btn">+</button></td><td>Iran</td><td><span class="type-badge tp-cf">CF</span></td><td>$100–300m est.</td><td><span class="sv-cat sv-cat3">Moderate</span></td>
+      </tr>
+      <tr class="detail-row" id="d14"><td colspan="6">Escalating EU and US sanctions on Iran (2007–2012) progressively frustrate export contracts and restrict banking relationships with Iranian buyers. European exporters with existing contracts face non-payment as Iranian banking channels are cut off. CF claims filed across European ECAs and Lloyd's CF lines. SWIFT disconnection (2012) completes the market closure. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="SOV" data-sev="Moderate" onclick="toggle('d15')">
+        <td>2015–16</td><td>Brazil Recession — Petrobras &amp; State Buyer Stress<button class="expand-btn">+</button></td><td>Brazil</td><td><span class="type-badge tp-sov">SOV</span></td><td>$100–250m est.</td><td><span class="sv-cat sv-cat3">Moderate</span></td>
+      </tr>
+      <tr class="detail-row" id="d15"><td colspan="6">Brazil's deep recession (2015–2016) and Lava Jato (Operation Car Wash) scandal expose widespread corruption in Petrobras supply chains. Sub-contractors and suppliers who had provided goods and services on credit find payments frozen. CR and WT claims rise. Credit insurers tighten Brazil limits; ECA programmes (SACE, UKEF, COFACE) restrict new Brazilian exposure. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Moderate" onclick="toggle('d16')">
+        <td>2016</td><td>Hanjin Shipping Collapse — Container Market Default<button class="expand-btn">+</button></td><td>Korea</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>$150–250m est. insured</td><td><span class="sv-cat sv-cat3">Moderate</span></td>
+      </tr>
+      <tr class="detail-row" id="d16"><td colspan="6">Hanjin Shipping — Korea's largest container carrier — files for bankruptcy in August 2016 with ~$5bn in debt. Strands 97 vessels at sea, triggering global cargo access crisis. Suppliers with open credit to Hanjin (freight forwarders, port operators, fuel suppliers) file CR claims. Demonstrates how shipping sector insolvency creates multi-sector credit insurance losses. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Moderate" onclick="toggle('d17')">
+        <td>2018–19</td><td>UK Retail Insolvency Wave — BHS, Carillion, Thomas Cook<button class="expand-btn">+</button></td><td>UK</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>£200–400m est. insured</td><td><span class="sv-cat sv-cat3">Moderate</span></td>
+      </tr>
+      <tr class="detail-row" id="d17"><td colspan="6">UK retail and construction sector sees significant insolvency wave 2016–2019: BHS (2016, 11,000 jobs), Carillion (2018, £7bn liabilities), House of Fraser, Debenhams, and Thomas Cook (2019). Suppliers with UK whole turnover policies covering these buyers file WT claims. Demonstrates that developed-market domestic WT policies face concentrated sector risk — particularly retail, hospitality, and construction during periods of structural change. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="CF" data-sev="Moderate" onclick="toggle('d18')">
+        <td>2019</td><td>Venezuela — State Buyer Moratorium &amp; CF Losses<button class="expand-btn">+</button></td><td>Venezuela</td><td><span class="type-badge tp-cf">CF</span></td><td>$100–200m est.</td><td><span class="sv-cat sv-cat3">Moderate</span></td>
+      </tr>
+      <tr class="detail-row" id="d18"><td colspan="6">Venezuela's progressive economic collapse under Maduro leads to protracted payment delays and ultimate default on state enterprise contracts. PDVSA (state oil company) and other Venezuelan state buyers progressively fail to meet commercial obligations. CF claims filed for frustrated contracts where government action (payment moratorium, currency controls) is the proximate cause. US sanctions complicate loss recovery. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="SOV" data-sev="Moderate" onclick="toggle('d19')">
+        <td>2022–23</td><td>Sri Lanka / Zambia / Pakistan — Multi-Country Emerging Market Stress<button class="expand-btn">+</button></td><td>Multiple</td><td><span class="type-badge tp-sov">SOV</span></td><td>$200–400m est. (combined)</td><td><span class="sv-cat sv-cat3">Moderate</span></td>
+      </tr>
+      <tr class="detail-row" id="d19"><td colspan="6">Sri Lanka sovereign default (April 2022) — first in its history; Zambia restructures Eurobond debt; Pakistan enters IMF emergency programme. All three markets face buyer distress and state-enterprise payment delays. ECA programmes (UKEF, COFACE, EXIM) and private CR with exposure to state buyers in these markets report claims. G20 Common Framework restructuring process proves slow and contested. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Moderate" onclick="toggle('d20')">
+        <td>2023–24</td><td>Chinese Property Sector — Evergrande &amp; Supplier Default Wave<button class="expand-btn">+</button></td><td>China</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>$300–600m est. insured</td><td><span class="sv-cat sv-cat3">Moderate</span></td>
+      </tr>
+      <tr class="detail-row" id="d20"><td colspan="6">China Evergrande default (2021, ~$330bn debt) triggers cascade of Chinese property sector insolvencies — Sunac China, Country Garden, R&F Properties. Suppliers of construction materials, fittings, and services with CR/WT coverage on Chinese property developer buyers face protracted default losses as developers halt payments to sub-contractors. Credit insurers significantly tighten China property sector limits. <span class="badge b-v">VER</span></td></tr>
+
+      <!-- MINOR -->
+      <tr class="main-row" data-type="DEFAULT" data-sev="Minor" onclick="toggle('d21')">
+        <td>2015</td><td>Tesco Accounting Scandal — UK Retail Credit Stress<button class="expand-btn">+</button></td><td>UK</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>£50–100m est.</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d21"><td colspan="6">Tesco's September 2014 revelation of £263m accounting overstatement triggers credit limit restrictions across the UK retail sector. While Tesco itself did not default, the confidence shock led credit insurers to rapidly reduce limits on UK supermarkets and retail sector buyers — affecting suppliers' ability to extend open-account credit. Demonstrates how financial reporting events can trigger rapid credit limit withdrawal even without default. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="CF" data-sev="Minor" onclick="toggle('d22')">
+        <td>2014</td><td>Ukraine Crimea Annexation — CF &amp; Export Frustration<button class="expand-btn">+</button></td><td>Ukraine / Russia</td><td><span class="type-badge tp-cf">CF</span></td><td>$50–100m est.</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d22"><td colspan="6">Russian annexation of Crimea (March 2014) and subsequent Donbas conflict frustrate export contracts with Ukrainian and Crimean buyers. EU and US sanctions on Russia create CF event for exporters to Russian entities. Smaller in scale than the 2022 full invasion; credit insurers' Russian exposure significantly higher by 2022 than in 2014. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Minor" onclick="toggle('d23')">
+        <td>2019</td><td>Thomas Cook Collapse — UK Tourism Sector Default<button class="expand-btn">+</button></td><td>UK</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>£30–70m est. insured</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d23"><td colspan="6">Thomas Cook Group's September 2019 insolvency — 178-year-old UK travel company; £1.7bn debt — leaves 150,000 UK tourists abroad and collapses the UK's second-largest tour operator. Hospitality, accommodation, and transport suppliers with WT credit on Thomas Cook entities file claims. UK government Operation Matterhorn repatriation costs £83m — no insurance involvement. Credit losses concentrated with European hotel suppliers. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Minor" onclick="toggle('d24')">
+        <td>2018</td><td>Carillion Collapse — UK Infrastructure Default<button class="expand-btn">+</button></td><td>UK</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>£50–150m est. insured</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d24"><td colspan="6">Carillion plc liquidation (January 2018) — UK's second-largest construction company; £7bn liabilities. Thousands of sub-contractors and material suppliers left unpaid. Suppliers with WT credit insurance on Carillion entities file claims. Demonstrates systemic risk in construction supply chains and the importance of payment chain credit monitoring. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="FIN" data-sev="Minor" onclick="toggle('d25')">
+        <td>2023</td><td>Silicon Valley Bank — US Tech Sector Credit Disruption<button class="expand-btn">+</button></td><td>USA</td><td><span class="type-badge tp-fin">FIN</span></td><td>$50–100m est. insured</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d25"><td colspan="6">SVB's March 2023 failure creates temporary liquidity crisis among US technology sector start-ups — many had concentrated deposits in SVB. Tech sector suppliers with WT credit on SVB-banking clients face temporary payment delays. FDIC guarantee of all deposits ultimately resolves the credit risk, but the episode created short-term CR uncertainty for trade creditors in the US tech sector. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="CF" data-sev="Minor" onclick="toggle('d26')">
+        <td>2020</td><td>Belarus — Post-Election Sanctions CF<button class="expand-btn">+</button></td><td>Belarus</td><td><span class="type-badge tp-cf">CF</span></td><td>$20–50m est.</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d26"><td colspan="6">EU and US sanctions imposed on Belarus following disputed 2020 presidential election and subsequent repression generate CF claims for European exporters with Belarusian state-buyer contracts. Smaller market with limited exposure, but illustrative of how democratic-crisis sanctions can trigger CF losses rapidly. <span class="badge b-e">EST</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Minor" onclick="toggle('d27')">
+        <td>2020–21</td><td>COVID Hospitality Sector Defaults — UK &amp; Europe<button class="expand-btn">+</button></td><td>Europe</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>£200m–400m est. (gross, pre-government backstop)</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d27"><td colspan="6">COVID lockdowns trigger widespread hospitality, retail, and non-essential service sector insolvencies. Without government guarantee schemes, WT losses would have been Catastrophic-scale. With UK TCR and European government backstops absorbing the bulk of risk, net insured losses contained to moderate levels. Gross potential loss estimated £200–400m in UK alone; actual insured net loss significantly lower due to government guarantees. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="SOV" data-sev="Minor" onclick="toggle('d28')">
+        <td>2016</td><td>Nigeria — Currency Crisis &amp; CI/TR Losses<button class="expand-btn">+</button></td><td>Nigeria</td><td><span class="type-badge tp-sov">SOV</span></td><td>$30–80m est.</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d28"><td colspan="6">Oil price collapse causes Nigerian foreign exchange crisis; CBN (Central Bank of Nigeria) restricts dollar sales and imposes currency controls. Nigerian buyers unable to convert naira to meet hard-currency trade obligations. CR/CF losses for suppliers with naira-invoiced or dollar-invoiced contracts to Nigerian buyers. Currency inconvertibility/transfer restriction (CI/TR) triggers CF coverage for political risk credit policyholders. <span class="badge b-e">EST</span></td></tr>
+
+      <tr class="main-row" data-type="CF" data-sev="Minor" onclick="toggle('d29')">
+        <td>2017</td><td>Qatar Blockade — CF &amp; CI/TR Event<button class="expand-btn">+</button></td><td>Qatar / Gulf</td><td><span class="type-badge tp-cf">CF</span></td><td>$20–50m est.</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d29"><td colspan="6">Saudi Arabia, UAE, Bahrain, and Egypt sever diplomatic and trade ties with Qatar in June 2017. Saudi-UAE land border closure disrupts supply chains to Qatar; ships and aircraft avoiding Saudi-blockaded routes incur additional costs. Export contracts to Qatar from neighbouring countries frustrated. CF claims filed on import-prohibition grounds. Blockade lifted January 2021. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Minor" onclick="toggle('d30')">
+        <td>2019</td><td>Debenhams / House of Fraser — UK Retail Defaults<button class="expand-btn">+</button></td><td>UK</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>£40–90m est. insured</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d30"><td colspan="6">Debenhams and House of Fraser enter administration in 2018–2019, part of the wider UK high street collapse. Suppliers — particularly clothing manufacturers and FMCG companies — with WT credit exposure file claims. Demonstrates the structural vulnerability of traditional retail to e-commerce disruption generating prolonged sector-wide credit deterioration. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="FIN" data-sev="Minor" onclick="toggle('d31')">
+        <td>2022</td><td>Crypto Sector Collapse — FTX &amp; Credit Exposure<button class="expand-btn">+</button></td><td>Global</td><td><span class="type-badge tp-fin">FIN</span></td><td>$30–80m est. insured</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d31"><td colspan="6">FTX exchange collapse (November 2022) triggers cascade of crypto sector insolvencies: BlockFi, Celsius, Genesis. Technology service providers, infrastructure companies, and B2B suppliers to the crypto sector with WT credit coverage file claims. Credit insurers had tightened crypto sector limits through 2021–2022 as market concerns mounted; many exposures had been reduced before collapse. <span class="badge b-e">EST</span></td></tr>
+
+      <tr class="main-row" data-type="DEFAULT" data-sev="Minor" onclick="toggle('d32')">
+        <td>2023</td><td>European Energy Sector Stress — Post-Russia Gas Crisis<button class="expand-btn">+</button></td><td>Europe</td><td><span class="type-badge tp-default">DEFAULT</span></td><td>€50–150m est.</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d32"><td colspan="6">Post-invasion European energy price spike causes financial distress across energy-intensive industries — aluminium, steel, chemicals, paper. Some energy sector buyers face liquidity challenges; credit insurers increase monitoring on energy-intensive buyer segments. Uniper (Germany's largest gas importer) requires government bailout — suppliers with WT exposure on Uniper entities face uncertainty. <span class="badge b-e">EST</span></td></tr>
+
+      <tr class="main-row" data-type="REG" data-sev="Minor" onclick="toggle('d33')">
+        <td>2016</td><td>Solvency II — Credit Insurer Capital Reorganisation<button class="expand-btn">+</button></td><td>EU</td><td><span class="type-badge tp-reg">REG</span></td><td>N/A — structural event</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d33"><td colspan="6">Full Solvency II implementation (January 2016) requires EU credit insurers to hold risk-based capital against concentrated credit exposures. Specialist credit insurers — Allianz Trade, Atradius, Coface — adjust portfolio composition and concentration limits in response. Some niche credit markets see capacity withdrawal; others see improved discipline. Pro-cyclical capital requirements remain a structural tension. <span class="badge b-v">VER</span></td></tr>
+
+      <tr class="main-row" data-type="CF" data-sev="Minor" onclick="toggle('d34')">
+        <td>2024</td><td>Red Sea Houthi Campaign — Trade Route Disruption<button class="expand-btn">+</button></td><td>Red Sea / Yemen</td><td><span class="type-badge tp-cf">CF</span></td><td>$20–60m est. (credit impact only)</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d34"><td colspan="6">Houthi attacks on Red Sea shipping (December 2023 onwards) cause significant container shipping delays and cost increases. Delayed shipments create technical payment term breaches; some export contracts with Asian buyers experience prolonged transit times beyond payment terms. CF and CR borderline situations emerge where payment delays are attributable to political-disruption-caused logistics failure. Insurance market debates whether transit delays constitute CF triggers. <span class="badge b-e">EST</span></td></tr>
+
+      <tr class="main-row" data-type="FIN" data-sev="Minor" onclick="toggle('d35')">
+        <td>2024</td><td>InsurTech Credit Losses — API-Embedded SME Credit<button class="expand-btn">+</button></td><td>Europe / USA</td><td><span class="type-badge tp-fin">FIN</span></td><td>$10–30m est.</td><td><span class="sv-cat sv-cat4">Minor</span></td>
+      </tr>
+      <tr class="detail-row" id="d35"><td colspan="6">First generation of API-embedded trade credit insurance products (Hokodo, Nimbla) experience elevated loss ratios as the SME buyer segment proves harder to underwrite on a per-invoice basis than anticipated. Adverse selection remains a challenge — SMEs most likely to seek per-invoice cover are those with buyers showing early distress signals. Reinsurers and Lloyd's capacity providers review delegated authority terms. <span class="badge b-e">EST</span></td></tr>
+
+    </tbody>
+  </table>
+
+</main>
+<footer>
+  <a href="../index.html">← Risk Code Hub</a> &nbsp;|&nbsp; Credit &amp; Contract Frustration (CR/CF/WT) — Module 03 Loss Database &nbsp;|&nbsp; Version 3.9 · May 2026
+</footer>
+<script>
+let activeType = 'ALL', activeSev = 'ALL';
+function applyFilters(type, sev, btn) {
+  if (type !== 'ALL' && sev === 'ALL') { activeType = type; }
+  else if (sev !== 'ALL' && type === 'ALL') { activeSev = sev; }
+  else { activeType = type; activeSev = sev; }
+  if (btn) {
+    document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  document.querySelectorAll('.main-row').forEach(row => {
+    const tOk = activeType === 'ALL' || row.dataset.type === activeType;
+    const sOk = activeSev === 'ALL' || row.dataset.sev === activeSev;
+    const show = tOk && sOk;
+    row.style.display = show ? '' : 'none';
+    const id = row.getAttribute('onclick').match(/'([^']+)'/)[1];
+    const detail = document.getElementById(id);
+    if (detail) detail.style.display = 'none';
+  });
+}
+function toggle(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+</script>
+</body>
+</html>

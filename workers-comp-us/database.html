@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Workers Compensation USA (W5/W6) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #1a237e;
+      --hub-dark:      #0d1257;
+      --hub-light:     #e8eaf6;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #b71c1c;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#0d1257 0%,#1a237e 55%,#283593 100%);
+      --header-sub:    #9fa8da;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#9fa8da;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#0d1257;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#9fa8da;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #c5cae9;}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #e8eaf6;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f0f2ff;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-cat-inj{background:#fce4ec;color:#880e4f;}
+    .tp-occ-dis{background:#e8f5e9;color:#1a5c2a;}
+    .tp-fraud{background:#fff3e0;color:#e65100;}
+    .tp-cum-trauma{background:#e3f2fd;color:#1565c0;}
+    .tp-mass-cas{background:#f3e5f5;color:#6a1b9a;}
+    .tp-tox-exp{background:#e0f2f1;color:#00695c;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#1a5c2a;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#eef0fa;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#0d1257;color:#9fa8da;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> &rsaquo; <a href="overview.html">Workers Comp USA (W5/W6)</a> &rsaquo; Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>Workers Compensation Loss Database</h1>
+    <div class="sub">35 notable WC loss events 1990–2024 — filter by type, sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Claim Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="cat-inj">Catastrophic Injury</option>
+        <option value="occ-dis">Occupational Disease</option>
+        <option value="fraud">Fraud / System Abuse</option>
+        <option value="cum-trauma">Cumulative Trauma</option>
+        <option value="mass-cas">Mass Casualty</option>
+        <option value="tox-exp">Toxic Exposure</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="construction">Construction</option>
+        <option value="mining">Mining</option>
+        <option value="agriculture">Agriculture</option>
+        <option value="transport">Transport</option>
+        <option value="manufacturing">Manufacturing</option>
+        <option value="healthcare">Healthcare</option>
+        <option value="retail">Retail</option>
+        <option value="public-sector">Public Sector</option>
+        <option value="maritime">Maritime / Offshore</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2010" min="1990" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 50" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Entity, state…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Entity / Event</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Est. Cost</th>
+        <th>Severity</th>
+        <th>Geography</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation USA (W5 / W6) &nbsp;|&nbsp; <a href="../index.html">&#8592; Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting &#8594;</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1990,n:"LA County Metro Rail Construction — Multiple Fatalities",t:"cat-inj",s:"construction",desc:"Series of construction fatalities on the new LA Metro Rail project during tunnel boring and underground construction phases. OSHA investigates; citations for confined space and fall protection failures. Signals the high WC exposure of major infrastructure projects in California.",v:25,sev:"maj",geo:"California"},
+  {y:1991,n:"Imperial Foods Chicken Processing Plant Fire — 25 Deaths",t:"mass-cas",s:"manufacturing",desc:"Fire at Hamlet, NC chicken processing plant kills 25 workers; exits were locked. Largest single-event WC mass casualty in NC history. Owner imprisoned; company shut down. Triggers nationwide review of exit and fire suppression requirements in food processing facilities.",v:15,sev:"maj",geo:"North Carolina"},
+  {y:1994,n:"Northridge Earthquake — WC Construction Injury Wave",t:"cat-inj",s:"construction",desc:"6.7 magnitude earthquake generates massive reconstruction employment in LA. Surge of WC claims from post-earthquake construction activity — falls, electrocution, struck-by incidents. Illustrates post-disaster WC exposure concentration in casualty-heavy construction trades.",v:80,sev:"maj",geo:"California"},
+  {y:1995,n:"California WC Fraud Ring — $50m Payroll Fraud",t:"fraud",s:"retail",desc:"Multi-employer WC premium fraud scheme in Southern California: employers systematically misclassify workers, underreport payroll and pay off-books to avoid WC premiums. Estimated $50m in avoided premiums across the ring. CA Department of Insurance and DA prosecute 40+ individuals.",v:50,sev:"maj",geo:"California"},
+  {y:1996,n:"Texas Non-Subscriber Litigation Surge",t:"cat-inj",s:"manufacturing",desc:"Following Texas's unique non-subscriber opt-out system, several large manufacturers elect not to purchase WC. Serious injuries result in uncapped tort suits — one manufacturer faces $25m verdict for worker injured without WC protection. Texas non-subscriber risk remains one of the most complex WC underwriting challenges.",v:35,sev:"maj",geo:"Texas"},
+  {y:1998,n:"Coal Mine Collapse — Upper Big Branch Precursor Events",t:"occ-dis",s:"mining",desc:"Series of underground coal mine safety incidents in WV, KY and VA through the late 1990s highlight the inadequacy of mine ventilation and methane monitoring. WC claims for permanent pulmonary disability cluster in Central Appalachian coal communities; black lung progression evident in long-service miners.",v:40,sev:"mod",geo:"West Virginia / Kentucky"},
+  {y:2000,n:"California Farm Worker Heat Illness Wave",t:"cat-inj",s:"agriculture",desc:"Series of heat-related deaths and injuries among California farm workers in the Central Valley during summer heat events. Absence of heat illness prevention standards (eventually enacted in 2005 by Cal/OSHA) means employers face both WC claims and OSHA citations. Sets the stage for CA Heat Illness Prevention Standard.",v:20,sev:"mod",geo:"California"},
+  {y:2001,n:"9/11 WTC Attacks — WC Mass Casualty Event",t:"mass-cas",s:"public-sector",desc:"Approximately 2,996 deaths across multiple employers — fire, police, Port Authority, building tenants. WC death benefits across all employers generate estimated $2–3bn in WC claims. Long-latency occupational disease (WTC cancers, respiratory disease) continues generating WC claims through 2024. The single largest WC catastrophe event in US history.",v:2500,sev:"cat",geo:"New York"},
+  {y:2003,n:"Staten Island Debris Removal Workers — Respiratory Disease Claims",t:"tox-exp",s:"public-sector",desc:"Workers involved in WTC debris removal and recovery at Fresh Kills landfill develop respiratory disease and cancers from continued toxic exposure. WC claims multiply as occupational disease latency periods elapse. Covered by workers at NYC Department of Sanitation and contracted debris firms.",v:120,sev:"maj",geo:"New York"},
+  {y:2005,n:"BP Texas City Refinery Explosion — 15 Deaths, 180 Injuries",t:"mass-cas",s:"manufacturing",desc:"Explosion at BP's Texas City refinery kills 15 workers and injures 180. BP cited by OSHA for 270 safety violations — largest OSHA fine in history at the time ($21.4m). WC claims for fatalities, burns, and permanent disabilities. BP later faces OSHA monitoring consent decree.",v:500,sev:"cat",geo:"Texas"},
+  {y:2006,n:"Sago Coal Mine Disaster — 12 Deaths",t:"mass-cas",s:"mining",desc:"Explosion at Sago Mine, WV kills 12 of 13 trapped miners. WC death benefits and dependent survivor benefits generate significant claims. Mine Safety and Health Administration investigates; owner International Coal Group fined. Triggers Mine Improvement and New Emergency Response (MINER) Act 2006.",v:30,sev:"maj",geo:"West Virginia"},
+  {y:2007,n:"Minnesota Bridge Collapse (I-35W) — Construction &amp; Public Sector WC",t:"cat-inj",s:"construction",desc:"I-35W Mississippi River bridge collapse kills 13 and injures 145, including construction workers on the deck at the time of collapse. WC claims for construction fatalities and injuries; Minnesota DOT workers also affected. Total WC exposure estimated at $25m+ across contractors.",v:25,sev:"maj",geo:"Minnesota"},
+  {y:2008,n:"Florida WC Fraud Scheme — Medical Provider Network Billing",t:"fraud",s:"healthcare",desc:"Large-scale WC medical provider fraud in South Florida: clinics bill WC carriers for unnecessary treatments, kickbacks to claimants, and phantom appointments. FL Division of Insurance Fraud estimates $300m+ in fraudulent WC medical billings over 5 years. Triggers FL legislative reforms of WC fee schedules.",v:300,sev:"cat",geo:"Florida"},
+  {y:2010,n:"BP Deepwater Horizon — USL&amp;H / Maritime WC",t:"cat-inj",s:"maritime",desc:"Explosion on the Deepwater Horizon drilling rig kills 11 workers and injures 17. Maritime workers covered under LHWCA (W6 code); offshore drilling platform workers are classic USL&H claimants. WC and Jones Act claims generate hundreds of millions in insured losses. Deepwater Horizon demonstrates the catastrophe potential of offshore maritime W6 exposure.",v:600,sev:"cat",geo:"Gulf of Mexico"},
+  {y:2010,n:"Upper Big Branch Mine — 29 Deaths",t:"mass-cas",s:"mining",desc:"Methane explosion at Massey Energy's Upper Big Branch mine kills 29 miners — deadliest US coal mine disaster since 1970. MSHA finds systematic safety violations; Massey CEO later convicted. WC death and permanent disability benefits across 29 families; black lung occupational disease background for surviving miners.",v:45,sev:"cat",geo:"West Virginia"},
+  {y:2012,n:"California WC Opioid Prescribing Investigation",t:"occ-dis",s:"healthcare",desc:"California DIR/DWC investigation reveals pervasive opioid prescribing in WC: some injured workers prescribed 1,000+ opioid pills per month; physician-dispensed opioid mark-ups generate excessive WC medical costs. Triggers CA opioid formulary and PDMP legislation. Isolated from national picture, CA opioid WC costs estimated at $1bn+ excess over guideline prescribing.",v:1000,sev:"cat",geo:"California"},
+  {y:2013,n:"Amazon Warehouse MSK Injury Claims — Musculoskeletal Cluster",t:"cum-trauma",s:"retail",desc:"OSHA investigation of Amazon fulfilment centre in Allentown, PA reveals injury rates 2–3x the warehouse industry average. Musculoskeletal injuries from high-pace picking operations generate significant WC cumulative trauma claims. Amazon WC exposure grows as warehouse network expands; remains one of the largest single-employer WC programmes in the US.",v:80,sev:"maj",geo:"National (Pennsylvania focus)"},
+  {y:2014,n:"Construction Industry Fall Deaths — OSHA Fatal Four",t:"cat-inj",s:"construction",desc:"OSHA's 'Fatal Four' (falls, struck-by, electrocution, caught-in/between) account for 60%+ of construction WC deaths annually. In 2014, falls alone generate ~350 fatalities and tens of thousands of lost-time injuries with WC claims. Single-employer WC loss potential for mid-size GCs from a fatal fall: $500k–$3m per event.",v:90,sev:"maj",geo:"National"},
+  {y:2015,n:"Healthcare Worker Needle-Stick &amp; Infection Claims",t:"occ-dis",s:"healthcare",desc:"CDC data confirms approximately 385,000 needle-stick injuries annually among US healthcare workers — each carrying WC exposure for blood-borne pathogen testing, prophylactic treatment and potential HIV/Hepatitis C claims. Hospital and nursing home WC programmes carry significant cumulative needle-stick WC cost; infection control failures elevate frequency.",v:45,sev:"mod",geo:"National"},
+  {y:2016,n:"North Carolina Poultry Processing — Carpal Tunnel Cluster",t:"cum-trauma",s:"manufacturing",desc:"OSHA investigation of NC poultry processing facilities identifies systematic under-reporting of musculoskeletal injuries. WC cumulative trauma claims for carpal tunnel syndrome, tendinitis and shoulder impingement cluster in processing workers performing repetitive cuts at high line speeds. Settlement includes ergonomics programme requirement and WC medical fund.",v:30,sev:"mod",geo:"North Carolina"},
+  {y:2017,n:"Hurricane Harvey — Construction Surge WC Claims",t:"cat-inj",s:"construction",desc:"Category 4 hurricane devastates Houston. Post-storm reconstruction surge employs an estimated 100,000+ construction workers. WC claims from falls, electrical hazards, heat illness and struck-by incidents rise sharply. Texas non-subscriber exposure compounds the issue — many reconstruction subcontractors uninsured for WC.",v:150,sev:"maj",geo:"Texas"},
+  {y:2018,n:"California Wildfire Emergency Responder WC",t:"cat-inj",s:"public-sector",desc:"Camp Fire (Paradise, CA) and Woolsey Fire generate extensive WC exposure for Cal Fire, USFS, and local fire agency responders — burns, smoke inhalation, traumatic injuries. Long-term respiratory and PTSD claims from firefighters working in extreme wildfire conditions are an emerging WC cost driver for California public sector.",v:60,sev:"maj",geo:"California"},
+  {y:2019,n:"Ohio BWC Opioid Settlement — Pharmaceutical Manufacturers",t:"occ-dis",s:"public-sector",desc:"Ohio Bureau of Workers' Compensation sues opioid manufacturers for cost of WC claims driven by opioid prescribing. $808m settlement with McKesson, AmerisourceBergen, Cardinal Health. Represents the WC system's effort to recover claim costs from pharmaceutical supply chain. Sets precedent for other state WC systems.",v:808,sev:"cat",geo:"Ohio"},
+  {y:2019,n:"Texas Shooting — Midland Odessa — Public Safety WC",t:"mass-cas",s:"public-sector",desc:"Mass shooting in Midland-Odessa, TX kills 7 and wounds 25. Law enforcement WC claims for officers wounded in the line of duty. Public safety mass casualty WC exposure — particularly PTSD and physical injuries — is a growing underwriting concern as active shooter events increase.",v:8,sev:"mod",geo:"Texas"},
+  {y:2020,n:"COVID-19 Healthcare Worker WC — Presumption Activation",t:"occ-dis",s:"healthcare",desc:"State COVID presumption laws activated for healthcare workers; WC carriers receive wave of COVID-related claims including death benefits, temporary disability, and long-COVID claims. Aggregate WC COVID cost across US estimated at $2–5bn by NCCI — significantly below initial projections due to short-duration most claims. Long-COVID reserve development remains open.",v:3000,sev:"cat",geo:"National"},
+  {y:2020,n:"Meat Packing Plant COVID Clusters — WC Essential Workers",t:"occ-dis",s:"manufacturing",desc:"Tyson, Smithfield and JBS meat processing plants become COVID hotspots; multiple employee deaths and mass infections. WC COVID presumption applies in several states; plant operators face both WC liability and OSHA citations for failure to implement adequate COVID safety protocols. Sets precedent for essential worker occupational disease WC.",v:200,sev:"maj",geo:"National (IA, SD, PA focus)"},
+  {y:2021,n:"New York Amazon Delivery Driver — Repetitive Strain Class Action",t:"cum-trauma",s:"transport",desc:"Group WC claims and OSHA complaints from Amazon delivery drivers across NY and NJ regarding musculoskeletal injuries from 250–400 delivery stops per shift. Lower back, shoulder and knee cumulative trauma claims generate significant WC frequency exposure. Amazon delivery network employs 150,000+ drivers — one of the largest single-class WC exposures in transport.",v:55,sev:"maj",geo:"New York / New Jersey"},
+  {y:2021,n:"Louisiana Offshore Hurricane Ida — Maritime Worker Injuries",t:"cat-inj",s:"maritime",desc:"Hurricane Ida damages 11 offshore oil and gas platforms in the Gulf of Mexico. Maritime worker injuries and fatalities from evacuation and post-storm recovery operations trigger LHWCA (W6) claims. Ida reinforces the catastrophe aggregation risk in offshore maritime WC portfolios concentrated in the Gulf.",v:75,sev:"maj",geo:"Louisiana / Gulf of Mexico"},
+  {y:2022,n:"California Hospital System — Nurse WC MSK &amp; Fatigue Claims",t:"cum-trauma",s:"healthcare",desc:"Large California hospital systems face elevated WC claims from nursing staff — musculoskeletal injuries from patient handling, PTSD and stress-related claims from COVID-era workload. CA safe patient handling law (AB 1192) compliance costs and WC musculoskeletal frequency drive premium increases for healthcare WC in California.",v:90,sev:"maj",geo:"California"},
+  {y:2022,n:"Florida Construction Industry WC Premium Fraud Prosecution",t:"fraud",s:"construction",desc:"Florida DFS investigation uncovers large construction WC premium fraud scheme: PEOs (professional employer organisations) misrepresent worker classification, issue fictitious certificates of insurance, and create shell companies to avoid WC premiums. $200m+ in avoided WC premiums across the conspiracy. 30 arrests.",v:200,sev:"cat",geo:"Florida"},
+  {y:2022,n:"USPS Letter Carriers — Heat Illness WC Wave",t:"cat-inj",s:"public-sector",desc:"2022 record US summer heat generates wave of heat illness WC claims among USPS letter carriers — outdoor workers with mandatory delivery schedules. Two fatalities confirmed; hundreds of heat exhaustion claims filed. OSHA proposes federal heat illness prevention standard; USPS WC programme faces elevated frequency.",v:20,sev:"mod",geo:"National"},
+  {y:2023,n:"Norfolk Southern Train Derailment — Railway Workers WC",t:"tox-exp",s:"transport",desc:"East Palestine, OH train derailment and toxic chemical release generates WC exposure for Norfolk Southern railway workers and emergency responders. Vinyl chloride and other hazardous materials exposure; respiratory injury, chemical burn, and stress/PTSD claims. Long-tail occupational disease exposure uncertain at 2024.",v:40,sev:"maj",geo:"Ohio"},
+  {y:2023,n:"Amazon Warehouse — OSHA National Emphasis Programme",t:"cum-trauma",s:"retail",desc:"OSHA launches national emphasis programme targeting Amazon warehouses following data showing injury rates persistently above industry average. Inspections at 100+ sites. WC cumulative trauma claims (lower back, shoulder, wrist) from high-repetition order picking remain elevated. Amazon EMR above 1.0 in several states despite safety investment.",v:100,sev:"maj",geo:"National"},
+  {y:2023,n:"Florida WC Non-Subscriber Tort — Warehouse Operator $18m Verdict",t:"cat-inj",s:"retail",desc:"Florida jury awards $18m against uninsured warehouse operator after worker suffers traumatic brain injury in forklift accident. Employer had lapsed WC coverage — Florida penalties include loss of tort immunity. Illustrates the catastrophic EL exposure for employers operating without WC in states where tort suits are permitted.",v:18,sev:"maj",geo:"Florida"},
+  {y:2024,n:"Black Lung Trust Fund Insolvency Risk — NCCI Report",t:"occ-dis",s:"mining",desc:"NCCI and Congressional Budget Office analysis projects Federal Black Lung Disability Trust Fund insolvency within 10 years without additional funding. Black Lung Excise Tax revenues insufficient to meet projected benefit obligations for progressive massive fibrosis claims. Potential federal backstop or industry assessment implications for coal company WC programmes.",v:150,sev:"maj",geo:"National (Appalachia focus)"},
+  {y:2024,n:"California Farm Workers — Heat Death Wave, Cal/OSHA Citations",t:"cat-inj",s:"agriculture",desc:"Record 2024 Central Valley temperatures generate multiple farm worker heat deaths; Cal/OSHA issues citations to 15+ agricultural employers for heat illness prevention standard violations. WC death benefits and serious injury claims generate significant exposure. Immigrant worker demographics complicate claims management and RTW programme implementation.",v:30,sev:"maj",geo:"California"}
+];
+
+const typeLabels = {
+  "cat-inj":"Catastrophic Injury",
+  "occ-dis":"Occupational Disease",
+  "fraud":"Fraud / System Abuse",
+  "cum-trauma":"Cumulative Trauma",
+  "mass-cas":"Mass Casualty",
+  "tox-exp":"Toxic Exposure"
+};
+const typeClass = {
+  "cat-inj":"tp-cat-inj",
+  "occ-dis":"tp-occ-dis",
+  "fraud":"tp-fraud",
+  "cum-trauma":"tp-cum-trauma",
+  "mass-cas":"tp-mass-cas",
+  "tox-exp":"tp-tox-exp"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${d.s.charAt(0).toUpperCase()+d.s.slice(1).replace(/-/g,' ')}</td>
+      <td>${d.v>=1000?'$'+(d.v/1000).toFixed(1)+'bn':'$'+d.v+'m'}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">&#9660; Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

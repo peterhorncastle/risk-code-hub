@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marine Liability — Risk Mitigation | Risk Code Hub</title>
+<link rel="stylesheet" href="../hub-styles.css">
+<style>
+  :root {
+    --hub-primary:    #005a6b;
+    --hub-dark:       #002d35;
+    --hub-light:      #e8f5f7;
+    --hub-accent:     #c8a84b;
+    --hub-secondary:  #1a5c28;
+    --hub-secondary2: #7b1a1a;
+    --header-gradient: linear-gradient(135deg,#002d35 0%,#005a6b 50%,#006e82 100%);
+    --header-sub:     #a8d8e0;
+  }
+  header { background: var(--header-gradient); color:#fff; padding:2rem 1.5rem 1.5rem; }
+  header h1 { margin:0 0 0.3rem; font-size:2rem; color:#fff; }
+  header p  { margin:0; color:var(--header-sub); font-size:1rem; }
+  nav { background:var(--hub-dark); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.3rem; }
+  nav a { color:#a8d8e0; text-decoration:none; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.85rem; }
+  nav a:hover, nav a.active { background:var(--hub-primary); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+  h2 { font-size:1.25rem; color:var(--hub-primary); margin:2rem 0 0.8rem; border-bottom:2px solid var(--hub-accent); padding-bottom:0.4rem; }
+  h3 { font-size:1.05rem; color:var(--hub-secondary); margin:1.2rem 0 0.5rem; }
+  p { line-height:1.8; color:#333; margin-bottom:0.8rem; font-size:0.93rem; }
+
+  .b-v { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#e6f4ea; color:#1a5c28; vertical-align:middle; }
+  .b-e { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#fef3e2; color:#7a4500; vertical-align:middle; }
+  .b-i { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#cce5ff; color:#004085; vertical-align:middle; }
+  .b-g { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#f8d7da; color:#721c24; vertical-align:middle; }
+
+  /* Control framework */
+  .phase-label { display:inline-block; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.6px; padding:0.25rem 0.8rem; border-radius:20px; margin-bottom:0.6rem; }
+  .ph-prevent { background:#e6f4ea; color:#1a5c28; }
+  .ph-detect  { background:#cce5ff; color:#004085; }
+  .ph-respond { background:#fef3e2; color:#7a4500; }
+  .ph-recover { background:#e8f5f7; color:#005a6b; }
+
+  .ctrl-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.8rem; margin:0.8rem 0 1.5rem; }
+  .ctrl-card { background:#fff; border-radius:8px; padding:1rem 1.1rem; border:1px solid #c0dde0; border-left:4px solid var(--hub-primary); }
+  .ctrl-card.detect  { border-left-color:#0056b3; }
+  .ctrl-card.respond { border-left-color:var(--hub-accent); }
+  .ctrl-card.recover { border-left-color:var(--hub-secondary); }
+  .ctrl-card h4 { margin:0 0 0.35rem; font-size:0.92rem; color:#222; }
+  .ctrl-card p  { margin:0; font-size:0.82rem; color:#444; line-height:1.6; }
+  .ctrl-card .tag { font-size:0.68rem; font-weight:700; color:var(--hub-primary); text-transform:uppercase; margin-bottom:0.25rem; display:block; }
+
+  /* Tables */
+  .tbl-wrap { overflow-x:auto; margin:0.5rem 0 1.5rem; }
+  table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+  thead th { background:var(--hub-primary); color:#fff; padding:0.55rem 0.7rem; text-align:left; }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid #d8eef0; vertical-align:top; }
+  tbody tr:nth-child(even) { background:#f0f9fb; }
+  .badge-v { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 6px; border-radius:10px; background:#e6f4ea; color:#1a5c28; }
+  .badge-e { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 6px; border-radius:10px; background:#fef3e2; color:#7a4500; }
+  .badge-m { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 6px; border-radius:10px; background:#e8f5f7; color:#005a6b; }
+
+  /* Claim guidance */
+  .steps-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin:0.8rem 0 1.5rem; }
+  @media(max-width:700px){ .steps-grid { grid-template-columns:1fr; } }
+  .steps-box { background:#fff; border-radius:8px; padding:1rem 1.1rem; border:1px solid #c0dde0; }
+  .steps-box h4 { margin:0 0 0.6rem; font-size:0.92rem; color:var(--hub-primary); }
+  .steps-box ol { padding-left:1.2rem; margin:0; }
+  .steps-box li { font-size:0.83rem; color:#333; margin-bottom:0.45rem; line-height:1.6; }
+
+  .warn-box { background:#fff3cd; border-left:4px solid var(--hub-accent); border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#5a4000; }
+  .alert-box { background:#f8d7da; border-left:4px solid #c0392b; border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#5a0010; }
+  .info-box  { background:var(--hub-light); border-left:4px solid var(--hub-primary); border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#00303a; }
+
+  footer { background:var(--hub-dark); color:#a8d8e0; text-align:center; padding:1rem; font-size:0.82rem; margin-top:2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Marine Liability</h1>
+  <p>Lloyd's Risk Codes G · GC · GX &nbsp;|&nbsp; Module 06: Risk Mitigation &amp; Controls</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <h2>Marine Liability Risk Control Framework</h2>
+  <p>Effective marine liability risk management spans flag state regulation, class society surveys, port state control (PSC) inspections, vetting systems (SIRE/CDI/RightShip), ISM Code compliance, STCW crew certification, cyber resilience (BIMCO/COMPIT), and environmental management systems. Lloyd's underwriters expect to see documentary evidence of these controls at placement and renewal. Deficiencies in any tier are material to pricing and coverage terms. <span class="b-v">VER</span></p>
+
+  <!-- PREVENT ────────────────────────────────────────────── -->
+  <span class="phase-label ph-prevent">Prevent — Reduce Probability &amp; Severity</span>
+  <div class="ctrl-grid">
+    <div class="ctrl-card">
+      <span class="tag">ISM Code / DOC &amp; SMC</span>
+      <h4>International Safety Management System</h4>
+      <p>Mandatory for ships &gt;500 GT in international trade since 1998 (SOLAS Chapter IX). Shipowner must hold a Document of Compliance (DOC); each vessel a Safety Management Certificate (SMC). ISM audits by flag state or RO every 2.5 years. Absence of valid ISM certification is an automatic referral trigger and may void P&amp;I cover under club rules. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card">
+      <span class="tag">SIRE / CDI / RightShip Vetting</span>
+      <h4>Third-Party Tanker &amp; Bulk Vetting</h4>
+      <p>Oil majors require SIRE (tanker) or CDI (chemical tanker) inspection before loading — typically valid 6 months. RightShip provides bulk carrier vetting. A vessel with no recent vetting or a SIRE-flagged report is effectively commercially disabled. Lloyd's underwriters treat an adverse vetting report as equivalent to a PSC deficiency for rating purposes. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card">
+      <span class="tag">Class Society Survey</span>
+      <h4>Continuous Machinery Survey &amp; Special Survey</h4>
+      <p>Classification by an IACS member (Lloyd's Register, DNV, BV, ABS, Class NK, etc.) is required for most marine liability placements. Special surveys at 5-year intervals check structural, mechanical, and safety systems. Vessels under-classed or with outstanding conditions are excluded from standard market terms. Class notation for ice, DP, chemical or gas tankers affects underwriting approach significantly. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card">
+      <span class="tag">MARPOL Pollution Prevention</span>
+      <h4>International Convention for Prevention of Pollution</h4>
+      <p>MARPOL Annexes I–VI regulate oil, bulk liquid, packaged goods, sewage, garbage, and air emissions. Double-hull construction (MARPOL 13G, since 2010 single-hull tankers phased out) materially reduces accidental oil pollution risk. Shipboard Oil Pollution Emergency Plan (SOPEP) required &gt;400 GT. Compliance documentation reviewed at underwriting; deficiencies indicate elevated pollution exposure. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card">
+      <span class="tag">STCW Crew Certification</span>
+      <h4>Standards of Training, Certification &amp; Watchkeeping</h4>
+      <p>Manila Amendments (2010) updated STCW competence requirements. Officers must hold flag-approved STCW certificates for the vessel type and route. Masters, chief officers, and engineers on tankers require additional advanced STCW endorsements (ARPA, GMDSS, chemical/oil tanker). Crew manning below STCW minimum is grounds for PSC detention and voids most marine liability policies. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card">
+      <span class="tag">BMP6 &amp; HOA Security</span>
+      <h4>Best Management Practices — High Risk Areas</h4>
+      <p>BMP6 (2023 edition) updated guidance for Gulf of Aden, Red Sea, Arabian Sea, Indian Ocean. Measures include: citadel construction, razor wire, self-activating fog signals, night-vision equipment, 24/7 bridge watch, UKMTO reporting, convoy participation. Vessels transiting HOA without BMP6 compliance receive a surcharge of 15–40% on GX excess layers and may face coverage sub-limits on crew injury arising from piracy/attack. <span class="b-v">VER</span></p>
+    </div>
+  </div>
+
+  <!-- DETECT ────────────────────────────────────────────── -->
+  <span class="phase-label ph-detect">Detect — Early Warning &amp; Monitoring</span>
+  <div class="ctrl-grid">
+    <div class="ctrl-card detect">
+      <span class="tag">Port State Control (PSC) Inspection Tracking</span>
+      <h4>Paris/Tokyo MOU Real-Time Monitoring</h4>
+      <p>PSC inspections are conducted by flag states in 9 regional MOUs (Paris, Tokyo, Indian Ocean, etc.). Deficiencies are public via Paris MOU / Tokyo MOU online databases. A vessel with a detention in the prior 12 months triggers immediate referral. Underwriters should conduct pre-bind PSC checks using equasismou.org and THETIS. Three or more deficiencies in 24 months = material derating or exclusion. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card detect">
+      <span class="tag">AIS / Dark Vessel Monitoring</span>
+      <h4>Automatic Identification System &amp; Satellite Tracking</h4>
+      <p>AIS transponders required &gt;300 GT international voyages (SOLAS V). AIS blackouts — intentional signal suppression — are a red flag for sanctions-evasion or dark fleet operations. Satellite AIS (S-AIS) via providers such as Spire or exactEarth enables detection of AIS manipulation. A vessel found to have engaged in ship-to-ship (STS) transfers with AIS switched off is presumptive evidence of sanctions violation and grounds for immediate coverage avoidance. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card detect">
+      <span class="tag">Cyber Threat Monitoring — BIMCO COMPIT</span>
+      <h4>Onboard Cyber Risk Management</h4>
+      <p>IMO resolution MSC-FAL.1/Circ.3 requires cyber risk management in ISM SMS from January 2021. BIMCO's COMPIT (Computer &amp; IT Security for Ships) framework provides practical shipboard guidance: network segmentation between OT (navigation/propulsion/ECDIS) and IT (crew/admin) systems, regular penetration testing for voyage management systems, update patching schedules, crew cyber awareness training. NotPetya (2017, $250–300m marine exposure) demonstrated consequences of unpatched systems. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card detect">
+      <span class="tag">Incident Reporting &amp; Near-Miss Systems</span>
+      <h4>ISM Non-Conformity Reporting &amp; FNOL Protocols</h4>
+      <p>ISM Chapter 9 requires ships to report accidents and hazardous situations to the DPA (Designated Person Ashore). Near-miss reporting culture — encouraged by IMO GISIS database — reduces accident frequency by identifying precursors before incidents occur. From an underwriting perspective, a company with a robust near-miss reporting record demonstrates safety culture maturity. Absence of any near-miss reports is a red flag (under-reporting, not absence of incidents). <span class="b-e">EST</span></p>
+    </div>
+  </div>
+
+  <!-- RESPOND ───────────────────────────────────────────── -->
+  <span class="phase-label ph-respond">Respond — Claims Handling &amp; Limitation</span>
+  <div class="ctrl-grid">
+    <div class="ctrl-card respond">
+      <span class="tag">Immediate FNOL &amp; Lloyd's Broker Notification</span>
+      <h4>First Notice of Loss — Timing is Critical</h4>
+      <p>Most marine liability policies require notification within 24–72 hours of an incident likely to give rise to a claim. Pollution incidents under OPA 90 (US) require FNOL to the USCG National Response Center within one hour of discovery — failure attracts civil penalties. For crew injury, notification under MLC 2006 must include immediate medical care provision. Brokers should have a 24/7 FNOL contact protocol in their service agreement. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card respond">
+      <span class="tag">Limitation of Liability — Filing &amp; Fund</span>
+      <h4>LLMC 1976/1996 Protocol — Limitation Action</h4>
+      <p>Shipowners seeking to limit liability under LLMC 1996 must file in the admiralty court of the relevant jurisdiction and constitute a limitation fund (SDR 3.02m for ships &lt;500 GT, scaling upward). US shipowners in US courts may seek limitation under the US Limitation of Liability Act 1851 (46 USC §30501) — though OPA 90 eliminates limitation for pollution. P&amp;I clubs and Lloyd's GX underwriters should be informed immediately of any limitation action, as the fund size affects priority of claims. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card respond">
+      <span class="tag">Salvage &amp; Wreck Removal Coordination</span>
+      <h4>LOF / SCOPIC &amp; Nairobi Wreck Removal</h4>
+      <p>Following a casualty, salvage under Lloyds Open Form (LOF) with SCOPIC clause is the most common commercial arrangement. SCOPIC protects marine environmental salvage contractors when cargo/hull value is insufficient to remunerate under Lloyd's standard. Wreck removal liability under the Nairobi Convention (2007, 55+ states) can be separate from and in addition to hull and P&amp;I claims. Underwriters should engage specialist P&amp;I correspondents and salvage arbitrators at earliest opportunity. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card respond">
+      <span class="tag">Pollution Response — SOPEP &amp; SMFF Activation</span>
+      <h4>Spill Response Resources — OPA 90 &amp; CLC Compliance</h4>
+      <p>OPA 90 requires US-flagged and US-trading vessels to pre-contract with a Salvage and Marine Firefighting (SMFF) provider and file a Vessel Response Plan (VRP) with the USCG. CLC states require similar arrangements via IOPC Fund mechanisms. Activation of pre-contracted SMFF is a condition precedent to OPA 90 liability limitation. Pollution response costs (booming, skimming, shoreline cleanup) are often the largest component of a pollution liability loss, exceeding third-party property damage. <span class="b-v">VER</span></p>
+    </div>
+  </div>
+
+  <!-- RECOVER ───────────────────────────────────────────── -->
+  <span class="phase-label ph-recover">Recover — Post-Loss &amp; Subrogation</span>
+  <div class="ctrl-grid">
+    <div class="ctrl-card recover">
+      <span class="tag">Subrogation — Collision / RDC Recovery</span>
+      <h4>Recovery Against Negligent Third Vessel</h4>
+      <p>The RDC (Running Down Clause) covers collision liability to the other vessel — typically 3/4ths under the standard collision clause, with the remaining 1/4 falling on P&amp;I. Full RDC coverage (4/4ths) is available on Lloyd's G placements. Post-collision, underwriters should pursue subrogation against the other vessel's hull and P&amp;I insurers. Cross-liability clauses apply when both vessels are insured by the same club or syndicate. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card recover">
+      <span class="tag">Post-Incident ISM Review</span>
+      <h4>Non-Conformity Investigation &amp; Corrective Action</h4>
+      <p>ISM Chapter 9 requires a formal investigation of every accident with corrective action planning. Underwriters should request the ISM non-conformity investigation report at next renewal and treat the quality of the corrective action as a material rating factor. A company that conducts a superficial investigation or fails to identify systemic causes is at significantly higher risk of recurrence. <span class="b-e">EST</span></p>
+    </div>
+    <div class="ctrl-card recover">
+      <span class="tag">Structured Settlement &amp; IOPC Fund Interface</span>
+      <h4>CLC / IOPC Fund Coordination for Pollution Losses</h4>
+      <p>For oil pollution losses in CLC states, the IOPC Fund 1992 provides top-up compensation above the shipowner's CLC limit (up to SDR 203m first tier; SDR 750m supplementary fund for major incidents). Lloyd's GX underwriters writing excess layers should understand the IOPC Fund intervention procedure to avoid double-payment or coverage gaps. Fund claims are filed with the IOPC Fund Secretariat in London; claims committees assess admissibility. <span class="b-v">VER</span></p>
+    </div>
+    <div class="ctrl-card recover">
+      <span class="tag">Reputation &amp; Crew Welfare Management</span>
+      <h4>MLC 2006 — Abandonment &amp; Repatriation Obligations</h4>
+      <p>MLC 2006 Standard A4.2 requires financial security for seafarer abandonment (repatriation + 4 months' unpaid wages). The ITF-operated Seafarer Abandonment database recorded 900+ abandonment cases 2012–2022 (many COVID-related). Flags state financial security certificates (from Lloyd's or P&amp;I clubs) are now required by 95+ states. Underwriters writing MLC-related liability must verify current financial security certificates are in force before binding. <span class="b-v">VER</span></p>
+    </div>
+  </div>
+
+  <h2>Regulatory &amp; Convention Standards Matrix</h2>
+  <p>Key conventions, codes, and regulations relevant to Lloyd's marine liability (G/GC/GX) placements. Compliance with these frameworks is a minimum expectation at underwriting. <span class="b-v">VER</span></p>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Standard / Convention</th>
+          <th>Scope</th>
+          <th>Administering Body</th>
+          <th>Key Requirement</th>
+          <th>Underwriting Relevance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ISM Code</strong></td>
+          <td>Ships &gt;500 GT international</td>
+          <td>IMO / Flag State</td>
+          <td>SMS, DOC, SMC — audit every 2.5 yr</td>
+          <td>No valid ISM = referral / exclusion</td>
+        </tr>
+        <tr>
+          <td><strong>STCW 1978 (Manila 2010)</strong></td>
+          <td>All seafarers on international voyages</td>
+          <td>IMO / Flag State</td>
+          <td>Certificates for officer grades; tanker endorsements</td>
+          <td>STCW deficiency = PSC detention risk; policy void</td>
+        </tr>
+        <tr>
+          <td><strong>MARPOL 73/78</strong></td>
+          <td>All ships — pollution prevention</td>
+          <td>IMO / Flag State</td>
+          <td>SOPEP; ORB; double hull (Annex I tankers); garbage plan</td>
+          <td>Non-compliance = pollution exposure and PSC risk</td>
+        </tr>
+        <tr>
+          <td><strong>CLC 1969 / Protocol 1992</strong></td>
+          <td>Tankers carrying persistent oil</td>
+          <td>IMO / IOPC Fund</td>
+          <td>Strict liability; compulsory CLC certificate; limit ~SDR 89m (large tanker)</td>
+          <td>GX excess layers above CLC fund; check CLC cert</td>
+        </tr>
+        <tr>
+          <td><strong>OPA 90 (US)</strong></td>
+          <td>All vessels in US waters / COFR</td>
+          <td>USCG / BSEE</td>
+          <td>COFR required; no limitation for oil spill; VRP/SMFF pre-contract</td>
+          <td>Major rating factor for US-trading tankers; check COFR</td>
+        </tr>
+        <tr>
+          <td><strong>Bunkers Convention 2001</strong></td>
+          <td>Non-tanker ships &gt;1,000 GT</td>
+          <td>IMO / Flag State</td>
+          <td>Strict liability for bunker oil spills; compulsory insurance certificate</td>
+          <td>Certificate required at placement; covers non-CLC vessels</td>
+        </tr>
+        <tr>
+          <td><strong>Nairobi Wreck Removal 2007</strong></td>
+          <td>Ships &gt;300 GT in Convention states' EEZ</td>
+          <td>IMO / Flag State</td>
+          <td>Compulsory insurance for wreck removal costs; WRC certificate</td>
+          <td>WRC certificate check; separate from P&amp;I cover scope</td>
+        </tr>
+        <tr>
+          <td><strong>MLC 2006</strong></td>
+          <td>All commercial ships &gt;500 GT</td>
+          <td>ILO / Flag State</td>
+          <td>Seafarer welfare; financial security for abandonment and injury</td>
+          <td>MLC financial security cert (Lloyd's or P&amp;I) must be current</td>
+        </tr>
+        <tr>
+          <td><strong>Athens Convention / PAL 2002</strong></td>
+          <td>Passenger ships</td>
+          <td>IMO / Flag State</td>
+          <td>Strict liability up to SDR 250,000 per passenger (terrorism); compulsory insurance</td>
+          <td>Cruise/passenger GX layers; very limited Lloyd's capacity</td>
+        </tr>
+        <tr>
+          <td><strong>LLMC 1976 / 1996 Protocol</strong></td>
+          <td>All seagoing ships</td>
+          <td>IMO / National Courts</td>
+          <td>Limitation fund: ~SDR 3.02m (&lt;500 GT) + scaling; OPA 90 eliminates for US pollution</td>
+          <td>Limitation fund size determines GX layer attachment adequacy</td>
+        </tr>
+        <tr>
+          <td><strong>IMO MASS Framework (2024)</strong></td>
+          <td>Autonomous/remotely operated vessels</td>
+          <td>IMO</td>
+          <td>Non-mandatory code May 2024; mandatory framework targeted 2028</td>
+          <td>Emerging liability gap for MASS; market coverage not yet standardised</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Claim Guidance — Before, During &amp; After</h2>
+  <p>Marine liability claims require rapid multi-jurisdictional response. Jurisdictional choices (admiralty court, limitation fund state, IOPC Fund) can be determinative of outcome. <span class="b-e">EST</span></p>
+
+  <div class="steps-grid">
+    <div class="steps-box">
+      <h4>Before a Claim — Underwriting Pre-Bind</h4>
+      <ol>
+        <li>Verify ISM DOC and SMC validity dates; request class certificates and special survey schedule.</li>
+        <li>Check PSC detention history via THETIS (EU) and Paris/Tokyo MOU online portals — last 36 months.</li>
+        <li>Confirm SIRE/CDI/RightShip vetting status for tankers and bulk carriers — last inspection date and any adverse findings.</li>
+        <li>Obtain loss runs for all marine liability classes — minimum 5 years; check for frequency pattern or large single event.</li>
+        <li>Verify OPA 90 COFR (US-trading vessels), CLC certificate, Bunkers Convention certificate, Nairobi WRC certificate as applicable.</li>
+        <li>Check MLC financial security certificate — issued by P&amp;I club or Lloyd's syndicate; current date of validity.</li>
+        <li>For GX excess: obtain full underlying programme schedule (club certificate, fixed-premium primary, intermediate layers) and attach as endorsement.</li>
+        <li>For vessels trading HOA/Red Sea: confirm BMP6 compliance, citadel arrangements, UKMTO registration.</li>
+      </ol>
+    </div>
+    <div class="steps-box">
+      <h4>During a Claim — Active Management</h4>
+      <ol>
+        <li>FNOL within policy notification period — typically 24–72 hours. US pollution: USCG NRC notification within 1 hour statutory obligation.</li>
+        <li>Appoint specialist marine lawyer in jurisdiction of incident — admiralty counsel (US) or specialist P&amp;I solicitor (UK/EU).</li>
+        <li>Preserve all voyage data recorder (VDR) evidence — flag state, AAIB/MAIB, US NTSB/USCG investigators will seek VDR under port state authority.</li>
+        <li>File for limitation of liability at earliest opportunity if loss likely to exceed SIR — constituting a fund prevents arrest of other vessels in fleet.</li>
+        <li>Activate Vessel Response Plan and SMFF contractor (US OPA 90 obligation) or SOPEP (MARPOL); notify IOPC Fund if CLC-covered incident.</li>
+        <li>Manage crew welfare — MLC 2006 medical care obligation; repatriation arrangements; avoid coercive crew statement-taking without legal advice.</li>
+        <li>Coordinate with club (if dual P&amp;I and fixed-premium placement) to avoid gaps and double-notification obligations.</li>
+        <li>For GX excess: notify immediately if underlying layers are likely to be exhausted — excess layer underwriters have independent notification rights.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="alert-box">
+    <strong>⚠ OPA 90 Strict Liability Warning:</strong> In US waters, the Oil Pollution Act 1990 eliminates the ability of a responsible party to limit liability for oil pollution removal costs and damages. Limitation under LLMC 1996 does not apply to OPA 90 claims. This means a VLCC oil spill in US waters can result in unlimited removal cost liability, natural resource damages assessed by NOAA and USFWS, and third-party economic damages (fishing, tourism). The Exxon Valdez ultimately cost ~$4.3bn in removal, litigation, and NRD — adjusted to today's values well in excess of $8bn. No GX excess programme can be adequately structured without separate analysis of OPA 90 worst-case discharge scenarios. <span class="b-v">VER</span>
+  </div>
+
+  <div class="warn-box">
+    <strong>⚠ Dark Fleet / Sanctions Risk Warning:</strong> Vessels suspected of transporting Russian, Iranian, or Venezuelan oil outside the IG P&amp;I system present compounding risks for adjacent operators: uninsured bunker spills, unreported casualty risk, and potential OFAC/SDN sanctions secondary liability. Lloyd's market participants must conduct enhanced due diligence on any vessel that has engaged in STS transfers in AIS-dark zones, called at sanctioned ports (Feodosiya, Bandar Abbas, Puerto Cabello), or changed flag/ownership in the prior 12 months. The LMA war and sanctions exclusions (LMA3100) apply across all marine classes. <span class="b-v">VER</span>
+  </div>
+
+</div><!-- /container -->
+
+<footer>Risk Code Hub — Marine Liability G/GC/GX | Module 06: Risk Mitigation &amp; Controls | v4.2</footer>
+</body>
+</html>

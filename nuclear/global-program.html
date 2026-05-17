@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Global Programme — Nuclear (NP / NL / NV) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a4a00;
+      --hub-dark:      #252500;
+      --hub-light:     #f9f9e8;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#252500 0%,#4a4a00 55%,#6b6b00 100%);
+      --header-sub:    #e6e682;
+      --hub-mid:       #e8e8c0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1e1e0a;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#252500;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .pool-hierarchy{background:#252500;color:var(--header-sub);border-radius:10px;padding:24px;margin-bottom:24px;}
+    .pool-hierarchy h3{font-size:1rem;font-weight:700;color:var(--hub-accent);margin-bottom:16px;}
+    .ph-layer{display:flex;align-items:stretch;gap:0;margin-bottom:4px;}
+    .ph-num{background:var(--hub-accent);color:#000;font-weight:700;font-size:0.78rem;padding:10px 14px;border-radius:6px 0 0 6px;display:flex;align-items:center;min-width:36px;justify-content:center;}
+    .ph-content{background:rgba(255,255,255,0.07);border-radius:0 6px 6px 0;padding:10px 16px;flex:1;}
+    .ph-content strong{font-size:0.85rem;color:var(--hub-accent);}
+    .ph-content p{font-size:0.8rem;color:var(--header-sub);margin-top:3px;line-height:1.4;}
+    .ph-arrow{text-align:center;color:#6b6b00;font-size:0.8rem;margin:2px 0;}
+    .convention-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:24px;}
+    .conv-card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .conv-card.paris{border-left:5px solid #4a4a00;}
+    .conv-card.vienna{border-left:5px solid #37474f;}
+    .conv-card.pa{border-left:5px solid #1565c0;}
+    .conv-card.none{border-left:5px solid #c62828;}
+    .conv-card .cv-tag{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+    .cv-paris{color:#4a4a00;}
+    .cv-vienna{color:#37474f;}
+    .cv-pa{color:#1565c0;}
+    .cv-none{color:#c62828;}
+    .conv-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .conv-card p{font-size:0.8rem;color:#444;line-height:1.45;}
+    .juris-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:24px;}
+    .juris-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:4px solid var(--hub-primary);}
+    .juris-card.uk{border-top-color:#4a4a00;}
+    .juris-card.fr{border-top-color:#c8a84b;}
+    .juris-card.us{border-top-color:#1565c0;}
+    .juris-card.jp{border-top-color:#c62828;}
+    .juris-card.cn{border-top-color:#b71c1c;}
+    .juris-card.ua{border-top-color:#e65100;}
+    .juris-card .jc-flag{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:6px;}
+    .juris-card h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:10px;}
+    .juris-card .jc-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #eeee99;font-size:0.8rem;}
+    .juris-card .jc-row:last-child{border-bottom:none;}
+    .juris-card .jk{color:#555;}
+    .juris-card .jv{color:var(--hub-dark);font-weight:600;}
+    .smr-box{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;border-left:6px solid var(--hub-accent);}
+    .smr-box h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .smr-box p{font-size:0.85rem;color:#444;line-height:1.5;margin-bottom:8px;}
+    .info-box{background:#f5f5dc;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#2a2a00;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #eeee99;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f5f5dc;}
+    footer{background:#252500;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Nuclear (NP/NL/NV)</a> › Global Programme</div>
+    <div class="tag">Module 07</div>
+    <h1>Global Programme</h1>
+    <div class="sub">Nuclear pool hierarchy, international liability conventions, jurisdiction profiles, and new nuclear technologies</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Pool hierarchy diagram -->
+  <div class="section-title">Nuclear Insurance Pool Hierarchy — From Operator to State of Last Resort</div>
+  <div class="pool-hierarchy">
+    <h3>The Nuclear Insurance Tower: How Catastrophic Nuclear Losses Are Funded</h3>
+    <div class="ph-layer">
+      <div class="ph-num">1</div>
+      <div class="ph-content">
+        <strong>Licensed Nuclear Operator — Direct Insurance Obligation</strong>
+        <p>The operator holds a licence from the national nuclear regulator (ONR, ASN, NRC, etc.) and is legally required to maintain insurance meeting convention requirements. All primary cover is placed through the national nuclear pool.</p>
+      </div>
+    </div>
+    <div class="ph-arrow">▼</div>
+    <div class="ph-layer">
+      <div class="ph-num">2</div>
+      <div class="ph-content">
+        <strong>National Nuclear Insurance Pool (NRI / ANP / ANI / NDF / CNIC etc.)</strong>
+        <p>Each country with commercial nuclear installations has a national pool. UK: NRI (Nuclear Risk Insurers). France: ANP (Advance). USA: ANI (American Nuclear Insurers). Japan: NDF/JAIF pool. Germany: Deutsche Kernreaktor-Versicherungsgemeinschaft (DKVG). The pool co-ordinates capacity from 30–60 member insurers (Lloyd's syndicates, company market). Estimated capacity: $1.0–1.5bn per site in major markets. <sup>[I3]</sup></p>
+      </div>
+    </div>
+    <div class="ph-arrow">▼</div>
+    <div class="ph-layer">
+      <div class="ph-num">3</div>
+      <div class="ph-content">
+        <strong>International Excess Layer — Pool-to-Pool Treaties &amp; Commercial Reinsurance</strong>
+        <p>Above national pool capacity, international treaties between pools provide additional layers. Lloyd's participates in pool-to-pool co-insurance arrangements internationally. Commercial reinsurers (Swiss Re, Munich Re, etc.) provide capacity above the primary pool layer through nuclear-specific treaties. <sup>[I10]</sup></p>
+      </div>
+    </div>
+    <div class="ph-arrow">▼</div>
+    <div class="ph-layer">
+      <div class="ph-num">4</div>
+      <div class="ph-content">
+        <strong>Government Indemnity / Nuclear Liability Convention Backstop</strong>
+        <p>Under the Brussels Supplementary Convention (for Paris Convention states) and equivalent national legislation, signatory governments provide financial compensation above the operator's liability limit and below the Brussels ceiling. Price-Anderson (USA) provides government indemnity above the industry pool. This is the structured government-backed layer. <sup>[L2]</sup></p>
+      </div>
+    </div>
+    <div class="ph-arrow">▼</div>
+    <div class="ph-layer">
+      <div class="ph-num">5</div>
+      <div class="ph-content">
+        <strong>State of Last Resort — Unlimited Government Liability</strong>
+        <p>For a Chernobyl or Fukushima-scale event affecting a commercially insured Western plant, total economic costs ($200bn+) far exceed any insurance pool capacity. The state ultimately absorbs residual liability through general taxation, sovereign borrowing, and long-term economic absorption. No insurance mechanism can fully cover true nuclear catastrophe at this scale.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Convention map -->
+  <div class="section-title">Nuclear Liability Convention Framework — Which Countries Are in Which System</div>
+  <div class="convention-grid">
+    <div class="conv-card paris">
+      <div class="cv-tag cv-paris">Paris / Brussels System</div>
+      <h4>Western Europe</h4>
+      <p>France, UK, Germany, Belgium, Netherlands, Spain, Sweden, Finland, Denmark, Switzerland, Italy, Portugal, Turkey and others. Governed by Paris Convention 1960 + Brussels Supplementary 1963. 2004 Protocol not fully in force. Minimum operator liability: €700m (post-Protocol). NRI, ANP, ANI-equivalent pools. <sup>[L1]</sup></p>
+    </div>
+    <div class="conv-card vienna">
+      <div class="cv-tag cv-vienna">Vienna System</div>
+      <h4>Eastern Europe &amp; Some Asia</h4>
+      <p>Czech Republic, Hungary, Slovakia, Romania, Ukraine (pre-conflict), Argentina, Brazil, Mexico, and others. Vienna Convention 1963 + 1997 Protocol. Lower minimum liability limits historically (SDR equivalents). Some states are in both Vienna and Joint Protocol with Paris states. Russia is notably NOT a full Vienna Convention party. <sup>[L3]</sup></p>
+    </div>
+    <div class="conv-card pa">
+      <div class="cv-tag cv-pa">Price-Anderson System</div>
+      <h4>USA Only</h4>
+      <p>The USA has its own unique nuclear liability framework — Price-Anderson does not align with the Paris or Vienna convention systems. Operator liability capped at $450m; above that, all US reactor operators contribute to the industry indemnity pool (currently ~$13bn); above that, unlimited government indemnity through Act of Congress. NRC regulation; ANI pool. <sup>[L5]</sup></p>
+    </div>
+    <div class="conv-card none">
+      <div class="cv-tag cv-none">Non-Convention / Developing Systems</div>
+      <h4>China, India, Pakistan, South Korea, others</h4>
+      <p>China (fastest growing fleet) has national nuclear liability law but limited international convention alignment. India's Civil Liability for Nuclear Damage Act 2010 controversially allows operator recourse against suppliers — incompatible with channelling doctrine and making India difficult for foreign nuclear suppliers. South Korea: similar domestic framework. Pool structures vary significantly in these markets.</p>
+    </div>
+  </div>
+
+  <!-- Paris Convention Protocol note -->
+  <div class="info-box">
+    <strong>Paris Convention Protocol 2004 — Implementation Status:</strong> The 2004 Protocol to the Paris Convention (and the associated Brussels Supplementary Protocol) has not been fully ratified by all signatory states as of 2026. When in full force, it will increase minimum operator liability to €700m (with SDR-based amounts for smaller states), extend the definition of nuclear damage to include environmental damage and economic loss, and broaden the geographic scope of compensation claims. The UK ratified the Protocol in 2022 but full implementation depends on all Paris Convention states ratifying. Underwriters should check current operative limits for specific Paris Convention jurisdictions. <sup>[L1]</sup>
+  </div>
+
+  <!-- Jurisdiction profiles -->
+  <div class="section-title">Jurisdiction Profiles — Key Nuclear Markets</div>
+  <div class="juris-grid">
+
+    <div class="juris-card uk">
+      <div class="jc-flag">United Kingdom</div>
+      <h3>UK Nuclear Market</h3>
+      <div class="jc-row"><span class="jk">Regulator</span><span class="jv">ONR (Office for Nuclear Regulation)</span></div>
+      <div class="jc-row"><span class="jk">Legislation</span><span class="jv">Nuclear Installations Act 1965; Energy Act 2004</span></div>
+      <div class="jc-row"><span class="jk">Convention</span><span class="jv">Paris + Brussels (2004 Protocol ratified 2022)</span></div>
+      <div class="jc-row"><span class="jk">Pool</span><span class="jv">NRI (Nuclear Risk Insurers); Lloyd's core member</span></div>
+      <div class="jc-row"><span class="jk">Operator Liability</span><span class="jv">~£140m current; higher post-Protocol full implementation</span></div>
+      <div class="jc-row"><span class="jk">Active Fleet</span><span class="jv">Sizewell B (PWR); Heysham 1&amp;2; Torness (AGRs)</span></div>
+      <div class="jc-row"><span class="jk">NDA</span><span class="jv">Nuclear Decommissioning Authority — £121bn est. decommissioning liability (Sellafield, legacy sites)</span></div>
+      <div class="jc-row"><span class="jk">New Build</span><span class="jv">Hinkley Point C (EDF, £25–33bn+); Sizewell C proposed; SMR competition ongoing</span></div>
+    </div>
+
+    <div class="juris-card fr">
+      <div class="jc-flag">France</div>
+      <h3>French Nuclear Market — World's Most Nuclear-Dependent Economy</h3>
+      <div class="jc-row"><span class="jk">Regulator</span><span class="jv">ASN (Autorité de Sûreté Nucléaire)</span></div>
+      <div class="jc-row"><span class="jk">Convention</span><span class="jv">Paris + Brussels; 2004 Protocol signatory</span></div>
+      <div class="jc-row"><span class="jk">Pool</span><span class="jv">ANP (Advance Nucléaire Pool) / Assuratome</span></div>
+      <div class="jc-row"><span class="jk">Fleet Size</span><span class="jv">56 PWRs (EDF); ~70% of electricity from nuclear — highest % globally</span></div>
+      <div class="jc-row"><span class="jk">New Build</span><span class="jv">Flamanville 3 EPR (operational 2024 after years of delay); 6 new EPRs announced by Macron 2022</span></div>
+      <div class="jc-row"><span class="jk">Key Concern</span><span class="jv">Stress corrosion cracking in primary circuit — affects multiple EDF reactors; extended outages 2022</span></div>
+    </div>
+
+    <div class="juris-card us">
+      <div class="jc-flag">United States of America</div>
+      <h3>US Nuclear Market — Price-Anderson System</h3>
+      <div class="jc-row"><span class="jk">Regulator</span><span class="jv">NRC (Nuclear Regulatory Commission)</span></div>
+      <div class="jc-row"><span class="jk">Legislation</span><span class="jv">Price-Anderson Act 1957 (reauthorised 2005)</span></div>
+      <div class="jc-row"><span class="jk">Pool</span><span class="jv">ANI (American Nuclear Insurers)</span></div>
+      <div class="jc-row"><span class="jk">Operator Liability Cap</span><span class="jv">$450m primary insurance (per plant)</span></div>
+      <div class="jc-row"><span class="jk">Industry Pool</span><span class="jv">~$13bn pooling among all US reactor operators (secondary layer)</span></div>
+      <div class="jc-row"><span class="jk">Govt Indemnity</span><span class="jv">Above pool — unlimited Congressional appropriation</span></div>
+      <div class="jc-row"><span class="jk">Fleet</span><span class="jv">~93 operating reactors; several long-running life extension approvals to 80yr</span></div>
+      <div class="jc-row"><span class="jk">New Build</span><span class="jv">Vogtle Units 3&amp;4 (AP1000) operational 2023/24; SMR development active (NuScale, TerraPower)</span></div>
+    </div>
+
+    <div class="juris-card jp">
+      <div class="jc-flag">Japan</div>
+      <h3>Japanese Nuclear Market — Post-Fukushima Restructure</h3>
+      <div class="jc-row"><span class="jk">Regulator</span><span class="jv">NRA (Nuclear Regulation Authority) — est. post-Fukushima 2012</span></div>
+      <div class="jc-row"><span class="jk">Legislation</span><span class="jv">Act on Compensation for Nuclear Damage</span></div>
+      <div class="jc-row"><span class="jk">Pool</span><span class="jv">NDF/JAIF — Japan Nuclear Fuel Development Corporation pool</span></div>
+      <div class="jc-row"><span class="jk">Post-Fukushima</span><span class="jv">All 54 reactors shut 2011; gradual restart under NRA new safety standards from 2015</span></div>
+      <div class="jc-row"><span class="jk">Operator Liability</span><span class="jv">¥120bn + government supplemental compensation (Fukushima costs absorbed by government via TEPCO rescue mechanism)</span></div>
+      <div class="jc-row"><span class="jk">Current Status</span><span class="jv">~12 reactors operational (2024); government pushing for restarts and lifetime extensions to 60yr+</span></div>
+    </div>
+
+    <div class="juris-card cn">
+      <div class="jc-flag">China</div>
+      <h3>Chinese Nuclear Market — Fastest Growing Fleet</h3>
+      <div class="jc-row"><span class="jk">Regulator</span><span class="jv">NNSA (National Nuclear Safety Administration)</span></div>
+      <div class="jc-row"><span class="jk">Convention</span><span class="jv">Not a Paris or Vienna Convention party; domestic nuclear liability law</span></div>
+      <div class="jc-row"><span class="jk">Pool</span><span class="jv">CNIC (China Nuclear Insurance Consortium)</span></div>
+      <div class="jc-row"><span class="jk">Fleet</span><span class="jv">~55 operational reactors (2024); 20+ under construction; world's fastest growing nuclear programme</span></div>
+      <div class="jc-row"><span class="jk">International Access</span><span class="jv">Limited Western insurer access; pool-to-pool treaties developing; growing market but limited international convention alignment</span></div>
+      <div class="jc-row"><span class="jk">2050 Target</span><span class="jv">China targets 200GW nuclear by 2050 — would require 150+ new reactors; enormous new insurance demand</span></div>
+    </div>
+
+    <div class="juris-card ua">
+      <div class="jc-flag">Ukraine — Special Risk Warning</div>
+      <h3>Ukraine — Conflict Zone Nuclear Risk</h3>
+      <div class="jc-row"><span class="jk">Status</span><span class="jv">Active military conflict since February 2022</span></div>
+      <div class="jc-row"><span class="jk">Zaporizhzhia</span><span class="jv">6 VVER reactors under Russian military occupation; IAEA monitoring ongoing</span></div>
+      <div class="jc-row"><span class="jk">Convention</span><span class="jv">Vienna Convention signatory; but convention liability framework inapplicable in armed conflict</span></div>
+      <div class="jc-row"><span class="jk">Insurance Status</span><span class="jv">War exclusions apply to all commercial nuclear policies; coverage gap is total</span></div>
+      <div class="jc-row"><span class="jk">Other Sites</span><span class="jv">Khmelnytskyi, Rivne, South Ukraine NPPs still operated by Energoatom under Ukrainian government; coverage position complex</span></div>
+      <div class="jc-row"><span class="jk">IAEA Role</span><span class="jv">IAEA Director General missions to Zaporizhzhia ongoing; requesting safety zone around plant</span></div>
+    </div>
+
+  </div>
+
+  <!-- New nuclear callout -->
+  <div class="smr-box">
+    <h3>New Nuclear Technologies — Insurance Implications</h3>
+    <p><strong>Small Modular Reactors (SMRs):</strong> SMRs (typically 50–300MW vs 1,000–1,600MW for conventional EPR) represent the most significant structural change in nuclear technology since the 1960s. The Rolls-Royce SMR (UK, 470MW — actually a larger-than-typical SMR) uses a factory-built, modular design. Factory construction reduces construction risk (controlled environment vs site) and potentially creates a more predictable PML. The UK government's SMR competition shortlisted designs in 2023–24. <sup>[I9]</sup></p>
+    <p><strong>SMR Insurance Challenges:</strong> No actuarial loss history exists for commercial SMRs. Regulatory frameworks (Generic Design Assessment in UK, NRC licensing in USA) are still being developed for new SMR designs. First-of-kind risk premiums apply. The lower PML per unit reduces the magnitude of the worst-case scenario but multiple SMRs at a single site could aggregate to substantial values. Pool participation models for SMRs are under active discussion within NRI and OECD NEA. <sup>[I5]</sup></p>
+    <p><strong>Hinkley Point C — Current Largest Nuclear Insurance Programme:</strong> The Hinkley Point C construction project (EDF, Somerset, UK) with a budget of £25–33bn+ is the largest single nuclear insurance programme currently active in the world. The construction phase (EAR/CAR) involves transport of reactor components from France and Finland, installation of two 1,630MW EPR reactors, and transition to operational nuclear pool cover upon first criticality. This project is writing nuclear insurance history in real time. <sup>[I9]</sup></p>
+    <p><strong>Fusion Energy (ITER, Commonwealth Fusion Systems):</strong> Fusion reactors (if achievable at commercial scale) have a fundamentally different risk profile from fission — no chain reaction possible, minimal long-lived radioactive waste, no meltdown risk. ITER (France, international project) and Commonwealth Fusion Systems (US) are the leading projects. Commercial fusion remains 15–30 years away. Insurance products do not yet exist for commercial fusion but will need to be developed in due course.</p>
+  </div>
+
+  <!-- Conventions summary table -->
+  <div class="section-title">International Nuclear Liability Conventions — Summary Comparison</div>
+  <table>
+    <thead>
+      <tr><th>Convention</th><th>Year</th><th>Jurisdiction</th><th>Strict Liability</th><th>Channelling</th><th>Operator Liability Limit</th><th>Government Top-Up</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Paris Convention (+ 2004 Protocol)</td><td>1960/2004</td><td>OECD Western Europe</td><td>Yes</td><td>Yes — to operator</td><td>€700m+ (post-Protocol)</td><td>Brussels Supplementary (state layer)</td></tr>
+      <tr><td>Brussels Supplementary Convention</td><td>1963</td><td>Paris states + EC</td><td>Adds govt layer</td><td>n/a</td><td>Varies by state</td><td>State fund above operator ceiling</td></tr>
+      <tr><td>Vienna Convention (+ 1997 Protocol)</td><td>1963/1997</td><td>IAEA global</td><td>Yes</td><td>Yes — to operator</td><td>SDR 300m+ (1997 Protocol)</td><td>State supplementary (voluntary)</td></tr>
+      <tr><td>Price-Anderson Act</td><td>1957 (2005 reauth.)</td><td>USA only</td><td>Yes</td><td>Yes</td><td>$450m primary insurance</td><td>$13bn industry pool; then unlimited Congressional indemnity</td></tr>
+      <tr><td>Joint Protocol (Paris-Vienna link)</td><td>1988</td><td>Cross-system states</td><td>Linked</td><td>Linked</td><td>Operative convention applies</td><td>As per operative convention</td></tr>
+      <tr><td>China domestic law</td><td>1986 (revised)</td><td>China</td><td>Yes</td><td>Yes (partial)</td><td>CNY 300m (~$42m)</td><td>Government guarantee fund — low limit</td></tr>
+      <tr><td>India CLNDA</td><td>2010</td><td>India</td><td>Yes</td><td>Modified — operator has right of recourse against suppliers</td><td>INR 1,500 crore (~$180m)</td><td>Government beyond cap</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn-box">
+    <strong>India's Supplier Recourse Clause — A Major Market Anomaly:</strong> India's Civil Liability for Nuclear Damage Act 2010 (§17(b)) gives nuclear operators the right to recourse against equipment suppliers if the nuclear incident was caused by "patent or latent defects" or "substandard services." This directly contradicts the channelling doctrine of Paris and Vienna conventions — which protect suppliers from any liability. As a result, most Western nuclear equipment suppliers (including EDF, Westinghouse, GE-Hitachi) have refused or been extremely reluctant to supply equipment to Indian nuclear plants, citing uninsurable liability exposure. India's nuclear programme has been significantly impeded by this legal provision. <sup>[L3]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Nuclear (NP / NL / NV) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Next: References →</a></p>
+</footer>
+
+</body>
+</html>

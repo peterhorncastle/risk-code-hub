@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Temporary Life &amp; Permanent Health (TL) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a1a7b;
+      --hub-dark:      #250a45;
+      --hub-light:     #f3e5ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #00796b;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#250a45 0%,#4a1a7b 55%,#6a1b9a 100%);
+      --header-sub:    #ce93d8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a0a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ce93d8;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#250a45;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ce93d8;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e1bee7;}
+    .filter-bar{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    .filter-bar span{font-size:0.82rem;font-weight:600;color:#444;margin-right:4px;}
+    .filter-btn{padding:6px 14px;border-radius:20px;border:1px solid #ccc;background:#fff;font-size:0.8rem;cursor:pointer;font-weight:600;transition:all 0.2s;}
+    .filter-btn:hover,.filter-btn.active{background:var(--hub-primary);color:#fff;border-color:var(--hub-primary);}
+    .timeline{position:relative;padding-left:24px;}
+    .timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:3px;background:#e1bee7;border-radius:2px;}
+    .tl-item{position:relative;margin-bottom:20px;padding-left:28px;}
+    .tl-item::before{content:'';position:absolute;left:-17px;top:6px;width:14px;height:14px;border-radius:50%;border:3px solid var(--hub-primary);background:#fff;}
+    .tl-item.legislative::before{background:#c62828;border-color:#c62828;}
+    .tl-item.product::before{background:#00796b;border-color:#00796b;}
+    .tl-item.medical::before{background:#2e7d32;border-color:#2e7d32;}
+    .tl-item.market::before{background:#4a1a7b;border-color:#4a1a7b;}
+    .tl-item.pandemic::before{background:#e65100;border-color:#e65100;}
+    .tl-item.regulatory::before{background:#1565c0;border-color:#1565c0;}
+    .tl-card{background:#fff;border-radius:8px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card .yr{font-size:1rem;font-weight:700;color:var(--hub-primary);margin-bottom:2px;}
+    .tl-card .type-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:8px;}
+    .tt-legislative{background:#fce4ec;color:#c62828;}
+    .tt-product{background:#e0f2f1;color:#00796b;}
+    .tt-medical{background:#e8f5e9;color:#2e7d32;}
+    .tt-market{background:#f3e5ff;color:#4a1a7b;}
+    .tt-pandemic{background:#fff3e0;color:#e65100;}
+    .tt-regulatory{background:#e3f2fd;color:#1565c0;}
+    .tl-card h4{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.8rem;color:#444;}
+    .legend-dot{width:12px;height:12px;border-radius:50%;}
+    footer{background:#250a45;color:#ce93d8;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Temporary Life &amp; Permanent Health (TL)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key life &amp; health insurance events 1900–2024 — filter by type</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+
+  <div class="filter-bar">
+    <span>Filter:</span>
+    <button class="filter-btn active" data-type="all">All Events</button>
+    <button class="filter-btn" data-type="legislative">Legislative</button>
+    <button class="filter-btn" data-type="product">Product Innovation</button>
+    <button class="filter-btn" data-type="medical">Medical / Mortality</button>
+    <button class="filter-btn" data-type="market">Market Structural</button>
+    <button class="filter-btn" data-type="pandemic">Pandemic</button>
+    <button class="filter-btn" data-type="regulatory">Regulatory</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#c62828;"></div> Legislative</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00796b;"></div> Product Innovation</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2e7d32;"></div> Medical / Mortality</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#4a1a7b;"></div> Market Structural</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100;"></div> Pandemic</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1565c0;"></div> Regulatory</div>
+  </div>
+
+  <div class="timeline" id="timeline">
+
+    <div class="tl-item legislative">
+      <div class="tl-card">
+        <div class="yr">1911</div>
+        <span class="type-tag tt-legislative">Legislative</span>
+        <h4>National Insurance Act 1911</h4>
+        <p>Lloyd George's landmark legislation introduces compulsory state sickness benefit and unemployment insurance for manual workers. First state income protection scheme in the UK — the legislative forerunner of today's Statutory Sick Pay and Employment Support Allowance. Spurred private PHI development as a top-up product for higher earners.<sup>[L5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item market">
+      <div class="tl-card">
+        <div class="yr">1911</div>
+        <span class="type-tag tt-market">Market Structural</span>
+        <h4>First Group Life Policy Issued — Equitable Life USA</h4>
+        <p>Equitable Life Assurance Society of the US issues first group life policy to employees of Pantasote Leather Company. Death-in-service benefit paid as a multiple of salary. The template for employer-sponsored group life that spread to the UK over subsequent decades and became a cornerstone of the employee benefits market.</p>
+      </div>
+    </div>
+
+    <div class="tl-item legislative">
+      <div class="tl-card">
+        <div class="yr">1942</div>
+        <span class="type-tag tt-legislative">Legislative</span>
+        <h4>Beveridge Report — "From Cradle to Grave"</h4>
+        <p>William Beveridge's report on Social Insurance and Allied Services proposes comprehensive welfare state. Leads to National Insurance Act 1946, NHS Act 1946. Establishes state minimum income protection floor — private life and health insurance positions as top-up above state provision.</p>
+      </div>
+    </div>
+
+    <div class="tl-item product">
+      <div class="tl-card">
+        <div class="yr">1954</div>
+        <span class="type-tag tt-product">Product Innovation</span>
+        <h4>Permanent Health Insurance (PHI) Launched UK</h4>
+        <p>First non-cancellable income protection policy launched in the UK. "Permanent" means the insurer cannot cancel or refuse to renew once issued — distinguishing PHI from accident and sickness cover. Monthly benefit pays until recovery or retirement age on inability to work due to illness or injury. Slow initial uptake; market grows through employer group schemes.<sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item product">
+      <div class="tl-card">
+        <div class="yr">1983</div>
+        <span class="type-tag tt-product">Product Innovation</span>
+        <h4>Critical Illness Insurance Invented — Dr Marius Barnard</h4>
+        <p>South African cardiac surgeon Dr Marius Barnard, motivated by patients who survived his brother Christiaan Barnard's pioneering heart transplants but faced financial ruin, persuades Sanlam Life to launch the world's first critical illness policy. The product pays a lump sum on diagnosis of heart attack, stroke, cancer or coronary bypass surgery. One of the most significant life insurance product innovations of the 20th century.<sup>[6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item medical">
+      <div class="tl-card">
+        <div class="yr">1985</div>
+        <span class="type-tag tt-medical">Medical / Mortality</span>
+        <h4>HIV/AIDS Epidemic — Underwriting Crisis Begins</h4>
+        <p>HIV antibody test becomes commercially available (1985). Life insurers face severe anti-selection risk as HIV-positive individuals seek life cover with knowledge of their status. UK insurance industry develops code of practice: HIV tests required above sum assured thresholds; insurer cannot decline solely on grounds of sexuality. Lloyd's life syndicates exposed through impaired life books. AIDS deaths peak UK around 1994–95 before antiretroviral therapy reduces mortality dramatically.<sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item product">
+      <div class="tl-card">
+        <div class="yr">1986</div>
+        <span class="type-tag tt-product">Product Innovation</span>
+        <h4>Critical Illness Launched in UK — Cannon Lincoln</h4>
+        <p>Cannon Lincoln launches first UK critical illness policy, covering heart attack, stroke, cancer and coronary artery bypass surgery. Initial uptake modest; product sold mainly alongside mortgage endowment and term life policies. ABI subsequently develops model definitions for CI conditions to improve standardisation and comparability across the market.</p>
+      </div>
+    </div>
+
+    <div class="tl-item market">
+      <div class="tl-card">
+        <div class="yr">1994</div>
+        <span class="type-tag tt-market">Market Structural</span>
+        <h4>Continuous Mortality Investigation (CMI) Established</h4>
+        <p>The Institute and Faculty of Actuaries formalises the CMI to produce standardised mortality and longevity improvement tables for the UK life insurance market. CMI tables become the foundation for life insurance and annuity pricing and reserving, enabling consistent actuarial basis across the industry. CMI projections are updated annually and have become progressively more influential post-COVID.<sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item market">
+      <div class="tl-card">
+        <div class="yr">2000</div>
+        <span class="type-tag tt-market">Market Structural</span>
+        <h4>Equitable Life Crisis — Closure to New Business</h4>
+        <p>House of Lords ruling in <em>Equitable Life Assurance Society v Hyman</em> [2000] UKHL 39: Equitable must honour guaranteed annuity rates (GARs) it can no longer afford. Society closes to new business December 2000; estimated £4.5bn policyholder losses. Parliamentary ombudsman finds systematic maladministration. Triggers overhaul of life insurance regulation and damages public trust in the life sector.<sup>[I10]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item legislative">
+      <div class="tl-card">
+        <div class="yr">2001</div>
+        <span class="type-tag tt-legislative">Legislative</span>
+        <h4>9/11 Attacks — Group Life Catastrophe Claims</h4>
+        <p>September 11 terrorist attacks cause an estimated $3.5bn in insured life insurance claims — the largest single terrorism loss to life insurers in history. Significant group life exposure from financial services companies concentrated in the World Trade Center. Prompts reinsurers to introduce catastrophe XL limits for group life concentrations; Lloyd's TL market reviews accumulation monitoring.<sup>[I9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory">
+      <div class="tl-card">
+        <div class="yr">2004</div>
+        <span class="type-tag tt-regulatory">Regulatory</span>
+        <h4>ABI Code of Practice — Genetic Testing &amp; Insurance</h4>
+        <p>ABI publishes updated Code of Practice on Genetics and Insurance, maintaining the moratorium on insurers requiring or using genetic test results in underwriting for policies below threshold limits. Reflects ongoing tension between genomic science advances and insurance underwriting principles. Code subsequently updated and extended as Concordat (2018, to 2025).<sup>[L4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item medical">
+      <div class="tl-card">
+        <div class="yr">2008</div>
+        <span class="type-tag tt-medical">Medical / Mortality</span>
+        <h4>CMI Longevity Projection — Improving Mortality Trend</h4>
+        <p>CMI longevity improvement projections confirm sustained improvement in UK mortality — life expectancy at 65 has increased by approximately 10 years since 1960. Life insurers and reinsurers benefit from lower-than-expected mortality, driving rate softening in the early 2010s. Simultaneously, improved longevity increases annuity and pension liabilities — the "longevity risk" paradox for financial institutions.<sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item product">
+      <div class="tl-card">
+        <div class="yr">2010</div>
+        <span class="type-tag tt-product">Product Innovation</span>
+        <h4>Digital Underwriting — CMR &amp; Tele-Underwriting</h4>
+        <p>Customer Medical Records (CMR) digital access (with insured consent) begins replacing traditional GP report requests and APS paperwork. Tele-underwriting — telephone medical interviews replacing paper application questions — improves data quality, reduces application time and non-disclosure risk. Electronic underwriting engines enable straight-through processing for standard risks, freeing underwriters for substandard case assessment.<sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory">
+      <div class="tl-card">
+        <div class="yr">2015</div>
+        <span class="type-tag tt-regulatory">Regulatory</span>
+        <h4>Insurance Act 2015 — Fair Presentation of Risk</h4>
+        <p>Insurance Act 2015 replaces 1906 Act duty of disclosure for commercial insurance. Fair presentation duty applies to group life and IP contracts placed by employers; life insurers can no longer avoid claims on technicalities — remedies must be proportionate. Individual consumer life insurance remains regulated under ICOBS rules.<sup>[L2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory">
+      <div class="tl-card">
+        <div class="yr">2018</div>
+        <span class="type-tag tt-regulatory">Regulatory</span>
+        <h4>ABI Concordat on Genetics &amp; Insurance — Extended to 2025</h4>
+        <p>ABI Concordat and Moratorium on Genetics and Insurance formally extended to November 2025. Prohibits use of predictive genetic test results in underwriting; Huntington's disease exception for policies over £500k sum assured. Post-2025 framework under consideration — potential legislation if voluntary concordat lapses.<sup>[L4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item medical">
+      <div class="tl-card">
+        <div class="yr">2018</div>
+        <span class="type-tag tt-medical">Medical / Mortality</span>
+        <h4>Mental Health Claims Surge — IP Dominant Cause</h4>
+        <p>Mental health conditions (depression, anxiety, burnout) overtake musculoskeletal conditions as the leading cause of long-term income protection claims by duration. Grid/Group Risk Development data confirms mental health responsible for the majority of extended IP claims. Unum, Zurich and other group IP providers report mental health loadings becoming a standard underwriting consideration.<sup>[I6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item pandemic">
+      <div class="tl-card">
+        <div class="yr">2020</div>
+        <span class="type-tag tt-pandemic">Pandemic</span>
+        <h4>COVID-19 — Excess Mortality Shock</h4>
+        <p>COVID-19 pandemic causes approximately 200,000 UK excess deaths in 2020–21 — the largest mortality shock to the life insurance market since the 1918 influenza pandemic. Group life schemes experience significant claim surges, particularly for healthcare, transport and care sector workers. Individual term life and CI claims increase sharply. Reinsurers review catastrophe XL treaties for pandemic carve-outs.<sup>[I8]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item medical">
+      <div class="tl-card">
+        <div class="yr">2021</div>
+        <span class="type-tag tt-medical">Medical / Mortality</span>
+        <h4>Long-COVID — New Class of Permanent Disability</h4>
+        <p>Long-COVID (persistent symptoms >12 weeks post-infection: fatigue, breathlessness, cognitive impairment, pain) emerges as a significant new IP claims driver from 2021. An estimated 2.5m people in the UK self-report long-COVID symptoms (ONS 2023). IP and group income protection providers begin receiving long-COVID disability claims; clinical pathways for assessment and rehabilitation remain under-developed. Reserve adequacy for long-COVID is a significant uncertainty for TL books.<sup>[I8]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory">
+      <div class="tl-card">
+        <div class="yr">2023</div>
+        <span class="type-tag tt-regulatory">Regulatory</span>
+        <h4>FCA Consumer Duty — Fair Value in Protection</h4>
+        <p>FCA Consumer Duty (PS22/9) comes into force August 2023. Requires life and health insurers selling to retail consumers to demonstrate fair value — benefits received must be proportionate to the price paid. Significant implications for protection products (term life, CI, individual IP) sold through intermediaries. Insurers must evidence outcomes monitoring; products with high commission and low claim rates are under particular scrutiny.<sup>[L7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item medical">
+      <div class="tl-card">
+        <div class="yr">2024</div>
+        <span class="type-tag tt-medical">Medical / Mortality</span>
+        <h4>Post-COVID Mortality Normalisation &amp; CMI 2023 Tables</h4>
+        <p>CMI publishes 2023 mortality improvement model showing partial recovery of longevity improvement trend post-COVID — but structural long-COVID and excess cardiovascular mortality concerns temper optimism. Life reinsurers revise longevity assumptions for group life and IP pricing. Excess cardiovascular deaths (elevated post-COVID) remain a pricing uncertainty. ABI mental health working group publishes IP claims management guidelines.<sup>[I4]</sup></p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Temporary Life &amp; Permanent Health (TL) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+  const btns = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.tl-item');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const type = btn.dataset.type;
+      items.forEach(item => {
+        item.style.display = (type === 'all' || item.classList.contains(type)) ? 'block' : 'none';
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

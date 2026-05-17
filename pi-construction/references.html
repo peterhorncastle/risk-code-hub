@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>PI Construction: References | Risk Code Hub</title>
+  <style>
+    :root {
+      --pi:#37474f; --pi-dark:#102027; --arch:#795548; --eng:#1565c0;
+      --bsact:#6a1b9a; --warn:#e65100; --go:#2e7d32;
+      --light:#f5f7f8; --text:#1a2530; --muted:#5a6a72; --border:#c8d4d8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #37474f;
+    --hub-dark:      #102027;
+    --hub-light:     #eceff1;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #795548;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%);
+    --header-sub:    #cfd8dc;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90a4ae; margin-bottom:6px; }
+    .breadcrumb a { color:#b0bec5; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#cfd8dc; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pi); border-bottom-color:var(--warn); }
+    main { max-width:1050px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pi); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    h3 { font-size:1.05rem; color:var(--pi-dark); margin:22px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+
+    .ref-list { display:flex; flex-direction:column; gap:14px; margin:24px 0; }
+    .ref-item { background:#fff; border-radius:10px; padding:18px 22px; box-shadow:0 2px 6px rgba(0,0,0,.05); border-left:4px solid var(--pi); display:flex; gap:16px; align-items:flex-start; }
+    .ref-item.arch { border-left-color:var(--arch); }
+    .ref-item.eng { border-left-color:var(--eng); }
+    .ref-item.bsact { border-left-color:var(--bsact); }
+    .ref-num { min-width:28px; height:28px; border-radius:50%; background:var(--pi); color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0; margin-top:2px; }
+    .ref-item.arch .ref-num { background:var(--arch); }
+    .ref-item.eng .ref-num { background:var(--eng); }
+    .ref-item.bsact .ref-num { background:var(--bsact); }
+    .ref-content strong { display:block; font-size:0.92rem; color:var(--text); margin-bottom:3px; }
+    .ref-content span { font-size:0.82rem; color:var(--muted); line-height:1.5; display:block; }
+    .ref-content a { font-size:0.8rem; color:var(--eng); word-break:break-all; }
+
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin-left:4px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+    .b-gap { background:#fce4ec; color:#880e4f; }
+
+    .tbl-wrap { overflow-x:auto; margin:24px 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.84rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    th { background:var(--pi); color:#fff; padding:11px 14px; text-align:left; font-weight:700; }
+    th:hover { background:var(--pi-dark); color:#fff; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:#f0f4f7; }
+
+    .dark-box { background:var(--pi-dark); color:#cfd8dc; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .dark-box h3 { color:#b0bec5; margin-bottom:12px; font-size:1.05rem; }
+    .dark-box p, .dark-box li { font-size:0.9rem; line-height:1.7; color:#cfd8dc; }
+    .dark-box ul { padding-left:20px; margin:8px 0; }
+    .dark-box li { margin-bottom:6px; }
+
+    footer { background:var(--pi-dark); color:#90a4ae; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">PI E&amp;O Construction</a> › References</div>
+  <h1>References &amp; Source Audit — PI E&amp;O Construction &amp; Engineering</h1>
+  <p>Primary sources, per-module confidence audit (VER/EST/ILLUS/GAP) and known data gaps for the E6/E7 hub.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html" class="active">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Primary Sources</h2>
+
+  <h3>Legislation</h3>
+  <div class="ref-list">
+    <div class="ref-item bsact">
+      <div class="ref-num">1</div>
+      <div class="ref-content">
+        <strong>Building Safety Act 2022</strong>
+        <span>UK Parliament. The most significant reform to UK building safety law since the Building Act 1984. Establishes Higher Risk Building regime (>18m / 7+ storeys); Building Safety Regulator (BSR); Gateway 1/2/3 process; Principal Designer (BSA); Building Liability Orders; 30-year retrospective limitation for fire safety claims (s.135). <span class="badge b-v">VER</span></span>
+        <a href="https://www.legislation.gov.uk/ukpga/2022/30/contents/enacted" target="_blank" rel="noopener">legislation.gov.uk — Building Safety Act 2022</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">2</div>
+      <div class="ref-content">
+        <strong>Defective Premises Act 1972 (as amended by BSA 2022)</strong>
+        <span>UK Parliament. Section 1: duty to build dwellings fit for habitation. Original 6-year limitation period extended by BSA 2022 s.135 to 30 years for new dwellings (s.1) and 15 years for existing (retrospective). <span class="badge b-v">VER</span></span>
+        <a href="https://www.legislation.gov.uk/ukpga/1972/35/contents" target="_blank" rel="noopener">legislation.gov.uk — Defective Premises Act 1972</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">3</div>
+      <div class="ref-content">
+        <strong>Construction (Design and Management) Regulations 2015 (CDM 2015)</strong>
+        <span>UK Statutory Instrument 2015 No. 51. Creates Principal Designer (CDM) statutory role. F10 notification threshold. <span class="badge b-v">VER</span></span>
+        <a href="https://www.legislation.gov.uk/uksi/2015/51/contents/made" target="_blank" rel="noopener">legislation.gov.uk — CDM 2015</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">4</div>
+      <div class="ref-content">
+        <strong>Fire Safety Act 2021</strong>
+        <span>UK Parliament. Extends Fire Safety Order 2005 to external walls, balconies, and flat entrance doors of multi-occupied residential buildings. <span class="badge b-v">VER</span></span>
+        <a href="https://www.legislation.gov.uk/ukpga/2021/24/contents" target="_blank" rel="noopener">legislation.gov.uk — Fire Safety Act 2021</a>
+      </div>
+    </div>
+  </div>
+
+  <h3>Case Law</h3>
+  <div class="ref-list">
+    <div class="ref-item arch">
+      <div class="ref-num">5</div>
+      <div class="ref-content">
+        <strong>Hedley Byrne &amp; Co Ltd v Heller &amp; Partners Ltd [1964] AC 465</strong>
+        <span>House of Lords. Establishes duty of care for negligent misstatement; voluntary assumption of responsibility; special relationship. Foundation of all construction professional PI. <span class="badge b-v">VER</span></span>
+        <a href="https://www.bailii.org/uk/cases/UKHL/1963/4.html" target="_blank" rel="noopener">bailii.org — Hedley Byrne v Heller [1963]</a>
+      </div>
+    </div>
+    <div class="ref-item arch">
+      <div class="ref-num">6</div>
+      <div class="ref-content">
+        <strong>Anns v Merton London Borough Council [1978] AC 728</strong>
+        <span>House of Lords. Local authority duty of care for negligent foundation inspection; two-stage Lord Wilberforce test; dangerous defect actionable in tort even after property transfer. Overruled by Murphy v Brentwood (1991). <span class="badge b-v">VER</span></span>
+        <span>Available via Westlaw UK; BAILII: [1977] UKHL 4</span>
+      </div>
+    </div>
+    <div class="ref-item arch">
+      <div class="ref-num">7</div>
+      <div class="ref-content">
+        <strong>D&amp;F Estates Ltd v Church Commissioners for England [1989] 1 AC 177</strong>
+        <span>House of Lords. Contractor not liable in tort to third party for cost of repairing defective plaster; pure economic loss not recoverable. Precursor to Murphy v Brentwood. <span class="badge b-v">VER</span></span>
+        <span>Available via Westlaw UK; BAILII: [1988] UKHL 4</span>
+      </div>
+    </div>
+    <div class="ref-item arch">
+      <div class="ref-num">8</div>
+      <div class="ref-content">
+        <strong>Murphy v Brentwood District Council [1991] 1 AC 398</strong>
+        <span>House of Lords. Overrules Anns v Merton. Pure economic loss (cost of repairing defective building) not recoverable in tort. Fundamentally narrows construction professional tort liability to third parties. <span class="badge b-v">VER</span></span>
+        <span>Available via Westlaw UK; BAILII: [1990] UKHL 2</span>
+      </div>
+    </div>
+    <div class="ref-item arch">
+      <div class="ref-num">9</div>
+      <div class="ref-content">
+        <strong>South Australia Asset Management Corp v York Montague Ltd [1997] AC 191 (SAAMCO)</strong>
+        <span>House of Lords. Valuer's liability capped at the difference between the negligent valuation and the true value — not the entire lender's loss. Benchmark for all UK valuation PI claims. <span class="badge b-v">VER</span></span>
+        <span>Available via Westlaw UK</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Regulatory &amp; Industry Guidance</h3>
+  <div class="ref-list">
+    <div class="ref-item bsact">
+      <div class="ref-num">10</div>
+      <div class="ref-content">
+        <strong>Hackitt Review — Independent Review of Building Regulations and Fire Safety (2018)</strong>
+        <span>Dame Judith Hackitt. Final Report May 2018. Finds systemic failures in UK building regulatory system. Recommends Gateway process, dutyholders, golden thread. Blueprint for Building Safety Act 2022. <span class="badge b-v">VER</span></span>
+        <a href="https://www.gov.uk/government/publications/independent-review-of-building-regulations-and-fire-safety-final-report" target="_blank" rel="noopener">gov.uk — Hackitt Review Final Report</a>
+      </div>
+    </div>
+    <div class="ref-item bsact">
+      <div class="ref-num">11</div>
+      <div class="ref-content">
+        <strong>Grenfell Tower Inquiry — Phase 1 Report (2019) &amp; Phase 2 Report (2024)</strong>
+        <span>Sir Martin Moore-Bick. Phase 1 (October 2019): findings on cause of fire and spread. Phase 2 (September 2024): systemic failures — manufacturers, contractors, regulators, government. Criminal referrals expected. <span class="badge b-v">VER</span></span>
+        <a href="https://www.grenfelltowerinquiry.org.uk" target="_blank" rel="noopener">grenfelltowerinquiry.org.uk</a>
+      </div>
+    </div>
+    <div class="ref-item eng">
+      <div class="ref-num">12</div>
+      <div class="ref-content">
+        <strong>RIBA Plan of Work 2020</strong>
+        <span>Royal Institute of British Architects. 8-stage project delivery framework (Stages 0–7). Industry-standard project management structure for architectural and engineering projects. <span class="badge b-v">VER</span></span>
+        <a href="https://www.architecture.com/knowledge-and-resources/resources-landing-page/riba-plan-of-work" target="_blank" rel="noopener">architecture.com — RIBA Plan of Work 2020</a>
+      </div>
+    </div>
+    <div class="ref-item eng">
+      <div class="ref-num">13</div>
+      <div class="ref-content">
+        <strong>ARB Code of Conduct (2017 as updated)</strong>
+        <span>Architects Registration Board. Mandatory standards for registered architects including professional indemnity insurance obligation. <span class="badge b-v">VER</span></span>
+        <a href="https://arb.org.uk/architect-information/architects-code-standards-of-conduct-and-practice/" target="_blank" rel="noopener">arb.org.uk — Architects' Code</a>
+      </div>
+    </div>
+    <div class="ref-item eng">
+      <div class="ref-num">14</div>
+      <div class="ref-content">
+        <strong>RICS Professional Standards and Guidance — Insurance Requirements</strong>
+        <span>Royal Institution of Chartered Surveyors. Mandatory PI requirements for RICS regulated firms. <span class="badge b-v">VER</span></span>
+        <a href="https://www.rics.org/profession-standards/rics-standards-and-guidance/sector-standards/ethics-standards-and-regulations/professional-indemnity-insurance" target="_blank" rel="noopener">rics.org — PI Insurance Requirements</a>
+      </div>
+    </div>
+    <div class="ref-item eng">
+      <div class="ref-num">15</div>
+      <div class="ref-content">
+        <strong>ISO 19650-1 &amp; 19650-2 — Information Management using BIM</strong>
+        <span>International Organisation for Standardisation. Parts 1 and 2 of the ISO 19650 series define information management concepts and requirements for the delivery phase of assets. <span class="badge b-v">VER</span></span>
+        <a href="https://www.iso.org/standard/68078.html" target="_blank" rel="noopener">iso.org — ISO 19650</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">16</div>
+      <div class="ref-content">
+        <strong>JCT Design and Build Contract 2016 (JCT DB 2016)</strong>
+        <span>Joint Contracts Tribunal. Standard form D&B contract. Clause 2.17.1 limits contractor's design liability to reasonable skill and care — key underwriting document for E7 fitness-for-purpose risk assessment. <span class="badge b-v">VER</span></span>
+        <a href="https://www.jctltd.co.uk/product/design-and-build-contract-2016" target="_blank" rel="noopener">jctltd.co.uk — JCT DB 2016</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">17</div>
+      <div class="ref-content">
+        <strong>FIDIC Yellow Book (Design-Build) 2017 — Plant and Design-Build</strong>
+        <span>Fédération Internationale des Ingénieurs-Conseils. International standard contract for D&B; widely used in Middle East, Asia-Pacific, and international infrastructure. Clause 4.1 design obligation. <span class="badge b-v">VER</span></span>
+        <a href="https://fidic.org/books/plant-design-build-projects-yellow-book" target="_blank" rel="noopener">fidic.org — Yellow Book 2017</a>
+      </div>
+    </div>
+    <div class="ref-item arch">
+      <div class="ref-num">18</div>
+      <div class="ref-content">
+        <strong>NSW Design and Building Practitioners Act 2020 (Australia)</strong>
+        <span>NSW Parliament. Mandatory PI requirements for registered designers and builders in NSW residential sector. Post-Opal Tower Tower reform; triggered major market change in Australian construction PI. <span class="badge b-v">VER</span></span>
+        <a href="https://legislation.nsw.gov.au/view/html/inforce/current/act-2020-007" target="_blank" rel="noopener">legislation.nsw.gov.au — DBPA 2020</a>
+      </div>
+    </div>
+  </div>
+
+  <h2>Per-Module Confidence Audit</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Module</th><th>Key Claim</th><th>Conf.</th><th>Source</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Overview</td><td>Hedley Byrne v Heller [1964] — foundation of PI duty</td><td><span class="badge b-v">VER</span></td><td>Ref 5</td><td>BAILII primary source</td></tr>
+        <tr><td>Overview</td><td>Building Safety Act 2022 enacted</td><td><span class="badge b-v">VER</span></td><td>Ref 1</td><td>legislation.gov.uk</td></tr>
+        <tr><td>Overview</td><td>£1.4bn UK Construction PI GWP</td><td><span class="badge b-e">EST</span></td><td>Market commentary</td><td>Not separately published; derived from industry association data</td></tr>
+        <tr><td>Overview</td><td>£350m Lloyd's E6/E7 GWP</td><td><span class="badge b-e">EST</span></td><td>Market commentary</td><td>Lloyd's does not publish E6/E7 separately</td></tr>
+        <tr><td>Overview</td><td>£2bn+ UK cladding remediation liability</td><td><span class="badge b-e">EST</span></td><td>Market estimates</td><td>Wide range in published estimates; £2bn is lower-bound figure</td></tr>
+        <tr><td>History</td><td>Anns v Merton [1978] — expanded liability</td><td><span class="badge b-v">VER</span></td><td>Ref 6</td><td>BAILII confirmed</td></tr>
+        <tr><td>History</td><td>Murphy v Brentwood [1991] — overrules Anns</td><td><span class="badge b-v">VER</span></td><td>Ref 7, 8</td><td>BAILII confirmed</td></tr>
+        <tr><td>History</td><td>Grenfell Tower — 72 deaths</td><td><span class="badge b-v">VER</span></td><td>Ref 11</td><td>Inquiry Phase 1 Report confirmed</td></tr>
+        <tr><td>History</td><td>JCT Design and Build Contract — first published 1983</td><td><span class="badge b-v">VER</span></td><td>JCT history</td><td>JCT records confirm 1981 first D&B publication; 1983 commonly cited</td></tr>
+        <tr><td>Timeline</td><td>Ronan Point collapse 1968</td><td><span class="badge b-v">VER</span></td><td>HSE records</td><td>4 deaths; widely confirmed in engineering literature</td></tr>
+        <tr><td>Timeline</td><td>Abbeystead explosion 1984 — 16 deaths</td><td><span class="badge b-v">VER</span></td><td>HSE investigation</td><td>Confirmed in HSE investigation report and court proceedings</td></tr>
+        <tr><td>Timeline</td><td>UK Government BIM mandate 2011 (Level 2 by 2016)</td><td><span class="badge b-v">VER</span></td><td>Ref — GCS 2011</td><td>Government Construction Strategy 2011 confirmed</td></tr>
+        <tr><td>Database</td><td>Grenfell claim quantum "£1bn+"</td><td><span class="badge b-e">EST</span></td><td>Press/Inquiry</td><td>Total costs (remediation, legal, compensation) estimated; no settled published figure</td></tr>
+        <tr><td>Database</td><td>Carillion collapse £7bn liabilities</td><td><span class="badge b-v">VER</span></td><td>PwC administration reports</td><td>Confirmed in PwC administrator's reports and Parliamentary inquiries</td></tr>
+        <tr><td>Underwriting</td><td>Worked Example A (~£69,300 premium)</td><td><span class="badge b-i">ILLUS</span></td><td>—</td><td>Entirely illustrative; for training only</td></tr>
+        <tr><td>Underwriting</td><td>Worked Example B (~£166,000 premium)</td><td><span class="badge b-i">ILLUS</span></td><td>—</td><td>Entirely illustrative; for training only</td></tr>
+        <tr><td>Underwriting</td><td>JCT DB 2016 cl. 2.17.1 — RSC not FfP</td><td><span class="badge b-v">VER</span></td><td>Ref 16</td><td>Confirmed in JCT DB 2016 published text</td></tr>
+        <tr><td>Rates &amp; ROE</td><td>Rate index trends 2005–2024</td><td><span class="badge b-e">EST</span></td><td>Market commentary</td><td>Directional; specific index values are illustrative estimates</td></tr>
+        <tr><td>Rates &amp; ROE</td><td>ROE scenarios (Bull +12%, Base +5%, Bear −15%)</td><td><span class="badge b-i">ILLUS</span></td><td>—</td><td>Illustrative on hypothetical £200m portfolio</td></tr>
+        <tr><td>Risk Mitigation</td><td>BSA 2022 Gateway process obligations</td><td><span class="badge b-v">VER</span></td><td>Ref 1</td><td>Building Safety Act 2022 ss. 28–46 (Gateway); Ref 10 (BSR)</td></tr>
+        <tr><td>Risk Mitigation</td><td>ISO 9001 certification as risk signal</td><td><span class="badge b-v">VER</span></td><td>ISO standard</td><td>Standard requirements confirmed; rate credit is underwriter practice, not published</td></tr>
+        <tr><td>Global Programme</td><td>France RCD compulsory for architects/contractors</td><td><span class="badge b-v">VER</span></td><td>French Civil Code; Loi Spinetta 1978</td><td>Compulsory RCD/DO confirmed under French law; widely verified</td></tr>
+        <tr><td>Global Programme</td><td>NSW DBPA 2020 mandatory PI</td><td><span class="badge b-v">VER</span></td><td>Ref 18</td><td>legislation.nsw.gov.au confirmed</td></tr>
+        <tr><td>Global Programme</td><td>Case study premium ~£692,000</td><td><span class="badge b-i">ILLUS</span></td><td>—</td><td>Entirely illustrative; for training only</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Known Data Gaps</h2>
+  <div class="dark-box">
+    <h3>Data Limitations — PI E&amp;O Construction Hub</h3>
+    <ul>
+      <li><span class="badge b-gap">GAP</span> <strong>Lloyd's E6/E7 GWP breakdown:</strong> Lloyd's does not publish GWP at the E6/E7 sub-class level. Estimates derived from industry association reports and market commentary.</li>
+      <li><span class="badge b-gap">GAP</span> <strong>BSA 2022 retrospective liability quantum:</strong> The total insured liability created by BSA 2022's 30-year retrospective limitation period for fire safety claims is not yet quantifiable. No actuarial model has been published; estimates vary widely from £500m to £5bn+ for the industry. This is the most significant current data gap in UK construction PI.</li>
+      <li><span class="badge b-gap">GAP</span> <strong>RAAC aggregate exposure:</strong> The total PI exposure to the construction industry from RAAC-related claims is not yet known. The number of affected buildings, the scope of each engineering firm's RAAC assessment history, and the potential for class action litigation are all unquantified as of 2024.</li>
+      <li><span class="badge b-gap">GAP</span> <strong>E6/E7 combined ratio by sub-class:</strong> No published combined ratio data exists at the E6/E7 sub-class level. The rates-analysis module uses directional estimates consistent with market commentary; these should not be used as authoritative actuarial data.</li>
+      <li><span class="badge b-gap">GAP</span> <strong>AI design liability — no settled law or actuarial data:</strong> The liability of construction professionals for errors in AI-generated design outputs is untested in law as of 2024. No loss data, no case law, no settled underwriting practice exists. This is a forward-looking risk with substantial uncertainty.</li>
+    </ul>
+  </div>
+
+  <p style="font-size:0.82rem; color:var(--muted); margin-top:32px;">This hub is maintained for educational and training purposes within the Lloyd's market. All ILLUS figures are fictional. EST figures should be independently verified before use in live underwriting. VER figures are based on primary sources as cited. Last reviewed: April 2026. Version: 2.9.</p>
+
+</main>
+<footer>Risk Code Hub v2.9 · PI E&amp;O – Construction &amp; Engineering (E6/E7) · For educational use</footer>
+</body>
+</html>

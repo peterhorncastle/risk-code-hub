@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Claims Database — Marine Cargo — Risk Code Hub</title>
+  <style>
+    :root {
+      --mc:#1565c0; --mc-dark:#0d2137; --icc:#00695c;
+      --fire:#c62828; --ga:#6a1b9a; --warn:#e65100;
+      --light:#e3f2fd; --border:#bbdefb; --text:#0d1b2e; --muted:#546e7a;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1565c0;
+    --hub-dark:      #0d2137;
+    --hub-light:     #e8f0fa;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #00695c;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%);
+    --header-sub:    #bbdefb;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90caf9; margin-bottom:6px; }
+    .breadcrumb a { color:#bbdefb; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#90caf9; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#bbdefb; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--mc); border-bottom-color:var(--fire); }
+    main { max-width:1200px; margin:0 auto; padding:40px 30px; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+
+    .controls { display:flex; gap:12px; flex-wrap:wrap; margin:24px 0; align-items:center; }
+    .controls input { padding:9px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.84rem; flex:1; min-width:200px; background:#fff; }
+    .controls select { padding:9px 12px; border:1px solid var(--border); border-radius:8px; font-size:0.84rem; background:#fff; }
+    .controls label { font-size:0.8rem; font-weight:600; color:var(--muted); }
+
+    #count { font-size:0.83rem; color:var(--muted); margin-bottom:16px; }
+
+    .db-table-wrap { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+    table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+    th { background:var(--mc); color:#fff; padding:11px 13px; text-align:left; cursor:pointer; white-space:nowrap; }
+    th:hover { background:#0d47a1; }
+    td { padding:10px 13px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:hover td { background:#e8f4fd; cursor:pointer; }
+    tr.expanded td { background:#dceefb; }
+
+    .peril-badge { font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:8px; white-space:nowrap; }
+    .p-FIRE { background:#fdecea; color:#b71c1c; }
+    .p-SINK { background:#e3f2fd; color:#0d47a1; }
+    .p-GA { background:#f3e5f5; color:#6a1b9a; }
+    .p-THEFT { background:#fff3e0; color:#e65100; }
+    .p-STORM { background:#e0f2f1; color:#00695c; }
+    .p-DAMAGE { background:#f5f5f5; color:#424242; }
+    .p-WAR { background:#fce4ec; color:#880e4f; }
+    .p-CONT { background:#e8f5e9; color:#1b5e20; }
+    .p-MULTI { background:#ede7f6; color:#311b92; }
+
+    .expand-row { display:none; }
+    .expand-row td { background:#f0f8ff; padding:14px 20px; font-size:0.82rem; line-height:1.7; border-bottom:2px solid var(--mc); }
+    .expand-row.show { display:table-row; }
+
+    .severity { font-weight:700; }
+    .sev-major { color:var(--fire); }
+    .sev-sig { color:var(--warn); }
+    .sev-mod { color:var(--icc); }
+
+    footer { background:var(--mc-dark); color:#90caf9; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Cargo</a> › Claims Database</div>
+  <div class="tag">Lloyd's Codes · V · Q · VL · VX</div>
+  <h1>Claims Database</h1>
+  <p>35 major cargo loss events from 1990 to 2024. Filter by peril type, region, or search by vessel name, commodity, or location. Click any row to expand full details.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search vessel, commodity, location…">
+    <div>
+      <label>Peril: </label>
+      <select id="peril-filter">
+        <option value="">All Perils</option>
+        <option value="FIRE">Fire / Explosion</option>
+        <option value="SINK">Sinking / Grounding</option>
+        <option value="GA">General Average</option>
+        <option value="THEFT">Theft / Piracy</option>
+        <option value="STORM">Storm / Weather</option>
+        <option value="DAMAGE">Physical Damage</option>
+        <option value="WAR">War / Political</option>
+        <option value="CONT">Contamination</option>
+        <option value="MULTI">Multi-Peril</option>
+      </select>
+    </div>
+    <div>
+      <label>Region: </label>
+      <select id="region-filter">
+        <option value="">All Regions</option>
+        <option value="Atlantic">Atlantic</option>
+        <option value="Pacific">Pacific</option>
+        <option value="Indian Ocean">Indian Ocean</option>
+        <option value="Mediterranean">Mediterranean</option>
+        <option value="Asia">Asia</option>
+        <option value="Americas">Americas</option>
+        <option value="Middle East">Middle East</option>
+        <option value="Europe">Europe</option>
+      </select>
+    </div>
+  </div>
+  <div id="count"></div>
+
+  <div class="db-table-wrap">
+    <table id="db-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Event / Vessel</th>
+          <th>Peril</th>
+          <th>Region</th>
+          <th>Commodity</th>
+          <th>Insured Loss (est.)</th>
+          <th>Severity</th>
+        </tr>
+      </thead>
+      <tbody id="db-body"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+const events = [
+  { year:1993, event:"Braer Oil Tanker Grounding — Shetland", peril:"SINK", region:"Europe", commodity:"Crude oil + cargo", loss:"$100m+", sev:"sig", detail:"Oil tanker Braer grounded off Shetland in severe storm; full cargo lost; major environmental damage to coastline; insured cargo and environmental claims. Highlighted the storm risk of the Northern routes. VER" },
+  { year:1994, event:"MSC Carla — Atlantic Fire", peril:"FIRE", region:"Atlantic", commodity:"Mixed containerised", loss:"~$80m", sev:"sig", detail:"Fire aboard MSC Carla in the South Atlantic; vessel abandoned; severe cargo loss across multiple containers. Early marker of growing container fire risk. EST" },
+  { year:1996, event:"MV Bright Field — New Orleans Collision", peril:"DAMAGE", region:"Americas", commodity:"Grain (bulk)", loss:"~$50m", sev:"mod", detail:"Grain bulk carrier MV Bright Field lost power and collided with Riverwalk Marketplace, New Orleans. 116 injured; cargo and property losses. Highlighted hazard of bulk carriers in congested waterways. VER" },
+  { year:1998, event:"Derbyshire-Type Bulk Carrier Losses", peril:"SINK", region:"Pacific", commodity:"Iron ore / bulk", loss:"~$200m cumulative", sev:"sig", detail:"A series of bulk carrier losses in Pacific typhoon conditions through the 1990s culminating in the formal Derbyshire inquiry (1994/98). Structural failure in heavy weather. Lloyd's cargo market began requiring improved structural warranties on certain bulk trades. VER" },
+  { year:2001, event:"Petrobras P-36 Platform Explosion — Brazil", peril:"FIRE", region:"Americas", commodity:"Petroleum / offshore cargo", loss:"~$500m", sev:"major", detail:"Platform explosion and sinking; significant cargo and property losses; P&I and energy market interaction. Largest offshore loss in history at the time. VER" },
+  { year:2002, event:"Prestige Oil Tanker Sinking — Spain", peril:"SINK", region:"Atlantic", commodity:"Fuel oil", loss:"~$800m total", sev:"major", detail:"Single-hull tanker Prestige sank off Galicia, Spain; massive oil spill across Spanish and French coastlines. Resulted in IMO single-hull phase-out regulations. Total claims including cargo, environmental liability, and P&I exceeded $800m. VER" },
+  { year:2004, event:"MSC Napoli — Pre-event: Atlantic Storm Damage", peril:"STORM", region:"Atlantic", commodity:"Mixed containerised", loss:"~$30m", sev:"mod", detail:"Several significant container vessels suffered storm damage in North Atlantic winter 2004–2005; cargo losses from shifting containers and sea water entry. Highlighted need for CTU Code compliance on container packing. EST" },
+  { year:2007, event:"MSC Napoli Grounding — Devon, UK", peril:"GA", region:"Europe", commodity:"Mixed containerised", loss:"~£120m", sev:"major", detail:"MSC Napoli disabled in English Channel gale; beached off Branscombe, Devon. General Average declared; thousands of containers discharged or lost; widespread media coverage of washed-up cargo. GA adjustment took years. Highlighted plight of uninsured cargo owners unable to pay GA security. VER" },
+  { year:2008, event:"Typhoon Sinlaku — Taiwan Strait Cargo Losses", peril:"STORM", region:"Asia", commodity:"Electronics, machinery", loss:"~$150m", sev:"sig", detail:"Typhoon Sinlaku (2008) caused widespread port damage and cargo losses across Taiwan and adjacent sea lanes. Electronics and machinery exports heavily affected. Taiwan is a major cargo insurance risk hub for electronics trade. EST" },
+  { year:2009, event:"MV Arctic Sea Hijacking", peril:"WAR", region:"Atlantic", commodity:"Timber", loss:"~$2m", sev:"mod", detail:"Cargo ship Arctic Sea hijacked in the Baltic/Atlantic (2009) in an incident of disputed motivation (piracy vs. smuggling). Timber cargo lost. Highlighted extension of maritime criminal risk beyond traditional piracy zones. VER" },
+  { year:2010, event:"Somali Piracy Peak — Gulf of Aden", peril:"WAR", region:"Middle East", commodity:"Multiple (container, tanker)", loss:"~$300m cumulative 2010", sev:"major", detail:"2010 saw the peak of Somali piracy: 445 attacks, 49 vessels seized. War risk premiums for Gulf of Aden transit at peak. Average ransom paid $5m. Collective naval response (EU NAVFOR, US Fifth Fleet) and Best Management Practice (BMP) eventually suppressed activity by 2016. VER" },
+  { year:2011, event:"Thailand Floods — Inland Transit & Warehouse Losses", peril:"STORM", region:"Asia", commodity:"Electronics, HDD, automotive", loss:"~$1.5bn (cargo component)", sev:"major", detail:"Unprecedented flooding of industrial estates (Ayutthaya, Navanakorn) inundated HDD manufacturing and automotive supply chain. Cargo in transit and in flooded warehouses extensively damaged. Exposed single-geography supply chain concentration risk. Total economic loss $45bn; insured $12bn. VER" },
+  { year:2011, event:"MV Rena Grounding — New Zealand", peril:"GA", region:"Pacific", commodity:"Mixed containerised", loss:"NZ$300m+", sev:"major", detail:"Container vessel Rena grounded on Ótāiti Reef, Tauranga. Vessel eventually broke apart; 900+ containers lost or damaged; major oil spill. General Average declared. Largest NZ maritime disaster. P&I environmental claims, cargo, and hull losses combined. VER" },
+  { year:2012, event:"Costa Concordia Grounding — Salvage GA", peril:"GA", region:"Mediterranean", commodity:"Passenger/provisions", loss:"~$2bn total (inc. GA)", sev:"major", detail:"Although primarily a hull/P&I loss, Costa Concordia (Giglio Island, 2012) produced the largest GA adjustment in history at the time: the two-year Parbuckling salvage operation cost $800m+, with a GA contribution claimed across all insurers. 32 deaths. VER" },
+  { year:2013, event:"Bangladesh Factory Collapse — Supply Chain Cargo Impact", peril:"DAMAGE", region:"Asia", commodity:"Garments/textiles", loss:"~$40m cargo component", sev:"mod", detail:"Rana Plaza factory collapse (1,134 killed) caused disruption to garment export shipments and exposed brand liability for supply chain conditions. Cargo claims arose from disrupted shipments and goods abandoned in the collapse. Drove ESG focus in cargo underwriting. VER" },
+  { year:2015, event:"Tianjin Port Explosions — Largest Port Accumulation Loss", peril:"FIRE", region:"Asia", commodity:"Vehicles, chemicals, containers", loss:"~$3.3bn", sev:"major", detail:"Two massive explosions at Ruihai International Logistics chemical store, Tianjin port (12 Aug 2015). 173 deaths. ~3,500 vehicles destroyed; thousands of containers damaged. Largest port accumulation cargo loss in insurance history. Exposed gaps in insurers' port accumulation PML models. VER" },
+  { year:2016, event:"Hanjin Shipping Bankruptcy — Cargo Stranding Crisis", peril:"MULTI", region:"Pacific", commodity:"Mixed containerised", loss:"~$500m", sev:"major", detail:"Collapse of Hanjin Shipping (Korea's largest container line, Sep 2016) left ~$14bn of cargo at sea across 88 vessels refused port entry globally. Cargo owners unable to recover goods; total cargo claims ~$500m. Exposed carrier insolvency risk — previously underappreciated by cargo underwriters. VER" },
+  { year:2017, event:"NotPetya Cyberattack — Maersk IT Outage", peril:"MULTI", region:"Europe", commodity:"Mixed containerised", loss:"~$300m (Maersk total)", sev:"major", detail:"NotPetya ransomware wiped Maersk's terminal operating systems globally; port operations halted at 17 terminals for 2 weeks. Cargo claims for delay and missed perishable deliveries. Market debated whether cyber-caused delay losses triggered standard ICC transit cover. Led to explicit cyber exclusions in marine cargo renewals 2018–19. VER" },
+  { year:2018, event:"Maersk Honam Fire — Arabian Sea", peril:"FIRE", region:"Indian Ocean", commodity:"Mixed containerised (misdeclared DG)", loss:"~$600m–$1.4bn", sev:"major", detail:"Fire aboard Maersk Honam in Arabian Sea; 5 crew killed; GA declared. Probable cause: misdeclared calcium hypochlorite (oxidiser). 30+ containers destroyed; vessel severely damaged. Focused market attention on dangerous goods misrepresentation — estimated 10%+ of 'benign' containers carry undeclared DG cargo. EST" },
+  { year:2018, event:"Typhoon Mangkhut — South China Sea & Philippines", peril:"STORM", region:"Asia", commodity:"Agricultural, consumer goods", loss:"~$1.5bn (total incl. cargo)", sev:"major", detail:"Super Typhoon Mangkhut caused widespread cargo losses in the South China Sea, Philippines, and South China coast. Port infrastructure damage at Hong Kong and Guangzhou terminals. Significant cargo accumulation losses at ports in the storm's path. VER" },
+  { year:2019, event:"Julianna Container Losses — North Atlantic", peril:"STORM", region:"Atlantic", commodity:"Mixed containerised", loss:"~$50m", sev:"mod", detail:"Multiple North Atlantic winter storms caused widespread overboard container losses from vessels in transit; individual cargo claims for overboard and water-damaged goods. Highlighted inadequacy of container securing in extreme North Atlantic conditions. EST" },
+  { year:2020, event:"Beirut Port Explosion — Cargo Accumulation", peril:"FIRE", region:"Middle East", commodity:"Ammonium nitrate, port cargo", loss:"~$2bn (total)", sev:"major", detail:"Massive explosion of 2,750 tonnes of ammonium nitrate at Beirut port (4 Aug 2020). 218 killed; port destroyed. Cargo stored in warehouses and aboard vessels in port suffered catastrophic losses. Raised regulatory focus on hazardous materials storage in ports globally. VER" },
+  { year:2021, event:"Ever Given — Suez Canal Grounding and GA", peril:"GA", region:"Middle East", commodity:"Mixed containerised", loss:"~$900m GA fund", sev:"major", detail:"20,388 TEU Ever Given grounded in Suez Canal (23 Mar–29 Mar 2021). Six-day blockage disrupted $9bn/day of trade. GA declared; 11.75% contribution rate; ~$900m GA fund. Highlighted ULCV grounding risk and scale of a single-vessel GA in the modern era. VER" },
+  { year:2021, event:"MV X-Press Pearl — Indian Ocean Fire", peril:"FIRE", region:"Indian Ocean", commodity:"Hazardous chemicals, containers", loss:"~$100m+", sev:"major", detail:"Container vessel X-Press Pearl fire and sinking off Colombo, Sri Lanka (May–Jun 2021). Cargo: 25 tonnes nitric acid plus other hazardous chemicals. Worst Indian Ocean maritime environmental disaster. Significant cargo and environmental P&I losses; ongoing. VER" },
+  { year:2021, event:"Maersk Essen — Container Cargo Overboard", peril:"STORM", region:"Pacific", commodity:"Mixed containerised", loss:"~$50m", sev:"mod", detail:"MV Maersk Essen lost approximately 750 containers overboard during a North Pacific storm (Jan 2021). Cargo losses across multiple owners; environmental concerns from floating debris. Followed similar Zim Kingston container loss in 2021. Highlighted frequency of North Pacific winter container overboard events. VER" },
+  { year:2022, event:"Felicity Ace — Vehicle Carrier Fire and Sinking", peril:"FIRE", region:"Atlantic", commodity:"EV and luxury vehicles (Porsche, Bentley, Audi, Lamborghini)", loss:"~$500m", sev:"major", detail:"Vehicle carrier Felicity Ace (3,965 VW Group vehicles inc. EVs) caught fire in North Atlantic; sank Feb 2022. Li-ion battery fires proved extremely difficult to extinguish. Largest vehicle cargo loss on record. Catalysed IMO focus on EV fire risk at sea and declared dangerous goods regime reform. VER" },
+  { year:2022, event:"Ukraine War — Black Sea Cargo Disruption", peril:"WAR", region:"Europe", commodity:"Grain, steel, agricultural", loss:"~$2bn+ (cargo + trade disruption)", sev:"major", detail:"Russia's invasion of Ukraine (Feb 2022) closed Black Sea ports and disrupted Ukraine's massive grain export trade. Vessels stranded in Black Sea; cargo owners suffered loss and delay. War risk market for Ukraine/Russia suspended; grain deal (Jul 2022) partially restored flows. JWC listed Black Sea as HRA. VER" },
+  { year:2022, event:"Hurricane Ian — Gulf Cargo and Inland Transit Losses", peril:"STORM", region:"Americas", commodity:"Consumer goods, vehicles, agricultural", loss:"~$400m cargo component", sev:"sig", detail:"Hurricane Ian (Category 4, Sep 2022) caused widespread cargo losses across Florida and the Gulf Coast — vehicles at dealers and storage, goods in transit, and warehouse stock. Total Ian insured loss ~$60bn; cargo component estimated $400m+. EST" },
+  { year:2023, event:"Panama Canal Drought — Rerouting and Delay Losses", peril:"STORM", region:"Americas", commodity:"LNG, container, bulk", loss:"~$200m (delay/spoilage)", sev:"sig", detail:"Severe drought reduced Canal capacity from 36 to 18 daily transits; draft restrictions applied. Cargo owners suffered delays of 2–3 weeks; perishable cargo spoilage; additional freight costs. LNG trade particularly affected. First major climate-driven chokepoint disruption since weather became a systemic cargo risk factor. EST" },
+  { year:2023, event:"Red Sea Houthi Attacks — War Risk Surge", peril:"WAR", region:"Middle East", commodity:"Mixed containerised, tanker", loss:"Several vessels hit; rerouting costs $bn+", sev:"major", detail:"Houthi attacks on commercial vessels from Oct 2023. Major carriers diverted via Cape of Good Hope from Dec 2023. JWC High Risk Area designation. War risk premiums: 0.07% → 0.5–1.0% for transiting vessels. Asia–Europe voyage times +10–14 days. First large-scale sustained threat to Suez trade route since 1970s. VER" },
+  { year:2024, event:"MV Dali — Baltimore Bridge Collapse", peril:"SINK", region:"Americas", commodity:"Mixed containerised", loss:"~$1.5bn+ (estimated)", sev:"major", detail:"MV Dali lost power and struck Francis Scott Key Bridge, Baltimore (26 Mar 2024). Bridge collapsed; 6 killed; Port of Baltimore closed weeks. Largest marine insured event of 2024. Hull, P&I liability, cargo claims, port business interruption all triggered. Ongoing litigation and salvage operation. EST" },
+  { year:2024, event:"Houthi Missile Strike — MV Tutor Sinking", peril:"WAR", region:"Middle East", commodity:"Bulk cargo", loss:"~$60m+", sev:"sig", detail:"Greek-flagged bulk carrier MV Tutor struck by Houthi drone and missile (June 2024); vessel later sank in the Red Sea. First full sinking of a commercial vessel attributable to Houthi attacks. War risk market responded with further rate increases and exclusion wording reviews. VER" },
+  { year:2024, event:"Lithium Battery Container Fires — Ongoing Frequency", peril:"FIRE", region:"Atlantic", commodity:"EVs, e-bikes, consumer electronics", loss:"Multiple events $20–80m each", sev:"sig", detail:"2024 saw multiple container ship fires attributable to misdeclared or overheating lithium-ion batteries across Atlantic and Pacific routes. IMO working group on li-ion battery SOLAS amendments accelerated. Lloyd's cargo market introduced specific EV battery cargo sub-limits and enhanced declaration requirements. EST" },
+  { year:2024, event:"Port of Baltimore Reopening — Accumulated Cargo Delays", peril:"MULTI", region:"Americas", commodity:"Mixed containerised", loss:"~$100m delay/diversion component", sev:"mod", detail:"Weeks-long closure of Baltimore following Dali bridge incident caused cargo diversions to Norfolk, New York, and Philadelphia. Perishable cargo spoilage; automotive shipment delays; additional warehousing costs. Highlighted single-port dependency risk for US East Coast importers. EST" }
+];
+
+function perilBadge(p){ const cls={'FIRE':'p-FIRE','SINK':'p-SINK','GA':'p-GA','THEFT':'p-THEFT','STORM':'p-STORM','DAMAGE':'p-DAMAGE','WAR':'p-WAR','CONT':'p-CONT','MULTI':'p-MULTI'}; const lbl={'FIRE':'🔥 Fire','SINK':'🚢 Sinking','GA':'⚖ Gen.Avg','THEFT':'🔓 Theft/Piracy','STORM':'🌀 Storm','DAMAGE':'📦 Damage','WAR':'⚔ War','CONT':'☣ Contam.','MULTI':'⚡ Multi'}; return `<span class="peril-badge ${cls[p]||''}">${lbl[p]||p}</span>`; }
+function sevLabel(s){ if(s==='major') return '<span class="severity sev-major">● Major</span>'; if(s==='sig') return '<span class="severity sev-sig">● Significant</span>'; return '<span class="severity sev-mod">● Moderate</span>'; }
+
+function render(list){
+  const tbody = document.getElementById('db-body');
+  tbody.innerHTML='';
+  list.forEach((e,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML=`<td>${e.year}</td><td><strong>${e.event}</strong></td><td>${perilBadge(e.peril)}</td><td>${e.region}</td><td>${e.commodity}</td><td><strong>${e.loss}</strong></td><td>${sevLabel(e.sev)}</td>`;
+    tr.onclick=()=>{ exp.classList.toggle('show'); tr.classList.toggle('expanded'); };
+    const exp = document.createElement('tr');
+    exp.className='expand-row';
+    exp.innerHTML=`<td colspan="7">${e.detail}</td>`;
+    tbody.appendChild(tr); tbody.appendChild(exp);
+  });
+  document.getElementById('count').textContent=`Showing ${list.length} of ${events.length} events`;
+}
+
+function filter(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const p=document.getElementById('peril-filter').value;
+  const r=document.getElementById('region-filter').value;
+  render(events.filter(e=>{
+    const txt=(e.event+e.commodity+e.detail).toLowerCase();
+    return (!q||txt.includes(q))&&(!p||e.peril===p)&&(!r||e.region===r);
+  }));
+}
+document.getElementById('search').addEventListener('input',filter);
+document.getElementById('peril-filter').addEventListener('change',filter);
+document.getElementById('region-filter').addEventListener('change',filter);
+render(events);
+</script>
+
+<footer>
+  Risk Code Hub — Marine Cargo (V/Q/VL/VX) · Lloyd's Market Intelligence · v3.3 April 2026
+</footer>
+</body>
+</html>

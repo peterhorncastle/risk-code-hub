@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>PI Construction: Overview | Risk Code Hub</title>
+  <style>
+    :root {
+      --pi:#37474f; --pi-dark:#102027; --arch:#795548; --eng:#1565c0;
+      --bsact:#6a1b9a; --warn:#e65100; --go:#2e7d32;
+      --light:#f5f7f8; --text:#1a2530; --muted:#5a6a72; --border:#c8d4d8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #37474f;
+    --hub-dark:      #102027;
+    --hub-light:     #eceff1;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #795548;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%);
+    --header-sub:    #cfd8dc;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90a4ae; margin-bottom:6px; }
+    .breadcrumb a { color:#b0bec5; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#cfd8dc; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pi); border-bottom-color:var(--warn); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pi); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+
+    /* Stats row */
+    .stats { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; margin:28px 0; }
+    .stat { background:#fff; border-radius:12px; padding:20px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.06); border-top:4px solid var(--pi); }
+    .stat .val { font-size:1.6rem; font-weight:800; color:var(--pi); }
+    .stat .lbl { font-size:0.72rem; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+    /* Code chips */
+    .codes { display:flex; flex-wrap:wrap; gap:10px; margin:20px 0; }
+    .code-chip { border-radius:10px; padding:14px 18px; min-width:160px; }
+    .code-chip.e6 { background:#e3f2fd; border-left:5px solid var(--eng); }
+    .code-chip.e7 { background:#fce4ec; border-left:5px solid #c62828; }
+    .code-chip .code { font-size:1.1rem; font-weight:800; }
+    .code-chip.e6 .code { color:var(--eng); }
+    .code-chip.e7 .code { color:#c62828; }
+    .code-chip .desc { font-size:0.78rem; color:var(--muted); margin-top:3px; line-height:1.4; }
+
+    /* Coverage/profession cards */
+    .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:20px; margin:24px 0; }
+    .card { background:#fff; border-radius:12px; padding:22px; box-shadow:0 2px 8px rgba(0,0,0,.06); border-top:4px solid var(--pi); }
+    .card.arch { border-top-color:var(--arch); }
+    .card.eng { border-top-color:var(--eng); }
+    .card.bsact { border-top-color:var(--bsact); }
+    .card.warn { border-top-color:var(--warn); }
+    .card.go { border-top-color:var(--go); }
+    .card h4 { font-size:0.95rem; font-weight:700; color:var(--pi); margin-bottom:10px; }
+    .card.arch h4 { color:var(--arch); }
+    .card.eng h4 { color:var(--eng); }
+    .card.bsact h4 { color:var(--bsact); }
+    .card.warn h4 { color:var(--warn); }
+    .card.go h4 { color:var(--go); }
+    .card p, .card li { font-size:0.86rem; line-height:1.6; color:var(--text); }
+    .card ul { padding-left:16px; margin-top:8px; }
+    .card li { margin-bottom:5px; }
+
+    /* Profession table */
+    .tbl-wrap { overflow-x:auto; margin:24px 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    th { background:var(--pi); color:#fff; padding:11px 14px; text-align:left; font-weight:700; }
+    th:hover { background:var(--pi-dark); color:#fff; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:#f0f4f7; }
+    .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:2px 7px; border-radius:8px; margin:1px; }
+    .t-e6 { background:#e3f2fd; color:#0d47a1; }
+    .t-e7 { background:#fce4ec; color:#880e4f; }
+    .t-both { background:#ede7f6; color:#311b92; }
+
+    /* Dark box */
+    .dark-box { background:var(--pi-dark); color:#cfd8dc; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .dark-box h3 { color:#b0bec5; margin-bottom:12px; font-size:1.05rem; }
+    .dark-box p, .dark-box li { font-size:0.9rem; line-height:1.7; color:#cfd8dc; }
+    .dark-box ul { padding-left:20px; margin:8px 0; }
+    .dark-box li { margin-bottom:6px; }
+
+    /* Module nav */
+    .module-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin:24px 0; }
+    .mod-link { background:#fff; border-radius:10px; padding:16px 18px; text-decoration:none; color:var(--text); box-shadow:0 2px 6px rgba(0,0,0,.05); border-left:4px solid var(--pi); display:block; transition:box-shadow .15s; }
+    .mod-link:hover { box-shadow:0 4px 14px rgba(0,0,0,.12); }
+    .mod-link strong { display:block; font-size:0.88rem; color:var(--pi); margin-bottom:3px; }
+    .mod-link span { font-size:0.78rem; color:var(--muted); }
+
+    /* Badge */
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    footer { background:var(--pi-dark); color:#90a4ae; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › PI E&amp;O Construction</div>
+  <h1>PI E&amp;O — Construction &amp; Engineering</h1>
+  <p>Professional indemnity for architects, engineers, surveyors, designers and design-and-build contractors. Lloyd's codes E6 (consultants) and E7 (contractors with design liability).</p>
+</header>
+<nav>
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Market at a Glance</h2>
+  <div class="stats">
+    <div class="stat"><div class="val">£1.4bn</div><div class="lbl">UK Construction PI GWP (est.) <span class="badge b-e">EST</span></div></div>
+    <div class="stat"><div class="val">£350m</div><div class="lbl">Lloyd's E6/E7 GWP (est.) <span class="badge b-e">EST</span></div></div>
+    <div class="stat"><div class="val">72</div><div class="lbl">Grenfell Tower deaths — catalyst for Building Safety Act</div></div>
+    <div class="stat"><div class="val">2022</div><div class="lbl">Building Safety Act enacted — biggest change to construction law in 50 years <span class="badge b-v">VER</span></div></div>
+    <div class="stat"><div class="val">£2bn+</div><div class="lbl">Estimated UK cladding remediation liability (insured portion est.) <span class="badge b-e">EST</span></div></div>
+    <div class="stat"><div class="val">15–25 yrs</div><div class="lbl">Typical latency for construction PI claims to emerge <span class="badge b-e">EST</span></div></div>
+  </div>
+
+  <h2>Lloyd's Risk Codes</h2>
+  <div class="codes">
+    <div class="code-chip e6">
+      <div class="code">E6</div>
+      <div class="desc"><strong>Construction &amp; Engineering Consultants</strong><br>Architects, structural engineers, civil engineers, M&amp;E engineers, quantity surveyors, building surveyors, project managers, planning consultants, CDM Principal Designers</div>
+    </div>
+    <div class="code-chip e7">
+      <div class="code">E7</div>
+      <div class="desc"><strong>Design &amp; Build Contractors</strong><br>Contractors who carry design liability under D&amp;B or EPC contracts — bears both construction risk AND professional design risk. Includes design-led infrastructure contractors</div>
+    </div>
+  </div>
+  <p>E6 covers pure professional consultants whose only deliverable is advice, design, or supervision — no physical construction. E7 covers contractors who have contractually accepted design responsibility, creating a combined PI + contractor risk profile. E7 risks typically attract higher premiums and additional loading for fitness-for-purpose warranty risk not present in E6 consultant covers.</p>
+
+  <h2>Professions Covered — E6 Detail</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Profession</th>
+          <th>Primary Body</th>
+          <th>Minimum PI Requirement</th>
+          <th>Typical Fee Base</th>
+          <th>Key Risk Area</th>
+          <th>Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Architect</strong></td>
+          <td>ARB / RIBA</td>
+          <td>ARB: proportionate to project; RIBA: recommended £250k minimum</td>
+          <td>4–6% of construction value</td>
+          <td>Building Safety Act higher risk buildings; cladding specification; fire strategy</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>Structural Engineer</strong></td>
+          <td>IStructE / ICE</td>
+          <td>ICE/IStructE: adequate to project; no statutory minimum</td>
+          <td>1–3% of construction value</td>
+          <td>Foundation design; structural calculations; retrospective BSA liability on existing HRBs</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>Civil Engineer</strong></td>
+          <td>ICE</td>
+          <td>ICE: adequate to project; no statutory minimum</td>
+          <td>2–4% of infrastructure contract value</td>
+          <td>Ground investigation; earthworks; flooding; tunnelling</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>M&amp;E Engineer</strong></td>
+          <td>CIBSE / IET</td>
+          <td>No statutory minimum; contract-specified (typically £2–5m)</td>
+          <td>1–2.5% of building services value</td>
+          <td>Fire engineering / passive fire protection; mechanical coordination; BIM clash detection</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>Quantity Surveyor</strong></td>
+          <td>RICS</td>
+          <td>RICS: proportionate; regulated member firms require PI</td>
+          <td>0.5–2% of construction value</td>
+          <td>Cost plan errors; valuation negligence; construction economics</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>Building Surveyor</strong></td>
+          <td>RICS</td>
+          <td>RICS: proportionate; homebuyer survey minimum £1m</td>
+          <td>Per-survey fee / percentage</td>
+          <td>Survey failures; latent defect non-disclosure; contamination non-identification</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>Project Manager</strong></td>
+          <td>RICS / APM / CIPM</td>
+          <td>No statutory minimum; contract-specified (typically £2–10m)</td>
+          <td>1.5–3% of construction value or fixed fee</td>
+          <td>Delay/cost overrun; programme management failures; inadequate design co-ordination</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>CDM Principal Designer</strong></td>
+          <td>HSE (regulatory)</td>
+          <td>CDM 2015 Reg 11: competent; no statutory PI minimum</td>
+          <td>Part of overall design fee or standalone</td>
+          <td>Health &amp; safety in design failures; pre-construction information; construction phase plan oversight</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>Design &amp; Build Contractor</strong></td>
+          <td>CIOB / ICE (as applicable)</td>
+          <td>Contract-specified (often £5–50m); D&amp;B PI is frequently inadequate for project scale</td>
+          <td>Contract sum (design element extracted)</td>
+          <td>Fitness for purpose warranty; ground risk; fire and cladding; post-completion latent defects</td>
+          <td><span class="tag t-e7">E7</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Coverage — What Construction PI Insures</h2>
+  <div class="cards">
+    <div class="card">
+      <h4>Design Error &amp; Negligent Specification</h4>
+      <p>The core insuring clause: civil liability arising from a negligent act, error or omission in the performance of professional services. Covers claims arising from defective designs, incorrect specifications, or erroneous calculations causing loss to the client or third parties.</p>
+      <ul>
+        <li>Structural calculation errors (undersized beams, inadequate foundations)</li>
+        <li>Specification of non-compliant materials (cladding, fire-stopping, fire doors)</li>
+        <li>M&amp;E design clashes causing installation rework</li>
+        <li>Architectural design deficiencies requiring demolition or significant remediation</li>
+      </ul>
+    </div>
+    <div class="card arch">
+      <h4>Supervision &amp; Inspection Failures</h4>
+      <p>PI covers the professional's failure to identify defects during site inspection or contract administration — liability arises not from the physical defect itself but from the failure of professional oversight to catch it.</p>
+      <ul>
+        <li>Failure to identify non-compliant workmanship during inspection</li>
+        <li>Incorrect certification of works (architect's certificate of practical completion)</li>
+        <li>Failure to issue timely instructions causing delay or defect</li>
+        <li>Contract administration errors in valuation and payment</li>
+      </ul>
+    </div>
+    <div class="card eng">
+      <h4>Cost &amp; Programme Advice</h4>
+      <p>QS and project management PI includes claims arising from inaccurate cost advice, programme failures, and project delivery failures where the professional owed a duty of care in relation to cost and time.</p>
+      <ul>
+        <li>Negligent cost planning — significant underestimate inducing client to commit to project</li>
+        <li>Construction economics errors (incorrect procurement advice, wrong contract form)</li>
+        <li>Project management failure — critical path errors causing delay costs</li>
+        <li>Valuation errors in homebuyer or RICS Red Book valuations</li>
+      </ul>
+    </div>
+    <div class="card bsact">
+      <h4>Building Safety Act 2022 — New Liability</h4>
+      <p>The Building Safety Act 2022 creates significant retrospective liability for construction professionals. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>30-year retrospective limitation for fire safety defects in higher risk buildings (HRBs)</li>
+        <li>New cause of action in tort — enables homeowners to sue designers, contractors</li>
+        <li>Building Liability Orders — holding company made liable for subsidiary's PI</li>
+        <li>Higher Risk Building regime (>18m / 7+ storeys): mandatory Gateway 1/2/3 process; Building Safety Regulator (BSR) oversight</li>
+        <li>Principal Designer (under BSA) — new mandatory competence requirements; separate from CDM Principal Designer role</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <h4>Fire Safety &amp; Cladding</h4>
+      <p>Post-Grenfell, cladding and passive fire protection specification is the dominant risk driver for architects and fire engineers on residential and mixed-use buildings. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>ACM cladding specification (Arconic Reynobond PE — Grenfell material)</li>
+        <li>Passive fire protection design failures (compartmentation, fire stopping)</li>
+        <li>Fire strategy report errors (fire engineered approach accepting non-standard design)</li>
+        <li>EWS1 form certification — retrospective liability for surveyors and fire engineers</li>
+        <li>Combustible insulation specification on HRBs</li>
+      </ul>
+    </div>
+    <div class="card go">
+      <h4>BIM &amp; Digital Design Risk</h4>
+      <p>Building Information Modelling (BIM) coordination creates new professional liability exposures — clash detection failure, data handover errors, and model coordination disputes.</p>
+      <ul>
+        <li>BIM coordination failure — undetected design clashes causing site rework costs</li>
+        <li>COBie data handover errors — incorrect asset data causing FM lifecycle cost overruns</li>
+        <li>Golden Thread (BSA requirement) — digital record-keeping obligations for HRB lifecycle</li>
+        <li>ISO 19650 information management failures</li>
+        <li>Cyber risk in BIM environments — model corruption, ransomware on design software</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>E6 vs E7 — The Design Liability Distinction</h2>
+  <div class="dark-box">
+    <h3>Why E7 (Design &amp; Build) Carries Higher Risk Than E6 (Consultants)</h3>
+    <p>The single most important distinction in construction PI underwriting is the difference between consultant PI (E6) and design-and-build contractor PI (E7). It arises from a legal distinction that most clients and many professionals do not fully appreciate:</p>
+    <ul>
+      <li><strong>E6 Consultant standard — "Reasonable skill and care" (Bolam test):</strong> A design professional's duty is to exercise the skill and care of a reasonably competent member of their profession. If a design choice was within the range of reasonable professional judgment at the time, the professional is not liable even if the design fails. This is the standard under the Supply of Goods and Services Act 1982 and general tort law.</li>
+      <li><strong>E7 Contractor risk — "Fitness for purpose":</strong> Under many design and build contracts (particularly where the client specifies an output, not a design), the contractor implicitly warrants that the completed building will be fit for its intended purpose. This is a strict liability obligation — if the building is unfit, the contractor is liable regardless of whether the design met the professional standard. JCT DB 2016 cl. 2.17.1 attempts to limit this to "reasonable skill and care" — but only where explicitly incorporated; many D&B contracts do not include this carve-out. <span class="badge b-v">VER</span></li>
+      <li><strong>E7 PI coverage gap:</strong> Standard PI policies cover "reasonable skill and care" duty — not fitness-for-purpose strict liability. Many E7 policies exclude fitness-for-purpose warranties not backed by professional skill-and-care obligations. Underwriters should carefully check the contract terms for D&B risks and ensure any fitness-for-purpose warranty is either excluded or specifically rated.</li>
+      <li><strong>Implication:</strong> E7 risks carry higher base rates than equivalent E6 risks on the same fee income; fitness-for-purpose exposure requires additional rating or endorsement exclusion; D&B contractors should be advised to cap fitness-for-purpose liability to reasonable skill and care in their contracts.</li>
+    </ul>
+  </div>
+
+  <h2>Jurisdictional Coverage</h2>
+  <div class="cards">
+    <div class="card">
+      <h4>UK (Primary Market)</h4>
+      <ul>
+        <li>Building Safety Act 2022 — dominant regulatory driver</li>
+        <li>Defective Premises Act 1972 (s.1) — original 6-year limitation extended to 30 years for new BSA s.135 duty <span class="badge b-v">VER</span></li>
+        <li>Architects Registration Board (ARB) — mandatory PI for registered architects</li>
+        <li>RICS Mandatory PI requirements — regulated firms</li>
+        <li>Claims-made standard; retroactive date critical</li>
+      </ul>
+    </div>
+    <div class="card arch">
+      <h4>Middle East (Major Market)</h4>
+      <ul>
+        <li>UAE, Saudi Arabia, Qatar — large infrastructure and hospitality construction; significant UK/European consultancy involvement</li>
+        <li>No equivalent of UK ARB/RICS mandatory PI — contractually driven</li>
+        <li>FIDIC Yellow Book (D&B) and Silver Book (EPC) standard contract forms</li>
+        <li>Dispute resolution: ICC arbitration, DIAC, ADCCAC — international arbitration environment</li>
+        <li>Lloyd's PI coverage frequently purchased for international project work by UK/EU consultants</li>
+      </ul>
+    </div>
+    <div class="card eng">
+      <h4>Australia</h4>
+      <ul>
+        <li>Strong mandatory PI regime — Design and Building Practitioners Act 2020 (NSW) — registered practitioners must hold PI <span class="badge b-v">VER</span></li>
+        <li>Cladding combustibility legislation (each state) — mirrors UK Grenfell response</li>
+        <li>High claims frequency; class action risk increasing (social inflation)</li>
+        <li>Novation of consultant appointments from developer to D&B contractor — creates complex PI chain</li>
+      </ul>
+    </div>
+    <div class="card bsact">
+      <h4>Europe</h4>
+      <ul>
+        <li>EU Construction Products Regulation (CPR) — mandatory CE marking for construction products; performance declarations</li>
+        <li>Eurocodes — harmonised structural design standards (EC2, EC3, EC7 etc.)</li>
+        <li>France: Assurance dommages-ouvrage (DO) and Responsabilité civile décennale (RCD) — 10-year strict liability for structural defects, compulsory for contractors and some professionals <span class="badge b-v">VER</span></li>
+        <li>Germany: Architects' chambers (Architektenkammer) — PI minimum requirements vary by state</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Key Market Participants</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Participant</th><th>Role</th><th>Market Position</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Lloyd's Syndicates</strong></td>
+          <td>Primary and excess E6/E7 PI underwriting</td>
+          <td>Beazley, Hiscox, Markel, QBE, ProSight (now Neon), Convex — major active writers; Lloyd's provides significant E7 D&B capacity unavailable elsewhere</td>
+        </tr>
+        <tr>
+          <td><strong>London Company Market</strong></td>
+          <td>Primary and excess PI</td>
+          <td>AIG, Zurich, Liberty Mutual, Allianz — significant capacity for large E6 practices and infrastructure E7</td>
+        </tr>
+        <tr>
+          <td><strong>Specialist Brokers</strong></td>
+          <td>Placement, risk management, claims advocacy</td>
+          <td>Howden, Lockton, Gallagher, Marsh, Aon — specialist construction PI teams essential for complex risks</td>
+        </tr>
+        <tr>
+          <td><strong>RIBA / ARB</strong></td>
+          <td>Mandatory PI oversight; complaints process</td>
+          <td>ARB: statutory registration for architects; mandatory PI condition of registration; conducts disciplinary proceedings</td>
+        </tr>
+        <tr>
+          <td><strong>Building Safety Regulator (BSR)</strong></td>
+          <td>New HRB regulatory authority under BSA 2022</td>
+          <td>Gateway 1/2/3 gatekeeper; operates within HSE; requires competence demonstration from professionals on HRBs</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Hub Modules</h2>
+  <div class="module-grid">
+    <a href="overview.html" class="mod-link"><strong>Overview</strong><span>Market overview, codes, professions</span></a>
+    <a href="history.html" class="mod-link"><strong>History</strong><span>From Anns v Merton to Building Safety Act</span></a>
+    <a href="timeline.html" class="mod-link"><strong>Timeline</strong><span>20 key events 1968–2024</span></a>
+    <a href="database.html" class="mod-link"><strong>Claims Database</strong><span>35 major PI claims events</span></a>
+    <a href="underwriting.html" class="mod-link"><strong>Underwriting</strong><span>Rating factors, worked examples</span></a>
+    <a href="rates-analysis.html" class="mod-link"><strong>Rates &amp; ROE</strong><span>Market cycle, ROE scenarios</span></a>
+    <a href="risk-mitigation.html" class="mod-link"><strong>Risk Mitigation</strong><span>BSA compliance, QA, contract drafting</span></a>
+    <a href="global-program.html" class="mod-link"><strong>Global Programme</strong><span>International project PI structures</span></a>
+    <a href="references.html" class="mod-link"><strong>References</strong><span>Sources &amp; confidence audit</span></a>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.9 · PI E&amp;O – Construction &amp; Engineering (E6/E7) · For educational use</footer>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marine Liability — Timeline | Risk Code Hub</title>
+<link rel="stylesheet" href="../hub-styles.css">
+<style>
+  :root {
+    --hub-primary:    #005a6b;
+    --hub-dark:       #002d35;
+    --hub-light:      #e8f5f7;
+    --hub-accent:     #c8a84b;
+    --hub-secondary:  #1a5c28;
+    --hub-secondary2: #7b1a1a;
+    --header-gradient: linear-gradient(135deg,#002d35 0%,#005a6b 50%,#006e82 100%);
+    --header-sub:     #a8d8e0;
+  }
+  header { background: var(--header-gradient); color:#fff; padding:2rem 1.5rem 1.5rem; }
+  header h1 { margin:0 0 0.3rem; font-size:2rem; color:#fff; }
+  header p  { margin:0; color:var(--header-sub); font-size:1rem; }
+  nav { background:var(--hub-dark); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.3rem; }
+  nav a { color:#a8d8e0; text-decoration:none; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.85rem; }
+  nav a:hover, nav a.active { background:var(--hub-primary); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+  h2 { font-size:1.25rem; color:var(--hub-primary); margin:2rem 0 0.8rem; border-bottom:2px solid var(--hub-accent); padding-bottom:0.4rem; }
+  p { line-height:1.8; color:#333; margin-bottom:0.8rem; font-size:0.93rem; }
+
+  .b-v { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#e6f4ea; color:#1a5c28; vertical-align:middle; }
+  .b-e { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#fef3e2; color:#7a4500; vertical-align:middle; }
+
+  /* Filter bar */
+  .filter-bar { display:flex; flex-wrap:wrap; gap:0.5rem; margin:1rem 0 1.2rem; }
+  .filter-bar button { padding:0.35rem 0.9rem; border:1px solid var(--hub-primary); border-radius:20px; background:#fff; color:var(--hub-primary); font-size:0.8rem; cursor:pointer; font-weight:600; transition:all .15s; }
+  .filter-bar button.active, .filter-bar button:hover { background:var(--hub-primary); color:#fff; }
+
+  /* Timeline */
+  .timeline { position:relative; margin:0.5rem 0 2rem; padding-left:28px; }
+  .timeline::before { content:''; position:absolute; left:10px; top:0; bottom:0; width:3px; background:linear-gradient(to bottom,var(--hub-primary),var(--hub-secondary)); border-radius:2px; }
+  .tl-item { position:relative; margin-bottom:1.4rem; display:none; }
+  .tl-item.show { display:block; }
+  .tl-dot { position:absolute; left:-22px; top:6px; width:14px; height:14px; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px var(--hub-primary); }
+  .tl-dot.oil   { background:#7b1a1a; box-shadow:0 0 0 2px #7b1a1a; }
+  .tl-dot.coll  { background:#005a6b; box-shadow:0 0 0 2px #005a6b; }
+  .tl-dot.wreck { background:#c8a84b; box-shadow:0 0 0 2px #c8a84b; }
+  .tl-dot.cargo { background:#1a5c28; box-shadow:0 0 0 2px #1a5c28; }
+  .tl-dot.crew  { background:#6a1b9a; box-shadow:0 0 0 2px #6a1b9a; }
+  .tl-dot.reg   { background:#1565c0; box-shadow:0 0 0 2px #1565c0; }
+  .tl-dot.cyber { background:#455a64; box-shadow:0 0 0 2px #455a64; }
+  .tl-card { background:#fff; border-radius:8px; padding:0.9rem 1.1rem; border:1px solid #c8dde0; }
+  .tl-meta { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.3rem; }
+  .tl-year { font-size:0.85rem; font-weight:700; color:var(--hub-primary); }
+  .type-chip { font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:10px; }
+  .chip-oil   { background:#7b1a1a; color:#fff; }
+  .chip-coll  { background:#005a6b; color:#fff; }
+  .chip-wreck { background:#c8a84b; color:#333; }
+  .chip-cargo { background:#1a5c28; color:#fff; }
+  .chip-crew  { background:#6a1b9a; color:#fff; }
+  .chip-reg   { background:#1565c0; color:#fff; }
+  .chip-cyber { background:#455a64; color:#fff; }
+  .tl-title { font-weight:700; font-size:0.95rem; color:#222; }
+  .tl-body  { font-size:0.84rem; color:#444; margin-top:0.3rem; line-height:1.6; }
+
+  footer { background:var(--hub-dark); color:var(--header-sub); text-align:center; padding:1rem; font-size:0.82rem; margin-top:2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Marine Liability</h1>
+  <p>Lloyd's Risk Codes G · GC · GX &nbsp;|&nbsp; Module 02: Major Events Timeline (1967–2024)</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+  <h2>20-Year+ Timeline of Major Marine Liability Events</h2>
+  <p>Key incidents and regulatory milestones that shaped marine liability insurance from 1967 to 2024. <span class="b-v">VER</span> for court-verified events; <span class="b-e">EST</span> for estimated loss figures. Filter by loss type.</p>
+
+  <div class="filter-bar">
+    <button class="active" onclick="filterTL('ALL',this)">All Types</button>
+    <button onclick="filterTL('oil',this)">🛢 Oil Pollution</button>
+    <button onclick="filterTL('coll',this)">⚓ Collision / RDC</button>
+    <button onclick="filterTL('wreck',this)">🪝 Wreck Removal</button>
+    <button onclick="filterTL('cargo',this)">📦 Cargo Liability</button>
+    <button onclick="filterTL('crew',this)">👤 Crew / Passenger</button>
+    <button onclick="filterTL('reg',this)">📋 Regulation</button>
+    <button onclick="filterTL('cyber',this)">💻 Cyber</button>
+  </div>
+
+  <div class="timeline" id="tlContainer">
+
+    <div class="tl-item show" data-type="oil">
+      <span class="tl-dot oil"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">1967</span><span class="type-chip chip-oil">OIL</span></div>
+        <div class="tl-title">Torrey Canyon — World's First Major Supertanker Casualty</div>
+        <div class="tl-body">119,000 tonnes crude oil spilled off Cornwall and Brittany. UK government bombed the wreck. Total cost ~£8m (£120m+ 2024 values). Triggered 1969 CLC and IOPC Fund conventions. Established principle of strict liability for tanker pollution. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="oil">
+      <span class="tl-dot oil"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">1978</span><span class="type-chip chip-oil">OIL</span></div>
+        <div class="tl-title">Amoco Cadiz — 227,000 Tonnes Oil, Brittany</div>
+        <div class="tl-body">Total mechanical failure off Portsall, France. 227,000 tonnes crude contaminated 360km of Breton coastline. French courts awarded Ffr 1.8bn in compensation. Exposed inadequacy of then-CLC Fund limits. Led to major revision of the IOPC Fund system. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="reg">
+      <span class="tl-dot reg"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">1989</span><span class="type-chip chip-reg">REG</span></div>
+        <div class="tl-title">Exxon Valdez &amp; the Road to OPA 90</div>
+        <div class="tl-body">37,000 tonnes crude spilled in Prince William Sound, Alaska. Total cost $3.8bn+ including punitive damages of $5bn (reduced to $507m by Supreme Court 2008). Catastrophic ecological damage. Directly triggered Oil Pollution Act 1990 (OPA 90) which eliminated US liability limitation for oil pollution. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="reg">
+      <span class="tl-dot reg"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">1990</span><span class="type-chip chip-reg">REG</span></div>
+        <div class="tl-title">OPA 90 — Oil Pollution Act Signed into US Law</div>
+        <div class="tl-body">OPA 90 eliminated limitation of liability for oil pollution in US waters. Required Certificate of Financial Responsibility (COFR) — mandating P&amp;I club or equivalent insurance. Established $1bn+ Oil Spill Liability Trust Fund. Fundamentally changed US marine liability market structure. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="oil">
+      <span class="tl-dot oil"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">1991</span><span class="type-chip chip-oil">OIL</span></div>
+        <div class="tl-title">M/T Haven — Largest Post-War Marine Liability Loss</div>
+        <div class="tl-body">Italian tanker exploded and sank off Genoa, releasing approximately 144,000 tonnes of crude. Total insured liability estimated at $5–6bn (multiple claims; CLC/Fund limits exceeded). Required supplementary Italian government funding. Remains reference case for extreme marine liability accumulation. <span class="b-e">EST</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="reg">
+      <span class="tl-dot reg"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">1998</span><span class="type-chip chip-reg">REG</span></div>
+        <div class="tl-title">ISM Code Mandatory for All Commercial Vessels &gt;500 GT</div>
+        <div class="tl-body">International Safety Management Code (ISM Code) under SOLAS Chapter IX became mandatory. Safety Management System (SMS) and Document of Compliance (DOC) now required. ISM certification became prerequisite for P&amp;I club entry and Lloyd's marine liability cover. Non-ISM vessels effectively uninsurable in mainstream market. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="oil">
+      <span class="tl-dot oil"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">1999</span><span class="type-chip chip-oil">OIL</span></div>
+        <div class="tl-title">Erika — 15,000 Tonnes, Brittany; EU Legislative Tsunami</div>
+        <div class="tl-body">Maltese-flagged tanker broke apart south of Brittany. 15,000 tonnes heavy fuel oil contaminated 400km of coastline. French criminal prosecution of Total SA (charterer) — groundbreaking finding that charterers are civilly liable. Total fines and compensation €193m. Triggered EU Erika I/II/III packages including accelerated single-hull phase-out and EMSA creation. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="oil">
+      <span class="tl-dot oil"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2002</span><span class="type-chip chip-oil">OIL</span></div>
+        <div class="tl-title">Prestige — 63,000 Tonnes, Galicia; Criminal Prosecution of Master</div>
+        <div class="tl-body">Single-hull Bahamas-flagged tanker broke in two off Galicia, Spain. 63,000 tonnes heavy fuel oil. Total cost €4bn+; Spanish state compensation programme. Criminal prosecution of master, chief officer, and maritime director resulted in convictions (initially) — creating chilling precedent for personal criminal liability of seafarers for pollution events. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="crew">
+      <span class="tl-dot crew"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2006</span><span class="type-chip chip-crew">CREW</span></div>
+        <div class="tl-title">Maritime Labour Convention 2006 — Global Crew Welfare Standard</div>
+        <div class="tl-body">MLC 2006 adopted at ILO Geneva. Consolidated 65 maritime labour conventions into single instrument. Mandatory provisions: work/rest hours, leave, repatriation, medical care, financial security for abandonment. P&amp;I clubs became MLC financial certificate issuers. MLC entered into force August 2013; ratified by nations covering &gt;80% of world tonnage. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="crew">
+      <span class="tl-dot crew"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2012</span><span class="type-chip chip-crew">CREW</span></div>
+        <div class="tl-title">Costa Concordia — 32 Deaths; Largest Marine Liability Loss</div>
+        <div class="tl-body">Cruise ship grounded Giglio Island, Italy. 32 deaths; 4,229 people evacuated. Master sentenced to 16 years. Total insured loss ~€1.5bn: hull write-off €450m, liability €470m (passenger/crew), wreck removal €600m. Largest ever marine insured loss. Triggered mandatory implementation of Athens Convention passenger liability in EU. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="wreck">
+      <span class="tl-dot wreck"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2011</span><span class="type-chip chip-wreck">WRECK</span></div>
+        <div class="tl-title">MV Rena — New Zealand's Worst Maritime Environmental Disaster</div>
+        <div class="tl-body">Containership grounded Ōtāiti/Astrolabe Reef, New Zealand. 11,500 tonnes fuel oil spilled; 900 containers lost. Wreck removal cost NZ$700m+. First major test of Nairobi Wreck Removal Convention in a State Party. P&amp;I club (Steamship Mutual) met all wreck removal costs. New Zealand declared most expensive wreck removal in Southern Hemisphere at time. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="cyber">
+      <span class="tl-dot cyber"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2017</span><span class="type-chip chip-cyber">CYBER</span></div>
+        <div class="tl-title">NotPetya Cyberattack — Maersk Loses Navigation &amp; Operations 10 Days</div>
+        <div class="tl-body">NotPetya malware destroyed Maersk's entire IT infrastructure. 17 terminals worldwide offline; 45,000 PCs, 4,000 servers reimaged. Maersk losses $250–300m. Lloyd's/insurers disputed whether this was covered under marine liability policies — "acts of war" exclusion arguments were ultimately unsuccessful in most courts. Led to NMA 2914 cyber exclusion and the "silent cyber" remediation across marine classes. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="coll">
+      <span class="tl-dot coll"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2019</span><span class="type-chip chip-coll">COLL</span></div>
+        <div class="tl-title">Viking Sky Near-Sinking — Cruise Passenger Liability Focus</div>
+        <div class="tl-body">Cruise ship Viking Sky suffered engine failures in severe storm off Norway. 479 passengers airlifted. Ship narrowly avoided grounding. Passenger claim exposures estimated at several hundred million USD if grounding had occurred. Heightened focus on cruise passenger Athens Convention compliance and adequacy of per-passenger limits at SDR 250,000. <span class="b-e">EST</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="wreck">
+      <span class="tl-dot wreck"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2021</span><span class="type-chip chip-wreck">WRECK</span></div>
+        <div class="tl-title">Ever Given — Suez Canal Grounding; $916m Claim by SCA</div>
+        <div class="tl-body">Ultra-large containership blocked Suez Canal for 6 days. Suez Canal Authority initially claimed $916m: $300m for salvage, $300m compensation, $300m for reputation damage, and $16m for canal clean-up. P&amp;I club (UK Club) settled on confidential terms. Economic disruption estimated $9–10bn/day. Demonstrated catastrophic wreck removal and consequential liability potential. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="cargo">
+      <span class="tl-dot cargo"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2021</span><span class="type-chip chip-cargo">CARGO</span></div>
+        <div class="tl-title">Ever Given — Cargo Delay Claims (60,000+ Containers)</div>
+        <div class="tl-body">The six-day blockage affected approximately 400 vessels and 60,000+ containers. Cargo interests filed delay claims against the vessel owner/P&amp;I club, but most cargo delay claims were excluded under standard Bills of Lading (force majeure and deviation clauses). Market estimated total cargo liability claim under $50m despite economic disruption far exceeding this. <span class="b-e">EST</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="oil">
+      <span class="tl-dot oil"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2022</span><span class="type-chip chip-oil">OIL</span></div>
+        <div class="tl-title">MV X-Press Pearl — Sri Lanka Burning Cargo Container Ship</div>
+        <div class="tl-body">Container ship caught fire and sank off Colombo, Sri Lanka. Cargo included 25 tonnes nitric acid and 78 tonnes plastic pellets (nurdles). Sri Lankan government claimed $40m initially. Wreck removal ordered; total liability estimate $1.5bn+ including environmental damage. Vessel owners (X-Press Feeders) and P&amp;I club (North P&amp;I) contest liability; litigation ongoing. <span class="b-e">EST</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="reg">
+      <span class="tl-dot reg"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2023</span><span class="type-chip chip-reg">REG</span></div>
+        <div class="tl-title">Lloyd's Sanctions &amp; Dark Fleet Underwriting Restrictions</div>
+        <div class="tl-body">Russia-Ukraine conflict created a "dark fleet" of 600–1,400 vessels transporting Russian oil outside IG P&amp;I Club coverage. These vessels lack: P&amp;I insurance, ISM certificates, class surveys. Lloyd's market issued guidance on sanctions compliance. Several dark fleet vessel incidents (oil spills, groundings) went uninsured. Estimated dark fleet environmental liability exposure: uninsurable / unquantified. <span class="b-e">EST</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="crew">
+      <span class="tl-dot crew"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2023</span><span class="type-chip chip-crew">CREW</span></div>
+        <div class="tl-title">Houthi Red Sea Campaign — Crew Abandonment Claims Begin</div>
+        <div class="tl-body">Houthi attacks on commercial shipping in Red Sea/Gulf of Aden from November 2023. Galaxy Leader seized; crew held captive. Multiple vessels struck by drones/missiles. Crew anxiety claims, hardship pay disputes, and vessel abandonment scenarios tested MLC financial certificate coverage. War risk and P&amp;I interface — who covers crew if vessel is hit — became acute underwriting question. <span class="b-e">EST</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="coll">
+      <span class="tl-dot coll"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2024</span><span class="type-chip chip-coll">COLL</span></div>
+        <div class="tl-title">Francis Scott Key Bridge — Baltimore; Vessel Collision with Bridge</div>
+        <div class="tl-card-body">Container ship Dali lost power and struck Francis Scott Key Bridge, Baltimore, collapsing it. 6 deaths. Total liability estimate: $2–4bn (bridge reconstruction, workers' compensation, port disruption, cargo delay). Largest-ever marine liability event in US waters. Vessel P&amp;I club (Britannia P&amp;I) filed limitation of liability action in Maryland. Global limitation (LLMC 1976) in tension with US OPA 90 unlimited pollution rules. <span class="b-e">EST</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="reg">
+      <span class="tl-dot reg"></span>
+      <div class="tl-card">
+        <div class="tl-meta"><span class="tl-year">2024</span><span class="type-chip chip-reg">REG</span></div>
+        <div class="tl-title">IMO MASS Code — Non-Mandatory Framework for Autonomous Vessels</div>
+        <div class="tl-body">IMO adopted non-mandatory MASS (Maritime Autonomous Surface Ships) Code at MSC 108 (May 2024). Addresses regulatory gaps for automated and remotely operated vessels. Mandatory MASS Code targeted for 2028. Liability allocation between: owner, operator, software developer, sensor manufacturer creates entirely new marine liability frontier with no settled legal framework. <span class="b-v">VER</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<footer>Risk Code Hub · Marine Liability (G · GC · GX) · Module 02: Timeline · v4.2 May 2026</footer>
+
+<script>
+function filterTL(type, btn) {
+  document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tl-item').forEach(item => {
+    item.classList.toggle('show', type === 'ALL' || item.dataset.type === type);
+  });
+}
+</script>
+</body>
+</html>

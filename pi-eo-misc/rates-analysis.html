@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PI E&O Miscellaneous — Rates & ROE | Risk Code Hub</title>
+<link rel="stylesheet" href="../hub-styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --hub-primary:    #5d4a7a;
+    --hub-dark:       #3a2d50;
+    --hub-light:      #f0ecf8;
+    --hub-accent:     #c8a84b;
+    --hub-secondary:  #c0392b;
+    --hub-secondary2: #2e7d32;
+    --header-gradient: linear-gradient(135deg,#3a2d50 0%,#5d4a7a 50%,#4a3860 100%);
+    --header-sub:     #c0b0d8;
+  }
+  header { background: var(--header-gradient); color:#fff; padding:2rem 1.5rem 1.5rem; }
+  header h1 { margin:0 0 0.3rem; font-size:2rem; color:#fff; }
+  header p  { margin:0; color:var(--header-sub); font-size:1rem; }
+  nav { background:var(--hub-dark); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.3rem; }
+  nav a { color:#c8bce0; text-decoration:none; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.85rem; }
+  nav a:hover, nav a.active { background:var(--hub-primary); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+
+  .chart-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:1.2rem; margin:1.5rem 0; }
+  .chart-box { background:#fff; border-radius:10px; padding:1.2rem; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+  .chart-box h3 { margin:0 0 0.8rem; font-size:0.95rem; color:var(--hub-primary); }
+
+  /* Cycle era cards */
+  .cycle-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:0.9rem; margin:1.2rem 0; }
+  .cycle-card { border-radius:8px; padding:1.1rem; color:#fff; }
+  .cycle-card h3 { margin:0 0 0.4rem; font-size:0.95rem; color:#fff; }
+  .cycle-card p  { margin:0; font-size:0.84rem; color:#ddd; }
+  .era-soft   { background:linear-gradient(135deg,#2e7d32,#388e3c); }
+  .era-hard   { background:linear-gradient(135deg,#7b1e1e,#c0392b); }
+  .era-trans  { background:linear-gradient(135deg,#e65100,#f57c00); }
+  .era-sel    { background:linear-gradient(135deg,#5d4a7a,#3a2d50); }
+
+  /* Rate benchmark table */
+  .tbl-wrap { overflow-x:auto; margin:1rem 0; }
+  table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+  th { background:var(--hub-primary); color:#fff; padding:0.6rem 0.8rem; text-align:left; }
+  th:hover { background:var(--hub-dark); color:#fff; }
+  td { padding:0.55rem 0.8rem; border-bottom:1px solid #eee; }
+  tr:nth-child(even) { background:rgba(0,0,0,.04); }
+  .up   { color:#c0392b; font-weight:700; }
+  .dn   { color:#2e7d32; font-weight:700; }
+  .flat { color:#888; }
+
+  /* ROE scenario */
+  .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin:1.2rem 0; }
+  @media(max-width:600px){ .roe-grid { grid-template-columns:1fr; } }
+  .roe-card { border-radius:10px; padding:1.2rem; text-align:center; color:#fff; }
+  .roe-bull { background:linear-gradient(135deg,#2e7d32,#388e3c); }
+  .roe-base { background:linear-gradient(135deg,#5d4a7a,#3a2d50); }
+  .roe-bear { background:linear-gradient(135deg,#7b1e1e,#c0392b); }
+  .roe-card .pct  { font-size:2rem; font-weight:700; color:#fff; }
+  .roe-card .lbl  { font-size:0.82rem; color:#ddd; margin-top:0.3rem; }
+  .roe-card p     { font-size:0.83rem; color:#ddd; margin-top:0.5rem; }
+
+  /* Pro-cyclicality note */
+  .warn-box { background:#fff3cd; border-left:4px solid #c8a84b; border-radius:6px; padding:1rem 1.2rem; margin:1.5rem 0; font-size:0.87rem; color:#5a4000; }
+  .warn-box strong { color:#5a4000; }
+
+  footer { background:var(--hub-dark); color:#c0b0d8; text-align:center; padding:1rem; font-size:0.82rem; margin-top:2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>PI E&O Miscellaneous — Rates &amp; ROE Analysis</h1>
+  <p>Lloyd's Risk Codes E8 · E9 · ED · EE &nbsp;|&nbsp; Market cycle, rate benchmarks, and return on equity scenarios</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <h2>Market Cycle 2010–2024</h2>
+  <div class="cycle-grid">
+    <div class="cycle-card era-soft">
+      <h3>2010–2015 — Post-GFC Softening</h3>
+      <p>GFC-era hardening (2009–2010) gives way to aggressive competition as new capacity enters. MGA/binder volume expands. Rates decline steadily 5–10% per year. Combined ratios benign as GFC claims settle. Profitability good; premium adequacy erodes quietly. <span class="badge badge-est">EST</span></p>
+    </div>
+    <div class="cycle-card era-trans">
+      <h3>2016–2019 — Latent Loss Emergence</h3>
+      <p>GFC-era claims continue running off; IR35 advisory claims emerge; management consultant public sector failures crystallise. Rates broadly flat to modest increases (+5% for claims-affected segments). Some MGA capacity withdrawn after poor binder performance. Insurance Act 2015 changes notification dynamics. <span class="badge badge-est">EST</span></p>
+    </div>
+    <div class="cycle-card era-hard">
+      <h3>2020–2022 — COVID and Hardening</h3>
+      <p>COVID-19 triggers EE travel/events mass notifications; BI broker PI claims emerge post-test case. Lloyd's performance management restricts E9 binder capacity. Rates increase 15–30% across E8/EE; design professional (ED) rates up 10–20%. Some insurers exit leisure travel E&O entirely. <span class="badge badge-est">EST</span></p>
+    </div>
+    <div class="cycle-card era-sel">
+      <h3>2023–2024 — Selective Stabilisation</h3>
+      <p>Rate increases slow but remain positive (+5–10% for claims-affected risks). Consumer Duty impact on broker PI being priced in. ESG advisory recognised as new risk segment — limited capacity, higher rates. Clean risks with strong governance: flat to modest reductions available. Market highly selective on loss-active accounts. <span class="badge badge-est">EST</span></p>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="chart-grid">
+    <div class="chart-box">
+      <h3>Rate Index by Sub-Line 2010–2024 (Index 100 = 2010) <span class="badge badge-est">EST</span></h3>
+      <canvas id="rateChart" height="240"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Combined Loss Ratio by Year (Illustrative Portfolio) <span class="badge badge-illus">ILLUS</span></h3>
+      <canvas id="lrChart" height="240"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Portfolio Mix by Sub-Class (Illustrative £30m Portfolio) <span class="badge badge-illus">ILLUS</span></h3>
+      <canvas id="mixChart" height="240"></canvas>
+    </div>
+  </div>
+
+  <!-- Rate benchmark table -->
+  <h2>Rate Benchmark Table 2024 <span class="badge badge-est">EST</span></h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Sub-Class / Segment</th><th>2020 Rate (% rev)</th><th>2022 Rate</th><th>2024 Rate</th><th>LR 2024E</th><th>Trend</th></tr></thead>
+      <tbody>
+        <tr><td>Insurance Broker — commercial (E8)</td><td>0.45–0.65%</td><td>0.55–0.80%</td><td>0.60–0.90%</td><td>55–65%</td><td class="up">↑ +5–10%</td></tr>
+        <tr><td>Insurance Broker — retail/consumer (E8)</td><td>0.60–0.90%</td><td>0.80–1.20%</td><td>0.90–1.30%</td><td>65–75%</td><td class="up">↑ +8–12%</td></tr>
+        <tr><td>Management Consultant — operations (E8)</td><td>0.30–0.45%</td><td>0.35–0.55%</td><td>0.35–0.55%</td><td>50–60%</td><td class="flat">→ Flat</td></tr>
+        <tr><td>Management Consultant — M&amp;A/strategy (E8)</td><td>0.50–0.80%</td><td>0.65–1.00%</td><td>0.70–1.10%</td><td>58–68%</td><td class="up">↑ +5–8%</td></tr>
+        <tr><td>HR / Recruitment Consultant (E8)</td><td>0.18–0.30%</td><td>0.22–0.38%</td><td>0.22–0.40%</td><td>45–55%</td><td class="flat">→ Flat</td></tr>
+        <tr><td>Estate Agent / Property Manager (E8)</td><td>0.14–0.28%</td><td>0.16–0.32%</td><td>0.16–0.32%</td><td>48–58%</td><td class="flat">→ Flat</td></tr>
+        <tr><td>PR / Communications Agency (E8/EE)</td><td>0.18–0.32%</td><td>0.22–0.40%</td><td>0.22–0.40%</td><td>50–60%</td><td class="flat">→ Flat</td></tr>
+        <tr><td>Advertising Agency (EE)</td><td>0.22–0.42%</td><td>0.28–0.50%</td><td>0.28–0.50%</td><td>52–62%</td><td class="flat">→ Flat</td></tr>
+        <tr><td>Architect (design/specification) (ED)</td><td>0.32–0.55%</td><td>0.38–0.65%</td><td>0.42–0.72%</td><td>55–65%</td><td class="up">↑ +8–12%</td></tr>
+        <tr><td>Interior Designer (ED)</td><td>0.22–0.38%</td><td>0.26–0.45%</td><td>0.26–0.48%</td><td>48–58%</td><td class="up">↑ +3–6%</td></tr>
+        <tr><td>Graphic / Brand Designer (ED)</td><td>0.18–0.32%</td><td>0.20–0.38%</td><td>0.20–0.38%</td><td>45–55%</td><td class="flat">→ Flat</td></tr>
+        <tr><td>Travel Agent (EE)</td><td>0.12–0.22%</td><td>0.18–0.35%</td><td>0.16–0.30%</td><td>55–70%</td><td class="dn">↓ Modest softening post-COVID hardening</td></tr>
+        <tr><td>Event Management (EE)</td><td>0.18–0.35%</td><td>0.25–0.45%</td><td>0.22–0.42%</td><td>55–65%</td><td class="dn">↓ Modest softening post-COVID hardening</td></tr>
+        <tr><td>ESG / Sustainability Adviser (E8) — new</td><td>N/A</td><td>0.50–0.90%</td><td>0.60–1.20%</td><td>Est. high</td><td class="up">↑ Emerging, limited capacity</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ROE scenarios -->
+  <h2>Illustrative ROE Scenarios — £30m Miscellaneous PI Portfolio</h2>
+  <p>Portfolio composition (illustrative): 35% insurance broker PI (E8), 30% management consulting (E8), 15% design professionals (ED), 12% travel/events/advertising (EE), 8% recruitment/estate agents (E8/misc).</p>
+  <div class="roe-grid">
+    <div class="roe-card roe-bull">
+      <div class="pct">+16.4%</div>
+      <div class="lbl">Bull Case ROE</div>
+      <p>Benign attritional losses; no large individual claims; 62% combined ratio. Rate increases sustain on broker and architect sub-classes. Strong investment income contribution. <span class="badge badge-illus">ILLUS</span></p>
+    </div>
+    <div class="roe-card roe-base">
+      <div class="pct">+8.2%</div>
+      <div class="lbl">Base Case ROE</div>
+      <p>Typical attritional loss activity; 1–2 moderate claims (£200–£500k each); 78% combined ratio. Rates flat to modest increases. Adequate return on diversified portfolio. <span class="badge badge-illus">ILLUS</span></p>
+    </div>
+    <div class="roe-card roe-bear">
+      <div class="pct">−9.8%</div>
+      <div class="lbl">Bear Case ROE</div>
+      <p>Recession-driven claims surge; major management consultant claim £3m+; insurance broker Consumer Duty mass-notification event; 115% combined ratio. Capital erosion. <span class="badge badge-illus">ILLUS</span></p>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <strong>Pro-Cyclicality Warning:</strong> Miscellaneous PI is demonstrably pro-cyclical. Rates fall during economic expansions (when advisory businesses grow revenues and claim frequency appears low), then rise too slowly as recessions reveal accumulated advice failures. The 2010–2015 soft market, combined with expanding management consulting revenues and new advisory categories (ESG, gig-economy HR, digital marketing), created a structural under-pricing condition that only began correcting after COVID-19 and Consumer Duty exposures materialised. Underwriters should maintain pricing discipline independent of recent loss experience.
+  </div>
+
+</div>
+
+<script>
+const labels = ['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'];
+
+// Rate index chart
+new Chart(document.getElementById('rateChart'), {
+  type:'line',
+  data:{
+    labels,
+    datasets:[
+      { label:'Insurance Broker PI (E8)', data:[100,98,95,92,88,85,86,88,90,92,108,122,130,135,140], borderColor:'#5d4a7a', backgroundColor:'rgba(93,74,122,0.08)', tension:0.3, pointRadius:2 },
+      { label:'Management Consulting (E8)', data:[100,97,93,90,87,84,83,84,86,88,98,108,114,116,118], borderColor:'#c8a84b', backgroundColor:'rgba(200,168,75,0.08)', tension:0.3, pointRadius:2 },
+      { label:'Design Professionals (ED)', data:[100,98,95,93,91,89,89,90,92,94,104,114,122,128,132], borderColor:'#8b6db0', backgroundColor:'rgba(139,109,176,0.08)', tension:0.3, pointRadius:2 },
+      { label:'Travel/Events/Advertising (EE)', data:[100,99,97,95,92,90,89,89,90,91,118,128,132,126,122], borderColor:'#c0392b', backgroundColor:'rgba(192,57,43,0.08)', tension:0.3, pointRadius:2 }
+    ]
+  },
+  options:{ responsive:true, plugins:{ legend:{ position:'bottom', labels:{ font:{ size:10 } } } }, scales:{ y:{ title:{ display:true, text:'Index (2010 = 100)' } } } }
+});
+
+// Loss ratio chart
+new Chart(document.getElementById('lrChart'), {
+  type:'bar',
+  data:{
+    labels,
+    datasets:[
+      { label:'Attritional LR', data:[55,54,52,50,49,48,49,51,52,54,60,62,58,57,56], backgroundColor:'rgba(93,74,122,0.7)' },
+      { label:'Large Loss LR', data:[8,10,12,8,9,11,10,14,12,18,28,20,16,14,13], backgroundColor:'rgba(192,57,43,0.8)' }
+    ]
+  },
+  options:{ responsive:true, plugins:{ legend:{ position:'bottom', labels:{ font:{ size:10 } } } }, scales:{ x:{ stacked:true }, y:{ stacked:true, title:{ display:true, text:'Loss Ratio (%)' }, max:110 } } }
+});
+
+// Portfolio mix doughnut
+new Chart(document.getElementById('mixChart'), {
+  type:'doughnut',
+  data:{
+    labels:['Insurance Broker PI','Management Consulting','Design Professionals (ED)','Travel/Events/Advertising (EE)','Recruitment/HR','Estate Agency/Property'],
+    datasets:[{
+      data:[35,30,15,12,5,3],
+      backgroundColor:['#5d4a7a','#c8a84b','#8b6db0','#c0392b','#2e7d32','#e65100'],
+      borderWidth:2, borderColor:'#fff'
+    }]
+  },
+  options:{ responsive:true, plugins:{ legend:{ position:'bottom', labels:{ font:{ size:10 } } } } }
+});
+</script>
+
+<footer>PI E&O Miscellaneous (E8 · E9 · ED · EE) &nbsp;|&nbsp; Risk Code Hub &nbsp;|&nbsp; Version 4.0 · May 2026</footer>
+</body>
+</html>

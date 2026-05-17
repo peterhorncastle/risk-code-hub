@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Workers Compensation International (W4) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #00575c;
+      --hub-dark:      #002c30;
+      --hub-light:     #e0f4f5;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#7b5e00;
+      --header-gradient:linear-gradient(135deg,#002c30 0%,#00575c 55%,#00838f 100%);
+      --header-sub:    #80deea;
+      --hub-mid:       #b2ebf2;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2e30;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#80deea;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#002c30;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#80deea;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    canvas{max-width:100%;height:280px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #e0f4f5;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f0fbfc;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #00575c;}
+    .roe-card.base{border-top:4px solid #c8a84b;}
+    .roe-card.bear{border-top:4px solid #c62828;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#00575c;}
+    .roe-card.base .val{color:#c8a84b;}
+    .roe-card.bear .val{color:#c62828;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:240px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:#00575c;}
+    .bar-out{background:#c62828;}
+    .bar-profit{background:#c8a84b;color:#000;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    footer{background:#002c30;color:#80deea;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Workers Comp International (W4)</a> › Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">W4 rate index 2001–2026, market cycle, DBA vs expat segment, ROE scenarios &amp; P&amp;L waterfall</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Charts -->
+  <div class="section-title">Rate Index &amp; Loss Ratio Trends<span class="badge b-e">EST</span></div>
+
+  <div class="chart-wrap">
+    <h3>Chart 1 — W4 Rate Index 2001–2026 (2001 = 100): DBA Hostile Zone / Standard Expat / NGO–Humanitarian</h3>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Gross Loss Ratio by Territory Risk Zone (A through E, illustrative)</h3>
+    <canvas id="chartLR"></canvas>
+  </div>
+
+  <!-- Market cycle -->
+  <div class="section-title">W4 Market Cycle History<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Driver</th><th>Rate Movement</th><th>Lloyd's W4 Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Pre-2001</td><td>Soft / Pre-Iraq</td><td>DBA volumes low; expat cover routine; minimal conflict zone exposure</td><td>Flat to −2% p.a.</td><td>Limited Lloyd's W4 capacity; niche specialty market</td></tr>
+      <tr><td>2001–2003</td><td>Hardening Begins</td><td>9/11 triggers DBA awareness; Afghanistan deployment begins; war risk re-rated</td><td>+15 to +25%</td><td>War risk extension terms tightened; hostile zone zones formalised</td></tr>
+      <tr><td>2003–2007</td><td>Hard Market — DBA Peak</td><td>Iraq invasion; LOGCAP/KBR deployment; contractor casualty surge; IED campaign</td><td>+30 to +80% (Zone E)</td><td>Zone E hostile zone rates 6–12× standard. WHCA backstop essential for capacity</td></tr>
+      <tr><td>2008–2011</td><td>Stabilisation</td><td>Iraq drawdown begins; Afghanistan plateau; rates stabilise at elevated level</td><td>Flat to −5% p.a.</td><td>DBA book maintained; expat segment grows as oil majors expand Middle East</td></tr>
+      <tr><td>2011–2015</td><td>Libya/Syria Disruption</td><td>Arab Spring conflict zones; Libya mass evacuation; Syria contractor exits</td><td>+10 to +20% (MENA zone)</td><td>MENA zone re-rating; NGO/humanitarian segment grows; conflict zone aggregate monitoring</td></tr>
+      <tr><td>2015–2020</td><td>Selective Softening</td><td>Afghanistan drawdown; oil price fall reduces expat headcounts; DBA volumes decline</td><td>−3 to −8% p.a.</td><td>DBA book reduces; oil &amp; gas expat headcount falls; capacity slightly oversupplied</td></tr>
+      <tr><td>2020–2022</td><td>COVID Disruption then Hardening</td><td>COVID repatriation surge; medical costs spike; Ukraine invasion 2022 adds war risk demand</td><td>+10 to +25%</td><td>Medical cost escalation noted; repatriation benefit limits reviewed; Ukraine zone E re-rated</td></tr>
+      <tr><td>2023–2026</td><td>Selective Hard Market</td><td>Ongoing Ukraine; Middle East conflict (Gaza, Houthi); reconstruction opportunities; AI monitoring tools</td><td>+5 to +15% (selective)</td><td>Zone D/E pricing firmer; standard expat Zone A–B more competitive; medevac cost inflation embedded</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative £15m W4 Portfolio<span class="badge b-e">EST</span></div>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+20%</div>
+      <div class="detail">Combined Ratio 72%<br>Selective Zone A–C book; strong WHCA recoveries; low conflict year; disciplined DBA underwriting</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+11%</div>
+      <div class="detail">Combined Ratio 85%<br>Mixed zone portfolio; one medium DBA loss event; normal medevac frequency; adequate WHCA backstop</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−12%</div>
+      <div class="detail">Combined Ratio 122%<br>Zone E mass casualty event; burn pit IBNR development; WHCA reimbursement delayed; medical cost inflation</div>
+    </div>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (£15m GWP W4 portfolio, illustrative)</h3>
+    <div class="wf-row"><div class="wf-label">Gross Written Premium</div><div class="wf-bar bar-in" style="width:100%;">£15m</div><div class="wf-val">£15.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Broker Commission (20%)</div><div class="wf-bar bar-out" style="width:40%;">−£3.0m</div><div class="wf-val">−£3.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Fronting / Local Policy Costs</div><div class="wf-bar bar-out" style="width:14%;">−£0.9m</div><div class="wf-val">−£0.9m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance Premium (XL)</div><div class="wf-bar bar-out" style="width:20%;">−£1.5m</div><div class="wf-val">−£1.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Earned Premium</div><div class="wf-bar bar-in" style="width:63%;background:#00838f;">£9.6m</div><div class="wf-val">£9.6m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Accidents / Injuries</div><div class="wf-bar bar-out" style="width:26%;">−£2.8m</div><div class="wf-val">−£2.8m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Medical Repatriation</div><div class="wf-bar bar-out" style="width:18%;">−£1.9m</div><div class="wf-val">−£1.9m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — DBA / Hostile Zone</div><div class="wf-bar bar-out" style="width:22%;">−£2.3m</div><div class="wf-val">−£2.3m</div></div>
+    <div class="wf-row"><div class="wf-label">WHCA Reimbursement (credit)</div><div class="wf-bar bar-in" style="width:8%;background:#c8a84b;color:#000;">+£0.7m</div><div class="wf-val">+£0.7m</div></div>
+    <div class="wf-row"><div class="wf-label">IBNR Reserve (burn pit / occ. disease)</div><div class="wf-bar bar-out" style="width:10%;">−£0.8m</div><div class="wf-val">−£0.8m</div></div>
+    <div class="wf-row"><div class="wf-label">Expenses / Overhead (12%)</div><div class="wf-bar bar-out" style="width:12%;">−£1.1m</div><div class="wf-val">−£1.1m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (est. 4%)</div><div class="wf-bar bar-in" style="width:5%;background:#c8a84b;color:#000;">+£0.4m</div><div class="wf-val">+£0.4m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Profit</strong></div><div class="wf-bar bar-profit" style="width:20%;"><strong>£1.5m</strong></div><div class="wf-val"><strong>£1.5m (10.7% ROE)</strong></div></div>
+  </div>
+
+  <!-- IBNR note -->
+  <div class="section-title">IBNR &amp; Reserve Development — W4 Specific Considerations</div>
+  <table>
+    <thead><tr><th>Factor</th><th>Impact on Reserves</th></tr></thead>
+    <tbody>
+      <tr><td>DBA Occupational Disease (burn pit, radiation, chemical)</td><td>Long latency occupational disease claims (cancer, respiratory, neurological) can emerge 10–25 years post-exposure. Iraq/Afghanistan burn pit IBNR is the most significant undeveloped W4 liability. Actuarial uncertainty is very high.</td></tr>
+      <tr><td>WHCA Reimbursement Timing</td><td>US government WHCA reimbursements for war hazard deaths can take 12–36 months to process through DOL/OWCP. Reserves must be held gross until reimbursement received; subrogation asset recognised separately.</td></tr>
+      <tr><td>TCN Benefit Disputes</td><td>DBA benefit calculations for TCN families in low-wage countries can generate protracted disputes with OWCP over wage base, dependency determinations and suitable wage comparators. Claims remain open for 3–7 years while disputes are resolved.</td></tr>
+      <tr><td>PTSD / Psychological Trauma</td><td>Mental health and PTSD claims from conflict zone workers have long development tails — symptoms emerge months or years post-deployment. W4 policies increasingly face late-notified psychological injury claims from Iraq/Afghanistan-era contractors.</td></tr>
+      <tr><td>Medical Cost Inflation (medevac)</td><td>Air ambulance and medical evacuation cost inflation is running at 8–12% per annum est. IBNR must account for medical cost trend; older reserves may be significantly inadequate at current medical costs.</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation International (W4) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation →</a></p>
+</footer>
+
+<script>
+// Chart 1 — W4 Rate Index 2001–2026
+const years = [2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type:'line',
+  data:{
+    labels: years,
+    datasets:[
+      {label:'DBA — Hostile Zone (Zone E)',data:[100,125,165,220,260,290,300,285,265,250,255,260,250,235,220,205,195,200,190,195,215,240,255,262,268,272],borderColor:'#c62828',backgroundColor:'rgba(198,40,40,0.07)',tension:0.3,fill:true,pointRadius:3},
+      {label:'Standard Expat (Zone B–C)',data:[100,105,112,120,128,135,140,138,132,128,132,136,132,128,122,116,112,114,110,115,120,130,137,142,146,150],borderColor:'#00575c',backgroundColor:'rgba(0,87,92,0.07)',tension:0.3,fill:true,pointRadius:3},
+      {label:'NGO / Humanitarian',data:[100,103,108,115,120,125,128,126,120,118,122,128,124,120,116,112,108,112,110,118,122,132,138,144,148,152],borderColor:'#c8a84b',backgroundColor:'rgba(200,168,75,0.06)',tension:0.3,pointRadius:3}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'Rate Index (2001=100)'},beginAtZero:false}}}
+});
+
+// Chart 2 — Gross LR by Territory Zone
+new Chart(document.getElementById('chartLR'), {
+  type:'bar',
+  data:{
+    labels:['Zone A — Low Risk','Zone B — Moderate','Zone C — Elevated','Zone D — High Risk','Zone E — War Zone'],
+    datasets:[
+      {label:'Gross Loss Ratio (%) — mid-range estimate',
+       data:[38,52,65,80,115],
+       backgroundColor:['#00575c','#00838f','#c8a84b','#e65100','#c62828'],
+       borderRadius:6}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{y:{title:{display:true,text:'Gross Loss Ratio (%)'},max:140,beginAtZero:true,
+      annotation:{line:{value:100,label:{content:'100% Loss Ratio',enabled:true}}}
+    }}
+  }
+});
+</script>
+</body>
+</html>

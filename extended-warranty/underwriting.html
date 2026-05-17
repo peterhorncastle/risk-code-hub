@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Extended Warranty — Underwriting Methodology | Risk Code Hub</title>
+  <style>
+    :root {
+      --wa:#8c4a15; --wa-dark:#5c2f0c; --wa-light:#fdf0e6; --accent:#c8a84b;
+      --copper:#b06020; --teal:#0d7377; --green:#166534; --red:#991b1b; --amber:#92400e;
+      --hub-primary:#8c4a15; --hub-dark:#5c2f0c; --hub-light:#fdf0e6;
+      --hub-accent:#c8a84b; --hub-secondary:#b06020;
+      --header-gradient:linear-gradient(135deg,#3d1c05 0%,#8c4a15 55%,#b06020 100%);
+      --header-sub:#e8c9a0;
+    }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:var(--header-gradient); color:#fff; padding:40px; }
+    .breadcrumb { font-size:.8rem; color:rgba(255,255,255,.6); margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:8px; color:var(--header-sub); font-size:.95rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--wa); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--wa-dark); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--wa); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:12px; font-size:.95rem; }
+    sup { font-size:.7rem; color:var(--wa); font-weight:700; }
+
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; margin:20px 0; }
+    .factor { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px; border-top:4px solid var(--wa); }
+    .factor.alt { border-top-color:var(--copper); }
+    .factor.teal { border-top-color:var(--teal); }
+    .factor h4 { font-size:.88rem; font-weight:700; color:var(--wa-dark); margin-bottom:8px; }
+    .factor p { font-size:.83rem; margin:0; color:#4b5563; }
+    .imp { display:inline-block; font-size:.7rem; font-weight:700; padding:.1rem .4rem; border-radius:8px; margin-bottom:6px; }
+    .imp-h { background:#fee2e2; color:#991b1b; }
+    .imp-m { background:#fef3c7; color:#92400e; }
+    .imp-l { background:#d1fae5; color:#166534; }
+
+    /* Loss ratio table */
+    .table-wrap { overflow-x:auto; border-radius:10px; margin:20px 0; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    table { width:100%; border-collapse:collapse; background:#fff; font-size:.88rem; }
+    thead th { background:var(--wa-dark); color:#fff; padding:10px 14px; text-align:left; }
+    tbody tr { border-bottom:1px solid var(--border); }
+    tbody tr:hover { background:#fdf5ee; }
+    tbody td { padding:9px 14px; vertical-align:middle; }
+    tbody tr:nth-child(even) td { background:#faf5ef; }
+    .pill { display:inline-block; font-size:.75rem; font-weight:700; padding:.15rem .5rem; border-radius:8px; }
+    .p-h  { background:#fee2e2; color:#991b1b; }
+    .p-m  { background:#fef3c7; color:#92400e; }
+    .p-l  { background:#d1fae5; color:#166534; }
+
+    /* Formula box */
+    .formula { background:var(--wa-dark); color:#e8d0b8; border-radius:12px; padding:24px 28px; margin:24px 0; font-family:monospace; font-size:.9rem; line-height:1.9; }
+    .formula .comment { color:#c8a84b; font-family:'Segoe UI',sans-serif; font-size:.82rem; font-style:italic; }
+
+    /* Worked example */
+    .example { background:#fff; border:1px solid var(--border); border-radius:12px; margin:24px 0; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    .example-header { background:var(--wa); color:#fff; padding:16px 24px; }
+    .example-header h3 { color:#fff; margin:0; font-size:1rem; }
+    .example-header p { color:rgba(255,255,255,.8); margin:4px 0 0; font-size:.85rem; }
+    .example-body { padding:20px 24px; }
+    .ex-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    @media(max-width:600px){ .ex-grid { grid-template-columns:1fr; } }
+    .ex-col h4 { font-size:.85rem; font-weight:700; color:var(--wa-dark); margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:6px; }
+    .ex-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px dashed var(--border); font-size:.85rem; }
+    .ex-row:last-child { border-bottom:none; }
+    .ex-label { color:var(--muted); }
+    .ex-val { font-weight:600; color:var(--wa-dark); }
+    .ex-total { display:flex; justify-content:space-between; padding:10px 0 0; font-size:1rem; font-weight:800; color:var(--wa); border-top:2px solid var(--wa); margin-top:6px; }
+
+    .callout { background:var(--wa-light); border-left:4px solid var(--wa); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+    .callout.red { background:#fef2f2; border-color:#dc2626; }
+    .callout h4 { font-weight:700; color:var(--wa-dark); margin-bottom:6px; }
+    .callout.red h4 { color:#991b1b; }
+    .callout p, .callout li { font-size:.9rem; color:#374151; }
+    .callout ul { margin:.4rem 0 0 1rem; }
+
+    footer { background:var(--wa-dark); color:rgba(255,255,255,.5); text-align:center; padding:24px; font-size:.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Extended Warranty</a> › Underwriting</div>
+  <h1>Extended Warranty — Underwriting Methodology</h1>
+  <p>Frequency–severity model, loss ratio benchmarks by category, and worked programme examples</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>The Extended Warranty Underwriting Model</h2>
+  <p>Extended warranty insurance is underwritten on a <strong>frequency–severity (F×S) model</strong> rather than a large-loss model. The risk profile is characterised by high claim frequency, low-to-moderate severity, and predictable aggregate loss patterns — more similar to motor or household insurance than to specialty liability.<sup>[1]</sup></p>
+  <p>The underwriter's core task is to assess: (1) the likelihood that a covered product will fail during the warranty period; (2) the cost of repair or replacement when it does; and (3) the programme's structure — whether the insurer bears first-loss risk or sits above a retention held by the programme administrator.</p>
+
+  <h2>Key Rating Factors</h2>
+  <div class="factor-grid">
+    <div class="factor">
+      <span class="imp imp-h">High Impact</span>
+      <h4>Product Category &amp; Sub-Category</h4>
+      <p>Loss ratios vary dramatically: mobile device accidental damage 60–80%; white goods M&amp;EB 25–40%; HVAC systems 35–55%; gaming consoles 20–50% depending on generation. Category is the primary determinant of expected loss ratio.<sup>[2]</sup></p>
+    </div>
+    <div class="factor">
+      <span class="imp imp-h">High Impact</span>
+      <h4>Product Age at Warranty Inception</h4>
+      <p>Failure probability rises sharply with product age (bathtub curve). New products: low failure rate in the early "infant mortality" period. 3–5 year products: entering the wear-out phase — significantly higher claim frequency. Key variable for MBI motor products.<sup>[3]</sup></p>
+    </div>
+    <div class="factor">
+      <span class="imp imp-h">High Impact</span>
+      <h4>Manufacturer / Brand Quality Rating</h4>
+      <p>Historical failure rates by OEM brand are tracked by major insurers. Premium brands (Apple, Bosch, Miele) typically have lower failure rates than budget or mid-range brands. Underwriters apply a brand quality loading (+/− 10–25%) to base rates.<sup>[4]</sup></p>
+    </div>
+    <div class="factor alt">
+      <span class="imp imp-h">High Impact</span>
+      <h4>Warranty Term &amp; Coverage Scope</h4>
+      <p>Longer terms expose the insurer to more of the wear-out curve. Accidental damage cover significantly increases frequency vs M&amp;EB-only. Cover for cosmetic damage, data recovery, or screen replacement requires separate loading. Term pricing is typically non-linear — a 3-year term is priced at more than 3× the 1-year rate.</p>
+    </div>
+    <div class="factor alt">
+      <span class="imp imp-m">Medium Impact</span>
+      <h4>Programme Retention / Attachment Point</h4>
+      <p>Where the insurer sits above a retention held by the administrator, the layer's loss ratio and pure IBNER development differ from first-loss programmes. Stop-loss structures above an 80% or 90% loss ratio are common for large administrators. The attachment point materially affects expected burning cost.<sup>[5]</sup></p>
+    </div>
+    <div class="factor alt">
+      <span class="imp imp-m">Medium Impact</span>
+      <h4>Parts &amp; Labour Inflation Assumptions</h4>
+      <p>Repair costs are driven by parts availability, technician labour rates, and logistics. Post-COVID inflation in parts and labour significantly increased claims costs. Underwriters now model inflation escalation explicitly — typically CPI + 2–4% for consumer electronics components.<sup>[6]</sup></p>
+    </div>
+    <div class="factor teal">
+      <span class="imp imp-m">Medium Impact</span>
+      <h4>Distribution Channel</h4>
+      <p>Point-of-sale retail capture produces adverse selection (consumers who feel anxious about the product or are not sophisticated) but also includes lower-risk consumers buying impulsively. Direct mail, online subscription, and renewal markets have different risk profiles. Claims frequency typically highest on direct-to-consumer channels.<sup>[7]</sup></p>
+    </div>
+    <div class="factor teal">
+      <span class="imp imp-m">Medium Impact</span>
+      <h4>Geographic Market (Regulatory &amp; Legal)</h4>
+      <p>Statutory consumer rights vary significantly — UK/EU 2-year guarantee narrows coverage gap; US statutory protection lower; Australia Consumer Law medium-term. Fraud rates differ by geography: US accidental damage fraud rates significantly higher than UK.</p>
+    </div>
+    <div class="factor teal">
+      <span class="imp imp-l">Lower Impact</span>
+      <h4>Service Network Quality (TPA / Repair Network)</h4>
+      <p>Claims costs depend heavily on whether the insurer controls repair network or reimburses any repairer. Authorised repair networks (Apple Authorised Resellers, Bosch Service Points) reduce cost vs open networks. TPA claims handling efficiency affects IBNR development speed.</p>
+    </div>
+    <div class="factor">
+      <span class="imp imp-l">Lower Impact</span>
+      <h4>Obsolescence &amp; Parts Availability</h4>
+      <p>Products more than 3 years old face increasing risk of parts unavailability, forcing replacement at current market prices (often higher than original purchase price). This is a longer-term programme risk that requires an explicit obsolescence reserve for multi-year programmes.</p>
+    </div>
+    <div class="factor">
+      <span class="imp imp-l">Lower Impact</span>
+      <h4>Excess / Deductible per Claim</h4>
+      <p>Consumer excess (e.g. £100 screen replacement excess) significantly reduces frequency of minor accidental damage claims. Home warranty service call fees ($100–$125 per visit) manage HVAC claim frequency. Excess design is a key programme structure lever.</p>
+    </div>
+    <div class="factor alt">
+      <span class="imp imp-h">High Impact</span>
+      <h4>Fraud Rate by Segment</h4>
+      <p>Accidental damage claims on smartphones have fraud rates estimated at 5–15% of claims in some US markets. Staged damage, multiple claims, false purchase dates, and organised rings are common. Fraud loading is applied to AD cover — typically +8–15% on gross premium in high-fraud geographies.<sup>[8]</sup></p>
+    </div>
+  </div>
+
+  <h2>Loss Ratio Benchmarks by Product Category</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Product Category</th><th>Cover Type</th><th>Typical Gross Loss Ratio</th><th>Claim Frequency</th><th>Average Claim Severity</th><th>Risk Level</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Smartphone</strong></td><td>M&amp;EB only</td><td>25–40%</td><td>Low</td><td>£150–£300</td><td><span class="pill p-l">Lower</span></td></tr>
+        <tr><td><strong>Smartphone</strong></td><td>M&amp;EB + AD + Theft</td><td>55–80%</td><td>High</td><td>£200–£600</td><td><span class="pill p-h">High</span></td></tr>
+        <tr><td><strong>Laptop / Tablet</strong></td><td>M&amp;EB + AD</td><td>40–60%</td><td>Medium</td><td>£200–£500</td><td><span class="pill p-m">Medium</span></td></tr>
+        <tr><td><strong>TV / AV</strong></td><td>M&amp;EB</td><td>20–35%</td><td>Low</td><td>£150–£400</td><td><span class="pill p-l">Lower</span></td></tr>
+        <tr><td><strong>Gaming Console</strong></td><td>M&amp;EB + AD</td><td>30–55%</td><td>Medium (generation-dependent)</td><td>£200–£500</td><td><span class="pill p-m">Medium</span></td></tr>
+        <tr><td><strong>Washing Machine / Dryer</strong></td><td>M&amp;EB</td><td>25–45%</td><td>Medium</td><td>£150–£350</td><td><span class="pill p-l">Lower</span></td></tr>
+        <tr><td><strong>Refrigerator / Fridge-Freezer</strong></td><td>M&amp;EB</td><td>30–50%</td><td>Low–Medium</td><td>£200–£600</td><td><span class="pill p-m">Medium</span></td></tr>
+        <tr><td><strong>Dishwasher</strong></td><td>M&amp;EB</td><td>25–40%</td><td>Low–Medium</td><td>£120–£280</td><td><span class="pill p-l">Lower</span></td></tr>
+        <tr><td><strong>HVAC / Heat Pump</strong></td><td>M&amp;EB</td><td>35–60%</td><td>Medium–High</td><td>$1,000–$5,000</td><td><span class="pill p-h">High</span></td></tr>
+        <tr><td><strong>Motor (MBI) — New Vehicle, Year 1–3</strong></td><td>Mechanical breakdown</td><td>25–45%</td><td>Low</td><td>£500–£2,000</td><td><span class="pill p-l">Lower</span></td></tr>
+        <tr><td><strong>Motor (MBI) — Used Vehicle, Age 5–8yr</strong></td><td>Mechanical breakdown</td><td>50–75%</td><td>Medium–High</td><td>£600–£3,000</td><td><span class="pill p-h">High</span></td></tr>
+        <tr><td><strong>EV Battery Warranty</strong></td><td>Catastrophic failure only</td><td>20–40% (current, low maturity)</td><td>Low (currently)</td><td>$10,000–$20,000</td><td><span class="pill p-m">Medium (watch)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.82rem;color:var(--muted)">* Loss ratios are gross (before reinsurance) and based on industry estimates. Actual figures vary by programme, territory, and underwriter. <span style="background:#e6f4ea;color:#166534;padding:1px 5px;border-radius:4px;font-size:.75rem;font-weight:700;">ESTIMATE</span></p>
+
+  <h2>Premium Formula</h2>
+  <div class="formula">
+    <div class="comment">// Extended Warranty — Insurance Premium Calculation (programme basis)</div>
+    Gross Premium = (Expected Claims Cost) ÷ (1 − Expense Ratio − Target Profit Margin)<br><br>
+    Expected Claims Cost = Premium Volume × Expected Loss Ratio<br>
+    Expected Loss Ratio = Base Loss Ratio × Brand Factor × Age Factor × Term Factor × Geography Factor × Fraud Loading<br><br>
+    <div class="comment">// Typical programme expense structure:</div>
+    Retail Commission:         20–40% of consumer premium<br>
+    TPA / Admin:               10–15%<br>
+    Insurer Acquisition:        3–5%<br>
+    Claims Handling:            5–8%<br>
+    <div class="comment">// Target combined ratio: 85–95% (insurer layer)</div>
+    Target Underwriting Profit: 5–15%<br>
+  </div>
+
+  <h2>Worked Example A — Consumer Electronics Programme (UK)</h2>
+  <div class="example">
+    <div class="example-header">
+      <h3>TechRetail UK — Mixed Electronics &amp; White Goods Programme</h3>
+      <p>UK high-street retailer; 500,000 policies in force; mix of smartphones (40%), white goods (35%), AV/laptops (25%); 3-year average term</p>
+    </div>
+    <div class="example-body">
+      <div class="ex-grid">
+        <div class="ex-col">
+          <h4>Programme Profile</h4>
+          <div class="ex-row"><span class="ex-label">Total policies in force</span><span class="ex-val">500,000</span></div>
+          <div class="ex-row"><span class="ex-label">Average annual premium per policy</span><span class="ex-val">£85</span></div>
+          <div class="ex-row"><span class="ex-label">Total gross premium (annual)</span><span class="ex-val">£42.5m</span></div>
+          <div class="ex-row"><span class="ex-label">Retailer commission</span><span class="ex-val">32% = £13.6m</span></div>
+          <div class="ex-row"><span class="ex-label">TPA admin &amp; claims handling</span><span class="ex-val">12% = £5.1m</span></div>
+          <div class="ex-row"><span class="ex-label">Insurer acquisition &amp; overhead</span><span class="ex-val">5% = £2.1m</span></div>
+          <div class="ex-row"><span class="ex-label">Net premium to insurer</span><span class="ex-val">51% = £21.7m</span></div>
+        </div>
+        <div class="ex-col">
+          <h4>Loss Model</h4>
+          <div class="ex-row"><span class="ex-label">Smartphone: 200k policies × 45% LR × £85</span><span class="ex-val">£7.65m</span></div>
+          <div class="ex-row"><span class="ex-label">White goods: 175k policies × 35% LR × £85</span><span class="ex-val">£5.21m</span></div>
+          <div class="ex-row"><span class="ex-label">AV/laptop: 125k policies × 40% LR × £85</span><span class="ex-val">£4.25m</span></div>
+          <div class="ex-row"><span class="ex-label">Fraud loading (3%)</span><span class="ex-val">£0.52m</span></div>
+          <div class="ex-row"><span class="ex-label">Obsolescence reserve (2%)</span><span class="ex-val">£0.34m</span></div>
+          <div class="ex-row"><span class="ex-label"><strong>Total expected claims</strong></span><span class="ex-val"><strong>£17.97m</strong></span></div>
+          <div class="ex-row"><span class="ex-label">Blended gross loss ratio</span><span class="ex-val">42.3%</span></div>
+          <div class="ex-total"><span>Insurer combined ratio</span><span>93.2% → UW profit £1.47m</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Worked Example B — Motor MBI Programme (UK Used Car Market)</h2>
+  <div class="example">
+    <div class="example-header" style="background:var(--teal)">
+      <h3>MotorAssure UK — Used Vehicle MBI Programme</h3>
+      <p>UK used car dealer network; 80,000 policies; vehicles age 3–8 years; 1–3 year terms; powertrain + gearbox + electrical coverage</p>
+    </div>
+    <div class="example-body">
+      <div class="ex-grid">
+        <div class="ex-col">
+          <h4>Programme Profile</h4>
+          <div class="ex-row"><span class="ex-label">Total policies (MBI)</span><span class="ex-val">80,000</span></div>
+          <div class="ex-row"><span class="ex-label">Average annual premium per policy</span><span class="ex-val">£320</span></div>
+          <div class="ex-row"><span class="ex-label">Total gross premium (annual)</span><span class="ex-val">£25.6m</span></div>
+          <div class="ex-row"><span class="ex-label">Dealer F&amp;I commission</span><span class="ex-val">28% = £7.17m</span></div>
+          <div class="ex-row"><span class="ex-label">Claims admin &amp; repair network</span><span class="ex-val">14% = £3.58m</span></div>
+          <div class="ex-row"><span class="ex-label">Insurer overhead</span><span class="ex-val">6% = £1.54m</span></div>
+          <div class="ex-row"><span class="ex-label">Net premium to insurer</span><span class="ex-val">52% = £13.31m</span></div>
+        </div>
+        <div class="ex-col">
+          <h4>Loss Model (by vehicle age band)</h4>
+          <div class="ex-row"><span class="ex-label">3–5yr vehicles: 40k × 45% LR × £320</span><span class="ex-val">£5.76m</span></div>
+          <div class="ex-row"><span class="ex-label">5–8yr vehicles: 40k × 65% LR × £320</span><span class="ex-val">£8.32m</span></div>
+          <div class="ex-row"><span class="ex-label">Parts inflation adjustment (+5%)</span><span class="ex-val">£0.70m</span></div>
+          <div class="ex-row"><span class="ex-label">Fraud / abuse reserve (2%)</span><span class="ex-val">£0.29m</span></div>
+          <div class="ex-row"><span class="ex-label"><strong>Total expected claims</strong></span><span class="ex-val"><strong>£15.07m</strong></span></div>
+          <div class="ex-row"><span class="ex-label">Blended gross loss ratio</span><span class="ex-val">58.9%</span></div>
+          <div class="ex-total"><span>Insurer combined ratio</span><span>106.8% → UW loss £(1.76m) — needs repricing or stop-loss</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout red">
+    <h4>⚠️ EV Battery Underwriting — Proceed with Caution</h4>
+    <p>Electric vehicle battery extended warranty is an emerging and poorly-priced class. Key underwriting concerns:</p>
+    <ul>
+      <li><strong>Catastrophic failure vs degradation:</strong> Statutory warranties cover failure; extended warranties must define whether "capacity below X%" is a trigger. Litigation risk on boundary.</li>
+      <li><strong>Parts availability:</strong> Battery packs for vehicles >5 years old may be unavailable or cost more than the vehicle's market value.</li>
+      <li><strong>Technology obsolescence:</strong> Battery technology is evolving rapidly — solid-state batteries (2027–2030?) may make current chemistry obsolete before policies expire.</li>
+      <li><strong>No credible long-run loss history:</strong> Mass-market EV fleet is less than 10 years old. Loss development beyond Year 5 is essentially unknown.<sup>[9]</sup></li>
+      <li><strong>Underwriting recommendation:</strong> Limit terms to 3 years; require Battery State of Health (SoH) diagnostic at inception (&gt;80%); impose per-battery sub-limits; use stop-loss above 85% LR.</li>
+    </ul>
+  </div>
+
+  <h2>Key Exclusions</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Exclusion</th><th>Rationale</th><th>Disputes / Boundary Issues</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cosmetic damage only</strong></td><td>No functional impairment — not a warranty risk</td><td>Screen scratches causing touch sensitivity issues — covered or not?</td></tr>
+        <tr><td><strong>Intentional damage / misuse</strong></td><td>Moral hazard</td><td>Difficult to prove; basis of many fraud disputes</td></tr>
+        <tr><td><strong>Wear and tear / consumables</strong></td><td>Expected deterioration not covered</td><td>Battery degradation (EV, laptop) — wear or failure?</td></tr>
+        <tr><td><strong>Pre-existing condition</strong></td><td>Adverse selection control</td><td>Defects that were developing at inception but not yet manifest</td></tr>
+        <tr><td><strong>Manufacturer recall</strong></td><td>Manufacturer's responsibility</td><td>Products subject to recall that also have non-recall faults</td></tr>
+        <tr><td><strong>Data recovery / software</strong></td><td>Not physical hardware failure</td><td>Software-caused hardware damage (e.g. iOS update)</td></tr>
+        <tr><td><strong>Virus / cyber damage</strong></td><td>Excluded as per cyber endorsement</td><td>Ransomware that bricks a device — hardware or cyber claim?</td></tr>
+        <tr><td><strong>Commercial / business use</strong></td><td>Consumer products not rated for commercial wear</td><td>Home-office use of consumer-grade equipment</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+<footer>Risk Code Hub — Extended Warranty Insurance | Lloyd's Code WA | Version 4.3</footer>
+</body>
+</html>

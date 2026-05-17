@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PI E&O Miscellaneous — Loss Database | Risk Code Hub</title>
+<link rel="stylesheet" href="../hub-styles.css">
+<style>
+  :root {
+    --hub-primary:    #5d4a7a;
+    --hub-dark:       #3a2d50;
+    --hub-light:      #f0ecf8;
+    --hub-accent:     #c8a84b;
+    --hub-secondary:  #c0392b;
+    --hub-secondary2: #2e7d32;
+    --header-gradient: linear-gradient(135deg,#3a2d50 0%,#5d4a7a 50%,#4a3860 100%);
+    --header-sub:     #c0b0d8;
+  }
+  header { background: var(--header-gradient); color:#fff; padding:2rem 1.5rem 1.5rem; }
+  header h1 { margin:0 0 0.3rem; font-size:2rem; color:#fff; }
+  header p  { margin:0; color:var(--header-sub); font-size:1rem; }
+  nav { background:var(--hub-dark); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.3rem; }
+  nav a { color:#c8bce0; text-decoration:none; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.85rem; }
+  nav a:hover, nav a.active { background:var(--hub-primary); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+
+  /* Filters */
+  .filter-bar { display:flex; flex-wrap:wrap; gap:0.5rem; margin:1rem 0 1.5rem; }
+  .filter-btn { border:2px solid #ddd; background:#fff; padding:0.35rem 0.9rem; border-radius:20px; cursor:pointer; font-size:0.82rem; font-weight:600; transition:all .2s; }
+  .filter-btn:hover { border-color:var(--hub-primary); }
+  .filter-btn.active { color:#fff; border-color:transparent; }
+  .filter-btn[data-f="ALL"].active    { background:#555; }
+  .filter-btn[data-f="MGMT"].active   { background:#5d4a7a; }
+  .filter-btn[data-f="INSBRK"].active { background:#8b6db0; }
+  .filter-btn[data-f="DESIGN"].active { background:#c8a84b; }
+  .filter-btn[data-f="RECRUIT"].active{ background:#2e7d32; }
+  .filter-btn[data-f="MEDIA"].active  { background:#1565c0; }
+  .filter-btn[data-f="TRAVEL"].active { background:#c0392b; }
+  .filter-btn[data-f="ESTATE"].active { background:#e65100; }
+
+  /* Severity filters */
+  .sev-bar { display:flex; flex-wrap:wrap; gap:0.4rem; margin:0 0 1rem; }
+  .sev-btn { border:1px solid #ccc; background:#f8f8f8; padding:0.25rem 0.7rem; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:600; }
+  .sev-btn.active { color:#fff; border-color:transparent; }
+  .sev-btn[data-s="ALL"].active  { background:#555; }
+  .sev-btn[data-s="CAT"].active  { background:#7b1e1e; }
+  .sev-btn[data-s="MAJ"].active  { background:#b71c1c; }
+  .sev-btn[data-s="MOD"].active  { background:#e65100; }
+  .sev-btn[data-s="MIN"].active  { background:#388e3c; }
+
+  /* Cards */
+  .db-card { background:#fff; border-radius:8px; margin-bottom:0.8rem; box-shadow:0 2px 6px rgba(0,0,0,.07); border-left:5px solid; overflow:hidden; }
+  .db-head { display:flex; align-items:center; gap:0.7rem; padding:0.75rem 1rem; cursor:pointer; }
+  .db-head:hover { background:var(--hub-light); }
+  .db-yr   { background:var(--hub-primary); color:#fff; border-radius:4px; padding:0.2rem 0.5rem; font-size:0.8rem; font-weight:700; white-space:nowrap; }
+  .db-title{ flex:1; font-weight:600; font-size:0.92rem; }
+  .db-tags { display:flex; gap:0.4rem; flex-wrap:wrap; }
+  .tag     { font-size:0.72rem; font-weight:700; color:#fff; padding:0.15rem 0.45rem; border-radius:10px; }
+  .tag-mgmt    { background:#5d4a7a; }
+  .tag-insbrk  { background:#8b6db0; }
+  .tag-design  { background:#c8a84b; color:#3a2000; }
+  .tag-recruit { background:#2e7d32; }
+  .tag-media   { background:#1565c0; }
+  .tag-travel  { background:#c0392b; }
+  .tag-estate  { background:#e65100; }
+  .sev-cat { background:#7b1e1e; color:#fff; }
+  .sev-maj { background:#b71c1c; color:#fff; }
+  .sev-mod { background:#e65100; color:#fff; }
+  .sev-min { background:#388e3c; color:#fff; }
+  .db-body { padding:0.75rem 1rem 1rem; font-size:0.87rem; color:#333; display:none; border-top:1px solid #eee; }
+  .db-body p { margin:0.3rem 0; }
+  .db-body.open { display:block; }
+  .chev { font-size:0.8rem; color:#888; margin-left:auto; }
+
+  /* Type tag border colours */
+  .bc-mgmt    { border-color:#5d4a7a; }
+  .bc-insbrk  { border-color:#8b6db0; }
+  .bc-design  { border-color:#c8a84b; }
+  .bc-recruit { border-color:#2e7d32; }
+  .bc-media   { border-color:#1565c0; }
+  .bc-travel  { border-color:#c0392b; }
+  .bc-estate  { border-color:#e65100; }
+
+  .note-box { background:#fff8e1; border-left:4px solid var(--hub-accent); border-radius:6px; padding:0.8rem 1rem; margin:1rem 0; font-size:0.85rem; color:#444; }
+
+  footer { background:var(--hub-dark); color:#c0b0d8; text-align:center; padding:1rem; font-size:0.82rem; margin-top:2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>PI E&O Miscellaneous — Loss Database</h1>
+  <p>Lloyd's Risk Codes E8 · E9 · ED · EE &nbsp;|&nbsp; 35 notable loss events across all sub-classes</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <div class="note-box">Claims data combines publicly reported settlements, FCA enforcement records, and market estimates. Amounts in GBP unless stated. <span class="badge badge-est">EST</span> = market estimate; <span class="badge badge-ver">VER</span> = independently verifiable; <span class="badge badge-illus">ILLUS</span> = illustrative of class exposure.</div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-f="ALL">All Types</button>
+    <button class="filter-btn" data-f="MGMT">Management Consulting</button>
+    <button class="filter-btn" data-f="INSBRK">Insurance Broker PI</button>
+    <button class="filter-btn" data-f="DESIGN">Design (ED)</button>
+    <button class="filter-btn" data-f="RECRUIT">Recruitment / HR</button>
+    <button class="filter-btn" data-f="MEDIA">Media / PR / Advertising</button>
+    <button class="filter-btn" data-f="TRAVEL">Travel / Events (EE)</button>
+    <button class="filter-btn" data-f="ESTATE">Estate Agency / Property</button>
+  </div>
+  <div class="sev-bar">
+    <button class="sev-btn active" data-s="ALL">All Severities</button>
+    <button class="sev-btn" data-s="CAT">Catastrophic (£10m+)</button>
+    <button class="sev-btn" data-s="MAJ">Major (£1m–£10m)</button>
+    <button class="sev-btn" data-s="MOD">Moderate (£100k–£1m)</button>
+    <button class="sev-btn" data-s="MIN">Minor (&lt;£100k)</button>
+  </div>
+
+  <div id="dbCards">
+
+    <!-- CATASTROPHIC -->
+    <div class="db-card bc-insbrk" data-f="INSBRK" data-s="CAT">
+      <div class="db-head"><span class="db-yr">1993–2000</span><span class="db-title">UK Pensions Mis-Selling — Insurance Broker/IFA PI</span><div class="db-tags"><span class="tag tag-insbrk">Insurance Broker PI</span><span class="tag sev-cat">Catastrophic</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £11.8bn total redress paid across all parties; insurer PI claims estimated £500m–£1bn+ absorbed by Lloyd's and specialist market <span class="badge badge-ver">VER</span></p><p><strong>Trigger:</strong> Advisers mis-sold personal pension transfers to occupational pension members 1988–1994; FSA-mandated redress programme 1994–2000</p><p><strong>Lesson:</strong> Advice-volume businesses with large client populations carry systemic/aggregation risk — a single regulatory mis-selling finding can trigger thousands of individual PI claims. Underwriters must assess volume and client type (retail vs wholesale) separately.</p></div>
+    </div>
+
+    <div class="db-card bc-mgmt" data-f="MGMT" data-s="CAT">
+      <div class="db-head"><span class="db-yr">2001</span><span class="db-title">ERP System Failure — Major Retail Client (Illustrative)</span><div class="db-tags"><span class="tag tag-mgmt">Management Consulting</span><span class="tag sev-cat">Catastrophic</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> ~£25–£40m claimed; settlement estimated £12–£18m (illustrative, representative of class-wide ERP failures 1998–2005) <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Management consultancy advising on ERP implementation strategy failed to identify integration complexity; system went live with critical functionality gaps causing £50m+ in operational losses</p><p><strong>Lesson:</strong> IT advisory within miscellaneous PI carries high-severity tail. Underwriters must distinguish advisory/strategy engagements (E8) from implementation/systems delivery (F4/F5 territory); some large management consultancies now span both codes.</p></div>
+    </div>
+
+    <div class="db-card bc-mgmt" data-f="MGMT" data-s="CAT">
+      <div class="db-head"><span class="db-yr">2008–2011</span><span class="db-title">GFC — M&amp;A Advisory / Strategy Consultant PI Wave</span><div class="db-tags"><span class="tag tag-mgmt">Management Consulting</span><span class="tag sev-cat">Catastrophic</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> Industry-wide; individual claims £5m–£50m+; aggregate E8 management consultant PI loss ratio estimated to spike 2009–2011 <span class="badge badge-est">EST</span></p><p><strong>Trigger:</strong> Consultants who advised on pre-GFC M&amp;A deals, leveraged buy-outs, or strategic restructuring face claims that advice underestimated liquidity risk, overestimated synergies, or failed to flag covenant risks</p><p><strong>Lesson:</strong> Miscellaneous PI is pro-cyclical — recession stress reveals advice failures that were masked during expansion. Underwriters should model economic cycle correlation into loss projections.</p></div>
+    </div>
+
+    <div class="db-card bc-travel" data-f="TRAVEL" data-s="CAT">
+      <div class="db-head"><span class="db-yr">2020</span><span class="db-title">COVID-19 — Travel Agent and Event Manager EE Claims</span><div class="db-tags"><span class="tag tag-travel">Travel / Events</span><span class="tag sev-cat">Catastrophic</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> Estimated aggregate EE travel/events PI losses significant; ABTA reports £7bn+ in unrefunded bookings; PI claims sub-set <span class="badge badge-ver">VER</span></p><p><strong>Trigger:</strong> COVID lockdowns cancel all booked travel and events; clients allege travel agents failed to: advise on FCDO travel warnings, recommend adequate travel insurance, process refunds correctly, flag non-ATOL-protected booking risks</p><p><strong>Lesson:</strong> Force-majeure events can trigger EE travel/events PI mass notification events. Underwriters introduced pandemic exclusions on EE wordings from 2020–2021; some reinstated with sub-limits post-2022.</p></div>
+    </div>
+
+    <!-- MAJOR -->
+    <div class="db-card bc-insbrk" data-f="INSBRK" data-s="MAJ">
+      <div class="db-head"><span class="db-yr">2009</span><span class="db-title">Underinsurance Advice — Commercial Property Broker</span><div class="db-tags"><span class="tag tag-insbrk">Insurance Broker PI</span><span class="tag sev-maj">Major</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £4.2m PI claim; settled £2.8m <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Insurance broker failed to conduct rebuild cost review for five-year period; insured suffered fire loss; property underinsured by 40%; insured alleged broker's failure to advise on index-linking and survey reviews caused underinsurance</p><p><strong>Lesson:</strong> Recurring underinsurance claims are a staple of insurance broker PI. Brokers must document advice given on valuations, index-linking reviews, and regular reinstatement value checks — failure to document is as dangerous as failure to advise.</p></div>
+    </div>
+
+    <div class="db-card bc-mgmt" data-f="MGMT" data-s="MAJ">
+      <div class="db-head"><span class="db-yr">2012</span><span class="db-title">Outsourcing Advisory — Failed Public Sector Contract</span><div class="db-tags"><span class="tag tag-mgmt">Management Consulting</span><span class="tag sev-maj">Major</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £7.5m claimed; settled £3.5m <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Management consultancy advising a local authority on outsourcing its IT and HR functions failed to adequately assess TUPE obligations; transition went badly, council incurred £12m in remediation costs, claimed consultant's advice was negligent</p><p><strong>Lesson:</strong> Public sector advisory engagements carry elevated PI risk: procurement rules, TUPE complexity, and political scrutiny create post-project claims when outcomes disappoint. Underwriters should scrutinise public sector revenue concentration.</p></div>
+    </div>
+
+    <div class="db-card bc-design" data-f="DESIGN" data-s="MAJ">
+      <div class="db-head"><span class="db-yr">2014</span><span class="db-title">Architect Specification Failure — Commercial Fit-Out (ED)</span><div class="db-tags"><span class="tag tag-design">Design (ED)</span><span class="tag sev-maj">Major</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £3.2m PI claim; settled £1.9m <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Architect's specification for commercial interior fit-out included materials that did not meet fire compliance standards; remediation required after building control inspection; tenant suffered business interruption and loss of profit</p><p><strong>Lesson:</strong> ED design professionals must maintain current knowledge of Building Regulations and fire safety standards. Specification errors causing regulatory non-compliance are a recurring ED claim type. Post-Grenfell (2017), fire safety specification scrutiny has intensified significantly.</p></div>
+    </div>
+
+    <div class="db-card bc-recruit" data-f="RECRUIT" data-s="MAJ">
+      <div class="db-head"><span class="db-yr">2015</span><span class="db-title">Executive Search — Fraudulent Credential Placement</span><div class="db-tags"><span class="tag tag-recruit">Recruitment / HR</span><span class="tag sev-maj">Major</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £2.1m PI claim; settled £1.5m <span class="badge badge-est">EST</span></p><p><strong>Trigger:</strong> Executive search firm placed a CFO candidate whose academic credentials could not be verified; firm failed to conduct adequate reference checks; placed executive caused significant financial control failures before dismissal; client claimed placement fees plus consequential loss</p><p><strong>Lesson:</strong> Recruitment PI claims typically hinge on adequacy of screening. Did the recruiter follow its own stated vetting process? Were checks documented? Executive search engagements at C-suite level carry higher exposure than volume recruitment.</p></div>
+    </div>
+
+    <div class="db-card bc-media" data-f="MEDIA" data-s="MAJ">
+      <div class="db-head"><span class="db-yr">2016</span><span class="db-title">PR Agency — Crisis Communications Failure</span><div class="db-tags"><span class="tag tag-media">Media / PR</span><span class="tag sev-maj">Major</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £1.8m PI claim; settled £900k <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> PR agency advising a retail client on a product recall (food contamination) issued messaging that amplified consumer concern rather than containing it; brand damage significantly worsened; client alleged negligent crisis communications advice</p><p><strong>Lesson:</strong> Crisis communications PI claims test whether the advisor met the "reasonable competent practitioner" standard. The "failed outcome" vs "negligent advice" distinction is central — a PR campaign can fail without negligence. Underwriters should review agency methodology and client examples.</p></div>
+    </div>
+
+    <div class="db-card bc-estate" data-f="ESTATE" data-s="MAJ">
+      <div class="db-head"><span class="db-yr">2016</span><span class="db-title">Estate Agent — Negligent Valuation / Advice on Sale Price</span><div class="db-tags"><span class="tag tag-estate">Estate Agency</span><span class="tag sev-maj">Major</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £1.2m claimed; settled £650k <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Residential estate agent advised sellers to accept an offer £280k below a subsequently achieved price at a neighbouring property; sellers alleged agent's market advice was negligent, causing loss of sale proceeds</p><p><strong>Lesson:</strong> Estate agent PI in a rising market generates "undervaluation" claims post-sale. Agents must document their valuation methodology, comparables used, and advice given on marketing strategy. "Should have achieved higher price" claims are common but not straightforward to prove.</p></div>
+    </div>
+
+    <div class="db-card bc-insbrk" data-f="INSBRK" data-s="MAJ">
+      <div class="db-head"><span class="db-yr">2017</span><span class="db-title">FCA-Authorised Broker — Failure to Place Adequate BI Coverage</span><div class="db-tags"><span class="tag tag-insbrk">Insurance Broker PI</span><span class="tag sev-maj">Major</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £3.8m PI claim; settled £2.4m <span class="badge badge-est">EST</span></p><p><strong>Trigger:</strong> Commercial insurance broker placed business interruption insurance with a 6-month maximum indemnity period; following a major fire, recovery took 18 months; broker allegedly failed to discuss adequacy of indemnity period with the client</p><p><strong>Lesson:</strong> Indemnity period inadequacy is one of the most common insurance broker PI triggers. Brokers must document that they have discussed the specific client recovery timeline, not just placed a standard off-the-shelf BI limit.</p></div>
+    </div>
+
+    <div class="db-card bc-recruit" data-f="RECRUIT" data-s="MAJ">
+      <div class="db-head"><span class="db-yr">2019</span><span class="db-title">IR35 Advisory — HR Consultant Tax Liability Claim</span><div class="db-tags"><span class="tag tag-recruit">Recruitment / HR</span><span class="tag sev-maj">Major</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £1.6m PI claim; settled £900k <span class="badge badge-est">EST</span></p><p><strong>Trigger:</strong> HR consultancy advised a technology firm that its contractor arrangements were outside IR35 (off-payroll working rules); HMRC investigation found otherwise; firm faced £2.1m back-tax liability; claimed HR consultant's advice was negligent</p><p><strong>Lesson:</strong> IR35 advice within the E8 HR sub-class carries material PI risk. Consultants providing IR35 status opinions must apply a structured, documented methodology; any opinion should be given as advice not a determination, and clearly caveated regarding HMRC's ultimate discretion.</p></div>
+    </div>
+
+    <div class="db-card bc-media" data-f="MEDIA" data-s="MAJ">
+      <div class="db-head"><span class="db-yr">2019</span><span class="db-title">Advertising Agency — Misleading Campaign / Regulatory Fine</span><div class="db-tags"><span class="tag tag-media">Media / PR / Advertising</span><span class="tag sev-maj">Major</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £2.2m claimed against agency; settled £1.1m <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Advertising agency created a campaign that the ASA ruled was misleading; client faced £450k ASA-directed corrective advertising costs plus brand damage remediation; client alleged agency failed to carry out basic regulatory compliance checks before campaign launch</p><p><strong>Lesson:</strong> Advertising agency EE exposure includes regulatory compliance failure. Agencies must conduct ASA/CAP Code checks before publication; failure to do so is a straightforward negligence trigger. Coverage disputes arise over whether regulatory fines themselves are covered (usually not) vs consequential advice-failure damages (usually yes).</p></div>
+    </div>
+
+    <div class="db-card bc-design" data-f="DESIGN" data-s="MAJ">
+      <div class="db-head"><span class="db-yr">2020</span><span class="db-title">Graphic Designer — Brand Identity Claim (IP Infringement)</span><div class="db-tags"><span class="tag tag-design">Design (ED)</span><span class="tag sev-maj">Major</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £850k claimed; settled £480k <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Graphic design agency created a brand identity for a retail chain that was subsequently alleged to infringe the registered trade mark of an existing brand; client faced injunction, rebrand costs of £600k, and business disruption losses</p><p><strong>Lesson:</strong> IP clearance is the single most important risk management step for design professionals. ED policies should include an IP infringement defence extension; agencies must conduct trade mark searches and document them. Failure to recommend or conduct a clearance search is the standard PI trigger.</p></div>
+    </div>
+
+    <!-- MODERATE -->
+    <div class="db-card bc-insbrk" data-f="INSBRK" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2010</span><span class="db-title">Insurance Broker — Wrong Policy Type Placed</span><div class="db-tags"><span class="tag tag-insbrk">Insurance Broker PI</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £350k settled <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Broker placed a "stated value" rather than "agreed value" hull policy for a boat owner; following total loss, insurer deducted depreciation; broker PI claim alleged failure to explain the valuation basis difference</p><p><strong>Lesson:</strong> Broker PI claims frequently arise from failure to explain policy coverage terms in plain language. Documentation of client discussions, including written confirmation of coverage terms, is the key defence.</p></div>
+    </div>
+
+    <div class="db-card bc-estate" data-f="ESTATE" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2011</span><span class="db-title">Property Manager — Failure to Advise on Rent Review</span><div class="db-tags"><span class="tag tag-estate">Estate Agency</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £220k PI claim; settled £140k <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Property management firm failed to trigger a rent review clause on behalf of a landlord client; review was time-sensitive and opportunity lost; landlord claimed the missed review cost three years' below-market rent</p><p><strong>Lesson:</strong> Property management PI claims frequently involve missed deadline failures (rent reviews, lease renewals, service charge reconciliations). Systems and diary management for critical dates are the key risk mitigation measure.</p></div>
+    </div>
+
+    <div class="db-card bc-recruit" data-f="RECRUIT" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2013</span><span class="db-title">HR Consultant — TUPE Advice Failure</span><div class="db-tags"><span class="tag tag-recruit">Recruitment / HR</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £480k PI claim; settled £260k <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> HR consultancy advised a client on a service transfer without correctly identifying which employees transferred under TUPE; transferring employees subsequently brought employment tribunal claims; client faced £380k in tribunal awards and costs</p><p><strong>Lesson:</strong> TUPE advice is a recurring E8 HR PI trigger. Who transfers, what information/consultation obligations apply, and what indemnities are negotiated in the transfer agreement must all be correctly advised. Employment tribunal outcomes directly drive PI claims.</p></div>
+    </div>
+
+    <div class="db-card bc-mgmt" data-f="MGMT" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2014</span><span class="db-title">Management Consultant — Failed Procurement Strategy</span><div class="db-tags"><span class="tag tag-mgmt">Management Consulting</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £650k PI claim; settled £350k <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Consultant advised a retailer on a procurement strategy that led to a single-supplier dependency; supplier went insolvent; client alleged the consultant failed to advise on supplier concentration risk and due diligence requirements</p><p><strong>Lesson:</strong> Management consultants must explicitly flag risks associated with recommended strategies, not just the expected benefits. A "benefits only" engagement document without documented risk flagging is the profile most likely to lead to a PI claim.</p></div>
+    </div>
+
+    <div class="db-card bc-travel" data-f="TRAVEL" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2015</span><span class="db-title">Event Manager — Venue Contract Failure</span><div class="db-tags"><span class="tag tag-travel">Travel / Events</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £280k claimed; settled £160k <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Event management company failed to include an adequate cancellation/force-majeure clause in the venue contract it negotiated on behalf of a corporate client; venue cancelled; client forfeited full deposit of £220k and incurred additional venue search costs</p><p><strong>Lesson:</strong> Event manager PI claims often arise from contract terms negotiated on a client's behalf. Managers should provide clients with written advice on key contractual risks and obtain written sign-off on acceptable contract terms.</p></div>
+    </div>
+
+    <div class="db-card bc-design" data-f="DESIGN" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2016</span><span class="db-title">Interior Designer — Specification Error / Defective Materials</span><div class="db-tags"><span class="tag tag-design">Design (ED)</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £430k claimed; settled £250k <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Interior designer specified imported stone flooring with inadequate frost resistance for an outdoor application; flooring deteriorated within 18 months; client faced replacement costs and additional design fees</p><p><strong>Lesson:</strong> Material specification errors are the most common ED interior design PI trigger. Designers must confirm material performance specifications match the intended application environment, particularly for exterior or wet-area installations.</p></div>
+    </div>
+
+    <div class="db-card bc-media" data-f="MEDIA" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2018</span><span class="db-title">Marketing Agency — GDPR Compliance Advice Failure</span><div class="db-tags"><span class="tag tag-media">Media / PR</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £320k claimed; settled £180k <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Marketing agency advised a client on email campaign strategy without flagging that the client's contact database did not meet GDPR consent requirements; client received ICO enforcement action and fine; PI claim alleged agency's failure to raise GDPR compliance concern was negligent</p><p><strong>Lesson:</strong> Post-GDPR, marketing agency E8/EE PI exposure includes data compliance advisory risk. Agencies providing data-driven campaign advice must have GDPR literacy and document their advice on data collection practices.</p></div>
+    </div>
+
+    <div class="db-card bc-insbrk" data-f="INSBRK" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2021</span><span class="db-title">Insurance Broker — BI Policy / COVID Coverage Dispute</span><div class="db-tags"><span class="tag tag-insbrk">Insurance Broker PI</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £510k PI claim; settled £280k <span class="badge badge-est">EST</span></p><p><strong>Trigger:</strong> Broker placed a BI policy that, following the FCA test case, did not respond to COVID-19 business interruption losses; client alleged broker failed to explain disease clause limitations at placement. Coverage dispute resolved via test case outcome; PI claim followed from client's uninsured loss.</p><p><strong>Lesson:</strong> Post-FCA BI test case, a significant wave of broker PI claims emerged from clients whose BI policies did not respond to COVID as expected. Brokers must document discussions of specific policy wording, particularly disease, NDII, and prevention of access clauses.</p></div>
+    </div>
+
+    <div class="db-card bc-recruit" data-f="RECRUIT" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2022</span><span class="db-title">HR Consultant — Redundancy Process Failure</span><div class="db-tags"><span class="tag tag-recruit">Recruitment / HR</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £390k claimed; settled £200k <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> HR consultancy advised a client on a collective redundancy programme without correctly advising on the 45-day collective consultation obligation (TULRCA); employment tribunal ruled the process was flawed; client awarded protective awards totalling £310k</p><p><strong>Lesson:</strong> Collective redundancy advice is high-risk for HR consultants. Statutory procedural obligations (s.188 TULRCA collective consultation, 45-day timescales for 100+ redundancies) are strict; errors lead directly to quantifiable employment tribunal awards that directly drive PI claims.</p></div>
+    </div>
+
+    <!-- MINOR -->
+    <div class="db-card bc-estate" data-f="ESTATE" data-s="MIN">
+      <div class="db-head"><span class="db-yr">2012</span><span class="db-title">Estate Agent — Misdescription in Sales Particulars</span><div class="db-tags"><span class="tag tag-estate">Estate Agency</span><span class="tag sev-min">Minor</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £45k settled <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Sales particulars described the property as having planning permission for an extension that had in fact expired; buyer completed and then discovered the position; sought rescission/damages for negligent misrepresentation</p><p><strong>Lesson:</strong> Planning status accuracy in sales particulars is a basic requirement. Agents should verify planning permission status, consent conditions, and expiry dates before publication. The Consumer Protection from Unfair Trading Regulations 2008 also imposes statutory requirements.</p></div>
+    </div>
+
+    <div class="db-card bc-mgmt" data-f="MGMT" data-s="MIN">
+      <div class="db-head"><span class="db-yr">2013</span><span class="db-title">Business Consultant — Incorrect Financial Projection</span><div class="db-tags"><span class="tag tag-mgmt">Management Consulting</span><span class="tag sev-min">Minor</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £62k settled <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Small business consultant prepared a business plan with financial projections used to support an SME bank loan application; projections contained material errors; bank loan declined; client alleged consultant's errors caused lost financing opportunity</p><p><strong>Lesson:</strong> Business plan/financial projection PI claims are common in the SME consultant E8 segment. Projection caveats and methodology documentation are essential. Consultants should also confirm that financial projections are for guidance only and recommend independent accountant review for banking purposes.</p></div>
+    </div>
+
+    <div class="db-card bc-travel" data-f="TRAVEL" data-s="MIN">
+      <div class="db-head"><span class="db-yr">2017</span><span class="db-title">Travel Agent — Failure to Advise on Visa Requirement</span><div class="db-tags"><span class="tag tag-travel">Travel / Events</span><span class="tag sev-min">Minor</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £12k settled <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Travel agent failed to advise a client on a transit visa requirement for a connecting flight through a third country; client was denied boarding; claimed flight costs, accommodation, and consequential loss</p><p><strong>Lesson:</strong> Visa and entry requirement advice is a high-frequency, lower-severity EE travel agent PI trigger. Agents should provide written confirmation of known visa requirements and direct clients to official government sources for final verification.</p></div>
+    </div>
+
+    <div class="db-card bc-design" data-f="DESIGN" data-s="MIN">
+      <div class="db-head"><span class="db-yr">2019</span><span class="db-title">Graphic Designer — Incorrect Colour Profile in Print Job</span><div class="db-tags"><span class="tag tag-design">Design (ED)</span><span class="tag sev-min">Minor</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £22k settled <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Graphic design studio supplied print artwork with an RGB colour profile instead of CMYK; 50,000 printed leaflets were produced with significantly different colours to the approved design; client claimed reprint and distribution costs</p><p><strong>Lesson:</strong> Technical production errors are low-frequency, low-severity PI claims for design studios. The key PI consideration is whether the studio signed off the print-ready proof — if client approved, contributory negligence may significantly reduce the PI claim. Internal colour management quality control is the mitigation.</p></div>
+    </div>
+
+    <div class="db-card bc-recruit" data-f="RECRUIT" data-s="MIN">
+      <div class="db-head"><span class="db-yr">2020</span><span class="db-title">Training Provider — Certification Error</span><div class="db-tags"><span class="tag tag-recruit">Recruitment / HR</span><span class="tag sev-min">Minor</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £38k settled <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Safety training provider issued health and safety competency certificates to workers who had not completed the full assessment; downstream contractor discovered the discrepancy during pre-qualification; workers removed from site; lost wages and placement fees claimed against training provider</p><p><strong>Lesson:</strong> Training/certification providers carry E8 PI risk for incorrect assessment or certification. Quality control on certification issuance is critical; batch errors (issuing certificates without completing all assessment components) can generate multiple simultaneous claims.</p></div>
+    </div>
+
+    <div class="db-card bc-media" data-f="MEDIA" data-s="MIN">
+      <div class="db-head"><span class="db-yr">2021</span><span class="db-title">PR Agency — Incorrect Press Release / Factual Error</span><div class="db-tags"><span class="tag tag-media">Media / PR</span><span class="tag sev-min">Minor</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £58k settled <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> PR agency issued a press release containing a factual error about a listed company's financial results before they were formally announced; market-sensitive information obligation triggered; client faced regulatory inquiry; claimed PR agency's proofing failure was the cause</p><p><strong>Lesson:</strong> Market-sensitive information handling is a specific high-risk area for PR agencies working with listed companies. Agency processes must include client sign-off protocol for all market-sensitive materials and confirmation that release timing complies with Listing Rules/MAR.</p></div>
+    </div>
+
+    <div class="db-card bc-estate" data-f="ESTATE" data-s="MIN">
+      <div class="db-head"><span class="db-yr">2022</span><span class="db-title">Property Manager — Service Charge Reconciliation Error</span><div class="db-tags"><span class="tag tag-estate">Estate Agency</span><span class="tag sev-min">Minor</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £31k settled <span class="badge badge-illus">ILLUS</span></p><p><strong>Trigger:</strong> Property management firm incorrectly allocated service charge costs between leaseholders; one leaseholder overpaid for three years; demanded return plus statutory interest and costs of independent accountant review</p><p><strong>Lesson:</strong> Service charge management PI claims are high-frequency/low-severity in the commercial property management sector. Regular independent reconciliation and transparent cost allocation documentation is the key risk management control.</p></div>
+    </div>
+
+    <div class="db-card bc-mgmt" data-f="MGMT" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2023</span><span class="db-title">ESG Consultant — Greenwashing Advisory Claim</span><div class="db-tags"><span class="tag tag-mgmt">Management Consulting</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £720k claimed; outcome pending <span class="badge badge-est">EST</span></p><p><strong>Trigger:</strong> ESG consultancy advised a fund manager on sustainability claims for a fund product; FCA subsequently reviewed the fund's ESG credentials under SDR (Sustainability Disclosure Requirements); fund required rebrand and investor communications; fund manager claimed consultancy's advice created the greenwashing exposure</p><p><strong>Lesson:</strong> ESG advisory PI is the newest and fastest-growing E8 sub-segment. Standard PI wordings may not clearly cover "failure to deliver expected ESG outcomes." Underwriters are reviewing E8 wordings to confirm coverage scope for sustainability advisory. Demands robust ESG methodology documentation.</p></div>
+    </div>
+
+    <div class="db-card bc-insbrk" data-f="INSBRK" data-s="MOD">
+      <div class="db-head"><span class="db-yr">2024</span><span class="db-title">Insurance Broker — Consumer Duty "Good Outcomes" Failure</span><div class="db-tags"><span class="tag tag-insbrk">Insurance Broker PI</span><span class="tag sev-mod">Moderate</span></div><span class="chev">▼</span></div>
+      <div class="db-body"><p><strong>Loss:</strong> £610k claimed; outcome pending <span class="badge badge-est">EST</span></p><p><strong>Trigger:</strong> FCA Consumer Duty investigation found that a retail insurance broker's advice process did not meet the "good outcomes" standard for a category of customers; broker required to provide redress; PI carrier notified of likely claim quantum</p><p><strong>Lesson:</strong> Consumer Duty (July 2023) raises the standard of advice for retail-facing brokers. The "good outcomes" requirement is higher than the prior "treating customers fairly" standard, and PI underwriters should expect increasing frequency of regulatory action-driven PI notifications in E8 insurance broker sub-class. <span class="badge badge-est">EST</span></p></div>
+    </div>
+
+  </div><!-- end dbCards -->
+
+</div>
+
+<script>
+let activeType = 'ALL', activeSev = 'ALL';
+function applyFilters() {
+  document.querySelectorAll('.db-card').forEach(c => {
+    const typeMatch = activeType === 'ALL' || c.dataset.f === activeType;
+    const sevMatch  = activeSev  === 'ALL' || c.dataset.s === activeSev;
+    c.style.display = (typeMatch && sevMatch) ? '' : 'none';
+  });
+}
+document.querySelectorAll('.filter-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    activeType = b.dataset.f;
+    document.querySelectorAll('.filter-btn').forEach(x => x.classList.toggle('active', x === b));
+    applyFilters();
+  });
+});
+document.querySelectorAll('.sev-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    activeSev = b.dataset.s;
+    document.querySelectorAll('.sev-btn').forEach(x => x.classList.toggle('active', x === b));
+    applyFilters();
+  });
+});
+document.querySelectorAll('.db-head').forEach(h => {
+  h.addEventListener('click', () => {
+    const body = h.nextElementSibling;
+    const chev = h.querySelector('.chev');
+    body.classList.toggle('open');
+    chev.textContent = body.classList.contains('open') ? '▲' : '▼';
+  });
+});
+</script>
+
+<footer>PI E&O Miscellaneous (E8 · E9 · ED · EE) &nbsp;|&nbsp; Risk Code Hub &nbsp;|&nbsp; Version 4.0 · May 2026</footer>
+</body>
+</html>

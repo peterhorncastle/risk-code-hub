@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Motor – UK: Claims Database | Risk Code Hub</title>
+  <style>
+    :root {
+      --motor:#c0392b; --motor-dark:#7b1010; --road:#263238;
+      --signal:#e67e22; --speed:#1565c0; --go:#2e7d32;
+      --light:#fdf5f5; --text:#1e2a2e; --muted:#6b7280; --border:#e0cece;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #c0392b;
+    --hub-dark:      #7b1010;
+    --hub-light:     #fdecea;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #e67e22;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#1a0808 0%,#c0392b 50%,#7b1010 100%);
+    --header-sub:    #f0c8c8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#1a0808 0%,#c0392b 50%,#7b1010 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#c8a090; margin-bottom:6px; }
+    .breadcrumb a { color:var(--signal); text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#f0c8c8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--motor); border-bottom-color:var(--signal); }
+    main { max-width:1150px; margin:0 auto; padding:40px 30px; }
+
+    .filter-bar { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:24px; align-items:center; }
+    .filter-bar label { font-size:0.8rem; font-weight:600; color:var(--muted); }
+    .filter-bar select, .filter-bar input { border:1px solid var(--border); border-radius:6px; padding:7px 12px; font-size:0.84rem; color:var(--text); background:#fff; }
+    .filter-bar input { min-width:200px; }
+
+    .db-wrap { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+    thead th { background:var(--motor); color:#fff; padding:11px 14px; text-align:left; cursor:pointer; user-select:none; white-space:nowrap; }
+    thead th:hover { background:var(--motor-dark); color:#fff; }
+    tbody td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tbody tr:last-child td { border-bottom:none; }
+    tbody tr:nth-child(even) td { background:#fdf8f8; }
+    tbody tr:hover td { background:#f5e8e8; cursor:pointer; }
+    tbody tr.detail-row td { background:#f9f9f9; padding:16px 20px; font-size:0.82rem; line-height:1.7; }
+    tbody tr.detail-row { display:none; }
+    tbody tr.detail-row.open { display:table-row; }
+
+    .loss-large { color:var(--motor); font-weight:800; }
+    .loss-med { color:var(--signal); font-weight:700; }
+    .loss-small { color:var(--go); font-weight:700; }
+    .type-chip { display:inline-block; font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:10px; color:#fff; }
+    .chip-bi { background:var(--motor); }
+    .chip-pd { background:var(--signal); }
+    .chip-fraud { background:var(--road); }
+    .chip-cat { background:var(--speed); }
+    .chip-reg { background:var(--go); }
+    .chip-fleet { background:#7b3f00; }
+
+    .badge { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:6px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .count-bar { font-size:0.82rem; color:var(--muted); margin-bottom:10px; }
+    footer { background:var(--road); color:#aabbc4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Motor – UK</a> › Claims Database</div>
+  <h1>Claims &amp; Events Database — UK Motor</h1>
+  <p>35 significant UK motor insurance claims, regulatory events and market incidents. Filter by type, code or keyword.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates & ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="filter-bar">
+    <label>Type:</label>
+    <select id="fType" onchange="filter()">
+      <option value="">All Types</option>
+      <option value="BI">Bodily Injury</option>
+      <option value="PD">Property Damage</option>
+      <option value="Fraud">Fraud / Organised Crime</option>
+      <option value="Cat">Catastrophe / Weather</option>
+      <option value="Reg">Regulatory / Legislative</option>
+      <option value="Fleet">Fleet / Commercial</option>
+    </select>
+    <label>Code:</label>
+    <select id="fCode" onchange="filter()">
+      <option value="">All Codes</option>
+      <option value="M2">M2 — Private Motor</option>
+      <option value="M3">M3 — Commercial Motor</option>
+      <option value="M4">M4 — Motorcycle</option>
+      <option value="M5">M5 — Motor Fleet</option>
+      <option value="M6">M6 — Motor Trade</option>
+    </select>
+    <input id="fText" type="text" placeholder="Search keyword…" oninput="filter()">
+  </div>
+  <div class="count-bar" id="countBar">Showing 35 of 35 events</div>
+
+  <div class="db-wrap">
+    <table id="dbTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Year ↕</th>
+          <th onclick="sortTable(1)">Event</th>
+          <th onclick="sortTable(2)">Type</th>
+          <th onclick="sortTable(3)">Code</th>
+          <th onclick="sortTable(4)">Loss (£)</th>
+        </tr>
+      </thead>
+      <tbody id="dbBody"></tbody>
+    </table>
+  </div>
+</main>
+<footer>Risk Code Hub v2.8 · Motor – UK (M2/M3/M4/M5/M6) · For educational use</footer>
+<script>
+const EVENTS = [
+  {year:1946,event:"MIB Created — Uninsured Driver Compensation Scheme",type:"Reg",code:"M2",loss:"–",detail:"Motor Insurers' Bureau established by agreement between government and insurers to ensure victims of uninsured drivers receive compensation. Landmark in compulsory insurance enforcement. VER",conf:"VER"},
+  {year:1984,event:"UK Industry: Seat Belt Law Reduces Severity",type:"Reg",code:"M2",loss:"–",detail:"Compulsory front seat belts introduced 1983; rear belts 1991. Estimated to reduce fatal injury frequency significantly — modelled at 2,000+ lives saved per year at peak. Long-term structural reduction in bodily injury severity loss costs. EST",conf:"EST"},
+  {year:1987,event:"Great Storm — Vehicle Damage Across Southern England",type:"Cat",code:"M2",loss:"~£400m",detail:"The Great Storm of October 1987 (winds to 100 mph) caused widespread vehicle damage across southern England. UK motor combined with property losses estimated £1bn+; motor vehicle damage component approximately £300–400m. EST",conf:"EST"},
+  {year:1999,event:"CFA Expansion — Whiplash Claims Surge Begins",type:"BI",code:"M2",loss:"Industry ~£1bn+ pa",detail:"Access to Justice Act 1999 enabled conditional fee agreements and recoverable ATE premiums. Whiplash claim industrialisation began — claims management companies processing thousands of minor soft-tissue claims. Industry-wide bodily injury costs doubled in the decade following. EST",conf:"EST"},
+  {year:2000,event:"Organised Crash-for-Cash Rings Identified",type:"Fraud",code:"M2",loss:"~£1.3bn pa (industry)",detail:"Staged and induced motor accident fraud ('crash for cash') identified as major organised crime concern. Insurance Fraud Bureau (IFB) later estimated £1.3bn+ annual cost to UK motor industry. Hotspots: Bradford, Birmingham, East London, Manchester. EST",conf:"EST"},
+  {year:2005,event:"Car Dealer Fraud — Motor Trade Policy Abuse",type:"Fraud",code:"M6",loss:"£50m+",detail:"Series of motor trade policy abuses involving phantom vehicles, inflated stock valuations and staged theft of non-existent dealer stock. Lloyd's syndicates writing M6 motor trade combined implemented stock verification requirements and dealer auditing protocols. ILLUS",conf:"ILLUS"},
+  {year:2007,event:"Floods — UK Summer Flooding: Vehicle Write-Offs",type:"Cat",code:"M2",loss:"~£300m",detail:"Summer 2007 UK flooding (Hull, Tewkesbury, Gloucestershire) caused widespread vehicle total losses from flood ingress. Estimated 75,000 vehicles written off. Motor insurers' combined loss from vehicles approximately £300m. EST",conf:"EST"},
+  {year:2010,event:"Flood Re Precursor — High Flood Zone Motor Pricing",type:"Cat",code:"M2",loss:"–",detail:"Before Flood Re (home insurance scheme), motor flood losses prompted Lloyd's and specialist market to begin explicit geographic flood loading for vehicles garaged in high flood-risk postcodes. Emerging risk management practice for motor underwriters. ILLUS",conf:"ILLUS"},
+  {year:2012,event:"LASPO — Referral Fees Banned",type:"Reg",code:"M2",loss:"–",detail:"Legal Aid, Sentencing and Punishment of Offenders Act 2012 banned referral fees in personal injury cases and removed recoverability of CFA success fees and ATE premiums. VER Short-term reduction in whiplash volumes; CMCs adapted within 2–3 years, shifting to psychological injury and passenger claims. VER",conf:"VER"},
+  {year:2013,event:"Hire or Reward Gap — Uber Launch UK",type:"Reg",code:"M3",loss:"–",detail:"Uber launched in London 2013, initially operating under private hire vehicle (PHV) licensing. Underwriting challenge: personal motor policies exclude hire or reward use; drivers using personal policies while providing ride-hail services had coverage gap. Led to Uber/Bolt fleet cover models and PHV-specific endorsements. ILLUS",conf:"ILLUS"},
+  {year:2014,event:"Ghost Broker Network Dismantled — Operation Cubo",type:"Fraud",code:"M2",loss:"£14m+",detail:"Police operation dismantled ghost broker ring selling fraudulent UK motor certificates using stolen insurer credentials. Victims unknowingly driving uninsured. Ghost broking estimated cost £14m+ to UK motor market in this operation alone. EST",conf:"EST"},
+  {year:2015,event:"Arson Attack — Commercial Fleet (Haulier)",type:"Fraud",code:"M5",loss:"£8m",detail:"Organised criminal gang set fire to haulier fleet yard, destroying 40+ HGVs and trailers. Insurance fraud component identified — owner had over-insured fleet and attempted to conceal financial difficulties. Total fleet loss value approximately £8m. ILLUS",conf:"ILLUS"},
+  {year:2016,event:"UK Flooding: Storm Desmond/Eva — Commercial Motor",type:"Cat",code:"M3",loss:"~£180m",detail:"Winter storms 2015/16 (Desmond, Eva, Frank) caused commercial vehicle flooding across Cumbria, Yorkshire and Scotland. Commercial motor losses estimated £180m including HGVs, vans and specialist vehicles. EST",conf:"EST"},
+  {year:2017,event:"Ogden Rate Cut: +2.5% to −0.75%",type:"Reg",code:"M2",loss:"Industry £3–4bn reserves",detail:"Lord Chancellor cut Personal Injury Discount Rate from +2.5% to -0.75%. VER Immediate reserve strengthening required across industry — estimated £3–4bn industry-wide. Average motor premium rose 15–20% in response. Catastrophic single event for motor reserving. EST",conf:"VER"},
+  {year:2017,event:"Uninsured Driver — M25 Fatal Multi-Vehicle Accident",type:"BI",code:"M2",loss:"£4.2m",detail:"High-speed M25 multi-vehicle collision caused by uninsured driver resulted in three fatalities and multiple serious injuries. MIB paid £4.2m in compensation. Case highlighted continuing uninsured driver problem despite CIE. ILLUS",conf:"ILLUS"},
+  {year:2018,event:"Classic Car Collection Total Loss — Fire (Lloyd's M2)",type:"PD",code:"M2",loss:"£12m",detail:"Showroom fire destroyed collection of 35+ classic and collector vehicles in specialist storage facility. Lloyd's syndicate on agreed-value M2 specialist policy paid £12m settlement covering pre-agreed valuations. Subrogation action against storage facility for fire alarm failure. ILLUS",conf:"ILLUS"},
+  {year:2019,event:"Ogden Rate Revised to +0.25% (England/Wales)",type:"Reg",code:"M2",loss:"–",detail:"Personal Injury (Discount Rate) Act 2018 reformed the Ogden rate-setting mechanism; Lord Chancellor revised the rate to +0.25% for England and Wales effective August 2019. VER Partial reserve release. Scotland retains separate rate; Northern Ireland on separate mechanism.",conf:"VER"},
+  {year:2019,event:"EV Battery Fire — Supercar Write-Off",type:"PD",code:"M2",loss:"£380k",detail:"Thermal runaway event in high-performance EV (battery spontaneously ignited in garage) caused total loss of vehicle and significant property damage. Lloyd's specialist M2 policy: agreed value settlement £380k for vehicle; property damage claimed separately under home policy. First of several EV thermal runaway total losses in specialist Lloyd's book. ILLUS",conf:"ILLUS"},
+  {year:2020,event:"COVID-19 — Claims Frequency Collapse, Then Bounce",type:"Cat",code:"M2",loss:"–",detail:"UK lockdowns (March–June 2020, Jan–March 2021) reduced vehicle miles travelled ~50–60%; motor claims frequency fell sharply. VER Insurers offered premium rebates or extended cover. Post-lockdown bounce: frequency recovered 2021–2022 while claims severity surged (parts inflation, EV costs). Net impact: short-term benefit, medium-term deterioration. EST",conf:"EST"},
+  {year:2020,event:"Courier Fleet Expansion — Gig Economy Classification",type:"Reg",code:"M3",loss:"–",detail:"COVID-driven food delivery and e-commerce surge created thousands of new courier vans. Many drivers using personal van policies without declaring commercial use, creating coverage gaps. FCA and Lloyd's market issued guidance on courier and gig economy vehicle classification. ILLUS",conf:"ILLUS"},
+  {year:2021,event:"OIC Portal Live — Whiplash Tariff Operational",type:"Reg",code:"M2",loss:"–",detail:"Official Injury Claim portal launched May 2021 for low-value RTA injury claims (≤£5,000 general damages). VER Whiplash tariffs capped damages: e.g. 3-month soft tissue injury = £240. Early data showed ~40% reduction in average low-value settlement. EST Fraudsters shifted focus to claims just above portal threshold.",conf:"VER"},
+  {year:2021,event:"Cement Mixer Rollover — Major Third-Party Liability",type:"BI",code:"M3",loss:"£7.8m",detail:"Commercial vehicle (cement mixer HGV) rollover on A-road resulted in collision with two passenger cars. Three fatalities and four serious injuries. Motor liability policy (M3) settled third-party bodily injury claims at £7.8m including fatality compensation, serious injury rehabilitation, and loss of earnings. ILLUS",conf:"ILLUS"},
+  {year:2021,event:"Hailstorm — Fleet Yard Damage (Yorkshire)",type:"Cat",code:"M5",loss:"£22m",detail:"Localised severe hailstorm (golf-ball size hail) caused write-off or major repair to 400+ vehicles in exposed fleet operator yard in Yorkshire. Motor fleet policy (M5) loss: £22m. Triggered fleet risk management requirement for covered storage at hail-exposed sites. ILLUS",conf:"ILLUS"},
+  {year:2022,event:"FCA Pricing Reform — End of Loyalty Penalty",type:"Reg",code:"M2",loss:"–",detail:"FCA General Insurance Pricing Practices rules effective 1 January 2022: renewal premium must not exceed equivalent new business price. VER Fundamental repricing of motor book — estimated £4bn+ market premium redistribution. New pricing models; customer retention strategies changed. VER",conf:"VER"},
+  {year:2022,event:"EV Battery Replacement — Fleet Total Loss Wave",type:"PD",code:"M5",loss:"~£5m (portfolio)",detail:"Fleet operator experienced multiple EV write-offs where battery pack replacement exceeded vehicle value. 12 EVs (average age 3 years) written off in 12-month period: insurer declined battery repair on economic grounds. Average total loss payment £42,000. Portfolio cost significantly above ICE fleet equivalent. ILLUS",conf:"ILLUS"},
+  {year:2022,event:"Telematics Fraud — App Manipulation Detected",type:"Fraud",code:"M2",loss:"£2.1m",detail:"Ring of telematics policy holders found to have GPS jamming devices fitted, preventing black-box telemetry upload. Allowed dangerous drivers to avoid speed/acceleration penalties and maintain low premiums despite poor driving behaviour. 300+ policies voided; estimated premium fraud £2.1m. ILLUS",conf:"ILLUS"},
+  {year:2022,event:"Van Fleet — Catalytic Converter Theft Wave",type:"PD",code:"M3",loss:"Industry £800m pa",detail:"Organised criminal gangs targeting catalytic converters (platinum group metals) caused industry-wide claims surge. Industry estimated annual cost £800m by 2022. EST Commercial motor (M3) disproportionately affected — diesel vans have more accessible converters. Higher claims frequency in urban fleet policies.",conf:"EST"},
+  {year:2023,event:"UK Motor Claims Inflation — Parts & Labour Crisis",type:"Cat",code:"M2",loss:"Industry GWP impact",detail:"Average comprehensive motor premium rose 29% in 2023 (ABI). VER Drivers: global semiconductor shortages raised new/used car values, increasing total loss costs; specialist EV repair skills scarce; paint and parts +30–40% from supply chain disruption; labour rates rising. VER Market-wide earned premium grew but lagged loss cost inflation.",conf:"VER"},
+  {year:2023,event:"Rented Electric Minibus Fire — Enclosed Car Park",type:"PD",code:"M3",loss:"£6.5m",detail:"Thermal runaway event in rented EV minibus parked in enclosed multi-storey car park overnight caused fire that spread to 18 adjacent vehicles and caused structural damage to two floors. M3 commercial motor policy covered own vehicle and third-party property. Total insured loss £6.5m. Building owner pursued separately for inadequate sprinkler system. ILLUS",conf:"ILLUS"},
+  {year:2023,event:"Ghost Broker Operation — Online Social Media",type:"Fraud",code:"M2",loss:"£9m",detail:"Fraud operation selling motor certificates via Instagram and WhatsApp targeted young drivers seeking cheap cover. Certificates issued using compromised insurer credentials. 600+ victims driving uninsured. Total fraud value £9m. Police and IFB joint operation. ILLUS",conf:"ILLUS"},
+  {year:2023,event:"Motor Trade — Dealership Cyber/Theft Combination",type:"Fraud",code:"M6",loss:"£3.2m",detail:"Cyber intrusion into motor dealer management system enabled fraudsters to create false vehicle records and process insurance claims for non-existent stock. Combined with physical vehicle key theft from dealer compound. M6 motor trade combined policy: stock and premises loss £3.2m. ILLUS",conf:"ILLUS"},
+  {year:2024,event:"Automated Vehicles Act 2024",type:"Reg",code:"M2",loss:"–",detail:"Automated Vehicles Act 2024 created statutory framework for self-driving vehicle insurance. VER Insurer bears first-response liability when approved self-driving system is engaged. Insurer subrogation rights against manufacturer where product defect caused accident. First practical application of AV insurance liability framework in UK law.",conf:"VER"},
+  {year:2024,event:"Classic Car Theft Ring — £20m Lloyd's Claims",type:"PD",code:"M2",loss:"£20m",detail:"Organised vehicle theft ring targeting classic and collector cars covered under Lloyd's specialist M2 agreed-value policies. 60+ vehicles stolen to order, exported to Eastern Europe and Middle East. Lloyd's syndicates paid agreed values totalling £20m over 18-month period. Police operation identified professional tracking-device disablement technique. ILLUS",conf:"ILLUS"},
+  {year:2024,event:"Autonomous Emergency Braking — False Positive Liability",type:"BI",code:"M2",loss:"£1.4m",detail:"AEB system activated without obstruction at 50 mph on dual carriageway, causing rear-end collision from following vehicle. Vehicle manufacturer denied product liability; insurer settled third-party bodily injury (£1.4m, two serious injuries) under motor policy, then commenced product liability proceedings against OEM. VER: AEB false-positive incidents confirmed emerging claim type. ILLUS on quantum. ILLUS",conf:"ILLUS"},
+  {year:2024,event:"UK Motor Market — Combined Ratio Improvement",type:"Reg",code:"M2",loss:"–",detail:"After two years of premium rate increases responding to claims inflation, UK motor market begins combined ratio improvement — estimated 2024 combined ratio 98–102% vs 115%+ in 2022. EST Premium rate adequacy returning; EV battery costs emerging as ongoing concern. Lloyd's motor portfolio benefiting from specialist rate discipline. EST",conf:"EST"}
+];
+
+function typeChip(t){
+  const map={BI:'chip-bi',PD:'chip-pd',Fraud:'chip-fraud',Cat:'chip-cat',Reg:'chip-reg',Fleet:'chip-fleet'};
+  return `<span class="type-chip ${map[t]||'chip-reg'}">${t}</span>`;
+}
+function lossClass(l){
+  if(!l||l==='–'||l.includes('pa')||l.includes('impact')||l.includes('reserves'))return '';
+  const num=parseInt(l.replace(/[^0-9]/g,''));
+  if(num>=10000000)return 'loss-large';
+  if(num>=1000000)return 'loss-med';
+  return 'loss-small';
+}
+function confBadge(c){
+  if(c==='VER')return '<span class="badge b-v">VER</span>';
+  if(c==='EST')return '<span class="badge b-e">EST</span>';
+  return '<span class="badge b-i">ILLUS</span>';
+}
+
+let sortDir=1, sortCol=0;
+let visibleEvents=[...EVENTS];
+
+function render(evts){
+  const tbody=document.getElementById('dbBody');
+  tbody.innerHTML='';
+  evts.forEach((e,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${e.year}</td><td>${e.event}</td><td>${typeChip(e.type)}</td><td>${e.code}</td><td class="${lossClass(e.loss)}">${e.loss}</td>`;
+    tr.onclick=()=>toggleDetail(i);
+    tbody.appendChild(tr);
+    const dr=document.createElement('tr');
+    dr.className='detail-row';
+    dr.id='det-'+i;
+    dr.innerHTML=`<td colspan="5">${e.detail} ${confBadge(e.conf)}</td>`;
+    tbody.appendChild(dr);
+  });
+  document.getElementById('countBar').textContent=`Showing ${evts.length} of ${EVENTS.length} events`;
+}
+
+function toggleDetail(i){
+  const el=document.getElementById('det-'+i);
+  if(el)el.classList.toggle('open');
+}
+
+function filter(){
+  const t=document.getElementById('fType').value;
+  const c=document.getElementById('fCode').value;
+  const q=document.getElementById('fText').value.toLowerCase();
+  visibleEvents=EVENTS.filter(e=>{
+    if(t&&e.type!==t)return false;
+    if(c&&e.code!==c)return false;
+    if(q&&!(e.event+e.detail).toLowerCase().includes(q))return false;
+    return true;
+  });
+  render(visibleEvents);
+}
+
+function sortTable(col){
+  if(sortCol===col)sortDir*=-1; else{sortCol=col;sortDir=1;}
+  const keys=['year','event','type','code','loss'];
+  visibleEvents.sort((a,b)=>{
+    let va=a[keys[col]],vb=b[keys[col]];
+    if(col===0){va=parseInt(va);vb=parseInt(vb);}
+    else{va=String(va).toLowerCase();vb=String(vb).toLowerCase();}
+    return va<vb?-sortDir:va>vb?sortDir:0;
+  });
+  render(visibleEvents);
+}
+
+render(EVENTS);
+</script>
+</body>
+</html>

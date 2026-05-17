@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Global Programme — Political Risk — Risk Code Hub</title>
+  <style>
+    :root {
+      --pr:#283593; --pr-dark:#1a237e; --pv:#c62828;
+      --inv:#e65100; --gov:#00695c; --treaty:#6a1b9a;
+      --warn:#f57f17; --light:#f3f4fd; --border:#c5cae9;
+      --text:#1a1f3a; --muted:#5c6270;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #283593;
+    --hub-dark:      #1a237e;
+    --hub-light:     #e8eaf6;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#00695c;
+    --header-gradient:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%);
+    --header-sub:    #c5cae9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#9fa8da; margin-bottom:6px; }
+    .breadcrumb a { color:#c5cae9; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#9fa8da; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#c5cae9; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pr); border-bottom-color:var(--pv); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pr); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--pv); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .info-box { background:var(--pr-dark); color:#c5cae9; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#e8eaf6; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#c5cae9; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    /* Tower diagram */
+    .tower-wrap { display:flex; gap:32px; align-items:flex-start; margin:28px 0; flex-wrap:wrap; }
+    .tower { flex:0 0 320px; }
+    .tower-layer { padding:14px 18px; margin-bottom:4px; border-radius:6px; }
+    .tl-miga { background:#e8f5e9; border-left:5px solid var(--gov); }
+    .tl-eca { background:#e8eaf6; border-left:5px solid var(--pr); }
+    .tl-lloyd { background:#fce4ec; border-left:5px solid var(--pv); }
+    .tl-xs { background:#fff3e0; border-left:5px solid var(--inv); }
+    .tl-ret { background:#f3e5f5; border-left:5px solid var(--treaty); }
+    .tl-sir { background:#f5f5f5; border-left:5px solid var(--muted); }
+    .tower-layer h4 { font-size:0.85rem; font-weight:700; color:var(--text); margin-bottom:4px; }
+    .tower-layer p { font-size:0.78rem; margin:0; line-height:1.5; }
+    .tower-notes { flex:1; min-width:260px; }
+    .tower-notes h3 { font-size:1rem; color:var(--pr); margin-bottom:14px; }
+    .tower-notes p { font-size:0.88rem; }
+
+    /* Programme matrix */
+    .prog-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:20px 0; font-size:0.83rem; }
+    .prog-table th { background:var(--pr); color:#fff; padding:10px 12px; text-align:left; }
+    .prog-table td { padding:9px 12px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .prog-table tr:last-child td { border-bottom:none; }
+    .prog-table tr:hover td { background:#f0f3ff; }
+    .prog-table .region { font-weight:700; color:var(--pr); }
+    .prog-table .cover { font-size:0.75rem; }
+    .status-full { color:var(--gov); font-weight:700; }
+    .status-lim { color:var(--warn); font-weight:700; }
+    .status-ex { color:var(--pv); font-weight:700; }
+
+    /* Claims cooperation */
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; margin:24px 0; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:22px; border-top:4px solid var(--pr); }
+    .card.pv { border-top-color:var(--pv); }
+    .card.gov { border-top-color:var(--gov); }
+    .card.treaty { border-top-color:var(--treaty); }
+    .card.inv { border-top-color:var(--inv); }
+    .card h3 { font-size:0.98rem; margin-bottom:10px; }
+    .card ul { padding-left:18px; }
+    .card li { font-size:0.84rem; margin-bottom:6px; line-height:1.6; }
+    .card-label { font-size:0.68rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--pr); margin-bottom:6px; }
+    .card.pv .card-label { color:var(--pv); }
+    .card.gov .card-label { color:var(--gov); }
+    .card.treaty .card-label { color:var(--treaty); }
+    .card.inv .card-label { color:var(--inv); }
+
+    /* Case study */
+    .case-study { background:#fff; border:1px solid var(--border); border-radius:14px; padding:32px; margin:28px 0; border-left:6px solid var(--gov); }
+    .cs-label { font-size:0.7rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gov); margin-bottom:8px; }
+    .case-study h3 { font-size:1.15rem; color:var(--text); margin-bottom:16px; }
+    .cs-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:16px 0; }
+    @media(max-width:600px){.cs-grid{grid-template-columns:1fr;}}
+    .cs-box { background:var(--light); border-radius:8px; padding:16px; }
+    .cs-box h4 { font-size:0.85rem; color:var(--pr); margin-bottom:8px; }
+    .cs-box p, .cs-box li { font-size:0.84rem; line-height:1.6; }
+    .cs-box ul { padding-left:16px; }
+    .cs-box li { margin-bottom:4px; }
+    .cs-total { background:var(--pr-dark); color:#c5cae9; border-radius:8px; padding:16px 20px; margin-top:16px; }
+    .cs-total p { font-size:0.9rem; color:#e8eaf6; margin:0; }
+    .cs-total strong { color:#fff; }
+
+    footer { background:var(--pr-dark); color:#9fa8da; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Political Risk</a> › Global Programme</div>
+  <div class="tag">Lloyd's Code · PR</div>
+  <h1>Global Programme Structure</h1>
+  <p>How large-scale political risk placements are structured — co-insurance towers, project finance PRI, ECA and MIGA layering, claims cooperation obligations, and a worked case study for an African mining project financing.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>Political risk insurance for large cross-border transactions — project finance, major foreign direct investment, export credit facilities — is rarely placed on a single carrier basis. The scale of limits required (often $100m–$1bn+), the duration of cover (5–15 years), and the complexity of the risk mean that successful placements typically involve a co-insurance tower spanning commercial insurers, export credit agencies, and multilateral guarantee bodies. Understanding the tower structure is as important for the underwriter as for the broker.</p>
+
+  <h2>1. The Co-Insurance Tower</h2>
+
+  <div class="tower-wrap">
+    <div class="tower">
+      <div class="tower-layer tl-miga">
+        <h4>MIGA / Multilateral Layer — "Preferred Creditor"</h4>
+        <p>World Bank MIGA guarantee; sovereign-to-sovereign enforcement; typically $50–200m; covers CEND, CI/TR, war &amp; civil disturbance; 3–20yr tenor</p>
+      </div>
+      <div class="tower-layer tl-eca">
+        <h4>ECA Layer — Government-Backed</h4>
+        <p>UKEF / US Ex-Im / Euler Hermes / KEXIM; tied to national export content; $50–500m; CEND + CF + NHSO; government-to-government leverage on claims</p>
+      </div>
+      <div class="tower-layer tl-lloyd">
+        <h4>Lloyd's / Commercial Lead Layer</h4>
+        <p>Syndicate lead + following market; $25–100m each; all PR covers (CEND/PV/CI/CF/FA/NHSO/AAD); most flexible on terms and conditions; sets policy wording</p>
+      </div>
+      <div class="tower-layer tl-xs">
+        <h4>Excess Layer — Commercial Followers</h4>
+        <p>AIG, Zurich, AXA XL, Chubb; $25–100m each; follow Lloyd's lead form; may impose sub-limits on PV or CI/TR</p>
+      </div>
+      <div class="tower-layer tl-ret">
+        <h4>Cat XL Reinsurance</h4>
+        <p>Lloyd's syndicates reinsure through treaty XL or facultative RI; limits exposure per country / per event; critical post-2022 for Russia/Ukraine-exposed books</p>
+      </div>
+      <div class="tower-layer tl-sir">
+        <h4>Insured Retention (SIR)</h4>
+        <p>Typically 10–20% of loss; aligns insured incentive; reduces moral hazard on CF / contract management disputes</p>
+      </div>
+    </div>
+    <div class="tower-notes">
+      <h3>Programme Architecture Principles</h3>
+      <p>The ordering of layers matters. MIGA sits at the top for a specific reason: its "preferred creditor" status in international law means host governments are unlikely to antagonise the World Bank even when they are willing to ignore commercial insurers. The deterrence effect diminishes as you move down the tower.</p>
+      <p style="margin-top:12px;">ECAs sit above commercial insurers for the same reason — their claims lead to government-to-government diplomatic consequences that commercial subrogation does not. The commercial layers (Lloyd's and XS) carry the most accessible (and most claimed upon) insurance, but also the highest premium contribution and the broadest coverage terms.</p>
+      <p style="margin-top:12px;">The claims cooperation clause (see section 3) binds all layers to a common claims notification and handling process — critical given that a MIGA or ECA claims decision can take 12–24 months. <span class="badge b-i">ILLUS</span></p>
+    </div>
+  </div>
+
+  <h2>2. Project Finance PRI Structure</h2>
+  <p>In project finance transactions, PRI is purchased not by the corporate sponsor but by the lender group — or by the project SPV (Special Purpose Vehicle) as a condition of the loan agreement. The structural differences from corporate PRI have significant underwriting implications.</p>
+
+  <div class="card-grid">
+    <div class="card treaty">
+      <div class="card-label">Lender-Side PRI</div>
+      <h3>Bank / Lender Coverage</h3>
+      <ul>
+        <li><strong>Insured:</strong> The lending bank or syndicate, not the equity investor</li>
+        <li><strong>Cover trigger:</strong> CEND that prevents the borrower from repaying the loan; CI/TR that prevents funds from reaching the lender; political violence that destroys the project and defeats loan repayment</li>
+        <li><strong>Loss quantification:</strong> Outstanding loan principal + accrued interest at date of loss — simpler than equity valuation</li>
+        <li><strong>Policy term:</strong> Follows the loan tenor — typically 7–15 years for infrastructure; 5–10 years for oil &amp; gas</li>
+        <li><strong>Subrogation:</strong> Insurer acquires lender's loan rights after paying claim; can pursue host government or SPV through ICSID or BIT mechanisms</li>
+        <li>Export credit tranche: If UKEF or US Ex-Im provides a political risk guarantee on the ECA tranche, the commercial PRI tranche is typically on the commercial bank portion only</li>
+      </ul>
+    </div>
+    <div class="card pv">
+      <div class="card-label">Equity PRI</div>
+      <h3>Sponsor / Equity Coverage</h3>
+      <ul>
+        <li><strong>Insured:</strong> The equity sponsor or development finance institution (DFC, BII, Proparco)</li>
+        <li><strong>Cover trigger:</strong> CEND of equity stake; forced abandonment; political violence destroying physical assets; CI/TR preventing dividend repatriation</li>
+        <li><strong>Loss quantification:</strong> Book value of equity investment or net asset value — subject to valuation dispute; waiting period and arbitration clause key</li>
+        <li><strong>Tenor considerations:</strong> Long-tenor equity PRI (10–15 years) attracts significant tenor loading — risk of regime change or policy reversal increases over time</li>
+        <li>Co-insurance: DFIs (BII, Proparco, DEG) often co-invest alongside commercial equity and purchase their own PRI — the commercial PRI market follows DFI pricing as a benchmark</li>
+      </ul>
+    </div>
+    <div class="card gov">
+      <div class="card-label">Host Government Agreement</div>
+      <h3>HGA / Investment Agreement</h3>
+      <ul>
+        <li>The Host Government Agreement (HGA) or Investment Agreement directly with the sovereign is a separate legal instrument from insurance — it sets out fiscal terms, licence conditions, stabilisation commitments, and dispute resolution</li>
+        <li>A robust HGA with ICSID arbitration clause reduces PRI premium — the insurer's post-claim recovery prospects are materially better with a treaty-grade dispute resolution mechanism</li>
+        <li>Stabilisation clause: freezes tax and regulatory terms at date of investment for a specified period; limits "creeping expropriation" via adverse regulation</li>
+        <li>Underwriters should request sight of the HGA as part of underwriting information — the absence of an HGA in a Tier 4/5 country is a significant negative underwriting factor</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>3. Tenor, Limit &amp; Structuring Considerations</h2>
+
+  <table class="prog-table">
+    <thead>
+      <tr>
+        <th>Consideration</th>
+        <th>Short Tenor (&lt;3yr)</th>
+        <th>Medium Tenor (3–7yr)</th>
+        <th>Long Tenor (&gt;7yr)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Typical transaction type</strong></td>
+        <td>Trade finance, working capital, short-term export credit</td>
+        <td>Project debt tranches, mid-term equity</td>
+        <td>Infrastructure, mining, LNG, long-term equity</td>
+      </tr>
+      <tr>
+        <td><strong>Country tier acceptance</strong></td>
+        <td>Tiers 1–4 generally available</td>
+        <td>Tiers 1–3 readily; Tier 4 with conditions</td>
+        <td>Tier 1–2 preferred; Tier 3 with MIGA/ECA co-insurance</td>
+      </tr>
+      <tr>
+        <td><strong>Rate loading (tenor)</strong></td>
+        <td>Base rate; no tenor loading</td>
+        <td>+15–35% on base annual rate <span class="badge b-e">EST</span></td>
+        <td>+40–80% on base rate; declining balance structures preferred <span class="badge b-e">EST</span></td>
+      </tr>
+      <tr>
+        <td><strong>Cancellability</strong></td>
+        <td>Often cancellable at 30 days' notice (CI/TR, CF)</td>
+        <td>Non-cancellable preferred for CEND; CI/TR may be cancellable</td>
+        <td>Non-cancellable required for project finance (lender condition)</td>
+      </tr>
+      <tr>
+        <td><strong>Annual vs. declining coverage</strong></td>
+        <td>Annual limit (annual premium)</td>
+        <td>Either; depends on loan amortisation schedule</td>
+        <td>Declining balance (as loan repays, cover reduces); saves premium</td>
+      </tr>
+      <tr>
+        <td><strong>Aggregate vs. per-claim limit</strong></td>
+        <td>Per-claim preferred</td>
+        <td>Aggregate per country is common market position</td>
+        <td>Aggregate per country essential; sub-limits by cover type</td>
+      </tr>
+      <tr>
+        <td><strong>Reinsurance availability</strong></td>
+        <td>Readily reinsured; short tenor is favoured</td>
+        <td>Good RI availability for Tier 1–3</td>
+        <td>Facultative RI required for large Tier 4/5 long-tenor deals; RI may impose conditions</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4. Claims Cooperation &amp; Multi-Insurer Obligations</h2>
+  <p>In a multi-layer PRI placement, the claims cooperation clause is one of the most commercially significant policy conditions. A claim event that affects the full tower requires alignment across commercial insurers, ECAs, and MIGA — entities with very different timescales, decision-making processes, and subrogation objectives.</p>
+
+  <div class="info-box">
+    <h3>Claims Cooperation — Key Obligations</h3>
+    <ul>
+      <li><strong>Immediate notification:</strong> Most PRI policies require notification within 30–90 days of the insured becoming aware of a potential triggering event. Late notification is a frequent grounds for coverage dispute — particularly for creeping CEND where the "trigger date" is disputed</li>
+      <li><strong>Joint investigation:</strong> The lead insurer typically appoints a claims counsel (legal) and, for large losses, a political risk specialist firm (Control Risks, Global Risk Insights) to conduct the investigation. Follower insurers may appoint their own representatives but are generally bound by lead's investigation findings under Lloyd's claims agreement clauses</li>
+      <li><strong>Preservation of rights:</strong> The insured must take all reasonable steps to preserve its legal rights — filing ICSID/BIT claims, registering as a creditor, obtaining injunctions — even before the waiting period expires. Failure to preserve rights may reduce or void recovery</li>
+      <li><strong>Multi-layer coordination:</strong> ECA waiting periods (typically 6–12 months after default) may differ from commercial waiting periods (6–24 months for CEND). Timeline mismatches can create gaps in cover or disputes about which layer is triggered first</li>
+      <li><strong>Subrogation cooperation:</strong> After paying a claim, commercial insurers acquire subrogation rights to pursue the host government. They may join an ICSID arbitration being pursued by the insured or the ECA. The insured must cooperate with subrogation proceedings — a common policy condition</li>
+      <li><strong>Claims currency:</strong> PRI policies are often written in USD for international transactions. Currency of loss (USD, EUR, local currency) must be specified to avoid exchange rate disputes at claim</li>
+    </ul>
+  </div>
+
+  <h2>5. Subrogation in Political Risk</h2>
+  <p>Subrogation in PRI is qualitatively different from property insurance subrogation. After paying a fire claim, the insurer sues the negligent party. After paying a CEND claim, the insurer acquires rights against a sovereign state — and must navigate international law to recover.</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">Recovery Mechanism</div>
+      <h3>ICSID / BIT Subrogation</h3>
+      <ul>
+        <li>After paying a CEND or CF claim, the commercial insurer "steps into the shoes" of the insured and acquires its ICSID/BIT claim against the host state</li>
+        <li>MIGA Convention Article 18 specifically provides for MIGA's subrogation rights against host governments — the most legally robust recovery mechanism available</li>
+        <li>Commercial insurers' BIT subrogation depends on: (a) home state of the insured having a BIT with the host state that covers the insurer; (b) assignment of the investment agreement rights from insured to insurer post-payment</li>
+        <li>Practical recovery rate: highly variable. High-income states (e.g., Russia pre-war for commercial disputes) may settle; low-income states may have insufficient assets abroad to enforce against</li>
+      </ul>
+    </div>
+    <div class="card pv">
+      <div class="card-label">Enforcement Reality</div>
+      <h3>Award Enforcement Challenges</h3>
+      <ul>
+        <li>An ICSID award is automatically enforceable in all 158 member states — but enforcement requires identifying attachable state assets in those jurisdictions</li>
+        <li>Sovereign immunity protects diplomatic property, military assets, central bank reserves (in most jurisdictions). Attachable assets: state-owned commercial enterprise assets, sovereign wealth fund investments in commercial activities, aircraft, ships</li>
+        <li>Venezuela case: $8.7bn ConocoPhillips award (2019); Venezuela has few attachable assets outside its own territory; enforcement proceedings ongoing in multiple jurisdictions for years</li>
+        <li>Russia/Ukraine 2022: Russian assets frozen under sanctions — paradoxically this may ultimately assist award enforcement if sanctions property is eventually made available for investor claims</li>
+      </ul>
+    </div>
+    <div class="card gov">
+      <div class="card-label">Underwriting Implication</div>
+      <h3>Recovery Expectations</h3>
+      <ul>
+        <li>For rating purposes, recovery is a secondary consideration — PRI pricing is based on loss probability, not recovery expectation. Unlike credit insurance, recoveries are slow and uncertain</li>
+        <li>However, the existence of a viable subrogation path (strong BIT + ICSID access + host state with overseas assets) is a meaningful risk quality indicator and may support a modest rate credit</li>
+        <li>Underwriters should document subrogation prospects in file notes — relevant if the claim is later disputed between layers or with reinsurers</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>6. Multi-Territory Programme — Coverage Matrix</h2>
+
+  <table class="prog-table">
+    <thead>
+      <tr>
+        <th>Territory</th>
+        <th>CEND</th>
+        <th>PV</th>
+        <th>CI/TR</th>
+        <th>CF/NHSO</th>
+        <th>Typical Insurer Mix</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="region">West Africa (Ghana, Côte d'Ivoire, Senegal)</td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td>Lloyd's + MIGA + UKEF</td>
+        <td>BIT coverage good; Senegal/Ghana oil sector rated Tier 3</td>
+      </tr>
+      <tr>
+        <td class="region">Sahel (Mali, Niger, Burkina Faso)</td>
+        <td><span class="status-lim">⚠ Limited</span></td>
+        <td><span class="status-lim">⚠ Limited</span></td>
+        <td><span class="status-ex">✘ Very limited</span></td>
+        <td><span class="status-ex">✘ Near-uninsurable</span></td>
+        <td>MIGA only (if available); ECAs withdrawn</td>
+        <td>Post-coup; French ECAs withdrawn 2023; junta governments unrecognised</td>
+      </tr>
+      <tr>
+        <td class="region">East Africa (Kenya, Tanzania, Ethiopia)</td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-lim">⚠ Sub-limits</span></td>
+        <td><span class="status-lim">⚠ Case-by-case</span></td>
+        <td>Lloyd's + AIG + MIGA</td>
+        <td>Ethiopia: conflict risk elevated; Kenya: CI/TR rated Tier 3; Tanzania: mining sector treaty disputes</td>
+      </tr>
+      <tr>
+        <td class="region">Southern Africa (Zambia, DRC, Zimbabwe)</td>
+        <td><span class="status-lim">⚠ Limited</span></td>
+        <td><span class="status-lim">⚠ Sub-limits</span></td>
+        <td><span class="status-lim">⚠ Sub-limits</span></td>
+        <td><span class="status-lim">⚠ Case-by-case</span></td>
+        <td>Lloyd's + MIGA; ECAs selective</td>
+        <td>DRC cobalt/copper: elevated Tier 4; Zambia: post-debt restructuring; Zimbabwe: Tier 5 for CF/NHSO</td>
+      </tr>
+      <tr>
+        <td class="region">Latin America (Chile, Peru, Colombia)</td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td>Lloyd's + AIG + Zurich + MIGA</td>
+        <td>Mining sector: elevated by political transition risk (Peru/Chile); Tier 2–3; good BIT coverage</td>
+      </tr>
+      <tr>
+        <td class="region">Latin America (Venezuela, Bolivia)</td>
+        <td><span class="status-ex">✘ Excluded</span></td>
+        <td><span class="status-ex">✘ Excluded</span></td>
+        <td><span class="status-ex">✘ Excluded</span></td>
+        <td><span class="status-ex">✘ Excluded</span></td>
+        <td>None</td>
+        <td>Venezuela: Tier 5; uninsurable since 2017. Bolivia: Tier 4; very limited appetite</td>
+      </tr>
+      <tr>
+        <td class="region">Southeast Asia (Indonesia, Philippines, Vietnam)</td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td>Lloyd's + AIG + Asian ECAs</td>
+        <td>Strong BIT networks; investment-grade sovereigns; good capacity; Tier 1–2 for most covers</td>
+      </tr>
+      <tr>
+        <td class="region">Central Asia (Kazakhstan, Uzbekistan)</td>
+        <td><span class="status-lim">⚠ Case-by-case</span></td>
+        <td><span class="status-lim">⚠ Sub-limits</span></td>
+        <td><span class="status-lim">⚠ Sub-limits</span></td>
+        <td><span class="status-lim">⚠ Case-by-case</span></td>
+        <td>Lloyd's + ECAs; MIGA selective</td>
+        <td>Russia-proximity risk elevated post-2022; Kazakhstan oil sector: Tier 3; Uzbekistan: improving</td>
+      </tr>
+      <tr>
+        <td class="region">MENA (UAE, Saudi Arabia, Qatar)</td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-lim">⚠ Sub-limits PV</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td><span class="status-full">✔ Full</span></td>
+        <td>Lloyd's + AIG + Zurich</td>
+        <td>GCC sovereigns strong credit; regional PV concern: Yemen spill-over; Tier 1–2 CEND</td>
+      </tr>
+      <tr>
+        <td class="region">Russia / Belarus</td>
+        <td><span class="status-ex">✘ Excluded</span></td>
+        <td><span class="status-ex">✘ Excluded</span></td>
+        <td><span class="status-ex">✘ Excluded</span></td>
+        <td><span class="status-ex">✘ Excluded</span></td>
+        <td>None since March 2022</td>
+        <td>All new placements excluded from March 2022; existing policies either non-renewed or claims in progress</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7. Worked Case Study — African Mining Project Finance</h2>
+
+  <div class="case-study">
+    <div class="cs-label">Illustrative Case Study · ILLUS</div>
+    <h3>Copper Mine Project Finance — Zambia / DRC Border Region</h3>
+    <p>A UK-listed mining company (Insured) is developing a copper/cobalt mine straddling the Zambia–DRC border. Total project cost: $650m. Debt: $450m (project finance loan consortium — UK clearing bank lead, IFC as co-lender). Equity: $200m (mining company: 60%, BII Development Finance: 40%). Requested PRI covers: CEND, CI/TR, PV.</p>
+
+    <div class="cs-grid">
+      <div class="cs-box">
+        <h4>Programme Layer 1 — MIGA (Preferred Creditor)</h4>
+        <ul>
+          <li>MIGA guarantee: $80m (BII equity stake + partial debt)</li>
+          <li>Covers: CEND + CI/TR + war &amp; civil disturbance</li>
+          <li>Tenor: 15 years (project life)</li>
+          <li>MIGA rate: 0.9% p.a. on declining balance (BII negotiated rate) <span class="badge b-e">EST</span></li>
+          <li>Annual premium: ~$720,000 yr 1; declining over tenor</li>
+          <li>Deterrence value: World Bank leverage vs Zambian and DRC governments</li>
+        </ul>
+      </div>
+      <div class="cs-box">
+        <h4>Programme Layer 2 — IFC / ECA</h4>
+        <ul>
+          <li>IFC: $100m loan with own CEND cover (internal, not placed in market)</li>
+          <li>UKEF: $60m guarantee on UK bank's tranche (equipment supply nexus)</li>
+          <li>UKEF covers: CF + NHSO on DRC government mining agreement</li>
+          <li>UKEF rate: 1.4% p.a. (Tier 4 country premium schedule) <span class="badge b-e">EST</span></li>
+          <li>Annual premium: ~$840,000 yr 1</li>
+          <li>DFI co-lending: IFC presence alone reduces commercial insurer's risk perception</li>
+        </ul>
+      </div>
+      <div class="cs-box">
+        <h4>Programme Layer 3 — Lloyd's Lead (Commercial)</h4>
+        <ul>
+          <li>Lloyd's lead syndicate: $75m xs $0 (primary commercial layer)</li>
+          <li>Covers: CEND + PV + CI/TR on Zambia portion; CEND + CI/TR on DRC portion</li>
+          <li>Tenor: 7 years (shorter than project — reviewed at year 7)</li>
+          <li>Blended rate: 2.8% p.a. (Zambia Tier 3 + DRC Tier 4 blended; PV loading; 7yr tenor loading) <span class="badge b-i">ILLUS</span></li>
+          <li>Annual premium: ~$2,100,000</li>
+          <li>Policy: LMA market form with 12-month CEND waiting period; 6-month CI/TR</li>
+        </ul>
+      </div>
+      <div class="cs-box">
+        <h4>Programme Layer 4 — Commercial XS Followers</h4>
+        <ul>
+          <li>AIG: $50m xs $75m; Zurich: $40m xs $125m; AXA XL: $30m xs $165m</li>
+          <li>All follow Lloyd's lead form; same covers, same tenor</li>
+          <li>Combined XS premium at ~2.6% (slight discount to lead — leaders' rate) <span class="badge b-i">ILLUS</span></li>
+          <li>Annual XS premium (combined): ~$3,120,000</li>
+          <li>Sub-limits: AIG imposes $30m sub-limit on PV for DRC portion</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cs-total">
+      <p><strong>Total insured limit:</strong> $195m commercial market (Lloyd's + XS) + $80m MIGA + $60m UKEF guarantee = $335m total programme</p>
+      <p style="margin-top:8px;"><strong>Total annual programme premium (year 1):</strong> MIGA ~$720k + UKEF ~$840k + Lloyd's lead ~$2.1m + XS followers ~$3.12m = <strong>~$6.78m p.a.</strong> declining over tenure as loan amortises <span class="badge b-i">ILLUS</span></p>
+      <p style="margin-top:8px;"><strong>Key structuring benefits:</strong> MIGA preferred creditor status deters outright expropriation; UKEF government leverage on DRC mining agreement compliance; Lloyd's broad cover terms cover residual risks; IFC co-lending reduces commercial insurer's perceived exposure to sovereign action.</p>
+    </div>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Political Risk (PR) · Lloyd's Market Intelligence · v3.2 April 2026
+</footer>
+</body>
+</html>

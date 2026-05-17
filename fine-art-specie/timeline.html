@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Fine Art, Specie &amp; Jewellery — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a148c;
+      --hub-dark:      #250057;
+      --hub-light:     #f3e5ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#7b0020;
+      --header-gradient:linear-gradient(135deg,#250057 0%,#4a148c 55%,#6a1b9a 100%);
+      --header-sub:    #ce93d8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a0a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.18) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ce93d8;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#250057;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ce93d8;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e1bee7;}
+    .filter-bar{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    .filter-btn{padding:6px 14px;border:2px solid #ddd;border-radius:20px;background:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filter-btn:hover,.filter-btn.on{background:var(--hub-primary);color:#fff;border-color:var(--hub-primary);}
+    .filter-btn.all.on{background:var(--hub-dark);}
+    .tl-wrap{position:relative;padding-left:32px;}
+    .tl-wrap::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--hub-primary),#ce93d8);}
+    .tl-item{position:relative;margin-bottom:22px;display:none;}
+    .tl-item.show{display:block;}
+    .tl-item::before{content:'';position:absolute;left:-26px;top:14px;width:14px;height:14px;border-radius:50%;background:var(--hub-primary);border:2px solid #fff;box-shadow:0 0 0 2px var(--hub-primary);}
+    .tl-item.theft-heist::before{background:#c62828;box-shadow:0 0 0 2px #c62828;}
+    .tl-item.market-structural::before{background:#4a148c;box-shadow:0 0 0 2px #4a148c;}
+    .tl-item.regulatory::before{background:#1565c0;box-shadow:0 0 0 2px #1565c0;}
+    .tl-item.authentication-fraud::before{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .tl-item.natural-catastrophe::before{background:#1a5c2a;box-shadow:0 0 0 2px #1a5c2a;}
+    .tl-item.technology::before{background:#00695c;box-shadow:0 0 0 2px #00695c;}
+    .tl-card{background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card.theft-heist{border-left:4px solid #c62828;}
+    .tl-card.market-structural{border-left:4px solid #4a148c;}
+    .tl-card.regulatory{border-left:4px solid #1565c0;}
+    .tl-card.authentication-fraud{border-left:4px solid #e65100;}
+    .tl-card.natural-catastrophe{border-left:4px solid #1a5c2a;}
+    .tl-card.technology{border-left:4px solid #00695c;}
+    .tl-meta{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+    .tl-year{font-size:1rem;font-weight:700;color:var(--hub-dark);}
+    .tl-type{font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-theft-heist{background:#fdecea;color:#c62828;}
+    .tp-market-structural{background:#f3e5ff;color:#4a148c;}
+    .tp-regulatory{background:#e3f2fd;color:#1565c0;}
+    .tp-authentication-fraud{background:#fff3e0;color:#e65100;}
+    .tp-natural-catastrophe{background:#e8f5e9;color:#1a5c2a;}
+    .tp-technology{background:#e0f2f1;color:#00695c;}
+    .tl-card h4{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.83rem;color:#444;line-height:1.5;}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#444;}
+    .legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+    footer{background:#250057;color:#ce93d8;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Fine Art, Specie &amp; Jewellery</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key fine art, specie &amp; jewellery events 1945–2024 — heists, frauds, disasters &amp; market shifts</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+  <div class="filter-bar">
+    <button class="filter-btn all on" onclick="filter('all',this)">All Events</button>
+    <button class="filter-btn" onclick="filter('theft-heist',this)">Theft / Heist</button>
+    <button class="filter-btn" onclick="filter('market-structural',this)">Market Structural</button>
+    <button class="filter-btn" onclick="filter('regulatory',this)">Regulatory</button>
+    <button class="filter-btn" onclick="filter('authentication-fraud',this)">Authentication / Fraud</button>
+    <button class="filter-btn" onclick="filter('natural-catastrophe',this)">Natural Catastrophe</button>
+    <button class="filter-btn" onclick="filter('technology',this)">Technology</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#c62828;"></div>Theft / Heist</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#4a148c;"></div>Market Structural</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1565c0;"></div>Regulatory</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100;"></div>Authentication / Fraud</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1a5c2a;"></div>Natural Catastrophe</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00695c;"></div>Technology</div>
+  </div>
+
+  <div class="tl-wrap" id="tl">
+
+    <div class="tl-item market-structural show">
+      <div class="tl-card market-structural">
+        <div class="tl-meta">
+          <span class="tl-year">1945</span>
+          <span class="tl-type tp-market-structural">Market Structural</span>
+        </div>
+        <h4>Washington Monuments, Mines Fund — Allies Recover Nazi Looted Art</h4>
+        <p>Allied Monuments, Fine Arts and Archives (MFAA) officers — the "Monuments Men" — recover hundreds of thousands of looted artworks from Altaussee salt mine and elsewhere. The post-war restitution challenge begins: many works cannot be returned to owners killed in the Holocaust, creating complex title disputes still unresolved 80 years later.<sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item market-structural show">
+      <div class="tl-card market-structural">
+        <div class="tl-meta">
+          <span class="tl-year">1961</span>
+          <span class="tl-type tp-market-structural">Market Structural</span>
+        </div>
+        <h4>Mona Lisa Loan to USA — and the Uninsurability Problem</h4>
+        <p>The Louvre's Mona Lisa is loaned to the United States for exhibition at the National Gallery of Art and Metropolitan Museum of Art. The painting is deemed too valuable to insure commercially — the French government provides its own guarantee rather than purchasing commercial cover. The episode illustrates the fundamental limit of agreed-value insurance for truly irreplaceable cultural property.<sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item theft-heist show">
+      <div class="tl-card theft-heist">
+        <div class="tl-meta">
+          <span class="tl-year">1969</span>
+          <span class="tl-type tp-theft-heist">Theft / Heist</span>
+        </div>
+        <h4>Caravaggio's "Nativity" Stolen from Palermo Oratory — Still Missing</h4>
+        <p>Caravaggio's "Nativity with St. Francis and St. Lawrence" is stolen from the Oratory of San Lorenzo in Palermo, Sicily. Estimated value at loss: $20m+. Never recovered; suspected Mafia involvement. One of the longest-outstanding unsolved art thefts in Europe. Italian investigators have periodically announced suspects but no charges have resulted in recovery.<sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item market-structural show">
+      <div class="tl-card market-structural">
+        <div class="tl-meta">
+          <span class="tl-year">1980</span>
+          <span class="tl-type tp-market-structural">Market Structural</span>
+        </div>
+        <h4>Art Market Globalises — Japanese and US Collectors Drive Impressionist Prices</h4>
+        <p>The globalisation of the art market through the 1980s — Japanese corporate buyers at Sotheby's, US billionaire collectors competing with European museums — drives Impressionist and Modern Art prices to levels that fundamentally change the scale of fine art insurance exposure. Agreed values on individual works rise from the hundreds of thousands to tens of millions of dollars over the decade.<sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item theft-heist show">
+      <div class="tl-card theft-heist">
+        <div class="tl-meta">
+          <span class="tl-year">1990</span>
+          <span class="tl-type tp-theft-heist">Theft / Heist</span>
+        </div>
+        <h4>Isabella Stewart Gardner Museum Heist — $500m, Still Unsolved</h4>
+        <p>Two thieves posing as police officers gain entry to the Gardner Museum in Boston, binding security guards and stealing 13 works including a Vermeer, three Rembrandts and five Degas drawings. Estimated value: $500m. The museum had no fine art insurance at the time — zero insurance recovery. The works have never been recovered; the FBI continues the investigation. Empty frames hang in the galleries where the stolen works once hung.<sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item market-structural show">
+      <div class="tl-card market-structural">
+        <div class="tl-meta">
+          <span class="tl-year">1991</span>
+          <span class="tl-type tp-market-structural">Market Structural</span>
+        </div>
+        <h4>Art Loss Register Established with Lloyd's Market Backing</h4>
+        <p>The Art Loss Register (ALR) is formally established in London as the world's largest private database of stolen cultural property. Founded with support from Lloyd's underwriters, major auction houses and law enforcement. Provides pre-sale and pre-insurance stolen art checks; has assisted in the recovery of over 350,000 items. Registration of stolen artworks with the ALR is now a standard condition of fine art insurance policies.<sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item authentication-fraud show">
+      <div class="tl-card authentication-fraud">
+        <div class="tl-meta">
+          <span class="tl-year">1993–2000</span>
+          <span class="tl-type tp-authentication-fraud">Authentication / Fraud</span>
+        </div>
+        <h4>Sotheby's / Christie's Price-Fixing Scandal</h4>
+        <p>Sotheby's and Christie's secretly agree on seller commission rates in violation of US and EU antitrust law. The scheme is discovered and both houses agree to a $512m civil settlement (2000). Sotheby's chairman Alfred Taubman receives a custodial sentence. The scandal reveals systemic governance failures in the art market's leading institutions — a continuing due diligence concern for underwriters assessing auction house and art dealer clients.<sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory show">
+      <div class="tl-card regulatory">
+        <div class="tl-meta">
+          <span class="tl-year">1998</span>
+          <span class="tl-type tp-regulatory">Regulatory</span>
+        </div>
+        <h4>Washington Principles on Nazi-Confiscated Art</h4>
+        <p>44 nations adopt the Washington Principles, establishing non-binding guidelines for identifying and returning Nazi-looted art. Calls on museums and institutions to publish their collections for provenance research, and to work towards "just and fair solutions" with victims' heirs. Creates ongoing provenance research obligations that affect the insurability and marketability of works from European collections of the 1930s–40s period.<sup>[L4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natural-catastrophe show">
+      <div class="tl-card natural-catastrophe">
+        <div class="tl-meta">
+          <span class="tl-year">2001</span>
+          <span class="tl-type tp-natural-catastrophe">Natural Catastrophe</span>
+        </div>
+        <h4>9/11 — WTC Art Collections Destroyed</h4>
+        <p>The World Trade Center attacks destroy significant corporate art collections held in the Twin Towers — including works by major contemporary artists commissioned for the WTC public art programme. Fine art insurers pay claims; the event prompts comprehensive review of security and catastrophe accumulation for major art concentrations (art fair venues, port freeports, major museums) within a single location.<sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item theft-heist show">
+      <div class="tl-card theft-heist">
+        <div class="tl-meta">
+          <span class="tl-year">2003</span>
+          <span class="tl-type tp-theft-heist">Theft / Heist</span>
+        </div>
+        <h4>Antwerp Diamond Centre Heist — €100m+</h4>
+        <p>Thieves breach the Antwerp Diamond Centre vault — one of the world's most secure diamond storage facilities — stealing an estimated €100m in diamonds, gold and jewellery. The heist exploits a combination of social engineering (renting office space in the building) and technical expertise to bypass the vault's security. Much of the stolen material is never recovered; the case becomes a benchmark for vault specification requirements in JB and GS underwriting.<sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natural-catastrophe show">
+      <div class="tl-card natural-catastrophe">
+        <div class="tl-meta">
+          <span class="tl-year">2005</span>
+          <span class="tl-type tp-natural-catastrophe">Natural Catastrophe</span>
+        </div>
+        <h4>Hurricane Katrina — New Orleans Museum and Private Collection Losses</h4>
+        <p>Hurricane Katrina causes severe flooding of New Orleans, damaging artworks in private collections, galleries and the New Orleans Museum of Art. The disaster demonstrates the catastrophic risk to artworks from water, mould and humidity damage — which can be as destructive as fire. Conservation costs for water-damaged artworks can approach or exceed replacement value. Climate-controlled storage and flood elevation requirements become critical underwriting conditions for Gulf Coast and flood-zone locations.<sup>[I8]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item theft-heist show">
+      <div class="tl-card theft-heist">
+        <div class="tl-meta">
+          <span class="tl-year">2008</span>
+          <span class="tl-type tp-theft-heist">Theft / Heist</span>
+        </div>
+        <h4>Zurich Museum Heist — Monet, Van Gogh, Cézanne, Degas (CHF 180m)</h4>
+        <p>Four armed thieves steal four Impressionist masterworks — a Monet, Van Gogh, Cézanne and Degas — from the E.G. Bührle Foundation in Zurich, Switzerland. Estimated value CHF 180m. Three of the four works are recovered within days (two found in a nearby car park, one in a psychiatric clinic); the Monet remains missing for several years before recovery. The case underlines the vulnerability of second-tier institutions with outstanding collections but limited security budgets.<sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item theft-heist show">
+      <div class="tl-card theft-heist">
+        <div class="tl-meta">
+          <span class="tl-year">2010</span>
+          <span class="tl-type tp-theft-heist">Theft / Heist</span>
+        </div>
+        <h4>Paris Museum of Modern Art — 5 Paintings, €500m Estimated</h4>
+        <p>A lone thief breaks into the Musée d'Art Moderne de la Ville de Paris and steals five paintings — works by Picasso, Matisse, Braque, Léger and Modigliani — estimated at €500m in total. The thief later claims to have destroyed the works after failing to find a buyer. Only fragments are reportedly recovered. The loss highlights the paradox of art theft: stolen masterworks are virtually unsellable on the open market, making them attractive only for ransom or organised crime collateral.<sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item authentication-fraud show">
+      <div class="tl-card authentication-fraud">
+        <div class="tl-meta">
+          <span class="tl-year">2011–2013</span>
+          <span class="tl-type tp-authentication-fraud">Authentication / Fraud</span>
+        </div>
+        <h4>Knoedler Gallery Forgery Scandal — $80m in Fake Abstract Expressionists</h4>
+        <p>New York's oldest gallery, Knoedler &amp; Company, closes abruptly after it is revealed that it sold approximately $80m of fake Abstract Expressionist paintings — including forged Rothkos, Pollocks and de Koonings — over 15 years. The forgeries were created by a Chinese-American artist, Pei-Shen Qian, and passed off as previously unknown works from major estates. Buyers included major collectors; several insurers faced claims for the diminution in value of "agreed" values on works that proved to be forgeries. The case is the definitive modern art forgery insurance event.<sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory show">
+      <div class="tl-card regulatory">
+        <div class="tl-meta">
+          <span class="tl-year">2015</span>
+          <span class="tl-type tp-regulatory">Regulatory</span>
+        </div>
+        <h4>Hatton Garden Safe Deposit Heist — £14m</h4>
+        <p>A gang of elderly career criminals drill into the Hatton Garden Safe Deposit vault over the Easter bank holiday weekend, stealing an estimated £14m in cash, jewellery and precious stones. Much of the stolen material is from personal safe deposit boxes and is uninsured or underinsured. The heist prompts widespread review of JB and GS vault specification standards and safe deposit insurance conditions across the London jewellery and diamond trade.<sup>[I6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory show">
+      <div class="tl-card regulatory">
+        <div class="tl-meta">
+          <span class="tl-year">2017–2020</span>
+          <span class="tl-type tp-regulatory">Regulatory</span>
+        </div>
+        <h4>EU / UK AML Regulations Extended to Art Market Participants</h4>
+        <p>The 5th EU Anti-Money Laundering Directive (2018) and UK Money Laundering Regulations 2017 (as amended 2020) extend AML obligations to art market participants — dealers, galleries and auction houses. From January 2021, UK art dealers must register with HMRC, conduct Customer Due Diligence (CDD) and report Suspicious Activity Reports (SARs) for transactions over €10,000. Underwriters must verify client compliance as part of the KYC process for art dealer and gallery risks.<sup>[L6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item technology show">
+      <div class="tl-card technology">
+        <div class="tl-meta">
+          <span class="tl-year">2021</span>
+          <span class="tl-type tp-technology">Technology</span>
+        </div>
+        <h4>Beeple NFT — $69m at Christie's; Digital Art Insurance Debate</h4>
+        <p>Beeple's "Everydays: The First 5000 Days" sells at Christie's for $69.3m — the third-highest price achieved by a living artist and the first major NFT auction. The sale triggers debate among fine art insurers about the insurability of purely digital works. Physical fine art policies require physical loss or damage; an NFT is a digital token on a blockchain. Phishing attacks and wallet theft can destroy an NFT collection's value without physical loss. No standard coverage product exists; the debate continues.<sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natural-catastrophe show">
+      <div class="tl-card natural-catastrophe">
+        <div class="tl-meta">
+          <span class="tl-year">2022</span>
+          <span class="tl-type tp-natural-catastrophe">Natural Catastrophe</span>
+        </div>
+        <h4>Ukrainian Cultural Heritage — Wartime Losses and Evacuations</h4>
+        <p>Russia's full-scale invasion of Ukraine in February 2022 puts the country's extraordinary cultural heritage at existential risk. The Museum of Folk Architecture in Kyiv, the Mariupol Museum, and dozens of regional collections suffer losses or are occupied. Ukrainian institutions rush to evacuate collections; some items in Russian-occupied territories are seized or destroyed. The losses prompt urgent review of war exclusions and government cultural heritage indemnity schemes across the European market.<sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item theft-heist show">
+      <div class="tl-card theft-heist">
+        <div class="tl-meta">
+          <span class="tl-year">2023</span>
+          <span class="tl-type tp-theft-heist">Theft / Heist</span>
+        </div>
+        <h4>British Museum Insider Theft — Up to 2,000 Items</h4>
+        <p>The British Museum confirms that a member of staff has been stealing objects from the museum's reserve collections over a period of years, with up to 2,000 Greek, Roman and Egyptian items including gold jewellery, gems and glass unaccounted for. Many items had never been properly catalogued, complicating recovery. The case is the largest insider theft at a major cultural institution in modern history and prompts urgent review of cataloguing, access control and insider threat procedures across the museum sector globally.<sup>[I10]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item technology show">
+      <div class="tl-card technology">
+        <div class="tl-meta">
+          <span class="tl-year">2024</span>
+          <span class="tl-type tp-technology">Technology</span>
+        </div>
+        <h4>Climate Risk and Art — MFAH Flood Assessment; Valuation Pressures</h4>
+        <p>Growing recognition in 2023–24 that climate change poses a long-term existential risk to fine art collections and cultural institutions worldwide. Flooding, wildfire smoke, humidity fluctuations and extreme temperature events all threaten artworks. The Museum of Fine Arts Houston (MFAH) completes a comprehensive flood risk and climate resilience assessment following Harvey. Insurers increasingly requiring climate resilience standards — including HVAC specifications, flood barriers and emergency evacuation plans — as conditions of cover for institutional clients.<sup>[I8]</sup></p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>Risk Code Hub — Fine Art, Specie &amp; Jewellery (FA/GS/JB/CT) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filter(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.tl-item').forEach(item => {
+    if (type === 'all' || item.classList.contains(type)) {
+      item.classList.add('show');
+    } else {
+      item.classList.remove('show');
+    }
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Yachts (O) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #00427b;
+      --hub-dark:      #002050;
+      --hub-light:     #e3f0fb;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #00796b;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#002050 0%,#00427b 55%,#0057a8 100%);
+      --header-sub:    #90caf9;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#0d1b2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(0,121,107,0.15) 0%,transparent 50%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#90caf9;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:2rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;margin-bottom:16px;}
+    .code-pill{display:inline-block;background:rgba(200,168,75,0.25);border:1px solid var(--hub-accent);
+      color:var(--hub-accent);padding:3px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;margin-right:6px;}
+    nav.hub-nav{background:#002050;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#90caf9;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+    .stat-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-top:4px solid var(--hub-primary);}
+    .stat-card .val{font-size:1.7rem;font-weight:700;color:var(--hub-primary);margin-bottom:4px;}
+    .stat-card .lbl{font-size:0.78rem;color:#555;line-height:1.3;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#00427b;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #bbdefb;}
+    .code-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px;}
+    .code-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .code-card h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .code-card p{font-size:0.85rem;color:#444;line-height:1.5;}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:28px;}
+    .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid var(--hub-primary);}
+    .card.accent{border-top-color:var(--hub-accent);}
+    .card.teal{border-top-color:#00796b;}
+    .card.purple{border-top-color:#6a1b9a;}
+    .card.red{border-top-color:#c62828;}
+    .card.navy{border-top-color:#0057a8;}
+    .card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .info-box{background:#e3f0fb;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#0d1b2e;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px;}
+    .nav-card{display:block;background:#fff;border-radius:10px;padding:16px 18px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);transition:all 0.2s;}
+    .nav-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12);border-left-color:var(--hub-accent);}
+    .nav-card .num{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .nav-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);}
+    .nav-card p{font-size:0.78rem;color:#555;margin-top:4px;}
+    .seg-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .seg-table th{background:var(--hub-dark);color:#fff;padding:10px 14px;font-size:0.8rem;text-align:left;}
+    .seg-table td{padding:9px 14px;font-size:0.82rem;border-bottom:1px solid #e3f0fb;}
+    .seg-table tr:last-child td{border-bottom:none;}
+    .seg-table tr:hover td{background:#f0f7ff;}
+    footer{background:#002050;color:#90caf9;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Marine › Yachts</div>
+    <div class="tag">Marine — Pleasure Craft</div>
+    <h1>Yachts</h1>
+    <div class="sub">Pleasure craft insurance — sailing yachts, motor yachts, superyachts, racing craft and charter vessels in the Lloyd's market</div>
+    <div>
+      <span class="code-pill">O</span>
+      <span class="code-pill" style="border-color:#90caf9;color:#90caf9;">Pleasure Craft</span>
+      <span class="code-pill" style="border-color:#90caf9;color:#90caf9;">Hull &amp; Machinery</span>
+    </div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~12,000<span class="badge b-e">EST</span></div>
+      <div class="lbl">Superyachts over 24m in global fleet</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">£500–700m<span class="badge b-e">EST</span></div>
+      <div class="lbl">Lloyd's yacht market GWP (est.)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">$22bn+<span class="badge b-e">EST</span></div>
+      <div class="lbl">Russian superyacht fleet seized/detained 2022 (est.)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">300+<span class="badge b-v">VER</span></div>
+      <div class="lbl">Yachts destroyed/damaged — Hurricane Irma 2017 Caribbean</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">Apr–Oct<span class="badge b-v">VER</span></div>
+      <div class="lbl">Mediterranean navigation season — primary claims concentration window</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">Jun–Nov<span class="badge b-v">VER</span></div>
+      <div class="lbl">Atlantic hurricane season — key nat cat driver for Caribbean-based yachts</div>
+    </div>
+  </div>
+
+  <!-- Lloyd's O code -->
+  <div class="section-title">Lloyd's Risk Code — O (Yachts)</div>
+  <div class="code-grid">
+    <div class="code-card">
+      <h3>O — Yachts (Pleasure Craft)</h3>
+      <p>Lloyd's risk code O covers pleasure craft of all types: sailing yachts, motor yachts, motor cruisers, racing yachts, and superyachts/megayachts. The code encompasses vessels used for leisure and recreational purposes, and commercially crewed charter vessels. Standard H&amp;M cover is written on an <strong>agreed value basis</strong>, meaning the vessel value is agreed at inception and paid in full on total loss without depreciation dispute. <sup>[I3]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#00796b;">
+      <h3>Market Segmentation by Vessel Size</h3>
+      <p>The Lloyd's O market is broadly segmented by vessel length: <strong>Small craft</strong> (under 8m) are commonly excluded from Lloyd's books or handled by mass-market insurers; <strong>Standard yachts</strong> (8–24m) form the core Lloyd's private client and broker market; <strong>Superyacht</strong> (24–60m+) is the specialist high-value segment where Lloyd's syndicates dominate. Megayachts (80m+) are the bespoke ultra-high-net-worth segment, often valued at £50–500m+. <sup>[I1]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#c8a84b;">
+      <h3>Agreed Value vs Market Value</h3>
+      <p>Yacht policies almost universally use <strong>agreed value</strong> rather than market/actual cash value (ACV). The agreed value is established at policy inception based on survey, comparable sales, and condition — it removes post-loss valuation disputes that plagued early yacht insurance. For superyachts, agreed value may be reviewed annually as values change significantly. Some superyachts have appreciated substantially, making undervaluation a risk for insurers as well as owners. <sup>[I2]</sup></p>
+    </div>
+  </div>
+
+  <!-- Coverage taxonomy -->
+  <div class="section-title">Coverage Taxonomy</div>
+  <div class="cards-grid">
+    <div class="card">
+      <h4>Hull &amp; Machinery (H&amp;M)</h4>
+      <p>Core physical damage cover for the vessel, machinery, and equipment on an agreed value basis. Covers sinking, fire, grounding, collision, storm damage, and accidental damage perils. Machinery breakdown (separate from collision damage) may be included or excluded. Total loss (constructive or actual) triggers payment of full agreed value. <sup>[I3]</sup></p>
+    </div>
+    <div class="card accent">
+      <h4>Third Party Liability</h4>
+      <p>P&amp;I-style cover for pleasure craft — liability to third parties for bodily injury, property damage, and environmental pollution arising from yacht ownership/operation. Limits typically range from £1m (small craft) to £50m+ (superyacht). Legally required in some jurisdictions (e.g., France, Italy for vessels over certain length). <sup>[L4]</sup></p>
+    </div>
+    <div class="card teal">
+      <h4>Personal Accident</h4>
+      <p>Cover for accidental death, permanent disability, and medical expenses for crew and passengers. Commercially crewed superyachts have MLC 2006 obligations for crew welfare. Owner-operated yachts often include PA as an add-on to the yacht policy or rely on personal travel insurance — a coverage gap at commercial/private boundary. <sup>[L3]</sup></p>
+    </div>
+    <div class="card purple">
+      <h4>Racing Cover</h4>
+      <p>Additional perils endorsement covering racing incidents — collisions with competing vessels, jury rig damage, righting costs for knockdowns, salvage during racing. Typically excluded under standard cruising cover and separately rated. Racing cover is essential for ocean racers (Fastnet, Sydney-Hobart, Jules Verne Trophy contenders). <sup>[I8]</sup></p>
+    </div>
+    <div class="card red">
+      <h4>Salvage &amp; Wreck Removal</h4>
+      <p>Covers the costs of salving a distressed vessel and, critically, wreck removal obligations imposed by port or coastal authorities. Wreck removal liability can exceed the vessel's agreed value — particularly for superyachts grounding in environmentally sensitive or busy waterways. Some syndicates sublimit wreck removal; others offer full cover. <sup>[L5]</sup></p>
+    </div>
+    <div class="card navy">
+      <h4>Charter Liability</h4>
+      <p>Enhanced liability and H&amp;M cover when the vessel is chartered to third parties (commercial bareboat or crewed charter). MCA commercial code compliance typically required; charter use changes the risk profile significantly — increased utilisation, less experienced charterers, higher wear exposure. A separate commercial charter endorsement or policy is usually required. <sup>[L2]</sup></p>
+    </div>
+  </div>
+
+  <!-- Navigation limits explainer -->
+  <div class="section-title">Navigation Limits — Key Underwriting Variable</div>
+  <div class="info-box">
+    <strong>Navigation limits define where a yacht may operate and are the single most important geographic rating variable in yacht underwriting.</strong> A breach of navigation limits — sailing outside the agreed area without prior endorsement — can void cover entirely. The standard navigation limit categories used by Lloyd's yacht syndicates are:<br><br>
+    <strong>Coastal Waters:</strong> Within territorial limits (typically 12nm from shore) — lowest risk, suitable for inland and sheltered sailing.<br>
+    <strong>Territorial Limits:</strong> Within a defined geographic area (e.g., UK coastal, Western Mediterranean) — standard for seasonal Mediterranean yachts.<br>
+    <strong>Offshore:</strong> Extended to national EEZ limits or defined ocean areas — step up from coastal, covers offshore racing.<br>
+    <strong>Bluewater / Worldwide:</strong> Unrestricted worldwide navigation, including ocean crossings — highest risk rating, piracy zone exclusions may apply (Gulf of Aden, Gulf of Guinea, Somali Basin).<br><br>
+    Seasonal endorsements (e.g., Caribbean season Oct–Apr, Mediterranean season Apr–Oct) are common — vessels hauled out or in lay-up attract reduced rates. <sup>[I3]</sup>
+  </div>
+
+  <!-- Market segmentation table -->
+  <div class="section-title">Market Segmentation by Vessel Type</div>
+  <table class="seg-table">
+    <thead>
+      <tr><th>Segment</th><th>Typical Length</th><th>Agreed Value Range</th><th>Navigation</th><th>Market</th><th>Key Perils</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Small pleasure craft</td><td>Under 8m</td><td>£5k–£50k</td><td>Coastal / inland</td><td>Mass market / household add-on</td><td>Theft, trailer damage, storm</td></tr>
+      <tr><td>Standard sailing yacht</td><td>8–18m</td><td>£20k–£250k</td><td>Coastal / territorial</td><td>Lloyd's / regional specialist</td><td>Grounding, storm, collision</td></tr>
+      <tr><td>Standard motor yacht</td><td>8–24m</td><td>£50k–£500k</td><td>Coastal / offshore</td><td>Lloyd's / broker market</td><td>Fire (engine room), grounding, sinking</td></tr>
+      <tr><td>Superyacht (sail/motor)</td><td>24–60m</td><td>£1m–£30m</td><td>Territorial / bluewater</td><td>Lloyd's specialist syndicates</td><td>Storm, fire, crew liability, grounding</td></tr>
+      <tr><td>Megayacht</td><td>60m+</td><td>£30m–£500m+</td><td>Worldwide</td><td>Lloyd's bespoke / co-insurance</td><td>All perils; political risk; sanctions</td></tr>
+      <tr><td>Racing yacht (offshore)</td><td>8–30m</td><td>£50k–£5m</td><td>Offshore / bluewater</td><td>Lloyd's specialist + racing endorsement</td><td>Collision in race, dismasting, MOB</td></tr>
+      <tr><td>Charter fleet (crewed)</td><td>10–50m</td><td>£100k–£20m</td><td>Territorial / MCA coded</td><td>Lloyd's fleet programme</td><td>Charter liability, P&amp;I, passenger PA</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Warning on nav limits -->
+  <div class="warn-box">
+    <strong>Navigation Limit Breach — Coverage Voiding Risk:</strong> Sailing outside agreed navigation limits without a prior endorsement is a common cause of coverage disputes. Yacht owners venturing into the Mediterranean under a UK Coastal limit, or crossing the Atlantic under a North Sea limit, may find their hull cover voided on a claim. Underwriters should ensure insured understands navigation limits explicitly; brokers should obtain seasonal or extended navigation endorsements in advance of planned passages. Piracy exclusion zones (Gulf of Aden, Gulf of Guinea) require specific war and piracy endorsements even where worldwide navigation is granted. <sup>[L9]</sup>
+  </div>
+
+  <!-- Module nav -->
+  <div class="section-title">Hub Modules</div>
+  <div class="nav-grid">
+    <a href="history.html" class="nav-card">
+      <div class="num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From Thames barges to superyachts — the evolution of yacht insurance</p>
+    </a>
+    <a href="timeline.html" class="nav-card">
+      <div class="num">Module 02</div>
+      <h4>Events Timeline</h4>
+      <p>20 key yacht market events 1979–2024</p>
+    </a>
+    <a href="database.html" class="nav-card">
+      <div class="num">Module 03</div>
+      <h4>Loss Database</h4>
+      <p>35 yacht losses — filterable by type, vessel class &amp; severity</p>
+    </a>
+    <a href="underwriting.html" class="nav-card">
+      <div class="num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>Rating factors, rate benchmarks, worked examples &amp; exclusions</p>
+    </a>
+    <a href="rates-analysis.html" class="nav-card">
+      <div class="num">Module 05</div>
+      <h4>Rates &amp; ROE</h4>
+      <p>Market cycle, rate index charts, ROE scenarios &amp; P&amp;L waterfall</p>
+    </a>
+    <a href="risk-mitigation.html" class="nav-card">
+      <div class="num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Hurricane preparedness, safety equipment &amp; chartering checklists</p>
+    </a>
+    <a href="global-program.html" class="nav-card">
+      <div class="num">Module 07</div>
+      <h4>Global Programme</h4>
+      <p>Fleet structures, jurisdiction profiles, superyacht P&amp;I &amp; sanctions</p>
+    </a>
+    <a href="references.html" class="nav-card">
+      <div class="num">Sources</div>
+      <h4>References</h4>
+      <p>Legal, regulatory &amp; industry citations</p>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Yachts (O) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Sources &amp; Citations</a></p>
+</footer>
+
+</body>
+</html>

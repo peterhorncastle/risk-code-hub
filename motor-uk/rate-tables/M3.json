@@ -1,0 +1,196 @@
+{
+  "riskCode": "M3",
+  "label": "Motor — Commercial Vehicle",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "vehicleValue",
+    "label": "Vehicle Value (£)",
+    "defaultValue": 25000,
+    "hint": "Market value or agreed value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.035
+  },
+  "ratingFactors": [
+    {
+      "key": "vehicleGroup",
+      "label": "Vehicle Group",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "mid",
+      "options": {
+        "economy": {
+          "label": "Economy (Group 1-10)",
+          "factor": 0.6
+        },
+        "mid": {
+          "label": "Mainstream (Group 11-25)",
+          "factor": 1
+        },
+        "performance": {
+          "label": "Performance (Group 26-40)",
+          "factor": 1.8
+        },
+        "supercar": {
+          "label": "Supercar (Group 41-50)",
+          "factor": 3.5
+        },
+        "ev": {
+          "label": "Electric Vehicle",
+          "factor": 1.1
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "driverAge",
+      "label": "Primary Driver Age",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 35,
+      "bands": [
+        {
+          "min": 17,
+          "max": 20,
+          "factor": 3.5
+        },
+        {
+          "min": 20,
+          "max": 25,
+          "factor": 1.8
+        },
+        {
+          "min": 25,
+          "max": 30,
+          "factor": 1.2
+        },
+        {
+          "min": 30,
+          "max": 65,
+          "factor": 1
+        },
+        {
+          "min": 65,
+          "max": 75,
+          "factor": 1.15
+        },
+        {
+          "min": 75,
+          "max": 99,
+          "factor": 1.5
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "territory",
+      "label": "Territory (Postcode)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "provincial",
+      "options": {
+        "rural": {
+          "label": "Rural",
+          "factor": 0.8
+        },
+        "provincial": {
+          "label": "Provincial Town",
+          "factor": 1
+        },
+        "city": {
+          "label": "Major City",
+          "factor": 1.2
+        },
+        "inner_london": {
+          "label": "Inner London",
+          "factor": 1.6
+        },
+        "high_crime": {
+          "label": "High Crime Area",
+          "factor": 2
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "use",
+      "label": "Vehicle Use",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "sdp",
+      "options": {
+        "sdp": {
+          "label": "Social/Pleasure",
+          "factor": 1
+        },
+        "commuting": {
+          "label": "SDP + Commuting",
+          "factor": 1.1
+        },
+        "business": {
+          "label": "Business Class 1",
+          "factor": 1.2
+        },
+        "hire_reward": {
+          "label": "Hire/Reward/PHV",
+          "factor": 2.2
+        },
+        "courier": {
+          "label": "Courier/Delivery",
+          "factor": 2.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "ncd",
+      "label": "No Claims Discount",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "5yr",
+      "options": {
+        "max": {
+          "label": "9+ years protected",
+          "factor": 0.3
+        },
+        "5yr": {
+          "label": "5 years",
+          "factor": 0.45
+        },
+        "3yr": {
+          "label": "3 years",
+          "factor": 0.65
+        },
+        "1yr": {
+          "label": "1 year",
+          "factor": 0.85
+        },
+        "none": {
+          "label": "None",
+          "factor": 1
+        },
+        "loaded": {
+          "label": "Loaded (at-fault claims)",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 30,
+    "claimsHandlingPerClaim": 500,
+    "systemOverheadPerYear": 20,
+    "fraudReservePerClaim": 100,
+    "expectedClaimsPerYear": 0.08,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.3,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+}

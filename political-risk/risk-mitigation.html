@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Risk Mitigation — Political Risk — Risk Code Hub</title>
+  <style>
+    :root {
+      --pr:#283593; --pr-dark:#1a237e; --pv:#c62828;
+      --inv:#e65100; --gov:#00695c; --treaty:#6a1b9a;
+      --warn:#f57f17; --light:#f3f4fd; --border:#c5cae9;
+      --text:#1a1f3a; --muted:#5c6270;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #283593;
+    --hub-dark:      #1a237e;
+    --hub-light:     #e8eaf6;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#00695c;
+    --header-gradient:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%);
+    --header-sub:    #c5cae9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#9fa8da; margin-bottom:6px; }
+    .breadcrumb a { color:#c5cae9; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#9fa8da; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#c5cae9; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pr); border-bottom-color:var(--pv); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pr); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--pv); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .info-box { background:var(--pr-dark); color:#c5cae9; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#e8eaf6; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#c5cae9; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin:24px 0; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; border-top:4px solid var(--pr); }
+    .card.pv { border-top-color:var(--pv); }
+    .card.inv { border-top-color:var(--inv); }
+    .card.gov { border-top-color:var(--gov); }
+    .card.treaty { border-top-color:var(--treaty); }
+    .card.warn { border-top-color:var(--warn); }
+    .card h3 { font-size:1rem; color:var(--text); margin-bottom:10px; }
+    .card p { font-size:0.88rem; margin-bottom:8px; }
+    .card ul { padding-left:18px; }
+    .card li { font-size:0.85rem; margin-bottom:6px; line-height:1.6; }
+    .card-label { font-size:0.68rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--pr); margin-bottom:6px; }
+    .card.pv .card-label { color:var(--pv); }
+    .card.inv .card-label { color:var(--inv); }
+    .card.gov .card-label { color:var(--gov); }
+    .card.treaty .card-label { color:var(--treaty); }
+    .card.warn .card-label { color:var(--warn); }
+
+    .top10 { background:#fff; border:1px solid var(--border); border-radius:12px; overflow:hidden; margin:24px 0; }
+    .top10 table { width:100%; border-collapse:collapse; }
+    .top10 th { background:var(--pr); color:#fff; padding:12px 16px; font-size:0.8rem; text-align:left; }
+    .top10 td { padding:11px 16px; font-size:0.84rem; border-bottom:1px solid var(--border); vertical-align:top; }
+    .top10 tr:last-child td { border-bottom:none; }
+    .top10 tr:hover td { background:#f0f3ff; }
+    .num { font-size:1.1rem; font-weight:700; color:var(--pr); }
+    .priority { font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:8px; }
+    .p-high { background:#fdecea; color:#b71c1c; }
+    .p-med { background:#fef3e2; color:#7a4500; }
+    .p-low { background:#e8f5e9; color:#1b5e20; }
+
+    .treaty-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:20px 0; }
+    .treaty-table th { background:var(--treaty); color:#fff; padding:11px 14px; font-size:0.8rem; text-align:left; }
+    .treaty-table td { padding:10px 14px; font-size:0.83rem; border-bottom:1px solid var(--border); }
+    .treaty-table tr:last-child td { border-bottom:none; }
+    .treaty-table tr:hover td { background:#f8f0ff; }
+    .tick { color:var(--gov); font-weight:700; }
+    .cross { color:var(--pv); font-weight:700; }
+    .partial { color:var(--warn); font-weight:700; }
+
+    .warn-box { background:#fffde7; border:1px solid #fdd835; border-radius:10px; padding:18px 22px; margin:20px 0; }
+    .warn-box h3 { color:#f57f17; font-size:0.95rem; margin-bottom:8px; }
+    .warn-box ul { padding-left:18px; }
+    .warn-box li { font-size:0.87rem; margin-bottom:5px; line-height:1.6; }
+
+    footer { background:var(--pr-dark); color:#9fa8da; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Political Risk</a> › Risk Mitigation</div>
+  <div class="tag">Lloyd's Code · PR</div>
+  <h1>Risk Mitigation</h1>
+  <p>From BIT architecture and ICSID arbitration clauses to operational de-risking and sovereign deterrence — the levers that reduce political risk exposure before the underwriter's pen touches the slip.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>Political risk mitigation is fundamentally different from property or casualty risk management. There is no sprinkler system for expropriation. Mitigation operates at the structural, legal, and diplomatic levels — the investment agreement, the treaty framework, the ownership structure, and the relationships maintained with host-country decision-makers. Underwriters who understand these levers write better risks; insureds who deploy them reduce both their exposure and their premium.</p>
+
+  <h2>1. Bilateral Investment Treaty (BIT) Protection</h2>
+  <p>A functioning BIT between the investor's home state and the host state is the single most powerful structural mitigation in political risk. BITs impose international law obligations on host governments: fair and equitable treatment (FET), full protection and security, prohibition on expropriation without prompt, adequate and effective compensation, and typically most-favoured-nation (MFN) status. <span class="badge b-v">VER</span></p>
+
+  <div class="card-grid">
+    <div class="card treaty">
+      <div class="card-label">Structural Mitigation</div>
+      <h3>What BITs Provide</h3>
+      <ul>
+        <li><strong>Expropriation protection:</strong> Host state must pay "prompt, adequate and effective" (Hull formula) compensation — not book value, not nominal payment</li>
+        <li><strong>Fair and Equitable Treatment (FET):</strong> Covers regulatory discrimination, denial of justice, arbitrary or abusive government action — the "creeping expropriation" gateway</li>
+        <li><strong>Most-Favoured-Nation (MFN):</strong> Investor can "import" more favourable procedural protections from the host state's other BITs</li>
+        <li><strong>ISDS (Investor-State Dispute Settlement):</strong> Direct investor right to arbitrate against sovereign — typically at ICSID (World Bank) or UNCITRAL</li>
+        <li><strong>Free transfer of funds:</strong> Specifically protects against currency inconvertibility and transfer restriction measures</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Underwriter Checks</div>
+      <h3>Verifying BIT Effectiveness</h3>
+      <ul>
+        <li>Confirm the relevant BIT is <strong>in force</strong> (not merely signed — some signed BITs have never been ratified) <span class="badge b-v">VER</span></li>
+        <li>Check BIT <strong>survival clause:</strong> most BITs include 10–15 year survival for existing investments post-termination; some do not</li>
+        <li>Review BIT <strong>carve-outs:</strong> many BITs exclude taxation measures, national security, public health — the "legitimate regulatory purpose" carve-out is expanding</li>
+        <li>Assess host state's <strong>BIT compliance history:</strong> has it honoured prior ICSID awards? Several Latin American states have ignored or renegotiated awards</li>
+        <li>Check treaty shopping opportunity: if home-state BIT is weak, can investor route via a third-country holding company with a stronger BIT?</li>
+        <li>Source: UNCTAD Investment Policy Hub (unctad.org/ips) — free database of all BITs by country <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <div class="card-label">Limitation</div>
+      <h3>When BITs Fail</h3>
+      <ul>
+        <li><strong>Non-ratification:</strong> Dozens of signed BITs are not in force — the investor has no treaty rights</li>
+        <li><strong>Award enforcement gap:</strong> An ICSID award against Venezuela for $8.7bn (ConocoPhillips, 2019) is worthless if the state has no enforceable overseas assets <span class="badge b-v">VER</span></li>
+        <li><strong>Treaty withdrawal:</strong> Bolivia, Ecuador and Venezuela all withdrew from ICSID Convention at various points — denying new ICSID access; UNCITRAL remained available</li>
+        <li><strong>ECT crisis:</strong> EU member states withdrawing from Energy Charter Treaty (2022–24) removes multilateral protection for intra-EU energy investment</li>
+        <li><strong>Russian counter-measures:</strong> Russia's 2022 legislation effectively seized assets in direct contravention of BITs — enforcement against a major nuclear-armed state is practically nil</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>2. ICSID Arbitration Clause — Structural Investment Protection</h2>
+  <p>Beyond the BIT framework, sophisticated investors embed ICSID (or UNCITRAL) arbitration clauses directly into their investment agreement with the host government or state-owned entity. This contractual route to arbitration does not depend on the BIT — it is a direct consent to jurisdiction given by the sovereign in the agreement itself. <span class="badge b-v">VER</span></p>
+
+  <div class="info-box">
+    <h3>ICSID vs. UNCITRAL — Which Forum?</h3>
+    <ul>
+      <li><strong>ICSID (International Centre for Settlement of Investment Disputes):</strong> World Bank body; 158 member states (2024); awards automatically enforceable in all member states under ICSID Convention Article 54 — no need to go to domestic courts; annulment process kept internal; preferred for large infrastructure and extractive industry</li>
+      <li><strong>UNCITRAL (United Nations Commission on International Trade Law):</strong> Provides arbitration rules rather than an institution; parties choose seat and arbitrators; awards enforced under New York Convention (1958) — requires domestic courts in each enforcement jurisdiction; preferred where one party is not in an ICSID member state</li>
+      <li><strong>ICC (International Chamber of Commerce):</strong> Commercial arbitration; occasionally used for PRI-adjacent contract disputes; less favourable for sovereign immunity arguments</li>
+      <li><strong>Underwriter value:</strong> An ICSID/UNCITRAL clause in the investment agreement is a meaningful risk reduction — it converts a political dispute into a legal claim with a structured resolution pathway, reducing the subjective "deprivation" judgment the underwriter would otherwise face in a claim scenario</li>
+    </ul>
+  </div>
+
+  <h2>3. Ownership Structure as CEND Deterrent</h2>
+  <p>The structure of the investment itself is a mitigation tool. A wholly foreign-owned subsidiary in a high-risk territory is a politically visible target. A carefully designed ownership structure that aligns host-country interests — commercial, political, and financial — significantly reduces expropriation incentive.</p>
+
+  <div class="card-grid">
+    <div class="card gov">
+      <div class="card-label">JV Structuring</div>
+      <h3>Local Partner / State JV</h3>
+      <ul>
+        <li><strong>Partial state ownership:</strong> Giving the host government (or state-owned entity) a direct equity stake creates fiscal alignment — seizing the asset harms the government's own revenue stream</li>
+        <li><strong>Local private partner:</strong> A credible, politically connected local partner reduces the nationalist optics of foreign ownership and creates domestic political opposition to any seizure</li>
+        <li>Limitation: choose partners carefully — politically exposed persons (PEPs) as local partners create AML/sanctions risk and may accelerate problems if the political wind changes</li>
+        <li>Chávez nationalised JVs with state equity stakes in Venezuela — partial state ownership is a deterrent, not an absolute shield</li>
+      </ul>
+    </div>
+    <div class="card inv">
+      <div class="card-label">Financial Structure</div>
+      <h3>Project Finance / Ring-Fencing</h3>
+      <ul>
+        <li><strong>Non-recourse project finance:</strong> Separate SPV (Special Purpose Vehicle) means only the specific project is at risk — parent company balance sheet is ring-fenced</li>
+        <li><strong>Lender consortium with ECAs:</strong> If the lending consortium includes export credit agencies from multiple sovereign states, a host government must simultaneously antagonise multiple foreign governments to proceed with expropriation — significant deterrent</li>
+        <li><strong>MIGA guarantee:</strong> A World Bank MIGA political risk guarantee creates direct World Bank exposure — host governments generally wish to maintain World Bank access and lending relationships</li>
+        <li><strong>Offshore revenue accounts:</strong> Structuring revenue to flow through offshore accounts before repatriation partially mitigates CI/TR risk — the transfer restriction hits an internal intercompany flow rather than blocking the primary revenue stream</li>
+      </ul>
+    </div>
+    <div class="card pv">
+      <div class="card-label">Asset Protection</div>
+      <h3>Technology / IP Retention</h3>
+      <ul>
+        <li>Retaining key IP, technology licences, or supply chain relationships outside the host-country entity creates practical operational dependency — nationalising the local subsidiary may be useless without access to the parent's systems or inputs</li>
+        <li>Common in oil &amp; gas: seismic data, reservoir modelling software, LNG technology held by the parent outside the joint operating agreement</li>
+        <li>Applicable to manufacturing, telecoms, pharmaceutical sectors where the local operation depends on foreign IP or components</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>4. ECA / MIGA Co-Insurance as Sovereign Deterrence</h2>
+  <p>Export Credit Agencies (ECAs) and MIGA operate on a fundamentally different principle from commercial insurers. When an ECA or MIGA pays a political risk claim, it exercises subrogation rights against the host government — meaning the sovereign must ultimately repay the agency, or face consequences for its broader government-to-government relations and multilateral lending access. <span class="badge b-v">VER</span></p>
+
+  <div class="info-box">
+    <h3>Why ECA/MIGA Involvement Changes Government Behaviour</h3>
+    <ul>
+      <li><strong>MIGA subrogation:</strong> If MIGA pays a CEND claim, it files against the host government through World Bank channels. Defaults affect the country's IDA/IBRD lending status — countries with unresolved MIGA subrogation claims face restrictions on new World Bank project finance. This is a genuine deterrent for IDA-eligible low-income countries that depend on concessional financing</li>
+      <li><strong>ECA government-to-government pressure:</strong> When UK Export Finance (UKEF), US Ex-Im Bank, or Euler Hermes (Germany) pay claims, diplomatic pressure is exerted at ambassador/foreign ministry level — not just by the private insured</li>
+      <li><strong>Co-insurance structure:</strong> A deal with Lloyd's as commercial layer + UKEF as primary + MIGA as preferred creditor layer means the host government must antagonise three sovereign entities plus the World Bank to proceed. This stacked deterrence is common in large infrastructure projects in Sub-Saharan Africa and South/Southeast Asia</li>
+      <li><strong>Limitation:</strong> Resource nationalism by China's major trading partners (e.g., DRC cobalt) often proceeds despite multilateral exposure because the political/resource calculus outweighs the lending relationship penalty</li>
+    </ul>
+  </div>
+
+  <h2>5. Operational De-Risking</h2>
+  <p>Operational behaviour within the host country affects both the probability and the severity of political risk events. Companies that are visible, high-profile, employ few local workers, use transfer pricing aggressively, or ignore environmental and social obligations are more likely to become targets of expropriation or political violence. <span class="badge b-v">VER</span></p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">Operational</div>
+      <h3>Local Content &amp; Employment</h3>
+      <ul>
+        <li>Comply with (and exceed where possible) host-country local content requirements — local employment, procurement from local suppliers, technology transfer</li>
+        <li>High local employment reduces nationalist "foreign extraction" narrative that precedes resource nationalisation</li>
+        <li>Visible corporate social responsibility (CSR) programmes — community hospitals, schools, infrastructure — creates domestic political constituencies that oppose seizure</li>
+        <li>Angola, Nigeria, Kazakhstan: local content legislation makes this a legal requirement and a commercial licence condition <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="card pv">
+      <div class="card-label">Security</div>
+      <h3>Security &amp; PV De-Risking</h3>
+      <ul>
+        <li><strong>Low-profile operating posture:</strong> Avoid conspicuous foreign-branded facilities, vehicles, uniforms in high-risk areas</li>
+        <li><strong>Private security standards:</strong> Comply with Voluntary Principles on Security and Human Rights (VPSHR) — non-compliance can void PV insurance coverage or create liability</li>
+        <li><strong>Personnel security:</strong> Kidnap &amp; Ransom (K&amp;R) cover; travel risk management; hostage response protocols; emergency evacuation plan pre-agreed with insurer</li>
+        <li>Do not use host-country military for site security without clear protocols — risks association with human rights violations (VPSHR) and policy voidance</li>
+        <li><strong>Political violence early warning:</strong> Subscriptions to risk intelligence services (Control Risks, Verisk Maplecroft, Oxford Analytica) provide 30–180 day lead-time indicators</li>
+      </ul>
+    </div>
+    <div class="card gov">
+      <div class="card-label">Compliance</div>
+      <h3>Tax &amp; Transfer Pricing</h3>
+      <ul>
+        <li>Aggressive transfer pricing — over-charging management fees, royalties, or procurement to strip profits from the host country — is a primary political trigger for resource nationalism</li>
+        <li>Maintain transparent, arm's-length intercompany pricing; document and defend transfer pricing contemporaneously</li>
+        <li>Pay local taxes on schedule — tax arrears create leverage for adverse government action</li>
+        <li>Environmental compliance: documented environmental breaches give governments legitimate-seeming grounds to revoke licences; maintain ISO 14001 or equivalent standards</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>6. Early Warning Indicators &amp; Exit Planning</h2>
+  <p>Political risk is rarely instantaneous — with the exception of military coups. Most CEND events are preceded by months or years of observable warning signals. Companies with active early warning processes are better positioned to restructure, divest, or exit before the triggering event crystallises a claim.</p>
+
+  <div class="warn-box">
+    <h3>⚠ Early Warning Indicators — Monitor Quarterly</h3>
+    <ul>
+      <li><strong>Regulatory signals:</strong> New extractive industry legislation; amendments to investment protection laws; increased tax or royalty rates; export restrictions</li>
+      <li><strong>Political signals:</strong> Incumbent government losing polling support; nationalist rhetoric increasing in campaign materials; opposition parties proposing nationalisation platforms</li>
+      <li><strong>Operational signals:</strong> Unexplained delays in licence renewal or permit processing; new regulatory inspections; labour disputes fomented by government-aligned unions</li>
+      <li><strong>FX signals:</strong> Central bank reserve depletion below 3 months of import cover; parallel exchange rate premium exceeding 20%; imposition of new capital controls on any sector</li>
+      <li><strong>Judicial signals:</strong> Adverse rulings in host-country courts against other foreign investors; delays in adjudicating investment disputes; judges replaced with government-aligned appointees</li>
+      <li><strong>Peer signals:</strong> Other foreign companies quietly reducing exposure, selling stakes, or not renewing leases in the same territory</li>
+    </ul>
+  </div>
+
+  <h2>7. Government Relationship Management</h2>
+  <p>Political risk is ultimately a relationship between a private investor and a sovereign. Relationship management — at political, regulatory, and community levels — is the least quantifiable but often the most effective mitigation.</p>
+
+  <div class="card-grid">
+    <div class="card treaty">
+      <div class="card-label">Diplomatic</div>
+      <h3>Maintaining Political Access</h3>
+      <ul>
+        <li>Senior executive visits to relevant ministries (mining, energy, finance) — not just when problems arise</li>
+        <li>Engage home-country embassy as a commercial resource — UK FCDO commercial teams, US Commercial Service — most have dedicated country risk briefings</li>
+        <li>Participate in business councils and chambers of commerce in-country — collective voice of foreign business community is more effective than individual representations</li>
+        <li>Anticipate elections: brief incoming government officials on your investment; provide economic impact data (jobs, tax, export revenue) to incoming team regardless of political stripe</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Regulatory</div>
+      <h3>Regulatory Relationship</h3>
+      <ul>
+        <li>Designate a senior local government affairs manager with language skills and cultural competence — not a lawyer, a relationship manager</li>
+        <li>Respond promptly and constructively to all regulatory correspondence — non-responsiveness is itself a political risk trigger</li>
+        <li>Offer to assist government with capacity building, technical training, data sharing — positions the investor as a partner not an extractor</li>
+        <li>Engage where possible in formal public-private consultation processes on new legislation — even if outcome is uncertain, participation creates a paper trail of good-faith engagement</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>8. Top-10 Underwriter Pre-Binding Checks</h2>
+
+  <div class="top10">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th>Check</th>
+          <th>What to Verify</th>
+          <th>Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="num">1</span></td>
+          <td><strong>BIT Verification</strong></td>
+          <td>Confirm BIT is in force (UNCTAD IPS database); check survival clause, carve-outs, ISDS provisions; assess host state's award compliance history</td>
+          <td><span class="priority p-high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td><span class="num">2</span></td>
+          <td><strong>Country Tier Assessment</strong></td>
+          <td>Classify host state per tier framework (1–5); cross-reference Control Risks, Verisk, PRS Group country ratings; check if any index has downgraded in past 12 months</td>
+          <td><span class="priority p-high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td><span class="num">3</span></td>
+          <td><strong>Government Counterparty Due Diligence</strong></td>
+          <td>For CF/NHSO covers: review SOE (state-owned entity) financial statements; credit ratings; payment history on comparable contracts; cross-reference PEP/sanctions screening</td>
+          <td><span class="priority p-high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td><span class="num">4</span></td>
+          <td><strong>Ownership Structure Review</strong></td>
+          <td>Is investment via SPV? Is there a state JV partner? Is MIGA or ECA involved? Map the full corporate structure including beneficial owners</td>
+          <td><span class="priority p-high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td><span class="num">5</span></td>
+          <td><strong>Sector Risk Assessment</strong></td>
+          <td>Apply sector multiplier (mining/extractive: 1.30–1.60×; renewables: 0.90–1.10×). Confirm resource nationalism risk — is insured in a sector with recent nationalisation precedent in this territory?</td>
+          <td><span class="priority p-high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td><span class="num">6</span></td>
+          <td><strong>Investment Agreement Review</strong></td>
+          <td>Does the investment agreement contain ICSID/UNCITRAL arbitration clause? Stabilisation clause (freezing regulatory terms at date of investment)? Force majeure wording compatible with cover?</td>
+          <td><span class="priority p-med">MED</span></td>
+        </tr>
+        <tr>
+          <td><span class="num">7</span></td>
+          <td><strong>Political Calendar Check</strong></td>
+          <td>Identify elections, term limits, constitutional changes due during the policy period. Regimes in late-term periods or succession uncertainty have elevated CEND risk</td>
+          <td><span class="priority p-med">MED</span></td>
+        </tr>
+        <tr>
+          <td><span class="num">8</span></td>
+          <td><strong>Currency/FX Position</strong></td>
+          <td>For CI/TR: review IMF Article IV consultation; parallel market premium; reserve coverage (months of import); capital account openness index; recent capital control precedent in territory</td>
+          <td><span class="priority p-med">MED</span></td>
+        </tr>
+        <tr>
+          <td><span class="num">9</span></td>
+          <td><strong>Insured's Operational Track Record</strong></td>
+          <td>How long has insured been operating in territory? Prior government disputes or tax claims? Evidence of local content compliance? Environmental or social licence issues?</td>
+          <td><span class="priority p-med">MED</span></td>
+        </tr>
+        <tr>
+          <td><span class="num">10</span></td>
+          <td><strong>Claims Cooperation &amp; Waiting Period</strong></td>
+          <td>Confirm insured understands and accepts waiting period (typically 12 months creeping CEND, 6 months outright nationalisation). Brief on claims notification obligations — late notice is a common grounds for coverage dispute</td>
+          <td><span class="priority p-low">LOW</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>9. Treaty &amp; Regulatory Framework — Summary Table</h2>
+
+  <table class="treaty-table">
+    <thead>
+      <tr>
+        <th>Framework / Body</th>
+        <th>What It Provides</th>
+        <th>Mitigates</th>
+        <th>Limitation</th>
+        <th>Underwriter Use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Bilateral Investment Treaty (BIT)</strong></td>
+        <td>FET, expropriation protection, ISDS access, free transfer of funds</td>
+        <td>CEND, CI/TR, CF</td>
+        <td>Only if ratified &amp; in force; sovereign may ignore award</td>
+        <td>Rate credit if confirmed BIT in force</td>
+      </tr>
+      <tr>
+        <td><strong>ICSID Convention</strong></td>
+        <td>Neutral arbitration; Article 54 enforcement in 158 member states</td>
+        <td>CEND, CF, AAD</td>
+        <td>Non-member states (e.g. Russia, Brazil were non-members) cannot be sued</td>
+        <td>Confirm investor has ICSID access via BIT or agreement</td>
+      </tr>
+      <tr>
+        <td><strong>MIGA (World Bank)</strong></td>
+        <td>Sovereign-backed PRI; subrogation creates World Bank leverage</td>
+        <td>CEND, CI/TR, PV (business interruption)</td>
+        <td>Eligibility criteria; can't cover all sectors; approval lead time 6–12 months</td>
+        <td>MIGA co-insurance: meaningful rate reduction on CEND layer</td>
+      </tr>
+      <tr>
+        <td><strong>UK Export Finance (UKEF)</strong></td>
+        <td>ECA backing; government-to-government subrogation leverage</td>
+        <td>CEND, CF, NHSO</td>
+        <td>Requires UK nexus (supply, finance, or investment)</td>
+        <td>ECA involvement on deal: positive rating factor</td>
+      </tr>
+      <tr>
+        <td><strong>Energy Charter Treaty (ECT)</strong></td>
+        <td>Multilateral investment protection for energy sector investments</td>
+        <td>CEND, CF, CI/TR (energy sector)</td>
+        <td>EU withdrawal crisis (2022–24) undermining effectiveness; fossil-fuel/transition conflicts</td>
+        <td>No longer considered reliable for EU-hosted energy investment</td>
+      </tr>
+      <tr>
+        <td><strong>New York Convention (1958)</strong></td>
+        <td>Enforceability of UNCITRAL arbitral awards in 170+ states</td>
+        <td>CF, AAD (contract-based)</td>
+        <td>Requires domestic court action in each enforcement jurisdiction; sovereign immunity can be invoked</td>
+        <td>Lower protection than ICSID for sovereign-risk claims</td>
+      </tr>
+      <tr>
+        <td><strong>Voluntary Principles on Security &amp; Human Rights (VPSHR)</strong></td>
+        <td>Framework for responsible security in extractive industries</td>
+        <td>PV (legal compliance &amp; coverage continuity)</td>
+        <td>Voluntary — no legal enforcement; breach may void PV cover</td>
+        <td>Confirm insured has VPSHR policy if security forces involved</td>
+      </tr>
+      <tr>
+        <td><strong>OECD Anti-Bribery Convention</strong></td>
+        <td>Anti-corruption obligations for multinationals in 44 member states</td>
+        <td>Corruption exclusion avoidance</td>
+        <td>Applies to home-state jurisdiction enforcement only</td>
+        <td>PRI policies exclude losses arising from corruption — verify insured's FCPA/Bribery Act compliance</td>
+      </tr>
+    </tbody>
+  </table>
+
+</main>
+<footer>
+  Risk Code Hub — Political Risk (PR) · Lloyd's Market Intelligence · v3.2 April 2026
+</footer>
+</body>
+</html>

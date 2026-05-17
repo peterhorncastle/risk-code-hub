@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Underwriting — Political Risk — Risk Code Hub</title>
+  <style>
+    :root {
+      --pr:#283593; --pr-dark:#1a237e; --pv:#c62828;
+      --inv:#e65100; --gov:#00695c; --treaty:#6a1b9a;
+      --warn:#f57f17; --light:#f3f4fd; --border:#c5cae9;
+      --text:#1a1f3a; --muted:#5c6270;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #283593;
+    --hub-dark:      #1a237e;
+    --hub-light:     #e8eaf6;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#00695c;
+    --header-gradient:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%);
+    --header-sub:    #c5cae9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#9fa8da; margin-bottom:6px; }
+    .breadcrumb a { color:#c5cae9; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#9fa8da; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#c5cae9; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pr); border-bottom-color:var(--pv); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pr); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--pv); }
+    h3 { font-size:1.0rem; color:var(--pr); margin:22px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .formula-box { background:#fff; border:2px solid var(--pr); border-radius:12px; padding:22px 26px; margin:20px 0; font-family:monospace; font-size:0.9rem; color:var(--pr-dark); line-height:2; }
+    .formula-box .op { color:var(--pv); font-weight:700; }
+
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin:24px 0; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-top:4px solid var(--pr); }
+    .factor-card.pv-top { border-top-color:var(--pv); }
+    .factor-card.inv-top { border-top-color:var(--inv); }
+    .factor-card.gov-top { border-top-color:var(--gov); }
+    .factor-card.treaty-top { border-top-color:var(--treaty); }
+    .factor-card h4 { font-size:0.88rem; font-weight:700; color:var(--pr); margin-bottom:8px; }
+    .factor-card.pv-top h4 { color:var(--pv); }
+    .factor-card.inv-top h4 { color:var(--inv); }
+    .factor-card.gov-top h4 { color:var(--gov); }
+    .factor-card.treaty-top h4 { color:var(--treaty); }
+    .factor-card p { font-size:0.82rem; color:#555; margin:0; line-height:1.55; }
+
+    .score-table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; margin:20px 0; font-size:0.86rem; }
+    .score-table th { background:var(--pr); color:#fff; padding:10px 14px; text-align:left; }
+    .score-table td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .score-table tr:last-child td { border-bottom:none; }
+    .score-table tr:nth-child(even) td { background:#f0f1fc; }
+    .green { color:#1a7431; font-weight:700; }
+    .amber { color:#7a4500; font-weight:700; }
+    .red   { color:#c62828; font-weight:700; }
+
+    .info-box { background:var(--pr-dark); color:#c5cae9; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#e8eaf6; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#c5cae9; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .example-box { background:#f5f6ff; border:1px solid var(--pr); border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .example-box h3 { color:var(--pr); margin-bottom:12px; }
+    .example-box table { width:100%; border-collapse:collapse; font-size:0.87rem; }
+    .example-box td { padding:7px 10px; border-bottom:1px solid var(--border); }
+    .example-box tr:last-child td { border-bottom:none; font-weight:700; color:var(--pv); }
+    .example-box .lbl { color:var(--muted); }
+
+    footer { background:var(--pr-dark); color:#9fa8da; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Political Risk</a> › Underwriting</div>
+  <div class="tag">Lloyd's Code · PR</div>
+  <h1>Underwriting Methodology</h1>
+  <p>Country risk scoring, cover-type factors, policy tenor and waiting period considerations, plus worked examples for a mining CEND risk and a financial institution CI/TR risk.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Rating Formula — Political Risk Insurance</h2>
+  <p>Unlike property insurance, there is no standardised actuarial rating model for political risk. The market operates on a qualitative-plus-quantitative basis — country risk intelligence, proprietary scoring models and underwriter judgement all feed into a rate expressed as a percentage of the insured exposure (investment value, loan amount or revenue stream). The formula below represents the key variable structure used across most Lloyd's PRI syndicates.</p>
+
+  <div class="formula-box">
+    <strong>Annual Premium</strong> <span class="op">=</span> Insured Exposure <span class="op">×</span> Base Country Rate<br>
+    <span class="op">×</span> Cover Type Factor (CEND / PV / CI / CF / FA)<br>
+    <span class="op">×</span> Tenor Factor (policy duration loading)<br>
+    <span class="op">×</span> Sector / Asset Class Factor<br>
+    <span class="op">×</span> Treaty Protection Credit (BIT / ICSID)<br>
+    <span class="op">×</span> Mitigation Credit (local partner / government relationship)<br>
+    <span class="op">÷</span> Waiting Period Adjustment (longer waiting period = lower premium)
+  </div>
+
+  <h2>Country Risk Assessment — The Foundation</h2>
+  <p>Country risk is the starting point for every PRI underwriting decision. Underwriters use a combination of external intelligence providers and proprietary scoring to assign each country a base rate bracket. The key analytical dimensions are political stability, rule of law, government effectiveness, regulatory quality, control of corruption, and historical expropriation track record.</p>
+
+  <div class="factor-grid">
+    <div class="factor-card">
+      <h4>🌍 Country Risk Scoring Sources</h4>
+      <p>Oxford Analytica; Control Risks; Verisk Maplecroft; Eurasia Group; MSCI (formerly PRS Group); World Bank WBGI (Worldwide Governance Indicators); OECD Country Risk Classification; Transparency International Corruption Perceptions Index; Freedom House Political Rights &amp; Civil Liberties indices. Most underwriters subscribe to 2–3 services and blend with proprietary judgement.</p>
+    </div>
+    <div class="factor-card pv-top">
+      <h4>🗺️ Base Rate Brackets by Risk Tier <span style="font-size:0.7rem;font-weight:400">(illustrative)</span></h4>
+      <p><strong>Tier 1 — Low risk</strong> (OECD stable democracies): 0.10–0.30% p.a. of exposure <span class="badge b-i">ILLUS</span><br>
+      <strong>Tier 2 — Moderate risk</strong> (Chile, Malaysia, Morocco, Jordan): 0.30–0.80%<br>
+      <strong>Tier 3 — Elevated risk</strong> (Ghana, Kenya, Peru, Philippines): 0.80–1.80%<br>
+      <strong>Tier 4 — High risk</strong> (Nigeria, Pakistan, Bangladesh): 1.80–3.50%<br>
+      <strong>Tier 5 — Very high risk</strong> (DRC, Sudan, Venezuela, Afghanistan): 3.50–6.00%+ or declination</p>
+    </div>
+    <div class="factor-card inv-top">
+      <h4>⚙️ Cover Type Multipliers <span style="font-size:0.7rem;font-weight:400">(illustrative)</span></h4>
+      <p><strong>CEND only:</strong> 1.0× base (benchmark cover)<br>
+      <strong>Political Violence only:</strong> 0.8–1.5× base (depends on conflict level)<br>
+      <strong>CI/TR only:</strong> 0.6–1.2× base (FX regime and capital controls history)<br>
+      <strong>Contract Frustration:</strong> 1.0–1.5× base (state entity counterparty risk)<br>
+      <strong>Combined CEND + PV:</strong> 1.2–1.6× base<br>
+      <strong>Full political risk (all covers):</strong> 1.5–2.2× base <span class="badge b-i">ILLUS</span></p>
+    </div>
+    <div class="factor-card gov-top">
+      <h4>📅 Policy Tenor Loading</h4>
+      <p><strong>1 year:</strong> 1.0× (annual base)<br>
+      <strong>2 years:</strong> 1.8× cumulative (not simply doubled — risk concentrates)<br>
+      <strong>3 years:</strong> 2.5× cumulative<br>
+      <strong>5 years:</strong> 3.8× cumulative<br>
+      <strong>7 years:</strong> 5.0× cumulative<br>
+      <strong>10 years:</strong> 6.5–8.0× cumulative <span class="badge b-i">ILLUS</span><br>
+      Post-Ukraine 2022: maximum tenor shortened to 3–5 years in Tier 4/5 markets.</p>
+    </div>
+    <div class="factor-card treaty-top">
+      <h4>⚖️ Treaty &amp; Mitigation Credits</h4>
+      <p><strong>BIT in force (host-investor country pair):</strong> −10 to −20% — treaty provides legal enforcement backstop<br>
+      <strong>ICSID arbitration clause in investment agreement:</strong> −5 to −15%<br>
+      <strong>Strong local partner (government-connected):</strong> −5 to −15%<br>
+      <strong>Strategic asset (government needs it):</strong> −10% — harder to expropriate<br>
+      <strong>ECA co-insurer (MIGA / UKEF):</strong> −10 to −20% — sovereign-to-sovereign deterrence <span class="badge b-i">ILLUS</span></p>
+    </div>
+    <div class="factor-card">
+      <h4>⏳ Waiting Period &amp; Retention</h4>
+      <p><strong>Standard waiting period (CEND creeping):</strong> 12–24 months — insured must demonstrate ongoing loss for this period before claim is recognised<br>
+      <strong>Longer waiting period credit:</strong> 24m vs 12m waiting period = −5 to −15% premium credit<br>
+      <strong>Deductible / self-insured retention:</strong> Typically 10–20% of loss — insured retains first slice<br>
+      <strong>Outright CEND (decree nationalisation):</strong> No waiting period — immediate trigger on government act</p>
+    </div>
+  </div>
+
+  <h2>Sector / Asset Class Factor</h2>
+  <table class="score-table">
+    <thead><tr><th>Sector</th><th>Asset Type</th><th>Sector Factor <span class="badge b-i">ILLUS</span></th><th>Rationale</th></tr></thead>
+    <tbody>
+      <tr><td>Mining (gold, base metals)</td><td>Fixed physical assets; high sunk cost</td><td class="red">1.30–1.60×</td><td>Resource nationalism target; visible, immovable assets; high government temptation</td></tr>
+      <tr><td>Oil &amp; Gas (upstream)</td><td>Wells, pipelines, refineries</td><td class="red">1.25–1.50×</td><td>Strategic national resource; repeated nationalisation history globally</td></tr>
+      <tr><td>Infrastructure (power, water, roads)</td><td>Long-lived fixed assets; concession-based</td><td class="amber">1.10–1.30×</td><td>Essential service; government may intervene on pricing; concession revocation risk</td></tr>
+      <tr><td>Manufacturing / Industrial</td><td>Plant, equipment, inventory</td><td class="amber">1.00–1.20×</td><td>Moderate; less strategically sensitive but exposed to PV and regulatory risk</td></tr>
+      <tr><td>Financial Services (banks / insurers)</td><td>Loans, equity stakes, licences</td><td class="amber">1.10–1.30×</td><td>Banking licence revocation; forced recapitalisation; CI/TR for loan repayments</td></tr>
+      <tr><td>Retail / Consumer Goods</td><td>Stores, inventory, franchise agreements</td><td class="green">0.80–1.00×</td><td>Lower profile; less strategic; easier exit; brand value does not survive CEND</td></tr>
+      <tr><td>Agriculture</td><td>Land, crops, processing facilities</td><td class="red">1.20–1.50×</td><td>Land reform risk; food security politics; Zimbabwe/Venezuela precedents</td></tr>
+      <tr><td>Telecoms</td><td>Spectrum licences, network infrastructure</td><td class="amber">1.10–1.25×</td><td>Licence revocation risk; strategic asset; government monitoring/control interest</td></tr>
+      <tr><td>Renewable Energy</td><td>Solar/wind farms; power purchase agreements</td><td class="green">0.90–1.10×</td><td>Usually welcome investment; but PPA contract frustration risk where government is offtaker</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <h3>The "Government as Counterparty" Risk — Contract Frustration Underwriting</h3>
+    <p>Contract Frustration (CF) covers losses where a government or government-owned entity repudiates, cancels or frustrates a contract. The key underwriting factors are:</p>
+    <ul>
+      <li><strong>Counterparty type:</strong> Sovereign (ministry) = higher risk than state-owned enterprise = higher risk than private entity with government guarantee</li>
+      <li><strong>Contract type:</strong> Concession agreements (30+ year terms) carry more frustration risk than short-term supply contracts</li>
+      <li><strong>Dispute resolution:</strong> ICSID arbitration clause in contract = significant credit; local court only = high risk; ICC arbitration with neutral seat = moderate credit</li>
+      <li><strong>Payment history:</strong> Has the government counterparty ever defaulted on a similar obligation? Default track record is the single most predictive CF underwriting factor</li>
+      <li><strong>Economic stress:</strong> IMF programme status; foreign exchange reserves; debt sustainability — a government in financial crisis is far more likely to frustrate commercial contracts</li>
+    </ul>
+  </div>
+
+  <h2>Risk Appetite Scorecard — CEND Investment Risk</h2>
+  <table class="score-table">
+    <thead><tr><th>Factor</th><th>Green ✅</th><th>Amber ⚠️</th><th>Red ❌</th></tr></thead>
+    <tbody>
+      <tr><td>Political stability</td><td class="green">Stable democracy; low regime change risk; WGI &gt;50th percentile</td><td class="amber">Moderate — competitive elections; some institutional fragility</td><td class="red">Authoritarian; frequent coups; current conflict or coup risk</td></tr>
+      <tr><td>Rule of law / courts</td><td class="green">Independent judiciary; international arbitration respected</td><td class="amber">Partial rule of law; some judicial independence</td><td class="red">Courts subordinate to executive; ICSID awards routinely ignored</td></tr>
+      <tr><td>Expropriation history</td><td class="green">No nationalisation in 20+ years; BIT-compliant</td><td class="amber">Nationalisation 10–20 years ago; compensation paid</td><td class="red">Active nationalisation programme; recent expropriation; no compensation paid</td></tr>
+      <tr><td>BIT protection</td><td class="green">BIT in force with investor's home state; ICSID clause</td><td class="amber">BIT exists but partial coverage or narrow scope</td><td class="red">No BIT; host state has withdrawn from ICSID; no arbitration clause</td></tr>
+      <tr><td>Sector sensitivity</td><td class="green">Manufacturing / retail — low government interest</td><td class="amber">Infrastructure / telecoms — moderate sensitivity</td><td class="red">Mining / oil &amp; gas — maximum resource nationalism target</td></tr>
+      <tr><td>Investment structure</td><td class="green">JV with state entity; MIGA cover; ECA co-insurer</td><td class="amber">Wholly foreign-owned; no state partnership</td><td class="red">Wholly foreign-owned in strategic sector; no local mitigation</td></tr>
+      <tr><td>Regulatory environment</td><td class="green">Stable tax/royalty regime; transparent licensing</td><td class="amber">Some regulatory uncertainty; royalty renegotiation history</td><td class="red">Frequent windfall tax; unpredictable licensing; creeping expropriation pattern</td></tr>
+      <tr><td>Exit options</td><td class="green">Liquid; assets transferable; easy exit mechanism</td><td class="amber">Some illiquidity; partial exit possible</td><td class="red">Completely illiquid; fixed infrastructure; no exit without government cooperation</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Worked Example A — Mining CEND Risk (West Africa)</h2>
+  <div class="example-box">
+    <h3>Risk Profile: Gold mine JV in Ghana — Australian miner 70%, Ghanaian state 30%</h3>
+    <table>
+      <tr><td class="lbl">Insured Exposure (investment value)</td><td>$120,000,000</td></tr>
+      <tr><td class="lbl">Cover</td><td>CEND (including creeping expropriation); Political Violence</td></tr>
+      <tr><td class="lbl">Policy tenor</td><td>3 years (renewable)</td></tr>
+      <tr><td class="lbl">Waiting period (creeping CEND)</td><td>12 months</td></tr>
+      <tr><td class="lbl">Self-insured retention</td><td>15% of any claim</td></tr>
+      <tr><td class="lbl">Country (Ghana) — Risk tier</td><td>Tier 2–3; WGI Rule of Law 45th percentile <span class="badge b-v">VER</span></td></tr>
+      <tr><td class="lbl">Base annual rate (Tier 2–3)</td><td>0.70% <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">Cover type factor (CEND + PV combined)</td><td>1.35×</td></tr>
+      <tr><td class="lbl">Sector factor (gold mining)</td><td>1.40×</td></tr>
+      <tr><td class="lbl">Tenor factor (3 years)</td><td>2.50× cumulative</td></tr>
+      <tr><td class="lbl">BIT credit (Australia–Ghana BIT in force)</td><td>−15%</td></tr>
+      <tr><td class="lbl">State JV partner credit (30% state ownership)</td><td>−10%</td></tr>
+      <tr><td class="lbl">Net rate calculation</td><td>0.70% × 1.35 × 1.40 × 2.50 × 0.85 × 0.90 = 2.54% (3-yr cumulative) <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">Annualised rate</td><td>~0.85% p.a.</td></tr>
+      <tr><td class="lbl"><strong>3-year Premium (indicative)</strong></td><td><strong>$120m × 2.54% = ~$3,048,000 total / ~$1,016,000 p.a.</strong> <span class="badge b-i">ILLUS</span></td></tr>
+    </table>
+  </div>
+
+  <h2>Worked Example B — CI/TR Risk (Financial Institution, Nigeria)</h2>
+  <div class="example-box">
+    <h3>Risk Profile: UK bank — $40m subordinated loan to Nigerian commercial bank</h3>
+    <table>
+      <tr><td class="lbl">Insured Exposure (outstanding loan)</td><td>$40,000,000</td></tr>
+      <tr><td class="lbl">Cover</td><td>Currency Inconvertibility &amp; Transfer Restriction (CI/TR)</td></tr>
+      <tr><td class="lbl">Policy tenor</td><td>5 years (matching loan maturity)</td></tr>
+      <tr><td class="lbl">Waiting period</td><td>90 days from initial failure to transfer</td></tr>
+      <tr><td class="lbl">Country (Nigeria) — Risk tier</td><td>Tier 4; CBN FX restriction history 2022–23 <span class="badge b-v">VER</span></td></tr>
+      <tr><td class="lbl">Base annual rate (Tier 4 CI/TR focus)</td><td>1.20% <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">Cover type factor (CI/TR only)</td><td>0.90× (CI/TR lower than CEND)</td></tr>
+      <tr><td class="lbl">Sector factor (financial services)</td><td>1.15×</td></tr>
+      <tr><td class="lbl">Tenor factor (5 years)</td><td>3.80× cumulative</td></tr>
+      <tr><td class="lbl">Mitigation credit (loan covenants + CBN reporting)</td><td>−8%</td></tr>
+      <tr><td class="lbl">Net rate calculation</td><td>1.20% × 0.90 × 1.15 × 3.80 × 0.92 = 4.34% (5-yr cumulative) <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">Annualised rate</td><td>~0.87% p.a.</td></tr>
+      <tr><td class="lbl"><strong>5-year Premium (indicative)</strong></td><td><strong>$40m × 4.34% = ~$1,736,000 total / ~$347,000 p.a.</strong> <span class="badge b-i">ILLUS</span></td></tr>
+    </table>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Political Risk (PR) · Lloyd's Market Intelligence · v3.2 April 2026
+</footer>
+</body>
+</html>

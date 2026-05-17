@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>GL Non-USA: Rates & ROE | Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --gl:#1b5e20; --gl-dark:#0a2e0d; --intl:#006064;
+      --warn:#e65100; --liab:#1565c0; --prod:#6a1b9a;
+      --light:#f1f8f1; --text:#1a2e1a; --muted:#5a7060; --border:#c0d8c0;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1b5e20;
+    --hub-dark:      #0a2e0d;
+    --hub-light:     #e8f5e9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #006064;
+    --header-gradient:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%);
+    --header-sub:    #c8e6c9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90c895; margin-bottom:6px; }
+    .breadcrumb a { color:#a5d6a7; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#c8e6c9; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--gl); border-bottom-color:var(--warn); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--gl); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .chart-wrap { background:#fff; border-radius:12px; padding:28px; box-shadow:0 2px 8px rgba(0,0,0,.06); margin:24px 0; }
+    .chart-wrap h3 { font-size:1rem; font-weight:700; color:var(--gl-dark); margin-bottom:16px; }
+    canvas { max-height:320px; }
+
+    .cycle-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:24px 0; }
+    .cycle-card { background:#fff; border-radius:10px; padding:20px 22px; border-left:5px solid var(--gl); box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .cycle-card.intl { border-left-color:var(--intl); }
+    .cycle-card.warn { border-left-color:var(--warn); }
+    .cycle-card.blue { border-left-color:var(--liab); }
+    .cycle-card.purple { border-left-color:var(--prod); }
+    .cycle-card h4 { font-size:0.88rem; font-weight:700; color:var(--gl); margin-bottom:6px; }
+    .cycle-card.intl h4 { color:var(--intl); }
+    .cycle-card.warn h4 { color:var(--warn); }
+    .cycle-card.blue h4 { color:var(--liab); }
+    .cycle-card.purple h4 { color:var(--prod); }
+    .cycle-card p { font-size:0.82rem; line-height:1.6; margin:0; color:#555; }
+
+    .rate-tbl { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.06); margin:24px 0; }
+    .rate-tbl table { width:100%; border-collapse:collapse; font-size:0.84rem; }
+    .rate-tbl th { background:var(--gl-dark); color:#fff; padding:10px 14px; text-align:left; }
+    .rate-tbl th:hover { background:#050f05; color:#fff; }
+    .rate-tbl td { padding:10px 14px; border-bottom:1px solid var(--border); }
+    .rate-tbl tr:last-child td { border-bottom:none; }
+    .rate-tbl tr:nth-child(even) td { background:#f5faf5; }
+
+    .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:24px 0; }
+    .roe-card { border-radius:12px; padding:22px; text-align:center; color:#fff; }
+    .roe-bull { background:linear-gradient(135deg,var(--gl),#0a2e0d); }
+    .roe-base { background:linear-gradient(135deg,var(--intl),#003d40); }
+    .roe-bear { background:linear-gradient(135deg,var(--warn),#7f2700); }
+    .roe-card h4 { font-size:0.9rem; font-weight:700; margin-bottom:10px; opacity:0.9; }
+    .roe-card .pct { font-size:2.0rem; font-weight:900; }
+    .roe-card p { font-size:0.78rem; opacity:0.85; margin-top:8px; line-height:1.5; }
+
+    footer { background:var(--gl-dark); color:#90c895; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">GL Non-USA</a> › Rates & ROE</div>
+  <h1>Rates &amp; ROE Analysis — General Liability (Non-USA)</h1>
+  <p>Market cycle, social inflation, long-tail reserving dynamics and three ROE scenarios on a Lloyd's non-US GL portfolio.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates & ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Rate Index — Non-US GL 2005–2024</h2>
+  <p>Non-US general liability rates are long-cycle — movements are slower and less dramatic than short-tail property, but more persistent. The chart below shows an illustrative composite rate index across N/NC/NR/NS (2015=100), reflecting key market dislocations and the emerging social inflation loading applied from 2020 onward. <span class="badge b-i">ILLUS</span></p>
+
+  <div class="chart-wrap">
+    <h3>Illustrative Non-US GL Rate Index by Code (2015 = 100) <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="rateChart"></canvas>
+  </div>
+
+  <h2>Market Cycle Narrative</h2>
+  <div class="cycle-grid">
+    <div class="cycle-card">
+      <h4>2001–2003: Post-9/11 Hard Market</h4>
+      <p>Across-board Lloyd's repricing following 9/11. Non-US GL rates rise 15–25% in 2002–2003. <span class="badge b-e">EST</span> Terrorism exclusions mandated. Asbestos reserve strengthening adds pressure. Market disciplines improve; loss-making syndicates merge or close.</p>
+    </div>
+    <div class="cycle-card intl">
+      <h4>2004–2011: Soft Cycle — Rate Erosion</h4>
+      <p>New capital enters Lloyd's; non-US GL rates fall steadily 2004–2011. Combined ratios deteriorate for long-tail risks as prior-year reserves develop adversely. Capacity for pharmaceutical and products risks compresses, but pricing remains competitive for standard risks. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="cycle-card warn">
+      <h4>2012–2015: Sideways — Structural Change</h4>
+      <p>Lloyd's performance management actions (2012 Franchise Board reviews) stabilise non-US GL pricing. Claims-made conversion accelerated for long-tail products risks. PIP breast implant and other European mass-tort events begin developing; reserve additions required. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="cycle-card blue">
+      <h4>2016–2019: Modest Firming</h4>
+      <p>Grenfell (2017), Dieselgate civil litigation (2015–), and emerging social inflation in Australia and Brazil trigger selective rate increases. Products liability (NR) hardens ahead of public liability (N). Lloyd's syndicate-level underwriting guidance tightens aggregate deployment. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="cycle-card purple">
+      <h4>2020–2022: Significant Hard Market</h4>
+      <p>COVID communicable disease exclusion debates, EU Representative Actions Directive (2019), and social inflation reaching non-US markets drive hardest cycle since 2002. NR rates +20–35%; NC contractors +10–20%; N public liability +8–15%. <span class="badge b-e">EST</span> Revised EU PLD in development — uncertainty loading applied.</p>
+    </div>
+    <div class="cycle-card">
+      <h4>2023–2024: Moderating but Selective Discipline</h4>
+      <p>Rate increases moderate but remain positive for most segments. GPSR (December 2024) and revised EU PLD create new exposure vectors — underwriters applying forward-looking loading for online marketplace and AI/software products liability. Long-tail reserving uncertainty remains elevated. <span class="badge b-e">EST</span></p>
+    </div>
+  </div>
+
+  <h2>Social Inflation — The Non-US Dimension</h2>
+  <div class="chart-wrap">
+    <h3>Social Inflation Risk Index by Jurisdiction (Lloyd's Non-US GL perspective) <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="inflChart"></canvas>
+  </div>
+
+  <h2>Rate Benchmarks — Non-US GL by Segment</h2>
+  <div class="rate-tbl">
+    <table>
+      <thead><tr><th>Segment (Code)</th><th>Rate Metric</th><th>Indicative 2024 Level</th><th>Trend vs 2020</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Standard public liability (N) — UK/EU</strong></td>
+          <td>£ per £1m limit p.a.</td>
+          <td>£200–450 per £1m <span class="badge b-i">ILLUS</span></td>
+          <td>+8–15%</td>
+          <td>Sector-dependent; retail/office at lower end; food processing/manufacturing at upper</td>
+        </tr>
+        <tr>
+          <td><strong>Food products liability (NR)</strong></td>
+          <td>Rate on turnover (products component)</td>
+          <td>0.04–0.12% of turnover <span class="badge b-i">ILLUS</span></td>
+          <td>+15–25%</td>
+          <td>Highly variable by product type, export destinations; HACCP certification material credit</td>
+        </tr>
+        <tr>
+          <td><strong>Pharmaceutical products (NR)</strong></td>
+          <td>Rate on sales (ex-US)</td>
+          <td>0.08–0.35% of non-US sales <span class="badge b-i">ILLUS</span></td>
+          <td>+20–35%</td>
+          <td>Claims-made basis standard; retroactive date pricing important; mass-tort aggregation concern</td>
+        </tr>
+        <tr>
+          <td><strong>Medical devices (NR)</strong></td>
+          <td>Rate on revenue</td>
+          <td>0.15–0.5% of non-US revenue <span class="badge b-i">ILLUS</span></td>
+          <td>+25–40%</td>
+          <td>Post-PIP/MDR uplift; CE marking requirement; implantable devices highest; EU MDR 2017 compliance</td>
+        </tr>
+        <tr>
+          <td><strong>Contractors liability (NC) — standard</strong></td>
+          <td>Rate on contract value</td>
+          <td>0.02–0.06% p.a. <span class="badge b-i">ILLUS</span></td>
+          <td>+10–20%</td>
+          <td>Wide range by project type; urban deep excavation, VWS exposure at upper end</td>
+        </tr>
+        <tr>
+          <td><strong>Event / entertainment (NS)</strong></td>
+          <td>Rate per attendee or per event</td>
+          <td>£0.10–0.80 per attendee <span class="badge b-i">ILLUS</span></td>
+          <td>+5–12%</td>
+          <td>Post-Martyn's Law duty of care loading; pyrotechnic, crowd crush risk key factors</td>
+        </tr>
+        <tr>
+          <td><strong>Excess / umbrella (NS)</strong></td>
+          <td>Rate on underlying premium (RoP)</td>
+          <td>8–18% RoP <span class="badge b-i">ILLUS</span></td>
+          <td>+10–20%</td>
+          <td>Social inflation loading increasing excess layers disproportionately; attachment point adequacy key concern</td>
+        </tr>
+        <tr>
+          <td><strong>Online marketplace operator (NR/N — post-GPSR)</strong></td>
+          <td>Rate on GMV / facilitated sales</td>
+          <td>0.005–0.015% of GMV <span class="badge b-i">ILLUS</span></td>
+          <td>New emerging segment 2024</td>
+          <td>GPSR creates distributor liability for marketplace operators; early pricing highly variable; limited loss data</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Combined Ratio — Illustrative Lloyd's Non-US GL Portfolio 2010–2024</h2>
+  <div class="chart-wrap">
+    <h3>Combined Ratio — Lloyd's Non-US GL Illustrative Portfolio <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="crChart"></canvas>
+  </div>
+
+  <h2>ROE Scenarios — £500m Non-US GL Portfolio</h2>
+  <p>Three return-on-equity scenarios on a hypothetical £500m GWP Lloyd's non-US GL portfolio (mix: 40% products NR, 35% public N, 15% contractors NC, 10% miscellaneous NS). Long-tail basis; 40% expense ratio; investment income at 3.8% on float (long-tail float benefit). <span class="badge b-i">ILLUS</span></p>
+
+  <div class="roe-grid">
+    <div class="roe-card roe-bull">
+      <h4>Bull Scenario</h4>
+      <div class="pct">+16%</div>
+      <p>Loss ratio 58%; combined 98%; investment income £19m (long float); profit £80m on £500m equity. Favourable: claims-made conversion limiting IBNR, social inflation contained, no major mass-tort year. ILLUS</p>
+    </div>
+    <div class="roe-card roe-base">
+      <h4>Base Scenario</h4>
+      <div class="pct">+8%</div>
+      <p>Loss ratio 68%; combined 108%; investment income £19m; profit £40m. Long-tail IBNR development broadly stable; moderate prior-year adverse development offset by current-year rate. ILLUS</p>
+    </div>
+    <div class="roe-card roe-bear">
+      <h4>Bear Scenario</h4>
+      <div class="pct">−12%</div>
+      <p>Loss ratio 86%; combined 126%; large mass-tort event (pharmaceutical or food), adverse reserve development on long-tail prior years, EU class action crystallisation. Loss £60m. Demonstrates long-tail volatility. ILLUS</p>
+    </div>
+  </div>
+
+  <p style="font-size:0.82rem;color:var(--muted);margin-top:8px;">Note: Non-US GL ROE is materially enhanced by investment income on long-tail float compared to short-tail classes. A 5-year average payment pattern on a £500m GWP portfolio generates approximately £2.5bn of invested reserves at any time — investment income at 3.8% = ~£95m p.a. in the base scenario. Long-tail benefits disproportionately disadvantage underwriters in low-interest-rate environments (2010–2022) and benefit them in rising-rate environments (2023–2024). <span class="badge b-i">ILLUS</span></p>
+
+</main>
+<footer>Risk Code Hub v2.9 · General Liability – Non-USA (N/NC/NR/NS) · For educational use</footer>
+<script>
+// Rate Index Chart
+const rateCtx=document.getElementById('rateChart').getContext('2d');
+new Chart(rateCtx,{
+  type:'line',
+  data:{
+    labels:['2005','2007','2009','2011','2013','2015','2017','2019','2020','2021','2022','2023','2024'],
+    datasets:[
+      {label:'N — Public Liability',data:[110,105,98,92,95,100,105,108,112,118,125,130,133],borderColor:'#1b5e20',backgroundColor:'rgba(27,94,32,0.07)',borderWidth:2.5,tension:0.4,fill:true,pointBackgroundColor:'#1b5e20'},
+      {label:'NR — Products',data:[115,108,100,93,96,100,108,114,120,132,148,158,163],borderColor:'#6a1b9a',backgroundColor:'rgba(106,27,154,0.05)',borderWidth:2,tension:0.4,fill:false,pointBackgroundColor:'#6a1b9a'},
+      {label:'NC — Contractors',data:[108,104,98,94,97,100,104,108,114,120,128,133,136],borderColor:'#006064',backgroundColor:'rgba(0,96,100,0.05)',borderWidth:2,tension:0.4,fill:false,pointBackgroundColor:'#006064'}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'Index (2015=100)'}}}}
+});
+
+// Social inflation chart
+const inflCtx=document.getElementById('inflChart').getContext('2d');
+new Chart(inflCtx,{
+  type:'bar',
+  data:{
+    labels:['USA','Australia','Brazil','UK','Germany','France','Singapore','UAE','Japan'],
+    datasets:[{
+      label:'Social Inflation Risk Score (0–100)',
+      data:[95,72,68,58,40,42,35,28,20],
+      backgroundColor:['#c62828','#e65100','#e65100','#f9a825','#1b5e20','#1b5e20','#1b5e20','#1b5e20','#1b5e20'],
+      borderRadius:5
+    }]
+  },
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{max:100,title:{display:true,text:'Risk Score'}}}}
+});
+
+// Combined ratio chart
+const crCtx=document.getElementById('crChart').getContext('2d');
+const crData=[105,108,112,110,107,103,105,108,106,112,118,115,110];
+new Chart(crCtx,{
+  type:'bar',
+  data:{
+    labels:['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+    datasets:[{
+      label:'Combined Ratio (%)',
+      data:[105,108,112,110,107,103,105,108,106,112,118,115,110,107,104],
+      backgroundColor:crData.map(v=>v<=105?'rgba(27,94,32,0.75)':'rgba(230,81,0,0.75)'),
+      borderRadius:5
+    }]
+  },
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:85,max:130,title:{display:true,text:'Combined Ratio (%)'}}}}
+});
+</script>
+</body>
+</html>

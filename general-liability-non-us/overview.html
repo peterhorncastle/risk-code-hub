@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>General Liability – Non-USA (N · NC · NR · NS) — Risk Code Hub</title>
+  <style>
+    :root {
+      --gl:#1b5e20; --gl-dark:#0a2e0d; --intl:#006064;
+      --warn:#e65100; --warn-light:#fff3e0; --liab:#1565c0;
+      --prod:#6a1b9a; --light:#f1f8f1; --mid:#c8e6c9;
+      --text:#1a2e1a; --muted:#5a7060; --border:#c0d8c0;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1b5e20;
+    --hub-dark:      #0a2e0d;
+    --hub-light:     #e8f5e9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #006064;
+    --header-gradient:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%);
+    --header-sub:    #c8e6c9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header {
+      background:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%);
+      color:#fff; padding:40px; position:relative; overflow:hidden;
+    }
+    header::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(0,96,100,0.22) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(230,81,0,0.10) 0%,transparent 50%);
+    }
+    header .inner { position:relative; z-index:1; }
+    .breadcrumb { font-size:0.8rem; color:#90c895; margin-bottom:6px; }
+    .breadcrumb a { color:#a5d6a7; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#a5d6a7; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#c8e6c9; font-size:0.95rem; max-width:740px; line-height:1.7; }
+
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--gl); border-bottom-color:var(--warn); }
+
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--gl); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; margin:28px 0; }
+    .stat-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; text-align:center; }
+    .stat-card .val { font-size:1.55rem; font-weight:800; color:var(--gl); line-height:1.1; }
+    .stat-card .val.intl { color:var(--intl); }
+    .stat-card .val.warn { color:var(--warn); }
+    .stat-card .val.blue { color:var(--liab); }
+    .stat-card .val.purple { color:var(--prod); }
+    .stat-card .lbl { font-size:0.74rem; color:var(--muted); margin-top:5px; line-height:1.4; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin-top:4px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+    .b-g { background:#f8d7da; color:#721c24; }
+
+    .code-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:24px 0; }
+    .code-table table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .code-table th { background:var(--gl); color:#fff; padding:10px 16px; text-align:left; }
+    .code-table th:hover { background:var(--gl-dark); color:#fff; }
+    .code-table td { padding:10px 16px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .code-table tr:last-child td { border-bottom:none; }
+    .code-table tr:nth-child(even) td { background:#f5faf5; }
+    .code-chip { display:inline-block; font-weight:800; font-size:0.8rem; padding:2px 10px; border-radius:12px; letter-spacing:1px; margin-right:4px; color:#fff; }
+    .chip-n { background:var(--gl); }
+    .chip-nc { background:var(--intl); }
+    .chip-nr { background:var(--prod); }
+    .chip-ns { background:var(--warn); }
+
+    .cov-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr)); gap:16px; margin:24px 0; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--gl); }
+    .cov-card.intl-top { border-top-color:var(--intl); }
+    .cov-card.warn-top { border-top-color:var(--warn); }
+    .cov-card.blue-top { border-top-color:var(--liab); }
+    .cov-card.purple-top { border-top-color:var(--prod); }
+    .cov-card h4 { font-size:0.9rem; font-weight:700; color:var(--gl); margin-bottom:8px; }
+    .cov-card.intl-top h4 { color:var(--intl); }
+    .cov-card.warn-top h4 { color:var(--warn); }
+    .cov-card.blue-top h4 { color:var(--liab); }
+    .cov-card.purple-top h4 { color:var(--prod); }
+    .cov-card ul { padding-left:16px; }
+    .cov-card li { font-size:0.84rem; margin-bottom:5px; line-height:1.5; }
+
+    .info-box { background:var(--gl-dark); color:#c8e0c8; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#a5d6a7; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#c8e0c8; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .jur-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin:24px 0; }
+    .jur-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:16px 18px; border-left:4px solid var(--gl); }
+    .jur-card.intl { border-left-color:var(--intl); }
+    .jur-card.warn { border-left-color:var(--warn); }
+    .jur-card.blue { border-left-color:var(--liab); }
+    .jur-card h4 { font-size:0.86rem; font-weight:700; color:var(--gl); margin-bottom:6px; }
+    .jur-card.intl h4 { color:var(--intl); }
+    .jur-card.warn h4 { color:var(--warn); }
+    .jur-card.blue h4 { color:var(--liab); }
+    .jur-card p { font-size:0.8rem; color:#555; margin:0; line-height:1.55; }
+
+    .mod-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:24px 0; }
+    .mod-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; text-decoration:none; color:var(--text); transition:box-shadow .2s; }
+    .mod-card:hover { box-shadow:0 4px 16px rgba(27,94,32,0.15); border-color:var(--gl); }
+    .mod-card .mod-num { font-size:0.72rem; font-weight:700; color:var(--gl); letter-spacing:2px; margin-bottom:4px; }
+    .mod-card h4 { font-size:0.9rem; font-weight:700; color:var(--text); }
+    .mod-card p { font-size:0.8rem; color:var(--muted); margin:4px 0 0; }
+
+    footer { background:var(--gl-dark); color:#90c895; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › General Liability – Non-USA</div>
+    <div class="tag">Lloyd's Codes · N · NC · NR · NS</div>
+    <h1>General Liability – Non-USA</h1>
+    <p>International public, products, contractors and miscellaneous liability insurance for non-US risks. Covers bodily injury and property damage arising from products placed on market, premises occupation, operations and completed works — across UK, Europe, Asia-Pacific, Middle East, Africa and Latin America.</p>
+  </div>
+</header>
+<nav>
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates & ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~$45bn</div>
+      <div class="lbl">Global non-US GL GWP (est. 2024) <span class="badge b-e">EST</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val intl">~£3bn</div>
+      <div class="lbl">Lloyd's non-US liability GWP (N/NC/NR/NS) <span class="badge b-e">EST</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val warn">2024</div>
+      <div class="lbl">EU General Product Safety Regulation (GPSR) effective <span class="badge b-v">VER</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val blue">€85bn</div>
+      <div class="lbl">Annual cost of product liability in EU (European Commission est.) <span class="badge b-e">EST</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val purple">~400,000</div>
+      <div class="lbl">PIP implants implanted globally — largest European products liability scandal <span class="badge b-e">EST</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val intl">180+</div>
+      <div class="lbl">Countries where Lloyd's non-US GL capacity deployed <span class="badge b-e">EST</span></div>
+    </div>
+  </div>
+
+  <h2>Lloyd's Risk Codes — N, NC, NR, NS</h2>
+  <p>Four Lloyd's risk codes cover non-US general liability, broadly segmented by type of liability trigger and risk nature. Together they represent one of the largest specialty casualty classes written at Lloyd's, and historically among the most technically complex — liability claims frequently develop over years or decades, requiring careful long-tail reserving and jurisdiction-aware policy drafting.</p>
+
+  <div class="code-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th><th>Class</th><th>Scope</th><th>Policy Basis</th><th>Typical Limits</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="code-chip chip-n">N</span></td>
+          <td><strong>General Liability (Non-US)</strong></td>
+          <td>Public liability, occupier's liability, employer's liability extensions, general third-party BI &amp; PD; the broadest non-US GL code covering all risks not better classified under NC, NR or NS</td>
+          <td>Occurrence or claims-made; primary or excess; annual or project</td>
+          <td>£1m–£50m any one occurrence; aggregates apply for products</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-nc">NC</span></td>
+          <td><strong>Contractors Liability (Non-US)</strong></td>
+          <td>Construction, engineering and contracting operations — works in progress, third-party BI &amp; PD arising from on-site activities, vibration, subsidence, collapse; completed operations (defects causing subsequent damage)</td>
+          <td>Occurrence; project-specific or annual; often combined with contractors' all-risks (CAR) property</td>
+          <td>£5m–£100m+ for major infrastructure projects</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-nr">NR</span></td>
+          <td><strong>Products Liability (Non-US)</strong></td>
+          <td>Bodily injury and property damage caused by defective products placed on market — consumer goods, pharmaceuticals, food &amp; beverage, industrial equipment, automotive components, medical devices</td>
+          <td>Occurrence; annual turnover basis; products/completed ops aggregate</td>
+          <td>£2m–£25m+ products aggregate; pharmaceutical and food higher</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-ns">NS</span></td>
+          <td><strong>Miscellaneous / Special Liability (Non-US)</strong></td>
+          <td>Non-standard liability risks that do not fit N/NC/NR — amusement parks, events, exhibitions, sports, hospitality, specialist operations; sometimes used for umbrella/excess liability positioned above primary layers</td>
+          <td>Claims-made or occurrence; event-specific or annual</td>
+          <td>Variable — event-specific; excess layers to £100m+</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Coverage Overview</h2>
+  <p>Non-US general liability policies protect insureds against legal liability for bodily injury (BI) and property damage (PD) suffered by third parties. The core insuring agreement is broadly consistent across jurisdictions, but the perils covered, exclusions applied and limits required vary significantly by territory, industry sector and applicable law.</p>
+
+  <div class="cov-grid">
+    <div class="cov-card">
+      <h4>Public / Premises Liability (N)</h4>
+      <ul>
+        <li>Third-party BI and PD from occupation of premises</li>
+        <li>Occupier's duty of care (Occupiers' Liability Acts 1957/1984 — UK)</li>
+        <li>Slip, trip and fall on premises</li>
+        <li>Third-party access areas, car parks, common areas</li>
+        <li>Visitor and trespasser claims</li>
+        <li>Advertising and personal injury liability (selected)</li>
+      </ul>
+    </div>
+    <div class="cov-card intl-top">
+      <h4>Contractors &amp; Operations (NC)</h4>
+      <ul>
+        <li>Works in progress — BI/PD from construction activities</li>
+        <li>Vibration, weakening of support, removal of support (VWS)</li>
+        <li>Subsidence and collapse arising from works</li>
+        <li>Adjacent property damage</li>
+        <li>Completed operations (post-handover defects causing loss)</li>
+        <li>Subcontractor liability extension</li>
+      </ul>
+    </div>
+    <div class="cov-card purple-top">
+      <h4>Products Liability (NR)</h4>
+      <ul>
+        <li>Bodily injury from defective products (manufacturing, design, warning defects)</li>
+        <li>Property damage caused by defective products</li>
+        <li>Food contamination / adulteration</li>
+        <li>Pharmaceutical adverse events</li>
+        <li>Medical device malfunction</li>
+        <li>Recall costs (where endorsed; otherwise separate PB code)</li>
+      </ul>
+    </div>
+    <div class="cov-card warn-top">
+      <h4>Miscellaneous &amp; Special Risks (NS)</h4>
+      <ul>
+        <li>Event and exhibition liability — public injury at venue</li>
+        <li>Amusement and leisure — fairground, theme park, adventure activity</li>
+        <li>Sports and motorsport liability</li>
+        <li>Hospitality — food service, alcohol service (where not excluded)</li>
+        <li>Umbrella/excess liability above primary layers</li>
+        <li>Non-standard risks not fitting N, NC or NR</li>
+      </ul>
+    </div>
+    <div class="cov-card blue-top">
+      <h4>Standard Exclusions (All Codes)</h4>
+      <ul>
+        <li>US/Canada jurisdiction (redirected to UA/UC codes)</li>
+        <li>Employer's liability (separate EL policy required in UK)</li>
+        <li>Professional indemnity / advice errors (separate PI codes)</li>
+        <li>Pollution (sudden &amp; accidental sometimes covered; gradual excluded)</li>
+        <li>War, nuclear, cyber (standard market exclusions LMA5400)</li>
+        <li>Asbestos (blanket exclusion — dedicated asbestos market)</li>
+        <li>Workers' compensation (territorial statutory schemes)</li>
+      </ul>
+    </div>
+    <div class="cov-card intl-top">
+      <h4>Extensions &amp; Optional Covers</h4>
+      <ul>
+        <li>Worldwide jurisdiction (excluding US/Canada) — critical for exporters</li>
+        <li>Cross-liability (each insured treated separately)</li>
+        <li>Tenants' liability (damage to rented premises)</li>
+        <li>Employers' liability (jurisdictions permitting combined)</li>
+        <li>Contractual liability (liability assumed under contract)</li>
+        <li>Defence costs — inside or outside the limit of indemnity</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Key Legislative Framework by Territory</h2>
+  <p>Unlike US liability, where federal and state law create a relatively uniform litigation environment, non-US GL spans wildly different legal systems — common law, civil law (Code Napoléon derivatives), Germanic law, Sharia-influenced systems — with very different approaches to fault, damages, limitation periods and class action rights. Underwriters must be alert to the governing law of the policy and the jurisdiction of likely claims.</p>
+
+  <div class="jur-grid">
+    <div class="jur-card">
+      <h4>United Kingdom</h4>
+      <p>Common law tort. Occupiers' Liability Acts 1957/1984. Consumer Protection Act 1987 (strict liability for defective products — implements EU PLD). Limitation Act 1980 (3-year BI; 6-year PD). No US-style class actions; representative actions available under CPR 19. VER</p>
+    </div>
+    <div class="jur-card intl">
+      <h4>European Union</h4>
+      <p>EU Product Liability Directive 1985 (amended 2024) — strict liability for defective products. General Product Safety Regulation (GPSR) 2024 replaces GPSD. Representative Actions Directive 2020 enables EU-wide class actions. Limitation: typically 3 years from discovery, 10-year longstop. VER</p>
+    </div>
+    <div class="jur-card warn">
+      <h4>Australia</h4>
+      <p>Competition and Consumer Act 2010 (Schedule 2: Australian Consumer Law) — strict product liability, safety standards, mandatory recalls. Trade Practices Act replaced 2011. State tort law varies; proportionate liability common. Class actions well-established (Federal Court, Victorian regime). VER</p>
+    </div>
+    <div class="jur-card blue">
+      <h4>Middle East / GCC</h4>
+      <p>Civil law codified systems (UAE Civil Code, Saudi Arabia). Product liability emerging — UAE Federal Law No. 15/2020 on Consumer Protection. Public liability relatively underdeveloped judicially but growing with infrastructure expansion. Sharia law principles influence damages. EST</p>
+    </div>
+    <div class="jur-card">
+      <h4>Asia-Pacific</h4>
+      <p>Highly variable: Singapore/HK common law (English influence); Japan civil law; China Product Quality Law 2009; India Consumer Protection Act 2019. Class actions limited in most jurisdictions. Damages generally lower than Western markets but trend rising. EST</p>
+    </div>
+    <div class="jur-card intl">
+      <h4>Latin America</h4>
+      <p>Civil law dominant (Civil Codes). Brazil: Consumer Defence Code (CDC) 1990 — strict product liability, class action well-developed, award inflation. Argentina, Mexico: civil law tort. Political and currency risk affects claims settlement. EST</p>
+    </div>
+  </div>
+
+  <h2>The US/Canada Exclusion — Critical Boundary</h2>
+  <div class="info-box">
+    <h3>Why Non-US GL Always Excludes the USA and Canada</h3>
+    <p>The USA and Canada are excluded from all N/NC/NR/NS policies as a fundamental underwriting boundary. This is not a minor endorsement — it is a core structural feature of the Lloyd's market segmentation. Reasons include:</p>
+    <ul>
+      <li><strong>Litigation environment:</strong> US litigation is uniquely aggressive — jury trials for liability, punitive damages (absent in most non-US jurisdictions), contingency fee plaintiff attorneys, and no proportionate liability in many states. US products liability awards regularly exceed $100m; equivalent awards are exceptional in non-US courts.</li>
+      <li><strong>Discovery/disclosure:</strong> US pre-trial discovery is vastly more extensive and costly than non-US disclosure processes. Even defending a US claim generates massive legal costs regardless of outcome.</li>
+      <li><strong>Class actions:</strong> Rule 23 federal class actions and state equivalents enable aggregation of millions of claims. Non-US jurisdictions have limited or no equivalent mechanism (though EU Representative Actions Directive is a developing parallel).</li>
+      <li><strong>Separate market:</strong> US and Canadian liability is covered by UA, UC, UR, US Lloyd's codes — written by dedicated casualty underwriters with US-specific expertise, US-qualified claims staff and US-appropriate rating.</li>
+      <li><strong>Territorial trigger:</strong> The exclusion is triggered by (a) the jurisdiction of the injury/damage occurring in the US/Canada, or (b) products intended for US/Canadian market, or (c) claims brought in US/Canadian courts. Wording precision is critical — US courts may accept jurisdiction even for non-US incidents if the defendant has a US presence.</li>
+    </ul>
+  </div>
+
+  <h2>Hub Modules</h2>
+  <div class="mod-grid">
+    <a class="mod-card" href="history.html"><div class="mod-num">MODULE 01</div><h4>History &amp; Origins</h4><p>From tort law foundations to modern international liability framework</p></a>
+    <a class="mod-card" href="timeline.html"><div class="mod-num">MODULE 02</div><h4>Major Events Timeline</h4><p>Key cases, legislation and market events 1932–2024</p></a>
+    <a class="mod-card" href="database.html"><div class="mod-num">MODULE 03</div><h4>Claims Database</h4><p>35 significant non-US GL claims and market incidents</p></a>
+    <a class="mod-card" href="underwriting.html"><div class="mod-num">MODULE 04</div><h4>Underwriting Methodology</h4><p>Rating factors, occurrence vs claims-made, worked examples</p></a>
+    <a class="mod-card" href="rates-analysis.html"><div class="mod-num">MODULE 05</div><h4>Rates &amp; ROE Analysis</h4><p>Market cycle, social inflation trends, ROE scenarios</p></a>
+    <a class="mod-card" href="risk-mitigation.html"><div class="mod-num">MODULE 06</div><h4>Risk Mitigation</h4><p>Product safety regulation, GPSR, quality management, REACH</p></a>
+    <a class="mod-card" href="global-program.html"><div class="mod-num">MODULE 07</div><h4>Global Programme</h4><p>Multinational liability structures, DIC/DIL, fronting, captives</p></a>
+    <a class="mod-card" href="references.html"><div class="mod-num">REFERENCES</div><h4>Sources &amp; Confidence</h4><p>VER/EST/ILLUS/GAP audit and primary sources</p></a>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.9 · General Liability – Non-USA (N/NC/NR/NS) · For educational use · Not a substitute for professional advice</footer>
+</body>
+</html>

@@ -1,0 +1,100 @@
+{
+  "riskCode": "AP",
+  "label": "Airport Owners & Operators Liability",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "annualPassengers",
+    "label": "Annual Passenger Throughput",
+    "defaultValue": 30000000,
+    "hint": "Total annual passenger movements"
+  },
+  "baseRate": {
+    "key": "ratePerPax",
+    "label": "Base Rate per 1000 Passengers ($)",
+    "value": 0.0000012
+  },
+  "ratingFactors": [
+    {
+      "key": "airportCategory",
+      "label": "Airport Category",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "international_hub",
+      "options": {
+        "international_hub": { "label": "International Hub (>40m pax)", "factor": 1.20 },
+        "major_international":{ "label": "Major International (15-40m)", "factor": 1.00 },
+        "regional":          { "label": "Regional (5-15m pax)",         "factor": 0.85 },
+        "domestic_small":    { "label": "Small Domestic (<5m pax)",     "factor": 0.70 },
+        "cargo_hub":         { "label": "Cargo Hub (DHL/FedEx)",        "factor": 1.10 }
+      }
+    },
+    {
+      "key": "groundHandling",
+      "label": "Ground Handling Scope",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "third_party",
+      "hint": "Who provides ground handling services",
+      "options": {
+        "self_handle":  { "label": "Self-handling (all services)",   "factor": 1.25 },
+        "partial":      { "label": "Partial (fuelling only)",        "factor": 1.10 },
+        "third_party":  { "label": "Third-party handlers licensed",  "factor": 1.00 },
+        "minimal":      { "label": "Minimal ground ops",             "factor": 0.85 }
+      }
+    },
+    {
+      "key": "cslLevel",
+      "label": "CSL Limit",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "1bn",
+      "options": {
+        "250m": { "label": "$250m CSL",  "factor": 0.60 },
+        "500m": { "label": "$500m CSL",  "factor": 0.80 },
+        "1bn":  { "label": "$1bn CSL",   "factor": 1.00 },
+        "1_5bn":{ "label": "$1.5bn CSL", "factor": 1.20 },
+        "2bn":  { "label": "$2bn CSL",   "factor": 1.40 }
+      }
+    },
+    {
+      "key": "dgHandling",
+      "label": "Dangerous Goods Operations",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "none":     { "label": "No DG handling",          "factor": 0.85 },
+        "standard": { "label": "Standard DG (IATA DGR)", "factor": 1.00 },
+        "heavy":    { "label": "Heavy DG / fuel farm",    "factor": 1.20 },
+        "military": { "label": "Military / munitions",    "factor": 1.50 }
+      }
+    },
+    {
+      "key": "lossHistory",
+      "label": "Loss History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean":       { "label": "Clean (no claims)",          "factor": 0.85 },
+        "attritional": { "label": "Attritional only",           "factor": 1.00 },
+        "notable":     { "label": "Notable incidents",          "factor": 1.25 },
+        "major":       { "label": "Major loss (>$10m claim)",   "factor": 1.60 }
+      }
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 8000,
+    "claimsHandlingPerClaim": 40000,
+    "systemOverheadPerYear": 4000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.20,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

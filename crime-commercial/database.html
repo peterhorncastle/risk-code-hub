@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Crime / Fidelity Commercial (BC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --bc:#1a5c2a; --bc-dark:#0b2e14; --bc-light:#edf7f0;
+      --bc-accent:#c8a84b; --bc-mid:#c8e6c9;
+      --hub-primary:#1a5c2a; --hub-dark:#0b2e14; --hub-light:#edf7f0;
+      --hub-accent:#c8a84b; --hub-secondary:#1565c0; --hub-secondary2:#6a1b9a;
+      --header-gradient:linear-gradient(135deg,#0b2e14 0%,#1a5c2a 55%,#2e7d32 100%);
+      --header-sub:#a5d6a7;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bc-light);color:#1e2e1e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#a5d6a7;margin-bottom:6px;}
+    .breadcrumb a{color:var(--bc-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--bc-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#0b2e14;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#a5d6a7;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--bc-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--bc-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--bc-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--bc);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--bc-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--bc-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #e8f5e9;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f1f8f2;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-bec{background:#fbe9e7;color:#e65100;}
+    .tp-internal{background:#e8f5e9;color:#1a5c2a;}
+    .tp-forgery{background:#fff8e1;color:#795548;}
+    .tp-eftraud{background:#e3f2fd;color:#1565c0;}
+    .tp-payroll{background:#f3e5f5;color:#6a1b9a;}
+    .tp-vendor{background:#e0f2f1;color:#00695c;}
+    .tp-deepfake{background:#fce4ec;color:#880e4f;}
+    .tp-money{background:#fff3e0;color:#e65100;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#1a5c2a;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--bc);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#f1f8f2;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#0b2e14;color:#a5d6a7;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--bc-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Crime Commercial (BC)</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>Commercial Crime Loss Database</h1>
+    <div class="sub">35 notable commercial crime incidents 1987–2024 — filter by type, sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Crime Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="bec">BEC / Social Engineering</option>
+        <option value="internal">Internal / Employee</option>
+        <option value="forgery">Forgery / Alteration</option>
+        <option value="eftraud">EFT / Computer Fraud</option>
+        <option value="payroll">Payroll Fraud</option>
+        <option value="vendor">Vendor / AP Fraud</option>
+        <option value="deepfake">Deepfake / AI</option>
+        <option value="money">Money &amp; Securities</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="retail">Retail / Consumer</option>
+        <option value="mfg">Manufacturing</option>
+        <option value="tech">Technology</option>
+        <option value="govt">Government / Public</option>
+        <option value="prof">Professional Services</option>
+        <option value="health">Healthcare</option>
+        <option value="constr">Construction</option>
+        <option value="npo">Non-Profit</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2015" min="1987" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 10" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Company, country…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Entity</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Value ($m)</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Crime / Fidelity Commercial (BC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1987,n:"ZZZZ Best Carpet Cleaning",t:"internal",s:"retail",desc:"Barry Minkow's carpet cleaning empire largely fictitious; fabricated insurance restoration contracts. CEO-level fraud undetected by auditors. Losses exceed $100m.",v:100,sev:"cat",geo:"USA"},
+  {y:1993,n:"Phar-Mor Discount Pharmacy",t:"internal",s:"retail",desc:"$1bn inventory fraud by senior executives over 5 years. CFO Michael Monus overstated inventory and understated losses. One of the largest retail fraud cases to that date.",v:1000,sev:"cat",geo:"USA"},
+  {y:1995,n:"Kidder Peabody — Joseph Jett",t:"eftraud",s:"prof",desc:"Fictitious government bond trades generating $350m in phantom profits. Computer system exploited to generate false trades — technically internal systems fraud, early computer fraud claim.",v:350,sev:"cat",geo:"USA"},
+  {y:1997,n:"Daiwa Bank — Toshihide Iguchi",t:"internal",s:"prof",desc:"Osaka bond trader hides $1.1bn losses over 11 years through falsified records. Though an FI case (BB), the internal controls failure analysis directly informed commercial crime underwriting standards.",v:1100,sev:"cat",geo:"USA/Japan"},
+  {y:1999,n:"HealthSouth Corporation",t:"internal",s:"health",desc:"$2.7bn accounting fraud: 17 former finance officers plead guilty to falsifying financial results at CEO's direction. Highlights senior management dishonesty risk in healthcare sector.",v:2700,sev:"cat",geo:"USA"},
+  {y:2001,n:"Enron Corporation — Internal Fraud",t:"internal",s:"prof",desc:"Beyond accounting fraud, internal embezzlement by multiple employees estimated at $40–60m separate from the broader corporate collapse. Commercial crime claims filed by several entities.",v:60,sev:"maj",geo:"USA"},
+  {y:2003,n:"Parmalat — €14bn Corporate Fraud",t:"internal",s:"mfg",desc:"Italian dairy giant collapses after CEO and CFO fabricate €14bn in assets. Fictitious bank account at Bank of America confirmed fraudulent. One of Europe's largest corporate fraud cases.",v:15000,sev:"cat",geo:"Italy"},
+  {y:2004,n:"Comverse Technology — Stock Options Backdating",t:"internal",s:"tech",desc:"Executive backdating of stock options generates $600m+ in unauthorised compensation. Triggers SEC investigation and class action. Commercial crime policies tested on 'dishonest act' definition.",v:600,sev:"cat",geo:"USA"},
+  {y:2007,n:"Alcatel-Lucent — AP Fraud Ring",t:"vendor",s:"tech",desc:"Accounts payable fraud scheme involving fictitious vendors and collusion between employees and external parties. $80m in fraudulent payments over 4 years before discovery by internal audit.",v:80,sev:"maj",geo:"USA"},
+  {y:2009,n:"Galleon Group Hedge Fund — Insider Trading Ring",t:"internal",s:"prof",desc:"$60m+ insider trading scheme. Raj Rajaratnam convicted; 85 individuals charged. Not a traditional crime claim but tests the boundaries of commercial crime 'dishonest act' coverage for investment managers.",v:60,sev:"maj",geo:"USA"},
+  {y:2011,n:"Olympus Corporation — $1.7bn Concealment Fraud",t:"internal",s:"mfg",desc:"Japanese camera manufacturer conceals $1.7bn in investment losses over 20 years through fraudulent acquisitions. CEO Michael Woodford blows the whistle. Commercial crime policy provides partial recovery.",v:1700,sev:"cat",geo:"Japan"},
+  {y:2012,n:"Chesapeake Energy — CEO Expense Fraud",t:"internal",s:"prof",desc:"CEO Aubrey McClendon uses company assets for personal benefit: undisclosed loans, personal gas interests, unauthorised use of corporate aircraft. $50m+ in diverted assets. Commercial crime policy disputed.",v:50,sev:"maj",geo:"USA"},
+  {y:2013,n:"Target Corporation — AP/Vendor Impersonation Fraud",t:"vendor",s:"retail",desc:"Vendor impersonation fraud via compromised HVAC contractor credentials. Though better known as a data breach, the initial entry was through fraudulent vendor access — tests crime/cyber policy boundary.",v:18,sev:"mod",geo:"USA"},
+  {y:2015,n:"Ubiquiti Networks — BEC $46.7m",t:"bec",s:"tech",desc:"Employee deceived by BEC emails impersonating executives; 14 wire transfers totalling $46.7m sent to overseas accounts. One of first large publicly disclosed BEC frauds. Insurance recovery partial.",v:47,sev:"maj",geo:"USA"},
+  {y:2015,n:"Mattel — CEO Impersonation BEC $3m",t:"bec",s:"mfg",desc:"Finance employee wires $3m to Chinese bank account following spoofed CEO email. Funds recovered with FBI and Chinese law enforcement cooperation — rare successful BEC recovery.",v:3,sev:"mod",geo:"USA"},
+  {y:2016,n:"Leoni AG — BEC €40m",t:"bec",s:"mfg",desc:"German cable manufacturer loses €40m in a BEC fraud targeting its Romanian subsidiary. Attacker impersonates board members via email, directing subsidiary finance to transfer funds to fraudulent accounts.",v:44,sev:"maj",geo:"Germany"},
+  {y:2016,n:"FACC AG — CEO Fraud €42m",t:"bec",s:"mfg",desc:"Austrian aerospace supplier loses €42m to CEO fraud. Email purportedly from CEO instructs finance to fund a confidential acquisition. CFO and CEO later dismissed for failing to prevent the loss.",v:46,sev:"maj",geo:"Austria"},
+  {y:2017,n:"Facebook/Google — Invoice Fraud €100m",t:"forgery",s:"tech",desc:"Evaldas Rimasauskas impersonates Taiwanese manufacturer Quanta Computer; sends forged invoices to Facebook and Google accounts payable. $100m in fraudulent payments before discovery. Both companies partially recover via litigation.",v:100,sev:"cat",geo:"Lithuania/USA"},
+  {y:2018,n:"Stradling Yocca Law Firm — Payroll Diversion",t:"payroll",s:"prof",desc:"Payroll officer diverts $7m over 3 years by creating fictitious employees and inflating legitimate payroll. Detected by internal audit comparison of HR records to payroll disbursements.",v:7,sev:"mod",geo:"USA"},
+  {y:2019,n:"Toyota Boshoku — BEC $37m",t:"bec",s:"mfg",desc:"Toyota Group supplier deceived into redirecting $37m supplier payment to attacker-controlled account via BEC email impersonating business partner. Highlights supply chain payment fraud risk.",v:37,sev:"maj",geo:"Japan"},
+  {y:2019,n:"Nikkei — BEC $29m",t:"bec",s:"mfg",desc:"Japanese media giant Nikkei's US unit sends $29m to fraudster impersonating company executive via email. Nikkei confirms the fraud publicly; recovery efforts largely unsuccessful.",v:29,sev:"maj",geo:"Japan/USA"},
+  {y:2019,n:"UK Construction Firm — Payroll Ghost Employee Scheme",t:"payroll",s:"constr",desc:"Payroll administrator adds 200 ghost employees over 4 years, diverting £4.2m in wages. Detected only when HR system audit flags anomalous termination patterns.",v:5,sev:"mod",geo:"UK"},
+  {y:2019,n:"Church of Jesus Christ of Latter-day Saints Investment Fund",t:"internal",s:"npo",desc:"IRS complaint alleges $100bn+ reserve fund misrepresented to members; though a regulatory dispute, the case raises fraud-adjacent issues around non-profit financial transparency.",v:100,sev:"cat",geo:"USA"},
+  {y:2020,n:"Puerto Rico Government — $15m Payroll Fraud",t:"payroll",s:"govt",desc:"Puerto Rico government payroll system compromised; ghost employees and inflated salaries divert $15m+ over multiple years. Detected by federal audit following hurricane relief oversight.",v:15,sev:"mod",geo:"USA/Puerto Rico"},
+  {y:2020,n:"Wirecard — €1.9bn Missing Assets",t:"internal",s:"prof",desc:"Wirecard collapse exposes €1.9bn in fictitious cash held in trust accounts. Though primarily an accounting fraud, custodian banks and commercial partners file crime and professional indemnity claims.",v:1900,sev:"cat",geo:"Germany"},
+  {y:2021,n:"Colonial Pipeline — Ransom Payment",t:"eftraud",s:"mfg",desc:"$4.4m ransomware payment to DarkSide group; most recovered by DOJ. Crime policy / cyber policy interface tested: is ransom payment a 'loss' under computer fraud insuring agreement?",v:4,sev:"mod",geo:"USA"},
+  {y:2021,n:"Singapore Government Hospital — Payroll Fraud SGD 8.8m",t:"payroll",s:"health",desc:"Accountant at Singapore public hospital diverts SGD 8.8m ($6.5m) over 5 years by creating fictitious vendor payments and redirecting salary payments. Detected by new finance director review.",v:7,sev:"mod",geo:"Singapore"},
+  {y:2022,n:"Crane Currency — AP Impersonation $40m",t:"vendor",s:"mfg",desc:"Accounts payable team deceived into making $40m in payments to fraudster impersonating legitimate supplier. Attacker intercepts email chain, substitutes bank account details. Commercial crime policy responds.",v:40,sev:"maj",geo:"USA"},
+  {y:2022,n:"UK NHS Trust — Employee Theft £4.5m",t:"internal",s:"health",desc:"Finance officer diverts NHS procurement payments to personal accounts over 7 years; £4.5m stolen. Internal controls failure: no segregation of duties between payment initiator and approver.",v:6,sev:"mod",geo:"UK"},
+  {y:2023,n:"Silentnight Group — Payroll Manipulation £2.1m",t:"payroll",s:"mfg",desc:"Payroll manager inflates own salary and adds fictitious employees over 3 years, diverting £2.1m. Detected when replacement manager reviews payroll cost trends during budget cycle.",v:3,sev:"min",geo:"UK"},
+  {y:2023,n:"US Retailer — Gift Card Fraud Ring $12m",t:"internal",s:"retail",desc:"Ring of 25 employees across multiple retail locations systematically drains gift card balances before customer activation, diverting $12m over 18 months. Organised internal collusion covered by commercial crime policy.",v:12,sev:"mod",geo:"USA"},
+  {y:2023,n:"Australian Local Council — Rates Refund Fraud A$8m",t:"eftraud",s:"govt",desc:"Finance system exploited to generate fraudulent rates refund payments to controlled accounts over 2 years. Internal computer fraud — EFT fraud insuring agreement responds.",v:6,sev:"mod",geo:"Australia"},
+  {y:2024,n:"Arup — Deepfake Video Call $25m",t:"deepfake",s:"constr",desc:"Engineering firm's Hong Kong employee transfers $25m HKD ($25m USD) following a deepfake AI video conference in which all participants — including a convincing CFO avatar — were fabricated. Most sophisticated commercial crime event to date. Policy wording adequacy for AI fraud under active review.",v:25,sev:"maj",geo:"Hong Kong/UK"},
+  {y:2024,n:"LastPass / GoTo — Social Engineering $4m+",t:"bec",s:"tech",desc:"Series of social engineering attacks targeting tech firm employees via voice phishing (vishing) and SMS phishing (smishing) to steal MFA credentials and initiate fraudulent transfers. Crime/cyber boundary disputed.",v:4,sev:"mod",geo:"USA"},
+  {y:2024,n:"UK Conveyancing Firm — Chaps Payment Fraud £7m",t:"forgery",s:"prof",desc:"Solicitors' CHAPS payment account compromised; fraudster substitutes client account details in completion funds transfer, diverting £7m. Crime policy responds; cyber exclusion argued by insurer but rejected.",v:9,sev:"mod",geo:"UK"}
+];
+
+const typeLabels = {
+  bec:"BEC / Social Eng.",internal:"Internal / Employee",forgery:"Forgery / Alteration",
+  eftraud:"EFT / Computer Fraud",payroll:"Payroll Fraud",vendor:"Vendor / AP Fraud",
+  deepfake:"Deepfake / AI",money:"Money & Securities"
+};
+const typeClass = {
+  bec:"tp-bec",internal:"tp-internal",forgery:"tp-forgery",eftraud:"tp-eftraud",
+  payroll:"tp-payroll",vendor:"tp-vendor",deepfake:"tp-deepfake",money:"tp-money"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${d.s.charAt(0).toUpperCase()+d.s.slice(1)}</td>
+      <td>${d.v>=1000?'$'+(d.v/1000).toFixed(1)+'bn':'$'+d.v+'m'}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">▼ Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

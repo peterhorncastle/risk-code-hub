@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Risk Mitigation — Difference in Conditions (DC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #2a1a5c;
+      --hub-dark:      #110a30;
+      --hub-light:     #ede8ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#37474f;
+      --header-gradient:linear-gradient(135deg,#110a30 0%,#2a1a5c 55%,#3d2880 100%);
+      --header-sub:    #b39ddb;
+      --mid:           #d1c4e9;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1430;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#b39ddb;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#110a30;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#b39ddb;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--mid);}
+    .controls-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:24px;}
+    .ctrl{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .ctrl.prevent{border-left:5px solid var(--hub-primary);}
+    .ctrl.detect{border-left:5px solid #e65100;}
+    .ctrl-type{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+    .ctrl.prevent .ctrl-type{color:var(--hub-primary);}
+    .ctrl.detect .ctrl-type{color:#e65100;}
+    .ctrl h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:7px;}
+    .ctrl p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .checklist{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .checklist h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:14px;}
+    .cl-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--hub-light);}
+    .cl-item:last-child{border-bottom:none;}
+    .cl-box{width:20px;height:20px;border:2px solid var(--hub-primary);border-radius:4px;flex-shrink:0;margin-top:1px;}
+    .cl-item p{font-size:0.84rem;color:#333;line-height:1.5;}
+    .cl-item strong{color:var(--hub-dark);}
+    .warn-box{background:#fff8e1;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .info-box{background:#ede8ff;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a1430;line-height:1.6;}
+    .country-map{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .country-map h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:14px;}
+    .map-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+    .country-badge{border-radius:8px;padding:10px 14px;font-size:0.82rem;font-weight:600;}
+    .cb-red{background:#ffebee;border:1px solid #ef9a9a;color:#b71c1c;}
+    .cb-amber{background:#fff8e1;border:1px solid #ffcc80;color:#5d3f00;}
+    .cb-green{background:#e8f5e9;border:1px solid #a5d6a7;color:#1b5e20;}
+    .country-badge .cb-name{font-size:0.9rem;font-weight:700;margin-bottom:3px;}
+    .country-badge .cb-status{font-size:0.72rem;}
+    .actions-list{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .actions-list h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:14px;}
+    .action-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--hub-light);}
+    .action-item:last-child{border-bottom:none;}
+    .action-num{background:var(--hub-primary);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0;}
+    .action-item p{font-size:0.84rem;color:#333;line-height:1.5;}
+    footer{background:#110a30;color:#b39ddb;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Difference in Conditions (DC)</a> › Risk Mitigation</div>
+    <div class="tag">Module 06</div>
+    <h1>Risk Mitigation</h1>
+    <div class="sub">Programme controls, NatCat PML modelling, BEPS compliance, non-admitted country map &amp; top actions</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">DIC/DIL Control Framework — PREVENT</div>
+  <div class="controls-grid">
+    <div class="ctrl prevent">
+      <div class="ctrl-type">Prevent</div>
+      <h4>NatCat PML Modelling (AIR/RMS)</h4>
+      <p>Annual probabilistic NatCat PML modelling using AIR Worldwide Touchstone or RMS Risk Intelligence across all global TIV locations. Map PML by peril against local admitted sublimits to quantify the DIC gap at 1-in-100, 1-in-250 and 1-in-500 return periods. Thailand 2011 was catastrophic for programmes without this analysis. <sup>[I10]</sup></p>
+    </div>
+    <div class="ctrl prevent">
+      <div class="ctrl-type">Prevent</div>
+      <h4>Annual Local Admitted Policy Review</h4>
+      <p>Review all local admitted policies annually at renewal to identify: new exclusions added since last review, sublimit changes, warranty/condition additions, and any coverage gaps that the DIC must fill. DIC is only as good as the accuracy of its gap analysis. <sup>[I2]</sup></p>
+    </div>
+    <div class="ctrl prevent">
+      <div class="ctrl-type">Prevent</div>
+      <h4>BEPS Arm's-Length Pricing Documentation</h4>
+      <p>Prepare and maintain transfer pricing documentation for all DIC/DIL premium allocations between group entities. Documentation must demonstrate that premium rates charged to subsidiaries are arm's-length (i.e., consistent with what an unrelated party would pay). KPMG/Deloitte transfer pricing specialists typically engaged. <sup>[L4]</sup></p>
+    </div>
+    <div class="ctrl prevent">
+      <div class="ctrl-type">Prevent</div>
+      <h4>Admitted Policy Renewal Coordination</h4>
+      <p>Coordinate renewal of local admitted policies and DIC master policy to ensure continuous coverage with no gap period. DIC must attach correctly to the local admitted policy at all times — a gap in local admitted coverage (e.g., lapse on renewal) may leave the DIC without valid primary below it, creating admitted rules compliance and coverage disputes. <sup>[I4]</sup></p>
+    </div>
+    <div class="ctrl prevent">
+      <div class="ctrl-type">Prevent</div>
+      <h4>Currency Matching — Local vs Master</h4>
+      <p>Align the currency of local admitted policies with master DIC/DIL policy where possible. FX mismatch creates uncertainty at claims stage — local policy pays in local currency, but DIC trigger calculation uses master currency exchange rate on loss date. Consider FX exposure reserves or hedging in programmes with material EM currency exposure.</p>
+    </div>
+    <div class="ctrl prevent">
+      <div class="ctrl-type">Prevent</div>
+      <h4>Annual Regulatory Compliance Audit</h4>
+      <p>Conduct annual country-by-country review of admitted insurance rules in all programme jurisdictions. Rules change — particularly in emerging markets. Brazil, India, China, Mexico and Saudi Arabia have issued new non-admitted restrictions in recent years. Non-compliance voids local policy coverage and potentially DIC master trigger. <sup>[I3]</sup></p>
+    </div>
+  </div>
+
+  <div class="section-title">DIC/DIL Control Framework — DETECT</div>
+  <div class="controls-grid">
+    <div class="ctrl detect">
+      <div class="ctrl-type">Detect</div>
+      <h4>Local Loss Early Notification Protocol</h4>
+      <p>Establish a formal early notification chain for large losses at local level: local risk manager → regional risk coordinator → group risk manager → DIC programme broker → Lloyd's DIC underwriter. DIC claims cannot be quantified until local claim is settled, but early notification enables DIC underwriter to reserve appropriately and appoint DIC-specific adjusters. <sup>[I9]</sup></p>
+    </div>
+    <div class="ctrl detect">
+      <div class="ctrl-type">Detect</div>
+      <h4>Catastrophe Response Team Activation</h4>
+      <p>Large multinationals maintain a global emergency response organisation (ERO) that activates on major NatCat events. ERO should include insurance programme notification triggers — when a facility is affected by a NatCat event in a DIC-exposed jurisdiction, automatic DIC programme notification should occur within 72 hours regardless of estimated loss quantum.</p>
+    </div>
+    <div class="ctrl detect">
+      <div class="ctrl-type">Detect</div>
+      <h4>Local Claims Adjuster Appointment</h4>
+      <p>Appoint a bilingual local loss adjuster who is familiar with both the local admitted policy and the master DIC programme. Dual appointment (local + international adjuster) ensures that the DIC gap calculation (what local paid vs what master covers) is performed correctly and documented for DIC claim presentation. <sup>[I9]</sup></p>
+    </div>
+    <div class="ctrl detect">
+      <div class="ctrl-type">Detect</div>
+      <h4>DIC/DIL Claims Quantification</h4>
+      <p>Once local adjuster establishes local policy settlement, quantify DIC claim: (a) DIC trigger — what did local policy NOT cover? (b) DIL trigger — what did local policy cover up to sublimit? (c) Master programme standard — what would full coverage provide? The difference is the DIC/DIL claim. Present to Lloyd's DIC underwriter with supporting documentation from local claim file. <sup>[I9]</sup></p>
+    </div>
+  </div>
+
+  <!-- Checklist -->
+  <div class="checklist">
+    <h3>Multinational Programme Annual Review Checklist — 8 Key Items</h3>
+    <div class="cl-item">
+      <div class="cl-box"></div>
+      <p><strong>All local admitted policies listed and reviewed:</strong> Complete schedule of local admitted policies in all programme jurisdictions — carrier name, policy number, period, TIV, sublimits, exclusions. Compare each to master DIC standard to identify gaps.</p>
+    </div>
+    <div class="cl-item">
+      <div class="cl-box"></div>
+      <p><strong>NatCat sublimits vs exposure analysis:</strong> For each NatCat-exposed jurisdiction (flood, earthquake, wind), compare local admitted sublimit to AIR/RMS modelled PML at 1-in-100 and 1-in-250. Gaps = DIL top-up requirement.</p>
+    </div>
+    <div class="cl-item">
+      <div class="cl-box"></div>
+      <p><strong>BI indemnity period matches supply chain recovery time:</strong> Review maximum indemnity period (MIP) in local admitted BI policies vs estimated supply chain recovery time. Thailand/Japan showed 6-month MIPs wholly inadequate for 12–24 month recovery. BI DIC top-up required for extended periods.</p>
+    </div>
+    <div class="cl-item">
+      <div class="cl-box"></div>
+      <p><strong>D&amp;O DIC/DIL terms broader than local:</strong> Confirm master D&O DIC/DIL provides US securities coverage, broader entity coverage, and Side C where required for US-listed entities. Check local D&O policies do not contain conditions that would prevent DIC trigger.</p>
+    </div>
+    <div class="cl-item">
+      <div class="cl-box"></div>
+      <p><strong>Premium allocation BEPS-compliant:</strong> Verify that DIC/DIL premium allocations to subsidiaries are documented as arm's-length. Transfer pricing benchmark analysis updated annually. Local tax counsel in major jurisdictions reviewed the allocation methodology.</p>
+    </div>
+    <div class="cl-item">
+      <div class="cl-box"></div>
+      <p><strong>Claims cooperation clause in master and all locals:</strong> Verify that all local admitted policies contain a claims cooperation clause requiring the local insurer to cooperate with the DIC master insurer's adjusters. "Follow-the-settlements" clause in master policy confirmed. <sup>[I4]</sup></p>
+    </div>
+    <div class="cl-item">
+      <div class="cl-box"></div>
+      <p><strong>Currency risk addressed:</strong> FX exposure between local policy currency and master policy currency reviewed. Material mismatches flagged to risk manager and DIC underwriter. FX hedging or currency endorsement considered for programmes with significant EM currency exposure.</p>
+    </div>
+    <div class="cl-item">
+      <div class="cl-box"></div>
+      <p><strong>Renewal date alignment:</strong> All local admitted policies aligned to single renewal date where possible, coordinated with master DIC renewal. Avoid situations where local policies lapse before master renewal, creating gaps in the primary layer below DIC.</p>
+    </div>
+  </div>
+
+  <!-- BEPS warning -->
+  <div class="warn-box">
+    <strong>BEPS Warning — Transfer Pricing for Intra-Group Insurance:</strong> OECD Base Erosion &amp; Profit Shifting (BEPS) Actions 8–10 require that all intra-group insurance transactions — including DIC/DIL premium charged by the parent to operating subsidiaries — be priced at arm's length. Tax authorities in France, Germany, Australia, and others have challenged premium deductions where the arm's-length basis is not adequately documented. Consequences of non-compliance include: premium deduction disallowance (corporate tax cost), penalties, and potential structural disruption of the programme. Engage specialist transfer pricing counsel annually for multinational DIC/DIL programmes exceeding $1m total premium. <sup>[L4]</sup>
+  </div>
+
+  <!-- Non-admitted country map -->
+  <div class="country-map">
+    <h3>Non-Admitted Insurance Restrictions — Key DIC/DIL Markets</h3>
+    <p style="font-size:0.83rem;color:#555;margin-bottom:14px;">Markets where DIC/DIL master policy cannot be placed directly with Lloyd's non-admitted — fronting or locally-admitted structure required:</p>
+    <div class="map-grid">
+      <div class="country-badge cb-red"><div class="cb-name">Brazil</div><div class="cb-status">Highly restrictive — SUSEP approval required; local fronting mandatory. IRB reinsurance via fronter. <sup>[L9]</sup></div></div>
+      <div class="country-badge cb-red"><div class="cb-name">China</div><div class="cb-status">Strict — PICC/Ping An admitted required; Lloyd's only via RI or Shanghai FTZ. <sup>[L8]</sup></div></div>
+      <div class="country-badge cb-red"><div class="cb-name">India</div><div class="cb-status">GIC Re involvement; fronting required; Lloyd's India office limited access.</div></div>
+      <div class="country-badge cb-red"><div class="cb-name">Mexico</div><div class="cb-status">CNSF restricts non-admitted; Mexican admitted fronter required for direct risks.</div></div>
+      <div class="country-badge cb-red"><div class="cb-name">Argentina</div><div class="cb-status">SSN prohibits most non-admitted placements; local carrier mandatory.</div></div>
+      <div class="country-badge cb-red"><div class="cb-name">Russia</div><div class="cb-status">CBR-licensed carrier required (+ sanctions/war complications post-2022).</div></div>
+      <div class="country-badge cb-red"><div class="cb-name">South Africa</div><div class="cb-status">FSCA restricts non-admitted; SARB approval needed; Lloyd's limited access.</div></div>
+      <div class="country-badge cb-red"><div class="cb-name">Saudi Arabia</div><div class="cb-status">SAMA-licensed insurer required; non-admitted prohibited for Saudi risks.</div></div>
+      <div class="country-badge cb-amber"><div class="cb-name">USA</div><div class="cb-status">Surplus lines non-admitted generally permitted for large/complex risks under NRRA 2010. <sup>[L2]</sup></div></div>
+      <div class="country-badge cb-amber"><div class="cb-name">EU (post-Brexit)</div><div class="cb-status">Lloyd's Europe (Brussels) required for direct placement; non-admitted from UK complicated. <sup>[L3]</sup></div></div>
+      <div class="country-badge cb-green"><div class="cb-name">Singapore</div><div class="cb-status">MAS permits non-admitted for sophisticated/large commercial risks; DIFC equivalent.</div></div>
+      <div class="country-badge cb-green"><div class="cb-name">UAE (DIFC)</div><div class="cb-status">DIFC financial zone permits Lloyd's direct access — most open Gulf market.</div></div>
+      <div class="country-badge cb-green"><div class="cb-name">Australia</div><div class="cb-status">APRA non-admitted permitted for eligible risks; Lloyd's has strong AU market access.</div></div>
+      <div class="country-badge cb-green"><div class="cb-name">Japan</div><div class="cb-status">FSA permits non-admitted for specific large/complex risks; Lloyd's has Japan licence.</div></div>
+      <div class="country-badge cb-green"><div class="cb-name">Canada</div><div class="cb-status">Provincial surplus lines non-admitted generally available; OSFI oversight of Lloyd's.</div></div>
+    </div>
+  </div>
+
+  <!-- Top actions -->
+  <div class="actions-list">
+    <h3>Top 7 Actions for DIC/DIL Programme Insureds</h3>
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <p><strong>Commission a full TIV revaluation every 3 years.</strong> TIV undervaluation is the single most common cause of DIC/DIL inadequacy. Use independent RICS/Marshall Valuation Service appraisal for all major locations — Thai and Japanese factories in particular. Inflation since 2020 has rendered many pre-COVID valuations severely inadequate.</p>
+    </div>
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <p><strong>Run NatCat PML modelling annually using AIR/RMS.</strong> Map your NatCat PML (1-in-100 and 1-in-250) against your local admitted sublimits country by country. The gap is your DIC/DIL requirement — quantify it before your underwriter does.</p>
+    </div>
+    <div class="action-item">
+      <div class="action-num">3</div>
+      <p><strong>Extend BI indemnity period to match actual recovery time.</strong> Use supply chain recovery data from your operations team to determine realistic BI indemnity requirements. If your supply chain takes 18 months to recover from a major NatCat event, your BI DIC must provide at least 18 months.</p>
+    </div>
+    <div class="action-item">
+      <div class="action-num">4</div>
+      <p><strong>Ensure follow-the-settlements clause in all master and local policies.</strong> Without this, the DIC underwriter can dispute every local settlement. With it, the DIC claim flows automatically once local claim is settled. This single clause is the most important DIC/DIL claims management tool. <sup>[I9]</sup></p>
+    </div>
+    <div class="action-item">
+      <div class="action-num">5</div>
+      <p><strong>Review BEPS transfer pricing documentation annually.</strong> Engage specialist counsel; update arm's-length benchmarks each year. Tax authority challenge of premium deductions is increasing — being audit-ready before a challenge is received is significantly less costly than responding reactively. <sup>[L4]</sup></p>
+    </div>
+    <div class="action-item">
+      <div class="action-num">6</div>
+      <p><strong>Map all jurisdictions for non-admitted compliance.</strong> Use the red/amber/green country framework to identify where fronting structures are required. Ensure fronting agreements are renewed and reinsurance treaties in place before the admitted policy is issued. Do not rely on expired fronting arrangements.</p>
+    </div>
+    <div class="action-item">
+      <div class="action-num">7</div>
+      <p><strong>Appoint a dedicated multinational programme broker and review annually.</strong> Experienced multinational brokers (Marsh Global Specialties, Aon Global Broking, WTW) bring network relationships, admitted rules knowledge and claims coordination capability that generalist brokers lack. Programme complexity demands specialist expertise. <sup>[I2]</sup></p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Difference in Conditions (DC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="global-program.html">Next: Global Programme →</a></p>
+</footer>
+
+</body>
+</html>

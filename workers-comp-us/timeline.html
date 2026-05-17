@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Workers Compensation USA (W5/W6) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #1a237e;
+      --hub-dark:      #0d1257;
+      --hub-light:     #e8eaf6;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #b71c1c;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#0d1257 0%,#1a237e 55%,#283593 100%);
+      --header-sub:    #9fa8da;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#9fa8da;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#0d1257;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#9fa8da;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1000px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #c5cae9;}
+    .filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+    .filter-btn{padding:7px 16px;border:2px solid #c5cae9;border-radius:20px;background:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;color:#444;transition:all 0.2s;}
+    .filter-btn:hover,.filter-btn.active{background:var(--hub-primary);color:#fff;border-color:var(--hub-primary);}
+    .filter-btn.f-leg{--fc:#b71c1c;} .filter-btn.f-leg.active,.filter-btn.f-leg:hover{background:#b71c1c;border-color:#b71c1c;}
+    .filter-btn.f-case{--fc:#1565c0;} .filter-btn.f-case.active,.filter-btn.f-case:hover{background:#1565c0;border-color:#1565c0;}
+    .filter-btn.f-mkt{--fc:#6a1b9a;} .filter-btn.f-mkt.active,.filter-btn.f-mkt:hover{background:#6a1b9a;border-color:#6a1b9a;}
+    .filter-btn.f-occ{--fc:#1a5c2a;} .filter-btn.f-occ.active,.filter-btn.f-occ:hover{background:#1a5c2a;border-color:#1a5c2a;}
+    .filter-btn.f-fraud{--fc:#e65100;} .filter-btn.f-fraud.active,.filter-btn.f-fraud:hover{background:#e65100;border-color:#e65100;}
+    .filter-btn.f-tech{--fc:#00695c;} .filter-btn.f-tech.active,.filter-btn.f-tech:hover{background:#00695c;border-color:#00695c;}
+    #tl-count{font-size:0.82rem;color:#555;margin-bottom:16px;}
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:#c5cae9;}
+    .tl-item{position:relative;margin-bottom:20px;display:flex;align-items:flex-start;gap:16px;}
+    .tl-item::before{content:'';position:absolute;left:-26px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;background:var(--hub-primary);box-shadow:0 0 0 2px #c5cae9;}
+    .tl-item.t-leg::before{background:#b71c1c;}
+    .tl-item.t-case::before{background:#1565c0;}
+    .tl-item.t-mkt::before{background:#6a1b9a;}
+    .tl-item.t-occ::before{background:#1a5c2a;}
+    .tl-item.t-fraud::before{background:#e65100;}
+    .tl-item.t-tech::before{background:#00695c;}
+    .tl-card{background:#fff;border-radius:8px;padding:14px 18px;box-shadow:0 1px 3px rgba(0,0,0,0.07);flex:1;border-left:4px solid var(--hub-primary);}
+    .tl-card.t-leg{border-left-color:#b71c1c;}
+    .tl-card.t-case{border-left-color:#1565c0;}
+    .tl-card.t-mkt{border-left-color:#6a1b9a;}
+    .tl-card.t-occ{border-left-color:#1a5c2a;}
+    .tl-card.t-fraud{border-left-color:#e65100;}
+    .tl-card.t-tech{border-left-color:#00695c;}
+    .tl-year{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .tl-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .type-pill{display:inline-block;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-bottom:6px;}
+    .pill-leg{background:#fce4ec;color:#b71c1c;}
+    .pill-case{background:#e3f2fd;color:#1565c0;}
+    .pill-mkt{background:#f3e5f5;color:#6a1b9a;}
+    .pill-occ{background:#e8f5e9;color:#1a5c2a;}
+    .pill-fraud{background:#fff3e0;color:#e65100;}
+    .pill-tech{background:#e0f2f1;color:#00695c;}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#444;}
+    .legend-dot{width:10px;height:10px;border-radius:50%;}
+    footer{background:#0d1257;color:#9fa8da;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> &rsaquo; <a href="overview.html">Workers Comp USA (W5/W6)</a> &rsaquo; Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key legislative, judicial and market events — 1911 to 2024</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#b71c1c;"></div> Legislative</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1565c0;"></div> Case Law</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6a1b9a;"></div> Market Structural</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1a5c2a;"></div> Occupational Disease</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100;"></div> Fraud / Reform</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00695c;"></div> Technology</div>
+  </div>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterTL('all',this)">All Events</button>
+    <button class="filter-btn f-leg" onclick="filterTL('t-leg',this)">Legislative</button>
+    <button class="filter-btn f-case" onclick="filterTL('t-case',this)">Case Law</button>
+    <button class="filter-btn f-mkt" onclick="filterTL('t-mkt',this)">Market Structural</button>
+    <button class="filter-btn f-occ" onclick="filterTL('t-occ',this)">Occupational Disease</button>
+    <button class="filter-btn f-fraud" onclick="filterTL('t-fraud',this)">Fraud / Reform</button>
+    <button class="filter-btn f-tech" onclick="filterTL('t-tech',this)">Technology</button>
+  </div>
+  <div id="tl-count"></div>
+
+  <div class="timeline" id="timeline">
+
+    <div class="tl-item t-leg">
+      <div class="tl-card t-leg">
+        <div class="tl-year">1911</div>
+        <span class="type-pill pill-leg">Legislative</span>
+        <h4>Wisconsin Workers Compensation Act</h4>
+        <p>First comprehensive US WC statute — the "grand bargain" establishing no-fault strict liability for employers in exchange for exclusive remedy protection. Model rapidly adopted by other states. All 48 states had WC by 1948.<sup>[L1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-leg">
+      <div class="tl-card t-leg">
+        <div class="tl-year">1927</div>
+        <span class="type-pill pill-leg">Legislative</span>
+        <h4>Longshore and Harbor Workers' Compensation Act (LHWCA)</h4>
+        <p>Federal act (33 U.S.C. §901) providing WC-type benefits for maritime workers on navigable waters — dock workers, ship repairers, harbour workers. Fills gap left by Jensen decision (1917). Basis of Lloyd's W6 code.<sup>[L2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-leg">
+      <div class="tl-card t-leg">
+        <div class="tl-year">1941</div>
+        <span class="type-pill pill-leg">Legislative</span>
+        <h4>Defense Base Act (DBA)</h4>
+        <p>Extends LHWCA benefits to employees of US contractors working on overseas US military bases and government projects (42 U.S.C. §1651). Mandatory for covered contractors. Generates large W6 claims from conflict-zone deployments.<sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-leg">
+      <div class="tl-card t-leg">
+        <div class="tl-year">1946</div>
+        <span class="type-pill pill-leg">Legislative</span>
+        <h4>Federal Employees' Compensation Act (FECA)</h4>
+        <p>Consolidated federal WC for US government civilian employees (5 U.S.C. §8101), administered by DOL/OWCP. Sets the federal standard for WC benefits and provides context for DBA and LHWCA programme design.<sup>[L6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-occ">
+      <div class="tl-card t-occ">
+        <div class="tl-year">1969</div>
+        <span class="type-pill pill-occ">Occupational Disease</span>
+        <h4>Black Lung Benefits Act</h4>
+        <p>30 U.S.C. §901 — recognises coal workers' pneumoconiosis as compensable WC disease; creates federal benefits programme for miners and surviving dependants. Long-tail legacy claims persist; resurgence of severe black lung disease reported from 2012 onward due to finer silica-rich coal seams.<sup>[L5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-leg">
+      <div class="tl-card t-leg">
+        <div class="tl-year">1970</div>
+        <span class="type-pill pill-leg">Legislative</span>
+        <h4>Occupational Safety and Health Act (OSHAct)</h4>
+        <p>29 U.S.C. §651 — comprehensive federal workplace safety law; creates OSHA to set and enforce standards. Imposes general duty clause requiring employers to maintain workplaces free from recognised hazards. Major long-term WC loss prevention driver; non-compliance is an underwriting red flag.<sup>[L4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-mkt">
+      <div class="tl-card t-mkt">
+        <div class="tl-year">1972</div>
+        <span class="type-pill pill-mkt">Market Structural</span>
+        <h4>National Commission Report — 84 WC Reform Recommendations</h4>
+        <p>OSHAct-mandated commission finds most state benefit levels inadequate. 84 recommendations drive sweeping state reforms through the 1970s — benefit increases, occupational disease coverage expansion, medical cost coverage. Triggers WC premium increases nationally and establishes NCCI's central data role.<sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-mkt">
+      <div class="tl-card t-mkt">
+        <div class="tl-year">1975</div>
+        <span class="type-pill pill-mkt">Market Structural</span>
+        <h4>NCCI Experience Rating Plan — Modernised</h4>
+        <p>National Council on Compensation Insurance formally establishes and refines the experience modification factor (EMR) system — 3-year weighted actual vs expected loss ratio translated into a premium multiplier. EMR becomes the cornerstone of individual WC risk pricing and a key safety incentive mechanism.<sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-fraud">
+      <div class="tl-card t-fraud">
+        <div class="tl-year">1990–1994</div>
+        <span class="type-pill pill-fraud">Fraud / Reform</span>
+        <h4>WC Cost Crisis — State Reform Wave</h4>
+        <p>Severe WC cost crisis in CA, FL, NY — combined ratios exceed 130%. Drives managed care entry, anti-fraud legislation, benefit restructuring. CA 1993 reform: mandatory preferred provider networks, independent medical reviews. Multiple states create WC fraud bureaux. Market hardening: +30–50% rate increases in worst-affected states.<sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-case">
+      <div class="tl-card t-case">
+        <div class="tl-year">1997</div>
+        <span class="type-pill pill-case">Case Law</span>
+        <h4>Larson's Workers Compensation Law — Dual Capacity Doctrine</h4>
+        <p>Courts across multiple states develop and define the limits of the dual capacity doctrine — exception to exclusive remedy where an employer acts in a capacity beyond that of employer (e.g. product manufacturer). Courts largely limit the doctrine narrowly, preserving WC exclusive remedy, but Employers Liability (Part Two) exposure from dual-capacity and third-party-over suits remains an underwriting concern.</p>
+      </div>
+    </div>
+
+    <div class="tl-item t-mkt">
+      <div class="tl-card t-mkt">
+        <div class="tl-year">2001</div>
+        <span class="type-pill pill-mkt">Market Structural</span>
+        <h4>9/11 WTC Attacks — Largest WC Mass Casualty Event</h4>
+        <p>~2,996 deaths generate WC death benefits across multiple employers; surviving first responders develop cancers and respiratory diseases from WTC exposure. Est. $2–3bn in WC claims. Zadroga Act 2010 creates federal WTC Health Program. Event tests WC catastrophe modelling and concentrations in high-rise/CBD occupancies for aggregate WC portfolios.<sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-fraud">
+      <div class="tl-card t-fraud">
+        <div class="tl-year">2004</div>
+        <span class="type-pill pill-fraud">Fraud / Reform</span>
+        <h4>California SB 899 — Major WC Reform</h4>
+        <p>Sweeping California reform: new permanent disability rating schedule (AMA Guides), independent medical review (IMR) for treatment disputes, medical provider networks (MPNs), anti-fraud provisions. Reduces California WC costs significantly in the short term; California remains the most complex and highest-cost state WC environment in the US.<sup>[I6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-occ">
+      <div class="tl-card t-occ">
+        <div class="tl-year">2008–2018</div>
+        <span class="type-pill pill-occ">Occupational Disease</span>
+        <h4>Opioid Crisis — WC Medical Cost Surge</h4>
+        <p>Opioid prescribing in WC claimants surges dramatically; RAND research estimates 15–20% cost addition to WC claims at peak. Long-tail disability, overdose deaths of claimants, and litigation over opioid manufacturer liability generate complex WC reserving issues. PDMPs and ODG prescribing guidelines adopted by most states from ~2014 onward.<sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-leg">
+      <div class="tl-card t-leg">
+        <div class="tl-year">2010</div>
+        <span class="type-pill pill-leg">Legislative</span>
+        <h4>James Zadroga 9/11 Health &amp; Compensation Act</h4>
+        <p>Creates the WTC Health Program — federally funded medical monitoring and treatment for 9/11 first responders and survivors. Extends the September 11th Victim Compensation Fund for first-responder cancer claims. Relieves some pressure on private WC carriers for long-latency WTC cancer claims.</p>
+      </div>
+    </div>
+
+    <div class="tl-item t-occ">
+      <div class="tl-card t-occ">
+        <div class="tl-year">2012</div>
+        <span class="type-pill pill-occ">Occupational Disease</span>
+        <h4>Black Lung Resurgence — Progressive Massive Fibrosis</h4>
+        <p>NIOSH and CDC begin reporting a sharp resurgence of severe black lung disease (progressive massive fibrosis) among coal miners, particularly in Central Appalachia. Attributed to longer working hours in thinner seams containing higher silica content. Black Lung Trust Fund under financial stress; coal industry Black Lung Excise Tax revenues insufficient to meet projected benefit obligations.<sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-tech">
+      <div class="tl-card t-tech">
+        <div class="tl-year">2015–2019</div>
+        <span class="type-pill pill-tech">Technology</span>
+        <h4>Wearables &amp; Telematics in WC</h4>
+        <p>Insurers and large self-insured employers begin pilot programmes using wearable sensors (exoskeletons, ergonomic monitors, fatigue sensors) to detect injury risk in real time. Telematics in commercial fleets reduces motor WC claims. Early evidence suggests 20–40% reduction in musculoskeletal injury frequency in well-designed programmes.<sup>[I8]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-leg">
+      <div class="tl-card t-leg">
+        <div class="tl-year">2019</div>
+        <span class="type-pill pill-leg">Legislative</span>
+        <h4>California AB5 — Gig Worker Classification</h4>
+        <p>California law codifies ABC test for worker classification, potentially requiring rideshare and delivery platforms to classify workers as employees — exposing Uber, Lyft, DoorDash and others to WC obligations. Proposition 22 (2020) temporarily exempts app-based transportation; classification litigation continues nationally, with significant WC premium exposure implications.</p>
+      </div>
+    </div>
+
+    <div class="tl-item t-leg">
+      <div class="tl-card t-leg">
+        <div class="tl-year">2020</div>
+        <span class="type-pill pill-leg">Legislative</span>
+        <h4>COVID Presumption Laws — 45+ States</h4>
+        <p>Most states enact COVID-19 WC presumption statutes for healthcare workers, first responders and essential workers — reversing the burden of proof for occupational causation. Full cost of COVID WC claims significantly below early projections; long-COVID claims remain an active reserving issue through 2025. Permanent presumption laws may expand future occupational disease WC exposure.<sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-mkt">
+      <div class="tl-card t-mkt">
+        <div class="tl-year">2021–2022</div>
+        <span class="type-pill pill-mkt">Market Structural</span>
+        <h4>Medical Inflation Surge — WC Severity Impact</h4>
+        <p>Post-COVID medical inflation (hospital staffing costs, pharmaceutical prices, supply chain disruption) drives WC medical claim severity higher across all states. WCRI Medical Price Index 2024 records highest medical cost growth in WC in 15 years. Combined ratios in several states deteriorate; rate adequacy debated in NCCI and independent bureau states.<sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item t-tech">
+      <div class="tl-card t-tech">
+        <div class="tl-year">2023–2024</div>
+        <span class="type-pill pill-tech">Technology</span>
+        <h4>AI in WC Claims Management — Predictive Analytics &amp; Fraud Detection</h4>
+        <p>AI-driven predictive analytics widely adopted by WC carriers for: catastrophic claim identification at first notice of loss, opioid prescribing pattern flagging, SIU fraud referral scoring, return-to-work timeline prediction. NCCI 2024 report identifies AI-assisted claims triage as the most significant operational development in WC for a decade. Regulatory scrutiny of AI use in claims decisions emerging in several states.<sup>[I1]</sup></p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation USA (W5 / W6) &nbsp;|&nbsp; <a href="../index.html">&#8592; Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database &#8594;</a></p>
+</footer>
+
+<script>
+function filterTL(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const items = document.querySelectorAll('.tl-item');
+  let count = 0;
+  items.forEach(item => {
+    if (type === 'all' || item.classList.contains(type)) {
+      item.style.display = 'flex';
+      count++;
+    } else {
+      item.style.display = 'none';
+    }
+  });
+  document.getElementById('tl-count').textContent = `Showing ${count} of 20 events`;
+}
+filterTL('all', document.querySelector('.filter-btn'));
+</script>
+
+</body>
+</html>

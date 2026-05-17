@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Global Programme — Motor International (MF/MG/MH/MI/MP) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b0020;
+      --hub-dark:      #4a0010;
+      --hub-light:     #fce4ec;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#4a0010 0%,#7b0020 55%,#9c0027 100%);
+      --header-sub:    #ef9a9a;
+      --hub-mid:       #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0010;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#4a0010;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .tower{background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:24px;}
+    .tower h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:18px;}
+    .layer{display:flex;align-items:stretch;margin-bottom:6px;border-radius:6px;overflow:hidden;}
+    .layer-num{background:var(--hub-dark);color:var(--hub-accent);font-weight:700;font-size:0.78rem;padding:12px 14px;display:flex;align-items:center;min-width:36px;justify-content:center;writing-mode:vertical-lr;text-orientation:mixed;transform:rotate(180deg);}
+    .layer-body{padding:12px 18px;flex:1;}
+    .layer-body h4{font-size:0.88rem;font-weight:700;margin-bottom:4px;}
+    .layer-body p{font-size:0.8rem;color:#444;line-height:1.4;}
+    .layer-body .meta{font-size:0.75rem;color:var(--hub-accent);font-weight:600;margin-top:4px;}
+    .layer.l5{background:#4a0010;color:#fff;}.layer.l5 .layer-body h4{color:#ef9a9a;}.layer.l5 .layer-body p{color:#f8bbd0;}
+    .layer.l4{background:#7b0020;color:#fff;}.layer.l4 .layer-body h4{color:#ef9a9a;}.layer.l4 .layer-body p{color:#f8bbd0;}
+    .layer.l3{background:#9c0027;color:#fff;}.layer.l3 .layer-body h4{color:#ef9a9a;}.layer.l3 .layer-body p{color:#f8bbd0;}
+    .layer.l2{background:#c62828;color:#fff;}.layer.l2 .layer-body h4{color:#fff;}.layer.l2 .layer-body p{color:#ffcdd2;}
+    .layer.l1{background:var(--hub-accent);color:#2e0010;}.layer.l1 .layer-body h4{color:#4a0010;}.layer.l1 .layer-body p{color:#4a0010;}
+    .greencard-box{background:#e8f5e9;border-left:4px solid #1a5c2a;border-radius:8px;padding:20px 24px;margin-bottom:24px;}
+    .greencard-box h3{font-size:1rem;font-weight:700;color:#1a5c2a;margin-bottom:10px;}
+    .greencard-box p{font-size:0.85rem;color:#1b3a1b;line-height:1.6;}
+    .jurisdiction-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:24px;}
+    .juris{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:4px solid var(--hub-primary);}
+    .juris.blue{border-top-color:var(--hub-secondary);}
+    .juris.green{border-top-color:var(--hub-secondary2);}
+    .juris.gold{border-top-color:var(--hub-accent);}
+    .juris.red{border-top-color:#c62828;}
+    .juris.dark{border-top-color:#4a0010;}
+    .juris h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .juris .flag{font-size:1.2rem;margin-right:6px;}
+    .juris p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .juris .limits{font-size:0.78rem;font-weight:700;color:var(--hub-primary);margin-top:6px;}
+    .case-study{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;border-left:6px solid var(--hub-accent);}
+    .case-study h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .case-study table{box-shadow:none;margin-bottom:0;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #fce4ec;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fff0f3;}
+    .info-box{background:#fff0f3;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a0010;line-height:1.6;}
+    footer{background:#4a0010;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Motor International</a> › Global Programme</div>
+    <div class="tag">Module 07</div>
+    <h1>Global Programme Structure</h1>
+    <div class="sub">Multinational fleet architecture, Green Card system, jurisdiction profiles &amp; case study</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- 5-layer tower -->
+  <div class="section-title">International Motor Programme Tower — 5-Layer Structure</div>
+  <div class="tower">
+    <h3>Illustrative multinational fleet programme tower (corporate with European HQ, 18-country fleet)</h3>
+
+    <div class="layer l5">
+      <div class="layer-num">5</div>
+      <div class="layer-body">
+        <h4>XL Aggregate Stop-Loss (Reinsurance Level)</h4>
+        <p>Annual aggregate stop-loss reinsurance protection at syndicate level. Protects against NatCat accumulation (hail, flood) and major single events. Trigger: gross loss ratio exceeds 95% on the portfolio. Recovery up to 120% LR.</p>
+        <div class="meta">Layer 5 — Reinsurance | Retained by Lloyd's syndicate reinsurer</div>
+      </div>
+    </div>
+
+    <div class="layer l4">
+      <div class="layer-num">4</div>
+      <div class="layer-body">
+        <h4>Lloyd's International Master Excess — Third-Party Liability</h4>
+        <p>Excess MTPL cover above local admitted minimum limits, written on a non-admitted surplus lines basis through Lloyd's master policy. Picks up bodily injury claims where local mandatory limits are insufficient — critical for US state exposure and high-award EU jurisdictions. Covers 18 operating countries under a single master certificate.</p>
+        <div class="meta">Layer 4 — Lloyd's syndicate | £10m xs £2m per occurrence</div>
+      </div>
+    </div>
+
+    <div class="layer l3">
+      <div class="layer-num">3</div>
+      <div class="layer-body">
+        <h4>Primary MTPL Admitted — Per Country (Local Policies)</h4>
+        <p>Compulsory third-party liability insurance placed with admitted carriers in each country of vehicle registration. Must comply with local minimum MTPL limits and regulatory requirements. For EU countries: harmonised minimum per 2021 Directive amendment (EUR 6.45m BI / EUR 1.22m PD). Country-by-country compliance is non-negotiable — unregistered vehicles operating without local admitted MTPL commit regulatory offences. <sup>[L1]</sup></p>
+        <div class="meta">Layer 3 — Local admitted carriers | Country-specific limits</div>
+      </div>
+    </div>
+
+    <div class="layer l2">
+      <div class="layer-num">2</div>
+      <div class="layer-body">
+        <h4>Local Admitted Top-Up — Comprehensive (Own Damage, Theft, Fire)</h4>
+        <p>Comprehensive cover (own damage, theft, fire, natural perils) placed locally where required by the local admitted carrier's terms. In many markets, comprehensive cover must be placed alongside MTPL with the same admitted insurer. Lloyd's fronting arrangements used where Lloyd's paper is required but not locally admitted.</p>
+        <div class="meta">Layer 2 — Local admitted / Lloyd's fronting | Sum insured basis per vehicle</div>
+      </div>
+    </div>
+
+    <div class="layer l1">
+      <div class="layer-num">1</div>
+      <div class="layer-body">
+        <h4>Excess UM/UIM — Uninsured/Underinsured Motorist (USA Exposure)</h4>
+        <p>For programmes with any US-based vehicle exposure, a separate excess uninsured/underinsured motorist (UM/UIM) tower is structured above state minimum BI/PD limits. State minimum limits range from $15,000 BI per person (state minimums) to $100,000+ in higher-limit states. A corporate fleet requires umbrella UM/UIM excess to protect against high-value injury claims.</p>
+        <div class="meta">Layer 1 (bottom excess) — USA only | Excess of state minimums</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Green Card explainer -->
+  <div class="greencard-box">
+    <h3>The Green Card System — How It Works</h3>
+    <p><strong>Coverage:</strong> 48 countries including all EU/EEA member states, non-EU European countries (UK, Switzerland, Türkiye, Russia, Morocco, Tunisia, Israel, Iran, Iraq and others) and associate members. <sup>[L4]</sup></p>
+    <p style="margin-top:8px;"><strong>Mechanism:</strong> A motorist from Country A causes an accident in Country B. The victim deals with the <strong>National Bureau of Country B</strong> (e.g. in France, the Bureau Central Français). The Bureau of Country B settles the claim with the victim and then recovers from the Bureau of Country A (the insurer's home bureau), which in turn recovers from the insurer. The motorist does not need to interact with a foreign insurer.</p>
+    <p style="margin-top:8px;"><strong>Post-Brexit UK position:</strong> Great Britain is no longer part of the EU's internal market insurance automatic extension. UK motorists driving in EU/EEA countries require either a Green Card (issued by their UK insurer) or must confirm their policy extends to the EU — which all UK policies must do by law (minimum MTPL). The UK has its own Motor Insurers' Bureau arrangement for uninsured and untraced drivers operating in the UK. <sup>[L9]</sup></p>
+  </div>
+
+  <!-- Jurisdiction profiles -->
+  <div class="section-title">Key Jurisdiction Profiles</div>
+  <div class="jurisdiction-grid">
+    <div class="juris blue">
+      <h4>European Union (27 Member States)</h4>
+      <p>Harmonised MTPL framework under 2009/103/EC as amended 2021. Minimum BI limit EUR 6.45m per incident, PD EUR 1.22m. All member states require local admitted MTPL; compulsory cross-border extension within EU via Green Card automatic extension. Direct compensation via national bureaux. Vnuk ruling extends MTPL scope to all vehicular use. <sup>[L1]</sup></p>
+      <div class="limits">Min BI: EUR 6.45m | Min PD: EUR 1.22m</div>
+    </div>
+    <div class="juris red">
+      <h4>United Kingdom (Post-Brexit)</h4>
+      <p>Road Traffic Act 1988 mandates MTPL. UK no longer in EU internal market — UK motorists need Green Card for EU travel (automatic MTPL extension to EU remains by statute). Motor Insurers' Bureau handles uninsured (MIB Uninsured Agreement 2017) and untraced (MIB Untraced Agreement 2017) drivers. Whiplash reform (Civil Liability Act 2018) caps soft-tissue injury damages. <sup>[L3]</sup></p>
+      <div class="limits">No upper limit on BI awards; unlimited</div>
+    </div>
+    <div class="juris gold">
+      <h4>UAE / GCC</h4>
+      <p>UAE Federal Law No. 21 of 1995 governs compulsory motor insurance. Third-party liability mandatory; comprehensive motor offered commercially. UAE Insurance Authority mandates minimum limits and regulates coverholder pricing. Saudi Arabia, Qatar, Kuwait have similar frameworks. Flash flood exposure underpriced historically. Mandatory telematics for fleet operators increasingly enforced. <sup>[L5]</sup></p>
+      <div class="limits">UAE min TPL: AED 250,000 PD / unlimited BI</div>
+    </div>
+    <div class="juris green">
+      <h4>Australia (State-by-State CTP)</h4>
+      <p>Australia operates state-level Compulsory Third-Party (CTP) insurance schemes — each state has its own scheme, premium setting body, and coverage rules. NSW: CTP managed by State Insurance Regulatory Authority (SIRA). Victoria: Transport Accident Commission (TAC, government body). Queensland: Motor Accident Insurance Commission (MAIC). Comprehensive motor is placed commercially. <sup>[L6]</sup></p>
+      <div class="limits">CTP: state-run | Comprehensive: commercial market</div>
+    </div>
+    <div class="juris dark">
+      <h4>South Africa</h4>
+      <p>Road Accident Fund (RAF) Act 56 of 1996 establishes a compulsory no-fault fund paid through a fuel levy — all victims of road accidents can claim from the RAF for bodily injury regardless of fault. This removes direct BI liability from motor policies (commercial motor is primarily OD/theft/fire). RAF faces a massive unfunded liability (ZAR 200bn+). Commercial TPL still covers property damage. <sup>[L7]</sup></p>
+      <div class="limits">RAF covers BI (no-fault) | Commercial motor: OD + PD</div>
+    </div>
+    <div class="juris blue">
+      <h4>USA (State Minimum BI/PD Limits)</h4>
+      <p>No federal compulsory insurance law — each of the 50 states sets its own minimum BI/PD limits. Minimum BI ranges from $15,000/30,000 (state minimums) to $25,000/50,000 in most states. For corporate fleets with US exposure: excess UM/UIM tower is essential (uninsured motorists in the US estimated at 13% of drivers). No-fault states (Florida, Michigan, New York) have additional PIP coverage requirements. <sup>[I5]</sup></p>
+      <div class="limits">State minimums: $15k–$100k+ BI | Excess umbrella essential</div>
+    </div>
+  </div>
+
+  <!-- Case study -->
+  <div class="case-study">
+    <h3>Case Study — European Multinational FMCG Company: 3,200 Vehicles, 18 Countries, UK HQ</h3>
+    <table>
+      <thead><tr><th>Programme Element</th><th>Detail</th><th>Solution</th></tr></thead>
+      <tbody>
+        <tr><td>Fleet profile</td><td>3,200 vehicles: 600 HGV distribution, 2,200 light commercial, 400 company cars</td><td>Mixed fleet programme — HGV rated separately</td></tr>
+        <tr><td>Countries</td><td>18 EU member states + UK + Switzerland + Norway</td><td>EU countries: local admitted MTPL + Lloyd's master excess; non-EU: Green Card + admitted local</td></tr>
+        <tr><td>MTPL structure</td><td>Country-by-country admitted primary at local minimums; master excess over all local primaries</td><td>Lloyd's master excess: £15m xs £5m per occurrence, 18-country schedule</td></tr>
+        <tr><td>Comprehensive cover</td><td>Own damage, theft, fire, NatCat — agreed value basis, all vehicles</td><td>Lloyd's comprehensive binder via specialist German motor MGA with sub-authorities</td></tr>
+        <tr><td>Green Card compliance</td><td>HGV fleet cross-border — Green Card system coverage required</td><td>All local admitted policies include Green Card; bureau-registered with national bureaux</td></tr>
+        <tr><td>UK post-Brexit position</td><td>UK fleet vehicles crossing to EU require explicit MTPL EU extension</td><td>UK MTPL extended to EU per statute; HGV vehicles carry physical Green Cards for checks</td></tr>
+        <tr><td>EV component</td><td>280 vehicles EV (Stellantis fleet, transitioning) — 8.8% of fleet</td><td>EV battery fire endorsement added; approved EV-capable repairer network confirmed</td></tr>
+        <tr><td>NatCat aggregation</td><td>Central/Eastern Europe — hail and flood exposure; German operations flood-exposed</td><td>Aggregate stop-loss at 100% LR trigger; specialist hail cover sublimited for Eastern Europe portfolio</td></tr>
+        <tr><td>Annual GWP (est.)</td><td>Programme total across all layers</td><td>~EUR 4.2m GWP equivalent</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- EU Directive 2021 update -->
+  <div class="info-box">
+    <strong>EU Motor Insurance Directive 2021 Update — Key Changes:</strong> The 2021 amendment to the consolidated EU Motor Insurance Directive raises minimum MTPL limits for the first time since 2009 — bodily injury minimum increased from EUR 1m to <strong>EUR 6.45m per incident</strong>, and property damage from EUR 1m to <strong>EUR 1.22m</strong>. The amendment also explicitly addresses compulsory insurance for autonomous vehicles, clarifying that MTPL must cover accidents occurring during autonomous mode. Member states must implement by December 2023. Lloyd's international motor underwriters with EU primary MTPL exposure must ensure local admitted policies reflect updated minimums and that excess tower attachment points are reviewed accordingly. <sup>[L2]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Motor International (MF/MG/MH/MI/MP) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Next: References →</a></p>
+</footer>
+
+</body>
+</html>

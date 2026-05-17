@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Motor – UK (M2 · M3 · M4 · M5 · M6) — Risk Code Hub</title>
+  <style>
+    :root {
+      --motor:#c0392b; --motor-dark:#7b1010; --road:#263238;
+      --signal:#e67e22; --signal-light:#fff5e6; --speed:#1565c0;
+      --go:#2e7d32; --light:#fdf5f5; --mid:#f5e0e0;
+      --text:#1e2a2e; --muted:#6b7280; --border:#e0cece;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #c0392b;
+    --hub-dark:      #7b1010;
+    --hub-light:     #fdecea;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #e67e22;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#1a0808 0%,#c0392b 50%,#7b1010 100%);
+    --header-sub:    #f0c8c8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header {
+      background:linear-gradient(135deg,#1a0808 0%,#c0392b 50%,#7b1010 100%);
+      color:#fff; padding:40px; position:relative; overflow:hidden;
+    }
+    header::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(230,126,34,0.18) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(21,101,192,0.12) 0%,transparent 50%);
+    }
+    header .inner { position:relative; z-index:1; }
+    .breadcrumb { font-size:0.8rem; color:#c8a090; margin-bottom:6px; }
+    .breadcrumb a { color:var(--signal); text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:var(--signal); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#f0c8c8; font-size:0.95rem; max-width:740px; line-height:1.7; }
+
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--motor); border-bottom-color:var(--signal); }
+
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--motor); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--signal); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; margin:28px 0; }
+    .stat-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; text-align:center; }
+    .stat-card .val { font-size:1.55rem; font-weight:800; color:var(--motor); line-height:1.1; }
+    .stat-card .val.amber { color:var(--signal); }
+    .stat-card .val.blue { color:var(--speed); }
+    .stat-card .val.green { color:var(--go); }
+    .stat-card .val.road { color:var(--road); }
+    .stat-card .lbl { font-size:0.74rem; color:var(--muted); margin-top:5px; line-height:1.4; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin-top:4px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+    .b-g { background:#f8d7da; color:#721c24; }
+
+    .code-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:24px 0; }
+    .code-table table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .code-table th { background:var(--motor); color:#fff; padding:10px 16px; text-align:left; }
+    .code-table th:hover { background:var(--motor-dark); color:#fff; }
+    .code-table td { padding:10px 16px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .code-table tr:last-child td { border-bottom:none; }
+    .code-table tr:nth-child(even) td { background:#fdf8f8; }
+    .code-chip { display:inline-block; font-weight:800; font-size:0.8rem; padding:2px 10px; border-radius:12px; letter-spacing:1px; margin-right:4px; color:#fff; }
+    .chip-m2 { background:var(--motor); }
+    .chip-m3 { background:var(--road); }
+    .chip-m4 { background:var(--signal); color:#fff; }
+    .chip-m5 { background:var(--speed); }
+    .chip-m6 { background:var(--go); }
+
+    .cov-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr)); gap:16px; margin:24px 0; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--motor); }
+    .cov-card.amber-top { border-top-color:var(--signal); }
+    .cov-card.blue-top { border-top-color:var(--speed); }
+    .cov-card.green-top { border-top-color:var(--go); }
+    .cov-card.road-top { border-top-color:var(--road); }
+    .cov-card h4 { font-size:0.9rem; font-weight:700; color:var(--motor); margin-bottom:8px; }
+    .cov-card.amber-top h4 { color:var(--signal); }
+    .cov-card.blue-top h4 { color:var(--speed); }
+    .cov-card.green-top h4 { color:var(--go); }
+    .cov-card.road-top h4 { color:var(--road); }
+    .cov-card ul { padding-left:16px; }
+    .cov-card li { font-size:0.84rem; margin-bottom:5px; line-height:1.5; }
+
+    .info-box { background:var(--road); color:#c8d8e0; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:var(--signal); margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#c8d8e0; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .market-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:24px 0; }
+    .market-table table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+    .market-table th { background:var(--road); color:#fff; padding:10px 16px; text-align:left; }
+    .market-table th:hover { background:#1a2328; color:#fff; }
+    .market-table td { padding:10px 16px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .market-table tr:last-child td { border-bottom:none; }
+    .market-table tr:nth-child(even) td { background:#f8fafa; }
+
+    .mod-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:24px 0; }
+    .mod-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; text-decoration:none; color:var(--text); transition:box-shadow .2s; }
+    .mod-card:hover { box-shadow:0 4px 16px rgba(192,57,43,0.15); border-color:var(--motor); }
+    .mod-card .mod-num { font-size:0.72rem; font-weight:700; color:var(--motor); letter-spacing:2px; margin-bottom:4px; }
+    .mod-card h4 { font-size:0.9rem; font-weight:700; color:var(--text); }
+    .mod-card p { font-size:0.8rem; color:var(--muted); margin:4px 0 0; }
+
+    footer { background:var(--road); color:#aabbc4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Motor – UK</div>
+    <div class="tag">Lloyd's Codes · M2 · M3 · M4 · M5 · M6</div>
+    <h1>Motor – UK</h1>
+    <p>UK motor insurance covering private cars, motorcycles, commercial vehicles, fleet and motor trade risks. Compulsory third-party liability under the Road Traffic Act 1988, with Lloyd's participation concentrated in non-standard, high-value, fleet and specialist risks.</p>
+  </div>
+</header>
+<nav>
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates & ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~£20bn</div>
+      <div class="lbl">Total UK motor GWP 2024 <span class="badge b-e">EST</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val amber">39m+</div>
+      <div class="lbl">Licensed vehicles on UK roads <span class="badge b-v">VER</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val blue">~£800m</div>
+      <div class="lbl">Lloyd's UK motor GWP (M2–M6) <span class="badge b-e">EST</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val road">1930</div>
+      <div class="lbl">Road Traffic Act — first compulsory TPL requirement <span class="badge b-v">VER</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val green">+17%</div>
+      <div class="lbl">EV share of new UK registrations 2024 <span class="badge b-v">VER</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val amber">+29%</div>
+      <div class="lbl">Average UK personal lines premium increase 2023 (ABI) <span class="badge b-v">VER</span></div>
+    </div>
+  </div>
+
+  <h2>Lloyd's Risk Codes — M2 to M6</h2>
+  <p>Five Lloyd's risk codes cover UK motor insurance, ranging from personal-lines private car through commercial fleets and specialist motor trade. All classes are subject to compulsory minimum third-party liability under the Road Traffic Act 1988 and FCA regulation. Lloyd's syndicates focus on non-standard and specialist segments where standard market pricing is inadequate.</p>
+
+  <div class="code-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Class</th>
+          <th>Scope</th>
+          <th>Policy Basis</th>
+          <th>Typical Limits</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="code-chip chip-m2">M2</span></td>
+          <td><strong>Private Motor</strong></td>
+          <td>Private cars and light vehicles — personal lines, agreed/market value, classic and high-performance cars, non-standard risks</td>
+          <td>Annual; comprehensive / TPFT / TPO; SDP, SDP+C, or business use</td>
+          <td>Unlimited TPL (RTA); vehicle value up to £500k+ (specialist)</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-m3">M3</span></td>
+          <td><strong>Commercial Motor</strong></td>
+          <td>Light commercial vehicles, vans, HGV, specialist vehicles, courier fleets, ride-hail operators</td>
+          <td>Annual; goods-in-transit add-on; any-driver / named-driver</td>
+          <td>Unlimited TPL; vehicle/cargo values to £5m+</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-m4">M4</span></td>
+          <td><strong>Motorcycle</strong></td>
+          <td>Motorcycles, mopeds, scooters, e-bikes (where classified), racing and track-day bikes</td>
+          <td>Annual; comprehensive / TPFT / TPO; laid-up option</td>
+          <td>Unlimited TPL; bike value to £100k+</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-m5">M5</span></td>
+          <td><strong>Motor Fleet</strong></td>
+          <td>Corporate fleets (typically 10+ vehicles), hire/rental fleets, chauffeur fleets, corporate travel programmes</td>
+          <td>Annual fleet policy; any-driver or named-driver; blanket or scheduled vehicles</td>
+          <td>Unlimited TPL; fleet values to £50m+</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-m6">M6</span></td>
+          <td><strong>Motor Trade</strong></td>
+          <td>Motor trade road risks and combined; dealer lots, repairers, recovery operators, vehicle testing — covering vehicles in custody/control</td>
+          <td>Road risks only or combined; blanket cover for vehicles in trade</td>
+          <td>Unlimited TPL; premises and trade stock to £10m+</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Coverage Overview</h2>
+  <p>UK motor insurance is legally stratified into three coverage tiers by the Road Traffic Act 1988. Lloyd's participates primarily in comprehensive and specialist segments where technical underwriting adds value. The compulsory minimum — Third Party Only — is largely a commodity market dominated by direct insurers.</p>
+
+  <div class="cov-grid">
+    <div class="cov-card">
+      <h4>Comprehensive (Fully Comp)</h4>
+      <ul>
+        <li>Own damage (accidental, malicious, weather)</li>
+        <li>Third-party property damage and bodily injury</li>
+        <li>Theft and attempted theft</li>
+        <li>Fire (internal and external)</li>
+        <li>Windscreen and glass</li>
+        <li>Agreed/market value settlement</li>
+      </ul>
+    </div>
+    <div class="cov-card amber-top">
+      <h4>TPFT — Third Party Fire &amp; Theft</h4>
+      <ul>
+        <li>Third-party bodily injury (unlimited)</li>
+        <li>Third-party property damage</li>
+        <li>Fire damage to own vehicle</li>
+        <li>Theft of own vehicle</li>
+        <li>No own-damage cover for accidents</li>
+        <li>Common on older or lower-value vehicles</li>
+      </ul>
+    </div>
+    <div class="cov-card blue-top">
+      <h4>TPO — Third Party Only (Minimum Legal)</h4>
+      <ul>
+        <li>Third-party bodily injury (unlimited by statute)</li>
+        <li>Third-party property damage</li>
+        <li>Minimum required by Road Traffic Act 1988</li>
+        <li>MIB backstop for uninsured/untraced drivers</li>
+        <li>Compulsory on all mechanically propelled vehicles used on public roads</li>
+      </ul>
+    </div>
+    <div class="cov-card green-top">
+      <h4>Fleet &amp; Commercial Extensions</h4>
+      <ul>
+        <li>Goods in transit (own and third-party goods)</li>
+        <li>Employers' liability (driving for work)</li>
+        <li>Breakdown and recovery</li>
+        <li>Replacement vehicle / loss of use</li>
+        <li>Any-driver up to age / licence limits</li>
+        <li>Territory extensions (EU, worldwide)</li>
+      </ul>
+    </div>
+    <div class="cov-card road-top">
+      <h4>Classic &amp; High-Value (M2 Specialist)</h4>
+      <ul>
+        <li>Agreed value (no depreciation deduction)</li>
+        <li>Limited mileage options</li>
+        <li>Club / rally participation cover</li>
+        <li>Track-day endorsement</li>
+        <li>Laid-up period discounts</li>
+        <li>Salvage retention rights</li>
+      </ul>
+    </div>
+    <div class="cov-card amber-top">
+      <h4>Motor Trade Combined (M6)</h4>
+      <ul>
+        <li>Road risks — vehicles in customer / dealer custody</li>
+        <li>Premises (fire, theft, business interruption)</li>
+        <li>EL and PL for trade activities</li>
+        <li>Tools, stock and equipment</li>
+        <li>Credit risk (demonstrator finance)</li>
+        <li>Product liability for repairs / parts fitted</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Regulatory &amp; Statutory Framework</h2>
+  <div class="info-box">
+    <h3>Road Traffic Act 1988 &amp; Compulsory Insurance Regime</h3>
+    <p>All mechanically propelled vehicles used on a road or other public place in Great Britain must carry at minimum third-party liability insurance under Part VI of the Road Traffic Act 1988. Failure to comply is a criminal offence; penalties include fixed penalty notices, licence endorsement (IN10), vehicle seizure and prosecution. Key statutory machinery includes:</p>
+    <ul>
+      <li><strong>Motor Insurers' Bureau (MIB):</strong> Compensates victims of uninsured and untraced drivers. Funded by levies on all UK motor insurers. Uninsured Drivers Agreement (2015) and Untraced Drivers Agreement (2017).</li>
+      <li><strong>Motor Insurance Database (MID):</strong> Operated by MIB — real-time database of all UK insured vehicles used by police, DVLA and ANPR cameras for enforcement.</li>
+      <li><strong>Continuous Insurance Enforcement (CIE):</strong> Since 2011, DVLA cross-references MID against registered keeper records. Uninsured vehicles receive automatic penalties unless validly SORNed.</li>
+      <li><strong>FCA Regulation:</strong> Motor insurance is a regulated activity under FSMA 2000. Insurers must hold a Part 4A permission and comply with ICOBS (Insurance Conduct of Business Sourcebook) rules.</li>
+      <li><strong>FCA Pricing Reform 2022:</strong> Banned "price walking" — renewal premiums cannot exceed equivalent new business price. Significant structural impact on personal lines pricing.</li>
+      <li><strong>Automated Vehicles Act 2024:</strong> New statutory framework for autonomous and self-driving vehicles. Insurer liable for incidents while vehicle is self-driving; subrogation rights against manufacturer.</li>
+    </ul>
+  </div>
+
+  <h2>Market Participants — UK Motor</h2>
+  <div class="market-table">
+    <table>
+      <thead>
+        <tr><th>Segment</th><th>Key Players</th><th>Approx. GWP Share</th><th>Lloyd's Involvement</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Personal Lines (M2)</strong></td>
+          <td>Admiral, Aviva, Direct Line, LV=, AXA, Hastings, Ageas, esure</td>
+          <td>~60% of UK motor market <span class="badge b-e">EST</span></td>
+          <td>Low — standard personal lines; Lloyd's active in HNW, classic car, agreed-value segments</td>
+        </tr>
+        <tr>
+          <td><strong>Commercial Motor (M3)</strong></td>
+          <td>Aviva, RSA, Zurich, AXA, NFU Mutual, Allianz</td>
+          <td>~20% <span class="badge b-e">EST</span></td>
+          <td>Moderate — courier, ride-hail, heavy haulage, non-standard commercial risks</td>
+        </tr>
+        <tr>
+          <td><strong>Motorcycle (M4)</strong></td>
+          <td>Bikesure, Devitt, MCE, Carole Nash, Aviva</td>
+          <td>~3% <span class="badge b-e">EST</span></td>
+          <td>Low-moderate — specialist performance bikes, racing, track-day endorsements</td>
+        </tr>
+        <tr>
+          <td><strong>Motor Fleet (M5)</strong></td>
+          <td>Zurich, Aviva, RSA, AXA, Ageas, Allianz</td>
+          <td>~12% <span class="badge b-e">EST</span></td>
+          <td>Active — large corporate fleets, global programme coordination, captive arrangements</td>
+        </tr>
+        <tr>
+          <td><strong>Motor Trade (M6)</strong></td>
+          <td>Equity Red Star, NIG, Allianz, Aviva, Motor Trade Protector</td>
+          <td>~5% <span class="badge b-e">EST</span></td>
+          <td>Active — specialist motor trade underwriters at Lloyd's; bespoke combined programmes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Key Emerging Risks</h2>
+  <p>UK motor is undergoing its most significant structural shift in a century, driven by electrification, connectivity and autonomy. Lloyd's underwriters writing M2–M6 must assess these risk vectors alongside traditional frequency/severity drivers.</p>
+  <div class="cov-grid">
+    <div class="cov-card">
+      <h4>Electric Vehicles (EV)</h4>
+      <ul>
+        <li>Battery replacement costs: £5,000–£30,000+ (BEV) <span class="badge b-e">EST</span></li>
+        <li>Thermal runaway — uncontrolled exothermic reaction; difficult to extinguish</li>
+        <li>Total-loss thresholds lower due to battery write-off criteria</li>
+        <li>Charging infrastructure liability (public charge points)</li>
+        <li>EV-specialist repair networks still limited (2024) <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="cov-card amber-top">
+      <h4>Telematics &amp; UBI</h4>
+      <ul>
+        <li>Usage-based insurance (UBI) via black-box or app</li>
+        <li>Pay-as-you-drive (PAYD) and pay-how-you-drive (PHYD)</li>
+        <li>Data privacy obligations under UK GDPR</li>
+        <li>Young driver telematics — dominant pricing tool under 25</li>
+        <li>Cyber risk if telematics data compromised</li>
+      </ul>
+    </div>
+    <div class="cov-card blue-top">
+      <h4>Autonomous Vehicles (AV)</h4>
+      <ul>
+        <li>Automated Vehicles Act 2024 — insurer first-response liability during self-drive</li>
+        <li>Right of subrogation against manufacturer for product defect</li>
+        <li>SAE levels 1–5 — only Level 3+ covered by AV Act regime</li>
+        <li>ADAS (Advanced Driver-Assistance Systems) — partial automation raises attribution questions</li>
+        <li>Long-term shift of premium from personal lines to product liability</li>
+      </ul>
+    </div>
+    <div class="cov-card green-top">
+      <h4>Gig Economy &amp; Ride-Hail</h4>
+      <ul>
+        <li>Uber, Bolt, Ola — hire &amp; reward classification requires specific PHV cover</li>
+        <li>Hire or reward exclusion in standard policies</li>
+        <li>Delivery courier boom post-COVID — classification grey areas</li>
+        <li>FCA guidance on gig economy insurance gaps (2021)</li>
+        <li>Aggregator platform liability questions</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Hub Modules</h2>
+  <div class="mod-grid">
+    <a class="mod-card" href="history.html"><div class="mod-num">MODULE 01</div><h4>History &amp; Origins</h4><p>From compulsory insurance 1930 to digital disruption</p></a>
+    <a class="mod-card" href="timeline.html"><div class="mod-num">MODULE 02</div><h4>Major Events Timeline</h4><p>Key legislative, market and claims events 1930–2024</p></a>
+    <a class="mod-card" href="database.html"><div class="mod-num">MODULE 03</div><h4>Claims Database</h4><p>35 significant motor claims and market events</p></a>
+    <a class="mod-card" href="underwriting.html"><div class="mod-num">MODULE 04</div><h4>Underwriting Methodology</h4><p>Rating factors, worked examples for fleet and classic car</p></a>
+    <a class="mod-card" href="rates-analysis.html"><div class="mod-num">MODULE 05</div><h4>Rates &amp; ROE Analysis</h4><p>Market cycle, claims inflation, ROE scenarios</p></a>
+    <a class="mod-card" href="risk-mitigation.html"><div class="mod-num">MODULE 06</div><h4>Risk Mitigation</h4><p>Fleet risk management, ADAS, MID compliance, EV protocols</p></a>
+    <a class="mod-card" href="global-program.html"><div class="mod-num">MODULE 07</div><h4>Global Programme</h4><p>Multinational fleet structures, captives, fronting arrangements</p></a>
+    <a class="mod-card" href="references.html"><div class="mod-num">REFERENCES</div><h4>Sources &amp; Confidence</h4><p>VER/EST/ILLUS/GAP audit and primary sources</p></a>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.8 · Motor – UK (M2/M3/M4/M5/M6) · For educational use · Not a substitute for professional advice</footer>
+</body>
+</html>

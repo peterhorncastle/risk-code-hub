@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+<title>Marine Hull War – Global Programme | Risk Code Hub</title>
+<style>
+:root{
+  --war:#1a237e;--war-dark:#0d1442;--danger:#c62828;--mine:#e65100;
+  --piracy:#6a1b9a;--jwc:#00695c;--warn:#f57f17;
+  --ver:#e6f4ea;--est:#fef3e2;--illus:#cce5ff;--gap:#fdecea;
+  --card:#fff;--border:#e0e0e0;--text:#212121;--muted:#757575;
+    /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1a237e;
+    --hub-dark:      #0d1442;
+    --hub-light:     #e8ebf8;
+    --hub-accent:    #f57f17;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#e65100;
+    --header-gradient:linear-gradient(135deg,#0d1442 0%,#1a237e 50%,#283593 100%);
+    --header-sub:    #b8c8e8;
+  }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f5f5;color:var(--text);font-size:15px;line-height:1.6}
+header{background:linear-gradient(135deg,#0d1442 0%,#1a237e 50%,#283593 100%);color:#fff;padding:2rem 1.5rem 1.5rem}
+header .breadcrumb{font-size:.8rem;opacity:.75;margin-bottom:.4rem}
+header .breadcrumb a{color:#fff;text-decoration:none}
+header h1{font-size:1.7rem;font-weight:700;letter-spacing:-.3px}
+header p{opacity:.85;margin-top:.3rem;font-size:.95rem}
+nav.tabs{background:#fff;border-bottom:2px solid var(--border);display:flex;flex-wrap:wrap;gap:0;overflow-x:auto}
+nav.tabs a{padding:.65rem 1.1rem;text-decoration:none;color:var(--muted);font-size:.82rem;font-weight:600;white-space:nowrap;border-bottom:3px solid transparent;transition:color .2s}
+nav.tabs a:hover{color:var(--war)}
+nav.tabs a.active{color:var(--war);border-bottom-color:var(--war)}
+main{max-width:1100px;margin:0 auto;padding:1.5rem}
+h2{font-size:1.15rem;font-weight:700;margin:1.5rem 0 .8rem;color:var(--war-dark);border-left:4px solid var(--war);padding-left:.6rem}
+h3{font-size:1rem;font-weight:700;margin:1.2rem 0 .5rem;color:var(--war)}
+p{margin:.4rem 0 .8rem}
+
+/* confidence badges */
+.ver,.est,.illus,.gap{display:inline-block;font-size:.7rem;font-weight:700;padding:.1rem .45rem;border-radius:3px;vertical-align:middle;margin-left:.3rem}
+.ver{background:var(--ver);color:#1b5e20}
+.est{background:var(--est);color:#e65100}
+.illus{background:var(--illus);color:#003d80}
+.gap{background:var(--gap);color:#b71c1c}
+
+/* layer tower */
+.tower{display:flex;flex-direction:column;gap:0;max-width:820px;margin:1rem auto}
+.tower-layer{display:flex;align-items:stretch;border:1px solid var(--border);border-top:none}
+.tower-layer:first-child{border-top:1px solid var(--border);border-radius:8px 8px 0 0}
+.tower-layer:last-child{border-radius:0 0 8px 8px}
+.layer-label{min-width:170px;padding:.8rem 1rem;font-weight:700;font-size:.85rem;color:#fff;display:flex;align-items:center;flex-shrink:0}
+.layer-body{padding:.8rem 1rem;flex:1;font-size:.85rem}
+.layer-body strong{display:block;margin-bottom:.2rem}
+.l1{background:#1a237e}
+.l2{background:#283593}
+.l3{background:#3949ab}
+.l4{background:#5c6bc0}
+.l5{background:#7986cb}
+.l6{background:#9fa8da;color:#1a237e}
+.l6 .layer-label{color:#1a237e}
+
+/* cards grid */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1rem;margin:1rem 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.1rem}
+.card h4{font-size:.9rem;font-weight:700;margin-bottom:.4rem;color:var(--war)}
+.card p{font-size:.84rem;margin:0}
+.card ul{font-size:.84rem;margin:.3rem 0 0 1.1rem}
+.card ul li{margin-bottom:.2rem}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;margin:1rem 0}
+table{width:100%;border-collapse:collapse;font-size:.84rem;background:#fff}
+th{background:var(--war);color:#fff;padding:.55rem .7rem;text-align:left;white-space:nowrap}
+td{padding:.5rem .7rem;border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:#f9f9f9}
+
+/* info boxes */
+.info-box{border-radius:8px;padding:1rem 1.2rem;margin:1rem 0;font-size:.88rem}
+.info-box.blue{background:#e3f2fd;border-left:4px solid #1565c0}
+.info-box.amber{background:#fff8e1;border-left:4px solid #f9a825}
+.info-box.green{background:var(--ver);border-left:4px solid #2e7d32}
+.info-box.red{background:var(--gap);border-left:4px solid #c62828}
+.info-box strong{display:block;margin-bottom:.3rem;font-size:.92rem}
+
+/* case study */
+.case-study{background:linear-gradient(135deg,#e8eaf6,#e3f2fd);border:1px solid #9fa8da;border-radius:8px;padding:1.3rem;margin:1.2rem 0}
+.case-study h3{color:#1a237e;margin-top:0}
+.case-study table{font-size:.83rem}
+.case-study th{background:#1a237e}
+
+/* structure diagram */
+.structure{display:flex;flex-wrap:wrap;gap:.8rem;margin:1rem 0;justify-content:center}
+.struct-box{border:2px solid var(--war);border-radius:8px;padding:.8rem 1rem;text-align:center;min-width:150px;font-size:.82rem}
+.struct-box .title{font-weight:700;color:var(--war);font-size:.88rem;margin-bottom:.25rem}
+.struct-box.ri{border-color:#c62828;background:#fdecea}
+.struct-box.ri .title{color:#c62828}
+.struct-box.pi{border-color:#00695c;background:#e8f5e9}
+.struct-box.pi .title{color:#00695c}
+.struct-arrow{display:flex;align-items:center;font-size:1.3rem;color:var(--muted)}
+
+footer{background:#263238;color:#cfd8dc;text-align:center;padding:1.2rem;font-size:.8rem;margin-top:2rem}
+footer a{color:#90caf9;text-decoration:none}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Hull War</a> › Global Programme</div>
+  <h1>Marine Hull War — Global Fleet Programme</h1>
+  <p>W · WB · AW · WX &nbsp;|&nbsp; Programme structure, P&I coordination, reinsurance & multi-vessel fleet case study</p>
+</header>
+
+<nav class="tabs">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════════
+     1. PROGRAMME OVERVIEW
+══════════════════════════════════════════════════════════════ -->
+<h2>War Risk Programme Architecture</h2>
+<p>Marine hull war risk is placed as a <strong>separate policy</strong> from the Hull &amp; Machinery (H&amp;M) policy, reflecting the F.C.&S. (Free of Capture &amp; Seizure) exclusion carved out of all standard H&amp;M wordings. A typical fleet programme combines a world-wide base war policy (annual) with ad hoc AWRP endorsements for JWC Listed Area transits, supplemented by P&amp;I war cover, crew K&amp;R/PA arrangements, and facultative reinsurance placements. <span class="ver">VER</span></p>
+
+<div class="info-box blue">
+  <strong>Why War Risk is Separate</strong>
+  Institute Time Clauses Hulls (ITCH) and equivalent H&amp;M wordings exclude "war, strikes, terrorism and related perils" via the F.C.&S. clause. This creates a <em>coverage gap</em> that shipowners must fill through a dedicated war risk policy. The Lloyd's War &amp; Strikes market and certain mutuals (Hellenic, Swedish Club) are the principal providers of this cover.
+</div>
+
+<!-- Tower -->
+<h3>Fleet War Programme — Coverage Tower <span class="illus">ILLUS</span></h3>
+<div class="tower">
+  <div class="tower-layer">
+    <div class="layer-label l1">Facultative RI / Cat Aggregate</div>
+    <div class="layer-body"><strong>Top-layer reinsurance — catastrophe events</strong>War syndicate reinsurance (e.g., mass casualty event, port closure, fleet-wide loss). Typically placed inwards by lead underwriter; owner may obtain facultative RI for very high-value vessels (&gt;$150m).</div>
+  </div>
+  <div class="tower-layer">
+    <div class="layer-label l2">Master War Policy (London market / Lloyd's)</div>
+    <div class="layer-body"><strong>Annual world-wide hull war — Institute CL.280</strong>Covers all fleet vessels; sets base war rate applied to insured value. Perils: war, capture/seizure, derelict mines/torpedoes, strikers, terrorism, piracy. Written as a Lloyd's slip or company market binder.</div>
+  </div>
+  <div class="tower-layer">
+    <div class="layer-label l3">AWRP Endorsements (per transit)</div>
+    <div class="layer-body"><strong>Additional War Risk Premium — JWC Listed Areas</strong>Attached to the master policy via endorsement each time a vessel enters a Listed Area. Rates set by JWC; owner notifies broker pre-transit. May stack (e.g., Red Sea + Bab-el-Mandeb).</div>
+  </div>
+  <div class="tower-layer">
+    <div class="layer-label l4">P&amp;I War Liability Cover</div>
+    <div class="layer-body"><strong>Third-party war liability — cargo, crew, pollution</strong>P&amp;I Clubs provide war liability cover (third-party) for entered vessels under their war rules, supplementing the hull war policy which covers only the shipowner's own asset.</div>
+  </div>
+  <div class="tower-layer">
+    <div class="layer-label l5">Crew PA / K&amp;R (KM code)</div>
+    <div class="layer-body"><strong>Crew personal accident &amp; kidnap and ransom</strong>Separate PA policy for seafarers (MLC 2006-compliant); K&amp;R for piracy/terrorism kidnap. Maritime PA (KM) sits alongside war cover, triggered by war perils injuring crew.</div>
+  </div>
+  <div class="tower-layer">
+    <div class="layer-label l6">Retained Deductible / Self-Insured Retention</div>
+    <div class="layer-body"><strong>Owner/operator first-loss retention</strong>Agreed per-occurrence deductible on hull war policy. Larger fleets may retain minor battle damage repair costs below ~$250k–$500k per occurrence.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     2. POLICY MECHANICS
+══════════════════════════════════════════════════════════════ -->
+<h2>Policy Mechanics — Annual Policy + AWRP Endorsements</h2>
+
+<div class="cards">
+  <div class="card">
+    <h4>Annual World-Wide Base Policy</h4>
+    <ul>
+      <li>12-month period; covers world-wide transits including international waters</li>
+      <li>Applies CL.280 perils to all fleet vessels as scheduled</li>
+      <li>Base rate on insured value (typically 0.035%–0.12% p.a. post-2022)</li>
+      <li>48-hour cancellation clause: underwriter may cancel or re-price at 48 hours' notice; owner must then find alternative cover</li>
+      <li>New vessels added by endorsement; sold vessels deleted (return of pro-rata premium)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>AWRP Endorsement Process</h4>
+    <ul>
+      <li>Owner/operator identifies transit through JWC Listed Area</li>
+      <li>Broker contacts lead underwriter for AWRP rate (per voyage or per day)</li>
+      <li>Endorsement issued specifying vessel name, voyage, duration, AWRP amount</li>
+      <li>Payment: premium typically billed on closing of voyage or monthly if multiple transits</li>
+      <li>Sub-rates for anchorage vs. transit; higher for overnight anchoring in HRA</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>War &amp; P&amp;I Coordination</h4>
+    <ul>
+      <li>Hull war policy covers <em>physical loss/damage</em> to vessel and CTL claims</li>
+      <li>P&amp;I Club war rules cover <em>third-party liabilities</em> (injury, pollution, cargo) arising from war perils</li>
+      <li>Coordination clause essential: avoid overlap on salvage/collision war scenarios</li>
+      <li>P&amp;I war cancellation typically mirrors hull war 48-hour notice</li>
+      <li>IG Group P&amp;I war pooling: major losses shared above $10m retention</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Crew K&amp;R and PA Integration</h4>
+    <ul>
+      <li>MLC 2006 Art. 4.2: shipowner must carry insurance for crew death, disability, and repatriation</li>
+      <li>KM-coded maritime PA covers AD&amp;D for seafarers transiting war zones</li>
+      <li>K&amp;R policy (separate) covers ransom, negotiation costs, and post-incident care</li>
+      <li>Piracy K&amp;R typically requires UKMTO registration and BMP compliance as a condition precedent</li>
+      <li>K&amp;R and hull war policies must not contain conflicting ransom coverage provisions</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     3. 48-HOUR CLAUSE — IMPLICATIONS
+══════════════════════════════════════════════════════════════ -->
+<h2>48-Hour Cancellation Clause — Programme Implications</h2>
+
+<div class="info-box amber">
+  <strong>Critical Programme Risk — Cancellation at Escalation</strong>
+  The 48-hour war cancellation clause is standard in CL.280-based policies. When geopolitical risk escalates rapidly (as with Ukraine Feb 2022 or Red Sea Dec 2023), underwriters issued mass cancellation notices within hours of JWC listing decisions. Owners who could not place replacement cover faced "war risk holes" in their programme. Effective fleet programme management requires contingency placement arrangements and pre-agreed reinstatement terms. <span class="est">EST</span>
+</div>
+
+<div class="tbl-wrap">
+<table>
+<thead>
+  <tr>
+    <th>Scenario</th><th>Cancellation Trigger</th><th>Owner Exposure Window</th><th>Mitigation</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>New JWC listing of vessel's trade route</td>
+    <td>Lead underwriter issues 48-hr notice</td>
+    <td>48 hours to arrange alternative or reroute</td>
+    <td>Pre-bind contingency war cover; broker on standby</td>
+  </tr>
+  <tr>
+    <td>Escalation mid-transit (e.g., missile attack nearby)</td>
+    <td>Underwriter cancels while vessel in HRA</td>
+    <td>Vessel uninsured for war perils in Listed Area</td>
+    <td>Pre-agreed "in-transit" extension clause (additional premium)</td>
+  </tr>
+  <tr>
+    <td>Sanctions trigger (vessel diverts to sanctioned port)</td>
+    <td>Automatic war policy suspension under sanctions clause</td>
+    <td>Immediate — no notice period</td>
+    <td>Pre-voyage sanctions screening; avoid listed port calls</td>
+  </tr>
+  <tr>
+    <td>Market-wide capacity withdrawal (Black Swan)</td>
+    <td>Multiple underwriters simultaneously cancel</td>
+    <td>Potential market failure; state backstop required</td>
+    <td>JWLA government scheme (historical precedent); P&amp;I pooling</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     4. REINSURANCE STRUCTURE
+══════════════════════════════════════════════════════════════ -->
+<h2>War Syndicate Reinsurance Structure <span class="est">EST</span></h2>
+
+<div class="info-box green">
+  <strong>War Risk RI — Unique Characteristics</strong>
+  Unlike H&amp;M reinsurance which uses quota share and excess of loss on standard attritional/catastrophe splits, marine war risk reinsurance must address correlated catastrophe scenarios (e.g., port closure trapping multiple vessels, simultaneous strikes on a fleet). Underwriters manage accumulation through vessel scheduling and per-location PML controls.
+</div>
+
+<div class="cards">
+  <div class="card">
+    <h4>Proportional (Quota Share) RI</h4>
+    <p>Smaller war risk syndicates cede 20–40% of premium to RI panel. RI panel receives same % of losses. Maintains underwriting capacity for large scheduled fleets while limiting net PML exposure per syndicate.</p>
+  </div>
+  <div class="card">
+    <h4>Excess of Loss RI — Per Occurrence</h4>
+    <p>Covers single major loss events: CTL of high-value vessel (&gt;$100m), seizure of multiple vessels simultaneously. Layer structure typically $50m xs $50m to $200m xs $100m. Scarce and expensive post-2022.</p>
+  </div>
+  <div class="card">
+    <h4>Catastrophe Aggregate RI</h4>
+    <p>Covers accumulation of war losses across a fleet in a defined period (e.g., Red Sea campaign). Triggers on aggregate loss exceeding retention. Rarely purchased; most syndicates manage via PML scheduling.</p>
+  </div>
+  <div class="card">
+    <h4>Facultative RI — Single Vessel</h4>
+    <p>For vessels above syndicate's automatic binding capacity (typically &gt;$100m insured value). Facultative RI placed alongside primary placement. Broker markets slip to reinsurers simultaneously with primary slip.</p>
+  </div>
+</div>
+
+<h3>PML Accumulation Controls</h3>
+<div class="tbl-wrap">
+<table>
+<thead>
+  <tr><th>Control Mechanism</th><th>How Applied</th><th>Example Limit</th></tr>
+</thead>
+<tbody>
+  <tr><td>Per-port accumulation limit</td><td>Maximum total insured value of scheduled vessels in single port simultaneously</td><td>$500m per port</td></tr>
+  <tr><td>Per-country accumulation limit</td><td>Maximum TIV in one jurisdiction at any time</td><td>$1bn per country</td></tr>
+  <tr><td>Single vessel maximum</td><td>Maximum any one vessel insured value on slip</td><td>$150m (automatic); fac above</td></tr>
+  <tr><td>AWRP transit scheduling</td><td>Stagger HRA transits to limit concurrent exposure</td><td>Max 3 vessels simultaneously in Red Sea</td></tr>
+  <tr><td>Flag restriction</td><td>Exclude or sub-limit Russian/Iranian/North Korean flag</td><td>100% exclusion</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     5. REGULATORY & COMPLIANCE FRAMEWORK
+══════════════════════════════════════════════════════════════ -->
+<h2>Regulatory &amp; Compliance Framework</h2>
+
+<div class="tbl-wrap">
+<table>
+<thead>
+  <tr><th>Requirement</th><th>Jurisdiction/Body</th><th>Programme Implication</th><th>Source</th></tr>
+</thead>
+<tbody>
+  <tr>
+    <td>War risk insurance — flag state compulsory</td>
+    <td>Many flag states (Bahamas, Marshall Islands, Panama)</td>
+    <td>Hull war policy may need to satisfy flag state certificate requirements; some accept Lloyd's policy direct</td>
+    <td><span class="est">EST</span></td>
+  </tr>
+  <tr>
+    <td>MLC 2006 — crew insurance compulsory</td>
+    <td>ILO / flag state</td>
+    <td>Seafarer death, disability, repatriation cover required; KM/PA policy must meet MLC Art 4.2 minimums</td>
+    <td><span class="ver">VER</span></td>
+  </tr>
+  <tr>
+    <td>ISPS Code compliance</td>
+    <td>IMO/port state</td>
+    <td>Ship Security Plan (SSP) required; non-compliance may void security-related war endorsements</td>
+    <td><span class="ver">VER</span></td>
+  </tr>
+  <tr>
+    <td>OFAC/OFSI sanctions</td>
+    <td>US/UK Treasury</td>
+    <td>Policy void if insured vessel trades with sanctioned entity; mandatory pre-binding check</td>
+    <td><span class="ver">VER</span></td>
+  </tr>
+  <tr>
+    <td>JWC Listed Area AWRP</td>
+    <td>JWC (Lloyd's/IUA)</td>
+    <td>Automatic AWRP endorsement required before vessel enters listed waters; failure = uninsured transit</td>
+    <td><span class="ver">VER</span></td>
+  </tr>
+  <tr>
+    <td>ISM Code — safety management</td>
+    <td>IMO / flag state</td>
+    <td>Valid ISM/SMC certificate required; underwriters may decline cover for non-ISM vessels</td>
+    <td><span class="ver">VER</span></td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     6. MULTI-VESSEL FLEET CASE STUDY
+══════════════════════════════════════════════════════════════ -->
+<h2>Multi-Vessel Fleet Case Study <span class="illus">ILLUS</span></h2>
+
+<div class="case-study">
+  <h3>Greek Tanker Group — 14-Vessel Mixed Fleet Programme (2024)</h3>
+  <p style="font-size:.88rem;margin-bottom:.8rem"><em>Illustrative example based on publicly observable 2024 market conditions. Individual figures are indicative only.</em></p>
+
+  <div class="tbl-wrap">
+  <table>
+  <thead>
+    <tr><th>Fleet Component</th><th>Vessels</th><th>Total Insured Value</th><th>Annual Base Rate</th><th>Base Premium</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>VLCCs (4 vessels)</td><td>4</td><td>$480m</td><td>0.085%</td><td>$408,000</td></tr>
+    <tr><td>Suezmax tankers (5 vessels)</td><td>5</td><td>$375m</td><td>0.080%</td><td>$300,000</td></tr>
+    <tr><td>Product tankers (3 vessels)</td><td>3</td><td>$150m</td><td>0.070%</td><td>$105,000</td></tr>
+    <tr><td>LPG carriers (2 vessels)</td><td>2</td><td>$100m</td><td>0.075%</td><td>$75,000</td></tr>
+    <tr><td><strong>Annual base war premium</strong></td><td><strong>14</strong></td><td><strong>$1,105m</strong></td><td><strong>~0.080% blended</strong></td><td><strong>$888,000</strong></td></tr>
+  </tbody>
+  </table>
+  </div>
+
+  <h3 style="margin-top:1rem">AWRP — Red Sea Transits (2024 routing decisions)</h3>
+  <div class="tbl-wrap">
+  <table>
+  <thead>
+    <tr><th>Vessel Type</th><th>Transits per Year</th><th>Decision</th><th>AWRP per Transit</th><th>Annual AWRP Cost</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>VLCC (chartered to Asian refinery, must deliver)</td><td>4</td><td>Red Sea (high priority cargo)</td><td>~$540,000</td><td>~$2,160,000</td></tr>
+    <tr><td>Suezmax (flexible routing)</td><td>12 (if Suez) → 0</td><td>Cape of Good Hope reroute</td><td>N/A</td><td>$0 AWRP (+$420k voyage cost per transit)</td></tr>
+    <tr><td>Product tankers (Med supply)</td><td>8</td><td>Partial Suez (with armed escort)</td><td>~$280,000</td><td>~$2,240,000</td></tr>
+    <tr><td>LPG carriers</td><td>0</td><td>Full Cape reroute</td><td>N/A</td><td>$0 AWRP</td></tr>
+    <tr><td><strong>Total AWRP 2024</strong></td><td colspan="3"></td><td><strong>~$4,400,000</strong></td></tr>
+  </tbody>
+  </table>
+  </div>
+
+  <h3 style="margin-top:1rem">Total War Risk Programme Cost Summary</h3>
+  <div class="tbl-wrap">
+  <table>
+  <thead><tr><th>Cost Element</th><th>Annual Cost</th><th>Note</th></tr></thead>
+  <tbody>
+    <tr><td>Annual base war policy premium</td><td>$888,000</td><td>14 vessels, blended 0.080% rate</td></tr>
+    <tr><td>AWRP — Red Sea transits</td><td>~$4,400,000</td><td>4 VLCCs + 8 product tankers Red Sea</td></tr>
+    <tr><td>Crew PA/KM war cover</td><td>~$210,000</td><td>420 seafarers @ $500 AWRP-adjusted rate</td></tr>
+    <tr><td>K&amp;R piracy cover (all vessels)</td><td>~$140,000</td><td>Global K&amp;R, piracy + terrorism</td></tr>
+    <tr><td>P&amp;I war liability premium (est.)</td><td>~$280,000</td><td>IG Pool war rules, 14 entered vessels</td></tr>
+    <tr><td>Fac RI cost (4 VLCCs, fac placed)</td><td>~$180,000</td><td>Facultative RI for vessels &gt;$100m</td></tr>
+    <tr style="background:#e8eaf6;font-weight:700">
+      <td><strong>Total War Risk Programme</strong></td><td><strong>~$6,098,000</strong></td><td>vs. $1.25m pre-2022 (380% increase)</td>
+    </tr>
+  </tbody>
+  </table>
+  </div>
+
+  <div class="info-box amber" style="margin-top:.8rem">
+    <strong>Cape Rerouting — Break-Even Analysis</strong>
+    For the Suezmax fleet, Cape rerouting adds ~$420,000 per voyage in fuel/time costs but saves ~$380,000–$540,000 in AWRP. Break-even favoured rerouting for most Suezmax trades in 2024. VLCCs on must-deliver charters had insufficient flexibility — Red Sea transit with AWRP remained the commercial necessity despite the premium cost. <span class="illus">ILLUS</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     7. MULTINATIONAL PROGRAMME — ADMITTED REQUIREMENTS
+══════════════════════════════════════════════════════════════ -->
+<h2>Multinational Fleet Programmes — Admitted Cover Requirements <span class="est">EST</span></h2>
+
+<div class="info-box blue">
+  <strong>Marine War — Largely Non-Admitted</strong>
+  Unlike P&amp;I (via Club network) or H&amp;M (some admitted requirements), marine hull war risk is largely placed on a non-admitted basis through the London market. Most flag states and port states accept Lloyd's or IUA market policies. However, a small number of jurisdictions (e.g., Brazil, China, India) may require locally admitted war cover for vessels flagged or trading domestically. Shipowners should verify flag state requirements for each vessel in the fleet. <span class="est">EST</span>
+</div>
+
+<div class="tbl-wrap">
+<table>
+<thead>
+  <tr><th>Jurisdiction</th><th>War Risk Admitted Requirement</th><th>Typical Arrangement</th></tr>
+</thead>
+<tbody>
+  <tr><td>UK (BVI, Cayman, Isle of Man flag)</td><td>None — London market policy accepted</td><td>Lloyd's CL.280 policy direct</td></tr>
+  <tr><td>Marshall Islands / Bahamas / Panama</td><td>None — internationally accepted</td><td>London market / club policy</td></tr>
+  <tr><td>China (CSSC managed vessels)</td><td>PICC local policy often required</td><td>Local fronting + London RI; or PICC direct</td></tr>
+  <tr><td>India (vessels trading Indian coastal)</td><td>GIC Re or nationalised insurer may be required</td><td>Local admitted + reinsurance to London</td></tr>
+  <tr><td>Brazil (Petrobras vessels)</td><td>SUSEP requires local admitted layer</td><td>Local fronting arrangement via IRB/Zurich BR</td></tr>
+  <tr><td>USA (Jones Act vessels)</td><td>American Hull Insurance Syndicate (AHIS) often used</td><td>US market + facultative London RI for war</td></tr>
+  <tr><td>Russia (pre-2022)</td><td>Ingosstrakh required</td><td>Now effectively excluded from international war market</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     8. AVIATION WAR (AW) — PROGRAMME CONSIDERATIONS
+══════════════════════════════════════════════════════════════ -->
+<h2>Aviation War (AW Code) — Programme Structure Differences</h2>
+
+<div class="cards">
+  <div class="card">
+    <h4>AVN52 — Aviation War Exclusion</h4>
+    <p>Standard aviation H&amp;M policies exclude war perils via AVN52, equivalent to the marine F.C.&S. clause. The AW code (Aviation War) covers these excluded perils: war, hi-jack, confiscation, government seizure, nuclear/biological/chemical terrorism.</p>
+  </div>
+  <div class="card">
+    <h4>Russia 2022 — Confiscation Crisis</h4>
+    <p>~520 western-leased aircraft (value ~$10bn) stranded in Russia after sanctions. Coverage dispute: was confiscation a "war" or "government seizure"? Multiple insurers contested. Lessors/underwriters faced long-running litigation. Major market loss event for AW underwriters.</p>
+  </div>
+  <div class="card">
+    <h4>Aviation War Pool (AWAS/Airline War Pools)</h4>
+    <p>Airlines and lessors access aviation war cover through airline war pools and specialist Lloyd's syndicates. Coverage mirrors marine war structure: annual base policy + specific geographical endorsements for high-risk routes. AVN52C exclusion carve-backs used.</p>
+  </div>
+  <div class="card">
+    <h4>Cyber/War Attribution — Aviation</h4>
+    <p>GPS spoofing, runway lighting interference, and cyber attacks on avionics create attribution ambiguity (war vs cyber vs mechanical). Aviation war underwriters are developing specific cyber-war exclusion/inclusion language similar to Lloyds CY/CZ marine cyber developments.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     9. KEY CONTACTS AND MARKET PLACEMENT
+══════════════════════════════════════════════════════════════ -->
+<h2>Market Placement — War Risk Programme Workflow <span class="est">EST</span></h2>
+
+<div class="tbl-wrap">
+<table>
+<thead>
+  <tr><th>Step</th><th>Action</th><th>Parties Involved</th><th>Timing</th></tr>
+</thead>
+<tbody>
+  <tr>
+    <td>1. Fleet scheduling</td>
+    <td>Owner provides vessel schedule (name, flag, type, value, trading area)</td>
+    <td>Owner → broker</td>
+    <td>60 days pre-renewal</td>
+  </tr>
+  <tr>
+    <td>2. Sanctions screening</td>
+    <td>Screen all vessels and counterparties against OFAC, OFSI, EU lists</td>
+    <td>Broker compliance team</td>
+    <td>45 days pre-renewal</td>
+  </tr>
+  <tr>
+    <td>3. Slip preparation</td>
+    <td>MRC slip drafted with fleet schedule, trading warranties, deductibles, AWRP mechanism</td>
+    <td>Broker → Lloyd's/company market</td>
+    <td>30 days pre-renewal</td>
+  </tr>
+  <tr>
+    <td>4. Lead underwriter</td>
+    <td>Lead sets rate; co-leaders and following market subscribe</td>
+    <td>Specialist war syndicates (e.g., Atrium, Ark, Chaucer, ANV)</td>
+    <td>Negotiated 2–4 weeks</td>
+  </tr>
+  <tr>
+    <td>5. Facultative RI</td>
+    <td>High-value vessels (&gt;$100m) placed with fac RI panel simultaneously</td>
+    <td>Broker RI team → RI market</td>
+    <td>Concurrent with primary</td>
+  </tr>
+  <tr>
+    <td>6. P&amp;I war confirmation</td>
+    <td>Owner confirms P&amp;I Club war entry; ensures no gap with hull war policy</td>
+    <td>Owner → P&amp;I Club</td>
+    <td>Pre-inception</td>
+  </tr>
+  <tr>
+    <td>7. AWRP protocol agreed</td>
+    <td>Standing authority agreed: broker can bind AWRP endorsements up to agreed per-transit limit without referral</td>
+    <td>Broker ↔ lead underwriter</td>
+    <td>At inception</td>
+  </tr>
+  <tr>
+    <td>8. In-transit management</td>
+    <td>Live tracking; UKMTO registration; 48-hr notice monitoring; incident reporting</td>
+    <td>Owner → broker; broker → underwriter</td>
+    <td>Continuous</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+</main>
+
+<footer>
+  <p><a href="../index.html">Risk Code Hub</a> · <a href="overview.html">Marine Hull War Overview</a> · Version 3.5 · April 2026</p>
+  <p style="margin-top:.3rem;font-size:.75rem">Confidence framework: <span class="ver">VER</span> verified · <span class="est">EST</span> estimated · <span class="illus">ILLUS</span> illustrative · <span class="gap">GAP</span> data gap. For training purposes only.</p>
+</footer>
+
+</body>
+</html>

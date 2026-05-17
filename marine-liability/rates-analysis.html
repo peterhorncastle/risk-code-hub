@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marine Liability — Rates &amp; ROE | Risk Code Hub</title>
+<link rel="stylesheet" href="../hub-styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --hub-primary:    #005a6b;
+    --hub-dark:       #002d35;
+    --hub-light:      #e8f5f7;
+    --hub-accent:     #c8a84b;
+    --hub-secondary:  #1a5c28;
+    --hub-secondary2: #7b1a1a;
+    --header-gradient: linear-gradient(135deg,#002d35 0%,#005a6b 50%,#006e82 100%);
+    --header-sub:     #a8d8e0;
+  }
+  header { background: var(--header-gradient); color:#fff; padding:2rem 1.5rem 1.5rem; }
+  header h1 { margin:0 0 0.3rem; font-size:2rem; color:#fff; }
+  header p  { margin:0; color:var(--header-sub); font-size:1rem; }
+  nav { background:var(--hub-dark); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.3rem; }
+  nav a { color:#a8d8e0; text-decoration:none; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.85rem; }
+  nav a:hover, nav a.active { background:var(--hub-primary); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+  h2 { font-size:1.25rem; color:var(--hub-primary); margin:2rem 0 0.8rem; border-bottom:2px solid var(--hub-accent); padding-bottom:0.4rem; }
+  h3 { font-size:1.05rem; color:var(--hub-secondary); margin:1.2rem 0 0.5rem; }
+  p { line-height:1.8; color:#333; margin-bottom:0.8rem; font-size:0.93rem; }
+
+  /* Confidence badges */
+  .b-v { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#e6f4ea; color:#1a5c28; vertical-align:middle; }
+  .b-e { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#fef3e2; color:#7a4500; vertical-align:middle; }
+  .b-i { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#cce5ff; color:#004085; vertical-align:middle; }
+  .b-g { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#f8d7da; color:#721c24; vertical-align:middle; }
+
+  /* Market cycle cards */
+  .cycle-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:0.8rem; margin:1rem 0 1.5rem; }
+  .cycle-card { background:#fff; border-radius:8px; padding:1rem 1.1rem; border:1px solid #c0dde0; border-top:4px solid var(--hub-primary); }
+  .cycle-card.soft  { border-top-color:#2e7d32; }
+  .cycle-card.mixed { border-top-color:var(--hub-accent); }
+  .cycle-card.hard  { border-top-color:var(--hub-secondary2); }
+  .cycle-card.current { border-top-color:var(--hub-primary); }
+  .cycle-card .era { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-bottom:0.4rem; }
+  .cycle-card.soft    .era { color:#2e7d32; }
+  .cycle-card.mixed   .era { color:#7a5a00; }
+  .cycle-card.hard    .era { color:var(--hub-secondary2); }
+  .cycle-card.current .era { color:var(--hub-primary); }
+  .cycle-card h4 { margin:0 0 0.4rem; font-size:0.95rem; color:#222; }
+  .cycle-card p  { font-size:0.83rem; color:#444; margin:0; }
+
+  /* Table */
+  .tbl-wrap { overflow-x:auto; margin:0.5rem 0 1.5rem; }
+  table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+  thead th { background:var(--hub-primary); color:#fff; padding:0.55rem 0.7rem; text-align:left; }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid #d8eef0; }
+  tbody tr:nth-child(even) { background:#f0f9fb; }
+  .dir-up   { color:#c0392b; font-weight:700; }
+  .dir-flat { color:#888;    font-weight:700; }
+  .dir-dn   { color:#2e7d32; font-weight:700; }
+  .seg-tag  { display:inline-block; font-size:0.68rem; font-weight:700; padding:1px 6px; border-radius:10px; background:var(--hub-light); color:var(--hub-primary); border:1px solid #9ac8d0; }
+
+  /* Charts */
+  .chart-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:1.5rem; margin:1.2rem 0 2rem; }
+  .chart-box { background:#fff; border-radius:10px; padding:1.2rem; border:1px solid #c0dde0; }
+  .chart-box h4 { font-size:0.9rem; color:var(--hub-primary); margin:0 0 0.8rem; }
+  .chart-box canvas { max-height:260px; }
+
+  /* ROE scenarios */
+  .roe-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.8rem; margin:1rem 0 1.5rem; }
+  .roe-card { background:#fff; border-radius:8px; padding:1.1rem; text-align:center; border:1px solid #c0dde0; }
+  .roe-card .roe-label { font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px; font-weight:700; color:#888; margin-bottom:0.4rem; }
+  .roe-card .roe-val { font-size:2rem; font-weight:800; }
+  .roe-card.bull .roe-val { color:#2e7d32; }
+  .roe-card.base .roe-val { color:var(--hub-primary); }
+  .roe-card.bear .roe-val { color:#b71c1c; }
+  .roe-card p { font-size:0.8rem; color:#555; margin:0.4rem 0 0; }
+
+  .warn-box { background:#fff3cd; border-left:4px solid var(--hub-accent); border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#5a4000; }
+  .info-box  { background:var(--hub-light); border-left:4px solid var(--hub-primary); border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#00303a; }
+
+  /* Assumptions table */
+  .assump-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:0.6rem; margin:0.8rem 0 1.5rem; }
+  .assump-item { background:#fff; border-radius:6px; padding:0.7rem 0.9rem; border:1px solid #c0dde0; }
+  .assump-item .assump-label { font-size:0.72rem; color:#666; text-transform:uppercase; letter-spacing:.4px; margin-bottom:0.2rem; }
+  .assump-item .assump-val { font-size:1rem; font-weight:700; color:var(--hub-primary); }
+
+  footer { background:var(--hub-dark); color:#a8d8e0; text-align:center; padding:1rem; font-size:0.82rem; margin-top:2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Marine Liability</h1>
+  <p>Lloyd's Risk Codes G · GC · GX &nbsp;|&nbsp; Module 05: Rates &amp; ROE Analysis</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <h2>Marine Liability Market Rate Cycle</h2>
+  <p>Lloyd's marine liability (G/GC/GX) operates alongside — but distinctly from — the mutual P&amp;I club market. While the International Group of P&amp;I Clubs sets calls (premiums) annually based on mutual loss experience, Lloyd's fixed-premium market prices individual risk at renewal. The two markets interact: when IG clubs harden calls or restrict eligibility, business migrates toward Lloyd's fixed-premium placements, and vice versa. The fixed-premium marine liability market has broadly tracked the wider marine specialty cycle, with significant hardening from 2020 driven by mega-casualty losses (Ever Given, Costa Concordia IOPC development, COVID crew liability) and Red Sea HOA risk from 2024. <span class="b-e">EST</span></p>
+
+  <div class="cycle-grid">
+    <div class="cycle-card soft">
+      <div class="era">2010–2016 — Soft Market</div>
+      <h4>Surplus Capacity, Competitive Fixed-Premium Pricing</h4>
+      <p>Post-financial crisis capital inflows boosted Lloyd's marine liability capacity. IG club calls were broadly stable or declining in real terms. Fixed-premium rates for P&amp;I alternatives (SRL, PTOL, yacht, freight forwarder) fell 5–15% over the period. Specialist GX excess layers competed aggressively for multinational marine programmes. OPA 90 and Bunkers Convention certificates widely placed without meaningful surcharge.</p>
+    </div>
+    <div class="cycle-card mixed">
+      <div class="era">2016–2020 — Claims Emergence &amp; Inflection</div>
+      <h4>Large Losses Signal Underpricing; Rates Begin to Rise</h4>
+      <p>Costa Concordia wreck removal (€1.5bn, 2013 loss fully developing), MV Rena (NZ$700m), X-Press Pearl (2021 lead-up). Lloyd's Decile 10 remediation (2018–2019) forces non-renewal of unprofitable marine liability syndicates. SRL market tightens after drydock crane collapses. PTOL liability concerns grow with port congestion claims. Rates +10–25% for high-risk sub-classes; flat to +5% for standard tonnage.</p>
+    </div>
+    <div class="cycle-card hard">
+      <div class="era">2020–2022 — Hard Market</div>
+      <h4>COVID Crew Liability, Ever Given, Capacity Withdrawal</h4>
+      <p>COVID-19 generates crew abandonment claims, repatriation costs, quarantine liability under MLC 2006. Ever Given canal blockage crystallises freight forwarder and PTOL liability exposures (confidential settlement). X-Press Pearl nurdle pollution ($40–100m, Sri Lanka). NotPetya cyber losses reclassified from marine to cyber by many syndicates. Lloyd's fixed-premium rates +20–50% for standard tonnage; SRL +30–60%; PTOL +25–45%; freight forwarder +15–30%. GX excess layer capacity significantly reduced; spreads widen by 40–80bps.</p>
+    </div>
+    <div class="cycle-card current">
+      <div class="era">2023–2024 — Selective Stabilisation &amp; Red Sea</div>
+      <h4>Standard Tonnage Easing; HOA/Dark Fleet Premium Surge</h4>
+      <p>Standard deep-sea bulk and container tonnage: rates flat to −5% as capacity returns. Tankers (especially VLCC/ULCC, US Gulf trading): rates +10–20% driven by OPA 90 and dark fleet contagion risk. Red Sea / HOA routing surcharges: +15–40% on GX layers covering war-adjacent liabilities. Cruise/passenger liability (Athens Convention): broadly stable. Dark fleet: effectively uninsurable in Lloyd's market at standard terms; admitted through specialist facilities with sub-limits only.</p>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>P&amp;I Club Call vs Lloyd's Fixed Premium Dynamics:</strong> When the International Group announces supplementary calls (unbudgeted mid-year draws), Lloyd's fixed-premium business becomes relatively more attractive to shipowners. Historically, IG supplementary calls have followed major catastrophe years (e.g., 2010 post-Deepwater Horizon pool entanglement, 2012 Costa Concordia). Underwriters tracking IG call movements can anticipate demand shifts into the Lloyd's fixed-premium market.
+  </div>
+
+  <h2>Rate Benchmarks by Sub-Class (2020–2024)</h2>
+  <p>Rate on line (RoL) and indicative combined loss ratio by marine liability sub-class. All figures are market estimates — Lloyd's syndicate data is commercially confidential. <span class="b-e">EST</span> <span class="b-i">ILLUS</span></p>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Sub-Class / Segment</th>
+          <th>Code</th>
+          <th>RoL 2020 (%)</th>
+          <th>RoL 2022 (%)</th>
+          <th>RoL 2024 (%)</th>
+          <th>Trend</th>
+          <th>Ind. LR 2022–24</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>P&amp;I Fixed Premium — Tanker (VLCC/ULCC, US Gulf)</td>
+          <td><span class="seg-tag">G</span></td>
+          <td>0.30–0.45</td>
+          <td>0.45–0.65</td>
+          <td>0.50–0.75</td>
+          <td class="dir-up">▲ +20%</td>
+          <td>68–78%</td>
+          <td>OPA 90 surcharge; US Gulf routing adds 30–40bps</td>
+        </tr>
+        <tr>
+          <td>P&amp;I Fixed Premium — Bulk Carrier (Standard)</td>
+          <td><span class="seg-tag">G</span></td>
+          <td>0.18–0.28</td>
+          <td>0.30–0.42</td>
+          <td>0.28–0.40</td>
+          <td class="dir-flat">→ Flat</td>
+          <td>65–75%</td>
+          <td>Capacity returned 2023; competitive renewals</td>
+        </tr>
+        <tr>
+          <td>P&amp;I Fixed Premium — Container Vessel</td>
+          <td><span class="seg-tag">G</span></td>
+          <td>0.20–0.32</td>
+          <td>0.35–0.50</td>
+          <td>0.30–0.45</td>
+          <td class="dir-dn">▼ −5%</td>
+          <td>62–72%</td>
+          <td>Post-Ever Given adjustment largely absorbed; easing</td>
+        </tr>
+        <tr>
+          <td>P&amp;I Fixed Premium — Cruise/Passenger (Athens)</td>
+          <td><span class="seg-tag">G</span></td>
+          <td>0.40–0.65</td>
+          <td>0.55–0.80</td>
+          <td>0.55–0.82</td>
+          <td class="dir-flat">→ Flat</td>
+          <td>72–84%</td>
+          <td>Athens PAL 2002 SDR 250k per passenger; limited capacity</td>
+        </tr>
+        <tr>
+          <td>Shiprepairers' Liability (SRL) — Coverholder</td>
+          <td><span class="seg-tag">GC</span></td>
+          <td>0.55–0.85</td>
+          <td>0.80–1.20</td>
+          <td>0.75–1.10</td>
+          <td class="dir-dn">▼ −5%</td>
+          <td>68–80%</td>
+          <td>MVIY-based; stabilising after 2020–21 crane/drydock losses</td>
+        </tr>
+        <tr>
+          <td>Port, Terminal &amp; Operator Liability (PTOL) — Coverholder</td>
+          <td><span class="seg-tag">GC</span></td>
+          <td>0.35–0.55</td>
+          <td>0.55–0.80</td>
+          <td>0.50–0.75</td>
+          <td class="dir-flat">→ Flat</td>
+          <td>70–82%</td>
+          <td>HOA/Red Sea port exposure surcharges emerging 2024</td>
+        </tr>
+        <tr>
+          <td>Freight Forwarder / MTO Liability — Coverholder</td>
+          <td><span class="seg-tag">GC</span></td>
+          <td>0.25–0.40</td>
+          <td>0.40–0.60</td>
+          <td>0.38–0.55</td>
+          <td class="dir-dn">▼ −5%</td>
+          <td>66–76%</td>
+          <td>Ever Given FF exposure absorbed; dangerous goods loading</td>
+        </tr>
+        <tr>
+          <td>Yacht / Small Craft Marine Liability — Coverholder</td>
+          <td><span class="seg-tag">GC</span></td>
+          <td>0.40–0.70</td>
+          <td>0.55–0.85</td>
+          <td>0.52–0.80</td>
+          <td class="dir-flat">→ Flat</td>
+          <td>60–72%</td>
+          <td>High attritional frequency; personal injury dominant</td>
+        </tr>
+        <tr>
+          <td>GX Excess — Standard Maritime ($500m xs $500m)</td>
+          <td><span class="seg-tag">GX</span></td>
+          <td>0.08–0.15</td>
+          <td>0.14–0.22</td>
+          <td>0.12–0.20</td>
+          <td class="dir-dn">▼ −8%</td>
+          <td>45–60%</td>
+          <td>Cat-layer; loss-free years dominate; capacity recovering</td>
+        </tr>
+        <tr>
+          <td>GX Excess — Tanker/Pollution High-Limit ($1bn+)</td>
+          <td><span class="seg-tag">GX</span></td>
+          <td>0.12–0.20</td>
+          <td>0.20–0.35</td>
+          <td>0.22–0.38</td>
+          <td class="dir-up">▲ +15%</td>
+          <td>50–65%</td>
+          <td>OPA 90 tail risk; dark fleet contagion premium; scarce capacity</td>
+        </tr>
+        <tr>
+          <td>GX Excess — Red Sea / HOA High-Risk Routing</td>
+          <td><span class="seg-tag">GX</span></td>
+          <td>N/A</td>
+          <td>0.18–0.28</td>
+          <td>0.28–0.45</td>
+          <td class="dir-up">▲ +40%</td>
+          <td>55–70%</td>
+          <td>Houthi attacks 2024; war-adjacent liability crystallising</td>
+        </tr>
+        <tr>
+          <td>Reinsurance — Marine Liability Treaty (RI)</td>
+          <td><span class="seg-tag">G</span></td>
+          <td>0.10–0.18</td>
+          <td>0.18–0.28</td>
+          <td>0.16–0.25</td>
+          <td class="dir-flat">→ Flat</td>
+          <td>55–68%</td>
+          <td>Treaty pricing follows primary; quota share most common</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="warn-box">
+    <strong>⚠ Dark Fleet Rate Distortion:</strong> The emergence of 600–1,400 sanctioned Russian oil tankers operating outside the IG P&amp;I Club system creates market distortion. These vessels are effectively uninsured or underinsured, driving up systemic pollution liability risk for adjacent ports and waterways. Legitimate tanker operators in high-pollution-risk corridors (Black Sea, Baltic, Persian Gulf) face upward rating pressure as underwriters load for dark fleet contagion risk. Standard RoL benchmarks above do not apply to dark fleet placements, which typically receive sub-limit only terms at 3–5× standard RoL.
+  </div>
+
+  <h2>Rate Index &amp; Loss Ratio Trends (Charts)</h2>
+  <p>Illustrative rate and loss ratio trends for Lloyd's marine liability sub-classes, 2015–2024 (2015 = 100 base). Data is market-estimated and illustrative; Lloyd's syndicate performance data is proprietary. <span class="b-i">ILLUS</span></p>
+
+  <div class="chart-grid">
+    <div class="chart-box">
+      <h4>Rate Index by Sub-Class (2015 = 100)</h4>
+      <canvas id="rateChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>Indicative Combined Loss Ratio — Marine Liability Portfolio</h4>
+      <canvas id="lrChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>Illustrative Portfolio Mix by Premium Volume</h4>
+      <canvas id="mixChart"></canvas>
+    </div>
+  </div>
+
+  <h2>Bull / Base / Bear ROE Scenarios</h2>
+  <p>Illustrative return-on-equity analysis for a hypothetical Lloyd's marine liability portfolio of £200m gross written premium. All figures are illustrative only and do not represent any specific syndicate. <span class="b-i">ILLUS</span></p>
+
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="roe-label">Bull Scenario</div>
+      <div class="roe-val">+13.5%</div>
+      <p>No major pollution or cruise casualty. Attritional claims below plan. Rate adequacy maintained; modest reserve release from 2022 hard market book. Investment income at upper range. RoL flat to +5% for standard classes.</p>
+    </div>
+    <div class="roe-card base">
+      <div class="roe-label">Base Scenario</div>
+      <div class="roe-val">+6.8%</div>
+      <p>One MAJ-tier loss event (SRL structural, PTOL collision). Attritional frequency in line with plan. Red Sea HOA claims materialise at moderate levels. Rate adequacy adequate for most classes; slight competitive pressure at renewal.</p>
+    </div>
+    <div class="roe-card bear">
+      <div class="roe-label">Bear Scenario</div>
+      <div class="roe-val">−10.2%</div>
+      <p>One CAT-tier event (VLCC oil spill in US waters, OPA 90 triggered, $1bn+ loss). Dark fleet contagion reserve strengthening. Red Sea crew injury claims at upper range. GX excess layers exhausted. Reserve development from pre-2021 book.</p>
+    </div>
+  </div>
+
+  <h3>Portfolio Assumptions (Base Scenario)</h3>
+  <div class="assump-grid">
+    <div class="assump-item"><div class="assump-label">GWP (Gross)</div><div class="assump-val">£200m</div></div>
+    <div class="assump-item"><div class="assump-label">Ceded RI Premium</div><div class="assump-val">18%</div></div>
+    <div class="assump-item"><div class="assump-label">Net Earned Premium</div><div class="assump-val">~£164m</div></div>
+    <div class="assump-item"><div class="assump-label">Gross Loss Ratio</div><div class="assump-val">68%</div></div>
+    <div class="assump-item"><div class="assump-label">Net Loss Ratio</div><div class="assump-val">72%</div></div>
+    <div class="assump-item"><div class="assump-label">Expense Ratio</div><div class="assump-val">32%</div></div>
+    <div class="assump-item"><div class="assump-label">Combined Ratio (Net)</div><div class="assump-val">104%</div></div>
+    <div class="assump-item"><div class="assump-label">Investment Income</div><div class="assump-val">4.5%</div></div>
+    <div class="assump-item"><div class="assump-label">Attritional LR</div><div class="assump-val">52%</div></div>
+    <div class="assump-item"><div class="assump-label">Large Loss LR</div><div class="assump-val">16%</div></div>
+    <div class="assump-item"><div class="assump-label">IBNR Provision</div><div class="assump-label" style="font-size:0.75rem">Pollution / crew / FF</div><div class="assump-val">18–24 mos</div></div>
+    <div class="assump-item"><div class="assump-label">CAT Reserve Load</div><div class="assump-val">5%</div></div>
+    <div class="assump-item"><div class="assump-label">Dark Fleet Reserve</div><div class="assump-val">3% of NP</div></div>
+    <div class="assump-item"><div class="assump-label">Rate Change (Renewal)</div><div class="assump-val">Flat to +5%</div></div>
+    <div class="assump-item"><div class="assump-label">Base ROE</div><div class="assump-val">+6.8%</div></div>
+    <div class="assump-item"><div class="assump-label">Capital Allocated</div><div class="assump-val">~£120m</div></div>
+  </div>
+
+  <div class="warn-box">
+    <strong>⚠ Long-Tail Development Risk:</strong> Marine liability — particularly pollution (OPA 90, CLC, Bunkers Convention) and crew personal injury — carries material IBNR risk. Pollution assessments for major spills can develop over 5–10 years as natural resource damage (NRD) claims are filed by government agencies. The Exxon Valdez generated NRD litigation for over 25 years. Underwriters must apply conservative IBNR provisions and avoid releasing reserves prematurely on complex pollution claims.
+  </div>
+
+</div><!-- /container -->
+
+<footer>Risk Code Hub — Marine Liability G/GC/GX | Module 05: Rates &amp; ROE | v4.2 | All rate benchmarks and ROE figures are illustrative estimates only</footer>
+
+<script>
+// ── Rate Index Chart (Line, 2015=100) ──────────────────────────────────────
+const rateCtx = document.getElementById('rateChart').getContext('2d');
+new Chart(rateCtx, {
+  type: 'line',
+  data: {
+    labels: ['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+    datasets: [
+      {
+        label: 'P&I Fixed — Tanker',
+        data: [100,95,97,105,112,130,148,168,172,185],
+        borderColor:'#005a6b', backgroundColor:'transparent', tension:0.3, pointRadius:3
+      },
+      {
+        label: 'P&I Fixed — Bulk/Container',
+        data: [100,96,98,102,108,118,135,150,148,145],
+        borderColor:'#c8a84b', backgroundColor:'transparent', tension:0.3, pointRadius:3
+      },
+      {
+        label: 'SRL / PTOL — Coverholder',
+        data: [100,94,96,100,108,125,155,175,172,170],
+        borderColor:'#1a5c28', backgroundColor:'transparent', tension:0.3, pointRadius:3
+      },
+      {
+        label: 'GX Excess — Standard',
+        data: [100,97,96,98,102,110,128,148,140,135],
+        borderColor:'#7b1a1a', backgroundColor:'transparent', tension:0.3, pointRadius:3
+      }
+    ]
+  },
+  options: {
+    responsive:true,
+    plugins: { legend:{ labels:{ font:{ size:10 } } } },
+    scales: {
+      y: { beginAtZero:false, min:80, title:{ display:true, text:'Index (2015=100)', font:{size:10} } },
+      x: { ticks:{ font:{size:10} } }
+    }
+  }
+});
+
+// ── Combined Loss Ratio Bar Chart ──────────────────────────────────────────
+const lrCtx = document.getElementById('lrChart').getContext('2d');
+new Chart(lrCtx, {
+  type: 'bar',
+  data: {
+    labels: ['2016','2017','2018','2019','2020','2021','2022','2023','2024e'],
+    datasets: [
+      {
+        label: 'Attritional LR',
+        data: [54,52,55,56,60,58,54,52,52],
+        backgroundColor:'rgba(0,90,107,0.7)'
+      },
+      {
+        label: 'Large Loss LR',
+        data: [12,10,14,18,22,25,20,16,16],
+        backgroundColor:'rgba(200,168,75,0.85)'
+      }
+    ]
+  },
+  options: {
+    responsive:true,
+    plugins: {
+      legend:{ labels:{ font:{ size:10 } } },
+      tooltip: {
+        callbacks: {
+          footer: (items) => {
+            const total = items.reduce((s,i) => s + i.parsed.y, 0);
+            return 'Combined LR: ~' + total + '%';
+          }
+        }
+      }
+    },
+    scales: {
+      x: { stacked:true, ticks:{ font:{size:10} } },
+      y: { stacked:true, min:0, max:110, title:{ display:true, text:'Loss Ratio (%)', font:{size:10} } }
+    }
+  }
+});
+
+// ── Portfolio Mix Doughnut ─────────────────────────────────────────────────
+const mixCtx = document.getElementById('mixChart').getContext('2d');
+new Chart(mixCtx, {
+  type: 'doughnut',
+  data: {
+    labels: [
+      'P&I Fixed — Tanker',
+      'P&I Fixed — Bulk/Container',
+      'P&I Fixed — Cruise',
+      'SRL — Coverholder',
+      'PTOL — Coverholder',
+      'Freight Forwarder',
+      'Yacht / Small Craft',
+      'GX Excess — Standard',
+      'GX Excess — High-Limit/HOA'
+    ],
+    datasets: [{
+      data: [22, 18, 8, 14, 12, 9, 7, 6, 4],
+      backgroundColor: [
+        '#005a6b','#006e82','#007f96',
+        '#1a5c28','#2e7d32',
+        '#c8a84b','#d4b96a',
+        '#7b1a1a','#a02525'
+      ]
+    }]
+  },
+  options: {
+    responsive:true,
+    plugins: {
+      legend:{ position:'right', labels:{ font:{ size:9 }, boxWidth:12 } }
+    }
+  }
+});
+</script>
+</body>
+</html>

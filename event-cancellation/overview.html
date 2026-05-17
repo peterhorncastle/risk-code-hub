@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Event Cancellation &amp; Contingency — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b005a;
+      --hub-dark:      #450030;
+      --hub-light:     #fce4f4;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#450030 0%,#7b005a 55%,#a0007a 100%);
+      --header-sub:    #f48fb1;
+      --bc:            #7b005a;
+      --bc-dark:       #450030;
+      --bc-light:      #fce4f4;
+      --bc-accent:     #c8a84b;
+      --bc-mid:        #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0020;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(26,35,126,0.15) 0%,transparent 50%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#f48fb1;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:2rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;margin-bottom:16px;}
+    .code-pill{display:inline-block;background:rgba(200,168,75,0.25);border:1px solid var(--hub-accent);
+      color:var(--hub-accent);padding:3px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;margin-right:6px;}
+    nav.hub-nav{background:#450030;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#f48fb1;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+    .stat-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-top:4px solid var(--bc);}
+    .stat-card .val{font-size:1.7rem;font-weight:700;color:var(--bc);margin-bottom:4px;}
+    .stat-card .lbl{font-size:0.78rem;color:#555;line-height:1.3;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--bc-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .code-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px;}
+    .code-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--bc);}
+    .code-card h3{font-size:1rem;font-weight:700;color:var(--bc-dark);margin-bottom:8px;}
+    .code-card p{font-size:0.85rem;color:#444;line-height:1.5;}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:28px;}
+    .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid var(--bc);}
+    .card.accent{border-top-color:var(--hub-accent);}
+    .card.blue{border-top-color:#1a237e;}
+    .card.purple{border-top-color:#6a1b9a;}
+    .card.red{border-top-color:#c62828;}
+    .card.teal{border-top-color:#00695c;}
+    .card h4{font-size:0.9rem;font-weight:700;color:var(--bc-dark);margin-bottom:8px;}
+    .card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .info-box{background:#fce4f4;border-left:4px solid var(--bc);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3b0028;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .danger-box{background:#ffebee;border-left:4px solid #c62828;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3b0000;line-height:1.6;}
+    .danger-box strong{color:#c62828;}
+    .nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px;}
+    .nav-card{display:block;background:#fff;border-radius:10px;padding:16px 18px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--bc);transition:all 0.2s;}
+    .nav-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12);border-left-color:var(--hub-accent);}
+    .nav-card .num{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .nav-card h4{font-size:0.9rem;font-weight:700;color:var(--bc-dark);}
+    .nav-card p{font-size:0.78rem;color:#555;margin-top:4px;}
+    footer{background:#450030;color:#f48fb1;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Contingency &amp; Entertainment › Event Cancellation</div>
+    <div class="tag">Event Cancellation &amp; Contingency</div>
+    <h1>Event Cancellation &amp; Contingency</h1>
+    <div class="sub">Protecting promoters, broadcasters and sponsors against financial loss from cancelled, postponed, abandoned or curtailed events</div>
+    <div>
+      <span class="code-pill">PC</span>
+      <span class="code-pill">PA</span>
+      <span class="code-pill">PN</span>
+      <span class="code-pill">PU</span>
+      <span class="code-pill">PZ</span>
+    </div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~$2bn<span class="badge b-e">EST</span></div>
+      <div class="lbl">Global EC GWP pre-COVID (est.)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">$4–6bn<span class="badge b-e">EST</span></div>
+      <div class="lbl">COVID-19 EC claims 2020–21 — largest single-class loss in history</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">£141m<span class="badge b-v">VER</span></div>
+      <div class="lbl">Wimbledon 2020 pandemic insurance claim (AELTC)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">~$500m<span class="badge b-e">EST</span></div>
+      <div class="lbl">Lloyd's EC market GWP est. 2024</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">100%<span class="badge b-v">VER</span></div>
+      <div class="lbl">Post-2020 policies: pandemic exclusion now standard</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">~$65m<span class="badge b-e">EST</span></div>
+      <div class="lbl">Global prize indemnity GWP est. 2024</div>
+    </div>
+  </div>
+
+  <!-- Code cards -->
+  <div class="section-title">Lloyd's Risk Code Coverage</div>
+  <div class="code-grid">
+    <div class="code-card">
+      <h3>PC — Event Cancellation</h3>
+      <p>Covers financial loss suffered by the event organiser or promoter if a scheduled event is <strong>cancelled, postponed, abandoned, interrupted or curtailed</strong> due to an insured peril. Covers net revenue loss and unrecoverable costs. Perils typically include: adverse weather, terrorism/security threat, government order, death or injury of key performer, venue failure, and industrial action. <sup>[1]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#1a237e;">
+      <h3>PA — Contingency (General)</h3>
+      <p>Bespoke contingency risks that do not fit neatly into the PC framework. Covers a wide range of one-off or recurring financial contingency exposures — film production abandonment, tournament cancellation, product launch events, award ceremonies. Written on an individual risk basis with tailored insuring agreements. <sup>[2]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#c8a84b;">
+      <h3>PN — Non-Appearance</h3>
+      <p>Covers the financial loss suffered by a promoter or employer if a <strong>named individual</strong> fails to appear at or complete a scheduled engagement due to death, bodily injury, sickness or other insured peril. Common for concert tours, sporting events, and corporate speaking engagements. Key extension: visa denial for international events. <sup>[3]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#6a1b9a;">
+      <h3>PU — Prize Indemnity</h3>
+      <p>Covers the promoter of a competition or promotional event if a specified prize is won. The promoter pays a premium to transfer the risk of the prize being claimed: hole-in-one golf competitions, half-court basketball shots, lottery-style promotions, "guess the weight" competitions. Premium is a function of the probability of the prize being won. <sup>[4]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#00695c;">
+      <h3>PZ — Contingency (Other)</h3>
+      <p>Catch-all code for niche contingency risks. Includes <strong>pluvius / weather insurance</strong> (cover triggers if rainfall exceeds a measured threshold at a specified weather station during the event period), Coverage A/B weather schemes for outdoor venues, and other bespoke contingency structures not captured under PC/PA/PN/PU. <sup>[5]</sup></p>
+    </div>
+  </div>
+
+  <!-- Coverage taxonomy -->
+  <div class="section-title">Coverage Taxonomy</div>
+  <div class="cards-grid">
+    <div class="card">
+      <h4>Cancellation / Postponement</h4>
+      <p>The core insuring agreement: covers net revenue lost and unrecoverable advance costs (venue, artist fees, production, marketing) if the event is cancelled or postponed. Usually requires the cause to be a named insured peril — most policies are NOT all-risks. <sup>[1]</sup></p>
+    </div>
+    <div class="card accent">
+      <h4>Non-Appearance of Named Individual</h4>
+      <p>Covers the financial consequences if a named headliner, athlete, speaker or key individual fails to appear. Can cover the full event or only the portion of revenue attributable to that individual. Health clauses, age limits and pre-existing condition exclusions are standard. <sup>[3]</sup></p>
+    </div>
+    <div class="card blue">
+      <h4>Extra Expenses (Rescheduling)</h4>
+      <p>Covers the additional costs incurred to postpone and reschedule an event rather than cancel it outright — re-booking the venue, reprinting materials, artist re-engagement fees, additional marketing. Often subject to a sublimit. Incentivises organisers to mitigate by rescheduling. <sup>[1]</sup></p>
+    </div>
+    <div class="card purple">
+      <h4>Prize Indemnity / Hole-in-One</h4>
+      <p>Covers a promoter against the prize fund being claimed. Prize indemnity rates are actuarially calculated from the probability of the event occurring (golf handicap, distance from hole, competition format). Claims are simple: prize won = policy triggers. <sup>[4]</sup></p>
+    </div>
+    <div class="card teal">
+      <h4>Weather / Pluvius Insurance</h4>
+      <p>Automatic trigger if rainfall (or other weather metric) exceeds a defined threshold at a specified official weather station during the event hours. No proof of financial loss required once the weather trigger is met — parametric structure. Widely used for outdoor events, concerts and festivals. <sup>[5]</sup></p>
+    </div>
+    <div class="card red">
+      <h4>Broadcasting &amp; Media Rights</h4>
+      <p>Covers the forfeiture of TV and streaming rights income if the event does not take place or is significantly curtailed. Often a separate layer or endorsement given the very high values at stake — major sporting events can have broadcasting rights packages worth multiples of gate revenue. <sup>[2]</sup></p>
+    </div>
+  </div>
+
+  <!-- COVID callout -->
+  <div class="danger-box">
+    <strong>COVID-19 — The Defining Event for this Class:</strong> In March 2020, the global events industry shut down simultaneously and completely for the first time in history. Governments around the world imposed legal prohibitions on public gatherings. Thousands of events — concerts, festivals, sporting events, conferences, weddings — were cancelled with no possibility of rescheduling. Many event cancellation policies written in 2019 contained <strong>no pandemic or communicable disease exclusion</strong> — the market had not considered this scenario. The result: an estimated <strong>$4–6bn of insured event cancellation losses</strong> — the largest single event affecting this class in history. By 2021, every EC policy in the market included a pandemic/communicable disease exclusion as standard. The market restructuring was complete and fundamental. <sup>[I2]</sup>
+  </div>
+
+  <!-- Regulatory context -->
+  <div class="info-box">
+    <strong>Market Context (UK/Lloyd's):</strong> Event cancellation is written in Lloyd's predominantly by specialist contingency syndicates. The Lloyd's EC market is estimated at £400–600m GWP, making it a meaningful but specialised class within the broader Lloyd's portfolio. Post-COVID, the market has hardened significantly with pandemic exclusions now universal. The <strong>Insurance Act 2015</strong> fair presentation obligation applies in full — underwriters must be provided with all material facts including venue contracts, artist health disclosures, and prior event claim history. <sup>[L1]</sup>
+  </div>
+
+  <!-- Module nav -->
+  <div class="section-title">Hub Modules</div>
+  <div class="nav-grid">
+    <a href="history.html" class="nav-card">
+      <div class="num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From Lloyd's pluvius covers to the COVID market restructuring</p>
+    </a>
+    <a href="timeline.html" class="nav-card">
+      <div class="num">Module 02</div>
+      <h4>Events Timeline</h4>
+      <p>20 key EC events 1972–2024</p>
+    </a>
+    <a href="database.html" class="nav-card">
+      <div class="num">Module 03</div>
+      <h4>Loss Database</h4>
+      <p>35 EC losses — filterable by type, sector &amp; severity</p>
+    </a>
+    <a href="underwriting.html" class="nav-card">
+      <div class="num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>Rating factors, rate tables, worked examples &amp; exclusions</p>
+    </a>
+    <a href="rates-analysis.html" class="nav-card">
+      <div class="num">Module 05</div>
+      <h4>Rates &amp; ROE</h4>
+      <p>Market cycle, rate index charts, ROE scenarios &amp; P&amp;L waterfall</p>
+    </a>
+    <a href="risk-mitigation.html" class="nav-card">
+      <div class="num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Event risk controls, pluvius explainer, pandemic exclusion guide</p>
+    </a>
+    <a href="global-program.html" class="nav-card">
+      <div class="num">Module 07</div>
+      <h4>Global Programme</h4>
+      <p>Touring artists, mega-events, IOC/FIFA structure, case study</p>
+    </a>
+    <a href="references.html" class="nav-card">
+      <div class="num">Sources</div>
+      <h4>References</h4>
+      <p>Legal, regulatory &amp; industry citations</p>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Event Cancellation &amp; Contingency (PC/PA/PN/PU/PZ) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Sources &amp; Citations</a></p>
+</footer>
+
+</body>
+</html>

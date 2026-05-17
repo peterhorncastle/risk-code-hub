@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Aviation War &amp; Confiscation (RX) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:#2a2a2a; --hub-dark:#111111; --hub-light:#f0f0f0;
+      --hub-accent:#c8a84b; --hub-secondary:#b71c1c; --hub-secondary2:#1a237e;
+      --header-gradient:linear-gradient(135deg,#111111 0%,#2a2a2a 55%,#424242 100%);
+      --header-sub:#bdbdbd;
+      --rx:#2a2a2a; --rx-dark:#111111; --rx-light:#f0f0f0;
+      --rx-accent:#c8a84b; --rx-mid:#e0e0e0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--rx-light);color:#1a1a1a;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--rx-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--rx-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#111111;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#bdbdbd;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--rx-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--rx-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--rx-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--rx-mid);}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--rx-dark);margin-bottom:16px;}
+    canvas{max-width:100%;height:280px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--rx-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #eeeeee;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f5f5f5;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #1a5c2a;}
+    .roe-card.base{border-top:4px solid #c8a84b;}
+    .roe-card.bear{border-top:4px solid #b71c1c;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#1a5c2a;}
+    .roe-card.base .val{color:#c8a84b;}
+    .roe-card.bear .val{color:#b71c1c;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--rx-dark);margin-bottom:16px;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:240px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:#2a2a2a;}
+    .bar-out{background:#b71c1c;}
+    .bar-profit{background:#c8a84b;color:#000;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    .warn-box{background:#fff8e1;border-left:4px solid #c8a84b;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a3500;line-height:1.6;}
+    .warn-box strong{color:#b71c1c;}
+    footer{background:#111111;color:#bdbdbd;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--rx-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Aviation War (RX)</a> › Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">Market cycle, rate index, loss event breakdown, ROE scenarios &amp; P&amp;L waterfall</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Charts -->
+  <div class="section-title">Aviation War Rate Index 2000–2026<span class="badge b-e">EST</span></div>
+  <div class="chart-wrap">
+    <h3>Chart 1 — Hull War &amp; Liability War Rate Index 2000–2026 (2000 = 100)</h3>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Estimated Insured Loss by Event Type (Selected Major Events, $m)</h3>
+    <canvas id="chartLoss"></canvas>
+  </div>
+
+  <!-- Market cycle -->
+  <div class="section-title">Market Cycle History<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Key Driver</th><th>Rate Movement</th><th>Lloyd's Market Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Pre-2001</td><td>Soft / Benign</td><td>Low war frequency; terrorism included in war at modest premium; 1990s geopolitical calm</td><td>−2 to −5% p.a.</td><td>Ample capacity; broad terrorism coverage within war</td></tr>
+      <tr><td>2001–2003</td><td>Hard — 9/11 Dislocation</td><td>9/11 — $3.5bn+ loss; immediate terrorism cancellations; TRIA needed; market exits terrorism</td><td>+200% to +500% (terrorism); +50–100% (war)</td><td>Terrorism excluded; separate terrorism pricing; TRIA backstop negotiated</td></tr>
+      <tr><td>2004–2013</td><td>Gradual Softening</td><td>No major war losses; terrorism risk reassessed post-9/11; capacity rebuilds; competition</td><td>−3 to −8% p.a.</td><td>Terrorism cover reinstated; war rates drift lower; market normalises</td></tr>
+      <tr><td>2014</td><td>MH17 Awareness Bump</td><td>MH17 shoot-down; industry forced to reassess overfly risk; Ukraine airspace restrictions</td><td>+10 to +25% (conflict zone overfly)</td><td>Airspace monitoring requirements tightened; conflict zone endorsements added</td></tr>
+      <tr><td>2015–2021</td><td>Moderate / Managed</td><td>Managed conflict zone risks; GNSS spoofing emerging; Belarus FR4978 incident 2021</td><td>Flat to +8% p.a.</td><td>NOTAM requirements strengthened; Belarus creates new class of state-directed interference</td></tr>
+      <tr><td>2022</td><td>Catastrophic Loss Year</td><td>Russia invasion of Ukraine; ~900 aircraft confiscated; $10–13bn largest aviation loss event ever</td><td>+100% to +300%+ (confiscation cover)</td><td>Confiscation cover re-evaluated; capacity reduced; Russia/Belarus excluded; sanctions clauses added</td></tr>
+      <tr><td>2023–2026</td><td>Hard — Post-Russia Restructuring</td><td>Ongoing Russia litigation; GNSS spoofing; Middle East escalation; confiscation risk re-priced</td><td>+20 to +60% (confiscation); +10 to +25% (general war)</td><td>Lessor confiscation cover subject to strict jurisdiction and sanctions clauses; new wording developments</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative £40m RX Book<span class="badge b-e">EST</span></div>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+20%</div>
+      <div class="detail">Combined Ratio 73%<br>Hard rates; no major war loss; controlled confiscation exposure; good reinsurance recovery</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+12%</div>
+      <div class="detail">Combined Ratio 85%<br>Hard rates offset by elevated claims; MH17-scale shoot-down; modest confiscation; ongoing litigation</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−50%+</div>
+      <div class="detail">Combined Ratio 200%+<br>Russia 2022-scale event; confiscation claims exceed total market GWP; reinsurance chain stress-tested</div>
+    </div>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (£40m GWP, illustrative RX book)</h3>
+    <div class="wf-row"><div class="wf-label">Gross Written Premium</div><div class="wf-bar bar-in" style="width:100%;">£40m</div><div class="wf-val">£40.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Broker Commission (15%)</div><div class="wf-bar bar-out" style="width:30%;">−£6.0m</div><div class="wf-val">−£6.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance Premium (war XL + quota share)</div><div class="wf-bar bar-out" style="width:35%;">−£7.0m</div><div class="wf-val">−£7.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Earned Premium</div><div class="wf-bar bar-in" style="width:67%;background:#424242;">£27.0m</div><div class="wf-val">£27.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Hull War Losses</div><div class="wf-bar bar-out" style="width:20%;">−£4.5m</div><div class="wf-val">−£4.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Liability War</div><div class="wf-bar bar-out" style="width:10%;">−£2.5m</div><div class="wf-val">−£2.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Confiscation/Expropriation</div><div class="wf-bar bar-out" style="width:15%;">−£3.5m</div><div class="wf-val">−£3.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Hi-jacking / Malicious Damage</div><div class="wf-bar bar-out" style="width:5%;">−£0.8m</div><div class="wf-val">−£0.8m</div></div>
+    <div class="wf-row"><div class="wf-label">IBNR Reserve (Russia 2022 development)</div><div class="wf-bar bar-out" style="width:8%;">−£1.5m</div><div class="wf-val">−£1.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Expenses / Overhead (10%)</div><div class="wf-bar bar-out" style="width:10%;">−£4.0m</div><div class="wf-val">−£4.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (est.)</div><div class="wf-bar bar-in" style="width:5%;background:#c8a84b;color:#000;">+£0.8m</div><div class="wf-val">+£0.8m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Profit</strong></div><div class="wf-bar bar-profit" style="width:25%;"><strong>£11.0m</strong></div><div class="wf-val"><strong>£11.0m (27.5% ROE est.)</strong></div></div>
+  </div>
+
+  <!-- Russia 2022 reserve note -->
+  <div class="warn-box">
+    <strong>Russia 2022 IBNR and Reserve Note:</strong> The Russia 2022 confiscation claims remain subject to extensive litigation in multiple jurisdictions as of May 2026. No definitive insured loss figure has been agreed between Lloyd's syndicates, their reinsurers, and the claimant lessors. Underwriters carrying Russia 2022 exposure must maintain prudent IBNR reserves that account for: (a) the full claimed value ($10–13bn market estimate), (b) expected recoveries through subrogation/litigation (uncertain), (c) reinsurance recovery disputes (lead/follow disagreements), and (d) the multi-year litigation timeline. Actuarial guidance from Lloyd's Corporation on Russia 2022 reserving should be followed. <sup>[I4]</sup>
+  </div>
+
+  <!-- IBNR table -->
+  <div class="section-title">IBNR &amp; Development Considerations</div>
+  <table>
+    <thead><tr><th>Factor</th><th>Impact on Aviation War Reserves</th></tr></thead>
+    <tbody>
+      <tr><td>Liability war — Montreal Convention claims</td><td>Wrongful death claims under Montreal Convention develop over 3–7 years; multiple jurisdictions; punitive damages debates. MH17 liability claims still developing 10 years post-event.</td></tr>
+      <tr><td>Russia 2022 confiscation — litigation uncertainty</td><td>Claims quantum uncertain; Russian court refusal to recognise judgments; potential partial settlement vs full trial outcomes. IBNR must reflect full range of outcomes from 0% to 100% recovery.</td></tr>
+      <tr><td>Reinsurance recovery disputes</td><td>Large aviation war losses trigger disputes between lead and follow underwriters and their respective reinsurers. Recovery from reinsurers may be delayed by coverage disputes. Net reserve must account for uncertain RI recovery.</td></tr>
+      <tr><td>GNSS spoofing — emerging class</td><td>No actuarial history for navigation losses attributable to state-directed spoofing. Prudent IBNR loading for post-2022 policy years until coverage position and frequency data established.</td></tr>
+      <tr><td>Currency and agreed value fluctuations</td><td>Aircraft values denominated in USD; significant currency movements (post-Russia sanctions USD/RUB, EUR/USD) affect reinsurance recoveries and net loss calculations for non-USD reporting syndicates.</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Aviation War &amp; Confiscation (RX) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation →</a></p>
+</footer>
+
+<script>
+// Chart 1 — Aviation War Rate Index 2000–2026
+const years = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type:'line',
+  data:{
+    labels: years,
+    datasets:[
+      {
+        label:'Hull War Rate Index (2000=100)',
+        data:[100,480,250,180,140,120,108,100,96,92,88,84,80,78,102,98,93,89,87,85,90,95,320,380,420,440,450],
+        borderColor:'#2a2a2a',backgroundColor:'rgba(42,42,42,0.08)',tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'Liability War Rate Index (2000=100)',
+        data:[100,520,270,200,155,130,115,106,100,96,90,86,82,80,115,108,100,95,92,88,92,98,350,410,450,470,480],
+        borderColor:'#b71c1c',backgroundColor:'rgba(183,28,28,0.06)',tension:0.3,fill:false,pointRadius:3
+      },
+      {
+        label:'Confiscation Rate Index (2000=100)',
+        data:[100,200,160,140,120,110,105,100,95,92,88,85,82,80,85,82,80,78,76,75,78,85,600,750,800,820,840],
+        borderColor:'#c8a84b',backgroundColor:'rgba(200,168,75,0.06)',tension:0.3,fill:false,pointRadius:3
+      }
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom'},
+      annotation:{annotations:{
+        line1:{type:'line',xMin:'2001',xMax:'2001',borderColor:'rgba(183,28,28,0.5)',borderWidth:2,label:{content:'9/11',enabled:true}},
+        line2:{type:'line',xMin:'2014',xMax:'2014',borderColor:'rgba(200,168,75,0.5)',borderWidth:2},
+        line3:{type:'line',xMin:'2022',xMax:'2022',borderColor:'rgba(183,28,28,0.5)',borderWidth:2}
+      }}
+    },
+    scales:{y:{title:{display:true,text:'Rate Index (2000=100)'},beginAtZero:false}}
+  }
+});
+
+// Chart 2 — Insured Loss by Event Type
+new Chart(document.getElementById('chartLoss'), {
+  type:'bar',
+  data:{
+    labels:[
+      'Shoot-down\n(MH17 2014)','Shoot-down\n(KAL007 1983)','Shoot-down\n(PS752 2020)',
+      'Bombing\n(Lockerbie 1988)','Bombing\n(Air India 1985)',
+      'Hijacking\n(9/11 2001)','Hijacking\n(Dawson\'s 1970)',
+      'Confiscation\n(Kuwait 1991)','Confiscation\n(Russia 2022 est.)'
+    ],
+    datasets:[{
+      label:'Estimated Insured Loss ($m)',
+      data:[180,110,85,300,80,3500,30,400,11000],
+      backgroundColor:[
+        '#6a1b9a','#6a1b9a','#6a1b9a',
+        '#e65100','#e65100',
+        '#b71c1c','#b71c1c',
+        '#c8a84b','#c8a84b'
+      ]
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{
+        title:{display:true,text:'Estimated Insured Loss ($m)'},
+        beginAtZero:true,
+        ticks:{callback:v=>v>=1000?'$'+(v/1000)+'bn':'$'+v+'m'}
+      },
+      x:{ticks:{maxRotation:45}}
+    }
+  }
+});
+</script>
+</body>
+</html>

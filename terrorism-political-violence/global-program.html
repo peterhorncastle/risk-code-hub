@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Global Programme — Terrorism &amp; Political Violence — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #3a0a0a;
+      --hub-dark:      #1a0000;
+      --hub-light:     #fce8e8;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1a0000 0%,#3a0a0a 55%,#5c1010 100%);
+      --header-sub:    #ef9a9a;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1e1010;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1a0000;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #f5c6c6;}
+    .tower{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .tower h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    .layer{border-radius:6px;padding:14px 18px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+    .layer .l-name{font-weight:700;font-size:0.88rem;}
+    .layer .l-detail{font-size:0.8rem;opacity:0.85;}
+    .l-1{background:#1a0000;color:#ef9a9a;}
+    .l-2{background:#3a0a0a;color:#fce8e8;}
+    .l-3{background:#5c1010;color:#fce8e8;}
+    .l-4{background:#c8a84b;color:#1a0000;}
+    .l-5{background:#37474f;color:#fff;}
+    .l-sir{background:#eee;color:#333;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #fce8e8;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fff5f5;}
+    .pool-uk{background:#fce8e8;}
+    .pool-us{background:#e3f2fd;}
+    .pool-fr{background:#e8f5e9;}
+    .pool-de{background:#fff8e1;}
+    .profile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px;}
+    .profile{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .profile.us{border-left-color:#c8a84b;}
+    .profile.fr{border-left-color:#1a5c2a;}
+    .profile.de{border-left-color:#37474f;}
+    .profile.me{border-left-color:#b71c1c;}
+    .profile.ua{border-left-color:#6a1b9a;}
+    .profile h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .profile .flag{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .profile p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .case-study{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;border-top:4px solid var(--hub-accent);}
+    .case-study h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .case-study table{box-shadow:none;margin-bottom:0;}
+    .case-study th{background:var(--hub-primary);}
+    .info-box{background:#fce8e8;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3a0a0a;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    footer{background:#1a0000;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Terrorism &amp; Political Violence</a> › Global Programme</div>
+    <div class="tag">Module 07</div>
+    <h1>Global Programme Structure</h1>
+    <div class="sub">Government terrorism pools, multinational programme tower, jurisdiction profiles &amp; case study</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Programme tower -->
+  <div class="section-title">International Terrorism Programme Tower — Illustrative 5-Layer Structure</div>
+  <div class="tower">
+    <h3>Typical multinational terrorism programme structure (property damage + BI; Zone C/D mix)</h3>
+    <div class="layer l-1">
+      <div>
+        <div class="l-name">Layer 5 — XL Catastrophe / Aggregate Reinsurance</div>
+        <div class="l-detail">Lloyd's / reinsurance market excess of loss; responds to single catastrophic event or aggregate annual loss above threshold</div>
+      </div>
+      <div style="text-align:right;font-size:0.8rem;">Top of tower</div>
+    </div>
+    <div class="layer l-2">
+      <div>
+        <div class="l-name">Layer 4 — Lloyd's Global Terrorism Master Policy (TW)</div>
+        <div class="l-detail">Lloyd's excess / difference-in-conditions layer above local admitted policies; fills gaps in government pool coverage (BI, AA, PV perils); worldwide scope</div>
+      </div>
+      <div style="text-align:right;font-size:0.8rem;">TW code</div>
+    </div>
+    <div class="layer l-3">
+      <div>
+        <div class="l-name">Layer 3 — Local Admitted / Country-Specific Policies</div>
+        <div class="l-detail">Where required by law: USA (TRIA-compliant), France (GAREAT-participating), Spain (Consorcio), Germany (Extremus-eligible). Mandatory local admitted in regulated markets.</div>
+      </div>
+      <div style="text-align:right;font-size:0.8rem;">TO / TU code (local)</div>
+    </div>
+    <div class="layer l-4">
+      <div>
+        <div class="l-name">Layer 2 — Government Backstop / Pool Reinsurance</div>
+        <div class="l-detail">Pool Re (UK), TRIA (US), GAREAT (France), Extremus (Germany), Consorcio (Spain), ARPC (Australia), TRIP (Belgium), NHT (Netherlands), SASRIA (South Africa)</div>
+      </div>
+      <div style="text-align:right;font-size:0.8rem;">Government layer</div>
+    </div>
+    <div class="layer l-sir">
+      <div>
+        <div class="l-name">Self-Insured Retention (SIR) / Deductible</div>
+        <div class="l-detail">Typically £50k–£500k per occurrence depending on risk size; absorbed by insured before policy responds</div>
+      </div>
+      <div style="text-align:right;font-size:0.8rem;">Insured retention</div>
+    </div>
+  </div>
+
+  <!-- Pool comparison table -->
+  <div class="section-title">Government Terrorism Pool / Backstop Comparison<span style="font-size:0.75rem;font-weight:400;color:#888;margin-left:8px;">9 jurisdictions</span></div>
+  <table>
+    <thead>
+      <tr><th>Jurisdiction</th><th>Pool / Scheme</th><th>Established</th><th>Perils Covered</th><th>NBCR?</th><th>BI Covered?</th><th>Government Guarantee</th></tr>
+    </thead>
+    <tbody>
+      <tr class="pool-uk">
+        <td><strong>UK</strong></td>
+        <td>Pool Re</td>
+        <td>1993</td>
+        <td>Property damage — all risks terrorism; NBCR (from 2017)</td>
+        <td>Yes (from 2017)</td>
+        <td>No — BI requires standalone terrorism policy</td>
+        <td>Unlimited — UK government reinsurer of last resort</td>
+      </tr>
+      <tr class="pool-us">
+        <td><strong>USA</strong></td>
+        <td>TRIA (federal backstop)</td>
+        <td>2002</td>
+        <td>Property and casualty — TRIA-certified acts only; must be foreign-organised terrorism; $5m+ aggregate loss</td>
+        <td>Yes (if TRIA-certified)</td>
+        <td>Yes (if covered in underlying policy)</td>
+        <td>$100bn per programme year (shared with insurers per formula); extended to 2027</td>
+      </tr>
+      <tr class="pool-fr">
+        <td><strong>France</strong></td>
+        <td>GAREAT</td>
+        <td>2002</td>
+        <td>Property damage — French-sited risks; terrorism and "acts of nature disaster" terrorism</td>
+        <td>Partial</td>
+        <td>No — BI requires terrorism endorsement; GAREAT property only</td>
+        <td>Caisse Centrale de Réassurance (CCR) backed by French state; unlimited in principle</td>
+      </tr>
+      <tr class="pool-de">
+        <td><strong>Germany</strong></td>
+        <td>Extremus AG</td>
+        <td>2002</td>
+        <td>Property damage — risks with SI &gt;€25m; terrorism and sabotage</td>
+        <td>No</td>
+        <td>Limited — Extremus BI cover available as option</td>
+        <td>German government reinsurance up to €10bn per event; beyond that government guarantee</td>
+      </tr>
+      <tr>
+        <td><strong>Spain</strong></td>
+        <td>Consorcio de Compensación de Seguros</td>
+        <td>1954 (terrorism coverage formalised)</td>
+        <td>Property + liability — all extraordinary risks including terrorism, floods, earthquakes</td>
+        <td>Yes</td>
+        <td>Yes</td>
+        <td>Spanish government; integrated into standard insurance — mandatory surcharge on all policies</td>
+      </tr>
+      <tr>
+        <td><strong>Australia</strong></td>
+        <td>ARPC (Australian Reinsurance Pool Corporation)</td>
+        <td>2003</td>
+        <td>Commercial property and BI — eligible risks; terrorism</td>
+        <td>No</td>
+        <td>Yes</td>
+        <td>Australian government unlimited backstop for ARPC claims</td>
+      </tr>
+      <tr>
+        <td><strong>Belgium</strong></td>
+        <td>TRIP (Terrorism Reinsurance and Insurance Pool)</td>
+        <td>2007</td>
+        <td>Property and BI — Belgian sited risks; terrorism</td>
+        <td>No</td>
+        <td>Yes</td>
+        <td>Belgian government backstop above pool retention</td>
+      </tr>
+      <tr>
+        <td><strong>Netherlands</strong></td>
+        <td>NHT (Nederlandse Herverzekeringsmaatschappij voor Terrorismeschaden)</td>
+        <td>2003</td>
+        <td>All non-life and life lines — Dutch sited risks; terrorism</td>
+        <td>No</td>
+        <td>Yes</td>
+        <td>Dutch government backstop; €1bn per calendar year cap</td>
+      </tr>
+      <tr>
+        <td><strong>South Africa</strong></td>
+        <td>SASRIA (South African Special Risks Insurance Association)</td>
+        <td>1979</td>
+        <td>Property and BI — riot, strike, civil commotion, terrorism, public disorder; all South African sited risks</td>
+        <td>No</td>
+        <td>Yes</td>
+        <td>South African government; SASRIA solvency supported by state; KZN 2021 riots tested capacity</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Jurisdiction profiles -->
+  <div class="section-title">Key Jurisdiction Profiles</div>
+  <div class="profile-grid">
+    <div class="profile">
+      <div class="flag">United Kingdom</div>
+      <h4>UK — Pool Re + Lloyd's Standalone</h4>
+      <p>Pool Re reinsures UK commercial property damage from terrorism up to the full sum insured (no SI cap since 2019 reform). Pool Re does <em>not</em> cover BI, active assailant casualty, or political violence (riots/civil commotion). A standalone terrorism policy (TO code) fills these gaps. NBCR added to Pool Re in 2017 — though with sublimits on BI. Access denial BI (inability to access undamaged premises) is available from Lloyd's. <sup>[L3]</sup></p>
+    </div>
+    <div class="profile us">
+      <div class="flag">United States</div>
+      <h4>USA — TRIA Backstop + Standalone (TU)</h4>
+      <p>TRIA requires US commercial insurers to make terrorism coverage available (make available mandate). TRIA certification requires: act committed by foreign individual(s), $5m+ aggregate loss, Secretary of Treasury/AG certification. TRIA does not cover: domestic terrorism (Oklahoma City would not qualify), events below $5m threshold. Standalone terrorism (TU) policy still essential for BI, active assailant and cyberterrorism beyond TRIA scope. <sup>[L1]</sup></p>
+    </div>
+    <div class="profile fr">
+      <div class="flag">France</div>
+      <h4>France — GAREAT + Terrorism Endorsement for BI</h4>
+      <p>GAREAT covers property damage for French-sited risks above €6m SI (smaller risks covered through mandatory insurance mechanism). GAREAT does <em>not</em> cover BI — a terrorism endorsement to the property policy (or standalone terrorism BI policy) is required. GAREAT's CCR backing provides effectively unlimited government reinsurance for major events. Paris Bataclan (2015) was GAREAT's largest single event. <sup>[I2]</sup></p>
+    </div>
+    <div class="profile de">
+      <div class="flag">Germany</div>
+      <h4>Germany — Extremus AG for Large Risks</h4>
+      <p>Extremus covers property damage for German-sited risks with SI above €25m. Smaller risks have limited terrorism coverage options — many rely on standard property policies with specific terrorism clauses. Government backstop up to €10bn per event. Extremus does not cover NBCR. Standalone terrorism policy (TO) needed for BI and risks below the Extremus SI threshold. <sup>[I4]</sup></p>
+    </div>
+    <div class="profile me">
+      <div class="flag">Middle East</div>
+      <h4>Middle East — No Government Backstop; Full Lloyd's Programme</h4>
+      <p>No government terrorism reinsurance pool exists across the GCC or wider Middle East. Multinationals operating in Saudi Arabia, UAE, Kuwait, Bahrain, Qatar, Jordan and Lebanon require full Lloyd's terrorism and political violence programme (TO/RW/RS). Rates are Zone C–D depending on country. Political violence (RS/RW) coverage is particularly important given regional geopolitical instability and the frequency of civil unrest events. <sup>[I6]</sup></p>
+    </div>
+    <div class="profile ua">
+      <div class="flag">Ukraine / Active Conflict</div>
+      <h4>Ukraine — War on Land (WL); Active Lloyd's Market</h4>
+      <p>Following Russia's 2022 invasion, Ukraine-sited commercial property requires war on land (WL) or political violence (RW) cover. No government pool exists — Lloyd's is the only market. Premiums are Zone E (0.15–0.50%+ of SI depending on location proximity to front line). Claims are complex — physical assessment of damaged property in active conflict zones is extremely difficult. Lloyd's WL underwriting is highly selective with stringent risk information requirements. <sup>[I6]</sup></p>
+    </div>
+  </div>
+
+  <!-- Case Study -->
+  <div class="case-study">
+    <h3>Case Study — UK FTSE 100 Company: Global Terrorism Programme</h3>
+    <p style="font-size:0.85rem;color:#555;margin-bottom:16px;">Hypothetical FTSE 100 financial services firm: headquarters London (£250m SI), offices Paris (£60m), New York (£80m), Riyadh (£40m), Singapore (£30m). Total combined property SI: £460m.</p>
+    <table>
+      <thead><tr><th>Location</th><th>SI</th><th>Country Zone</th><th>Government Pool</th><th>Lloyd's Coverage Layer</th><th>Est. Annual Premium</th></tr></thead>
+      <tbody>
+        <tr><td>London HQ (financial district)</td><td>£250m</td><td>Zone C</td><td>Pool Re (PD + NBCR from 2017)</td><td>TO: BI / Access Denial / AA / PV (above Pool Re)</td><td>~£180,000</td></tr>
+        <tr><td>Paris (central offices)</td><td>£60m</td><td>Zone C</td><td>GAREAT (PD only)</td><td>TO: BI endorsement / AA (above GAREAT)</td><td>~£55,000</td></tr>
+        <tr><td>New York (Midtown office)</td><td>£80m</td><td>Zone C</td><td>TRIA-compliant admitted policy (PD + BI)</td><td>TU: AA / cyberterrorism / excess of TRIA</td><td>~£75,000</td></tr>
+        <tr><td>Riyadh (regional HQ)</td><td>£40m</td><td>Zone D</td><td>None</td><td>TO: full programme (PD + BI + AA + PV) — Lloyd's only</td><td>~£90,000</td></tr>
+        <tr><td>Singapore (APAC hub)</td><td>£30m</td><td>Zone B/C</td><td>None (private market adequate)</td><td>TO: PD + BI + AA</td><td>~£28,000</td></tr>
+        <tr><td><strong>Total Portfolio (TW master)</strong></td><td><strong>£460m</strong></td><td>—</td><td>Multiple pools (coordinated)</td><td>TW master: DIC/DIL excess; aggregation management</td><td><strong>~£428,000 est.</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- NBCR note -->
+  <div class="info-box">
+    <strong>NBCR Capacity Note — Global Programmes:</strong> NBCR terrorism coverage is the most restricted capacity in the global terrorism market. For the case study above, NBCR would be covered under Pool Re for the London location (post-2017) and potentially under TRIA for the New York location (if a TRIA-certified NBCR event). For Riyadh and other non-pool jurisdictions, NBCR coverage would require a specialist Lloyd's NBCR endorsement — and capacity is severely limited (typically $25–50m sublimit maximum from the handful of NBCR-writing syndicates). The Riyadh location would likely have no NBCR cover, or a very low sublimit. Insureds in Zone D countries should have an explicit NBCR conversation with their broker and the Lloyd's market. <sup>[I5]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Terrorism &amp; Political Violence (TO/TU/TW/RS/RW/WL) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Next: References →</a></p>
+</footer>
+
+</body>
+</html>

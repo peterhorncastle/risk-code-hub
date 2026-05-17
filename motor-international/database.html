@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Motor International (MF/MG/MH/MI/MP) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b0020;
+      --hub-dark:      #4a0010;
+      --hub-light:     #fce4ec;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#4a0010 0%,#7b0020 55%,#9c0027 100%);
+      --header-sub:    #ef9a9a;
+      --hub-mid:       #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0010;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#4a0010;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #fce4ec;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fff0f3;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-fleet-loss{background:#ffebee;color:#c62828;}
+    .tp-natural-perils{background:#e8f5e9;color:#1a5c2a;}
+    .tp-fraud-ring{background:#fff3e0;color:#e65100;}
+    .tp-major-accident{background:#fce4ec;color:#7b0020;}
+    .tp-ev-fire{background:#e8eaf6;color:#1a237e;}
+    .tp-product-recall-motor{background:#f3e5f5;color:#6a1b9a;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#1a5c2a;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#fff0f3;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#4a0010;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Motor International</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>International Motor Loss Database</h1>
+    <div class="sub">35 notable international motor loss events 1990–2024 — filter by type, sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Loss Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="fleet-loss">Fleet Loss / Total Loss Event</option>
+        <option value="natural-perils">Natural Perils (NatCat)</option>
+        <option value="fraud-ring">Fraud Ring / Staged Accidents</option>
+        <option value="major-accident">Major Accident / Mass Casualty</option>
+        <option value="ev-fire">EV / Battery Fire</option>
+        <option value="product-recall-motor">Motor Product Recall</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="commercial-fleet">Commercial Fleet</option>
+        <option value="private-car">Private Car</option>
+        <option value="hire-car">Hire Car / Rental</option>
+        <option value="hgv-trucking">HGV / Trucking</option>
+        <option value="ride-sharing">Ride-Sharing / TNC</option>
+        <option value="construction-plant">Construction / Plant</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2010" min="1990" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 50" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Country, event…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event / Name</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Loss ($m est.)</th>
+        <th>Severity</th>
+        <th>Geography</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Motor International (MF/MG/MH/MI/MP) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1990,n:"Bangkok Mass Transit Accident — Bus Fire",t:"major-accident",s:"commercial-fleet",desc:"Severe bus fire in Bangkok results in 166 fatalities. Inadequate third-party death and injury compensation under Thai compulsory insurance system highlighted. Triggers review of MTPL adequacy and mandatory limits in South-East Asian markets.",v:15,sev:"maj",geo:"Thailand"},
+  {y:1993,n:"Middle East Sandstorm Fleet Damage — Gulf States",t:"natural-perils",s:"commercial-fleet",desc:"A series of exceptional sandstorm events across Saudi Arabia and UAE cause extensive paintwork, windscreen and mechanical damage to commercial vehicle fleets. Comprehensive motor claims surge — estimated industry loss USD 80m across Gulf states. Highlights natural perils exposure in MENA motor portfolios.",v:80,sev:"maj",geo:"UAE/Saudi Arabia"},
+  {y:1994,n:"South African Minibus Taxi Industry — Chronic Fraud",t:"fraud-ring",s:"commercial-fleet",desc:"South Africa's minibus taxi industry — some 200,000 vehicles — is identified as the highest-frequency fraud segment in the country's motor insurance market. Staged accidents, false injury claims, and vehicle substitution are endemic. Insurers begin withdrawing or repricing the sector aggressively. Estimated annual fraud cost ZAR 500m+.",v:45,sev:"maj",geo:"South Africa"},
+  {y:1999,n:"Sydney Hailstorm — Fleet and Private Car Total Losses",t:"natural-perils",s:"commercial-fleet",desc:"April 1999 severe hailstorm across Sydney causes an estimated A$1.7bn in insured losses, with motor vehicle total losses representing a significant component. Lloyd's international motor binders with Australian exposure face large aggregate losses. Event becomes a benchmark for Australian motor NatCat accumulation management.",v:850,sev:"cat",geo:"Australia"},
+  {y:2001,n:"Philippine Typhoon Feria — Flood Vehicle Losses",t:"natural-perils",s:"private-car",desc:"Typhoon Feria causes widespread flooding across Metro Manila and Luzon, with extensive motor vehicle flood total losses. Comprehensive motor policies in the Philippines tested on flood sub-limits and total loss valuation. Estimated motor component of insured losses USD 40m.",v:40,sev:"maj",geo:"Philippines"},
+  {y:2003,n:"European Heat Wave — Commercial Vehicle Breakdowns and Incident Surge",t:"natural-perils",s:"hgv-trucking",desc:"The 2003 European heat wave causes road surface deterioration, tyre blowouts on HGV fleets, and elevated breakdown/incident frequency across France, Germany and Italy. Not a single catastrophic event but a sustained frequency deterioration across multiple Lloyd's European motor binder books.",v:60,sev:"mod",geo:"France/Germany/Italy"},
+  {y:2005,n:"New Orleans Hurricane Katrina — 200,000 Vehicle Total Losses",t:"natural-perils",s:"private-car",desc:"Hurricane Katrina flooding of New Orleans causes approximately 200,000 vehicle total losses in Louisiana alone. Though primarily a US domestic market event, Lloyd's international motor syndicates with US-exposed binders face significant losses. Katrina motor losses contribute to the overall $45bn+ insured loss.",v:2500,sev:"cat",geo:"USA"},
+  {y:2007,n:"Santiago Bus Fire — 13 Fatalities, Chile",t:"major-accident",s:"commercial-fleet",desc:"A major bus fire in Santiago, Chile kills 13 passengers and injures dozens. The incident exposes inadequate maintenance standards and MTPL limits in the Chilean transport sector. Triggers regulatory review of compulsory motor insurance minimums and bus operator licensing standards.",v:8,sev:"mod",geo:"Chile"},
+  {y:2008,n:"Eastern European HGV Fraud Ring — Staged Motorway Accidents",t:"fraud-ring",s:"hgv-trucking",desc:"Organised fraud rings operating across Poland, Czech Republic and Slovakia stage HGV motorway accidents, generating false cargo and third-party liability claims. Estimated losses of EUR 60m across multiple insurers over a 3-year period before police disruption. Highlights organised motor fraud in emerging European markets.",v:75,sev:"maj",geo:"Poland/Czech Republic"},
+  {y:2009,n:"Queensland Floods — Motor Fleet Total Losses",t:"natural-perils",s:"commercial-fleet",desc:"Major Queensland flooding events cause significant motor vehicle total losses, particularly affecting commercial vehicle fleets of mining and agricultural companies. Lloyd's Australian motor binders experience elevated flood total loss claims. Precursor to the larger 2010–11 Queensland floods.",v:120,sev:"maj",geo:"Australia"},
+  {y:2010,n:"Queensland Floods 2010–11 — Record Fleet Losses",t:"natural-perils",s:"commercial-fleet",desc:"The 2010–11 Queensland flooding — covering an area larger than France and Germany combined — causes an estimated A$2.3bn in total insured losses, with motor vehicles a significant component. Mining and construction fleet operators suffer mass total losses of expensive heavy equipment. Lloyd's international motor syndicates review Australian flood accumulation protocols.",v:400,sev:"cat",geo:"Australia"},
+  {y:2011,n:"Thailand Floods — Industrial Estate Vehicle Losses",t:"natural-perils",s:"commercial-fleet",desc:"Severe flooding of central Thailand industrial estates, including Ayutthaya, causes massive losses to vehicle manufacturers, component suppliers and commercial fleets. Toyota, Honda and other OEM facilities flooded. Motor insurance claims for production vehicles, fleet vehicles and employee cars at flooded facilities estimated at USD 300m+.",v:300,sev:"cat",geo:"Thailand"},
+  {y:2012,n:"UAE Dubai Flash Flood — Luxury Fleet Losses",t:"natural-perils",s:"commercial-fleet",desc:"Exceptional flash flooding in Dubai causes widespread motor vehicle losses including high-value luxury fleet vehicles. UAE motor policies tested on flash flood sub-limits and agreed value vs market value settlements. Industry loss estimated at AED 500m (USD 136m).",v:136,sev:"maj",geo:"UAE"},
+  {y:2013,n:"South African Truck Manufacturer Warranty Fraud Ring",t:"fraud-ring",s:"hgv-trucking",desc:"A fraud ring exploiting warranty and motor insurance claims simultaneously is exposed involving a commercial truck dealership network across three South African provinces. Staged mechanical failures and false theft claims generate estimated ZAR 85m in fraudulent insurance payouts before detection by the South African Police Service and Insurance Crime Bureau.",v:8,sev:"mod",geo:"South Africa"},
+  {y:2015,n:"Volkswagen Dieselgate — Motor Product Recall Insurance Claims",t:"product-recall-motor",s:"private-car",desc:"The Volkswagen emissions scandal (defeat device software on 11 million vehicles worldwide) triggers motor product recall insurance claims and liability exposures. VW's comprehensive recall programme and related litigation cost an estimated EUR 35bn. Lloyd's product recall and motor liability syndicates assess exposure to VW dealer network and vehicle owner claims.",v:500,sev:"cat",geo:"Germany/Global"},
+  {y:2016,n:"Takata Airbag Recall — Largest Motor Safety Recall in History",t:"product-recall-motor",s:"private-car",desc:"The Takata airbag recall — covering approximately 100 million vehicles across multiple OEMs worldwide — is the largest automotive safety recall in history. Defective airbag inflators causing fatal injuries. Motor product recall and liability insurers face claims across multiple Lloyd's risk codes. Total industry cost estimated at USD 24bn.",v:1200,sev:"cat",geo:"Global"},
+  {y:2016,n:"South Africa Road Accident Fund — Systemic Claims Inflation",t:"fraud-ring",s:"private-car",desc:"The South African Road Accident Fund (RAF) — the compulsory no-fault motor accident compensation scheme — faces systemic exploitation through fraudulent personal injury claims, legal fee abuse, and agent-driven mass litigation. RAF's unfunded liability exceeds ZAR 200bn. Commercial motor insurers face knock-on effects through subrogation recovery failure.",v:200,sev:"cat",geo:"South Africa"},
+  {y:2017,n:"Hurricane Harvey — 500,000 Vehicle Total Losses, Houston",t:"natural-perils",s:"private-car",desc:"Hurricane Harvey causes catastrophic flooding in the Houston metropolitan area, resulting in approximately 500,000 vehicle total losses — the largest single motor NatCat event in US history. Lloyd's international motor binders with USA-exposed risks face significant losses. Total motor insured loss estimated at USD 5bn+.",v:5000,sev:"cat",geo:"USA"},
+  {y:2017,n:"Uber Pool Data Breach — TNC Liability Exposure",t:"ride-sharing",s:"ride-sharing",desc:"Uber's disclosure of a 2016 data breach affecting 57 million users highlights the complex liability landscape for TNC operators. While primarily a cyber event, it exposes the multi-layered insurance structure of TNC platforms — from personal motor policies to TNC platform coverage — and the inadequacy of coverage during the 'period 1' gap (driver logged in but no passenger).",v:30,sev:"mod",geo:"Global"},
+  {y:2018,n:"Middle East MENA Truck Fleet Losses — Wadi Flash Floods",t:"natural-perils",s:"hgv-trucking",desc:"A series of wadi flash flood events across Oman, UAE and Saudi Arabia cause extensive HGV and commercial vehicle losses. Vehicles parked in low-lying areas or crossing wadis during flash floods are total-lost. Estimated industry motor loss USD 95m. Highlights the underappreciated flood peril in MENA motor portfolios.",v:95,sev:"maj",geo:"Oman/UAE/Saudi Arabia"},
+  {y:2018,n:"South African Taxi Accident — Multiple Fatalities, Limpopo",t:"major-accident",s:"commercial-fleet",desc:"A heavily overloaded minibus taxi crash in Limpopo Province kills 24 passengers. South Africa's Road Accident Fund and voluntary motor third-party liability insurers face claims from victim families. Highlights the endemic safety failures in the minibus taxi sector and regulatory challenges in enforcing MTPL compliance.",v:5,sev:"mod",geo:"South Africa"},
+  {y:2019,n:"Renault-Nissan Recall — CVT Transmission Defect",t:"product-recall-motor",s:"private-car",desc:"Renault-Nissan recall of approximately 800,000 vehicles in Europe and Asia over a continuously variable transmission (CVT) defect. Motor product recall insurance claims for dealer costs, rental vehicles and associated liability. Estimated recall cost EUR 120m. Illustrates the scale of OEM recall events and their motor insurance implications.",v:135,sev:"maj",geo:"Europe/Asia"},
+  {y:2020,n:"COVID-19 — Frequency Collapse and Salvage Market Disruption",t:"fleet-loss",s:"commercial-fleet",desc:"Global lockdowns reduce motor claim frequency 30–50% in Q2–Q3 2020. However, salvage and total loss markets are simultaneously disrupted — auction values spike as second-hand vehicle supply tightens. Fleet operators face elevated replacement vehicle costs. The frequency benefit is partially offset by severity deterioration and supply chain delays.",v:150,sev:"maj",geo:"Global"},
+  {y:2020,n:"Turkish Commercial Fleet — Currency Devaluation Total Loss Inflation",t:"fleet-loss",s:"commercial-fleet",desc:"Severe Turkish lira depreciation through 2020–21 causes dramatic increases in vehicle replacement values and parts costs for Turkish commercial fleets insured in USD or EUR. Agreed value policies insured in TRY become materially underinsured. Lloyd's international motor binders with Turkey exposure review currency and indexation clauses.",v:80,sev:"mod",geo:"Turkey"},
+  {y:2021,n:"German Ahrtal Valley Floods — Commercial and Private Vehicle Losses",t:"natural-perils",s:"private-car",desc:"The catastrophic Ahr Valley flooding in Germany (July 2021) causes widespread vehicle total losses across the Rhineland-Palatinate region. Estimated motor vehicle losses of EUR 400m+. European motor insurers and Lloyd's syndicates with German exposure face significant claims. Event triggers review of flood aggregate accumulation in European motor portfolios.",v:450,sev:"cat",geo:"Germany"},
+  {y:2021,n:"Microchip Shortage — New Vehicle Scarcity, Repair Cost Inflation",t:"fleet-loss",s:"commercial-fleet",desc:"Global semiconductor shortage cuts new vehicle production by 7.7 million units in 2021 (AlixPartners). Second-hand vehicle values spike 30–50% in major markets. Total loss settlements and replacement vehicle costs for commercial fleets inflate sharply. Lloyd's international motor syndicates experience combined ratio deterioration of 8–12 percentage points.",v:200,sev:"maj",geo:"Global"},
+  {y:2022,n:"Tesla Battery Fire Events — European Fleets",t:"ev-fire",s:"commercial-fleet",desc:"A series of Tesla Model S and Model 3 battery thermal runaway fires in European fleet operations prompt insurance industry concern. EV battery fires require 30,000–80,000 litres of water to extinguish and can reignite up to 24 hours later. Repair costs often exceed vehicle value. Lloyd's EV fleet underwriters review battery fire endorsements and salvage handling protocols.",v:25,sev:"mod",geo:"Europe"},
+  {y:2022,n:"Pakistan Floods — Commercial Vehicle and Transport Losses",t:"natural-perils",s:"hgv-trucking",desc:"The catastrophic 2022 Pakistan floods — covering one-third of the country — cause extensive commercial vehicle and transport fleet losses, particularly in Sindh and Balochistan provinces. Pakistan's nascent motor insurance market (low penetration) means most losses are uninsured, but Lloyd's programmes with Pakistan exposure face claims from commercial operators.",v:60,sev:"maj",geo:"Pakistan"},
+  {y:2022,n:"Australian Eastern Seaboard Floods — Motor Total Losses",t:"natural-perils",s:"private-car",desc:"Repeated east coast flooding events in 2022 (NSW, Queensland) cause significant motor vehicle total losses. Industry motor losses estimated at A$800m+ across the flooding sequence. Lloyd's Australian motor binders experience aggregation of losses across multiple events — triggering review of annual aggregate limits in coverholder agreements.",v:580,sev:"cat",geo:"Australia"},
+  {y:2023,n:"Australian Hailstorms — A$1.1bn Motor Market Impact",t:"natural-perils",s:"private-car",desc:"Multiple hailstorm events across Australia's eastern seaboard in late 2022/early 2023 generate an estimated A$1.1bn in insured motor losses (ICA data). Hail dent repair costs for ADAS-equipped vehicles are significantly elevated due to sensor replacement and recalibration requirements. Lloyd's Australian motor capacity reviews hail aggregate accumulation.",v:750,sev:"cat",geo:"Australia"},
+  {y:2023,n:"Middle East Organised Motor Fraud — UAE Insurance Authority Action",t:"fraud-ring",s:"private-car",desc:"UAE Insurance Authority (IA) announces enforcement action against a network of 42 workshop operators and assessors found to have systematically inflated repair claims, staged accidents and provided false certificates. Estimated fraud losses AED 180m (USD 49m). Lloyd's UAE motor binder managers review anti-fraud monitoring requirements for coverholders.",v:49,sev:"maj",geo:"UAE"},
+  {y:2023,n:"South African Motor Insurance — Post-COVID Frequency Surge",t:"fleet-loss",s:"commercial-fleet",desc:"South Africa's commercial motor market experiences a sharp frequency deterioration in 2022–23 as traffic volumes recover post-COVID, combined with road infrastructure deterioration, increased fuel theft incidents, and elevated vehicle theft (catalytic converters, targeting of specific models). Combined ratios deteriorate 10–15 points for Lloyd's SA binders.",v:90,sev:"maj",geo:"South Africa"},
+  {y:2023,n:"Electric Bus Fleet Fire — Chilean Transit Authority",t:"ev-fire",s:"commercial-fleet",desc:"A fleet of 50 BYD electric buses operated by Santiago's transit authority suffer multiple battery fire incidents in a depot, causing significant damage to vehicles and charging infrastructure. Chilean motor product liability and fleet insurance claims disputed between bus manufacturer, charging infrastructure provider and fleet operator.",v:18,sev:"mod",geo:"Chile"},
+  {y:2024,n:"European Hailstorm Season — Record Motor Losses",t:"natural-perils",s:"private-car",desc:"The 2024 European summer hailstorm season causes record motor vehicle losses across Italy, France, Germany and Austria. Combination of large hail stones, elevated vehicle values and ADAS repair cost inflation drives industry motor hail losses to an estimated EUR 1.8bn — among the highest ever recorded in a single European hail season.",v:1600,sev:"cat",geo:"Europe"},
+  {y:2024,n:"Saudi Arabia Vision 2030 Fleet Electrification — EV Underinsurance Risk",t:"ev-fire",s:"commercial-fleet",desc:"Saudi Arabia's accelerating EV adoption programme (part of Vision 2030) sees a rapid increase in EV fleet deployment by government ministries and state enterprises. Lloyd's international motor underwriters assess the emerging battery fire, range performance and telematics data quality risks in MENA EV fleets — a new exposure with limited actuarial history.",v:10,sev:"min",geo:"Saudi Arabia"}
+];
+
+const typeLabels = {
+  "fleet-loss":"Fleet Loss / Total Loss","natural-perils":"Natural Perils","fraud-ring":"Fraud Ring / Staged",
+  "major-accident":"Major Accident","ev-fire":"EV / Battery Fire","product-recall-motor":"Motor Product Recall"
+};
+const typeClass = {
+  "fleet-loss":"tp-fleet-loss","natural-perils":"tp-natural-perils","fraud-ring":"tp-fraud-ring",
+  "major-accident":"tp-major-accident","ev-fire":"tp-ev-fire","product-recall-motor":"tp-product-recall-motor"
+};
+const secLabels = {
+  "commercial-fleet":"Commercial Fleet","private-car":"Private Car","hire-car":"Hire Car/Rental",
+  "hgv-trucking":"HGV/Trucking","ride-sharing":"Ride-Sharing","construction-plant":"Construction/Plant"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${secLabels[d.s]||d.s}</td>
+      <td>${d.v>=1000?'$'+(d.v/1000).toFixed(1)+'bn':'$'+d.v+'m'}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">▼ Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

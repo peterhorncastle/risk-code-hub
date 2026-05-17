@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Motor – International (MF/MG/MH/MI/MP) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b0020;
+      --hub-dark:      #4a0010;
+      --hub-light:     #fce4ec;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#4a0010 0%,#7b0020 55%,#9c0027 100%);
+      --header-sub:    #ef9a9a;
+      --hub-mid:       #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0010;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(26,35,126,0.15) 0%,transparent 50%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:2rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;margin-bottom:16px;}
+    .code-pill{display:inline-block;background:rgba(200,168,75,0.25);border:1px solid var(--hub-accent);
+      color:var(--hub-accent);padding:3px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;margin-right:6px;}
+    nav.hub-nav{background:#4a0010;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+    .stat-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-top:4px solid var(--hub-primary);}
+    .stat-card .val{font-size:1.5rem;font-weight:700;color:var(--hub-primary);margin-bottom:4px;}
+    .stat-card .lbl{font-size:0.78rem;color:#555;line-height:1.3;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .code-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px;}
+    .code-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .code-card.blue{border-left-color:var(--hub-secondary);}
+    .code-card.green{border-left-color:var(--hub-secondary2);}
+    .code-card.gold{border-left-color:var(--hub-accent);}
+    .code-card h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .code-card p{font-size:0.85rem;color:#444;line-height:1.5;}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:28px;}
+    .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid var(--hub-primary);}
+    .card.accent{border-top-color:var(--hub-accent);}
+    .card.blue{border-top-color:var(--hub-secondary);}
+    .card.green{border-top-color:var(--hub-secondary2);}
+    .card.red{border-top-color:#c62828;}
+    .card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .info-box{background:#fff0f3;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a0010;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px;}
+    .nav-card{display:block;background:#fff;border-radius:10px;padding:16px 18px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);transition:all 0.2s;}
+    .nav-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12);border-left-color:var(--hub-accent);}
+    .nav-card .num{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .nav-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);}
+    .nav-card p{font-size:0.78rem;color:#555;margin-top:4px;}
+    footer{background:#4a0010;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Motor › International</div>
+    <div class="tag">Motor Insurance</div>
+    <h1>Motor – International</h1>
+    <div class="sub">International motor fleet, private car, HGV &amp; general programmes — delegated authority dominant</div>
+    <div>
+      <span class="code-pill">MF</span>
+      <span class="code-pill">MG</span>
+      <span class="code-pill">MH</span>
+      <span class="code-pill">MI</span>
+      <span class="code-pill">MP</span>
+    </div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~$800bn<span class="badge b-e">EST</span></div>
+      <div class="lbl">Global motor insurance premium market (2024)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">$1.5–2bn<span class="badge b-e">EST</span></div>
+      <div class="lbl">Lloyd's international motor GWP est. (delegated authority dominant)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">15–20%<span class="badge b-v">VER</span></div>
+      <div class="lbl">EV share of new car sales in major markets 2024 (IEA)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">48<span class="badge b-v">VER</span></div>
+      <div class="lbl">Countries covered by the Green Card system (Council of Bureaux)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">+32%<span class="badge b-e">EST</span></div>
+      <div class="lbl">Average repair cost inflation 2021–2023 (parts, labour, supply chain)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">SAE 2–3<span class="badge b-v">VER</span></div>
+      <div class="lbl">Dominant ADAS level in new vehicle production fleets 2024</div>
+    </div>
+  </div>
+
+  <!-- Lloyd's code definitions -->
+  <div class="section-title">Lloyd's Risk Code Coverage</div>
+  <div class="code-grid">
+    <div class="code-card">
+      <h3>MF — Motor Fleet International</h3>
+      <p>International motor fleet programmes, predominantly written on a delegated authority basis through specialist MGAs. Covers multi-vehicle fleets operated by corporations, rental companies, logistics operators and NGOs outside the UK. Third-party liability, comprehensive, and fleet excess of loss structures are all common. <sup>[I7]</sup></p>
+    </div>
+    <div class="code-card blue">
+      <h3>MG — Motor International General</h3>
+      <p>Catch-all code for international motor business that does not fit neatly into other sub-classes. Includes specialist classes such as motor trade road risks, agricultural vehicles, special types, and miscellaneous international motor business written on a direct or facultative basis.</p>
+    </div>
+    <div class="code-card green">
+      <h3>MH — Motor International Heavy</h3>
+      <p>Heavy goods vehicles (HGV), truck fleets, articulated lorries, buses and coaches written on an international basis. High severity/moderate frequency profile. Cargo liability exposure on HGV adds complexity. CMR Convention governs international road haulage liability across Europe and Middle East. <sup>[L3]</sup></p>
+    </div>
+    <div class="code-card gold">
+      <h3>MI — Motor International</h3>
+      <p>Broad international personal lines motor programmes — typically binder business covering private car, light commercial vehicles and motorcycles in international markets. Lloyd's syndicates underwrite the risk through a coverholder in the local market (e.g. South Africa, Middle East, Australia).</p>
+    </div>
+    <div class="code-card" style="border-left-color:#880e4f;">
+      <h3>MP — Motor International Private</h3>
+      <p>Private car delegated authority programmes specifically — pure passenger vehicle books written via international MGAs. Includes telematics/UBI (usage-based insurance) programmes which are increasingly common in MENA, Latin America and South Africa. Performance monitoring of the coverholder is critical. <sup>[I3]</sup></p>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>UK Motor is a Separate Hub:</strong> Lloyd's UK motor business (codes M2–M6) is covered in the separate Motor UK hub. These MF/MG/MH/MI/MP codes exclusively cover <strong>non-UK international business</strong> — i.e. risks where the vehicle is not registered and principally garaged in Great Britain. Post-Brexit, GB has its own International Motor Insurance Bureau arrangement distinct from the EU Green Card system. <sup>[L9]</sup>
+  </div>
+
+  <!-- Coverage taxonomy -->
+  <div class="section-title">Coverage Taxonomy</div>
+  <div class="cards-grid">
+    <div class="card">
+      <h4>Third-Party Liability (MTPL)</h4>
+      <p>Mandatory in virtually all jurisdictions worldwide. Covers bodily injury and property damage caused to third parties by the insured vehicle. Minimum limits vary enormously — from minimal GCC levels to the harmonised EU minimum (currently EUR 6.45m BI / EUR 1.22m PD per EU Directive 2021). <sup>[L1]</sup></p>
+    </div>
+    <div class="card accent">
+      <h4>Accidental Damage (Comprehensive)</h4>
+      <p>Covers physical damage to the insured's own vehicle from accident, collision, overturning or impact. The cornerstone of most comprehensive motor programmes. Sum insured basis (agreed value vs market value) is a critical underwriting decision — particularly relevant in high-inflation or depreciation-volatile markets. <sup>[I1]</sup></p>
+    </div>
+    <div class="card blue">
+      <h4>Theft, Fire &amp; Natural Perils</h4>
+      <p>Theft and attempted theft of the vehicle; fire including spontaneous combustion; storm, flood, hail and earthquake damage. NatCat exposure in motor portfolios is significant — Australian hail events and North American flood total losses are major aggregate exposures. EV battery fires present a new variant of this peril. <sup>[I1]</sup></p>
+    </div>
+    <div class="card green">
+      <h4>Personal Accident (Driver &amp; Passengers)</h4>
+      <p>Fixed benefit or medical expenses cover for driver and passenger occupants injured in an accident. Mandatory in several jurisdictions (e.g. Singapore, Malaysia). Often an add-on to fleet programmes; some markets (South Africa RAF) run compulsory no-fault government schemes alongside the commercial motor market.</p>
+    </div>
+    <div class="card red">
+      <h4>Legal Expenses</h4>
+      <p>Defence costs and pursuit of uninsured driver claims. Valuable in litigious jurisdictions. In EU markets, motor legal expenses is a regulated class in its own right (Insurance Distribution Directive). Typically sublimited; covers lawyer fees, court costs and enforcement of judgements against uninsured third parties.</p>
+    </div>
+    <div class="card" style="border-top-color:#795548;">
+      <h4>Uninsured / Underinsured Motorist</h4>
+      <p>Covers the insured's own BI/PD loss where caused by an uninsured or untraced driver. Essential in markets with poor compulsory insurance compliance — South Africa, parts of LatAm, some APAC markets. In the UK, the Motor Insurers' Bureau administers the untraced and uninsured driver agreements. <sup>[L9]</sup></p>
+    </div>
+  </div>
+
+  <!-- Delegated authority model -->
+  <div class="section-title">Delegated Authority / MGA Model</div>
+  <div class="info-box">
+    <strong>The dominant distribution model for Lloyd's international motor is delegated authority (binder business).</strong> A Lloyd's syndicate grants a binding authority to a specialist MGA or coverholder, typically located in the territory of risk, authorising them to bind risks on behalf of the syndicate within agreed parameters (risk criteria, territory, vehicle type, sum insured limits, policy conditions). The coverholder manages distribution, policy issuance, premium collection and often first-line claims handling. The syndicate audits the coverholder quarterly against the binder terms, monitoring loss ratios, premium volume and aggregate exposure. Quality of coverholder due diligence (Lloyd's minimum standards for delegated authority — DAs) is the primary underwriting control. <sup>[I7]</sup>
+  </div>
+
+  <div class="warn-box">
+    <strong>EV Severity Emerging Risk:</strong> Electric vehicle batteries introduce a new claims dynamic: thermal runaway fires are dramatically harder to extinguish than conventional fires (requiring thousands of litres of water), repair costs for high-voltage battery systems can exceed the vehicle's market value, and OEM parts supply constraints cause extended off-road periods. Lloyd's international motor underwriters should explicitly assess the proportion of EVs within a fleet or programme book and model severity uplift accordingly. Telematics data from EV fleets can assist (regenerative braking, speed profile) but battery state-of-health data sharing from OEMs remains limited. <sup>[I6]</sup>
+  </div>
+
+  <!-- Module nav -->
+  <div class="section-title">Hub Modules</div>
+  <div class="nav-grid">
+    <a href="history.html" class="nav-card">
+      <div class="num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From Travelers 1897 to the Green Card system and the EV revolution</p>
+    </a>
+    <a href="timeline.html" class="nav-card">
+      <div class="num">Module 02</div>
+      <h4>Events Timeline</h4>
+      <p>20 key international motor events 1930–2024</p>
+    </a>
+    <a href="database.html" class="nav-card">
+      <div class="num">Module 03</div>
+      <h4>Loss Database</h4>
+      <p>35 international motor losses — filterable by type, territory &amp; severity</p>
+    </a>
+    <a href="underwriting.html" class="nav-card">
+      <div class="num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>Rating factors, territory benchmarks, worked examples &amp; exclusions</p>
+    </a>
+    <a href="rates-analysis.html" class="nav-card">
+      <div class="num">Module 05</div>
+      <h4>Rates &amp; ROE</h4>
+      <p>Market cycle, rate index charts by region, ROE scenarios &amp; P&amp;L waterfall</p>
+    </a>
+    <a href="risk-mitigation.html" class="nav-card">
+      <div class="num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Fleet safety controls, telematics, EV-specific risk and fraud detection</p>
+    </a>
+    <a href="global-program.html" class="nav-card">
+      <div class="num">Module 07</div>
+      <h4>Global Programme</h4>
+      <p>Multinational fleet structure, Green Card system, jurisdiction profiles</p>
+    </a>
+    <a href="references.html" class="nav-card">
+      <div class="num">Sources</div>
+      <h4>References</h4>
+      <p>Legal, regulatory &amp; industry citations</p>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Motor International (MF/MG/MH/MI/MP) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Sources &amp; Citations</a></p>
+</footer>
+
+</body>
+</html>

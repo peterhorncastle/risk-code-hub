@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Livestock &amp; Bloodstock (NB/NX) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4e342e;
+      --hub-dark:      #260f0a;
+      --hub-light:     #fbe9e7;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#1a237e;
+      --header-gradient:linear-gradient(135deg,#260f0a 0%,#4e342e 55%,#6d4c41 100%);
+      --header-sub:    #ffccbc;
+      --hub-mid:       #d7ccc8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1209;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ffccbc;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#260f0a;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ffccbc;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #f3e8e6;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fdf0ee;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-disease-epidemic{background:#fbe9e7;color:#c62828;}
+    .tp-individual-mortality{background:#f3e5f5;color:#6a1b9a;}
+    .tp-permanent-infertility{background:#e8eaf6;color:#1a237e;}
+    .tp-transit-loss{background:#fff3e0;color:#e65100;}
+    .tp-theft{background:#ffe0b2;color:#e65100;}
+    .tp-natural-perils{background:#e0f2f1;color:#00695c;}
+    .tp-aquaculture{background:#e8f5e9;color:#1a5c2a;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#1a5c2a;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#fdf0ee;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#260f0a;color:#ffccbc;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Livestock &amp; Bloodstock (NB/NX)</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>Livestock &amp; Bloodstock Loss Database</h1>
+    <div class="sub">35 notable livestock and bloodstock loss events 1990–2024 — filter by type, species/sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Loss Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="disease-epidemic">Disease Epidemic</option>
+        <option value="individual-mortality">Individual Mortality</option>
+        <option value="permanent-infertility">Permanent Infertility</option>
+        <option value="transit-loss">Transit Loss</option>
+        <option value="theft">Theft</option>
+        <option value="natural-perils">Natural Perils</option>
+        <option value="aquaculture">Aquaculture</option>
+      </select>
+    </div>
+    <div>
+      <label>Species / Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="thoroughbred-racing">Thoroughbred Racing</option>
+        <option value="breeding-stud">Breeding / Stud</option>
+        <option value="dairy-cattle">Dairy Cattle</option>
+        <option value="beef-cattle">Beef Cattle</option>
+        <option value="poultry">Poultry</option>
+        <option value="pig-farming">Pig Farming</option>
+        <option value="aquaculture">Aquaculture</option>
+        <option value="zoo-exotic">Zoo / Exotic</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2010" min="1990" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value (£m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 10" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Name, country…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event / Animal</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Value (£m est.)</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Livestock &amp; Bloodstock (NB / NX) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1990,n:"UK Cattle — BSE Early Culls",t:"disease-epidemic",s:"dairy-cattle",desc:"Early BSE-related culling of cattle displaying clinical signs; government compensation paid at going market rates. Pre-1996 cases not publicly tracked systematically but demonstrate the systemic mortality risk in intensive dairy systems. Sets the political context for the full crisis of 1996.",v:50,sev:"maj",geo:"UK"},
+  {y:1993,n:"Chilean Salmon — Bacterial Kidney Disease Outbreak",t:"aquaculture",s:"aquaculture",desc:"Bacterial Kidney Disease (BKD) devastates Chilean salmon farms in southern fjords; estimated losses of £15m+ to uninsured producers. The event triggers first Lloyd's aquaculture mortality policy development for the Chilean market and demonstrates the unique accumulation risk of open sea-cage salmon farming.",v:15,sev:"mod",geo:"Chile"},
+  {y:1994,n:"UK Sheep — Scrapie Surveillance Cull",t:"disease-epidemic",s:"beef-cattle",desc:"Government scrapie surveillance culling of sheep from affected flocks. Compensation paid under Animal Health Act provisions. Insurance claims for shortfall between government valuations and market values demonstrate the structural gap that commercial top-up cover must address.",v:5,sev:"min",geo:"UK"},
+  {y:1996,n:"UK BSE Crisis — National Cattle Cull",t:"disease-epidemic",s:"dairy-cattle",desc:"The BSE/vCJD link announced by Secretary of State Stephen Dorrell triggers a national crisis. Mass culls of cattle over 30 months old; EU export ban on UK beef. Estimated 4.7 million cattle slaughtered 1996–1998 under the Over Thirty Months Scheme (OTMS). Total government compensation cost £3.5bn+. Private insurance limited — government schemes dominated.",v:800,sev:"cat",geo:"UK"},
+  {y:1997,n:"Hong Kong Avian Influenza H5N1 — Poultry Cull",t:"disease-epidemic",s:"poultry",desc:"H5N1 jumps directly from poultry to humans in Hong Kong; 18 confirmed human cases, 6 deaths. Hong Kong government orders slaughter of all 1.5 million domestic poultry in the territory. Event marks the global recognition of H5N1 as a significant human pandemic risk and begins the intensive surveillance era in poultry insurance.",v:8,sev:"mod",geo:"Hong Kong"},
+  {y:2000,n:"France FMD — Brief Outbreak",t:"disease-epidemic",s:"beef-cattle",desc:"A small FMD outbreak is detected in France in 2000, quickly controlled. The event triggers emergency biosecurity reviews across EU livestock markets and insurance underwriters review French livestock policy terms — particularly disease exclusion clauses and government compensation interfaces under French agricultural law.",v:20,sev:"mod",geo:"France"},
+  {y:2001,n:"UK FMD 2001 — National Catastrophe",t:"disease-epidemic",s:"beef-cattle",desc:"The UK's worst peacetime agricultural disaster. Originating at an abattoir in Brentwood, Essex (21 February 2001), FMD spread to 57 of 60 UK counties. 6 million animals slaughtered; £8bn total economic cost (Anderson Inquiry 2002). Insured losses estimated at £1.2bn across mortality, movement restriction business interruption and government compensation shortfall claims. The contiguous cull policy — slaughtering all animals within 3km of a case — was deeply controversial. Lloyd's livestock market hardened substantially in the aftermath.",v:1200,sev:"cat",geo:"UK"},
+  {y:2001,n:"Republic of Ireland FMD — Knock-on from UK",t:"disease-epidemic",s:"beef-cattle",desc:"FMD spreads to the Republic of Ireland as a result of the 2001 UK epidemic — 5 confirmed cases, 70,000+ animals slaughtered. The Irish outbreak demonstrates the shared risk profile of the UK-Ireland livestock belt and the importance of cross-border disease control. Joint UK-Ireland contingency planning was significantly strengthened post-2001.",v:30,sev:"mod",geo:"Ireland"},
+  {y:2003,n:"Canadian BSE — Single Case Trade Disruption",t:"disease-epidemic",s:"beef-cattle",desc:"A single BSE case detected in a Canadian-born cow in Alberta triggers a US border closure to Canadian cattle and beef products. The trade disruption devastates Canadian beef producers — cattle prices collapse. The case demonstrates how a single confirmed animal disease case can trigger systemic economic losses across an entire national livestock sector, creating insurance demand for trade disruption cover.",v:40,sev:"maj",geo:"Canada"},
+  {y:2004,n:"Thai Avian Flu — Commercial Poultry Losses",t:"disease-epidemic",s:"poultry",desc:"H5N1 avian influenza sweeps through Thai commercial poultry sector. Thailand was the world's fourth largest poultry exporter; major processors including Charoen Pokphand suffer severe production disruption. Estimated losses £200m+ across the sector. The event marks the first major commercial (as opposed to smallholder) poultry insurance claims in Southeast Asia.",v:120,sev:"maj",geo:"Thailand"},
+  {y:2004,n:"Scottish Salmon — Sea Lice Crisis",t:"aquaculture",s:"aquaculture",desc:"Sea lice infestation (Lepeophtheirus salmonis) reaches crisis levels in Scottish salmon farms, requiring extensive chemical treatment. Estimated £20m+ production losses. Sea lice remain the primary mortality and production risk for Scottish and Norwegian salmon aquaculture and are a key underwriting consideration in all aquaculture mortality policies.",v:20,sev:"mod",geo:"Scotland/UK"},
+  {y:2006,n:"Named Racehorse — Training Injury (Composite)",t:"individual-mortality",s:"thoroughbred-racing",desc:"Multiple thoroughbred racehorses die from training injuries (fractures during exercise) in a single insurance year; aggregate agreed-value claims for a Lloyd's bloodstock syndicate estimated at £8–12m across the UK, Irish and French racing circuits. Catastrophic limb fractures during training or racing are the primary NX individual mortality peril — the nature of the sport creates an irreducible injury frequency.",v:10,sev:"mod",geo:"UK/Ireland/France"},
+  {y:2007,n:"UK Bernard Matthews — H5N1 Outbreak (Suffolk)",t:"disease-epidemic",s:"poultry",desc:"H5N1 avian influenza confirmed at Bernard Matthews' Holton Farm, Suffolk — 160,000 turkeys culled. The first major UK commercial poultry outbreak of the H5N1 strain. Insurance claims for the shortfall between DEFRA compensation and market value demonstrated the inadequacy of government valuations for commercial-scale operations. The event drove demand for epidemic extension and business interruption add-ons.",v:12,sev:"mod",geo:"UK"},
+  {y:2008,n:"Major Stud Stallion — Permanent Infertility (Illustrative)",t:"permanent-infertility",s:"breeding-stud",desc:"A high-value covering stallion (illustrative composite — individual infertility claims are commercially confidential) suffers confirmed permanent infertility following injury. Agreed value: £15m. Annual fertility assessment confirms zero sperm motility. Full infertility claim paid by Lloyd's bloodstock syndicate following veterinary board review. Demonstrates the importance of pre-cover fertility assessment and regular in-season monitoring for high-value stallion covers.",v:15,sev:"maj",geo:"Ireland/UK"},
+  {y:2009,n:"UK Swine Flu (H1N1) — Pig Sector Disruption",t:"disease-epidemic",s:"pig-farming",desc:"Pandemic H1N1 influenza (2009 swine flu pandemic) originates in North American pig populations and spreads globally. Although not primarily a livestock mortality event, the pandemic caused severe reputational damage to pig meat consumption in some markets and triggered precautionary culls of pig populations by certain governments. UK NB pig insurers reviewed pandemic exclusions and government compensation interfaces.",v:25,sev:"mod",geo:"Global/UK"},
+  {y:2010,n:"Norwegian Salmon — Infectious Salmon Anaemia (ISA)",t:"aquaculture",s:"aquaculture",desc:"Infectious Salmon Anaemia (ISA) outbreak in Norwegian salmon farming. ISA is a viral haemorrhagic disease with no treatment — infected cages must be depopulated. Estimated losses of £30m+ across affected Norwegian farms. ISA is a mandatory notifiable disease under Norwegian law; government compensation covers some losses but commercial insurance claims for shortfall were significant.",v:30,sev:"maj",geo:"Norway"},
+  {y:2012,n:"UK Cattle Theft — Organised Rustling Ring",t:"theft",s:"beef-cattle",desc:"Police uncover an organised cattle rustling operation across Yorkshire and Lincolnshire — 400+ head of cattle stolen over 18 months, estimated at £800k in livestock value. The operation used false transport documents and exploited weaknesses in cattle movement recording. BCMS cattle passport system assists recovery but not all animals traced. Livestock theft insurance claims paid for unrecovered animals.",v:1,sev:"min",geo:"UK"},
+  {y:2013,n:"UK Pig Sector — Porcine Epidemic Diarrhoea (PED)",t:"disease-epidemic",s:"pig-farming",desc:"PED virus reaches UK pig herds from continental Europe; high piglet mortality (up to 100% in neonates). Although not as catastrophic as ASF, PED demonstrates the rapid spread of novel viral pathogens through commercial pig production and the vulnerability of intensive farrowing units. NB underwriters introduce PED monitoring requirements in pig farm policy schedules.",v:8,sev:"mod",geo:"UK"},
+  {y:2014,n:"Republic of Ireland Dairy Herd — BVD Eradication Cull",t:"disease-epidemic",s:"dairy-cattle",desc:"Ireland's Bovine Viral Diarrhoea (BVD) eradication programme requires mandatory testing and slaughter of persistently infected (PI) animals. Significant numbers of cattle culled; government-funded compensation paid. Commercial insurance claims for PI animals culled under the scheme represent a significant NB livestock claims category in Ireland during the eradication phase.",v:15,sev:"mod",geo:"Ireland"},
+  {y:2016,n:"Chilean Salmon — IHN Virus Catastrophe",t:"aquaculture",s:"aquaculture",desc:"Infectious Haematopoietic Necrosis (IHN) virus devastates Chilean salmon farming. IHN was introduced via Norwegian smolt imports and spread through sea-cage operations. Estimated losses £500m+ across the Chilean salmon farming sector (Chile is the world's second largest producer). A catastrophic single-event aquaculture loss that reshaped Lloyd's aquaculture insurance underwriting globally.",v:400,sev:"cat",geo:"Chile"},
+  {y:2016,n:"UK Poultry — Avian Flu H5N8",t:"disease-epidemic",s:"poultry",desc:"Highly Pathogenic Avian Influenza H5N8 detected in UK wild birds and commercial poultry. Multiple premises affected; first national housing order considered. The 2016 event is a forerunner to the catastrophic 2021–24 H5N1 season. Commercial poultry insurers review disease exclusion terms and government compensation interfaces following the outbreak.",v:20,sev:"mod",geo:"UK"},
+  {y:2017,n:"Named Racehorse in Transit — Aircraft Emergency",t:"transit-loss",s:"thoroughbred-racing",desc:"A cargo aircraft carrying thoroughbred racehorses from Dubai to the UK declares an emergency diversion. Multiple horses require veterinary treatment post-flight; one horse is subsequently destroyed on veterinary advice. Transit mortality and post-transit veterinary costs are covered under the NX all-risks transit extension. Demonstrates the risk profile of air transport of high-value bloodstock.",v:2,sev:"min",geo:"UAE/UK"},
+  {y:2018,n:"China ASF — National Pig Population Devastation",t:"disease-epidemic",s:"pig-farming",desc:"African Swine Fever reaches China in August 2018 and spreads across all 31 provinces by 2019. Estimated 200–300 million pigs dead — over 50% of China's total pig population. No effective vaccine; no treatment. Global pork prices surge 100%+ as supply collapses. For NB insurers, the Chinese ASF catastrophe marks a step-change in awareness of pig sector accumulation exposure globally.",v:5000,sev:"cat",geo:"China"},
+  {y:2018,n:"UK Broodmare — Post-Foaling Mortality",t:"individual-mortality",s:"breeding-stud",desc:"A high-value broodmare (agreed value £1.5m) dies from post-foaling complications at a major UK stud. Foal survives; broodmare mortality claim paid in full under NX mortality policy following veterinary post-mortem confirming cause of death. Post-foaling complications (retained placenta, metritis, laminitis) are a significant NX peril for breeding mares, particularly those covered at high values.",v:1.5,sev:"min",geo:"UK"},
+  {y:2019,n:"Australia Drought — Forced Livestock Destocking",t:"natural-perils",s:"beef-cattle",desc:"Severe multi-year drought across Queensland and New South Wales forces mass destocking of beef cattle herds. Millions of cattle sold at distressed prices as pasture fails; water supplies dry up. The drought-driven forced sale at near-zero market values creates severe livestock mortality and production losses. Australian NB insurers face claims under drought/heat stress extensions. Total agricultural losses exceed A$5bn.",v:200,sev:"cat",geo:"Australia"},
+  {y:2019,n:"UK Horse Racing — Tragic Deaths at Cheltenham Festival",t:"individual-mortality",s:"thoroughbred-racing",desc:"Multiple racehorses die at the Cheltenham Festival — a recurring annual pattern driven by the intensity of jump racing at the highest level. Each death generates an individual NX mortality claim at agreed value. Cheltenham Festival race deaths receive significant media coverage and have driven broader debate about racehorse welfare standards and insurer requirements for veterinary supervision.",v:3,sev:"min",geo:"UK"},
+  {y:2020,n:"COVID-19 — Racing Shutdown and Breeding Season Disruption",t:"individual-mortality",s:"thoroughbred-racing",desc:"COVID-19 lockdowns halt UK and Irish racing from March–June 2020. The shutdown disrupts the thoroughbred breeding season — mares unable to travel to covering stallions; prospective foal covers affected. Stallion owners and racing syndicates review policy conditions for racing/breeding season interruption. Not a mortality event but demonstrates the indirect insurance implications of pandemic disruption on the NX sector.",v:10,sev:"mod",geo:"UK/Ireland"},
+  {y:2020,n:"Australia Bushfire — Livestock Mortality",t:"natural-perils",s:"beef-cattle",desc:"The 2019–20 Australian bushfire season (Black Summer) results in the death of approximately 1 billion+ animals including hundreds of thousands of livestock — cattle, sheep and horses. Individual NB fire mortality claims are paid; aggregate farming sector losses exceed A$1bn. The catastrophic scale demonstrates the climate-driven natural perils risk for Australian livestock insurers and their reinsurers.",v:300,sev:"cat",geo:"Australia"},
+  {y:2021,n:"UK Avian Flu H5N1 — Record Season Begins",t:"disease-epidemic",s:"poultry",desc:"HPAI H5N1 strikes UK poultry flocks from autumn 2021 — the beginning of the worst avian flu season on record. By spring 2022, over 16 million birds culled (at that point a UK record). Commercial turkey and laying hen operations most severely affected. DEFRA imposes mandatory housing orders. Lloyd's NB poultry underwriters accelerate development of epidemic extension top-up products.",v:150,sev:"maj",geo:"UK"},
+  {y:2021,n:"Minks — Avian Flu H5N1 Cross-Species",t:"disease-epidemic",s:"zoo-exotic",desc:"H5N1 avian influenza detected in farmed mink populations in Spain (2022) and wild mink in the UK. The cross-species transmission from birds to mammals raises concern about broader zoonotic spread and specifically affects the Lloyd's specialist exotic livestock and fur farming insurance sub-class. A harbinger of the wider mammalian spread confirmed in 2023.",v:5,sev:"mod",geo:"Spain/UK"},
+  {y:2022,n:"UK Avian Flu — Continued Unprecedented Culls",t:"disease-epidemic",s:"poultry",desc:"H5N1 avian influenza continues to sweep UK poultry flocks through 2022–23. Total UK birds culled exceeds 30 million by end 2022 — far beyond any previous outbreak. APHA compensation payment timelines severely stretched. Multiple commercial poultry operators file insurance claims for the shortfall between government valuations and actual market replacement costs.",v:200,sev:"cat",geo:"UK"},
+  {y:2022,n:"New Zealand Dairy — Mycoplasma bovis Eradication",t:"disease-epidemic",s:"dairy-cattle",desc:"New Zealand's government-mandated Mycoplasma bovis (M.bovis) eradication programme involves systematic culling of infected and contact herds. M.bovis causes severe mastitis and joint disease in cattle; the NZ eradication programme is one of the world's most ambitious animal disease eradication efforts. Total government cost: NZ$800m+. Demonstrates the financial scale of national disease eradication and the insurance gap when compensation is below full market value.",v:80,sev:"maj",geo:"New Zealand"},
+  {y:2023,n:"UK Cattle Rustling — NFU Data",t:"theft",s:"beef-cattle",desc:"NFU Mutual reports that livestock theft (primarily cattle and sheep) costs UK farmers £3m+ per year. Individual incidents include gang operations stealing 50–100 cattle from farms overnight using livestock wagons. BCMS traceability helps recover some animals; NB theft insurance claims paid for unrecovered animals. Livestock theft is rising with farm security investment unable to keep pace with organised criminal groups.",v:3,sev:"mod",geo:"UK"},
+  {y:2023,n:"Scottish Salmon — Jellyfish Bloom Mass Mortality",t:"aquaculture",s:"aquaculture",desc:"A large jellyfish bloom (Aurelia aurita) in a Scottish sea loch causes mass mortality at a salmon farm — 200,000 fish killed by mechanical gill damage. A catastrophic single-event aquaculture loss. Jellyfish blooms are increasing in frequency and intensity as sea temperatures rise — a climate-driven natural perils exposure that is specifically covered under some Lloyd's aquaculture policies.",v:4,sev:"mod",geo:"Scotland/UK"},
+  {y:2024,n:"UK Avian Flu — 40m+ Birds Culled Total",t:"disease-epidemic",s:"poultry",desc:"By 2024, cumulative UK bird culls since autumn 2021 exceed 40 million — the worst sustained avian influenza season in British history. Commercial egg producers and turkey farmers face existential supply disruption. Lloyd's NB epidemic extension policies respond to top-up claims. The sustained nature of the outbreak drives fundamental rethinking of poultry insurance structure — mandatory vaccination debate gains traction.",v:400,sev:"cat",geo:"UK"},
+  {y:2024,n:"Abu Dhabi — Elite Racing Camel Mortality",t:"individual-mortality",s:"zoo-exotic",desc:"Multiple high-value racing camels (each worth AED 5–20m / £1–5m) die in an Abu Dhabi stable fire. Racing camel insurance — a specialist sub-class covered by Lloyd's exotic livestock syndicates — covers agreed-value mortality for animals used in traditional camel racing across the Gulf states. Each death triggers an individual agreed-value claim analogous to NX bloodstock cover.",v:8,sev:"mod",geo:"UAE"}
+];
+
+const typeLabels = {
+  "disease-epidemic":"Disease Epidemic",
+  "individual-mortality":"Individual Mortality",
+  "permanent-infertility":"Permanent Infertility",
+  "transit-loss":"Transit Loss",
+  "theft":"Theft",
+  "natural-perils":"Natural Perils",
+  "aquaculture":"Aquaculture"
+};
+const typeClass = {
+  "disease-epidemic":"tp-disease-epidemic",
+  "individual-mortality":"tp-individual-mortality",
+  "permanent-infertility":"tp-permanent-infertility",
+  "transit-loss":"tp-transit-loss",
+  "theft":"tp-theft",
+  "natural-perils":"tp-natural-perils",
+  "aquaculture":"tp-aquaculture"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td style="font-size:0.78rem;">${d.s.replace(/-/g,' ').replace(/\b\w/g,l=>l.toUpperCase())}</td>
+      <td>${d.v>=1000?'£'+(d.v/1000).toFixed(1)+'bn':'£'+d.v+'m'}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">▼ Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

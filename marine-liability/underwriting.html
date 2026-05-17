@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marine Liability — Underwriting | Risk Code Hub</title>
+<link rel="stylesheet" href="../hub-styles.css">
+<style>
+  :root {
+    --hub-primary:    #005a6b;
+    --hub-dark:       #002d35;
+    --hub-light:      #e8f5f7;
+    --hub-accent:     #c8a84b;
+    --hub-secondary:  #1a5c28;
+    --hub-secondary2: #7b1a1a;
+    --header-gradient: linear-gradient(135deg,#002d35 0%,#005a6b 50%,#006e82 100%);
+    --header-sub:     #a8d8e0;
+  }
+  header { background: var(--header-gradient); color:#fff; padding:2rem 1.5rem 1.5rem; }
+  header h1 { margin:0 0 0.3rem; font-size:2rem; color:#fff; }
+  header p  { margin:0; color:var(--header-sub); font-size:1rem; }
+  nav { background:var(--hub-dark); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.3rem; }
+  nav a { color:#a8d8e0; text-decoration:none; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.85rem; }
+  nav a:hover, nav a.active { background:var(--hub-primary); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+  h2 { font-size:1.25rem; color:var(--hub-primary); margin:2rem 0 0.8rem; border-bottom:2px solid var(--hub-accent); padding-bottom:0.4rem; }
+  h3 { font-size:1.05rem; color:var(--hub-secondary); margin:1.2rem 0 0.5rem; }
+  p { line-height:1.8; color:#333; margin-bottom:0.8rem; font-size:0.93rem; }
+
+  .b-v { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#e6f4ea; color:#1a5c28; vertical-align:middle; }
+  .b-e { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#fef3e2; color:#7a4500; vertical-align:middle; }
+  .b-i { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#cce5ff; color:#004085; vertical-align:middle; }
+
+  /* Factor cards */
+  .factor-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:0.8rem; margin:1rem 0 1.5rem; }
+  .factor-card { background:#fff; border-radius:8px; padding:1rem 1.1rem; border:1px solid #c8dde0; border-top:4px solid var(--hub-primary); }
+  .factor-card.grn { border-top-color:var(--hub-secondary); }
+  .factor-card.gld { border-top-color:var(--hub-accent); }
+  .factor-card.red { border-top-color:var(--hub-secondary2); }
+  .factor-card h4 { margin:0 0 0.5rem; font-size:0.92rem; color:var(--hub-primary); }
+  .factor-card.grn h4 { color:var(--hub-secondary); }
+  .factor-card.gld h4 { color:#7a5a00; }
+  .factor-card.red h4 { color:var(--hub-secondary2); }
+  .factor-card p { font-size:0.83rem; color:#444; margin:0; }
+  .range { font-size:0.79rem; font-weight:700; color:var(--hub-primary); display:block; margin-top:0.4rem; background:var(--hub-light); padding:0.2rem 0.5rem; border-radius:4px; }
+  .range.grn { color:var(--hub-secondary); background:#eef8ee; }
+  .range.gld { color:#7a5a00; background:#fffaec; }
+  .range.red { color:var(--hub-secondary2); background:#fdf0f0; }
+
+  /* Formula box */
+  .formula-box { background:#fff; border:2px solid var(--hub-primary); border-radius:8px; padding:1.1rem 1.4rem; margin:0.8rem 0 1.5rem; font-family:monospace; font-size:0.87rem; line-height:1.9; color:#333; }
+  .formula-box .fl { font-family:'Segoe UI',Arial,sans-serif; font-size:0.75rem; color:var(--hub-primary); font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-bottom:0.3rem; display:block; }
+
+  /* Worked examples */
+  .example-box { background:var(--hub-light); border-radius:10px; padding:1.2rem 1.4rem; margin:1rem 0 1.5rem; border-left:4px solid var(--hub-primary); }
+  .example-box h4 { color:var(--hub-primary); margin:0 0 0.8rem; font-size:1rem; }
+  .ex-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+  .ex-table td { padding:0.35rem 0.6rem; border-bottom:1px solid #c8dde0; }
+  .ex-table tr:last-child td { border-bottom:none; font-weight:700; background:#d0eaed; }
+  .ex-table td:last-child { text-align:right; }
+
+  /* Checklist */
+  .checklist { margin:0.8rem 0 1.5rem; }
+  .ck { display:flex; gap:0.7rem; align-items:flex-start; padding:0.5rem 0.8rem; border-radius:5px; margin-bottom:0.35rem; font-size:0.86rem; }
+  .ck.r { background:#f0fafb; border-left:3px solid var(--hub-primary); }
+  .ck.p { background:#eef8ee; border-left:3px solid var(--hub-secondary); }
+  .ck.i { background:#fffaec; border-left:3px solid var(--hub-accent); }
+  .ck-b { font-size:0.68rem; font-weight:700; padding:1px 5px; border-radius:8px; white-space:nowrap; flex-shrink:0; margin-top:2px; }
+  .ck-br { background:var(--hub-primary); color:#fff; }
+  .ck-bp { background:var(--hub-secondary); color:#fff; }
+  .ck-bi { background:var(--hub-accent); color:#333; }
+
+  /* Referral cards */
+  .ref-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.7rem; margin:0.8rem 0 1.5rem; }
+  .ref-card { background:#fff3cd; border-left:4px solid var(--hub-accent); border-radius:7px; padding:0.9rem 1rem; font-size:0.84rem; color:#5a4000; }
+  .ref-card strong { display:block; color:#7a5a00; margin-bottom:0.25rem; }
+
+  /* Tables */
+  .tbl-wrap { overflow-x:auto; margin:0.5rem 0 1.5rem; }
+  table { width:100%; border-collapse:collapse; font-size:0.84rem; }
+  thead th { background:var(--hub-primary); color:#fff; padding:0.55rem 0.7rem; text-align:left; }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid #d0eaed; }
+  tbody tr:nth-child(even) { background:#f0f9fb; }
+
+  .warn-box { background:#fff3cd; border-left:4px solid var(--hub-accent); border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#5a4000; }
+  footer { background:var(--hub-dark); color:var(--header-sub); text-align:center; padding:1rem; font-size:0.82rem; margin-top:2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Marine Liability</h1>
+  <p>Lloyd's Risk Codes G · GC · GX &nbsp;|&nbsp; Module 04: Underwriting Methodology</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <h2>Marine Liability Underwriting Framework</h2>
+  <p>Marine liability underwriting at Lloyd's requires a working knowledge of international maritime law, the P&amp;I club system, vessel classification, and the regulatory framework that determines minimum insurance levels. Unlike most other lines, marine liability is heavily convention-driven: MARPOL, CLC, OPA 90, Nairobi, Bunkers, MLC, and Athens Convention each impose compulsory coverage levels that determine minimum underwriting parameters. Lloyd's writers price the risk above these floors and provide coverage for the specialist segments the club system does not serve. <span class="b-e">EST</span></p>
+
+  <h2>Key Underwriting Parameters by Sub-Class</h2>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Sub-Class</th><th>Primary Rating Basis</th><th>Exposure Metric</th><th>Minimum Info Required</th></tr></thead>
+    <tbody>
+      <tr><td><strong>P&amp;I (Fixed Premium) — G</strong></td><td>GT (gross tonnage) × rate per GT + crew count factor</td><td>GT of fleet; number of crew</td><td>Fleet list, GT, flags, class, trade, crew count, 5yr loss runs</td></tr>
+      <tr><td><strong>Ship Repairer's Liability — G/GC</strong></td><td>Maximum vessel value in yard (MVIY) × RoL</td><td>Max value of single vessel in custody at any time</td><td>Throughput ($), max single vessel value, yard facilities, safety record</td></tr>
+      <tr><td><strong>Port &amp; Terminal — G/GC</strong></td><td>Annual cargo throughput (tonnes/TEU) × rate + vessel value exposed</td><td>Annual throughput; max single vessel value at berth</td><td>Port layout, cargo types, vessel size range, crane operations, loss runs</td></tr>
+      <tr><td><strong>Freight Forwarder — GC</strong></td><td>Annual turnover × rate; per-shipment limit</td><td>Annual freight value handled</td><td>Turnover, modes handled, dangerous goods %, top commodity types</td></tr>
+      <tr><td><strong>Yacht P&amp;I — GC</strong></td><td>LOA (length overall) / vessel value × rate</td><td>Vessel LOA or agreed value</td><td>LOA, flag, home port, trading area, skipper/crew experience</td></tr>
+      <tr><td><strong>GX — Excess/Specialist</strong></td><td>Rate on line (RoL) × limit; severity-adjusted layer pricing</td><td>Layer limit and attachment point</td><td>Underlying P&I club, IG Pool retention, fleet details, top loss scenarios</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>P&amp;I (Fixed Premium) — Rating Formula</h2>
+  <div class="formula-box">
+    <span class="fl">G — P&I Fixed Premium Annual Rate</span>
+    Premium = Fleet GT × Base Rate per GT × Vessel Type Factor × Age Factor
+              × Flag/Class Factor × Trading Area Factor × Claims Loading
+              × Limit Factor × Deductible Credit
+  </div>
+
+  <h3>G P&amp;I Rating Factor Cards</h3>
+  <div class="factor-grid">
+    <div class="factor-card">
+      <h4>Vessel Type Factor</h4>
+      <p>Different vessel types have materially different marine liability profiles. Tankers carry highest pollution exposure; cruise ships carry passenger liability; bulk carriers carry crew and cargo risk.</p>
+      <span class="range">Yacht: 0.6× &nbsp;|&nbsp; Bulk carrier: 1.0× (base) &nbsp;|&nbsp; Chemical tanker: 1.8× &nbsp;|&nbsp; Cruise: 2.2× &nbsp;|&nbsp; VLCC: 2.5×</span>
+    </div>
+    <div class="factor-card grn">
+      <h4>Flag / Class Factor</h4>
+      <p>Flag state determines enforcement of ISM Code and STCW compliance. Class society determines technical standards. Paris/Tokyo MOU detention rates used as proxy for flag quality.</p>
+      <span class="range grn">Top-tier flag (Marshall Islands, Liberia, Panama): 1.0× &nbsp;|&nbsp; Mid-tier: 1.1–1.3× &nbsp;|&nbsp; Black-listed flag or unclassed: decline or 2.5×+</span>
+    </div>
+    <div class="factor-card gld">
+      <h4>Age Factor</h4>
+      <p>Vessel age correlates strongly with machinery failure, structural weakness, and crew competence. Age &gt;20 years significantly increases both frequency and severity of marine liability events.</p>
+      <span class="range gld">&lt;5 years: 0.85× &nbsp;|&nbsp; 5–10yr: 1.0× &nbsp;|&nbsp; 10–15yr: 1.2× &nbsp;|&nbsp; 15–20yr: 1.5× &nbsp;|&nbsp; &gt;20yr: 1.8–2.5×</span>
+    </div>
+    <div class="factor-card red">
+      <h4>Trading Area / Route Risk</h4>
+      <p>Route determines: pollution jurisdiction (OPA 90 for US waters; CLC for most others), port state control inspection frequency, piracy exposure (Red Sea/Gulf of Aden), collision density (Malacca, Dover, Hormuz).</p>
+      <span class="range red">Worldwide incl. US: 1.3× &nbsp;|&nbsp; European trades: 1.0× &nbsp;|&nbsp; Inland/restricted: 0.8× &nbsp;|&nbsp; US Gulf: 1.4× (OPA 90)</span>
+    </div>
+    <div class="factor-card">
+      <h4>Claims History Loading</h4>
+      <p>5-year loss run analysis on current and prior club entries. Large loss development (occurrence basis) reviewed. Club call history reviewed where mutual — indicates actual claims spend vs. premium.</p>
+      <span class="range">Clean 5yr: 0.85× &nbsp;|&nbsp; 1 moderate loss: 1.15× &nbsp;|&nbsp; 1 major loss: 1.4–1.8× &nbsp;|&nbsp; 5yr LR &gt;80%: referral mandatory</span>
+    </div>
+    <div class="factor-card grn">
+      <h4>Crew Nationality / Manning</h4>
+      <p>Crew competence and language proficiency are significant loss drivers. ITF/STCW compliance; officer/rating ratio; shore-based support quality all assessed.</p>
+      <span class="range grn">ITF-approved, STCW compliant, vetting-passed: standard &nbsp;|&nbsp; Mixed nationality without STCW alignment: +10–25%</span>
+    </div>
+    <div class="factor-card gld">
+      <h4>Limit of Liability</h4>
+      <p>Convention minimum limits (CLC, OPA 90, Nairobi, Bunkers) set the floor. Additional limit above floor requires actuarial pricing for severity distribution above conventional limits.</p>
+      <span class="range gld">CLC minimum: base rate &nbsp;|&nbsp; $100m: ILF ×1.4 &nbsp;|&nbsp; $500m: ILF ×1.9 &nbsp;|&nbsp; $1bn+: ILF ×2.5+ (GX layer pricing)</span>
+    </div>
+    <div class="factor-card red">
+      <h4>Deductible / SIR Credit</h4>
+      <p>Many P&amp;I-equivalent fixed premium placements include a per-occurrence deductible especially for cargo claims (matching club Member's deductible). Higher SIR for large fleet operators.</p>
+      <span class="range red">No deductible: 0% credit &nbsp;|&nbsp; $10k ded: −8% &nbsp;|&nbsp; $50k ded: −18% &nbsp;|&nbsp; $100k SIR: −28%</span>
+    </div>
+  </div>
+
+  <h2>Ship Repairer's Liability — Rating Formula</h2>
+  <div class="formula-box">
+    <span class="fl">G/GC — Ship Repairer's Liability (SRL)</span>
+    Premium = Maximum Vessel Value in Yard (MVIY) × Rate on Line (RoL)
+              × Yard Quality Factor × Work Type Factor × Limit Factor × Deductible Credit
+  </div>
+
+  <h2>Worked Example A — G Fixed Premium P&amp;I (Small Tanker Fleet)</h2>
+  <p>Illustrative fixed-premium P&amp;I for a Greek-owned fleet of 4 product tankers, total 80,000 GT, trading worldwide including US. <span class="b-i">ILLUS</span></p>
+  <div class="example-box">
+    <h4>Hellas Petrocharters — Fleet P&amp;I G &nbsp;<span style="font-weight:400;font-size:0.88rem;">4 product tankers, 80,000 GT total, Greek flag, BV class, worldwide incl. US Gulf. Limit $500m. No deductible (cargo); $25k ded (other)</span></h4>
+    <table class="ex-table">
+      <tr><td>Fleet GT</td><td>80,000 GT</td><td></td></tr>
+      <tr><td>Base rate per GT (product tanker, worldwide)</td><td>$3.20 per GT</td><td>$256,000</td></tr>
+      <tr><td>Vessel type factor (product tanker — pollution risk)</td><td>×1.8</td><td>$460,800</td></tr>
+      <tr><td>Age factor (fleet average 9 years)</td><td>×1.0</td><td>$460,800</td></tr>
+      <tr><td>Flag/class factor (Greek flag, BV class — mid-tier)</td><td>×1.1</td><td>$506,880</td></tr>
+      <tr><td>Trading area factor (worldwide incl. US Gulf — OPA 90)</td><td>×1.35</td><td>$684,288</td></tr>
+      <tr><td>Claims history (5yr: 2 cargo claims; LR 55%; clean pollution)</td><td>×0.90</td><td>$615,859</td></tr>
+      <tr><td>Limit factor ($500m total vs. CLC minimum)</td><td>×1.30</td><td>$800,617</td></tr>
+      <tr><td>Deductible credit ($25k cargo; other claims)</td><td>−8%</td><td>$736,568</td></tr>
+      <tr><td><strong>Indicated Annual Premium</strong></td><td></td><td><strong>~$737,000</strong></td></tr>
+    </table>
+  </div>
+
+  <h2>Worked Example B — G/GC Ship Repairer's Liability (UK Shipyard)</h2>
+  <p>SRL for a specialist UK repair yard. Maximum vessel value in yard (MVIY): £25m (cruise ferry). Annual throughput: 120 vessels. <span class="b-i">ILLUS</span></p>
+  <div class="example-box">
+    <h4>Tyne Marine Services — SRL G/GC &nbsp;<span style="font-weight:400;font-size:0.88rem;">UK dry/wet dock. Max vessel value £25m. 120 vessels pa. Limit £20m any one vessel. £50k excess.</span></h4>
+    <table class="ex-table">
+      <tr><td>Max vessel value in yard (MVIY)</td><td>£25,000,000</td><td></td></tr>
+      <tr><td>Base RoL for UK specialist yard</td><td>0.28% of MVIY</td><td>£70,000</td></tr>
+      <tr><td>Yard quality factor (ISO 9001, IACS member yard, 5yr LR 40%)</td><td>×0.85</td><td>£59,500</td></tr>
+      <tr><td>Work type factor (includes propulsion/engine overhaul — high risk)</td><td>×1.15</td><td>£68,425</td></tr>
+      <tr><td>Limit factor (£20m per vessel vs MVIY)</td><td>×0.92 (sub-MVIY limit credit)</td><td>£62,951</td></tr>
+      <tr><td>Deductible credit (£50k excess per claim)</td><td>−12%</td><td>£55,397</td></tr>
+      <tr><td><strong>Indicated Annual SRL Premium</strong></td><td></td><td><strong>~£55,000</strong></td></tr>
+    </table>
+  </div>
+
+  <h2>Pre-Bind Underwriting Checklist</h2>
+  <div class="checklist">
+    <div class="ck r"><span class="ck-b ck-br">R</span>Fleet list: vessel name, IMO number, GT, flag, class society, year built, vessel type for all vessels in scope</div>
+    <div class="ck r"><span class="ck-b ck-br">R</span>ISM Document of Compliance (DOC) and Safety Management Certificate (SMC) for all vessels — must be current and issued by approved IACS classification society</div>
+    <div class="ck r"><span class="ck-b ck-br">R</span>5-year loss runs from current P&I club or insurer — all claims including nil claims, closed and open with current reserve</div>
+    <div class="ck r"><span class="ck-b ck-br">R</span>Current P&I club certificate of entry (if leaving club — reason for change must be explained; mid-term departures are significant red flag)</div>
+    <div class="ck r"><span class="ck-b ck-br">R</span>Port state control inspection history — last 3 years, all detentions and deficiencies (Paris/Tokyo MOU public database cross-check)</div>
+    <div class="ck r"><span class="ck-b ck-br">R</span>Pollution record — any oil spill, MARPOL violation, or COFR non-compliance in last 5 years</div>
+    <div class="ck r"><span class="ck-b ck-br">R</span>For US waters trading: COFR (Certificate of Financial Responsibility) confirmation; OPA 90 exposure analysis</div>
+    <div class="ck p"><span class="ck-b ck-bp">P</span>SIRE/CDI vetting inspection reports (last 12 months) for tanker fleets — Rightship rating for bulk carriers/containerships</div>
+    <div class="ck p"><span class="ck-b ck-bp">P</span>Manning agent details and STCW compliance confirmation — officer certificate copies for senior officers (master/chief officer/chief engineer)</div>
+    <div class="ck p"><span class="ck-b ck-bp">P</span>Trading routes and cargo types — hazardous/dangerous cargoes to be specifically identified (chemicals, LNG, LPG, explosives)</div>
+    <div class="ck p"><span class="ck-b ck-bp">P</span>SRL: yard survey/inspection report within 3 years; details of maximum single vessel value accepted; list of work types performed</div>
+    <div class="ck p"><span class="ck-b ck-bp">P</span>PTOL: port plan/layout; annual throughput (TEU/tonnes); vessel size range at berth; crane operation details; ISPS Code compliance</div>
+    <div class="ck i"><span class="ck-b ck-bi">I</span>Cyber security posture — BIMCO COMPIT completion; network segmentation between bridge and commercial IT; crew cyber awareness training</div>
+    <div class="ck i"><span class="ck-b ck-bi">I</span>GX: IG Pool details — which club, entry level, club supplementary call history; prior GX excess arrangements</div>
+    <div class="ck i"><span class="ck-b ck-bi">I</span>Cruise vessels: Athens Convention compliance; passenger manifest/emergency muster drill records; medical facility certification</div>
+    <div class="ck i"><span class="ck-b ck-bi">I</span>MLC 2006 financial security certificate — confirmation of current crew abandonment/repatriation financial security</div>
+  </div>
+
+  <h2>Automatic Referral Triggers</h2>
+  <div class="ref-grid">
+    <div class="ref-card"><strong>Vessels Without Valid ISM Certification</strong>No ISM = no mainstream marine liability placement. Only specialist high-risk market (if any) will consider; senior authority required.</div>
+    <div class="ref-card"><strong>Port State Control Detention History</strong>Any vessel detained by Paris/Tokyo/US Coast Guard MOU in last 12 months: automatic referral. 2+ detentions in 3 years: likely decline.</div>
+    <div class="ref-card"><strong>5-Year Loss Ratio &gt;80%</strong>Developed LR exceeding 80% on total marine liability: root cause analysis required before quotation. Frequency pattern vs. severity spike — different treatment.</div>
+    <div class="ref-card"><strong>US Waters — VLCC/Tanker Fleet</strong>VLCC or large tanker trading US Gulf/East Coast: OPA 90 unlimited pollution exposure. Senior authority; dedicated US pollution model required.</div>
+    <div class="ref-card"><strong>Cruise Passenger Liability</strong>Any cruise vessel with passenger liability component: Athens Convention compliance check; per-passenger limit adequacy vs. head count; specialist referral.</div>
+    <div class="ref-card"><strong>Vessel Age &gt;20 Years Without Enhanced Survey</strong>Sub-standard or aged tonnage without Enhanced Survey Programme (ESP) results and structural assessment: referral to senior underwriter or decline.</div>
+    <div class="ref-card"><strong>Red Sea / HOA / High-Risk Route Operations</strong>Vessels regularly trading Red Sea/Horn of Africa (Houthi threat): war risk/P&I interface review required; BMP6 compliance mandatory; crew hardship pay protocol needed.</div>
+    <div class="ref-card"><strong>Limit &gt;$500m (GX Layer)</strong>Any single risk GX excess layer above $500m attachment requires accumulation modelling. IG Pool sits at $3.1bn — clash reinsurance position above this analysed at syndicate level.</div>
+  </div>
+
+  <div class="warn-box"><strong>⚠ Dark Fleet / Sanctions Screening:</strong> All marine liability submissions must be screened against OFAC, EU, and OFSI sanctions lists at vessel, owner, manager, and flag state level. Dark fleet vessels (typically aged, trading Russian oil outside IG Club system) present: (a) sanctions exposure for Lloyd's, (b) absent/fraudulent insurance certificates, and (c) catastrophic uninsured pollution risk for coastal states. Vessels with Statutes of Liberty, Maritime Administration, or known Russian beneficial ownership must be declined without senior compliance sign-off.</div>
+
+</div>
+<footer>Risk Code Hub · Marine Liability (G · GC · GX) · Module 04: Underwriting Methodology · v4.2 May 2026</footer>
+</body>
+</html>

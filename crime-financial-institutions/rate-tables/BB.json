@@ -1,0 +1,166 @@
+{
+  "riskCode": "BB",
+  "label": "Crime — Financial Institutions",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "policyLimit",
+    "label": "Policy Limit (£)",
+    "defaultValue": 10000000,
+    "hint": "Crime/fidelity limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.005
+  },
+  "ratingFactors": [
+    {
+      "key": "entityType",
+      "label": "Entity Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "corporate",
+      "options": {
+        "financial_institution": {
+          "label": "Financial Institution",
+          "factor": 1.3
+        },
+        "corporate": {
+          "label": "Corporate/Commercial",
+          "factor": 1
+        },
+        "public_sector": {
+          "label": "Public Sector",
+          "factor": 0.85
+        },
+        "nonprofit": {
+          "label": "Non-Profit",
+          "factor": 0.9
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "employees",
+      "label": "Employee Count",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 500,
+      "bands": [
+        {
+          "min": 0,
+          "max": 100,
+          "factor": 0.75
+        },
+        {
+          "min": 100,
+          "max": 500,
+          "factor": 1
+        },
+        {
+          "min": 500,
+          "max": 2000,
+          "factor": 1.1
+        },
+        {
+          "min": 2000,
+          "max": 99999,
+          "factor": 1.25
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "controls",
+      "label": "Internal Controls",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "strong",
+      "options": {
+        "excellent": {
+          "label": "Excellent (SOX compliant)",
+          "factor": 0.8
+        },
+        "strong": {
+          "label": "Strong",
+          "factor": 0.9
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "weak": {
+          "label": "Weak/Concerns",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "sector",
+      "label": "Industry",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "general",
+      "options": {
+        "banking": {
+          "label": "Banking/Securities",
+          "factor": 1.3
+        },
+        "insurance": {
+          "label": "Insurance",
+          "factor": 1.15
+        },
+        "general": {
+          "label": "General Commercial",
+          "factor": 1
+        },
+        "retail": {
+          "label": "Retail",
+          "factor": 1.1
+        },
+        "tech": {
+          "label": "Technology",
+          "factor": 1.05
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Fidelity Claims (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "minor": {
+          "label": "Minor",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material loss",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 3000,
+    "claimsHandlingPerClaim": 20000,
+    "systemOverheadPerYear": 1500,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.02,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

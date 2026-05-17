@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Rates &amp; ROE — Political Risk — Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --pr:#283593; --pr-dark:#1a237e; --pv:#c62828;
+      --inv:#e65100; --gov:#00695c; --treaty:#6a1b9a;
+      --warn:#f57f17; --light:#f3f4fd; --border:#c5cae9;
+      --text:#1a1f3a; --muted:#5c6270;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #283593;
+    --hub-dark:      #1a237e;
+    --hub-light:     #e8eaf6;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#00695c;
+    --header-gradient:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%);
+    --header-sub:    #c5cae9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#9fa8da; margin-bottom:6px; }
+    .breadcrumb a { color:#c5cae9; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#9fa8da; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#c5cae9; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pr); border-bottom-color:var(--pv); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pr); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--pv); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .chart-wrap { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; margin:24px 0; }
+    .chart-wrap h3 { font-size:1rem; color:var(--pr); margin-bottom:16px; }
+    .chart-wrap canvas { max-height:320px; }
+
+    .cycle-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px; margin:24px 0; }
+    .cycle-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-left:5px solid var(--pr); }
+    .cycle-card.hard { border-left-color:var(--pv); }
+    .cycle-card.soft { border-left-color:var(--gov); }
+    .cycle-card.turn { border-left-color:var(--warn); }
+    .cycle-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:6px; }
+    .cycle-card.hard h4 { color:var(--pv); }
+    .cycle-card.soft h4 { color:var(--gov); }
+    .cycle-card.turn h4 { color:var(--warn); }
+    .cycle-card p { font-size:0.82rem; color:#555; margin:0; line-height:1.55; }
+
+    .roe-table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; margin:20px 0; font-size:0.87rem; }
+    .roe-table th { background:var(--pr); color:#fff; padding:10px 14px; text-align:left; }
+    .roe-table td { padding:9px 14px; border-bottom:1px solid var(--border); }
+    .roe-table tr:last-child td { border-bottom:none; }
+    .roe-table tr:nth-child(even) td { background:#f0f1fc; }
+    .green { color:#1a7431; font-weight:700; }
+    .amber { color:#7a4500; font-weight:700; }
+    .red   { color:#c62828; font-weight:700; }
+
+    .rate-bm { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; margin:20px 0; font-size:0.86rem; }
+    .rate-bm th { background:var(--pr-dark); color:#fff; padding:10px 14px; text-align:left; }
+    .rate-bm td { padding:9px 14px; border-bottom:1px solid var(--border); }
+    .rate-bm tr:last-child td { border-bottom:none; }
+    .rate-bm tr:nth-child(even) td { background:#f0f1fc; }
+
+    footer { background:var(--pr-dark); color:#9fa8da; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Political Risk</a> › Rates &amp; ROE</div>
+  <div class="tag">Lloyd's Code · PR</div>
+  <h1>Rates &amp; ROE Analysis</h1>
+  <p>Political risk market cycle 2005–2024, rate benchmarks by region and cover type, loss ratio trends and three ROE scenarios from benign to major-event stress.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Rate Index — Political Risk Market 2005–2024</h2>
+  <p>The PRI market is structurally different from property or casualty lines: premiums are multi-year, claims are infrequent but very large, and the market is heavily influenced by geopolitical events rather than actuarial cycles. The chart below tracks indicative rate movement across key regional segments relative to a 2005 base. <span class="badge b-i">ILLUS</span></p>
+
+  <div class="chart-wrap">
+    <h3>Rate Index by Region (Base 2005 = 100) <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="rateChart"></canvas>
+  </div>
+
+  <h2>Loss Ratio Trend — PRI Market</h2>
+  <p>The PRI loss ratio is inherently lumpy: long periods of low attritional losses punctuated by large events (Venezuela, Zimbabwe, Crimea, Ukraine). The market's long-tail nature means claims declared in year 3 of a 5-year policy may not be finally settled for 10–15 years. IBNR (incurred but not reported) and IBNER (incurred but not enough reported) reserves are substantial in this class. <span class="badge b-e">EST</span></p>
+
+  <div class="chart-wrap">
+    <h3>Estimated PRI Market Loss Ratio 2005–2024 <span class="badge b-e">EST</span></h3>
+    <canvas id="lrChart"></canvas>
+  </div>
+
+  <h2>Market Cycle Narrative</h2>
+
+  <div class="cycle-grid">
+    <div class="cycle-card soft">
+      <h4>2005–2008 · Growth Phase — Commodities Boom</h4>
+      <p>Commodity supercycle drove foreign direct investment into Africa, Latin America, Central Asia. PRI demand grew strongly; rates relatively soft as new capacity entered. Venezuela losses beginning to emerge but not yet at peak.</p>
+    </div>
+    <div class="cycle-card hard">
+      <h4>2009–2013 · Venezuela/LatAm Claims Wave</h4>
+      <p>Chavez nationalisation programme producing claims; ICSID proceedings multiplied. Bolivia, Ecuador losses accumulating. CI/TR claims from GFC-related capital controls. Loss ratios elevated; capacity cautious but not retreating.</p>
+    </div>
+    <div class="cycle-card soft">
+      <h4>2013–2016 · Market Expansion</h4>
+      <p>Arab Spring losses partly absorbed. ILS/alternative capital never entered PRI (too opaque). New Lloyd's syndicates and MGAs (BPL Global, Chubb PRI) expanded capacity. Sub-Saharan Africa rates competitive. Average global rate stable to slightly softer.</p>
+    </div>
+    <div class="cycle-card turn">
+      <h4>2017–2020 · Mixed — Crimea Legacy &amp; New Events</h4>
+      <p>Crimea claims still in dispute/negotiation. Sub-Saharan Africa (Congo, South Sudan, Nigeria, Mozambique) producing PV claims. CI/TR in Argentina, Turkey elevated. Market selective: tightened in Sub-Saharan Africa; competitive in Asia-Pacific and stable economies.</p>
+    </div>
+    <div class="cycle-card hard">
+      <h4>2021–2024 · Ukraine — Full Market Hardening</h4>
+      <p>Russia/Ukraine war triggered the largest PRI event in history. Russia/Belarus entirely excluded. Ukraine capacity severely limited. MENA and Africa hardened 30–80%. Sahel coups made West Africa highest-risk region globally. Tenor shortening. Market GWP grew to ~$3.5bn as demand surged despite harder rates.</p>
+    </div>
+  </div>
+
+  <h2>Rate Benchmark — Political Risk by Region &amp; Cover (2024 Market)</h2>
+  <table class="rate-bm">
+    <thead><tr><th>Region / Country</th><th>Cover</th><th>Indicative Rate p.a.</th><th>Direction</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Western Europe / OECD stable</td><td>CEND / full PRI</td><td class="green">0.10–0.30%</td><td>→ Flat</td><td>Very low demand; mainly project finance or energy sector</td></tr>
+      <tr><td>Eastern Europe excl. Russia/Ukraine</td><td>CEND + PV</td><td class="amber">0.40–1.00%</td><td>↗ +15–25%</td><td>Contagion from Ukraine war; Moldova, Georgia, Baltic states repriced</td></tr>
+      <tr><td>Russia / Belarus</td><td>All covers</td><td>Not available</td><td>⛔ Excluded</td><td>No new capacity since February 2022; existing policies in run-off</td></tr>
+      <tr><td>Ukraine</td><td>PV (war)</td><td>Very limited / bespoke</td><td>⛔ Very limited</td><td>MIGA and DFC writing some sovereign-backed; private market essentially withdrawn</td></tr>
+      <tr><td>MENA (Gulf / Saudi / UAE)</td><td>CEND / CF</td><td class="green">0.20–0.60%</td><td>→ Flat</td><td>Stable monarchies; main risk is contract frustration on government contracts</td></tr>
+      <tr><td>MENA (Iraq / Libya / Yemen)</td><td>PV + CEND</td><td class="red">2.00–5.00%+</td><td>↑ +20–40%</td><td>Active conflict; very limited capacity; bespoke placement only</td></tr>
+      <tr><td>Sub-Saharan Africa (stable — Kenya, Rwanda)</td><td>CEND + CI/TR</td><td class="amber">0.80–1.80%</td><td>↗ +15–30%</td><td>Contagion from Sahel; Kenya political instability 2023 protests repriced</td></tr>
+      <tr><td>Sahel (Mali, Niger, Burkina Faso)</td><td>All covers</td><td class="red">4.00–7.00%+</td><td>⛔ Near-uninsurable</td><td>Post-coup; French withdrawal; Wagner/Africa Corps presence; mining licences revoked</td></tr>
+      <tr><td>West Africa (Ghana, Nigeria, Côte d'Ivoire)</td><td>CEND + CI/TR</td><td class="red">1.50–3.50%</td><td>↑ +25–50%</td><td>Ghana restructuring; Nigeria FX; Côte d'Ivoire stable exception</td></tr>
+      <tr><td>Latin America (Chile, Colombia, Peru)</td><td>CEND (mining)</td><td class="amber">0.60–1.40%</td><td>↗ +10–20%</td><td>Left-wing governments; constitutional reform attempts; copper mining sensitivity</td></tr>
+      <tr><td>Latin America (Venezuela, Bolivia)</td><td>All covers</td><td class="red">5.00%+ or declined</td><td>⛔ Very limited</td><td>Chronic political risk; most capacity withdrawn or exhausted on prior claims</td></tr>
+      <tr><td>Asia-Pacific (Myanmar, Pakistan)</td><td>CEND + PV</td><td class="red">2.50–5.00%</td><td>↑ +20–40%</td><td>Myanmar post-coup; Pakistan economic/political instability</td></tr>
+      <tr><td>Asia-Pacific (Vietnam, Indonesia, Thailand)</td><td>CEND + CI/TR</td><td class="green">0.40–1.00%</td><td>→ Flat/+5%</td><td>Stable; foreign investment welcome; FX regimes manageable</td></tr>
+    </tbody>
+  </table>
+
+  <h2>ROE Scenarios — Lloyd's Political Risk Syndicate</h2>
+  <table class="roe-table">
+    <thead><tr><th>Scenario</th><th>Loss Assumption</th><th>Loss Ratio</th><th>Expense Ratio</th><th>Combined Ratio</th><th>ROE (est.)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>🟢 Bull — No Major Event</strong></td>
+        <td>Attritional losses only; no $500m+ single event</td>
+        <td class="green">25–35%</td><td>28–32%</td><td class="green">55–67%</td><td class="green">+18–28%</td>
+      </tr>
+      <tr>
+        <td><strong>🟡 Base — Moderate Events</strong></td>
+        <td>1–2 mid-size events ($100–300m each); normal attrition</td>
+        <td class="amber">45–60%</td><td>28–32%</td><td class="amber">75–92%</td><td class="amber">+8–15%</td>
+      </tr>
+      <tr>
+        <td><strong>🔴 Bear — Ukraine-Style Major Event</strong></td>
+        <td>$1bn+ single-event; systemic regional losses</td>
+        <td class="red">100–150%+</td><td>28–32%</td><td class="red">130–182%</td><td class="red">−30 to −55%</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.82rem;color:var(--muted);">PRI ROE is highly asymmetric: long periods of profitable attritional years followed by catastrophic loss years. The class requires strong capital discipline and multi-year reserving. <span class="badge b-i">ILLUS</span></p>
+
+  <div class="chart-wrap">
+    <h3>Key Drivers of PRI Rate Increases Post-2022 <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="driversChart"></canvas>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Political Risk (PR) · Lloyd's Market Intelligence · v3.2 April 2026
+</footer>
+
+<script>
+const years=[2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+
+new Chart(document.getElementById('rateChart'),{
+  type:'line',
+  data:{
+    labels:years,
+    datasets:[
+      {label:'Sub-Saharan Africa', data:[100,105,112,118,125,130,120,115,110,108,106,104,108,115,118,120,125,165,195,220], borderColor:'#283593', backgroundColor:'rgba(40,53,147,0.07)', tension:0.3, fill:false, pointRadius:3},
+      {label:'Latin America', data:[100,110,120,115,130,135,128,140,145,148,142,135,130,128,125,130,135,150,160,165], borderColor:'#c62828', backgroundColor:'rgba(198,40,40,0.07)', tension:0.3, fill:false, pointRadius:3},
+      {label:'MENA', data:[100,102,105,108,115,118,140,132,128,125,122,120,125,130,128,125,130,155,175,180], borderColor:'#e65100', backgroundColor:'rgba(230,81,0,0.07)', tension:0.3, fill:false, pointRadius:3},
+      {label:'Europe / FSU (excl. Russia)', data:[100,98,95,100,108,105,102,100,98,120,118,115,112,110,108,110,115,180,210,225], borderColor:'#6a1b9a', backgroundColor:'rgba(106,27,154,0.07)', tension:0.3, fill:false, pointRadius:3},
+      {label:'Asia-Pacific (stable)', data:[100,98,96,95,98,100,102,100,98,96,94,93,95,97,96,96,98,105,110,112], borderColor:'#00695c', backgroundColor:'rgba(0,105,92,0.07)', tension:0.3, fill:false, pointRadius:3}
+    ]
+  },
+  options:{responsive:true, plugins:{legend:{position:'bottom'}}, scales:{y:{title:{display:true,text:'Rate Index (2005=100)'}}}}
+});
+
+new Chart(document.getElementById('lrChart'),{
+  type:'bar',
+  data:{
+    labels:years,
+    datasets:[
+      {label:'Reported Loss Ratio (%)', data:[28,32,35,42,55,48,65,70,58,52,48,44,50,55,52,60,48,95,80,70], backgroundColor:years.map(y=>y>=2022?'rgba(198,40,40,0.8)':'rgba(40,53,147,0.65)')},
+      {label:'Target / Technical Loss Ratio', data:years.map(()=>50), type:'line', borderColor:'#f57f17', borderDash:[6,4], borderWidth:2, pointRadius:0, fill:false}
+    ]
+  },
+  options:{responsive:true, plugins:{legend:{position:'bottom'}}, scales:{y:{title:{display:true,text:'Loss Ratio (%)'},max:120}}}
+});
+
+new Chart(document.getElementById('driversChart'),{
+  type:'bar',
+  data:{
+    labels:['Russia/Ukraine war (CEND scale)','Sahel coup wave (6 coups)','Global geopolitical fragmentation','Supply chain de-risking demand surge','CI/TR events (Nigeria, Argentina, Sri Lanka)','Saharan mining licence revocations','ECT treaty vacuum (energy sector)','Red Sea / MENA instability'],
+    datasets:[{label:'Estimated % contribution to post-2022 rate increase', data:[42,18,12,9,7,5,4,3],
+      backgroundColor:['#c62828','#283593','#6a1b9a','#00695c','#e65100','#1565c0','#37474f','#f57f17']}]
+  },
+  options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{x:{title:{display:true,text:'Estimated % weighting (ILLUS)'}}}}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Claims Database — Political Risk — Risk Code Hub</title>
+  <style>
+    :root {
+      --pr:#283593; --pr-dark:#1a237e; --pv:#c62828;
+      --inv:#e65100; --gov:#00695c; --treaty:#6a1b9a;
+      --warn:#f57f17; --light:#f3f4fd; --border:#c5cae9;
+      --text:#1a1f3a; --muted:#5c6270;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #283593;
+    --hub-dark:      #1a237e;
+    --hub-light:     #e8eaf6;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#00695c;
+    --header-gradient:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%);
+    --header-sub:    #c5cae9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#9fa8da; margin-bottom:6px; }
+    .breadcrumb a { color:#c5cae9; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#9fa8da; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#c5cae9; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pr); border-bottom-color:var(--pv); }
+    main { max-width:1200px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pr); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--pv); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .controls { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+    .controls input, .controls select { padding:8px 12px; border:1px solid var(--border); border-radius:8px; font-size:0.85rem; background:#fff; }
+    .controls input { min-width:240px; }
+
+    table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 6px rgba(40,53,147,0.08); font-size:0.85rem; }
+    thead th { background:var(--pr); color:#fff; padding:10px 14px; text-align:left; cursor:pointer; white-space:nowrap; }
+    thead th:hover { background:var(--pr-dark); }
+    tbody td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tbody tr:last-child td { border-bottom:none; }
+    tbody tr:nth-child(even) td { background:#f0f1fc; }
+    tbody tr:hover td { background:#e8eaf6; }
+    .expand-row { display:none; background:#f5f6ff !important; }
+    .expand-row td { padding:14px 20px; }
+    .expand-row.open { display:table-row; }
+    .expand-detail { font-size:0.84rem; line-height:1.7; color:#444; }
+
+    .tag-pill { display:inline-block; font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:8px; color:#fff; margin-right:3px; }
+    .tp-cend   { background:var(--pr); }
+    .tp-pv     { background:var(--pv); }
+    .tp-ci     { background:var(--gov); }
+    .tp-cf     { background:var(--inv); }
+    .tp-fa     { background:var(--treaty); }
+    .tp-nhso   { background:#37474f; }
+    .tp-multi  { background:#5d4037; }
+
+    .badge { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:6px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .stat-bar { display:flex; gap:16px; flex-wrap:wrap; margin:20px 0 30px; }
+    .stat-pill { background:#fff; border:1px solid var(--border); border-radius:8px; padding:8px 16px; font-size:0.8rem; }
+    .stat-pill strong { color:var(--pr); }
+
+    footer { background:var(--pr-dark); color:#9fa8da; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Political Risk</a> › Claims Database</div>
+  <div class="tag">Lloyd's Code · PR</div>
+  <h1>Claims Database</h1>
+  <p>35 significant political risk losses — searchable and filterable by cover type, region and sector. Click any row for full detail.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="stat-bar">
+    <div class="stat-pill">Total events: <strong id="total-count">35</strong></div>
+    <div class="stat-pill">Showing: <strong id="show-count">35</strong></div>
+    <div class="stat-pill">Largest loss: <strong>$40bn+ (Russia 2022)</strong></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="🔍 Search event, country, company…">
+    <select id="filter-type">
+      <option value="">All Cover Types</option>
+      <option value="CEND">CEND (Confiscation / Nationalisation)</option>
+      <option value="PV">Political Violence</option>
+      <option value="CI">CI/TR (Currency / Transfer)</option>
+      <option value="CF">Contract Frustration</option>
+      <option value="FA">Forced Abandonment</option>
+      <option value="NHSO">Non-Honoring Sovereign</option>
+      <option value="MULTI">Multi-cover</option>
+    </select>
+    <select id="filter-region">
+      <option value="">All Regions</option>
+      <option value="LatAm">Latin America</option>
+      <option value="Africa">Sub-Saharan Africa</option>
+      <option value="MENA">MENA</option>
+      <option value="Europe">Europe / FSU</option>
+      <option value="Asia">Asia-Pacific</option>
+      <option value="Global">Global / Multi-region</option>
+    </select>
+  </div>
+
+  <table id="db-table">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Year ↕</th>
+        <th onclick="sortTable(1)">Event / Country</th>
+        <th onclick="sortTable(2)">Cover</th>
+        <th onclick="sortTable(3)">Est. Loss</th>
+        <th onclick="sortTable(4)">Region</th>
+        <th onclick="sortTable(5)">Sector</th>
+        <th>Conf.</th>
+      </tr>
+    </thead>
+    <tbody id="db-body"></tbody>
+  </table>
+</main>
+<footer>
+  Risk Code Hub — Political Risk (PR) · Lloyd's Market Intelligence · v3.2 April 2026
+</footer>
+
+<script>
+const events = [
+  { year:1959, event:"Cuba — Castro Nationalisation of US Assets", type:"CEND", loss:"~$1.8bn", region:"LatAm", sector:"Oil / Industry / Hotels", conf:"VER", detail:"Fidel Castro's revolution led to nationalisation of all significant US and foreign-owned businesses. Approximately $1.8bn (1960 values) in US assets seized. No insurance existed; the event directly triggered the creation of OPIC (1969) and the modern PRI market." },
+  { year:1979, event:"Iran — Islamic Revolution Asset Seizures", type:"CEND", loss:"~$2bn+ US losses", region:"MENA", sector:"Oil / Manufacturing / Banks", conf:"VER", detail:"Islamic Revolution overthrew the Shah; all US business assets nationalised. Iran-US Claims Tribunal at The Hague took 30+ years to resolve claims. One of the formative events for modern PRI." },
+  { year:2000, event:"Zimbabwe — Fast-Track Land Reform", type:"CEND", loss:"$500m+ agri investment", region:"Africa", sector:"Agriculture", conf:"VER", detail:"Mugabe's government seized ~4,000 commercial farms without compensation. Foreign investors (UK, South Africa) lost agricultural assets; Zimbabwe's food output collapsed 60%. Major CEND claims paid by Lloyd's market." },
+  { year:2002, event:"Venezuela — PDVSA Oil Nationalisation Begins", type:"CEND", loss:"$30bn+ total", region:"LatAm", sector:"Oil & Gas", conf:"VER", detail:"Chavez progressively nationalised PDVSA and related assets, oil fields, and refineries. ConocoPhillips ($8.7bn ICSID award 2019) and ExxonMobil ($1.4bn award) were largest claimants. One of the largest CEND events in modern history." },
+  { year:2003, event:"Iraq War — Physical Asset Destruction", type:"PV", loss:"$5bn+ investor losses", region:"MENA", sector:"Infrastructure / Energy", conf:"EST", detail:"US-led invasion of Iraq; physical destruction of infrastructure; looting of industrial facilities. Foreign investors who had operated under Saddam's licences lost assets. Subsequent insurgency prevented reinvestment for years." },
+  { year:2006, event:"Bolivia — Gas Nationalisation (1 May)", type:"CEND", loss:"$2bn+ est.", region:"LatAm", sector:"Oil & Gas", conf:"VER", detail:"Military deployed to 56 gas fields; Repsol, Total, Petrobras, British Gas affected. ICSID proceedings initiated; bilateral settlements reached. Defining event for Andean resource nationalism." },
+  { year:2007, event:"Ecuador — OXY Licence Revocation", type:"CF", loss:"$2.3bn (ICSID award)", region:"LatAm", sector:"Oil & Gas", conf:"VER", detail:"Occidental (OXY) had its Ecuadorian oil licence terminated by government in 2006; ICSID Tribunal awarded $2.3bn in 2012 — largest ICSID award at time. Ecuador eventually paid. AAD covers became important post-event." },
+  { year:2008, event:"Iceland Capital Controls — CI/TR", type:"CI", loss:"Multi-bn krona assets frozen", region:"Europe / FSU", sector:"Banking / Finance", conf:"VER", detail:"Iceland's banking collapse triggered capital controls preventing foreign creditors from repatriating krona assets (2008–2017). Foreign bond holders and banks suffered CI/TR losses. Controls lasted nearly 10 years." },
+  { year:2008, event:"Russia — TNK-BP Shareholder Dispute", type:"MULTI", loss:"$25bn reputational / $7bn loss est.", region:"Europe / FSU", sector:"Oil & Gas", conf:"EST", detail:"BP's 50% TNK-BP JV was subjected to pressure by Russian state; forced restructuring; BP eventually sold its stake to Rosneft in 2013. Creeping expropriation through regulatory harassment — a textbook example of Russian state pressure short of formal nationalisation." },
+  { year:2009, event:"Guinea — Mining Licence Revocations", type:"CF", loss:"$1bn+ est.", region:"Africa", sector:"Mining", conf:"EST", detail:"Transitional government revoked or renegotiated mining licences for bauxite and iron ore projects following Lansana Conté's death. Foreign miners including Rio Tinto (Simandou iron ore) faced licence revocation; multi-year arbitrations followed." },
+  { year:2010, event:"Kyrgyzstan — Bakiyev Overthrow; Kumtor Mine Threatened", type:"MULTI", loss:"$500m+ est.", region:"Asia", sector:"Mining", conf:"EST", detail:"President Bakiyev overthrown; successor government threatened Cameco's Kumtor gold mine (largest in Central Asia). Renegotiated agreements imposed; effectively a forced dilution of shareholder value. PRI claims raised on CI/TR and creeping expropriation grounds." },
+  { year:2011, event:"Libya — Civil War, Asset Destruction", type:"PV", loss:"$5bn+ investor losses", region:"MENA", sector:"Oil / Infrastructure", conf:"EST", detail:"NATO intervention; Gaddafi regime fell; infrastructure looted and destroyed. Oil facilities damaged. Italian, French and British investors had significant exposure. LNG plant (Mellitah — ENI/NOC JV) temporarily seized. Political violence covers triggered across multiple Lloyd's syndicates." },
+  { year:2011, event:"Egypt — Arab Spring Political Violence", type:"PV", loss:"$2bn+ est.", region:"MENA", sector:"Tourism / Retail / Manufacturing", conf:"EST", detail:"Tahrir Square protests; Mubarak's fall; subsequent political instability (Morsi/al-Sisi). Tourism collapsed; foreign retail and hotel investments suffered physical damage and prolonged business interruption. PRI political violence and forced abandonment claims filed." },
+  { year:2012, event:"Argentina — YPF Nationalisation (Repsol)", type:"CEND", loss:"$5bn (settlement)", region:"LatAm", sector:"Oil & Gas", conf:"VER", detail:"Fernandez nationalised YPF from Spain's Repsol; diplomatic crisis with EU; $5bn compensation settlement reached 2014. PRI claims paid on JV partner losses. Reignited concern about Argentine resource nationalism." },
+  { year:2013, event:"Mali — Islamist Insurgency; Mining Disruption", type:"PV", loss:"$500m+ est.", region:"Africa", sector:"Mining / Construction", conf:"EST", detail:"Al-Qaeda-linked militants seized northern Mali (2012); French Operation Serval (2013) partially restored order. Gold mines in northern Mali (Randgold/Barrick) suspended operations; political violence PRI claims filed. Beginning of Sahel destabilisation cycle." },
+  { year:2014, event:"Crimea Annexation — Russia", type:"CEND", loss:"~$3bn", region:"Europe / FSU", sector:"Banking / Retail / Utilities", conf:"VER", detail:"Russia annexed Crimea; overnight territory transferred. Banks, utilities, telecoms in Crimea lost assets in legal limbo. Novel coverage questions: was this CEND by Ukraine (host country) or by Russia (third-party state)? PRI claims eventually paid under most policies." },
+  { year:2014, event:"Ukraine War (Donbas) — Phase 1 PV Losses", type:"PV", loss:"$2bn+ est.", region:"Europe / FSU", sector:"Industry / Infrastructure", conf:"EST", detail:"Russian-backed separatists seized Donetsk and Luhansk; industrial plants (Donbas Steel, coal mines) destroyed or seized. PV claims filed; some contested on war exclusion grounds. Precedent-setting for later 2022 full-scale war." },
+  { year:2016, event:"Nigeria — Militant Attacks on Oil Infrastructure", type:"PV", loss:"$1bn+ est.", region:"Africa", sector:"Oil & Gas", conf:"EST", detail:"Niger Delta Avengers and other militant groups attacked Shell, Chevron and Agip pipelines and facilities; Nigeria's oil output fell 40%. Political violence covers triggered; some disputed on whether attacks were political violence or criminal sabotage." },
+  { year:2017, event:"Venezuela — ConocoPhillips Asset Seizure (Final Phase)", type:"CEND", loss:"$8.7bn (ICSID 2019)", region:"LatAm", sector:"Oil & Gas", conf:"VER", detail:"Maduro government seized ConocoPhillips Caribbean assets to enforce a prior ICSID interim award. ConocoPhillips used ICSID proceedings to attach Venezuelan assets in Curaçao, Aruba and USVI. Final award $8.7bn issued 2019 — largest ICSID award at that time." },
+  { year:2018, event:"Saudi Arabia — Ritz-Carlton Detentions; Business Seizures", type:"CEND", loss:"$100bn+ forced 'settlements'", region:"MENA", sector:"Business / Real Estate / Media", conf:"VER", detail:"MBS's anti-corruption purge; 200+ princes, businessmen, ministers detained in Ritz-Carlton; forced asset transfers/financial settlements estimated $100bn+. Not a traditional PRI event (Saudi investors primarily) but raised questions about rule of law for foreign investors in Kingdom." },
+  { year:2019, event:"Ethiopia — Tigray Conflict Begins; Asset Destruction", type:"PV", loss:"$2bn+ est.", region:"Africa", sector:"Manufacturing / Agriculture", conf:"EST", detail:"Tigray conflict (2020–22) caused massive physical destruction; factories (Tigray including H&M/Primark supplier facilities) looted and destroyed. Foreign manufacturers and their insurers faced PV losses. AU-brokered peace deal (Nov 2022) but reconstruction slow." },
+  { year:2020, event:"Argentina — Peso Controls; CI/TR Claims", type:"CI", loss:"Multi-bn peso assets", region:"LatAm", sector:"Multi-sector", conf:"VER", detail:"Argentina's 'cepo' capital controls tightened after Fernandez election; official/parallel rate diverged 100%+; multinationals unable to repatriate profits or pay foreign debts. CI/TR covers triggered for companies including Unilever, P&G, automotive sector." },
+  { year:2021, event:"Myanmar — Coup; TotalEnergies Forced Exit", type:"FA", loss:"$2.5bn+ est.", region:"Asia", sector:"Oil & Gas / Manufacturing", conf:"VER", detail:"Military coup Feb 2021; Western sanctions; civil war. TotalEnergies announced exit from Yadana pipeline; exited 2022. Japanese, Malaysian and other JV partners similarly affected. Forced abandonment claims filed; companies valued exit losses at $2.5bn+." },
+  { year:2021, event:"Mozambique — Cabo Delgado Insurgency; LNG Delay", type:"PV", loss:"$20bn LNG investment at risk", region:"Africa", sector:"Oil & Gas", conf:"EST", detail:"Islamist insurgency in Cabo Delgado province forced TotalEnergies to declare force majeure on $20bn Mozambique LNG project (March 2021). PV covers invoked. TotalEnergies eventually returned 2023 after security situation partially improved." },
+  { year:2022, event:"Russia — BP, Shell, Renault Write-offs", type:"CEND", loss:"$40bn+ combined", region:"Europe / FSU", sector:"Oil & Gas / Automotive / Retail", conf:"VER", detail:"Russia's invasion of Ukraine triggered mass exit. BP: $24bn write-down (19.75% Rosneft stake). Shell: $3.9bn. Renault: sold for 1 rouble. McDonald's, IKEA, Carlsberg exited. Sanctions prevented insurance settlements with Russian entities. Largest CEND event in history; still largely unresolved." },
+  { year:2022, event:"Ukraine — War Damage to Physical Assets", type:"PV", loss:"$500bn+ total; $30bn+ insured est.", region:"Europe / FSU", sector:"Infrastructure / Manufacturing / Agriculture", conf:"EST", detail:"Russia's full-scale invasion caused catastrophic physical damage to Ukrainian infrastructure, industry and agriculture. USAID estimates $500bn+ total damage. Insured PV losses difficult to quantify due to war exclusion complexity. Some Lloyd's syndicates specifically excluded Ukraine from war risk covers pre-invasion." },
+  { year:2022, event:"Kazakhstan — Tokayev Shootings; Post-Nazarbayev Asset Review", type:"CEND", loss:"$5bn+ est.", region:"Asia", sector:"Oil & Gas / Mining", conf:"EST", detail:"January 2022 unrest; Tokayev requested CSTO intervention; subsequent political consolidation. Government launched review of major privatisation contracts from Nazarbayev era; Chevron's Tengizchevroil (TCO) project faced pressure over expansion. Creeping expropriation concerns elevated." },
+  { year:2022, event:"Sri Lanka — Economic Collapse; Capital Controls", type:"CI", loss:"Multi-bn; all sectors", region:"Asia", sector:"Multi-sector", conf:"VER", detail:"Sri Lanka's sovereign debt default (April 2022) and economic collapse triggered strict capital controls; foreign businesses unable to remit dividends, service USD debts or import inputs. PRI CI/TR claims filed by tourism, manufacturing and banking sector investors." },
+  { year:2023, event:"Niger Coup — Uranium Mining (Orano/AREVA)", type:"CEND", loss:"$1.5bn est.", region:"Africa", sector:"Mining (Uranium)", conf:"VER", detail:"Military coup July 2023; junta suspended uranium exports; threatened nationalisation of Orano's Somaïr mine. Niger supplies ~15% of France's uranium. All new PRI capacity for Niger suspended. Orano eventually agreed exit 2024; loss of investment estimated $1.5bn+." },
+  { year:2023, event:"Sudan — Civil War; Complete Market Withdrawal", type:"PV", loss:"$2bn+ est.", region:"Africa", sector:"Telecoms / Banking / NGO", conf:"EST", detail:"RSF vs SAF conflict began April 2023; Khartoum became war zone; all remaining foreign businesses evacuated. PV claims filed by telecoms (MTN, Zain), banking and development finance entities. Sudan became completely uninsurable; all capacity withdrawn." },
+  { year:2023, event:"Nigeria — CBN FX Restrictions; Multinationals Exit", type:"CI", loss:"$3bn+ est.", region:"Africa", sector:"FMCG / Aviation / Telecoms", conf:"EST", detail:"Central Bank of Nigeria (CBN) FX restrictions prevented multinationals (P&G, Unilever, GSK, Ethiopian Airlines) from repatriating profits. Multiple companies exited Nigerian market citing FX losses. CI/TR claims filed. Tinubu government FX reforms (2023) partially resolved but damage done." },
+  { year:2024, event:"Gaza / Red Sea — PRI/Marine War Interface", type:"PV", loss:"Ongoing / multi-sector", region:"MENA", sector:"Shipping / Trade / Manufacturing", conf:"EST", detail:"Hamas attack Oct 2023 and Israeli operations; Houthi Red Sea attacks from Nov 2023. Complex PRI/marine war/trade credit interface. Western businesses with Israeli or Gaza operations face PV questions; supply chain disruption creates indirect losses." },
+  { year:2024, event:"Haiti — Complete State Collapse", type:"PV", loss:"$500m+ est.", region:"LatAm", sector:"Manufacturing / NGO / Telecoms", conf:"EST", detail:"Gang control of Port-au-Prince expanded 2023–24; PM Ariel Henry resigned March 2024; Kenyan-led multilateral security force deployed. All remaining foreign businesses evacuated. PV claims filed; Haiti now effectively uninsurable for any private sector capacity." },
+  { year:2024, event:"Bangladesh — Hasina Government Falls; Factory Unrest", type:"PV", loss:"$500m+ est.", region:"Asia", sector:"Garment / Manufacturing", conf:"EST", detail:"Sheikh Hasina fled Bangladesh August 2024 following student protests; political violence and factory attacks in major garment manufacturing zones. Global fashion brands (H&M, Zara, Next, M&S) with Bangladesh supply chains faced PV-adjacent losses." },
+  { year:2024, event:"Russia — Frozen Assets; Arbitral Award Default Exposures", type:"NHSO", loss:"$300bn+ frozen Russian assets", region:"Europe / FSU", sector:"Finance / Sovereign", conf:"VER", detail:"G7 froze ~$300bn Russian Central Bank assets. AAD (Arbitral Award Default) covers tested as multinationals sought to enforce pre-war arbitration awards against Russia using frozen assets. Novel use of PRI to bridge gap between ICSID award and enforcement against a sanctioned sovereign." }
+];
+
+function renderTable(data) {
+  const tbody = document.getElementById('db-body');
+  tbody.innerHTML = '';
+  document.getElementById('show-count').textContent = data.length;
+  data.forEach((e) => {
+    const pillClass = {CEND:'tp-cend',PV:'tp-pv',CI:'tp-ci',CF:'tp-cf',FA:'tp-fa',NHSO:'tp-nhso',MULTI:'tp-multi'}[e.type]||'tp-cend';
+    const typeLabel = {CEND:'CEND',PV:'Pol. Violence',CI:'CI/TR',CF:'Contract Fr.',FA:'Forced Ab.',NHSO:'NHSO',MULTI:'Multi-cover'}[e.type]||e.type;
+    const confBadge = e.conf==='VER'?'<span class="badge b-v">VER</span>':'<span class="badge b-e">EST</span>';
+    const row = document.createElement('tr');
+    row.style.cursor='pointer';
+    row.innerHTML=`<td>${e.year}</td><td>${e.event}</td><td><span class="tag-pill ${pillClass}">${typeLabel}</span></td><td>${e.loss}</td><td>${e.region}</td><td>${e.sector}</td><td>${confBadge}</td>`;
+    row.onclick=()=>{
+      const next=tbody.rows[Array.from(tbody.rows).indexOf(row)+1];
+      if(next&&next.classList.contains('expand-row')){next.classList.toggle('open');return;}
+      const exp=document.createElement('tr');
+      exp.className='expand-row open';
+      exp.innerHTML=`<td colspan="7"><div class="expand-detail">${e.detail}</div></td>`;
+      row.after(exp);
+    };
+    tbody.appendChild(row);
+  });
+}
+
+function filterData() {
+  const q=document.getElementById('search').value.toLowerCase();
+  const t=document.getElementById('filter-type').value;
+  const r=document.getElementById('filter-region').value;
+  return events.filter(e=>{
+    const mQ=!q||e.event.toLowerCase().includes(q)||e.detail.toLowerCase().includes(q)||e.sector.toLowerCase().includes(q);
+    const mT=!t||e.type===t;
+    const mR=!r||e.region.includes(r);
+    return mQ&&mT&&mR;
+  });
+}
+
+document.getElementById('search').addEventListener('input',()=>renderTable(filterData()));
+document.getElementById('filter-type').addEventListener('change',()=>renderTable(filterData()));
+document.getElementById('filter-region').addEventListener('change',()=>renderTable(filterData()));
+
+let sortDir={};
+function sortTable(col){
+  const keys=['year','event','type','loss','region','sector'];
+  const k=keys[col];
+  sortDir[col]=!sortDir[col];
+  const sorted=[...filterData()].sort((a,b)=>{
+    const av=String(a[k]||'').toLowerCase();
+    const bv=String(b[k]||'').toLowerCase();
+    return sortDir[col]?av.localeCompare(bv):bv.localeCompare(av);
+  });
+  renderTable(sorted);
+}
+
+renderTable(events);
+</script>
+</body>
+</html>

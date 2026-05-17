@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>PI Construction: Risk Mitigation | Risk Code Hub</title>
+  <style>
+    :root {
+      --pi:#37474f; --pi-dark:#102027; --arch:#795548; --eng:#1565c0;
+      --bsact:#6a1b9a; --warn:#e65100; --go:#2e7d32;
+      --light:#f5f7f8; --text:#1a2530; --muted:#5a6a72; --border:#c8d4d8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #37474f;
+    --hub-dark:      #102027;
+    --hub-light:     #eceff1;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #795548;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%);
+    --header-sub:    #cfd8dc;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90a4ae; margin-bottom:6px; }
+    .breadcrumb a { color:#b0bec5; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#cfd8dc; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pi); border-bottom-color:var(--warn); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pi); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+
+    .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:20px; margin:24px 0; }
+    .card { background:#fff; border-radius:12px; padding:22px; box-shadow:0 2px 8px rgba(0,0,0,.06); border-top:4px solid var(--pi); }
+    .card.arch { border-top-color:var(--arch); }
+    .card.eng { border-top-color:var(--eng); }
+    .card.bsact { border-top-color:var(--bsact); }
+    .card.warn { border-top-color:var(--warn); }
+    .card.go { border-top-color:var(--go); }
+    .card h4 { font-size:0.95rem; font-weight:700; color:var(--pi); margin-bottom:10px; }
+    .card.arch h4 { color:var(--arch); }
+    .card.eng h4 { color:var(--eng); }
+    .card.bsact h4 { color:var(--bsact); }
+    .card.warn h4 { color:var(--warn); }
+    .card.go h4 { color:var(--go); }
+    .card p, .card li { font-size:0.86rem; line-height:1.6; color:var(--text); }
+    .card ul { padding-left:16px; margin-top:8px; }
+    .card li { margin-bottom:5px; }
+
+    .action-list { counter-reset:action; margin:24px 0; }
+    .action-item { counter-increment:action; display:flex; gap:16px; align-items:flex-start; background:#fff; border-radius:10px; padding:18px 20px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,.05); border-left:4px solid var(--pi); }
+    .action-item::before { content:counter(action); min-width:28px; height:28px; background:var(--pi); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; flex-shrink:0; margin-top:2px; }
+    .action-item div strong { display:block; font-size:0.92rem; color:var(--pi-dark); margin-bottom:4px; }
+    .action-item div span { font-size:0.84rem; color:var(--muted); line-height:1.5; }
+
+    .dark-box { background:var(--pi-dark); color:#cfd8dc; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .dark-box h3 { color:#b0bec5; margin-bottom:12px; font-size:1.05rem; }
+    .dark-box p, .dark-box li { font-size:0.9rem; line-height:1.7; color:#cfd8dc; }
+    .dark-box ul { padding-left:20px; margin:8px 0; }
+    .dark-box li { margin-bottom:6px; }
+
+    .tbl-wrap { overflow-x:auto; margin:24px 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    th { background:var(--pi); color:#fff; padding:11px 14px; text-align:left; font-weight:700; }
+    th:hover { background:var(--pi-dark); color:#fff; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:#f0f4f7; }
+    .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:2px 7px; border-radius:8px; margin:1px; }
+    .t-e6 { background:#e3f2fd; color:#0d47a1; }
+    .t-e7 { background:#fce4ec; color:#880e4f; }
+    .t-both { background:#ede7f6; color:#311b92; }
+
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+
+    footer { background:var(--pi-dark); color:#90a4ae; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">PI E&amp;O Construction</a> › Risk Mitigation</div>
+  <h1>Risk Mitigation — PI E&amp;O Construction &amp; Engineering</h1>
+  <p>Building Safety Act compliance, quality management, contract drafting controls and top-10 underwriter risk mitigation actions for E6/E7 risks.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Building Safety Act 2022 — Compliance Framework</h2>
+  <p>The Building Safety Act 2022 is the primary risk management obligation for construction professionals working on Higher Risk Buildings (HRBs — residential buildings >18m or 7+ storeys). <span class="badge b-v">VER</span> Compliance with the BSA framework is both a legal obligation and a material risk mitigation factor for PI underwriters.</p>
+
+  <div class="cards">
+    <div class="card bsact">
+      <h4>Gateway Process — HRB</h4>
+      <p>Three mandatory Gateways apply to all new HRBs under BSA 2022: <span class="badge b-v">VER</span></p>
+      <ul>
+        <li><strong>Gateway 1:</strong> Planning stage — fire statement required; Fire and Rescue Service consulted; fire safety embedded in design brief</li>
+        <li><strong>Gateway 2:</strong> Before construction begins — Building Safety Regulator (BSR) approval required; full design documentation submitted; competence of dutyholder declared</li>
+        <li><strong>Gateway 3:</strong> Before occupation — BSR issues completion certificate; as-built information verified; golden thread complete</li>
+        <li><strong>Risk mitigation:</strong> Gateway compliance documented at each stage; independent design check prior to Gateway 2 submission; record all BSR correspondence</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <h4>Principal Designer (BSA) — Competence</h4>
+      <p>BSA 2022 creates a new statutory role: Principal Designer (Building Regulations). Distinct from the CDM 2015 Principal Designer. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>PD (BSA) must be a registered building inspector or a professional with competence in building regulations — not automatically the architect or CDM PD</li>
+        <li>Competence framework: BSI/RIBA/ICE/CIBSE/RICS joint competence guidance; demonstrate knowledge, experience and behaviours (KEB) framework</li>
+        <li>Golden Thread: PD (BSA) responsible for maintaining the golden thread of building information throughout design and construction</li>
+        <li>PI risk: professionals accepting PD (BSA) appointment without adequate competence = material PI exposure; underwriters should verify BSA PD competence on HRB submissions</li>
+      </ul>
+    </div>
+    <div class="card eng">
+      <h4>Golden Thread — Digital Information Management</h4>
+      <p>BSA 2022 requires a "golden thread" of building information — a digital record of the as-designed and as-built building maintained throughout the building's lifetime. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>Applies to all HRBs from Gateway 2</li>
+        <li>ISO 19650 information management standard provides the technical framework</li>
+        <li>Information must be stored in a structured, accessible format (CDE — Common Data Environment)</li>
+        <li>Any change to the building must be reflected in the golden thread; change control process mandatory</li>
+        <li>PI risk: golden thread management failures = potential BSA duty breach; design team must agree golden thread responsibility in appointment documents</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Retrospective HRB Assessment — Legacy Risk</h4>
+      <p>Existing HRBs completed before BSA 2022 must be registered with the BSR. <span class="badge b-v">VER</span> Responsible persons must undertake safety case reports — creating a new round of retrospective structural and fire safety assessments.</p>
+      <ul>
+        <li>Safety case report required for all existing HRBs over 18m — structural and fire safety</li>
+        <li>PI exposure: engineers and architects who designed or refurbished the building may be drawn back into scope</li>
+        <li>DPA 1972 s.1 limitation extended retrospectively to 15 years for existing dwellings</li>
+        <li>Risk mitigation: professionals should retain complete project records from all HRB work — indefinitely, not just for original 6-year limitation period</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Quality Management — Risk Controls for E6 Consultants</h2>
+  <div class="cards">
+    <div class="card go">
+      <h4>ISO 9001 Quality Management System</h4>
+      <p>ISO 9001:2015 is the benchmark QMS for construction professional practices. <span class="badge b-v">VER</span> Key elements for PI risk reduction:</p>
+      <ul>
+        <li>Design review: mandatory peer review of all major design decisions before issue; documented sign-off</li>
+        <li>Document control: version control of all design drawings and calculations; superseded drawings archived not deleted</li>
+        <li>Corrective action: non-conformance reports (NCRs) for all design errors identified during checking; root cause analysis</li>
+        <li>Management review: annual QMS review; claims experience fed back into QMS improvements</li>
+        <li>Underwriter action: ISO 9001 certificate with scope confirmation (design services included) = material rate credit</li>
+      </ul>
+    </div>
+    <div class="card arch">
+      <h4>RIBA Plan of Work 2020 — Stage Gate Compliance</h4>
+      <p>The RIBA Plan of Work 2020 provides a project delivery framework with 8 stages (0–7). <span class="badge b-v">VER</span> Stage gate compliance reduces PI exposure by ensuring design decisions are made at the correct stage and signed off by client before proceeding.</p>
+      <ul>
+        <li>Stage 2 (Concept Design): client sign-off before progressing to technical design — avoids expensive late-stage design changes</li>
+        <li>Stage 3 (Spatial Coordination): coordinated design resolved before detailed design; BIM clash detection report</li>
+        <li>Stage 4 (Technical Design): specification and detailed design complete before construction; no "design on site"</li>
+        <li>Post-Occupancy Evaluation (Stage 7): identify design performance issues post-occupancy; feeds back into practice QMS</li>
+      </ul>
+    </div>
+    <div class="card eng">
+      <h4>Independent Design Check</h4>
+      <p>For large, complex, or novel structures, an independent design check (IDC) by a separate structural engineering practice is the single most effective risk mitigation for structural PI exposure.</p>
+      <ul>
+        <li>IDC recommended for: spans >30m; novel structural systems; all HRB structural designs; post-tensioned concrete slabs; transfer structures</li>
+        <li>ICE / IStructE guidance on IDC scope and competence requirements</li>
+        <li>IDC report retained as project record; insurer may request for high-value structural E6 risks</li>
+        <li>Geotechnical peer review: independent review of ground investigation and foundation design on complex ground conditions</li>
+        <li>Underwriter action: request IDC certificate for structural E6 risks with novel or HRB exposure</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <h4>Cladding &amp; External Wall Specification Controls</h4>
+      <p>Post-Grenfell, the specification of external wall systems (EWS) is the highest-risk design decision for architects on residential and mixed-use buildings. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>BS 8414-1 / BS 8414-2 large-scale fire test evidence required for non-standard EWS</li>
+        <li>BRE fire test reports reviewed by specialist fire engineer before specification finalised</li>
+        <li>NHBC Technical Standards and Housing Association design standards on EWS compliance</li>
+        <li>No substitution of specified cladding products by contractor without architect's written consent and re-assessment</li>
+        <li>Specification: always specify by performance requirement + compliant product example; avoid "or equivalent" without defining equivalence criteria</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Contract Drafting Risk Controls</h2>
+  <div class="dark-box">
+    <h3>Key Contractual Protections for Construction Professionals</h3>
+    <p>The professional appointment document is the primary risk management tool available to the professional — it defines the scope of service, the standard of care, liability cap, and dispute resolution. The following protections should be sought in every appointment:</p>
+    <ul>
+      <li><strong>Reasonable skill and care (not fitness for purpose):</strong> The appointment should expressly state that the professional's obligation is to exercise reasonable skill and care (RSC) — not to warrant that the design will be fit for any particular purpose. Include express wording: "The Consultant's liability shall be limited to the exercise of reasonable skill and care." For E7 D&B contracts, ensure JCT DB 2016 cl. 2.17.1 equivalent is included.</li>
+      <li><strong>Liability cap:</strong> The liability cap (maximum aggregate liability of the professional to the client) should be set at a level consistent with the professional's PI limit. Typical caps: 1× annual fee for small commissions; project value (up to limit) for major projects; must not exceed PI limit. Net contribution clauses apportion liability between multiple consultants.</li>
+      <li><strong>Scope of service definition:</strong> Clearly define what services are and are not included. "Design and project management" is ambiguous — list specific deliverables, stages, and responsibilities. Anything outside the defined scope is additional services requiring a variation instruction.</li>
+      <li><strong>Collateral warranties and third-party rights:</strong> Funders, tenants, and purchasers frequently request collateral warranties from design consultants — creating direct contractual liability to third parties. Limit the number and scope of collateral warranties; ensure each CW obligation does not extend beyond the PI policy's coverage (e.g., avoid "fitness for purpose" obligations in CWs where the main appointment has RSC only).</li>
+      <li><strong>Net contribution clause:</strong> In multi-consultant projects, ensure net contribution clause (NCC) prevents the professional being required to pay more than their proportionate share of a loss — avoiding "deep pockets" risk where one consultant pays for all because others are insolvent.</li>
+      <li><strong>Dispute resolution:</strong> Specify adjudication, then arbitration (ICC or LCIA) rather than litigation — faster, cheaper, more expert determination; arbitration award is internationally enforceable (NYC Convention).</li>
+    </ul>
+  </div>
+
+  <h2>BIM Risk Management</h2>
+  <div class="cards">
+    <div class="card">
+      <h4>ISO 19650 Information Management</h4>
+      <p>ISO 19650 (Parts 1 &amp; 2) defines the information management process for construction projects using BIM. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>Appointment Information Requirements (AIR) — client specifies what BIM information is required and when</li>
+        <li>BIM Execution Plan (BEP) — project team sets out how the AIR will be delivered; agreed before mobilisation</li>
+        <li>Common Data Environment (CDE) — shared information platform; version control; approval workflows</li>
+        <li>Information container naming — structured naming convention for all design files prevents version confusion</li>
+        <li>Clash detection protocol: agreed frequency and responsibility for BIM coordination meetings; clash log maintained and resolved before information passed to construction</li>
+      </ul>
+    </div>
+    <div class="card arch">
+      <h4>BIM Liability Allocation</h4>
+      <p>BIM creates new questions about who is liable when a coordination error causes a construction defect — the architect? The structural engineer? The M&amp;E consultant? The BIM coordinator?</p>
+      <ul>
+        <li>BIM coordinator role: typically architect or specialist — should be specifically appointed with defined scope; not automatically included in basic architectural appointment</li>
+        <li>Model ownership and authorship: each discipline owns its own model; federated model is responsibility of BIM coordinator; errors in another discipline's model are that discipline's responsibility</li>
+        <li>Clash detection responsibility: clear protocol for who raises, owns, and resolves each clash; all clashes documented with resolution record</li>
+        <li>Contractual BIM protocol: CIC BIM Protocol (2013/2018) or similar; incorporates into each appointment by reference</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Top 10 Underwriter Risk Mitigation Actions — E6/E7</h2>
+  <div class="action-list">
+    <div class="action-item">
+      <div>
+        <strong>Obtain and review professional appointments for all major E6 risks (>£500k premium)</strong>
+        <span>The appointment document defines scope, standard of care, liability cap, and collateral warranty obligations — the primary document for understanding the true liability exposure of the professional. Request the latest standard form appointment and any project-specific amendments. Flag if fitness-for-purpose obligations, uncapped liability, or unlimited collateral warranties are present.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Verify BSA 2022 compliance status for any architect or structural engineer with HRB work</strong>
+        <span>For architects and structural engineers with Higher Risk Building work (>18m / 7+ storeys residential), verify: (a) Gateway compliance documentation for any HRBs under Gateway 2 or 3; (b) Principal Designer (BSA) competence assessment completed; (c) golden thread management plan in place; (d) legacy HRB work identified and retained in project records. Non-compliance = material PI risk; potential BSR enforcement action.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Confirm retroactive date continuity and identify any gaps in prior cover</strong>
+        <span>A gap in claims-made cover creates an uninsured period. For all E6/E7 risks, request evidence of continuous PI cover back to the retroactive date. Any gap — even a single day — creates a potential uninsured claim. For new-to-insurer risks, request prior insurer renewal certificates for the past 5+ years. For long-established practices, request 10+ years of renewal certificates where retroactive date runs back to founding.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Identify and specifically underwrite EWS1 and fire engineering exposure</strong>
+        <span>EWS1 assessors and fire engineers signing fire strategies for residential buildings require specific underwriting treatment distinct from standard architect PI. Identify: number of EWS1 assessments signed; buildings assessed; any assessments currently under challenge or disputed; scope of fire strategy work. Apply specific sub-limit or endorsement for EWS1/fire assessment risk; do not write this exposure at the same rate as general architectural PI.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>For E7 D&B risks: extract and verify the design fee equivalent from contract documentation</strong>
+        <span>E7 premium is rated on the "design fee equivalent" — the portion of the contract sum attributable to design. Contractors frequently understate design value. Request tender analysis or QS breakdown showing design element. Cross-check against the proportion of in-house design staff time. Typical benchmarks: 8–12% of contract sum for standard commercial D&B; 12–18% for complex/specialist structures; 15–20% for architect-led D&B.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Verify fitness-for-purpose warranty status for all E7 risks</strong>
+        <span>Standard E7 PI covers professional negligence (reasonable skill and care standard) but not fitness-for-purpose warranties. For every E7 submission, request the relevant contract clauses dealing with design liability standard (JCT DB 2016 cl. 2.17.1 equivalent; FIDIC Yellow Book clause 4.1). If the contract does not limit design liability to reasonable skill and care, apply a specific fitness-for-purpose loading or endorse to exclude FfP obligations not backed by professional skill-and-care duties.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Review RAAC exposure for structural engineers with 1980s–2000s school/public building portfolios</strong>
+        <span>Reinforced Autoclaved Aerated Concrete (RAAC) — used extensively in UK schools, hospitals, and public buildings 1950s–1990s — is a significant emerging PI exposure for structural engineers who inspected, surveyed, or assessed these buildings. Identify: any structural engineering reports covering schools, hospitals, or public buildings constructed 1950s–1990s; any RAAC-specific surveys commissioned; any buildings where the engineer signed off a structural report that did not identify RAAC risk. RAAC may develop into a class action event.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Confirm ISO 9001 certification scope includes design services</strong>
+        <span>ISO 9001 certification scope can vary — a firm may be certified for "project management" but not "architectural design services." Always request the ISO 9001 certificate and confirm the scope description covers the design activities being insured. An ISO 9001 certificate with a scope that excludes design does not provide the risk mitigation signal that a full-scope certification does. Request the most recent surveillance audit report for confirmation.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Request 5-year claims history including circumstances notified but not yet claims</strong>
+        <span>Construction PI claims frequently begin as "notified circumstances" — the professional becomes aware of a potential claim before the claimant has formally issued proceedings. These notifications are as important as formal claims for underwriting purposes. Request: (a) all formal claims made in the past 5 years; (b) all circumstances notified to the current or previous insurer in the past 5 years; (c) any disputes, complaints to professional bodies, or known client dissatisfaction. Circumstances not yet claimed may crystallise during the new policy year.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Implement 6-year run-off terms in standard conditions; extend to 30-year run-off for HRB-exposed practices</strong>
+        <span>Standard construction PI run-off cover is provided for 6 years after cessation of practice (matching the standard Defective Premises Act 1972 limitation period pre-BSA). Following the Building Safety Act 2022 extension to 30 years for new dwellings and 15 years for existing HRBs, practices with significant HRB residential work should be advised that standard 6-year run-off is potentially insufficient and may require extended run-off arrangements. Consider endorsing run-off policies for HRB-exposed practices with a specific extended tail notification period.</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Key Standards &amp; Regulatory Compliance Table</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Standard / Regulation</th>
+          <th>Applies To</th>
+          <th>Key Obligation</th>
+          <th>Underwriter Verification</th>
+          <th>Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Building Safety Act 2022</strong></td>
+          <td>All professionals working on HRBs (>18m / 7+ storeys)</td>
+          <td>Gateway compliance; PD (BSA) appointment; golden thread; 30-year limitation</td>
+          <td>Gateway compliance documentation; PD (BSA) competence evidence</td>
+          <td><span class="tag t-both">E6/E7</span></td>
+        </tr>
+        <tr>
+          <td><strong>Defective Premises Act 1972 (as amended)</strong></td>
+          <td>Professionals doing work in connection with provision of dwellings</td>
+          <td>Duty to ensure fit for habitation; 30-year limitation for new; 15-year for existing</td>
+          <td>HRB exposure identified; run-off terms adequate for extended tail</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>ARB Code of Conduct</strong></td>
+          <td>Registered architects (ARB registration required to use title "architect")</td>
+          <td>Mandatory PI as condition of registration; CPD obligations; ARB complaints process</td>
+          <td>ARB registration confirmation; current PI certificate provided to ARB</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>RICS Rules of Conduct</strong></td>
+          <td>RICS regulated firms and individual members</td>
+          <td>Mandatory PI for regulated firms; minimum limits proportionate; RICS complaint process</td>
+          <td>RICS regulated firm confirmation; firm registration on RICS Find a Surveyor</td>
+          <td><span class="tag t-e6">E6</span></td>
+        </tr>
+        <tr>
+          <td><strong>CDM 2015</strong></td>
+          <td>All construction projects; mandatory for notifiable projects</td>
+          <td>Principal Designer (CDM) appointment; pre-construction information; F10 notification</td>
+          <td>PD (CDM) appointment documents; F10 notification for notifiable projects</td>
+          <td><span class="tag t-both">E6/E7</span></td>
+        </tr>
+        <tr>
+          <td><strong>ISO 9001:2015</strong></td>
+          <td>Professional practices (voluntary; widely required by clients)</td>
+          <td>Documented QMS; design review; document control; corrective action</td>
+          <td>Current ISO 9001 certificate; scope includes design services</td>
+          <td><span class="tag t-both">E6/E7</span></td>
+        </tr>
+        <tr>
+          <td><strong>ISO 19650 (BIM)</strong></td>
+          <td>Professional practices using BIM (mandatory on government projects from 2016)</td>
+          <td>Information management plan; CDE; BIM Execution Plan; golden thread for HRBs</td>
+          <td>BEP for major projects; CDE platform confirmation</td>
+          <td><span class="tag t-both">E6/E7</span></td>
+        </tr>
+        <tr>
+          <td><strong>JCT DB 2016 cl. 2.17.1</strong></td>
+          <td>Design &amp; build contractors using JCT form</td>
+          <td>Limits design liability to reasonable skill and care (fitness for purpose excluded)</td>
+          <td>Contract clause confirmation; ensure cl. 2.17.1 expressly included (not deleted)</td>
+          <td><span class="tag t-e7">E7</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.9 · PI E&amp;O – Construction &amp; Engineering (E6/E7) · For educational use</footer>
+</body>
+</html>

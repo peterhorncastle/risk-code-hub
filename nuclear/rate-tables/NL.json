@@ -1,0 +1,144 @@
+{
+  "riskCode": "NL",
+  "label": "Nuclear — Liability",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "insuredValue",
+    "label": "Insured Value / Limit ($)",
+    "defaultValue": 1000000000,
+    "hint": "TIV or liability limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.002
+  },
+  "ratingFactors": [
+    {
+      "key": "facilityType",
+      "label": "Facility Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "pwr",
+      "options": {
+        "pwr": {
+          "label": "PWR (Pressurised Water)",
+          "factor": 1
+        },
+        "bwr": {
+          "label": "BWR (Boiling Water)",
+          "factor": 1.05
+        },
+        "smr": {
+          "label": "SMR (Small Modular)",
+          "factor": 0.85
+        },
+        "research": {
+          "label": "Research Reactor",
+          "factor": 0.75
+        },
+        "fuel_cycle": {
+          "label": "Fuel Cycle Facility",
+          "factor": 1.15
+        },
+        "decommissioning": {
+          "label": "Decommissioning",
+          "factor": 0.9
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "regulatory",
+      "label": "Regulatory Standing",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "good",
+      "options": {
+        "excellent": {
+          "label": "Excellent (no findings)",
+          "factor": 0.8
+        },
+        "good": {
+          "label": "Good",
+          "factor": 1
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1.1
+        },
+        "concerns": {
+          "label": "Regulatory Concerns",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "operatingHistory",
+      "label": "Operating History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "strong",
+      "options": {
+        "exemplary": {
+          "label": "Exemplary (20+ yr clean)",
+          "factor": 0.85
+        },
+        "strong": {
+          "label": "Strong",
+          "factor": 1
+        },
+        "average": {
+          "label": "Average",
+          "factor": 1.1
+        },
+        "new": {
+          "label": "New Build/First-of-Kind",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "territory",
+      "label": "Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "developed",
+      "options": {
+        "us": {
+          "label": "United States (NRC)",
+          "factor": 1
+        },
+        "uk": {
+          "label": "UK (ONR)",
+          "factor": 0.95
+        },
+        "eu": {
+          "label": "EU",
+          "factor": 1
+        },
+        "asia": {
+          "label": "Asia",
+          "factor": 1.1
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 25000,
+    "claimsHandlingPerClaim": 200000,
+    "systemOverheadPerYear": 15000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.005,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.15,
+    "reinsuranceRate": 0.15
+  },
+  "targetProfitMargin": 0.05
+}

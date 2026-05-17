@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Overview — Marine Cargo — Risk Code Hub</title>
+  <style>
+    :root {
+      --mc:#1565c0; --mc-dark:#0d2137; --icc:#00695c;
+      --fire:#c62828; --ga:#6a1b9a; --warn:#e65100;
+      --light:#e3f2fd; --border:#bbdefb; --text:#0d1b2e; --muted:#546e7a;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1565c0;
+    --hub-dark:      #0d2137;
+    --hub-light:     #e8f0fa;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #00695c;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%);
+    --header-sub:    #bbdefb;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90caf9; margin-bottom:6px; }
+    .breadcrumb a { color:#bbdefb; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#90caf9; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#bbdefb; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--mc); border-bottom-color:var(--fire); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--mc); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:16px; margin:28px 0; }
+    .stat-card { background:#fff; border-radius:12px; padding:22px 24px; border-left:5px solid var(--mc); box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+    .stat-num { font-size:1.9rem; font-weight:700; color:var(--mc); }
+    .stat-label { font-size:0.8rem; color:var(--muted); margin-top:4px; }
+
+    .code-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:20px 0; }
+    .code-table th { background:var(--mc); color:#fff; padding:11px 14px; font-size:0.8rem; text-align:left; }
+    .code-table td { padding:10px 14px; font-size:0.84rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.6; }
+    .code-table tr:last-child td { border-bottom:none; }
+    .code-table tr:hover td { background:#e8f4fd; }
+    .code-badge { font-size:0.8rem; font-weight:700; background:var(--mc); color:#fff; padding:2px 8px; border-radius:6px; }
+
+    .icc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:24px 0; }
+    @media(max-width:700px){.icc-grid{grid-template-columns:1fr;}}
+    .icc-card { background:#fff; border-radius:12px; padding:20px; border-top:5px solid var(--mc); box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+    .icc-card.b { border-top-color:var(--warn); }
+    .icc-card.c { border-top-color:var(--muted); }
+    .icc-card h3 { font-size:1rem; color:var(--text); margin-bottom:6px; }
+    .icc-card .icc-label { font-size:0.68rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--mc); margin-bottom:8px; }
+    .icc-card.b .icc-label { color:var(--warn); }
+    .icc-card.c .icc-label { color:var(--muted); }
+    .icc-card ul { padding-left:16px; }
+    .icc-card li { font-size:0.83rem; margin-bottom:5px; line-height:1.5; }
+    .tick { color:var(--icc); font-weight:700; }
+    .cross { color:var(--fire); font-weight:700; }
+
+    .info-box { background:var(--mc-dark); color:#bbdefb; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#e3f2fd; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#bbdefb; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .participant-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:24px 0; }
+    .participant-card { background:#fff; border-radius:10px; padding:18px 20px; border-left:4px solid var(--mc); box-shadow:0 1px 3px rgba(0,0,0,0.07); }
+    .participant-card h4 { font-size:0.9rem; color:var(--mc); margin-bottom:6px; }
+    .participant-card p { font-size:0.83rem; margin:0; line-height:1.6; }
+
+    .inco-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:20px 0; font-size:0.83rem; }
+    .inco-table th { background:var(--icc); color:#fff; padding:10px 13px; text-align:left; }
+    .inco-table td { padding:9px 13px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .inco-table tr:last-child td { border-bottom:none; }
+    .inco-table tr:hover td { background:#e8f5e9; }
+    .ins-buyer { color:var(--mc); font-weight:700; }
+    .ins-seller { color:var(--fire); font-weight:700; }
+
+    .module-nav { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:32px 0; }
+    .module-nav a { display:block; background:#fff; border:1px solid var(--border); border-radius:10px; padding:14px 16px; text-decoration:none; color:var(--mc); font-size:0.85rem; font-weight:600; transition:background 0.15s; border-left:4px solid var(--mc); }
+    .module-nav a:hover { background:var(--light); }
+
+    footer { background:var(--mc-dark); color:#90caf9; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Marine Cargo</div>
+  <div class="tag">Lloyd's Codes · V · Q · VL · VX</div>
+  <h1>Marine Cargo Insurance</h1>
+  <p>The oldest insured peril in commercial history — from Lloyd's Coffee House in 1688 to the Red Sea crisis of 2024. Marine cargo covers physical loss and damage to goods in transit by sea, air, road and rail, and remains one of Lloyd's largest and most internationally traded classes.</p>
+</header>
+<nav>
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num">~$25bn</div>
+      <div class="stat-label">Global marine cargo GWP (2023) <span class="badge b-v">VER</span></div>
+    </div>
+    <div class="stat-card" style="border-left-color:var(--icc)">
+      <div class="stat-num" style="color:var(--icc)">~$5bn</div>
+      <div class="stat-label">Lloyd's marine cargo GWP (est.) <span class="badge b-e">EST</span></div>
+    </div>
+    <div class="stat-card" style="border-left-color:var(--fire)">
+      <div class="stat-num" style="color:var(--fire)">24,116</div>
+      <div class="stat-label">TEU capacity — world's largest container vessel (MSC Irina, 2023) <span class="badge b-v">VER</span></div>
+    </div>
+    <div class="stat-card" style="border-left-color:var(--ga)">
+      <div class="stat-num" style="color:var(--ga)">~$1bn+</div>
+      <div class="stat-label">Max cargo value exposure per mega-vessel <span class="badge b-e">EST</span></div>
+    </div>
+  </div>
+
+  <h2>Lloyd's Risk Codes — Marine Cargo</h2>
+  <table class="code-table">
+    <thead>
+      <tr><th>Code</th><th>Class Name</th><th>Coverage Scope</th><th>Typical Insureds</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="code-badge">V</span></td>
+        <td><strong>Marine Cargo</strong></td>
+        <td>Physical loss or damage to goods in international transit by sea, air, road or rail. Covers from warehouse to warehouse. Includes ICC A (All Risks), ICC B and ICC C (named perils).</td>
+        <td>Exporters, importers, commodity traders, freight forwarders, banks with security interest in goods, manufacturers, retailers</td>
+      </tr>
+      <tr>
+        <td><span class="code-badge">Q</span></td>
+        <td><strong>Inland Transit / Inland Marine</strong></td>
+        <td>Goods in transit by road, rail, inland waterway within a single country. Also covers goods stored in transit warehouses. Similar to V but no ocean voyage element. Often combined with V on open covers.</td>
+        <td>Road hauliers, manufacturers, wholesalers/distributors, retailers, domestic courier services</td>
+      </tr>
+      <tr>
+        <td><span class="code-badge">VL</span></td>
+        <td><strong>Cargo Legal Liability</strong></td>
+        <td>Legal liability of carriers, freight forwarders, warehouse operators and logistics providers to cargo owners for loss or damage. Covers liability in excess of Hague-Visby / CMR / Warsaw Convention limits.</td>
+        <td>Freight forwarders (BIFA/FIATA conditions), NVOCC operators, road hauliers (CMR liability), warehouse operators, combined transport operators</td>
+      </tr>
+      <tr>
+        <td><span class="code-badge">VX</span></td>
+        <td><strong>Cargo Special Risks</strong></td>
+        <td>Specialist cargo covers outside standard ICC framework: fine art in transit, bulk commodity (grain, coal, metals), project/heavy lift cargo, livestock in transit, exhibitions, temperature-sensitive pharmaceuticals.</td>
+        <td>Art dealers/galleries, mining and metals traders, project cargo operators (plant, machinery), pharmaceuticals cold chain, livestock exporters</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Institute Cargo Clauses — ICC A, B and C</h2>
+  <p>The Institute Cargo Clauses (ICC), maintained by the Lloyd's Market Association and the International Underwriting Association, are the standard policy wordings for marine cargo worldwide. The 2009 edition (effective 1 January 2009) is the current version; the 1982 edition remains widely used in some markets. <span class="badge b-v">VER</span></p>
+
+  <div class="icc-grid">
+    <div class="icc-card">
+      <div class="icc-label">ICC (A) — Broadest</div>
+      <h3>All Risks</h3>
+      <ul>
+        <li><span class="tick">✔</span> All risks of loss or damage (subject to exclusions)</li>
+        <li><span class="tick">✔</span> Fire and explosion</li>
+        <li><span class="tick">✔</span> Washing overboard / jettison</li>
+        <li><span class="tick">✔</span> Theft, pilferage, non-delivery</li>
+        <li><span class="tick">✔</span> Vessel grounding / stranding / collision</li>
+        <li><span class="tick">✔</span> General average / salvage charges</li>
+        <li><span class="tick">✔</span> Both-to-blame collision</li>
+        <li><span class="cross">✘</span> War &amp; strikes (separate clause required)</li>
+        <li><span class="cross">✘</span> Inherent vice, ordinary leakage, wilful misconduct</li>
+        <li><span class="cross">✘</span> Delay (even if proximately caused by insured peril)</li>
+      </ul>
+    </div>
+    <div class="icc-card b">
+      <div class="icc-label">ICC (B) — Named Perils</div>
+      <h3>Intermediate Cover</h3>
+      <ul>
+        <li><span class="tick">✔</span> Fire and explosion</li>
+        <li><span class="tick">✔</span> Vessel stranding, grounding, sinking, capsizing</li>
+        <li><span class="tick">✔</span> Overturning / derailment of land conveyance</li>
+        <li><span class="tick">✔</span> Collision / contact of vessel with external object</li>
+        <li><span class="tick">✔</span> Discharge of cargo at port of distress</li>
+        <li><span class="tick">✔</span> Earthquake, volcanic eruption, lightning</li>
+        <li><span class="tick">✔</span> Washing overboard / jettison</li>
+        <li><span class="tick">✔</span> Entry of sea, lake, river water into vessel/container</li>
+        <li><span class="tick">✔</span> Total loss of package overboard or dropped</li>
+        <li><span class="cross">✘</span> Theft; <span class="cross">✘</span> Contamination; <span class="cross">✘</span> War &amp; strikes</li>
+      </ul>
+    </div>
+    <div class="icc-card c">
+      <div class="icc-label">ICC (C) — Basic Perils</div>
+      <h3>Restricted Cover</h3>
+      <ul>
+        <li><span class="tick">✔</span> Fire and explosion</li>
+        <li><span class="tick">✔</span> Vessel stranding, grounding, sinking, capsizing</li>
+        <li><span class="tick">✔</span> Overturning / derailment of land conveyance</li>
+        <li><span class="tick">✔</span> Collision / contact with external object</li>
+        <li><span class="tick">✔</span> Discharge of cargo at port of distress</li>
+        <li><span class="tick">✔</span> General average / salvage charges</li>
+        <li><span class="cross">✘</span> Water damage; <span class="cross">✘</span> Washing overboard</li>
+        <li><span class="cross">✘</span> Theft; <span class="cross">✘</span> Breakage / leakage</li>
+        <li><span class="cross">✘</span> Earthquake; <span class="cross">✘</span> War &amp; strikes</li>
+        <li style="color:var(--muted);font-size:0.8rem;">Commonly used for bulk commodities (steel, timber, coal) where all-risks premium is disproportionate to risk profile</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>General Average — The Unique Marine Concept</h2>
+
+  <div class="info-box">
+    <h3>What is General Average?</h3>
+    <p>General Average (GA) is an ancient principle of maritime law — when a voluntary sacrifice is made or extraordinary expenditure incurred to save a voyage (vessel + cargo + freight), the resulting loss is shared proportionately by all parties who benefit. A captain who orders cargo jettisoned to refloat a grounded vessel creates a GA event: the cargo owner whose goods were jettisoned can claim contribution from all other cargo owners (and the shipowner), in proportion to the value of property saved.</p>
+    <ul>
+      <li><strong>York-Antwerp Rules 2016</strong> govern most modern GA adjustments — the rules are incorporated by reference into virtually all bills of lading <span class="badge b-v">VER</span></li>
+      <li><strong>Average Adjusters</strong> (members of the Association of Average Adjusters) calculate each party's proportion — the process typically takes 18–36 months for a large event</li>
+      <li><strong>GA Security:</strong> Cargo interests must provide GA security (cash deposit or bank/insurer guarantee) before their cargo is released from the vessel or terminal. Cargo insurers provide GA guarantees to policyholders — without insurance, cargo owners may need to lodge substantial cash deposits before recovering their goods</li>
+      <li><strong>Ever Given (Suez Canal, 2021):</strong> GA declared; estimated GA contribution of 11.75% of cargo value; total GA fund ~$900m across thousands of cargo interests <span class="badge b-e">EST</span></li>
+      <li><strong>Underwriting relevance:</strong> GA is an insured peril under ICC A, B and C (General Average and salvage charges clause). GA claims are complex, slow to resolve, and often result in cargo insurers paying GA contributions on behalf of insureds who may have had no physical loss themselves</li>
+    </ul>
+  </div>
+
+  <h2>Incoterms 2020 — Who Insures the Cargo?</h2>
+  <p>Incoterms (International Commercial Terms), published by the International Chamber of Commerce, define the point at which risk in goods passes from seller to buyer — and therefore who has the insurable interest and should be buying insurance. <span class="badge b-v">VER</span></p>
+
+  <table class="inco-table">
+    <thead>
+      <tr><th>Incoterm</th><th>Meaning</th><th>Risk Transfer Point</th><th>Who Insures</th><th>Minimum Insurance Required</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>EXW</strong></td>
+        <td>Ex Works</td>
+        <td>At seller's premises</td>
+        <td><span class="ins-buyer">Buyer</span> — from collection onwards</td>
+        <td>None mandated; buyer's responsibility</td>
+      </tr>
+      <tr>
+        <td><strong>FCA</strong></td>
+        <td>Free Carrier</td>
+        <td>When handed to buyer's carrier</td>
+        <td><span class="ins-buyer">Buyer</span> — from named place</td>
+        <td>None mandated</td>
+      </tr>
+      <tr>
+        <td><strong>FOB</strong></td>
+        <td>Free on Board</td>
+        <td>When goods on board vessel</td>
+        <td><span class="ins-buyer">Buyer</span> — from ship's rail</td>
+        <td>None mandated — but buyer almost always insures</td>
+      </tr>
+      <tr>
+        <td><strong>CFR</strong></td>
+        <td>Cost &amp; Freight</td>
+        <td>When goods on board vessel</td>
+        <td><span class="ins-buyer">Buyer</span> — risk travels with cargo; seller pays freight</td>
+        <td>None mandated — buyer insures</td>
+      </tr>
+      <tr>
+        <td><strong>CIF</strong></td>
+        <td>Cost, Insurance &amp; Freight</td>
+        <td>When goods on board vessel</td>
+        <td><span class="ins-seller">Seller</span> must provide minimum insurance (ICC C) for buyer's benefit</td>
+        <td><strong>ICC (C) minimum — 110% of CIF value</strong></td>
+      </tr>
+      <tr>
+        <td><strong>CIP</strong></td>
+        <td>Carriage &amp; Insurance Paid</td>
+        <td>At named carrier</td>
+        <td><span class="ins-seller">Seller</span> must provide insurance for buyer's benefit</td>
+        <td><strong>ICC (A) minimum — 110% of CIP value</strong> (upgraded from ICC C in Incoterms 2020)</td>
+      </tr>
+      <tr>
+        <td><strong>DAP / DPU / DDP</strong></td>
+        <td>Delivered (various)</td>
+        <td>At destination</td>
+        <td><span class="ins-seller">Seller</span> bears risk to destination; seller typically insures</td>
+        <td>None mandated; seller's commercial interest</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Market Participants</h2>
+  <div class="participant-grid">
+    <div class="participant-card">
+      <h4>Lloyd's Syndicates</h4>
+      <p>Atrium (1221), Talbot (1183), MS Amlin (2001), Beazley (623), Chaucer (1084), Tokio Marine Kiln — Lloyd's marine cargo market remains the global benchmark for specialty and complex cargo risks. Syndicates typically lead on open cover wordings and commodity trade finance structures.</p>
+    </div>
+    <div class="participant-card">
+      <h4>Company Market</h4>
+      <p>Allianz (including AGCS), Zurich, AXA XL, Swiss Re (corporate), Munich Re, Generali — major company market followers on Lloyd's-led open covers and standalone commodity placements. Allianz and AXA XL maintain specialist marine cargo underwriting teams in London.</p>
+    </div>
+    <div class="participant-card">
+      <h4>National Markets</h4>
+      <p>European and Asian national markets (Germany — Versicherungsverein; Scandinavia — Gard, Skuld for some cargo elements; Korea — Samsung Fire, KB Insurance; Japan — Tokio Marine, Sompo) write domestic and regional cargo. Lloyd's often reinsures national market excess.</p>
+    </div>
+    <div class="participant-card">
+      <h4>Commodity Trade Finance Banks</h4>
+      <p>ING, BNP Paribas, Standard Chartered, Société Générale — banks financing commodity trades (oil, metals, soft commodities) routinely require cargo insurance as a condition of the financing facility. The bank is typically named as loss payee or additional insured. Trade finance cargo is a major London market segment.</p>
+    </div>
+    <div class="participant-card">
+      <h4>Freight Forwarders &amp; 3PLs</h4>
+      <p>DHL, Kuehne+Nagel, DB Schenker, DSV — major freight forwarders arrange cargo insurance either on behalf of clients or under their own liability cover (VL code). BIFA (British International Freight Association) standard trading conditions cap freight forwarder liability at £2 per kilo — cargo insurance fills the gap.</p>
+    </div>
+    <div class="participant-card">
+      <h4>War Risk Market</h4>
+      <p>Institute War Clauses (Cargo) are written separately from ICC coverage — typically by a specialist subset of Lloyd's syndicates. War risk rates are set by the Joint War Committee (JWC) which publishes its High Risk Area (HRA) list. Red Sea / Gulf of Aden: elevated war risk rates from late 2023 following Houthi attacks. <span class="badge b-v">VER</span></p>
+    </div>
+  </div>
+
+  <h2>Hub Modules</h2>
+  <div class="module-nav">
+    <a href="history.html">📜 History &amp; Origins</a>
+    <a href="timeline.html">📅 Timeline (2003–2024)</a>
+    <a href="database.html">🗄 Claims Database</a>
+    <a href="underwriting.html">⚖ Underwriting</a>
+    <a href="rates-analysis.html">📈 Rates &amp; ROE</a>
+    <a href="risk-mitigation.html">🛡 Risk Mitigation</a>
+    <a href="global-program.html">🌐 Global Programme</a>
+    <a href="references.html">📚 References</a>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Marine Cargo (V/Q/VL/VX) · Lloyd's Market Intelligence · v3.3 April 2026
+</footer>
+</body>
+</html>

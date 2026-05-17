@@ -1,0 +1,102 @@
+{
+  "riskCode": "H3",
+  "label": "General Aviation Hull",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "agreedValue",
+    "label": "Aircraft Agreed Value ($)",
+    "defaultValue": 5000000,
+    "hint": "Agreed value of individual aircraft or fleet"
+  },
+  "baseRate": {
+    "key": "baseROL",
+    "label": "Base Rate on Line (%)",
+    "value": 0.012
+  },
+  "ratingFactors": [
+    {
+      "key": "aircraftType",
+      "label": "Aircraft Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "corporate_jet",
+      "options": {
+        "corporate_jet":   { "label": "Corporate Jet (Citation/Gulfstream)", "factor": 0.75 },
+        "turboprop_single":{ "label": "Turboprop Single (King Air)",         "factor": 1.00 },
+        "piston_single":   { "label": "Piston Single Engine",                "factor": 1.20 },
+        "piston_twin":     { "label": "Piston Twin Engine",                  "factor": 1.10 },
+        "helicopter_light":{ "label": "Light Helicopter",                    "factor": 1.50 },
+        "helicopter_medium":{ "label": "Medium Helicopter (offshore)",       "factor": 1.30 },
+        "uav_commercial":  { "label": "Commercial UAV/Drone",                "factor": 1.80 }
+      }
+    },
+    {
+      "key": "pilotExperience",
+      "label": "Pilot Experience",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "experienced",
+      "options": {
+        "atp_5000":    { "label": "ATP 5000+ hours",        "factor": 0.80 },
+        "experienced": { "label": "1000-5000 hours",        "factor": 1.00 },
+        "moderate":    { "label": "500-1000 hours",         "factor": 1.20 },
+        "low_time":    { "label": "<500 hours",             "factor": 1.50 },
+        "student":     { "label": "Student / PPL training", "factor": 2.00 }
+      }
+    },
+    {
+      "key": "aircraftAge",
+      "label": "Aircraft Age (years)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 8,
+      "bands": [
+        { "min": 0,  "max": 5,  "factor": 0.90 },
+        { "min": 5,  "max": 15, "factor": 1.00 },
+        { "min": 15, "max": 25, "factor": 1.20 },
+        { "min": 25, "max": 50, "factor": 1.50 }
+      ]
+    },
+    {
+      "key": "useType",
+      "label": "Use Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "private",
+      "options": {
+        "private":         { "label": "Private / Owner flown",  "factor": 1.00 },
+        "corporate":       { "label": "Corporate (pro pilots)", "factor": 0.85 },
+        "charter":         { "label": "Charter / Air Taxi",     "factor": 1.15 },
+        "flight_training": { "label": "Flight Training",        "factor": 1.60 },
+        "aerial_work":     { "label": "Aerial Work / Survey",   "factor": 1.30 }
+      }
+    },
+    {
+      "key": "territory",
+      "label": "Operating Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "developed",
+      "options": {
+        "developed":    { "label": "Developed (US/EU/Aus)",  "factor": 1.00 },
+        "mixed":        { "label": "Mixed territories",      "factor": 1.10 },
+        "challenging":  { "label": "Challenging (mountain/remote)", "factor": 1.25 },
+        "high_risk":    { "label": "High risk regions",      "factor": 1.50 }
+      }
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 2000,
+    "claimsHandlingPerClaim": 15000,
+    "systemOverheadPerYear": 1000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.04,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+}

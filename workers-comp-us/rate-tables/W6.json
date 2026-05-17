@@ -1,0 +1,136 @@
+{
+  "riskCode": "W6",
+  "label": "Workers Comp — US (Excess)",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "payroll",
+    "label": "Annual Payroll ($)",
+    "defaultValue": 20000000,
+    "hint": "Total US payroll"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.0015
+  },
+  "ratingFactors": [
+    {
+      "key": "stateClass",
+      "label": "State Classification",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "favorable": {
+          "label": "Favorable (TX/VA)",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "adverse": {
+          "label": "Adverse (CA/NY)",
+          "factor": 1.2
+        },
+        "monopolistic": {
+          "label": "Monopolistic State",
+          "factor": 1.1
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "industry",
+      "label": "Industry Class",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clerical",
+      "options": {
+        "clerical": {
+          "label": "Clerical/Office",
+          "factor": 0.5
+        },
+        "retail": {
+          "label": "Retail/Service",
+          "factor": 0.8
+        },
+        "manufacturing": {
+          "label": "Manufacturing",
+          "factor": 1
+        },
+        "construction": {
+          "label": "Construction",
+          "factor": 1.4
+        },
+        "heavy": {
+          "label": "Heavy Industry",
+          "factor": 1.8
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "expMod",
+      "label": "Experience Modification",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "unity",
+      "options": {
+        "credit": {
+          "label": "Below Unity (<0.90)",
+          "factor": 0.85
+        },
+        "unity": {
+          "label": "Unity (0.90-1.10)",
+          "factor": 1
+        },
+        "debit": {
+          "label": "Above Unity (>1.10)",
+          "factor": 1.2
+        },
+        "high_debit": {
+          "label": "High Debit (>1.30)",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "safetyProgram",
+      "label": "Safety Program",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "excellent": {
+          "label": "Excellent (OSHA VPP)",
+          "factor": 0.8
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "minimal": {
+          "label": "Minimal",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 3000,
+    "claimsHandlingPerClaim": 15000,
+    "systemOverheadPerYear": 1500,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.05,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

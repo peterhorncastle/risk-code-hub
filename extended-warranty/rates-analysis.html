@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Extended Warranty — Rates & ROE Analysis | Risk Code Hub</title>
+  <style>
+    :root {
+      --wa:#8c4a15; --wa-dark:#5c2f0c; --wa-light:#fdf0e6; --accent:#c8a84b;
+      --copper:#b06020; --teal:#0d7377;
+      --hub-primary:#8c4a15; --hub-dark:#5c2f0c; --hub-light:#fdf0e6;
+      --hub-accent:#c8a84b; --hub-secondary:#b06020;
+      --header-gradient:linear-gradient(135deg,#3d1c05 0%,#8c4a15 55%,#b06020 100%);
+      --header-sub:#e8c9a0;
+    }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:var(--header-gradient); color:#fff; padding:40px; }
+    .breadcrumb { font-size:.8rem; color:rgba(255,255,255,.6); margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:8px; color:var(--header-sub); font-size:.95rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--wa); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--wa-dark); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--wa); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:12px; font-size:.95rem; }
+    sup { font-size:.7rem; color:var(--wa); font-weight:700; }
+
+    .chart-box { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; margin:24px 0; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    .chart-box h3 { margin:0 0 16px; color:var(--wa-dark); font-size:1rem; }
+    canvas { max-width:100%; }
+
+    .table-wrap { overflow-x:auto; border-radius:10px; margin:20px 0; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    table { width:100%; border-collapse:collapse; background:#fff; font-size:.87rem; }
+    thead th { background:var(--wa-dark); color:#fff; padding:10px 14px; text-align:left; }
+    tbody tr { border-bottom:1px solid var(--border); }
+    tbody tr:hover { background:#fdf5ee; }
+    tbody td { padding:9px 14px; vertical-align:middle; }
+    tbody tr:nth-child(even) td { background:#faf5ef; }
+
+    .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:24px 0; }
+    @media(max-width:700px){ .roe-grid { grid-template-columns:1fr; } }
+    .roe-card { border-radius:12px; padding:24px; text-align:center; }
+    .roe-card.bull { background:linear-gradient(135deg,#d1fae5,#a7f3d0); border:2px solid #166534; }
+    .roe-card.base { background:linear-gradient(135deg,var(--wa-light),#f5ddc5); border:2px solid var(--wa); }
+    .roe-card.bear { background:linear-gradient(135deg,#fee2e2,#fecaca); border:2px solid #991b1b; }
+    .roe-card .scenario { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; }
+    .roe-card.bull .scenario { color:#166534; }
+    .roe-card.base .scenario { color:var(--wa-dark); }
+    .roe-card.bear .scenario { color:#991b1b; }
+    .roe-card .pct { font-size:2.4rem; font-weight:800; line-height:1; margin:8px 0; }
+    .roe-card.bull .pct { color:#166534; }
+    .roe-card.base .pct { color:var(--wa); }
+    .roe-card.bear .pct { color:#991b1b; }
+    .roe-card .assumption { font-size:.8rem; color:#4b5563; line-height:1.5; margin-top:8px; }
+    .roe-card .cr-label { font-size:.75rem; font-weight:700; color:#6b7280; margin-top:6px; }
+
+    .waterfall { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; margin:24px 0; }
+    .waterfall h3 { color:var(--wa-dark); margin-bottom:16px; font-size:1rem; }
+    .wf-row { display:flex; align-items:center; margin-bottom:8px; gap:12px; }
+    .wf-label { width:220px; font-size:.85rem; color:var(--text); flex-shrink:0; }
+    .wf-bar-wrap { flex:1; background:#f0f0f0; border-radius:4px; height:22px; overflow:hidden; }
+    .wf-bar { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:8px; font-size:.78rem; font-weight:700; color:#fff; }
+    .wf-val { width:60px; text-align:right; font-size:.85rem; font-weight:700; color:var(--wa-dark); }
+    .wf-sub { margin-left:220px; padding-left:12px; font-size:.78rem; color:var(--muted); margin-bottom:12px; }
+    .wf-total { display:flex; align-items:center; gap:12px; border-top:2px solid var(--wa); padding-top:10px; margin-top:6px; }
+    .wf-total .wf-label { font-weight:700; color:var(--wa-dark); }
+    .wf-total .wf-val { color:#166534; font-weight:800; }
+
+    footer { background:var(--wa-dark); color:rgba(255,255,255,.5); text-align:center; padding:24px; font-size:.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Extended Warranty</a> › Rates &amp; ROE</div>
+  <h1>Extended Warranty — Rates &amp; ROE Analysis</h1>
+  <p>Market cycle, programme loss ratio trends, and three-scenario ROE model</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Market Rate Environment (2000–2026)</h2>
+  <p>Extended warranty is not a commodity market with a single pricing cycle — it is a portfolio of sub-classes (electronics, white goods, motor, home) each driven by distinct loss trends, regulatory interventions, and technology cycles. The market does not follow the classic Lloyd's hard/soft cycle to the same degree as short-tail property or liability lines, but significant repricing events occur following mass defect events, regulatory interventions, and inflationary periods.<sup>[1]</sup></p>
+
+  <div class="chart-box">
+    <h3>Loss Ratio Index by Segment — Consumer Electronics vs Motor MBI (2005=100)</h3>
+    <canvas id="chartLR" height="110"></canvas>
+    <p style="font-size:.78rem;color:var(--muted);margin-top:8px">* Index = gross loss ratio relative to 2005 baseline. Higher = deterioration. Estimates based on market commentary and regulatory data. <span style="background:#fef3e2;color:#7a4500;padding:1px 5px;border-radius:4px;font-size:.72rem;font-weight:700;">ESTIMATE</span></p>
+  </div>
+
+  <h2>Market Cycle — Extended Warranty</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Phase</th><th>Period</th><th>Driver</th><th>Key Characteristics</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Expansion</strong></td><td>1985–1994</td><td>Retail discovery of high-margin EW product</td><td>Loss ratios 15–30%; margins very high; little competition; limited regulatory oversight</td></tr>
+        <tr><td><strong>Regulatory Pressure I</strong></td><td>1994–2003</td><td>OFT investigation; consumer awareness</td><td>Margins compress slightly; third-party market opens; insolvency events in US require CLIP market</td></tr>
+        <tr><td><strong>Structural Reset</strong></td><td>2003–2007</td><td>UK Competition Commission; EU Directive</td><td>45-day cooling-off; portability rights; loss ratios rise as adverse selection increases; premium volumes fall in UK</td></tr>
+        <tr><td><strong>Mobile Era Boom</strong></td><td>2007–2015</td><td>iPhone; smartphone penetration</td><td>Mobile device protection becomes major segment; accidental damage drives frequency; loss ratios rise to 55–70% on AD cover</td></tr>
+        <tr><td><strong>M&amp;A Consolidation</strong></td><td>2015–2018</td><td>Allstate/SquareTrade; D&amp;G acquisition; AmTrust collapse</td><td>Market consolidates; capacity disruption post-AmTrust; Lloyd's share increases</td></tr>
+        <tr><td><strong>Inflation Shock</strong></td><td>2020–2022</td><td>COVID supply chain; parts unavailability</td><td>Claim costs rise 20–35%; obsolescence crystallises; loss ratios spike; programmes requiring repricing</td></tr>
+        <tr><td><strong>Regulatory Tightening</strong></td><td>2021–2024</td><td>ASIC deferred sales; FCA Consumer Duty; EU Right to Repair</td><td>Distribution economics restructured; low-value products withdrawn; fair value evidence required</td></tr>
+        <tr><td><strong>EV/New Tech Repricing</strong></td><td>2024+</td><td>EV battery warranty; eVTOL; smart home</td><td>New product categories with limited loss history; underwriters cautious; stop-loss structures preferred</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Programme Loss Ratio by Segment (2024 Estimates)</h2>
+  <div class="chart-box">
+    <h3>Gross Loss Ratio Range by Product Segment — Midpoint Estimate</h3>
+    <canvas id="chartSeg" height="120"></canvas>
+    <p style="font-size:.78rem;color:var(--muted);margin-top:8px">Bars show midpoint of typical gross loss ratio range by segment. Actual varies significantly by programme quality, fraud controls, and geography. <span style="background:#fef3e2;color:#7a4500;padding:1px 5px;border-radius:4px;font-size:.72rem;font-weight:700;">ESTIMATE</span></p>
+  </div>
+
+  <h2>ROE Scenarios — Extended Warranty Insurance Programme</h2>
+  <p>ROE is modelled on a representative £100m GWP extended warranty book (mixed consumer electronics, white goods, and motor MBI). Capital loading assumed at 30% of net premium income (lower than property cat due to short-tail, diversified nature). Investment income on float is modest given the short duration of claims.<sup>[2]</sup></p>
+
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="scenario">Bull Scenario</div>
+      <div class="pct">+16.4%</div>
+      <div class="cr-label">Combined Ratio: 78%</div>
+      <div class="assumption">Strong product quality; low fraud; effective TPA controls; parts inflation contained; no mass defect events; regulatory environment stable</div>
+    </div>
+    <div class="roe-card base">
+      <div class="scenario">Base Scenario</div>
+      <div class="pct">+8.2%</div>
+      <div class="cr-label">Combined Ratio: 92%</div>
+      <div class="assumption">Average programme quality; moderate fraud; typical parts availability; limited defect events; modest regulatory compliance costs</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="scenario">Bear Scenario</div>
+      <div class="pct">−12.8%</div>
+      <div class="cr-label">Combined Ratio: 122%</div>
+      <div class="assumption">Mass defect event (gaming console/white goods); supply chain crisis inflating replacement costs; regulatory intervention requiring redress payments; fraud ring losses</div>
+    </div>
+  </div>
+
+  <div class="waterfall">
+    <h3>Base Scenario P&amp;L Waterfall — £100m GWP Portfolio</h3>
+    <div class="wf-row"><span class="wf-label">Gross Written Premium</span><div class="wf-bar-wrap"><div class="wf-bar" style="width:100%;background:var(--wa)">£100.0m</div></div><span class="wf-val">£100.0m</span></div>
+    <div class="wf-row"><span class="wf-label">Retail / Dealer Commission</span><div class="wf-bar-wrap"><div class="wf-bar" style="width:30%;background:#dc2626">−£30.0m</div></div><span class="wf-val" style="color:#dc2626">−£30.0m</span></div>
+    <div class="wf-sub">Average 30% commission across electronics (32%) and motor (28%) channels</div>
+    <div class="wf-row"><span class="wf-label">TPA &amp; Claims Admin</span><div class="wf-bar-wrap"><div class="wf-bar" style="width:13%;background:#f97316">−£13.0m</div></div><span class="wf-val" style="color:#dc2626">−£13.0m</span></div>
+    <div class="wf-row"><span class="wf-label">Insurer Acquisition &amp; Overhead</span><div class="wf-bar-wrap"><div class="wf-bar" style="width:5%;background:#f97316">−£5.0m</div></div><span class="wf-val" style="color:#dc2626">−£5.0m</span></div>
+    <div class="wf-row"><span class="wf-label">Net Earned Premium</span><div class="wf-bar-wrap"><div class="wf-bar" style="width:52%;background:var(--copper)">£52.0m</div></div><span class="wf-val">£52.0m</span></div>
+    <div class="wf-row"><span class="wf-label">Net Claims (40% gross LR)</span><div class="wf-bar-wrap"><div class="wf-bar" style="width:40%;background:#dc2626">−£40.0m</div></div><span class="wf-val" style="color:#dc2626">−£40.0m</span></div>
+    <div class="wf-sub">Blended 40% gross LR: electronics 38%, white goods 35%, motor MBI 50%</div>
+    <div class="wf-row"><span class="wf-label">Fraud &amp; Obsolescence Reserve</span><div class="wf-bar-wrap"><div class="wf-bar" style="width:4%;background:#dc2626">−£4.0m</div></div><span class="wf-val" style="color:#dc2626">−£4.0m</span></div>
+    <div class="wf-row"><span class="wf-label">Investment Income (1.8% on float)</span><div class="wf-bar-wrap"><div class="wf-bar" style="width:2%;background:#166534">+£2.0m</div></div><span class="wf-val" style="color:#166534">+£2.0m</span></div>
+    <div class="wf-row"><span class="wf-label">Reinsurance Cost (stop-loss)</span><div class="wf-bar-wrap"><div class="wf-bar" style="width:2%;background:#dc2626">−£2.0m</div></div><span class="wf-val" style="color:#dc2626">−£2.0m</span></div>
+    <div class="wf-total"><span class="wf-label">Underwriting Profit</span><div style="flex:1"></div><span class="wf-val">+£8.0m</span></div>
+    <div style="margin-left:220px;font-size:.82rem;color:var(--muted);padding-top:4px">ROE: 8.2% on £98m capital base (30% of NEP × 3.3 leverage). Combined ratio 92%.</div>
+  </div>
+
+  <h2>IBNR and Reserve Development Characteristics</h2>
+  <p>Extended warranty is a relatively short-tail class compared to liability lines. Consumer electronics claims are typically reported and settled within 6–18 months of the warranty event. Motor MBI has a slightly longer tail — complex powertrain repairs may involve authorised dealer backlogs — but is still substantially settled within 24 months of the event year.<sup>[3]</sup></p>
+  <p>The key reserving risk is <strong>mass defect IBNR</strong> — where a product line is failing at rates significantly above priced expectations but claims have not yet been fully reported. Gaming console and white goods mass defects have historically generated IBNR development over 3–5 years as the full affected population works through failures at different rates across the bathtub curve. Underwriters writing multi-year programme contracts should carry explicit IBNR margins of 10–20% of annual claims for mature programmes.</p>
+  <p><strong>Obsolescence reserves</strong> are a unique feature of extended warranty. Unlike most insurance lines, the cost of a future claim may exceed the current cost if: (a) the product is discontinued and parts become scarce; (b) supply chain disruption inflates parts costs; or (c) technological change means replacement units cost more than the original product (e.g. OLED television replacing LCD). Explicit obsolescence reserving of 2–5% of claims is considered best practice for programmes with 3+ year terms.<sup>[4]</sup></p>
+
+</main>
+<footer>Risk Code Hub — Extended Warranty Insurance | Lloyd's Code WA | Version 4.3</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+// Loss Ratio Index chart
+new Chart(document.getElementById('chartLR'), {
+  type:'line',
+  data:{
+    labels:['2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'],
+    datasets:[
+      {label:'Consumer Electronics (Index)',data:[100,102,108,110,107,105,112,115,118,120,118,117,115,122,118,135,142,148,138,132,128,125],borderColor:'#8c4a15',backgroundColor:'rgba(140,74,21,.08)',tension:.4,fill:true,pointRadius:3},
+      {label:'Motor MBI (Index)',data:[100,103,106,112,118,115,112,110,115,120,125,128,130,135,132,138,145,155,148,142,138,135],borderColor:'#0d7377',backgroundColor:'rgba(13,115,119,.07)',tension:.4,fill:false,borderDash:[5,3],pointRadius:3},
+      {label:'White Goods (Index)',data:[100,101,103,105,104,103,105,107,108,115,112,110,109,112,110,125,132,138,128,122,118,115],borderColor:'#b06020',backgroundColor:'transparent',tension:.4,fill:false,borderDash:[3,3],pointRadius:3}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{position:'top',labels:{font:{size:12}}}},scales:{y:{beginAtZero:false,min:90,title:{display:true,text:'Loss Ratio Index (2005=100)'}},x:{title:{display:true,text:'Year'}}}}
+});
+
+// Segment loss ratio bar chart
+new Chart(document.getElementById('chartSeg'), {
+  type:'bar',
+  data:{
+    labels:['Smartphone\n(M&EB+AD)','Mobile\n(M&EB only)','TV/AV','White\nGoods','Gaming\nConsole','HVAC\n(Home)','Motor MBI\n(Used 5–8yr)','EV Battery\n(New)'],
+    datasets:[{
+      label:'Midpoint Gross Loss Ratio (%)',
+      data:[67,32,27,37,42,47,62,30],
+      backgroundColor:['#8c4a15','#b06020','#d97706','#0d7377','#7c3aed','#dc2626','#047857','#0369a1'],
+      borderRadius:6
+    }]
+  },
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:90,title:{display:true,text:'Gross Loss Ratio (%)'},ticks:{callback:v=>v+'%'}},x:{ticks:{font:{size:11}}}}}
+});
+</script>
+</body>
+</html>

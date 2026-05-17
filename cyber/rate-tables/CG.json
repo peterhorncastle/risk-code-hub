@@ -1,0 +1,200 @@
+{
+  "riskCode": "CG",
+  "label": "Cyber — SME Package",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "policyLimit",
+    "label": "Policy Limit (£)",
+    "defaultValue": 1000000,
+    "hint": "SME coverage limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.015
+  },
+  "ratingFactors": [
+    {
+      "key": "sector",
+      "label": "Industry Sector",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "manufacturing",
+      "options": {
+        "healthcare": {
+          "label": "Healthcare",
+          "factor": 1.5
+        },
+        "financial": {
+          "label": "Financial Services",
+          "factor": 1.3
+        },
+        "retail": {
+          "label": "Retail / E-commerce",
+          "factor": 1.2
+        },
+        "manufacturing": {
+          "label": "Manufacturing",
+          "factor": 1
+        },
+        "professional": {
+          "label": "Professional Services",
+          "factor": 0.9
+        },
+        "education": {
+          "label": "Education",
+          "factor": 1.1
+        },
+        "government": {
+          "label": "Government / Public",
+          "factor": 1.05
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "mfa",
+      "label": "MFA Deployment",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "deployed",
+      "options": {
+        "full": {
+          "label": "Full (all systems)",
+          "factor": 0.75
+        },
+        "deployed": {
+          "label": "Email + Remote Access",
+          "factor": 0.9
+        },
+        "partial": {
+          "label": "Partial",
+          "factor": 1.1
+        },
+        "none": {
+          "label": "None / Unknown",
+          "factor": 1.6
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "edr",
+      "label": "EDR/XDR Coverage",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "high",
+      "options": {
+        "full": {
+          "label": "≥95% endpoints",
+          "factor": 0.8
+        },
+        "high": {
+          "label": "80-95% endpoints",
+          "factor": 0.9
+        },
+        "moderate": {
+          "label": "60-80% endpoints",
+          "factor": 1
+        },
+        "low": {
+          "label": "<60% endpoints",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "backup",
+      "label": "Backup Architecture",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "good",
+      "options": {
+        "immutable": {
+          "label": "3-2-1 with immutable/air-gap",
+          "factor": 0.75
+        },
+        "good": {
+          "label": "3-2-1 standard",
+          "factor": 0.9
+        },
+        "basic": {
+          "label": "Basic backup",
+          "factor": 1.1
+        },
+        "weak": {
+          "label": "Local only / untested",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "patchMgmt",
+      "label": "Patch Management",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "good",
+      "options": {
+        "excellent": {
+          "label": "Critical <72hrs",
+          "factor": 0.8
+        },
+        "good": {
+          "label": "Critical <30 days",
+          "factor": 1
+        },
+        "moderate": {
+          "label": "Critical <90 days",
+          "factor": 1.15
+        },
+        "poor": {
+          "label": ">90 days / ad-hoc",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "priorLoss",
+      "label": "Prior Cyber Incidents (3yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "None",
+          "factor": 0.9
+        },
+        "minor": {
+          "label": "Minor (no claim)",
+          "factor": 1
+        },
+        "breach": {
+          "label": "Data breach (resolved)",
+          "factor": 1.2
+        },
+        "ransomware": {
+          "label": "Ransomware attack",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 500,
+    "claimsHandlingPerClaim": 5000,
+    "systemOverheadPerYear": 300,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.04,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.3,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Aviation War &amp; Confiscation (RX) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:#2a2a2a; --hub-dark:#111111; --hub-light:#f0f0f0;
+      --hub-accent:#c8a84b; --hub-secondary:#b71c1c; --hub-secondary2:#1a237e;
+      --header-gradient:linear-gradient(135deg,#111111 0%,#2a2a2a 55%,#424242 100%);
+      --header-sub:#bdbdbd;
+      --rx:#2a2a2a; --rx-dark:#111111; --rx-light:#f0f0f0;
+      --rx-accent:#c8a84b; --rx-mid:#e0e0e0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--rx-light);color:#1a1a1a;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--rx-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--rx-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#111111;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#bdbdbd;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--rx-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--rx-accent);font-weight:600;}
+    main{max-width:1000px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--rx-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--rx-mid);}
+    .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+    .filters button{padding:6px 14px;border-radius:20px;border:2px solid var(--rx);background:#fff;color:var(--rx);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filters button.active,.filters button:hover{background:var(--rx);color:#fff;}
+    .filters button[data-t="hijacking"]{border-color:#b71c1c;}
+    .filters button[data-t="hijacking"].active,.filters button[data-t="hijacking"]:hover{background:#b71c1c;border-color:#b71c1c;color:#fff;}
+    .filters button[data-t="confiscation"]{border-color:#e65100;}
+    .filters button[data-t="confiscation"].active,.filters button[data-t="confiscation"]:hover{background:#e65100;border-color:#e65100;color:#fff;}
+    .filters button[data-t="shootdown"]{border-color:#6a1b9a;}
+    .filters button[data-t="shootdown"].active,.filters button[data-t="shootdown"]:hover{background:#6a1b9a;border-color:#6a1b9a;color:#fff;}
+    .filters button[data-t="regulatory"]{border-color:#1565c0;}
+    .filters button[data-t="regulatory"].active,.filters button[data-t="regulatory"]:hover{background:#1565c0;border-color:#1565c0;color:#fff;}
+    .filters button[data-t="market"]{border-color:#1a5c2a;}
+    .filters button[data-t="market"].active,.filters button[data-t="market"]:hover{background:#1a5c2a;border-color:#1a5c2a;color:#fff;}
+    .filters button[data-t="technology"]{border-color:#00695c;}
+    .filters button[data-t="technology"].active,.filters button[data-t="technology"]:hover{background:#00695c;border-color:#00695c;color:#fff;}
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--rx-mid);}
+    .tl-item{position:relative;margin-bottom:24px;display:none;}
+    .tl-item.show{display:block;}
+    .dot{position:absolute;left:-28px;top:4px;width:16px;height:16px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--rx);}
+    .dot.hijacking{background:#b71c1c;box-shadow:0 0 0 2px #b71c1c;}
+    .dot.confiscation{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .dot.shootdown{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .dot.regulatory{background:#1565c0;box-shadow:0 0 0 2px #1565c0;}
+    .dot.market{background:#1a5c2a;box-shadow:0 0 0 2px #1a5c2a;}
+    .dot.technology{background:#00695c;box-shadow:0 0 0 2px #00695c;}
+    .tl-card{background:#fff;border-radius:8px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card .yr{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--rx-accent);margin-bottom:4px;}
+    .tl-card h4{font-size:0.92rem;font-weight:700;color:var(--rx-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.84rem;color:#444;line-height:1.5;}
+    .type-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;}
+    .tag-hijacking{background:#ffebee;color:#b71c1c;}
+    .tag-confiscation{background:#fbe9e7;color:#e65100;}
+    .tag-shootdown{background:#f3e5f5;color:#6a1b9a;}
+    .tag-regulatory{background:#e3f2fd;color:#1565c0;}
+    .tag-market{background:#e8f5e9;color:#1a5c2a;}
+    .tag-technology{background:#e0f2f1;color:#00695c;}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#555;}
+    .legend-dot{width:12px;height:12px;border-radius:50%;}
+    footer{background:#111111;color:#bdbdbd;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--rx-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Aviation War (RX)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key aviation war &amp; confiscation events 1970–2024</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#b71c1c;"></div> Hijacking / Terrorism</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100;"></div> Confiscation / State</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6a1b9a;"></div> Shoot-down / Military</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1565c0;"></div> Regulatory / Convention</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1a5c2a;"></div> Market Structural</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00695c;"></div> Technology / Spoofing</div>
+  </div>
+
+  <div class="filters">
+    <button class="active" onclick="filterTL('all',this)">All Events</button>
+    <button data-t="hijacking" onclick="filterTL('hijacking',this)">Hijacking / Terrorism</button>
+    <button data-t="confiscation" onclick="filterTL('confiscation',this)">Confiscation / State</button>
+    <button data-t="shootdown" onclick="filterTL('shootdown',this)">Shoot-down / Military</button>
+    <button data-t="regulatory" onclick="filterTL('regulatory',this)">Regulatory / Convention</button>
+    <button data-t="market" onclick="filterTL('market',this)">Market Structural</button>
+    <button data-t="technology" onclick="filterTL('technology',this)">Technology / Spoofing</button>
+  </div>
+
+  <div class="timeline" id="tl"></div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Aviation War &amp; Confiscation (RX) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+const EVENTS = [
+  {y:"1970",t:"hijacking",title:"Dawson's Field — PFLP Multi-Hijacking",body:"PFLP hijacks four commercial aircraft simultaneously. Three (TWA 741, Swissair 100, BOAC 775) are flown to Dawson's Field, Jordan, and destroyed after passengers evacuated. A fourth (Pan Am 093) is flown to Cairo and also destroyed. The first coordinated multi-aircraft hijacking causes substantial hull war losses and triggers urgent review of aviation war policy capacity."},
+  {y:"1970",t:"regulatory",title:"Hague Convention — Unlawful Seizure of Aircraft",body:"Convention for the Suppression of Unlawful Seizure of Aircraft signed at The Hague. Obligates signatory states to make hi-jacking a serious criminal offence and to prosecute or extradite offenders. Fundamental international framework underpinning the legality of aviation war peril coverage for hi-jacking. [L3]"},
+  {y:"1972",t:"regulatory",title:"Montreal Convention — Sabotage Framework",body:"Convention for the Suppression of Unlawful Acts against the Safety of Civil Aviation (Montreal 1971) enters into force. Extends the Hague framework to cover sabotage, bomb attacks on aircraft and attacks on airports — creating the international legal architecture within which aviation war malicious damage perils are defined. [L4]"},
+  {y:"1976",t:"hijacking",title:"Entebbe Crisis — Air France",body:"Air France Flight 139 (Tel Aviv-Athens-Paris) hijacked by PFLP and German Revolutionary Cells; aircraft diverted to Entebbe, Uganda with Idi Amin's connivance. Israeli Defence Force Operation Thunderbolt (3 July 1976) rescues hostages. Three hostages and one IDF soldier killed. State-supported hijacking tests the non-state/state actor boundary in aviation war coverage."},
+  {y:"1983",t:"shootdown",title:"Korean Air 007 — Soviet Shoot-Down",body:"Korean Air Lines Flight 007 (New York-Seoul) shot down by Soviet Su-15 interceptor over Sakhalin Island after navigational error leads it into Soviet airspace. All 269 aboard killed. Soviet Union initially denies involvement. The shoot-down of a commercial airliner by a state military aircraft is a defining hull war and liability war event — $100m+ estimated insured loss."},
+  {y:"1988",t:"hijacking",title:"Lockerbie — Pan Am 103 Bombing",body:"Pan Am Flight 103 (London Heathrow-New York JFK) destroyed by bomb in luggage hold over Lockerbie, Scotland. 270 killed. Libya later attributed. $300m+ estimated insured loss across hull war, liability war and ground damage claims. Lockerbie establishes aviation terrorism as a catastrophic, mass-casualty aviation war peril and drives significant market rate hardening. [I1]"},
+  {y:"1991",t:"confiscation",title:"Gulf War — Kuwait Airways Fleet Confiscation",body:"Iraq's invasion of Kuwait in August 1990 leads to the seizure of Kuwait Airways' entire fleet — 15 aircraft confiscated. Following the Gulf War, Iraq does not return the fleet; Kuwait Airways pursues claims through international courts. The confiscation claim — one of the first major state-actor aircraft confiscation insurance events of the modern era — is eventually settled after extensive litigation."},
+  {y:"1994",t:"regulatory",title:"ICAO Conflict Zone Framework — Early Development",body:"ICAO begins systematic development of conflict zone risk assessment guidance following Gulf War airspace incidents. Early precursor to the Conflict Zone Information Repository (Doc 10108). Establishes the principle that ICAO member states have an obligation to share information about risks to civil aviation from armed conflict. [I2]"},
+  {y:"2001",t:"hijacking",title:"9/11 — Four Aircraft; $3.5bn War Loss",body:"Four US commercial aircraft hijacked by Al-Qaeda; two destroy WTC, one hits Pentagon, one crashes in Pennsylvania. All 2,977 on board and on the ground killed. Estimated hull war and liability war insured losses exceed $3.5bn — the largest aviation war loss in history at the time. 7-day cancellation of terrorism cover exercised immediately across the Lloyd's market; TRIA enacted 2002 as government backstop. [L9] [I4]"},
+  {y:"2002",t:"market",title:"TRIA 2002 — US Terrorism Backstop Enacted",body:"Terrorism Risk Insurance Act 2002 signed. Creates federal backstop for certified acts of terrorism — requires US insurers to offer terrorism cover with government reinsurance of 90%+ above attachment point. Aviation war terrorism cover in the US now available again with TRIA support. Lloyd's and the international market separately develop bespoke aviation war terrorism wordings that complement TRIA. [L9]"},
+  {y:"2003",t:"market",title:"Post-9/11 Market Restructuring — Terrorism Split from War",body:"The aviation war market formally separates war cover (state actor conflict) from terrorism cover (non-state actor politically motivated violence) in underwriting and rating terms following the 9/11 experience. Different rate components, different cancellability provisions, and different reinsurance structures apply to each sub-peril. This bifurcation remains the structural basis of modern RX policies."},
+  {y:"2010",t:"shootdown",title:"Ethiopian Airlines Shoot-Down Risk — Somalia Airspace",body:"Heightened concern about MANPADS threats to commercial aircraft over Somalia and the Horn of Africa following surge in Somali piracy and militia activity. ICAO and IATA issue guidance on minimum safe altitude requirements for aircraft transiting conflict zone airspace. Systematic altitude-based MANPADS risk assessment introduced into aviation war underwriting for the first time. [I2]"},
+  {y:"2014",t:"shootdown",title:"MH17 — Malaysia Airlines Shoot-Down, Ukraine",body:"Malaysia Airlines Flight MH17 (Amsterdam-Kuala Lumpur) shot down over eastern Ukraine by Russian military Buk SA-11 missile; 298 killed. ~$180m estimated insured hull war and liability war loss. Post-MH17 airspace restrictions imposed over eastern Ukraine. Industry-wide overfly risk reassessment; dozens of airlines re-route. ICAO issues conflict zone information repository guidance. [I5]"},
+  {y:"2014",t:"regulatory",title:"Ukraine Airspace Restrictions — Post-MH17 NOTAM",body:"Following MH17, ICAO member states and airlines implement airspace restrictions over eastern Ukraine. NOTAMs (Notices to Airmen) are issued restricting or banning commercial overflights above specified altitudes in designated conflict zones. The systematic use of NOTAMs as a real-time aviation war risk management tool becomes embedded practice for underwriters and insureds. [I2]"},
+  {y:"2019",t:"market",title:"Conflict Zone — Iran/Strait of Hormuz Tension",body:"Iranian seizure of oil tankers and US-Iran tensions in the Strait of Hormuz create heightened aviation war risk for aircraft overflying the Persian Gulf. Iraq and Iranian airspace placed under enhanced monitoring. Several airlines divert routes to avoid Iranian airspace. Aviation war underwriters review 48-hour cancellation exposure for Gulf-route aircraft; some individual aircraft endorsed with specific conflict zone conditions."},
+  {y:"2020",t:"shootdown",title:"Ukraine Airlines PS752 — Shot Down by Iran",body:"Ukraine International Airlines Flight PS752 (Tehran-Kyiv) shot down by two Iranian Tor surface-to-air missiles minutes after take-off from Tehran on 8 January 2020. All 176 aboard killed. Iran initially denied responsibility; later admitted the shoot-down was an 'unintentional' military error. Hull war and liability war claims filed. Demonstrates ongoing shoot-down risk for commercial aircraft operating in or near active military operations."},
+  {y:"2021",t:"confiscation",title:"Ryanair FR4978 — Belarus Forced Landing",body:"Ryanair Flight FR4978 (Athens-Vilnius) intercepted by Belarusian MiG-29 and forced to land in Minsk; journalist Roman Protasevich arrested. False bomb threat used as pretext. State-directed interference with a commercial aircraft in international airspace. Aviation war market examines whether hi-jacking or confiscation coverage is triggered; EU and ICAO condemn the interception. Belarus aviation connections suspended by EU. [L3]"},
+  {y:"2022",t:"confiscation",title:"Russia — ~900 Aircraft Confiscated; $10–13bn Loss",body:"Russia's invasion of Ukraine (February 2022) triggers Western sanctions. Lessors (AerCap, Air Lease, SMBC, GECAS et al.) ordered to repossess aircraft from Russian airlines. Russia passes legislation allowing Russian-registered aircraft to remain; ~900 aircraft worth $10–13bn are not returned. Largest confiscation loss event in aviation history. Confiscation/expropriation claims filed across Lloyd's and international reinsurers. Litigation ongoing in Ireland, US, UK and Bermuda. [I7] [L5]"},
+  {y:"2022",t:"regulatory",title:"Ukraine Airspace Closure — Full Ban",body:"Ukraine declares total closure of its airspace to civilian aircraft from 24 February 2022 following Russia's invasion. Russian airspace simultaneously closed to EU/US airlines in retaliation for sanctions. Multiple major international routes disrupted permanently. Overflights of Ukraine, Belarus and Russia by Western carriers suspended. Aviation war underwriters immediately activate conflict zone monitoring and review 7-day cancellation exposures."},
+  {y:"2023",t:"technology",title:"GNSS Spoofing — GPS Jamming over Mediterranean, Baltic and Middle East",body:"Systematic GPS/GNSS spoofing and jamming affecting commercial aircraft navigation intensifies in the Eastern Mediterranean, Baltic Sea region and Middle East. Incidents recorded near Cyprus, the Greek islands, Finland/Estonia border and Iraq/Iran. Aircraft receive false position data; autopilot system errors. ICAO and EASA issue safety warnings. Aviation war underwriters begin examining whether GNSS spoofing is an insured war peril if state-directed or an all-risks navigation peril. [I2]"}
+];
+
+const tagClass = {hijacking:'tag-hijacking',confiscation:'tag-confiscation',shootdown:'tag-shootdown',regulatory:'tag-regulatory',market:'tag-market',technology:'tag-technology'};
+const tagLabel = {hijacking:'Hijacking / Terrorism',confiscation:'Confiscation / State',shootdown:'Shoot-down / Military',regulatory:'Regulatory / Convention',market:'Market Structural',technology:'Technology / Spoofing'};
+
+let active = 'all';
+
+function filterTL(type, btn) {
+  active = type;
+  document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tl-item').forEach(el => {
+    el.classList.toggle('show', type === 'all' || el.dataset.t === type);
+  });
+}
+
+const tl = document.getElementById('tl');
+tl.innerHTML = EVENTS.map((e,i) => `
+  <div class="tl-item show" data-t="${e.t}">
+    <div class="dot ${e.t}"></div>
+    <div class="tl-card">
+      <div class="yr">${e.y}</div>
+      <span class="type-tag ${tagClass[e.t]}">${tagLabel[e.t]}</span>
+      <h4>${e.title}</h4>
+      <p>${e.body}</p>
+    </div>
+  </div>
+`).join('');
+</script>
+</body>
+</html>

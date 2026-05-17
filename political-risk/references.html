@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>References — Political Risk — Risk Code Hub</title>
+  <style>
+    :root {
+      --pr:#283593; --pr-dark:#1a237e; --pv:#c62828;
+      --inv:#e65100; --gov:#00695c; --treaty:#6a1b9a;
+      --warn:#f57f17; --light:#f3f4fd; --border:#c5cae9;
+      --text:#1a1f3a; --muted:#5c6270;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #283593;
+    --hub-dark:      #1a237e;
+    --hub-light:     #e8eaf6;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#00695c;
+    --header-gradient:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%);
+    --header-sub:    #c5cae9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#9fa8da; margin-bottom:6px; }
+    .breadcrumb a { color:#c5cae9; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#9fa8da; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#c5cae9; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pr); border-bottom-color:var(--pv); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pr); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--pv); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+    .b-g { background:#fdecea; color:#b71c1c; }
+
+    .ref-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:20px 0; }
+    .ref-table th { background:var(--pr); color:#fff; padding:11px 14px; font-size:0.8rem; text-align:left; }
+    .ref-table td { padding:10px 14px; font-size:0.83rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.6; }
+    .ref-table tr:last-child td { border-bottom:none; }
+    .ref-table tr:hover td { background:#f0f3ff; }
+    .ref-table .src-title { font-weight:600; color:var(--pr-dark); }
+    .ref-table a { color:var(--pr); text-decoration:none; }
+    .ref-table a:hover { text-decoration:underline; }
+    .ref-num { font-size:0.78rem; font-weight:700; color:var(--muted); }
+
+    .audit-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:20px 0; font-size:0.83rem; }
+    .audit-table th { background:var(--treaty); color:#fff; padding:10px 13px; text-align:left; }
+    .audit-table td { padding:9px 13px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .audit-table tr:last-child td { border-bottom:none; }
+    .audit-table tr:hover td { background:#f8f0ff; }
+
+    .gap-box { background:#fdecea; border:1px solid #ef9a9a; border-radius:10px; padding:18px 22px; margin:20px 0; }
+    .gap-box h3 { color:var(--pv); font-size:0.95rem; margin-bottom:8px; }
+    .gap-box ul { padding-left:18px; }
+    .gap-box li { font-size:0.87rem; margin-bottom:5px; line-height:1.6; }
+
+    .info-box { background:var(--pr-dark); color:#c5cae9; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#e8eaf6; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#c5cae9; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    footer { background:var(--pr-dark); color:#9fa8da; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Political Risk</a> › References</div>
+  <div class="tag">Lloyd's Code · PR</div>
+  <h1>References &amp; Sources</h1>
+  <p>Primary sources, international conventions, treaty databases, market intelligence sources, confidence badge methodology, and known data gaps underpinning the Political Risk hub.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html" class="active">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>All content in the Political Risk hub has been compiled from publicly available primary legal instruments, international body publications, ICSID/UNCTAD databases, industry body reports, and academic literature. Where data is derived from proprietary market sources, estimates, or illustrative modelling, the relevant confidence badge (VER / EST / ILLUS / GAP) is applied throughout the modules.</p>
+
+  <div class="info-box">
+    <h3>Confidence Badge Framework</h3>
+    <ul>
+      <li><span style="background:#e6f4ea;color:#1a5c28;padding:1px 6px;border-radius:8px;font-size:0.75rem;font-weight:700;">VER</span> <strong>Verified</strong> — Sourced from a named primary or authoritative secondary source; fact-checked against original material</li>
+      <li><span style="background:#fef3e2;color:#7a4500;padding:1px 6px;border-radius:8px;font-size:0.75rem;font-weight:700;">EST</span> <strong>Estimated</strong> — Reasonable market estimate based on comparable data or disclosed ranges; specific to this hub's context</li>
+      <li><span style="background:#cce5ff;color:#004085;padding:1px 6px;border-radius:8px;font-size:0.75rem;font-weight:700;">ILLUS</span> <strong>Illustrative</strong> — Hypothetical example constructed to demonstrate a concept or calculation; not a real transaction</li>
+      <li><span style="background:#fdecea;color:#b71c1c;padding:1px 6px;border-radius:8px;font-size:0.75rem;font-weight:700;">GAP</span> <strong>Data Gap</strong> — Material data exists but is not publicly available; disclosure limitation noted</li>
+    </ul>
+  </div>
+
+  <h2>International Conventions &amp; Treaties</h2>
+  <table class="ref-table">
+    <thead>
+      <tr><th>#</th><th>Source</th><th>Relevance to Hub</th><th>URL / Location</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ref-num">T1</td>
+        <td><span class="src-title">ICSID Convention (Convention on the Settlement of Investment Disputes between States and Nationals of Other States), 1965</span></td>
+        <td>Foundation of investment arbitration; Article 54 enforcement mechanism; 158 contracting states as of 2024. Referenced throughout underwriting, risk-mitigation, global-program modules.</td>
+        <td><a href="https://icsid.worldbank.org/resources/rules-and-regulations/convention" target="_blank">icsid.worldbank.org</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">T2</td>
+        <td><span class="src-title">MIGA Convention (Convention Establishing the Multilateral Investment Guarantee Agency), 1985; entered force 1988</span></td>
+        <td>Establishes MIGA's mandate to provide PRI; Article 18 subrogation rights; preferred creditor status. Referenced in global-program, risk-mitigation modules.</td>
+        <td><a href="https://www.miga.org/convention" target="_blank">miga.org/convention</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">T3</td>
+        <td><span class="src-title">Energy Charter Treaty (ECT), 1994 (entered force 1998)</span></td>
+        <td>Multilateral investment protection for energy sector; Part III investor protections; Article 26 ISDS; withdrawal crisis 2022–24. Referenced in history, timeline, risk-mitigation modules.</td>
+        <td><a href="https://www.energycharter.org/process/energy-charter-treaty-1994/energy-charter-treaty/" target="_blank">energycharter.org</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">T4</td>
+        <td><span class="src-title">UNCITRAL Arbitration Rules (2013 revision)</span></td>
+        <td>Primary alternative to ICSID for investor-state arbitration; New York Convention enforcement. Referenced in underwriting, risk-mitigation, global-program modules.</td>
+        <td><a href="https://uncitral.un.org/en/texts/arbitration/contractualtexts/arbitration" target="_blank">uncitral.un.org</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">T5</td>
+        <td><span class="src-title">New York Convention on Recognition and Enforcement of Foreign Arbitral Awards, 1958</span></td>
+        <td>Enforcement of UNCITRAL awards in 170+ contracting states; distinction from ICSID Convention Article 54. Referenced in risk-mitigation module.</td>
+        <td><a href="https://uncitral.un.org/en/texts/arbitration/conventions/foreign_arbitral_awards" target="_blank">uncitral.un.org</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">T6</td>
+        <td><span class="src-title">OECD Convention on Combating Bribery of Foreign Public Officials in International Business Transactions, 1997</span></td>
+        <td>Anti-corruption obligation; FCPA/UK Bribery Act parallel; corruption exclusion in PRI policies. Referenced in risk-mitigation module.</td>
+        <td><a href="https://www.oecd.org/en/topics/sub-issues/anti-bribery-convention.html" target="_blank">oecd.org</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">T7</td>
+        <td><span class="src-title">Voluntary Principles on Security and Human Rights (VPSHR), 2000</span></td>
+        <td>Security risk management framework for extractive industries; breach can void PV coverage; referenced in risk-mitigation module.</td>
+        <td><a href="https://www.voluntaryprinciples.org" target="_blank">voluntaryprinciples.org</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>International Body &amp; Database Sources</h2>
+  <table class="ref-table">
+    <thead>
+      <tr><th>#</th><th>Source</th><th>Relevance to Hub</th><th>URL / Location</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ref-num">D1</td>
+        <td><span class="src-title">UNCTAD Investment Policy Hub — BIT Database</span></td>
+        <td>Primary source for confirming BITs in force by country pair; includes ratification status, survival clause data, ISDS provisions. Essential for risk-mitigation BIT verification check.</td>
+        <td><a href="https://investmentpolicy.unctad.org" target="_blank">investmentpolicy.unctad.org</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">D2</td>
+        <td><span class="src-title">ICSID Caseload Statistics — Annual Report (2024)</span></td>
+        <td>Case registration volumes by sector and region; award/settlement outcomes; claim values. Referenced in timeline, database, and underwriting modules for claim frequency/severity data.</td>
+        <td><a href="https://icsid.worldbank.org/resources/publications/icsid-caseload-statistics" target="_blank">icsid.worldbank.org</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">D3</td>
+        <td><span class="src-title">MIGA World Investment and Political Risk Report (annual)</span></td>
+        <td>Annual survey of PRI market capacity, claim trends, ECA activity, investor attitudes to political risk. Key industry benchmark source. Referenced in overview, rates-analysis modules.</td>
+        <td><a href="https://www.miga.org/resources/publications" target="_blank">miga.org/resources</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">D4</td>
+        <td><span class="src-title">UNCTAD World Investment Report (annual)</span></td>
+        <td>Global FDI flows by region; investment protection trends; policy environment index. Referenced in overview statistics and history modules.</td>
+        <td><a href="https://unctad.org/topic/investment/world-investment-report" target="_blank">unctad.org</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">D5</td>
+        <td><span class="src-title">IMF World Economic Outlook — Country Data</span></td>
+        <td>GDP growth, reserve coverage, fiscal position, current account data used in country risk tier assessment and CI/TR underwriting module.</td>
+        <td><a href="https://www.imf.org/en/Publications/WEO" target="_blank">imf.org/WEO</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">D6</td>
+        <td><span class="src-title">World Bank Doing Business / Business Ready Report</span></td>
+        <td>Regulatory environment, rule of law, contract enforcement data by country. Incorporated in country risk tier framework in underwriting module.</td>
+        <td><a href="https://www.worldbank.org/en/businessready" target="_blank">worldbank.org/businessready</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">D7</td>
+        <td><span class="src-title">PRS Group — Political Risk Services (ICRG)</span></td>
+        <td>International Country Risk Guide; proprietary political, financial and economic risk scores. Standard reference for country tier calibration; quoted in underwriting module tier brackets.</td>
+        <td><a href="https://www.prsgroup.com" target="_blank">prsgroup.com</a> (subscription)</td>
+      </tr>
+      <tr>
+        <td class="ref-num">D8</td>
+        <td><span class="src-title">Verisk Maplecroft — Political Risk Atlas</span></td>
+        <td>Country-level political risk indices: expropriation, political violence, currency, supply chain. Used for risk-mitigation early warning indicators module.</td>
+        <td><a href="https://www.maplecroft.com" target="_blank">maplecroft.com</a> (subscription)</td>
+      </tr>
+      <tr>
+        <td class="ref-num">D9</td>
+        <td><span class="src-title">Control Risks — RiskMap (annual)</span></td>
+        <td>Security and political risk country assessments; operational de-risking guidance. Referenced in risk-mitigation operational section and rates-analysis.</td>
+        <td><a href="https://www.controlrisks.com/riskmap" target="_blank">controlrisks.com</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Lloyd's Market &amp; Industry Sources</h2>
+  <table class="ref-table">
+    <thead>
+      <tr><th>#</th><th>Source</th><th>Relevance to Hub</th><th>URL / Location</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ref-num">M1</td>
+        <td><span class="src-title">Lloyd's Market Association (LMA) — Political Risk Model Clauses</span></td>
+        <td>LMA policy wording framework for PRI; CEND, CI/TR, PV, CF definitions; waiting period provisions; claims cooperation clauses. Foundational for underwriting and global-program modules.</td>
+        <td><a href="https://www.lmalloyds.com" target="_blank">lmalloyds.com</a> (member access)</td>
+      </tr>
+      <tr>
+        <td class="ref-num">M2</td>
+        <td><span class="src-title">Berne Union — Annual Yearbook &amp; Statistics</span></td>
+        <td>ECA and private PRI market aggregate statistics; new business volumes, claims paid, recoveries, membership data. Key source for market size data in overview and rates-analysis modules.</td>
+        <td><a href="https://www.berneunion.org/statistics" target="_blank">berneunion.org</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">M3</td>
+        <td><span class="src-title">Aon / WTW / Marsh — Political Risk Surveys (annual)</span></td>
+        <td>Broker market surveys of insurer appetite, capacity, rate movement, and risk perception by territory. Referenced for rate benchmark data in rates-analysis module.</td>
+        <td>Available from major broker research portals</td>
+      </tr>
+      <tr>
+        <td class="ref-num">M4</td>
+        <td><span class="src-title">UK Export Finance (UKEF) — Country Buyer Credit Premium Rates</span></td>
+        <td>Published OECD Consensus country risk premia by category (1–7); primary benchmark for country risk tier rate calibration in underwriting module.</td>
+        <td><a href="https://www.gov.uk/guidance/country-cover-policy-and-indicators" target="_blank">gov.uk/UKEF</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">M5</td>
+        <td><span class="src-title">OECD — Country Risk Classification (Knaepen Package)</span></td>
+        <td>Official OECD country risk categories (0–7) used by ECA premia; foundational for underwriting module tier framework. Updated bi-annually.</td>
+        <td><a href="https://www.oecd.org/trade/topics/export-credits/arrangements-and-guidelines/country-risk-classifications/" target="_blank">oecd.org</a></td>
+      </tr>
+      <tr>
+        <td class="ref-num">M6</td>
+        <td><span class="src-title">ICISA (International Credit Insurance &amp; Surety Association) — Annual Report</span></td>
+        <td>Trade credit, surety and political risk market data; overlap with CI/TR and NHSO product lines; market capacity trends.</td>
+        <td><a href="https://www.icisa.org" target="_blank">icisa.org</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Key Case Law &amp; Arbitral Awards</h2>
+  <table class="ref-table">
+    <thead>
+      <tr><th>#</th><th>Case / Award</th><th>Significance</th><th>Outcome</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ref-num">C1</td>
+        <td><span class="src-title">ConocoPhillips v Venezuela — ICSID Case No. ARB/07/30</span></td>
+        <td>Venezuelan oil industry nationalisation (2007); largest ICSID case by quantum at time of award. Landmark on valuation methodology (market value vs. book value) for expropriated oil assets.</td>
+        <td>$8.7bn awarded to ConocoPhillips (2019); enforcement proceedings ongoing. <span class="badge b-v">VER</span></td>
+      </tr>
+      <tr>
+        <td class="ref-num">C2</td>
+        <td><span class="src-title">Occidental Petroleum v Ecuador — ICSID Case No. ARB/06/11</span></td>
+        <td>Ecuador terminated OXY's oil licence (2006); ICSID awarded $1.77bn — one of the largest awards against Ecuador. Disputed and reduced on appeal to $1.06bn (2015).</td>
+        <td>Final: ~$1.06bn paid by Ecuador. Landmark on proportionality in expropriation. <span class="badge b-v">VER</span></td>
+      </tr>
+      <tr>
+        <td class="ref-num">C3</td>
+        <td><span class="src-title">Repsol v Argentina — ICSID Case No. ARB/12/38 (YPF nationalisation)</span></td>
+        <td>Argentina's 2012 expropriation of Repsol's YPF stake; settled outside ICSID award for $5bn (2014).</td>
+        <td>$5bn settlement (2014); established negotiated settlement as alternative to full arbitration. <span class="badge b-v">VER</span></td>
+      </tr>
+      <tr>
+        <td class="ref-num">C4</td>
+        <td><span class="src-title">Yukos v Russia — PCA Cases AA226, AA227, AA228</span></td>
+        <td>Largest international arbitral award in history ($50bn, 2014) against Russia for expropriation of Yukos oil company. Overturned by Dutch courts (2021); restored by appeals (2021); enforcement complex post-2022.</td>
+        <td>$50bn award (2014); enforcement status contested post-2022 sanctions environment. <span class="badge b-v">VER</span></td>
+      </tr>
+      <tr>
+        <td class="ref-num">C5</td>
+        <td><span class="src-title">Vattenfall v Germany I &amp; II — ICSID (ECT cases)</span></td>
+        <td>Two ECT cases by Vattenfall against Germany: I (Hamburg environmental restrictions, settled 2011); II (nuclear phase-out compensation, €4.7bn, withdrawn 2021 after settlement).</td>
+        <td>Both settled; precedent for regulatory expropriation via energy transition policy — driving ECT reform crisis. <span class="badge b-v">VER</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Per-Module Confidence Audit</h2>
+  <table class="audit-table">
+    <thead>
+      <tr>
+        <th>Module</th>
+        <th>VER Facts (primary source)</th>
+        <th>EST / ILLUS Content</th>
+        <th>Known Gaps</th>
+        <th>Overall Confidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Overview</strong></td>
+        <td>Market size ($13bn Berne Union 2023), cover definitions, ICSID member count, key participant names</td>
+        <td>Capacity estimates by participant type; rate range illustrative</td>
+        <td>No published split of Lloyd's PR market by cover type</td>
+        <td><span class="badge b-v">VER</span> High</td>
+      </tr>
+      <tr>
+        <td><strong>History</strong></td>
+        <td>Cuba nationalisation (~$1.8bn), OPIC/DFC creation, Iran hostage crisis, Chile copper mines, BIT count (2,000+ by 2000), Venezuela ConocoPhillips award, Russia/Ukraine $40bn+ exposure estimate</td>
+        <td>$40bn+ Russia/Ukraine combined figure is industry estimate (Berne Union / broker reports), not disclosed claims data</td>
+        <td>Individual insurer loss triangles for Venezuela/Russia not publicly disclosed</td>
+        <td><span class="badge b-v">VER</span> High for facts; <span class="badge b-e">EST</span> for quantum</td>
+      </tr>
+      <tr>
+        <td><strong>Timeline</strong></td>
+        <td>All 20 events sourced from verifiable public record (ICSID, UNCTAD, news archives, government announcements)</td>
+        <td>Market impact assessments (e.g., premium movements post-event) are qualitative/estimated</td>
+        <td>Precise claim payments per event are commercially confidential</td>
+        <td><span class="badge b-v">VER</span> High for events; <span class="badge b-e">EST</span> for market impact</td>
+      </tr>
+      <tr>
+        <td><strong>Claims Database</strong></td>
+        <td>35 events; event facts, participants, legal outcomes VER against ICSID, UNCTAD, news sources</td>
+        <td>Insured loss estimates for several events (e.g., Crimea ~$3bn, Sahel coup losses) are market estimates</td>
+        <td>Individual policy claim data — commercially confidential; Lloyd's aggregate PR loss data not published separately</td>
+        <td><span class="badge b-e">EST</span> Medium-High (facts VER, quantum EST)</td>
+      </tr>
+      <tr>
+        <td><strong>Underwriting</strong></td>
+        <td>Rating formula structure; cover type definitions; sector risk rankings are market practice; OECD country risk category alignment</td>
+        <td>All rate ranges (0.10%–6%+), multipliers, and worked example premiums are illustrative market estimates</td>
+        <td>No published Lloyd's PR rate card; individual syndicate rating models proprietary</td>
+        <td><span class="badge b-i">ILLUS</span> for rates; <span class="badge b-v">VER</span> for framework</td>
+      </tr>
+      <tr>
+        <td><strong>Rates &amp; ROE</strong></td>
+        <td>Market cycle narrative aligns with published Berne Union / broker reports; post-2022 Russia/Ukraine rate hardening widely documented</td>
+        <td>All rate index figures, ROE scenarios, and rate tables are illustrative / estimated; not from a disclosed Lloyd's rate monitor</td>
+        <td>Lloyd's does not publish PR rate indices; individual syndicate ROE for PR class not disclosed</td>
+        <td><span class="badge b-e">EST</span> / <span class="badge b-i">ILLUS</span> throughout</td>
+      </tr>
+      <tr>
+        <td><strong>Risk Mitigation</strong></td>
+        <td>BIT provisions (VER — UNCTAD); ICSID/UNCITRAL mechanisms (VER — conventions); MIGA subrogation (VER — MIGA Convention Art.18); VPSHR (VER — published standard); operational risk practices (market practice)</td>
+        <td>Rate credits for BIT/MIGA involvement are indicative; no published grid</td>
+        <td>Insurer-specific rate credits for structural mitigation not publicly disclosed</td>
+        <td><span class="badge b-v">VER</span> High for frameworks; <span class="badge b-e">EST</span> for pricing effects</td>
+      </tr>
+      <tr>
+        <td><strong>Global Programme</strong></td>
+        <td>Tower architecture based on market practice; MIGA preferred creditor status (VER); ECA government leverage mechanism (VER — OECD Consensus); ICSID award enforcement (VER — ICSID Convention Article 54)</td>
+        <td>All premium calculations in case study are illustrative (ILLUS); MIGA rate, UKEF rate, Lloyd's blended rate are indicative</td>
+        <td>Specific multi-insurer co-placement pricing is commercially confidential</td>
+        <td><span class="badge b-i">ILLUS</span> for case study; <span class="badge b-v">VER</span> for structure</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Known Data Gaps</h2>
+
+  <div class="gap-box">
+    <h3>⚠ Material Data Gaps — Flagged for Future Enhancement</h3>
+    <ul>
+      <li><span class="badge b-g">GAP 1</span> <strong>Lloyd's PR Class Loss Statistics:</strong> Lloyd's does not publish aggregate loss ratios, combined ratios, or gross written premium for the PR class separately. All market-level financial data in this hub is estimated from Berne Union aggregate (public + private market combined) and broker survey sources. A dedicated Lloyd's PR class performance disclosure would significantly improve the rates-analysis module.</li>
+      <li><span class="badge b-g">GAP 2</span> <strong>Individual Insurer Exposure to Russia/Ukraine:</strong> While industry estimates for total insured exposure to Russia/Ukraine put the figure at $40bn+, individual insurer gross and net exposures are not publicly disclosed. The quantum of claims paid, reserved, or disputed by Lloyd's syndicates versus AIG, Zurich, AXA XL is commercially confidential. This hub uses Berne Union and broker estimates as proxies.</li>
+      <li><span class="badge b-g">GAP 3</span> <strong>ECA Claims Data by Territory:</strong> National ECAs (UKEF, US Ex-Im, Euler Hermes) publish aggregate annual claims data but not detailed country-by-country or event-level claim records. This limits the granularity achievable in the claims database module for ECA-covered losses.</li>
+      <li><span class="badge b-g">GAP 4</span> <strong>Sub-Sovereign CEND Pricing:</strong> Rating approaches for CEND by sub-sovereign entities (state-owned enterprises, municipal governments) versus central government counterparties are not publicly documented. The underwriting module treats these together with a government counterparty loading; individual syndicate approaches vary.</li>
+      <li><span class="badge b-g">GAP 5</span> <strong>PRI Recovery / Subrogation Data:</strong> Aggregate recovery rates from subrogation proceedings (ICSID awards, BIT recoveries, settlement) are not publicly reported by commercial insurers. The hub notes the structural mechanisms but cannot quantify actual recovery rates for the Lloyd's PR book.</li>
+    </ul>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Political Risk (PR) · Lloyd's Market Intelligence · v3.2 April 2026
+</footer>
+</body>
+</html>

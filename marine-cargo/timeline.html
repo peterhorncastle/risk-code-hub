@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Timeline — Marine Cargo — Risk Code Hub</title>
+  <style>
+    :root {
+      --mc:#1565c0; --mc-dark:#0d2137; --icc:#00695c;
+      --fire:#c62828; --ga:#6a1b9a; --warn:#e65100;
+      --light:#e3f2fd; --border:#bbdefb; --text:#0d1b2e; --muted:#546e7a;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1565c0;
+    --hub-dark:      #0d2137;
+    --hub-light:     #e8f0fa;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #00695c;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%);
+    --header-sub:    #bbdefb;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90caf9; margin-bottom:6px; }
+    .breadcrumb a { color:#bbdefb; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#90caf9; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#bbdefb; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--mc); border-bottom-color:var(--fire); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--mc); margin:36px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+
+    .legend { display:flex; gap:16px; flex-wrap:wrap; margin:0 0 32px; }
+    .leg-item { display:flex; align-items:center; gap:6px; font-size:0.8rem; font-weight:600; }
+    .leg-dot { width:12px; height:12px; border-radius:50%; }
+
+    .timeline { position:relative; padding-left:44px; }
+    .timeline::before { content:''; position:absolute; left:16px; top:0; bottom:0; width:3px; background:linear-gradient(to bottom,var(--mc),var(--icc)); border-radius:2px; }
+    .tl-item { position:relative; margin-bottom:28px; }
+    .tl-dot { position:absolute; left:-36px; top:4px; width:18px; height:18px; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px var(--mc); background:var(--mc); }
+    .tl-dot.LOSS { background:var(--fire); box-shadow:0 0 0 2px var(--fire); }
+    .tl-dot.REG { background:var(--icc); box-shadow:0 0 0 2px var(--icc); }
+    .tl-dot.MKT { background:var(--ga); box-shadow:0 0 0 2px var(--ga); }
+    .tl-dot.GEO { background:var(--warn); box-shadow:0 0 0 2px var(--warn); }
+    .tl-dot.ACC { background:var(--mc-dark); box-shadow:0 0 0 2px var(--mc-dark); }
+
+    .tl-card { background:#fff; border-radius:10px; padding:18px 20px; border-left:4px solid var(--mc); box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+    .tl-card.LOSS { border-left-color:var(--fire); }
+    .tl-card.REG { border-left-color:var(--icc); }
+    .tl-card.MKT { border-left-color:var(--ga); }
+    .tl-card.GEO { border-left-color:var(--warn); }
+    .tl-card.ACC { border-left-color:var(--mc-dark); }
+    .tl-meta { display:flex; gap:10px; align-items:center; margin-bottom:6px; }
+    .tl-year { font-size:0.78rem; font-weight:700; color:var(--muted); }
+    .tl-type { font-size:0.66rem; font-weight:700; padding:1px 7px; border-radius:8px; }
+    .type-LOSS { background:#fdecea; color:#b71c1c; }
+    .type-REG { background:#e6f4ea; color:#1a5c28; }
+    .type-MKT { background:#f3e5f5; color:#6a1b9a; }
+    .type-GEO { background:#fff3e0; color:#e65100; }
+    .type-ACC { background:#eceff1; color:#37474f; }
+    .tl-card h3 { font-size:0.97rem; color:var(--text); margin-bottom:6px; }
+    .tl-card p { font-size:0.85rem; margin:0; line-height:1.65; color:var(--muted); }
+
+    footer { background:var(--mc-dark); color:#90caf9; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Cargo</a> › Timeline</div>
+  <div class="tag">Lloyd's Codes · V · Q · VL · VX</div>
+  <h1>Timeline 2003–2024</h1>
+  <p>Two decades of major loss events, regulatory milestones, market shifts, and geopolitical disruptions that have shaped the modern marine cargo insurance market.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--fire)"></div> LOSS — Major cargo loss event</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--icc)"></div> REG — Regulatory / legal milestone</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--ga)"></div> MKT — Market development</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--warn)"></div> GEO — Geopolitical / route disruption</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--mc-dark)"></div> ACC — Accumulation / systemic risk</div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2003</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>MSC Carla — Atlantic Fire &amp; Cargo Loss</h3>
+        <p>Severe fire aboard MSC Carla in the South Atlantic; significant cargo loss across multiple containers. Early example of the fire-at-sea risk that would grow in prominence with increasing vessel size and lithium-battery cargo. Triggered Lloyd's market focus on container fire risk accumulation. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot REG"></div>
+      <div class="tl-card REG">
+        <div class="tl-meta"><span class="tl-year">2004</span><span class="tl-type type-REG">REG</span></div>
+        <h3>ISPS Code — International Ship and Port Facility Security</h3>
+        <p>The IMO's International Ship and Port Facility Security (ISPS) Code entered full force (July 2004). Mandatory security assessments and plans for vessels and ports; enhanced cargo tracking and manifest requirements. Reduced cargo theft risk at ISPS-compliant ports; created new compliance obligations for cargo insurers assessing risk quality. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot GEO"></div>
+      <div class="tl-card GEO">
+        <div class="tl-meta"><span class="tl-year">2005</span><span class="tl-type type-GEO">GEO</span></div>
+        <h3>Somali Piracy Escalation Begins</h3>
+        <p>Somali-based piracy attacks on commercial shipping in the Gulf of Aden and Indian Ocean began escalating sharply from 2005. By 2010–2011, piracy attacks peaked at 445 incidents annually; war risk premiums for Gulf of Aden transit surged. The Joint War Committee (JWC) expanded its High Risk Area. Combined industry anti-piracy response (naval escorts, Best Management Practice) eventually suppressed activity by 2016. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2007</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>MSC Napoli Grounding — General Average Declaration</h3>
+        <p>MSC Napoli, disabled in the English Channel, was beached off Branscombe, Devon. General Average declared; thousands of containers discharged or lost. The beaching attracted widespread media coverage as locals removed goods from washing-up containers. Highlighted GA complexity — some cargo interests had no insurance and couldn't recover their goods without lodging GA security deposits. Insured cargo losses ~£120m. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot REG"></div>
+      <div class="tl-card REG">
+        <div class="tl-meta"><span class="tl-year">2009</span><span class="tl-type type-REG">REG</span></div>
+        <h3>Institute Cargo Clauses (2009) — Current Market Standard</h3>
+        <p>The LMA and IUA published the revised ICC (A), (B) and (C) clauses (effective 1 January 2009), replacing the 1982 edition as the market standard. Key updates: clearer interaction with multimodal transport; updated General Average reference; modernised termination of transit clause; revised dangerous goods exclusions; updated both-to-blame collision clause. The 2009 edition is the current operative wording for most new open covers. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2011</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>Thailand Floods — Inland Transit and Supply Chain Losses</h3>
+        <p>Unprecedented flooding in Thailand's central plains (July–December 2011) inundated seven major industrial estates, including the Hard Disk Drive (HDD) manufacturing hub at Ayutthaya. Total economic loss ~$45bn; insured loss ~$12bn. Cargo and inland transit losses for goods in transit and in flooded warehouses were a significant component. The floods exposed the concentration of global supply chains in single geographies. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2011</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>MV Rena Grounding — New Zealand</h3>
+        <p>Container ship Rena grounded on Ótāiti / Astrolabe Reef off Tauranga, New Zealand (October 2011). The vessel eventually broke apart; 900 containers lost or damaged; significant oil spill and environmental damage. General Average declared. New Zealand's largest maritime environmental disaster. Insured cargo and liability losses in excess of NZ$300m. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot MKT"></div>
+      <div class="tl-card MKT">
+        <div class="tl-meta"><span class="tl-year">2013</span><span class="tl-type type-MKT">MKT</span></div>
+        <h3>Mega-Vessel Era Begins — Triple-E Class Vessels</h3>
+        <p>Maersk Line launched the first of its Triple-E class (18,270 TEU) vessels — the largest container ships in the world at the time. The rapid scaling of vessel size (from 5,000 TEU in 2000 to 24,000 TEU by 2023) created a step-change in cargo accumulation risk. Lloyd's Realistic Disaster Scenarios (RDS) introduced a "mega-vessel fire/sinking" scenario as a mandatory accumulation stress test for syndicates writing marine cargo. <span class="badge b-e">EST</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2015</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>Tianjin Port Explosions — Largest Modern Port Accumulation Loss</h3>
+        <p>Massive explosions at the Tianjin port storage facility (12 August 2015) destroyed thousands of vehicles and containers. Total insured loss ~$3.3bn — the largest cargo and property accumulation loss at a single port in insurance history. 173 deaths. Exposed the accumulation of vehicle stock and container cargo at port — many cargo insurers had underestimated their aggregation at Tianjin. Triggered market-wide port accumulation PML reviews. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot REG"></div>
+      <div class="tl-card REG">
+        <div class="tl-meta"><span class="tl-year">2016</span><span class="tl-type type-REG">REG</span></div>
+        <h3>Insurance Act 2015 — Fair Presentation Duty</h3>
+        <p>The Insurance Act 2015 (in force 12 August 2016) reformed the pre-contractual duty of utmost good faith for all UK commercial insurance — including marine cargo. The "all or nothing" avoidance remedy was replaced with proportionate remedies: if the insured made a deliberate/reckless non-disclosure, the insurer may avoid; if innocent/negligent, proportionate reduction only. Open cover wordings updated across the Lloyd's market. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2017</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>NotPetya Cyber Attack — Supply Chain Cargo Impact</h3>
+        <p>The NotPetya ransomware attack (June 2017) hit Maersk's global IT systems, shutting down its terminal operating systems for approximately two weeks. An estimated 45,000 PCs and 4,000 servers wiped. Maersk reported losses of $250–300m. Cargo owners suffered business interruption and delivery delays — triggering debates about whether cyber-induced transit delay losses were covered under standard ICC open covers or excluded. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2018</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>Maersk Honam Fire — Largest Cargo Loss of 2018</h3>
+        <p>Fire broke out in a container aboard Maersk Honam in the Arabian Sea (March 2018); spread rapidly despite firefighting efforts; five crew killed. General Average declared; 30+ containers destroyed; total insured loss estimated at $600m–$1.4bn (cargo + hull + GA). Misdeclared dangerous goods (likely undeclared calcium hypochlorite) identified as probable cause. Focused market attention on dangerous goods misrepresentation in container cargo. <span class="badge b-e">EST</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot REG"></div>
+      <div class="tl-card REG">
+        <div class="tl-meta"><span class="tl-year">2019</span><span class="tl-type type-REG">REG</span></div>
+        <h3>IMO Sulphur Cap 2020 — Bunker Fuel Change</h3>
+        <p>IMO's global 0.5% sulphur cap on marine fuel (effective 1 January 2020) required vessels to switch from high-sulphur fuel oil (HSFO) to very low-sulphur fuel oil (VLSFO) or fit scrubbers. Cargo insurers assessed impact on fire risk (VLSFO has different flashpoint/combustion characteristics) and equipment failure risk during fuel changeover. No material claims wave materialised, but the transition period was a monitored risk. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot ACC"></div>
+      <div class="tl-card ACC">
+        <div class="tl-meta"><span class="tl-year">2020–21</span><span class="tl-type type-ACC">ACC</span></div>
+        <h3>COVID-19 — Port Congestion, Container Shortage and Supply Chain Fracture</h3>
+        <p>COVID-19 produced unprecedented supply chain dislocation: port congestion (LA/Long Beach backlogs of 100+ vessels), container shortages (empty boxes stranded in wrong locations), surging freight rates (Shanghai Containerized Freight Index up 10× in 12 months), and warehouse accumulation as goods piled up awaiting delivery. Cargo insurers saw increased claims for goods damaged in extended storage, spoilage of perishables, and pilferage from congested ports. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2021</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>Ever Given — Suez Canal Blockage and General Average</h3>
+        <p>MV Ever Given (20,388 TEU) grounded in the Suez Canal (23 March 2021), blocking the canal for six days and disrupting ~12% of world trade. General Average declared; estimated GA contribution 11.75% of cargo value; total GA fund estimate ~$900m across thousands of cargo interests. Ship refloated 29 March. Highlighted systemic fragility of the Suez route and the scale of GA exposure from a single ultra-large vessel grounding. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2021</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>MV X-Press Pearl — Largest Indian Ocean Environmental Disaster</h3>
+        <p>Container ship X-Press Pearl caught fire and sank off Colombo, Sri Lanka (May–June 2021). Cargo included 25 tonnes of nitric acid and other hazardous chemicals. Described as the worst maritime environmental disaster in the Indian Ocean; Sri Lanka's coastline severely affected. Cargo losses across hundreds of containers; total insured loss ~$100m+; P&I environmental liability claims continuing. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2022</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>Felicity Ace — EV/Luxury Vehicle Fire and Sinking</h3>
+        <p>MV Felicity Ace, carrying 3,965 Volkswagen Group vehicles (Porsche, Audi, Bentley, Lamborghini, VW), caught fire in the North Atlantic (February 2022) and sank. Multiple lithium-ion batteries in EVs/PHEVs ignited and proved extremely difficult to extinguish. Total insured loss ~$500m — the largest single vehicle cargo loss on record. Catalysed IMO and industry focus on li-ion battery fire risk in vehicle carriers and container vessels. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot MKT"></div>
+      <div class="tl-card MKT">
+        <div class="tl-meta"><span class="tl-year">2022–23</span><span class="tl-type type-MKT">MKT</span></div>
+        <h3>Market Hardening — Premium Rate Increases Across Cargo</h3>
+        <p>Following several years of underpriced cargo business and adverse loss experience (Tianjin, COVID accumulation, vessel fires), Lloyd's cargo market hardened significantly 2021–2023. Commodity trade accounts, electronics trades, and vehicle shipments saw premium rate increases of 15–40%. Lloyd's Performance Management Directorate flagged marine cargo as a line requiring rate adequacy improvement. Open cover automatic limits were reduced; higher deductibles applied. <span class="badge b-e">EST</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot GEO"></div>
+      <div class="tl-card GEO">
+        <div class="tl-meta"><span class="tl-year">2023</span><span class="tl-type type-GEO">GEO</span></div>
+        <h3>Panama Canal Drought — Vessel Restrictions and Rerouting</h3>
+        <p>Severe drought reduced water levels in Gatun Lake (the freshwater reservoir feeding the Panama Canal locks) to historic lows. The Panama Canal Authority imposed draft restrictions and reduced daily transits from 36 to 18 vessels. Cargo owners faced delays of 2–3 weeks; freight costs on Asia–US East Coast and LNG trades spiked. Highlighted climate-driven fragility of a second critical global trade chokepoint within two years of the Suez Canal blockage. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot GEO"></div>
+      <div class="tl-card GEO">
+        <div class="tl-meta"><span class="tl-year">2023–24</span><span class="tl-type type-GEO">GEO</span></div>
+        <h3>Red Sea Crisis — Houthi Attacks and War Risk Surge</h3>
+        <p>Houthi (Ansar Allah) forces began attacking commercial vessels in the Red Sea and Gulf of Aden from October 2023, citing solidarity with Gaza. Major shipping lines (Maersk, Hapag-Lloyd, MSC, CMA CGM) suspended Red Sea transits and rerouted via the Cape of Good Hope. JWC designated Red Sea as High Risk Area (December 2023). War risk premiums for Red Sea transit rose from 0.07% to 0.5–1.0%. Asia–Europe voyage times increased by 10–14 days, adding ~$1m per voyage in additional fuel cost. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot LOSS"></div>
+      <div class="tl-card LOSS">
+        <div class="tl-meta"><span class="tl-year">2024</span><span class="tl-type type-LOSS">LOSS</span></div>
+        <h3>Baltimore Bridge Collapse — Port Closure and Cargo Accumulation</h3>
+        <p>MV Dali (container ship, 10,000 TEU) lost power and struck the Francis Scott Key Bridge, Baltimore (26 March 2024). Bridge collapsed; six construction workers killed; Port of Baltimore closed for weeks. Estimated insured loss $1.5bn+ (hull, P&I liability, cargo delays, port business interruption). Largest single marine insured event of 2024 at time of writing. Highlighted cargo accumulation risk at US East Coast ports and the catastrophic loss potential of port infrastructure incidents. <span class="badge b-e">EST</span></p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Marine Cargo (V/Q/VL/VX) · Lloyd's Market Intelligence · v3.3 April 2026
+</footer>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Underwriting — Temporary Life &amp; Permanent Health (TL) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a1a7b;
+      --hub-dark:      #250a45;
+      --hub-light:     #f3e5ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #00796b;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#250a45 0%,#4a1a7b 55%,#6a1b9a 100%);
+      --header-sub:    #ce93d8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a0a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ce93d8;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#250a45;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ce93d8;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e1bee7;}
+    .factors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .factor{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);}
+    .factor.high{border-left-color:#c62828;}
+    .factor.med{border-left-color:#e65100;}
+    .factor.low{border-left-color:#4a1a7b;}
+    .factor .impact{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .factor h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .factor p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .factor .rate{font-size:0.78rem;font-weight:700;color:#c62828;margin-top:6px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #f3e5ff;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#faf0ff;}
+    .formula-box{background:#250a45;color:#ce93d8;border-radius:8px;padding:20px 24px;font-family:monospace;font-size:0.88rem;line-height:1.8;margin-bottom:24px;}
+    .formula-box .comment{color:#c8a84b;}
+    .worked{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px;border-top:4px solid var(--hub-primary);}
+    .worked.alt{border-top-color:var(--hub-accent);}
+    .worked h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .worked table{box-shadow:none;margin-bottom:0;}
+    .worked th{background:#4a1a7b;}
+    .info-box{background:#f3e5ff;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a0a2e;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#4a1a7b;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    footer{background:#250a45;color:#ce93d8;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Temporary Life &amp; Permanent Health (TL)</a> › Underwriting</div>
+    <div class="tag">Module 04</div>
+    <h1>Underwriting Methodology</h1>
+    <div class="sub">Rating factors, EPM methodology, benchmark rates, worked examples &amp; key exclusions</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- High impact rating factors -->
+  <div class="section-title">Rating Factors — High Impact</div>
+  <div class="factors-grid">
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Age</h4>
+      <p>The primary mortality and morbidity driver. Mortality rates approximately double every 8 years of age (Gompertz law). For term life, premium increases sharply from age 40 onward. For IP/PHI, both claim frequency and duration increase with age; benefit-to-retirement-age policies are priced substantially higher for older entrants. At Lloyd's: substandard lives at older ages require careful EPM assessment.<sup>[I4]</sup></p>
+      <div class="rate">Age 25 to 45 male non-smoker, £500k term: approximately 5–6× premium increase</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Medical History — Impaired Lives</h4>
+      <p>Existing or past medical conditions are the key differentiator for Lloyd's TL business. Standard market declines or rates prohibitively for conditions including: cancer (within 5 years), cardiac conditions, poorly controlled diabetes, HIV+, significant mental health history. Lloyd's specialist underwriters use EPM (extra mortality per mille) or percentage ratings to price the additional risk. CMR (Customer Medical Records) access is standard for lives above threshold sum assured.<sup>[I7]</sup></p>
+      <div class="rate">Well-controlled Type 2 diabetes: +50–200% extra premium; previous cancer (5yr+): +100–300%</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Sum Assured / Benefit Level</h4>
+      <p>Financial underwriting (insurable interest and income multiple checks) required at high sum assureds. For term life: income multiple typically capped at 25–30× earnings. For IP: benefit typically capped at 50–65% of pre-disability income. Very high sum assureds (£2m+ individual; £10m+ group) require additional medical evidence (full medical, ECG, blood chemistry) and reinsurance treaty approval at Lloyd's.</p>
+      <div class="rate">Non-medical limit: typically £350–500k (term life, under age 50); full medical above this</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Term / Benefit Period</h4>
+      <p>Longer terms increase mortality exposure. For IP/PHI: "benefit to age 65" policies carry substantially higher risk than policies with a 2 or 5-year benefit period. Own-occupation IP to 65 is the most comprehensive (and expensive) benefit; any-occupation definition significantly reduces claim likelihood. Short deferred periods (4 weeks) add to premium versus longer deferred periods (52 weeks/104 weeks).<sup>[I3]</sup></p>
+      <div class="rate">Own occupation to 65 vs 2-year any occupation: 4–7× premium differential typically</div>
+    </div>
+  </div>
+
+  <!-- Medium impact factors -->
+  <div class="section-title">Rating Factors — Medium Impact</div>
+  <div class="factors-grid">
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Occupation</h4>
+      <p>Occupation significantly affects IP/PHI pricing. Class 1 (professional/sedentary) has lowest morbidity; Class 4 (heavy manual, hazardous) is most expensive. For term life, hazardous occupations (offshore, military, mining, deep-sea diving) attract loadings or exclusions. Occupation determines both claim frequency (accident risk) and claim definition applicability (own vs any occupation).</p>
+      <div class="rate">IP Class 1 (professional) vs Class 4 (heavy manual): 3–5× premium multiple</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Smoker / Non-Smoker Status</h4>
+      <p>Smoking is a major independent mortality and morbidity risk factor — associated with increased mortality from cardiovascular disease, COPD, and cancer. Standard market rates for smokers are 20–40% higher than non-smokers on term life, and proportionately more for CI (cancer prevalence significantly higher). Smoker definition: any tobacco use in preceding 12 months. Ex-smokers may qualify for non-smoker rates after 12 months abstinence (varies by insurer).<sup>[I2]</sup></p>
+      <div class="rate">Smoker loading: typically +25–40% on term life premium vs equivalent non-smoker</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>BMI / Weight</h4>
+      <p>Obesity (BMI &gt;30) is associated with increased mortality from cardiovascular disease and type 2 diabetes, and with higher IP claim rates (musculoskeletal, mobility, mental health). BMI 30–35: typically rated. BMI &gt;40: significant loading or declination depending on other factors. At Lloyd's: morbid obesity (BMI &gt;40) with comorbidities is a substandard life requiring EPM assessment.</p>
+      <div class="rate">BMI 30–35 loading: +25–75% term life; BMI 35–40: +100–200%; BMI 40+: case by case</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Mental Health History (IP)</h4>
+      <p>Mental health history is the most significant IP-specific underwriting consideration. Single episode of depression, well-treated: typically excludable with specific exclusion endorsement or modest loading. Recurrent depression, bipolar disorder, personality disorders: potential decline or full mental health exclusion. Mental health claims are now the dominant IP claim cause by duration; underwriters must balance inclusivity with anti-selection risk.<sup>[I6]</sup></p>
+      <div class="rate">Specific mental health exclusion or 20–100% loading depending on history severity</div>
+    </div>
+  </div>
+
+  <!-- Lower impact factors -->
+  <div class="section-title">Rating Factors — Lower Impact</div>
+  <div class="factors-grid">
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Family History</h4>
+      <p>Parental death from cardiovascular disease or cancer before age 60 increases the insured's mortality rating. Relevant particularly for CI (inherited cancer predisposition, familial hypercholesterolaemia). Family history of hereditary conditions (Huntington's, BRCA1/2 carriers who have tested) is subject to ABI genetic testing moratorium rules until 2025.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Geographic Residence / Foreign Travel</h4>
+      <p>Residence in high-mortality countries (Sub-Saharan Africa, certain Asian markets) attracts loadings on international schemes. Frequent travel to high-risk regions (war zones, tropical disease regions) requires assessment. Expatriate lives — away from home country — often have enhanced healthcare access but elevated accidental death and tropical disease risk.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Hazardous Activities</h4>
+      <p>Participation in high-risk sports or hobbies (mountaineering, SCUBA diving, motorsport, skydiving, private aviation) attracts exclusions or premium loadings on term life and CI. IP policies typically exclude disability arising from hazardous activities. At Lloyd's: specialist hazardous life cover written on named-activity basis with appropriate loadings.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Sex</h4>
+      <p>Historically females paid lower life insurance premiums (lower mortality) and higher IP premiums (higher morbidity). EU Gender Directive (Test-Achats ruling, 2012) prohibited sex-based pricing in new retail contracts. Group life and IP schemes are typically priced on unisex rates. Individual policies post-2012 use unisex tables; legacy policies may retain sex-based pricing where permitted.</p>
+    </div>
+  </div>
+
+  <!-- EPM methodology -->
+  <div class="section-title">Substandard Life Rating Methodology — Extra Mortality Per Mille (EPM)</div>
+  <div class="info-box">
+    <strong>EPM (Extra Mortality Per Mille):</strong> The premium for a substandard life is calculated by adding an EPM to the standard mortality rate. EPM represents the additional expected deaths per 1,000 lives per year attributable to the impairment. A life with an EPM of 5 is expected to experience 5 additional deaths per 1,000 per year above the standard table rate. EPM ratings are derived from actuarial studies of impaired life mortality experience — published by UK and US life office research organisations.<sup>[I7]</sup>
+  </div>
+  <div class="formula-box">
+    <span class="comment">// TL — Substandard Life Rating: Two Main Approaches</span><br><br>
+    <span class="comment">// Approach 1: Flat Extra (EPM) — adds £X per £1,000 sum assured per year</span><br>
+    Total Premium = Standard Premium + (EPM × Sum Assured ÷ 1,000)<br><br>
+    <span class="comment">// Approach 2: Percentage Rating — treats life as older than actual age</span><br>
+    <span class="comment">// e.g., +50% mortality rating on 45yr male treated as 52yr male actuarially</span><br>
+    Rated Premium = Standard Premium × Percentage Rating Multiple<br><br>
+    <span class="comment">// For IP/PHI: percentage extra morbidity (PEM) applied to claim incidence rate</span><br>
+    IP Premium = Standard IP Premium × (1 + PEM/100)<br><br>
+    <span class="comment">// Lloyd's: large substandard lives often require RI approval above treaty line</span>
+  </div>
+
+  <!-- Standard benchmark rates -->
+  <div class="section-title">Benchmark Term Life Rates — £250k Level Term, 25yr, Non-Smoker<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Age</th><th>Standard Male (p.m.)</th><th>Standard Female (p.m.)</th><th>Unisex (p.m.)</th><th>Note</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>25</td><td>£8–12</td><td>£7–10</td><td>£9–11</td><td>Very low mortality; mortgage protection most common purpose</td></tr>
+      <tr><td>30</td><td>£11–16</td><td>£9–13</td><td>£12–15</td><td>Family protection; decreasing term for mortgage</td></tr>
+      <tr><td>35</td><td>£16–24</td><td>£13–19</td><td>£17–22</td><td>Higher coverage demand; family responsibility peak</td></tr>
+      <tr><td>40</td><td>£26–40</td><td>£20–32</td><td>£26–38</td><td>Mortality curve steepening; cardiovascular risk increasing</td></tr>
+      <tr><td>45</td><td>£44–68</td><td>£33–52</td><td>£42–62</td><td>Lloyd's substandard business significant from this age band</td></tr>
+      <tr><td>50</td><td>£75–115</td><td>£56–88</td><td>£72–104</td><td>Standard market often requires full medical above this age</td></tr>
+      <tr><td>55</td><td>£130–195</td><td>£95–145</td><td>£120–175</td><td>Typically Lloyd's/specialist market for substandard at this age</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Worked Example A -->
+  <div class="worked">
+    <h3>Worked Example A — Substandard Individual Life: Ex-Smoker, Type 2 Diabetes, BMI 30</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value / Loading</th></tr></thead>
+      <tbody>
+        <tr><td>Life Insured</td><td>Male, age 45, ex-smoker (3 years), well-controlled Type 2 diabetes (HbA1c 52 mmol/mol), BMI 30</td><td>—</td></tr>
+        <tr><td>Policy</td><td>Level term life, £500,000 sum assured, 20-year term, decreasing</td><td>—</td></tr>
+        <tr><td>Standard Base Premium</td><td>Age 45 male, non-smoker, £500k, 20yr (benchmark)</td><td>£68/month</td></tr>
+        <tr><td>Diabetes EPM Loading</td><td>Well-controlled T2 diabetes, no complications: EPM +3 per mille — flat extra on £500k sum assured</td><td>+£125/year = +£10.42/month</td></tr>
+        <tr><td>Ex-Smoker Adjustment</td><td>3 years ex-smoker: standard non-smoker rates apply per ABI convention (&gt;12 months)</td><td>Nil</td></tr>
+        <tr><td>BMI Loading</td><td>BMI 30: borderline, minor loading for cardiovascular risk</td><td>+10% = +£6.80/month</td></tr>
+        <tr><td>Reinsurance Review</td><td>Sum assured £500k: requires reinsurer treaty line approval at Lloyd's above automatic binding</td><td>Facultative referral</td></tr>
+        <tr><td><strong>Indicative Rated Premium</strong></td><td>—</td><td><strong>~£85/month (£1,020/year)</strong></td></tr>
+        <tr><td>Standard Market Equivalent</td><td>If offered at all: approx £90–110/month (less competitive than Lloyd's for this risk profile)</td><td>£90–110/month</td></tr>
+        <tr><td>Comparison</td><td>Lloyd's substandard pricing advantage: ~10–20% better rate than standard market for this risk class</td><td>Competitive advantage</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Worked Example B -->
+  <div class="worked alt">
+    <h3>Worked Example B — Group IP Scheme: 500-Employee Tech Company, Mental Health Loading</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Scheme</td><td>Group income protection, 500 employees, tech sector (London), average salary £65,000</td><td>—</td></tr>
+        <tr><td>Benefits</td><td>Own occupation definition; 2-year deferred period; benefit to age 65; 75% of salary</td><td>—</td></tr>
+        <tr><td>Total Insured Payroll</td><td>500 × £65,000</td><td>£32,500,000</td></tr>
+        <tr><td>Base Group IP Rate</td><td>Tech sector, London; 2yr deferred; own occupation; age/sex adjusted (average age 34)</td><td>0.42% of payroll</td></tr>
+        <tr><td>Base Premium</td><td>£32.5m × 0.42%</td><td>£136,500</td></tr>
+        <tr><td>Mental Health Loading</td><td>Tech sector high mental health claims frequency; no formal EAP in place; +20% loading</td><td>+£27,300</td></tr>
+        <tr><td>EAP Credit</td><td>Employer commits to introduce EAP within 12 months: provisional −5% subject to evidence</td><td>−£6,825</td></tr>
+        <tr><td>Catastrophe Premium</td><td>500 employees, London concentration: group catastrophe XL loading (terrorism/catastrophe)</td><td>+£8,000</td></tr>
+        <tr><td>Reinsurance Structure</td><td>First £5,000/week per risk retained by Lloyd's syndicate; excess to quota share RI treaty</td><td>—</td></tr>
+        <tr><td><strong>Indicative Annual GWP</strong></td><td>—</td><td><strong>~£164,975</strong></td></tr>
+        <tr><td>Assumed Loss Ratio</td><td>Tech sector group IP with mental health concerns: 78%</td><td>78%</td></tr>
+        <tr><td>Claims Reserve</td><td>£164,975 × 78%</td><td>£128,681</td></tr>
+        <tr><td>Commission (20%)</td><td>Group IP broker commission</td><td>£32,995</td></tr>
+        <tr><td>Expenses (10%)</td><td>—</td><td>£16,498</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>−£13,199 (marginal loss — mental health loading insufficient without EAP)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Benchmark IP rates -->
+  <div class="section-title">Group IP Rate Benchmarks by Sector<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Sector</th><th>Key IP Risk Factor</th><th>Rate (% payroll)</th><th>Key Driver</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Technology / Finance</td><td>Mental health (burnout, anxiety, depression)</td><td>0.35–0.55%</td><td>High-pressure workplace; long hours</td></tr>
+      <tr><td>Healthcare / NHS</td><td>Musculoskeletal + mental health combined</td><td>0.55–0.80%</td><td>Physical demands; COVID burnout legacy</td></tr>
+      <tr><td>Construction / Manual</td><td>Musculoskeletal + accident</td><td>0.70–1.10%</td><td>Physical injury frequency</td></tr>
+      <tr><td>Retail / Hospitality</td><td>Musculoskeletal + mental health</td><td>0.45–0.70%</td><td>Customer-facing stress; physical demands</td></tr>
+      <tr><td>Professional Services</td><td>Mental health (stress, burnout)</td><td>0.30–0.50%</td><td>High-performance culture</td></tr>
+      <tr><td>Public Sector / Local Government</td><td>Mental health + long-term sickness management</td><td>0.50–0.75%</td><td>Restructuring stress; long-term sickness culture</td></tr>
+      <tr><td>International / Expatriate</td><td>Tropical disease + accident + mental health</td><td>0.60–1.20%</td><td>Higher morbidity in developing market locations</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Key exclusions -->
+  <div class="section-title">Key Policy Exclusions</div>
+  <table>
+    <thead>
+      <tr><th>Exclusion</th><th>Product</th><th>Rationale</th><th>Endorsement Available?</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Suicide within 12 months of inception</td><td>Term Life</td><td>Anti-selection; moral hazard. After 12 months, suicide typically covered.</td><td>No</td></tr>
+      <tr><td>Self-inflicted injury</td><td>IP / Term Life</td><td>Deliberate self-harm not an insurable loss</td><td>No</td></tr>
+      <tr><td>War and active military service</td><td>Term Life / IP / Group Life</td><td>Standard war exclusion; high systemic loss potential</td><td>Military service extension available at Lloyd's for specialist schemes</td></tr>
+      <tr><td>Substance misuse</td><td>IP</td><td>Inability to work due to alcohol/drug dependency; moral hazard</td><td>Sometimes endorsed after sustained recovery period (2yr+)</td></tr>
+      <tr><td>Pre-existing conditions (CI)</td><td>Critical Illness</td><td>Conditions present at inception excluded to prevent adverse selection</td><td>Sometimes endorsed with medical evidence and rated premium</td></tr>
+      <tr><td>Aviation (non-commercial passenger)</td><td>Term Life / IP</td><td>Private pilot/recreational aviation fatality exclusion</td><td>Aviation extension at additional premium (Lloyd's specialist)</td></tr>
+      <tr><td>Hazardous sports and activities</td><td>Term Life / IP</td><td>Elevated accident mortality/morbidity; defined activity basis</td><td>Named activity extension at additional premium</td></tr>
+      <tr><td>HIV/AIDS (standard market)</td><td>Term Life / CI</td><td>Standard HIV exclusion for new policies; disclosure required. HIV+ lives rated at Lloyd's specialist market.</td><td>HIV+ rated cover available at Lloyd's with medical evidence</td></tr>
+      <tr><td>Pregnancy and childbirth complications (IP)</td><td>IP</td><td>Normal pregnancy not an "illness" for PHI; excluded. Complications may be covered.</td><td>Maternity leave cover available as separate rider</td></tr>
+      <tr><td>Mental health (specific exclusion at inception)</td><td>IP</td><td>Pre-existing mental health condition excluded at policy inception; future unrelated mental health covered</td><td>Mental health exclusion may be removed after 2-year exclusion-free period</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Genetic testing warning -->
+  <div class="warn-box">
+    <strong>Genetic Testing Moratorium (ABI Concordat 2018, extended to 2025):</strong> Underwriters must NOT require disclosure of, or take into account, predictive genetic test results when underwriting life, critical illness or income protection insurance — with one exception: policies with a sum assured over £500,000 may require disclosure of a positive Huntington's disease predictive test result. This moratorium is currently in force until November 2025. Post-2025 framework is under government review. Underwriters must ensure their CMR access processes do not inadvertently capture genetic test results held on medical records.<sup>[L4]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Temporary Life &amp; Permanent Health (TL) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="rates-analysis.html">Next: Rates &amp; ROE →</a></p>
+</footer>
+
+</body>
+</html>

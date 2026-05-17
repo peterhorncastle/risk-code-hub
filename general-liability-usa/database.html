@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>General Liability USA — Loss Database | Risk Code Hub</title>
+<link rel="stylesheet" href="../hub-styles.css">
+<style>
+  :root {
+    --hub-primary:    #7b1a1a;
+    --hub-dark:       #4a0d0d;
+    --hub-light:      #fdf0f0;
+    --hub-accent:     #c8a84b;
+    --hub-secondary:  #1c2e6b;
+    --hub-secondary2: #2e7d32;
+    --header-gradient: linear-gradient(135deg,#4a0d0d 0%,#7b1a1a 50%,#8b2020 100%);
+    --header-sub:     #e8b0a0;
+  }
+  header { background: var(--header-gradient); color:#fff; padding:2rem 1.5rem 1.5rem; }
+  header h1 { margin:0 0 0.3rem; font-size:2rem; color:#fff; }
+  header p  { margin:0; color:var(--header-sub); font-size:1rem; }
+  nav { background:var(--hub-dark); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.3rem; }
+  nav a { color:#e8c0b0; text-decoration:none; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.85rem; }
+  nav a:hover, nav a.active { background:var(--hub-primary); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+  h2 { font-size:1.25rem; color:var(--hub-primary); margin:2rem 0 0.8rem; border-bottom:2px solid var(--hub-accent); padding-bottom:0.4rem; }
+  p { line-height:1.8; color:#333; margin-bottom:0.8rem; font-size:0.93rem; }
+
+  /* Confidence badges */
+  .b-v { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#e6f4ea; color:#1a5c28; vertical-align:middle; }
+  .b-e { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#fef3e2; color:#7a4500; vertical-align:middle; }
+  .b-i { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#cce5ff; color:#004085; vertical-align:middle; }
+  .b-g { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#f8d7da; color:#721c24; vertical-align:middle; }
+
+  /* Filter bar */
+  .filter-bar { display:flex; flex-wrap:wrap; gap:0.5rem; margin:1rem 0 1.2rem; }
+  .filter-bar button { padding:0.35rem 0.9rem; border:1px solid var(--hub-primary); border-radius:20px; background:#fff; color:var(--hub-primary); font-size:0.8rem; cursor:pointer; font-weight:600; transition:all .15s; }
+  .filter-bar button.active { background:var(--hub-primary); color:#fff; }
+  .filter-bar button:hover { background:var(--hub-primary); color:#fff; }
+  .filter-sep { width:1px; background:#ddd; margin:0 0.3rem; }
+
+  /* Database table */
+  .db-wrap { overflow-x:auto; margin:0.5rem 0 1.5rem; }
+  table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+  thead th { background:var(--hub-primary); color:#fff; padding:0.55rem 0.7rem; text-align:left; white-space:nowrap; }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid #f0dada; vertical-align:top; }
+  tbody tr:nth-child(even) { background:#fdf5f5; }
+  tbody tr:hover { background:#fae0e0; cursor:pointer; }
+  .sev { display:inline-block; font-size:0.72rem; font-weight:700; padding:2px 7px; border-radius:10px; }
+  .sev-CAT { background:#c0392b; color:#fff; }
+  .sev-MAJ { background:#e67e22; color:#fff; }
+  .sev-MOD { background:#f1c40f; color:#333; }
+  .sev-MIN { background:#27ae60; color:#fff; }
+  .type-chip { display:inline-block; font-size:0.7rem; font-weight:700; padding:1px 6px; border-radius:8px; margin-right:2px; }
+  .tc-BI   { background:#7b1a1a; color:#fff; }
+  .tc-PD   { background:#1c2e6b; color:#fff; }
+  .tc-PI   { background:#c8a84b; color:#333; }
+  .tc-PROD { background:#6a1b9a; color:#fff; }
+  .tc-PFAS { background:#00695c; color:#fff; }
+  .tc-SAM  { background:#c62828; color:#fff; }
+  .tc-CYBER{ background:#1565c0; color:#fff; }
+
+  /* Expandable row */
+  .expand-row { display:none; background:#fff8f8; border-bottom:2px solid #f0dada; }
+  .expand-row td { padding:0.8rem 1rem; font-size:0.83rem; color:#444; }
+  .expand-row.show { display:table-row; }
+  .expand-inner { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:0.7rem; }
+  .expand-inner div strong { display:block; font-size:0.72rem; color:var(--hub-primary); text-transform:uppercase; letter-spacing:.5px; margin-bottom:0.15rem; }
+
+  .note-box { background:#fff8e1; border-left:4px solid var(--hub-accent); border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#5a4000; }
+  footer { background:var(--hub-dark); color:#e8c0b0; text-align:center; padding:1rem; font-size:0.82rem; margin-top:2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>General Liability — USA</h1>
+  <p>Lloyd's Risk Codes UA · UC · UR · US &nbsp;|&nbsp; Module 03: Major Loss Database</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <h2>US GL Major Loss Database</h2>
+  <p>Approximately 35 significant loss events drawn from publicly reported verdicts, settlements, and industry analyses. <span class="b-v">VER</span> = verified from public records &nbsp; <span class="b-e">EST</span> = estimated / industry sources &nbsp; <span class="b-i">ILLUS</span> = illustrative composite &nbsp; <span class="b-g">GAP</span> = data limited. Loss amounts in USD. Click any row to expand detail.</p>
+
+  <div class="note-box"><strong>⚠ Social Inflation Warning:</strong> US GL loss costs have escalated materially since 2017 driven by nuclear verdicts (jury awards >$10m), litigation funding, and plaintiff bar strategies. Many "moderate" losses pre-2015 would be reclassified as major under today's tort environment. All loss figures are at reported/paid amounts and may understate economic impact due to defence costs and IBNR development.</div>
+
+  <!-- Filter bar — type -->
+  <div class="filter-bar" id="typeFilters">
+    <button class="active" onclick="filterType('ALL',this)">All Types</button>
+    <button onclick="filterType('BI',this)">BI — Bodily Injury</button>
+    <button onclick="filterType('PD',this)">PD — Property Damage</button>
+    <button onclick="filterType('PI',this)">PI — Personal Injury</button>
+    <button onclick="filterType('PROD',this)">Products</button>
+    <button onclick="filterType('PFAS',this)">PFAS / Toxic</button>
+    <button onclick="filterType('SAM',this)">Sexual Abuse (SAM)</button>
+    <button onclick="filterType('CYBER',this)">Cyber GL</button>
+  </div>
+
+  <!-- Filter bar — severity -->
+  <div class="filter-bar" id="sevFilters">
+    <button class="active" onclick="filterSev('ALL',this)">All Severity</button>
+    <button onclick="filterSev('CAT',this)">CAT (&gt;$500m)</button>
+    <button onclick="filterSev('MAJ',this)">MAJ ($50–500m)</button>
+    <button onclick="filterSev('MOD',this)">MOD ($10–50m)</button>
+    <button onclick="filterSev('MIN',this)">MIN (&lt;$10m)</button>
+  </div>
+
+  <div class="db-wrap">
+  <table id="lossTable">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event / Entity</th>
+        <th>Type</th>
+        <th>Severity</th>
+        <th>Loss (USD)</th>
+        <th>Lloyd's Code</th>
+        <th>Conf.</th>
+      </tr>
+    </thead>
+    <tbody id="lossBody">
+
+      <!-- ROW 1 -->
+      <tr data-type="PROD" data-sev="CAT" onclick="toggle(this)">
+        <td>1985–2002</td>
+        <td>Asbestos — Manville Trust &amp; Industry-Wide Reserve</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-CAT">CAT</span></td>
+        <td>&gt;$100bn (industry)</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Mesothelioma and asbestosis claims against asbestos manufacturers and installers. Johns-Manville filed for bankruptcy 1982; Manville Personal Injury Settlement Trust established.</div>
+        <div><strong>Coverage Trigger</strong>Products-completed operations hazard (PCOH), Coverage A — BI. Long-tail occupational disease development over 40+ years.</div>
+        <div><strong>Market Impact</strong>Largest single insurance loss in history at time of settlement. Triggered Lloyd's near-collapse in 1988–1992 spiral. Led to absolute asbestos exclusions in all new GL policies from c.1986.</div>
+        <div><strong>Underwriting Lesson</strong>Occurrence-basis long-tail accumulation; invisible at policy inception. Demand for absolute exclusions and prior knowledge conditions now standard.</div>
+      </div></td></tr>
+
+      <!-- ROW 2 -->
+      <tr data-type="PROD" data-sev="CAT" onclick="toggle(this)">
+        <td>1998</td>
+        <td>Tobacco — Master Settlement Agreement (MSA)</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-CAT">CAT</span></td>
+        <td>$246bn (25-year payout)</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>State AGs brought suit against tobacco manufacturers for Medicaid reimbursement of smoking-related illness costs. 46-state MSA signed November 1998.</div>
+        <div><strong>Coverage Trigger</strong>Products liability, Coverage A — BI (disease). Most tobacco company GL policies excluded or litigated extensively over coverage.</div>
+        <div><strong>Market Impact</strong>Largest civil litigation settlement in US history. Demonstrated the scale of product liability exposure for consumer goods with addictive or latent harm properties.</div>
+        <div><strong>Underwriting Lesson</strong>Absolute tobacco exclusion now standard. Reinforced need for mass tort exposure screening in PCOH rating.</div>
+      </div></td></tr>
+
+      <!-- ROW 3 -->
+      <tr data-type="PFAS" data-sev="CAT" onclick="toggle(this)">
+        <td>2023</td>
+        <td>3M — AFFF PFAS Water Supply Settlement</td>
+        <td><span class="type-chip tc-PFAS">PFAS</span></td>
+        <td><span class="sev sev-CAT">CAT</span></td>
+        <td>$10.3bn</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>PFAS contamination of public water supplies from AFFF (aqueous film-forming foam) used at airports and military bases. 3M settled with US public water suppliers.</div>
+        <div><strong>Coverage Trigger</strong>Products liability / property damage (Coverage A &amp; B). Environmental contamination — many policies disputed due to pollution exclusions.</div>
+        <div><strong>Market Impact</strong>Largest PFAS settlement to date. Industry-wide PFAS exclusions now applied across GL market. Major IBNR reserve development for US E&amp;S carriers.</div>
+        <div><strong>Underwriting Lesson</strong>PFAS/forever chemicals now standalone exclusion in most Lloyd's GL slips. Exposure screening requires supply chain and manufacturing process review.</div>
+      </div></td></tr>
+
+      <!-- ROW 4 -->
+      <tr data-type="PFAS" data-sev="CAT" onclick="toggle(this)">
+        <td>2023</td>
+        <td>DuPont / Chemours — PFAS Personal Injury Settlement</td>
+        <td><span class="type-chip tc-PFAS">PFAS</span></td>
+        <td><span class="sev sev-CAT">CAT</span></td>
+        <td>$1.185bn</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>PFAS/PFOA contamination near Washington Works, WV plant. Personal injury claims for kidney cancer, thyroid disease, and other illnesses linked to C8/PFOA exposure.</div>
+        <div><strong>Coverage Trigger</strong>Products/pollution — BI. Extensive coverage litigation; many insurers relied on pollution exclusions.</div>
+        <div><strong>Market Impact</strong>Confirmed plaintiff ability to connect PFAS to specific disease causation. Opened litigation template for further PFAS BI claims against other manufacturers.</div>
+        <div><strong>Underwriting Lesson</strong>Chemical manufacturers with PFAS in supply chain require specialist environmental GL endorsement or separate placement.</div>
+      </div></td></tr>
+
+      <!-- ROW 5 -->
+      <tr data-type="PROD" data-sev="CAT" onclick="toggle(this)">
+        <td>2021</td>
+        <td>Opioids — National Prescription Opiate Litigation (MDL 2804)</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-CAT">CAT</span></td>
+        <td>&gt;$50bn (multi-defendant)</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Multi-state litigation against pharma manufacturers, distributors and pharmacies for the opioid epidemic. Johnson &amp; Johnson ($5bn), McKesson/Cardinal/AmerisourceBergen ($21bn), Walgreens ($5.7bn).</div>
+        <div><strong>Coverage Trigger</strong>Products liability, Coverage A — BI (addiction/death). Significant GL coverage litigation on occurrence vs. claims-made trigger and "expected or intended" exclusions.</div>
+        <div><strong>Market Impact</strong>Created new category of mass tort exposure for pharma distributors. Drove pharmacy GL rates up 200–400%. Many insurers withdrew from pharma distribution GL entirely.</div>
+        <div><strong>Underwriting Lesson</strong>Opioid/controlled substances exclusions now standard for US GL. Due diligence required on pharma clients' supply chain role.</div>
+      </div></td></tr>
+
+      <!-- ROW 6 -->
+      <tr data-type="PROD" data-sev="CAT" onclick="toggle(this)">
+        <td>2020</td>
+        <td>Bayer/Monsanto — Roundup Glyphosate Litigation</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-CAT">CAT</span></td>
+        <td>$10.9bn (settlement fund)</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Non-Hodgkin's lymphoma claims against Monsanto/Bayer alleging glyphosate herbicide causes cancer. Bayer settled approximately 100,000 claims for $10.9bn in 2020.</div>
+        <div><strong>Coverage Trigger</strong>Products liability — BI. Coverage disputed on "known loss" and "expected or intended" grounds. IARC Group 2A carcinogen classification central to plaintiff case.</div>
+        <div><strong>Market Impact</strong>Demonstrated litigation funding power; single case verdict $289m (reduced on appeal). Triggered broad re-evaluation of agricultural chemical GL pricing.</div>
+        <div><strong>Underwriting Lesson</strong>Herbicide/pesticide manufacturer GL now high-hazard classification. Prior cancer studies and IARC status reviewed at underwriting.</div>
+      </div></td></tr>
+
+      <!-- ROW 7 -->
+      <tr data-type="SAM" data-sev="CAT" onclick="toggle(this)">
+        <td>2019–2023</td>
+        <td>Boy Scouts of America — Sexual Abuse Claims</td>
+        <td><span class="type-chip tc-SAM">SAM</span></td>
+        <td><span class="sev sev-CAT">CAT</span></td>
+        <td>$2.46bn</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Approximately 82,000 sexual abuse claims filed in BSA Chapter 11 bankruptcy proceeding. Historical abuse by troop leaders dating back to 1940s–1990s.</div>
+        <div><strong>Coverage Trigger</strong>GL — personal injury/BI (SAM). Complex coverage litigation across dozens of policy years and insurers including Hartford, Century, AIG, Chubb.</div>
+        <div><strong>Market Impact</strong>Largest SAM settlement in history. Triggered statutory lookback window proliferation across US states. SAM GL now typically excluded or written as separate policy.</div>
+        <div><strong>Underwriting Lesson</strong>Historical SAM occurrence policies remain active long-tail exposure. Exclusions alone insufficient for youth-serving organisations without separate stand-alone SAM policy.</div>
+      </div></td></tr>
+
+      <!-- ROW 8 -->
+      <tr data-type="SAM" data-sev="CAT" onclick="toggle(this)">
+        <td>2023</td>
+        <td>Catholic Diocese Nationwide — Historic Abuse Settlements</td>
+        <td><span class="type-chip tc-SAM">SAM</span></td>
+        <td><span class="sev sev-CAT">CAT</span></td>
+        <td>&gt;$4bn (cumulative)</td>
+        <td>UA / US</td>
+        <td><span class="b-e">EST</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Clergy sexual abuse claims against Catholic dioceses. State lookback windows (NY CVAA 2019, NJ 2019, CA AB-218 2019) reopened historically time-barred claims.</div>
+        <div><strong>Coverage Trigger</strong>Occurrence GL policies from 1950s–1990s. Insurers including London Market historically wrote long-tail GL for religious institutions.</div>
+        <div><strong>Market Impact</strong>Multiple dioceses filed for bankruptcy including Los Angeles, Baltimore, San Francisco. Religious institution GL one of most difficult classes to place on London Market.</div>
+        <div><strong>Underwriting Lesson</strong>Lookback windows a permanent feature of US tort landscape. Religious, educational, and youth-serving organisations require comprehensive SAM coverage review.</div>
+      </div></td></tr>
+
+      <!-- ROW 9 -->
+      <tr data-type="BI" data-sev="MAJ" onclick="toggle(this)">
+        <td>2022</td>
+        <td>Astroworld Festival — Crowd Crush (Travis Scott / Live Nation)</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>~$750m (est. settlement fund)</td>
+        <td>UA / UC</td>
+        <td><span class="b-e">EST</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>10 deaths and hundreds of injuries at Houston music festival, November 2021. Crowd crush during Travis Scott performance. Approximately 4,800 plaintiffs filed claims.</div>
+        <div><strong>Coverage Trigger</strong>Operations GL — BI (Coverage A). Event organiser, venue operator, and artist all named. Live Nation/Scoremore settled majority of claims by 2023.</div>
+        <div><strong>Market Impact</strong>Large-scale event GL re-priced significantly. Crowd management and security standards now key underwriting considerations for events >10,000 attendees.</div>
+        <div><strong>Underwriting Lesson</strong>Crowd dynamics and emergency egress plans required for major event GL. Contractual indemnities between organiser/venue/promoter critical to allocation.</div>
+      </div></td></tr>
+
+      <!-- ROW 10 -->
+      <tr data-type="PROD" data-sev="MAJ" onclick="toggle(this)">
+        <td>2020</td>
+        <td>3M — Combat Arms Earplugs — Military Hearing Loss MDL</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>$6bn (settlement)</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Dual-sided earplugs supplied to US military 2003–2015 alleged to be defective — could loosen without user awareness, causing hearing loss and tinnitus. Largest MDL in US history (230,000+ claimants).</div>
+        <div><strong>Coverage Trigger</strong>Products liability — BI. 3M settled for $6bn in August 2023 avoiding bankruptcy filing. Government contractor defence partially successful for some claims.</div>
+        <div><strong>Market Impact</strong>Record MDL volume. Demonstrated plaintiff bar ability to manage massive multi-claimant product liability litigation at scale.</div>
+        <div><strong>Underwriting Lesson</strong>Military/government contractor products require specialist GL with government contract exclusion carve-back analysis.</div>
+      </div></td></tr>
+
+      <!-- ROW 11 -->
+      <tr data-type="PROD" data-sev="MAJ" onclick="toggle(this)">
+        <td>2019</td>
+        <td>Johnson &amp; Johnson — Baby Powder / Talc Litigation</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>$8.9bn (proposed settlement)</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Claims that asbestos-contaminated talc in J&amp;J Baby Powder caused ovarian cancer and mesothelioma. Approximately 60,000 claimants. J&amp;J used divisive merger (Texas two-step) to create LTL Management LLC for bankruptcy resolution.</div>
+        <div><strong>Coverage Trigger</strong>Products — BI. Coverage disputed across decades of occurrence policies. J&amp;J Texas two-step bankruptcy strategy ultimately rejected by courts.</div>
+        <div><strong>Market Impact</strong>Largest consumer products liability case since tobacco. Established limits on "Texas two-step" divisive merger strategy as coverage/mass tort bypass tool.</div>
+        <div><strong>Underwriting Lesson</strong>Talc/mineral-derived products require enhanced due diligence on asbestos contamination testing history.</div>
+      </div></td></tr>
+
+      <!-- ROW 12 -->
+      <tr data-type="BI" data-sev="MAJ" onclick="toggle(this)">
+        <td>2023</td>
+        <td>Nuclear Verdict — Georgia Truck Accident (Winn-Dixie Driver)</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>$1.7bn (punitive verdict)</td>
+        <td>UA / UC</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Fatal truck accident. Jury awarded $1.7bn including $1.5bn in punitive damages against Winn-Dixie/Southeastern Grocers. One of the largest single-plaintiff verdicts in US history.</div>
+        <div><strong>Coverage Trigger</strong>Commercial auto/GL — BI. Punitive damages may not be covered in all states. Umbrella/excess layers triggered well beyond primary limits.</div>
+        <div><strong>Market Impact</strong>Emblematic of nuclear verdict trend. Trucking/fleet GL rates increased 50–150% in Georgia, Florida, Texas, California over 2019–2023.</div>
+        <div><strong>Underwriting Lesson</strong>Punitive exposure screening for fleet operators. State venue/jurisdiction analysis critical — Georgia, Florida, Texas highest verdict states.</div>
+      </div></td></tr>
+
+      <!-- ROW 13 -->
+      <tr data-type="BI" data-sev="MAJ" onclick="toggle(this)">
+        <td>2021</td>
+        <td>Nuclear Verdict — Florida Nursing Home Negligence</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>$256m verdict</td>
+        <td>UA / UC</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Nursing home negligence / elder abuse claim in Florida. Jury awarded $256m reflecting punitive component for institutional recklessness.</div>
+        <div><strong>Coverage Trigger</strong>Operations GL — BI. Long-term care/senior living GL one of hardest classes to place post-2018 in Florida due to nuclear verdict history.</div>
+        <div><strong>Market Impact</strong>Florida nursing home GL effectively withdrawn by most admitted carriers. Predominantly E&amp;S/surplus lines market with very high retentions.</div>
+        <div><strong>Underwriting Lesson</strong>Senior living GL requires state-specific analysis. Florida, Georgia, Alabama: extreme caution. Consider mandatory minimum $2m SIR.</div>
+      </div></td></tr>
+
+      <!-- ROW 14 -->
+      <tr data-type="PROD" data-sev="MAJ" onclick="toggle(this)">
+        <td>2018</td>
+        <td>Roundup — Dewayne Johnson (Groundskeeper) First Verdict</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>$289m (reduced to $78m on appeal)</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>First Roundup/glyphosate trial verdict — groundskeeper Dewayne Johnson won $289m against Monsanto. Opened floodgates for subsequent cases that eventually settled for $10.9bn.</div>
+        <div><strong>Coverage Trigger</strong>Products — BI. Internal Monsanto emails on scientific manipulation were key to punitive damages award.</div>
+        <div><strong>Market Impact</strong>Precedent-setting verdict for mass tort litigation against agricultural chemical companies. Triggered litigation funding investment in glyphosate plaintiff portfolio.</div>
+        <div><strong>Underwriting Lesson</strong>Internal communications/corporate governance records material to punitive damage exposure. Underwriters should request product safety committee status for chemical manufacturers.</div>
+      </div></td></tr>
+
+      <!-- ROW 15 -->
+      <tr data-type="PI" data-sev="MAJ" onclick="toggle(this)">
+        <td>2020</td>
+        <td>Defamation / False Arrest — Social Media Platform GL</td>
+        <td><span class="type-chip tc-PI">PI</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>~$50m (illustrative composite)</td>
+        <td>UA / UC</td>
+        <td><span class="b-i">ILLUS</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Composite representing PI/defamation claims under Coverage B (personal and advertising injury) arising from viral social media misidentification, false arrest allegations, and malicious prosecution claims.</div>
+        <div><strong>Coverage Trigger</strong>Coverage B — personal and advertising injury (offences b, d, e of ISO CG 00 01). Coverage B aggregate limits often inadequate relative to BI. IP exclusion potential conflict.</div>
+        <div><strong>Market Impact</strong>Coverage B exposure growing as defamation/PI claims increase in social media era. Many writers sub-limiting Coverage B to $1m regardless of occurrence limit.</div>
+        <div><strong>Underwriting Lesson</strong>Review Coverage B sub-limit vs. total limit. Consider knowledge of publication exclusion endorsement for media-adjacent risks.</div>
+      </div></td></tr>
+
+      <!-- ROW 16 -->
+      <tr data-type="PROD" data-sev="MAJ" onclick="toggle(this)">
+        <td>2022</td>
+        <td>E-cigarette / Vape — Youth Marketing Products Liability MDL</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>$462m (JUUL settlement)</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>JUUL Labs settled with 33 states and DC for $462m over marketing e-cigarettes to minors. Separate personal injury claims ongoing for nicotine addiction and lung injury.</div>
+        <div><strong>Coverage Trigger</strong>Products — BI/PI. Coverage disputed on intentional act grounds re: youth marketing. Altria (35% stake in JUUL) named in many suits.</div>
+        <div><strong>Market Impact</strong>E-cigarette/vape product GL effectively uninsurable in standard market. E&amp;S specialty only at very high rates with addiction exclusions.</div>
+        <div><strong>Underwriting Lesson</strong>Any product with inhalation risk + youth access warrants heightened screening. Regulatory status with FDA critical underwriting data point.</div>
+      </div></td></tr>
+
+      <!-- ROW 17 -->
+      <tr data-type="PFAS" data-sev="MAJ" onclick="toggle(this)">
+        <td>2022</td>
+        <td>Tyco / Johnson Controls — AFFF PFAS Municipal Claims</td>
+        <td><span class="type-chip tc-PFAS">PFAS</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>$750m+ (partial)</td>
+        <td>UA / US</td>
+        <td><span class="b-e">EST</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Municipal water system claims against AFFF manufacturers including Tyco/JCI. Groundwater and drinking water contamination from firefighting foam at industrial and military sites.</div>
+        <div><strong>Coverage Trigger</strong>Products / pollution GL. Most policies post-1986 contain total pollution exclusions (TPE) that were heavily litigated in PFAS context.</div>
+        <div><strong>Market Impact</strong>Led to PFAS absolute exclusion becoming market-standard in Lloyd's GL slips from 2021. Dispute over whether PFAS is "pollution" under TPE continues in state courts.</div>
+        <div><strong>Underwriting Lesson</strong>PFAS exclusion required for all manufacturing, chemical, and industrial GL. Water utility GL separately exposed as claimant class.</div>
+      </div></td></tr>
+
+      <!-- ROW 18 -->
+      <tr data-type="BI" data-sev="MAJ" onclick="toggle(this)">
+        <td>2019</td>
+        <td>Construction Scaffold Collapse — New York Labour Law §240</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>~$35m (illustrative)</td>
+        <td>UA / UC</td>
+        <td><span class="b-i">ILLUS</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Illustrative composite of New York Labour Law §240 ("Scaffold Law") absolute liability claims. NY §240 imposes strict/absolute liability on owners and general contractors for gravity-related construction accidents. Plaintiff contributory negligence is no defence.</div>
+        <div><strong>Coverage Trigger</strong>Operations GL — BI. NY §240 is unique nationally and drives NY construction GL to among highest rates in the US market.</div>
+        <div><strong>Market Impact</strong>New York construction GL rates 3–5× national average. Many carriers exclude NY §240 exposure entirely. Separate endorsement required.</div>
+        <div><strong>Underwriting Lesson</strong>NY construction GL requires separate §240 analysis. Sublimit or exclusion standard. Any risk with NY operations and construction activity flagged for referral.</div>
+      </div></td></tr>
+
+      <!-- ROW 19 -->
+      <tr data-type="CYBER" data-sev="MAJ" onclick="toggle(this)">
+        <td>2022</td>
+        <td>Biometric Data — Illinois BIPA Class Actions (Tech Sector)</td>
+        <td><span class="type-chip tc-CYBER">CYBER</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>$650m (BNSF/Facebook prior settlements)</td>
+        <td>UA / UC</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Illinois Biometric Information Privacy Act (BIPA) class actions for unlawful collection of fingerprints/facial recognition data. $1,000–$5,000 per violation, no proof of harm needed. Facebook settled for $650m (2021), BNSF for $228m.</div>
+        <div><strong>Coverage Trigger</strong>GL Coverage A (BI — privacy injury) or Coverage B (PI — publication of private information). Disputed whether BIPA claims are "bodily injury" under GL. Also triggers cyber coverage.</div>
+        <div><strong>Market Impact</strong>BIPA creates aggregated statutory damages without actual harm. Illinois GL policies for technology users carry substantial BIPA sub-limit considerations.</div>
+        <div><strong>Underwriting Lesson</strong>Illinois operations with biometric data collection require BIPA sublimit or exclusion analysis. Cyber and GL co-ordination essential to avoid gaps.</div>
+      </div></td></tr>
+
+      <!-- ROW 20 -->
+      <tr data-type="SAM" data-sev="MAJ" onclick="toggle(this)">
+        <td>2023</td>
+        <td>USA Gymnastics — Larry Nassar Abuse Settlement (USOC)</td>
+        <td><span class="type-chip tc-SAM">SAM</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>$380m</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Sexual abuse of gymnasts by team physician Larry Nassar. USA Gymnastics and USOC (now USOPC) settled with approximately 500 survivors. Nassar sentenced to 175 years.</div>
+        <div><strong>Coverage Trigger</strong>GL — SAM/PI. Coverage disputed on intentional act exclusion grounds. Multiple insurers including Markel and Great American involved in coverage litigation.</div>
+        <div><strong>Market Impact</strong>Confirmed that institutional SAM exposure exists even in non-religious youth organisations. Sports governing body GL now specialty class.</div>
+        <div><strong>Underwriting Lesson</strong>Any youth-serving sports organisation requires standalone SAM coverage. Institutional knowledge and reporting protocols are key underwriting criteria.</div>
+      </div></td></tr>
+
+      <!-- ROW 21 -->
+      <tr data-type="BI" data-sev="MOD" onclick="toggle(this)">
+        <td>2021</td>
+        <td>Amazon — Third-Party Marketplace Products Liability</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MOD">MOD</span></td>
+        <td>~$40m (est. aggregate)</td>
+        <td>UA / US</td>
+        <td><span class="b-e">EST</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Products sold through Amazon Marketplace found to injure users — defective children's products, fire-risk electronics. Pennsylvania Superior Court ruled Amazon liable as product seller (2021).</div>
+        <div><strong>Coverage Trigger</strong>Products — BI. Amazon required third-party sellers to name Amazon as additional insured. Amazon's own GL programme covers marketplace operator role.</div>
+        <div><strong>Market Impact</strong>E-commerce platform product liability a growing category. Platform operator GL for e-commerce one of the fastest-growing specialty GL segments.</div>
+        <div><strong>Underwriting Lesson</strong>Marketplace/platform operator GL distinct from retailer GL. Requires analysis of seller vetting, product safety oversight, and indemnity flow-through from sellers.</div>
+      </div></td></tr>
+
+      <!-- ROW 22 -->
+      <tr data-type="PROD" data-sev="MOD" onclick="toggle(this)">
+        <td>2020</td>
+        <td>Hand Sanitiser / PPE — COVID-19 Product Defect Claims</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-MOD">MOD</span></td>
+        <td>~$30m (est. composite)</td>
+        <td>UA / US</td>
+        <td><span class="b-i">ILLUS</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Composite of product defect claims related to COVID-era products: methanol-contaminated hand sanitiser (HAND LLC — methanol poisoning deaths), ineffective KN95 masks, defective ventilators.</div>
+        <div><strong>Coverage Trigger</strong>Products — BI. PREP Act provided some immunity for COVID countermeasures. Coverage A applicable to BI from defective product.</div>
+        <div><strong>Market Impact</strong>COVID-era product rush created new product liability categories. Emergency manufacturing without standard QC created insurable events.</div>
+        <div><strong>Underwriting Lesson</strong>New product manufacturers require full quality control documentation review. Emergency production or product line changes require mid-term notice.</div>
+      </div></td></tr>
+
+      <!-- ROW 23 -->
+      <tr data-type="PD" data-sev="MOD" onclick="toggle(this)">
+        <td>2018</td>
+        <td>Camp Lejeune Water Contamination — Property &amp; Health Claims</td>
+        <td><span class="type-chip tc-PD">PD</span></td>
+        <td><span class="sev sev-MAJ">MAJ</span></td>
+        <td>$21bn+ (2022 PACT Act authorisation)</td>
+        <td>UA / US</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Trichloroethylene (TCE) and perchloroethylene (PCE) contamination of Camp Lejeune water supply 1953–1987. PACT Act 2022 opened two-year window for veteran and family member claims. 200,000+ claims filed.</div>
+        <div><strong>Coverage Trigger</strong>Government/military liability — not standard CGL. Private contractor GL potentially implicated for remediation contractors. Highlights long-tail environmental contamination exposure.</div>
+        <div><strong>Market Impact</strong>Government contractor operations and environmental liabilities often intermingled. Industrial solvent use in operations requires careful GL coverage mapping.</div>
+        <div><strong>Underwriting Lesson</strong>Any contractor with historic government site operations should be reviewed for historical contamination exposure.</div>
+      </div></td></tr>
+
+      <!-- ROW 24 -->
+      <tr data-type="BI" data-sev="MOD" onclick="toggle(this)">
+        <td>2023</td>
+        <td>Premises Liability — Chicago Rooftop Collapse (Restaurant)</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MOD">MOD</span></td>
+        <td>~$15m (est.)</td>
+        <td>UA</td>
+        <td><span class="b-e">EST</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Restaurant rooftop deck structural failure during private event — multiple injuries. Premises liability (operations GL) against property owner, restaurant operator, and event organiser.</div>
+        <div><strong>Coverage Trigger</strong>Coverage A — BI. Multiple insured defendants. Allocation between property owner GL and tenant/operator GL. Additional insured status contested.</div>
+        <div><strong>Market Impact</strong>Illustrative of premises liability claims against food/beverage/hospitality sector. Structural integrity assessments now key for high-occupancy entertainment venues.</div>
+        <div><strong>Underwriting Lesson</strong>Hospitality GL should require evidence of structural inspections for elevated or temporary structures. Additional insured chain must be clear.</div>
+      </div></td></tr>
+
+      <!-- ROW 25 -->
+      <tr data-type="PFAS" data-sev="MOD" onclick="toggle(this)">
+        <td>2022</td>
+        <td>PFAS in Food Packaging — Fast Food Chains (Class Action)</td>
+        <td><span class="type-chip tc-PFAS">PFAS</span></td>
+        <td><span class="sev sev-MOD">MOD</span></td>
+        <td>~$20m (est. composite)</td>
+        <td>UA / US</td>
+        <td><span class="b-i">ILLUS</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Class actions against major fast food chains (McDonald's, Burger King, Wendy's) over PFAS/PFOA in food packaging materials. Allegations of product contamination and consumer deception.</div>
+        <div><strong>Coverage Trigger</strong>Products GL — BI/PI. Coverage disputed — PFAS exclusions applied from 2021. Earlier policies potentially exposed under products coverage.</div>
+        <div><strong>Market Impact</strong>Food packaging supply chain implicated in PFAS exposure. Food service GL now screened for packaging material sourcing.</div>
+        <div><strong>Underwriting Lesson</strong>Food and beverage GL requires PFAS supply chain warranty. Packaging sourced from non-compliant suppliers creates uninsured product liability.</div>
+      </div></td></tr>
+
+      <!-- ROW 26 -->
+      <tr data-type="CYBER" data-sev="MOD" onclick="toggle(this)">
+        <td>2021</td>
+        <td>GL Coverage B — Website Accessibility ADA Class Actions</td>
+        <td><span class="type-chip tc-CYBER">CYBER</span></td>
+        <td><span class="sev sev-MOD">MOD</span></td>
+        <td>~$10m (composite)</td>
+        <td>UA</td>
+        <td><span class="b-i">ILLUS</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>ADA Title III class actions against businesses for inaccessible websites (missing alt text, keyboard navigation, screen reader compatibility). Surge in serial plaintiff filings post-2018 (Winn-Dixie case).</div>
+        <div><strong>Coverage Trigger</strong>Coverage B — personal and advertising injury (discrimination offence). GL coverage for ADA digital accessibility claims disputed — some courts have found coverage, others have not.</div>
+        <div><strong>Market Impact</strong>ADA website accessibility a high-frequency, low-severity category that strains aggregate limits. Defence costs often exceed settlement value.</div>
+        <div><strong>Underwriting Lesson</strong>Review Coverage B aggregate relative to ADA claim frequency in insured's sector. Retail and hospitality particularly exposed. WCAG 2.1 compliance reduces risk.</div>
+      </div></td></tr>
+
+      <!-- ROW 27 -->
+      <tr data-type="PROD" data-sev="MOD" onclick="toggle(this)">
+        <td>2021</td>
+        <td>Electric Scooter Injuries — Shared Mobility Products GL</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-MOD">MOD</span></td>
+        <td>~$25m (est. composite)</td>
+        <td>UA / US</td>
+        <td><span class="b-e">EST</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Head injuries and fatalities from shared electric scooter use (Bird, Lime, Spin). Product design defects (speed limiter failure, brake failure) and premises liability where sidewalk deployment injured pedestrians.</div>
+        <div><strong>Coverage Trigger</strong>Products GL — BI. Complex split between operator GL (operations/premises) and product manufacturer GL (defective hardware). Waiver of subrogation between manufacturers and operators.</div>
+        <div><strong>Market Impact</strong>Shared mobility GL a new specialty category. City permit conditions often require minimum GL limits of $5m per occurrence for e-scooter operators.</div>
+        <div><strong>Underwriting Lesson</strong>Shared mobility operators require combination of products + operations GL. Municipal permit requirements drive minimum limit specifications.</div>
+      </div></td></tr>
+
+      <!-- ROW 28 -->
+      <tr data-type="BI" data-sev="MOD" onclick="toggle(this)">
+        <td>2020</td>
+        <td>Cannabis Dispensary — Premises BI &amp; Dram Shop (Colorado)</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MOD">MOD</span></td>
+        <td>~$12m (illustrative)</td>
+        <td>UA</td>
+        <td><span class="b-i">ILLUS</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Illustrative composite: cannabis dispensary sold edibles to customer who subsequently caused a motor accident. Colorado dram shop analogue liability — dispensary liability for post-consumption third-party harm.</div>
+        <div><strong>Coverage Trigger</strong>Operations GL — BI. Many standard carriers exclude cannabis operations. E&amp;S specialty market. Dram shop liability for cannabis analogous to alcohol liability.</div>
+        <div><strong>Market Impact</strong>Cannabis GL one of fastest-growing E&amp;S specialty categories. All 38 recreational/medical states have distinct regulatory regimes affecting GL exposure.</div>
+        <div><strong>Underwriting Lesson</strong>Cannabis GL requires state-by-state analysis. Operations (dispensary vs. cultivation vs. processing) have very different GL profiles.</div>
+      </div></td></tr>
+
+      <!-- ROW 29 -->
+      <tr data-type="BI" data-sev="MOD" onclick="toggle(this)">
+        <td>2022</td>
+        <td>Construction Defect — Condominium HOA (Florida)</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MOD">MOD</span></td>
+        <td>~$20m (est.)</td>
+        <td>UA / UC</td>
+        <td><span class="b-e">EST</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Surfside Champlain Towers South collapse, June 2021 — 98 deaths. While directly a structural failure, triggered wave of Florida condominium GL and construction defect claims and reserve increases across the state.</div>
+        <div><strong>Coverage Trigger</strong>Operations/completed operations GL — BI and PD. Developer, contractor, structural engineer all potentially liable. HOA GL separate from developer/contractor GL.</div>
+        <div><strong>Market Impact</strong>Florida property/condo GL repriced dramatically post-Surfside. Legislative changes (SB 4-D) mandated structural inspections. GL rates for Florida condo construction +80–150%.</div>
+        <div><strong>Underwriting Lesson</strong>Florida condominium GL requires Surfside-era structural inspection certificates. Completed operations tail for condo developments typically 10+ years.</div>
+      </div></td></tr>
+
+      <!-- ROW 30 -->
+      <tr data-type="PD" data-sev="MOD" onclick="toggle(this)">
+        <td>2023</td>
+        <td>Data Destruction — IT Contractor Ransomware (Operations PD)</td>
+        <td><span class="type-chip tc-PD">PD</span></td>
+        <td><span class="sev sev-MOD">MOD</span></td>
+        <td>~$18m (est.)</td>
+        <td>UA / US</td>
+        <td><span class="b-i">ILLUS</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Illustrative composite: managed IT service provider suffered ransomware; client data and systems destroyed. Client sued IT contractor under GL for property damage (loss of data and systems).</div>
+        <div><strong>Coverage Trigger</strong>Coverage A — PD (electronic data). ISO CG 00 01 2001 amendment excluded "electronic data" from PD definition. Many IT contractor GL policies now add electronic data back in. Complex GL/cyber co-ordination required.</div>
+        <div><strong>Market Impact</strong>IT/technology contractor GL and cyber increasingly interlinked. Standalone cyber insufficient if GL policy excludes electronic data PD.</div>
+        <div><strong>Underwriting Lesson</strong>Technology E&amp;O/GL combined policy recommended for IT service providers. ISO CG 00 01 electronic data exclusion must be evaluated.</div>
+      </div></td></tr>
+
+      <!-- ROW 31 -->
+      <tr data-type="BI" data-sev="MIN" onclick="toggle(this)">
+        <td>2023</td>
+        <td>Slip &amp; Fall — Retail Grocery (High-Frequency Attritional)</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MIN">MIN</span></td>
+        <td>$50k–$500k (per claim)</td>
+        <td>UA</td>
+        <td><span class="b-e">EST</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Representative of high-frequency premises liability — slip and fall on wet floors, spills, poor lighting in retail environments. Primary driver of attritional GL loss for retail, hospitality, and food service operations.</div>
+        <div><strong>Coverage Trigger</strong>Coverage A — BI. Premises operations. High frequency/low severity, but aggregate impact material for large retail chains. Defence costs often exceed settlement amount for minor injuries.</div>
+        <div><strong>Market Impact</strong>Attritional GL for retail is actuarially predictable but influenced by jurisdiction — California, Florida, New York materially above national average.</div>
+        <div><strong>Underwriting Lesson</strong>Slip and fall frequency driven by incident reporting procedures, cleaning logs, CCTV. Risk quality driven by loss control practices. Key driver of primary GL rate for retail risks.</div>
+      </div></td></tr>
+
+      <!-- ROW 32 -->
+      <tr data-type="PROD" data-sev="MIN" onclick="toggle(this)">
+        <td>2022</td>
+        <td>Food Contamination — E. coli Outbreak (Small Restaurant Chain)</td>
+        <td><span class="type-chip tc-PROD">PROD</span></td>
+        <td><span class="sev sev-MIN">MIN</span></td>
+        <td>$2m–$5m (illustrative)</td>
+        <td>UA</td>
+        <td><span class="b-i">ILLUS</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Illustrative of food contamination claim against regional restaurant chain — multiple E. coli illness cases, CDC traceback to contaminated lettuce. Reputational damage, loss of business, and personal injury claims.</div>
+        <div><strong>Coverage Trigger</strong>Products GL — BI. Potentially also products recall (separate cover). Restaurant GL typically includes products coverage on standard CGL form.</div>
+        <div><strong>Market Impact</strong>Food service GL attritional category. Chipotle precedent (multiple E. coli outbreaks 2015–2018, $25m DOJ settlement) shows reputational multiplier for national chains.</div>
+        <div><strong>Underwriting Lesson</strong>Restaurant/food service GL loss experience is the primary rating driver. HACCP certification and food safety audit records should be requested for large accounts.</div>
+      </div></td></tr>
+
+      <!-- ROW 33 -->
+      <tr data-type="BI" data-sev="MIN" onclick="toggle(this)">
+        <td>2021</td>
+        <td>Contractor Injury on Third-Party Premises (Additional Insured Claim)</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MIN">MIN</span></td>
+        <td>$500k–$2m (illustrative)</td>
+        <td>UA</td>
+        <td><span class="b-i">ILLUS</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Illustrative of additional insured (AI) GL claim: subcontractor employee injured on general contractor's site; GC named as AI on subcontractor's GL policy. AI tender triggers coverage dispute over scope and limits.</div>
+        <div><strong>Coverage Trigger</strong>Coverage A — BI. Additional insured endorsements (CG 20 10 / CG 20 37) define scope. Ongoing vs. completed operations AI distinction frequently litigated.</div>
+        <div><strong>Market Impact</strong>AI claims represent a significant proportion of construction GL claims. AI endorsement wording and limits critical to coverage outcome.</div>
+        <div><strong>Underwriting Lesson</strong>Review AI endorsement language — blanket AI (CG 20 33) vs. specific (CG 20 10/37). Subcontractor limit adequacy relative to GC project value critical.</div>
+      </div></td></tr>
+
+      <!-- ROW 34 -->
+      <tr data-type="PI" data-sev="MIN" onclick="toggle(this)">
+        <td>2022</td>
+        <td>Copyright / Advertising Injury — Social Media Content Claim</td>
+        <td><span class="type-chip tc-PI">PI</span></td>
+        <td><span class="sev sev-MIN">MIN</span></td>
+        <td>$200k–$1m (illustrative)</td>
+        <td>UA</td>
+        <td><span class="b-i">ILLUS</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Illustrative: business uses copyrighted music in social media advertising without licence; copyright holder claims infringement under Coverage B (advertising injury — "use of another's copyrighted work" — offence g of ISO CG 00 01).</div>
+        <div><strong>Coverage Trigger</strong>Coverage B — advertising injury. IP exclusion (exclusion i) may apply if infringement was intentional. Defence costs often $100k–$500k for IP copyright disputes.</div>
+        <div><strong>Market Impact</strong>Social media advertising injury a growing sub-category. IP infringement in digital marketing now a standard Coverage B loss type.</div>
+        <div><strong>Underwriting Lesson</strong>Coverage B IP exclusion must be understood by insured. Digital marketing agencies require careful Coverage B analysis — consider separate IP/media liability endorsement.</div>
+      </div></td></tr>
+
+      <!-- ROW 35 -->
+      <tr data-type="BI" data-sev="MOD" onclick="toggle(this)">
+        <td>2023</td>
+        <td>Nuclear Verdict — Drunk Driving Accident / Dram Shop (Texas)</td>
+        <td><span class="type-chip tc-BI">BI</span></td>
+        <td><span class="sev sev-MOD">MOD</span></td>
+        <td>$300m (verdict, under appeal)</td>
+        <td>UA / UC</td>
+        <td><span class="b-v">VER</span></td>
+      </tr>
+      <tr class="expand-row"><td colspan="7"><div class="expand-inner">
+        <div><strong>Cause</strong>Texas dram shop case — restaurant/bar served visibly intoxicated patron who subsequently caused a fatal accident. Jury awarded $300m including $250m punitive against the establishment.</div>
+        <div><strong>Coverage Trigger</strong>Operations GL — BI. Texas dram shop liability codified in Tex. Alco. Bev. Code §2.02. Punitive damages not covered under most GL policies in Texas.</div>
+        <div><strong>Market Impact</strong>Texas hospitality/liquor liability rates among highest in US. Nuclear verdict risk drives many Texas food/beverage operators to E&amp;S market.</div>
+        <div><strong>Underwriting Lesson</strong>Liquor liability endorsement essential for any F&amp;B operation serving alcohol. Texas, Florida, Louisiana — highest dram shop verdict states. Punitive multiplier must be assessed for umbrella adequacy.</div>
+      </div></td></tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Coverage Code Reference</h2>
+  <p>All loss events above map to one or more of the four Lloyd's US GL codes. The table below clarifies which coverage triggers align to each code.</p>
+  <div style="overflow-x:auto; margin:0.5rem 0 1.5rem;">
+  <table>
+    <thead><tr><th>Code</th><th>Full Name</th><th>Primary Loss Triggers in Database</th></tr></thead>
+    <tbody>
+      <tr><td><strong>UA</strong></td><td>General Liability USA — Direct</td><td>Operations BI/PD (premises, products), Coverage A &amp; B all categories</td></tr>
+      <tr><td><strong>UC</strong></td><td>Commercial Umbrella &amp; Excess USA</td><td>Nuclear verdicts, mass tort excess layers, umbrella triggered above primary UA limits</td></tr>
+      <tr><td><strong>UR</strong></td><td>GL USA — Reinsurance (Treaty/Fac)</td><td>Industry-wide aggregates: asbestos, tobacco, PFAS, opioids, SAM portfolio XL</td></tr>
+      <tr><td><strong>US</strong></td><td>GL USA — Surplus Lines / E&amp;S Direct</td><td>Declined/non-admitted risks: cannabis, PFAS manufacturers, SAM youth orgs, nuclear verdict jurisdictions, NY construction §240</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+<footer>Risk Code Hub · General Liability USA (UA · UC · UR · US) · Module 03: Loss Database · v4.1 May 2026</footer>
+
+<script>
+  let activeType = 'ALL';
+  let activeSev  = 'ALL';
+
+  function filterType(t, btn) {
+    activeType = t;
+    document.querySelectorAll('#typeFilters button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+  function filterSev(s, btn) {
+    activeSev = s;
+    document.querySelectorAll('#sevFilters button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+  function applyFilters() {
+    document.querySelectorAll('#lossBody tr[data-type]').forEach(row => {
+      const typeMatch = activeType === 'ALL' || row.dataset.type === activeType;
+      const sevMatch  = activeSev  === 'ALL' || row.dataset.sev  === activeSev;
+      const show = typeMatch && sevMatch;
+      row.style.display = show ? '' : 'none';
+      // hide expand row if parent hidden
+      const next = row.nextElementSibling;
+      if (next && next.classList.contains('expand-row')) {
+        if (!show) next.classList.remove('show');
+        next.style.display = (show && next.classList.contains('show')) ? '' : (show ? '' : 'none');
+      }
+    });
+  }
+  function toggle(row) {
+    const next = row.nextElementSibling;
+    if (next && next.classList.contains('expand-row')) {
+      next.classList.toggle('show');
+      next.style.display = next.classList.contains('show') ? 'table-row' : 'none';
+    }
+  }
+</script>
+</body>
+</html>

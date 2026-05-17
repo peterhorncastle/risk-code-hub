@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Legal Expenses (LE) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #455a64;
+      --hub-dark:      #1c313a;
+      --hub-light:     #eceff1;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1c313a 0%,#455a64 55%,#607d8b 100%);
+      --header-sub:    #b0bec5;
+      --le-mid:        #cfd8dc;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2a31;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1c313a;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1000px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--le-mid);}
+    .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+    .filters button{padding:6px 14px;border-radius:20px;border:2px solid var(--hub-primary);background:#fff;color:var(--hub-primary);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filters button.active,.filters button:hover{background:var(--hub-primary);color:#fff;}
+    .filters button[data-t="legislative"]{border-color:#c62828;}
+    .filters button[data-t="legislative"].active,.filters button[data-t="legislative"]:hover{background:#c62828;border-color:#c62828;color:#fff;}
+    .filters button[data-t="caselaw"]{border-color:#1565c0;}
+    .filters button[data-t="caselaw"].active,.filters button[data-t="caselaw"]:hover{background:#1565c0;border-color:#1565c0;color:#fff;}
+    .filters button[data-t="market"]{border-color:#6a1b9a;}
+    .filters button[data-t="market"].active,.filters button[data-t="market"]:hover{background:#6a1b9a;border-color:#6a1b9a;color:#fff;}
+    .filters button[data-t="access"]{border-color:#1a5c2a;}
+    .filters button[data-t="access"].active,.filters button[data-t="access"]:hover{background:#1a5c2a;border-color:#1a5c2a;color:#fff;}
+    .filters button[data-t="technology"]{border-color:#00695c;}
+    .filters button[data-t="technology"].active,.filters button[data-t="technology"]:hover{background:#00695c;border-color:#00695c;color:#fff;}
+    .filters button[data-t="regulatory"]{border-color:#e65100;}
+    .filters button[data-t="regulatory"].active,.filters button[data-t="regulatory"]:hover{background:#e65100;border-color:#e65100;color:#fff;}
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--le-mid);}
+    .tl-item{position:relative;margin-bottom:24px;display:none;}
+    .tl-item.show{display:block;}
+    .dot{position:absolute;left:-28px;top:4px;width:16px;height:16px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--hub-primary);}
+    .dot.legislative{background:#c62828;box-shadow:0 0 0 2px #c62828;}
+    .dot.caselaw{background:#1565c0;box-shadow:0 0 0 2px #1565c0;}
+    .dot.market{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .dot.access{background:#1a5c2a;box-shadow:0 0 0 2px #1a5c2a;}
+    .dot.technology{background:#00695c;box-shadow:0 0 0 2px #00695c;}
+    .dot.regulatory{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .tl-card{background:#fff;border-radius:8px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card .yr{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .tl-card h4{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.84rem;color:#444;line-height:1.5;}
+    .type-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;}
+    .tag-legislative{background:#ffebee;color:#c62828;}
+    .tag-caselaw{background:#e3f2fd;color:#1565c0;}
+    .tag-market{background:#f3e5f5;color:#6a1b9a;}
+    .tag-access{background:#e8f5e9;color:#1a5c2a;}
+    .tag-technology{background:#e0f2f1;color:#00695c;}
+    .tag-regulatory{background:#fff3e0;color:#e65100;}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#555;}
+    .legend-dot{width:12px;height:12px;border-radius:50%;}
+    footer{background:#1c313a;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Legal Expenses (LE)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key legislative, case law, market and access-to-justice events 1928–2024</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#c62828;"></div> Legislative</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1565c0;"></div> Case Law</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6a1b9a;"></div> Market Structural</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1a5c2a;"></div> Access to Justice</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00695c;"></div> Technology</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100;"></div> Regulatory</div>
+  </div>
+
+  <div class="filters">
+    <button class="active" data-t="all" onclick="filter('all',this)">All Events</button>
+    <button data-t="legislative" onclick="filter('legislative',this)">Legislative</button>
+    <button data-t="caselaw" onclick="filter('caselaw',this)">Case Law</button>
+    <button data-t="market" onclick="filter('market',this)">Market Structural</button>
+    <button data-t="access" onclick="filter('access',this)">Access to Justice</button>
+    <button data-t="technology" onclick="filter('technology',this)">Technology</button>
+    <button data-t="regulatory" onclick="filter('regulatory',this)">Regulatory</button>
+  </div>
+
+  <div class="timeline" id="timeline"></div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Legal Expenses (LE) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+const EVENTS = [
+  {y:1928,t:"market",title:"DAS Founded — Munich, Germany",body:"Deutsche Automobil Schutz (DAS) founded in Munich as the world's first specialist legal expenses insurer, providing motor legal protection insurance to German motorists. DAS remains one of the largest LEI providers globally and is now part of the Munich Re group. The German BTE model — broad-scope, panel-solicitor-managed, affordable — becomes the global template for legal expenses insurance."},
+  {y:1949,t:"legislative",title:"UK Legal Aid Act 1949",body:"Legal Aid and Advice Act 1949 establishes a comprehensive state-funded legal aid scheme in England and Wales. For three decades, generous eligibility thresholds mean that the majority of the population can access state-funded legal representation, reducing private demand for LEI. The gradual erosion of legal aid eligibility from the 1990s onwards is a key driver of BTE market growth."},
+  {y:1964,t:"market",title:"ARAG Group Expands Internationally",body:"ARAG (founded Düsseldorf 1935) expands its legal expenses insurance operations internationally during the 1960s–70s, becoming one of the major European LEI carriers alongside DAS, Roland Rechtsschutz and Allianz Legal Protection. The continental European model of standalone BTE cover sold through direct channels and motor add-ons is established during this era."},
+  {y:1984,t:"regulatory",title:"EU Motor Insurance Directives — Legal Protection Requirement",body:"EC Motor Insurance Directives progressively require member states to ensure that motor third-party liability insurance includes legal protection for occupants pursuing injury claims. This drives mass-market BTE penetration across European motor insurance markets and establishes the regulatory foundation for EU Directive 2009/22/EC on Legal Expenses Insurance, which sets minimum requirements for LEI providers."},
+  {y:1990,t:"legislative",title:"Courts and Legal Services Act 1990",body:"Courts and Legal Services Act 1990 gives the Lord Chancellor power to permit conditional fee agreements (CFAs). This is the legislative foundation for both the ATE insurance market and 'no win no fee' litigation. CFAs are subsequently permitted in personal injury cases from 1995, followed by a phased extension to most civil litigation by 2000. The ATE market grows directly from the CFA regime."},
+  {y:1995,t:"market",title:"CFAs Permitted — ATE Market Born",body:"Conditional fee agreements (CFAs) permitted in personal injury, insolvency and human rights cases. Claimant solicitors can now pursue cases on 'no win no fee' terms, but clients face adverse costs risk if they lose. After-the-event (ATE) insurance emerges immediately to cover this adverse costs risk. Major ATE providers including Temple Legal Protection and several Lloyd's syndicates enter the market."},
+  {y:1999,t:"legislative",title:"Access to Justice Act 1999 — ATE Premiums Recoverable",body:"Access to Justice Act 1999 makes ATE insurance premiums recoverable from the losing party in civil litigation. This creates a powerful commercial dynamic: successful claimants can recover not only damages and costs, but the ATE premium itself from the defendant. The ATE market grows rapidly 1999–2012 on this basis. Clinical negligence, personal injury and commercial ATE all expand."},
+  {y:2002,t:"legislative",title:"Employment Act 2002 — ACAS Conciliation Framework",body:"Employment Act 2002 establishes the framework for ACAS involvement in employment disputes. Subsequently strengthened by the Enterprise and Regulatory Reform Act 2013, which made ACAS early conciliation mandatory before a claimant can issue employment tribunal proceedings. ACAS now handles approximately 100,000+ early conciliation notifications per year. A key BTE employment LEI trigger metric."},
+  {y:2004,t:"regulatory",title:"EU Directive on Legal Expenses Insurance (2004/113/EC lineage)",body:"EU framework for legal expenses insurance regulation develops through the 2000s, culminating in Directive 2009/22/EC. Key requirements: freedom of choice of lawyer (insured can choose own solicitor for any proceedings requiring legal representation); separation of LEI claims management from motor/property claims management; ring-fencing of LEI reserves. These requirements shape how BTE providers structure panel solicitor arrangements."},
+  {y:2010,t:"legislative",title:"Jackson Review of Civil Litigation Costs",body:"Lord Justice Jackson publishes the final report of his Review of Civil Litigation Costs (January 2010). Core recommendations: make success fees and ATE premiums non-recoverable; introduce qualified one-way cost shifting (QOCS) for personal injury; tighten costs budgeting and case management. The report is the most comprehensive review of civil litigation costs since the Woolf reforms (1999) and directly shapes LASPO 2012."},
+  {y:2012,t:"legislative",title:"LASPO 2012 — Fundamental ATE Market Restructuring",body:"Legal Aid, Sentencing and Punishment of Offenders Act 2012. From April 2013: ATE premiums and CFA success fees are non-recoverable from losing parties in most civil litigation. Exceptions preserved for clinical negligence (ATE premium for expert reports recoverable) and publication/privacy proceedings. The personal injury ATE market collapses in volume. Commercial ATE adapts at higher premium rates. BTE market accelerates as individuals seek private funding solutions."},
+  {y:2013,t:"legislative",title:"Employment Tribunal Fees Introduced",body:"From July 2013, employment tribunal claimants required to pay fees (issue fee £160–250; hearing fee £230–950). Tribunal claim volumes fall by approximately 70% within 12 months — one of the most dramatic suppressions of access to justice in modern UK legal history. The fee regime persists until struck down by the Supreme Court in 2017. The fee period coincidentally depresses BTE employment claims frequency, masking underlying employment dispute risk."},
+  {y:2013,t:"market",title:"QOCS Introduced for Personal Injury",body:"Qualified One-Way Cost Shifting (QOCS) introduced alongside LASPO for personal injury cases. QOCS means that a losing PI claimant cannot generally be ordered to pay the winning defendant's costs (unless they behaved unreasonably or fraudulently). QOCS partially replaces the protection that ATE insurance previously provided for PI claimants, reducing demand for PI ATE in lower-value cases while higher-value and complex cases continue to use ATE."},
+  {y:2017,t:"caselaw",title:"R (Unison) v Lord Chancellor [2017] UKSC 51",body:"Supreme Court unanimously strikes down employment tribunal fees as unlawful (26 July 2017). Lord Reed holds that the fees interfere unjustifiably with the right of access to the courts and are an unlawful exercise of the Lord Chancellor's power. Employment tribunal volumes recover substantially following the ruling. Government required to refund approximately £30m in fees already collected. A landmark access-to-justice decision."},
+  {y:2018,t:"regulatory",title:"GDPR Comes into Force — New LEI Trigger",body:"EU General Data Protection Regulation (GDPR) and UK Data Protection Act 2018 in force from 25 May 2018. Creates a wave of new legal disputes: data breach claims by individuals against organisations, subject access request (SAR) disputes, ICO regulatory investigations, and class action data breach claims. Morrisons data breach group litigation, British Airways breach, Marriott breach all generate LEI and litigation funding activity. GDPR becomes the fastest-growing commercial LEI trigger."},
+  {y:2019,t:"caselaw",title:"Lloyd's List Intelligence v Maritime Insights [2019] — Data Dispute",body:"Data breach and commercial dispute case highlighting the growing intersection of GDPR enforcement, data access rights and LEI. Illustrates how data-related disputes — increasingly common post-GDPR — engage commercial BTE policies covering contract disputes and regulatory investigations. LEI providers update wordings to confirm GDPR investigation costs are within scope."},
+  {y:2020,t:"market",title:"COVID-19 Employment Surge — BTE Claims Spike",body:"COVID-19 pandemic generates a wave of employment disputes from mid-2020: redundancy disputes (employer eligibility for CJRS furlough contested), flexible working refusal claims, health and safety dismissal claims, and discrimination claims related to workplace shielding. ACAS early conciliation notifications rise sharply. BTE employment LEI claims frequency increases markedly in 2020–21. Many BTE providers trigger panel solicitor caseload management."},
+  {y:2021,t:"market",title:"FCA Business Interruption Test Case — Litigation Funding Integration",body:"FCA v Arch Insurance [2021] UKSC 1 — Supreme Court confirms BI coverage for many policyholders. The proceedings involved significant ATE insurance and litigation funding activity. The case demonstrates how ATE and third-party litigation funding (Burford, Harbour, LCM) now operate as an integrated commercial litigation funding ecosystem. ATE insurance for funded commercial disputes becomes a specialist growth sub-market."},
+  {y:2023,t:"legislative",title:"Fixed Recoverable Costs Extended — Civil Cases to £100,000",body:"Fixed Recoverable Costs (FRC) regime extended from October 2023 to cover most civil cases valued up to £100,000 (excluding clinical negligence and certain specialist proceedings). FRC caps costs recoverable between parties at prescribed levels. Impact on BTE: limits the indemnity insurer needs to provide in many covered cases. Impact on ATE: changes adverse costs risk quantum for FRC-capped cases. Market assessing full implications through 2024–25."},
+  {y:2024,t:"technology",title:"AI-Related Employment Disputes — Emerging LEI Frontier",body:"AI-driven algorithmic management systems (automated performance monitoring, algorithmic dismissal triggers) and automated decision-making in recruitment generate new categories of employment dispute. UK Employment Rights Act 2023 rights and GDPR Article 22 (automated decision-making) are engaged. Legal expenses insurers and employment lawyers see the first wave of AI-related tribunal claims. LEI wordings are being reviewed for scope adequacy in AI dispute contexts."}
+];
+
+function filter(type, btn) {
+  document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tl-item').forEach(el=>{
+    if(type==='all'||el.dataset.t===type) el.classList.add('show');
+    else el.classList.remove('show');
+  });
+}
+
+function render() {
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = EVENTS.map(e=>`
+    <div class="tl-item show" data-t="${e.t}">
+      <div class="dot ${e.t}"></div>
+      <div class="tl-card">
+        <div class="yr">${e.y}</div>
+        <span class="type-tag tag-${e.t}">${e.t.replace('caselaw','Case Law').replace('legislative','Legislative').replace('market','Market').replace('access','Access to Justice').replace('technology','Technology').replace('regulatory','Regulatory')}</span>
+        <h4>${e.title}</h4>
+        <p>${e.body}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

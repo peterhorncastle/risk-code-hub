@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Fine Art, Specie &amp; Jewellery — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a148c;
+      --hub-dark:      #250057;
+      --hub-light:     #f3e5ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#7b0020;
+      --header-gradient:linear-gradient(135deg,#250057 0%,#4a148c 55%,#6a1b9a 100%);
+      --header-sub:    #ce93d8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a0a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.18) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ce93d8;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#250057;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ce93d8;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e1bee7;}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #f0e6ff;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#faf0ff;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-theft-heist{background:#fdecea;color:#c62828;}
+    .tp-fire{background:#fff3e0;color:#e65100;}
+    .tp-flood{background:#e3f2fd;color:#1565c0;}
+    .tp-transit-damage{background:#f3e5f5;color:#6a1b9a;}
+    .tp-forgery-fraud{background:#fff8e1;color:#795548;}
+    .tp-looting{background:#fce4ec;color:#880e4f;}
+    .tp-mysterious-disappearance{background:#e8f5e9;color:#1a5c2a;}
+    .tp-vandalism{background:#e0f2f1;color:#00695c;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#1a5c2a;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#faf0ff;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#250057;color:#ce93d8;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Fine Art, Specie &amp; Jewellery</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>Fine Art &amp; Specie Loss Database</h1>
+    <div class="sub">35 notable fine art, specie &amp; jewellery incidents 1945–2024 — filter by type, sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Loss Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="theft-heist">Theft / Heist</option>
+        <option value="fire">Fire</option>
+        <option value="flood">Flood / Water</option>
+        <option value="transit-damage">Transit Damage</option>
+        <option value="forgery-fraud">Forgery / Fraud</option>
+        <option value="looting">Looting / Confiscation</option>
+        <option value="mysterious-disappearance">Mysterious Disappearance</option>
+        <option value="vandalism">Vandalism</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="museum-gallery">Museum / Gallery</option>
+        <option value="private-collection">Private Collection</option>
+        <option value="jewellery-retail">Jewellery Retail</option>
+        <option value="bullion-transit">Bullion / Transit</option>
+        <option value="auction-house">Auction House</option>
+        <option value="art-fair">Art Fair</option>
+        <option value="specie-vault">Specie Vault</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2000" min="1945" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 50" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Museum, country…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event / Entity</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Value (est.)</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Fine Art, Specie &amp; Jewellery (FA/GS/JB/CT) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1945,n:"Nazi Looted Art — Post-War Restitution",t:"looting",s:"museum-gallery",desc:"Systematic Nazi looting of an estimated $20bn (1945 values) of artworks across occupied Europe. Restitution process has continued for 80 years. Thousands of works still unrecovered. Defines the scope of confiscation exclusions in modern fine art policies.",v:20000,sev:"cat",geo:"Europe"},
+  {y:1961,n:"Mona Lisa — Loan to USA (Uninsured)",t:"mysterious-disappearance",s:"museum-gallery",desc:"The Louvre's Mona Lisa travels to the USA for exhibition at the National Gallery and Metropolitan Museum. Deemed too valuable for commercial insurance — French government provides its own guarantee. Illustrates the ceiling of commercially insurable agreed values for truly unique cultural objects.",v:0,sev:"min",geo:"France/USA"},
+  {y:1969,n:"Caravaggio 'Nativity' — Palermo Oratory",t:"theft-heist",s:"museum-gallery",desc:"Caravaggio's 'Nativity with St. Francis and St. Lawrence' stolen from the Oratory of San Lorenzo, Palermo. Value est. $20m+. Never recovered. Suspected Mafia involvement cited by Italian investigators; fragments reportedly destroyed. One of the longest-outstanding unsolved art thefts in Europe.",v:20,sev:"maj",geo:"Italy"},
+  {y:1972,n:"Michelangelo Pietà — Vatican Hammer Attack",t:"vandalism",s:"museum-gallery",desc:"Laszlo Toth attacks Michelangelo's Pietà in St. Peter's Basilica with a geologist's hammer, breaking off the Madonna's arm and damaging her nose and eyelid. The work is restored over two years. The attack led to the installation of bulletproof glass — now the standard for such irreplaceable works. Insured by the Vatican; restoration cost confidential.",v:0,sev:"maj",geo:"Vatican"},
+  {y:1976,n:"Dublin National Gallery — Three Works Stolen",t:"theft-heist",s:"museum-gallery",desc:"Three works including a Rubens and a Vermeer stolen from the Irish National Gallery in Dublin. The works are recovered two years later, significantly damaged. The case highlights the vulnerability of national institutions with limited security budgets.",v:15,sev:"mod",geo:"Ireland"},
+  {y:1985,n:"Marmottan Museum Paris — 9 Monet Impressionists",t:"theft-heist",s:"museum-gallery",desc:"Nine Impressionist works, including the seminal Monet 'Impression, Sunrise' (which gave Impressionism its name), stolen from the Musée Marmottan Paris during opening hours by armed thieves. The works are recovered in Corsica five years later following an Interpol operation. Insured; significant conservation required after recovery.",v:12,sev:"maj",geo:"France"},
+  {y:1990,n:"Isabella Stewart Gardner Museum Heist",t:"theft-heist",s:"museum-gallery",desc:"Thirteen works — including a Vermeer, three Rembrandts and five Degas drawings — stolen by two thieves posing as police officers. Estimated value $500m. Museum had NO fine art insurance — zero recovery. The greatest unsolved art theft in history; FBI investigation ongoing. Empty frames remain on display. The Gardner heist is the paradigm case used by insurers to argue the value of fine art cover to uninsured museums.",v:500,sev:"cat",geo:"USA"},
+  {y:1991,n:"Vincent Van Gogh Museum Amsterdam — Two Works",t:"theft-heist",s:"museum-gallery",desc:"Two Van Gogh works — 'The Parsonage Garden at Nuenen in Spring' and 'Congregation Leaving the Reformed Church in Nuenen' — stolen from the Van Gogh Museum, Amsterdam, by thieves who enter through the roof. The works are recovered 35 minutes later in an abandoned car; thieves had fled without them. Security overhaul follows.",v:30,sev:"mod",geo:"Netherlands"},
+  {y:1994,n:"Edvard Munch 'The Scream' — Oslo National Gallery",t:"theft-heist",s:"museum-gallery",desc:"Munch's iconic 'The Scream' (1893 version) stolen from the National Gallery of Norway by thieves who leave a note reading 'Thanks for the poor security.' Recovered three months later following a sting operation. A second version of The Scream is stolen from the Munch Museum in 2004 and recovered in 2006. Demonstrates the value of rapid police intelligence in art recovery.",v:75,sev:"maj",geo:"Norway"},
+  {y:1998,n:"Schiele Estate — Government Seizure at NY Museum",t:"looting",s:"museum-gallery",desc:"Two Egon Schiele works on loan from the Leopold Museum in Vienna are seized by the Manhattan District Attorney's office at the Museum of Modern Art, New York, following claims by Jewish families that the works were looted by the Nazis. The legal battle over the Washington Principles and title to looted art continues for years. Provenance due diligence risk crystallises as a real underwriting concern.",v:30,sev:"mod",geo:"USA/Austria"},
+  {y:2000,n:"Sotheby's / Christie's — $512m Antitrust Settlement",t:"forgery-fraud",s:"auction-house",desc:"Sotheby's and Christie's pay $512m in a civil antitrust settlement after secretly fixing seller commission rates for a decade. Sotheby's chairman Alfred Taubman convicted and imprisoned. Not a fine art insurance claim per se, but the governance failure directly affects the underwriting assessment of auction house and art dealer clients.",v:512,sev:"cat",geo:"USA/UK"},
+  {y:2003,n:"Antwerp Diamond Centre Heist",t:"theft-heist",s:"specie-vault",desc:"Thieves penetrate the Antwerp Diamond Centre vault — one of the world's most secure — stealing €100m+ in diamonds, gold and jewellery. Social engineering: thieves had rented an office in the building. Much not recovered. Benchmark event for vault security specifications in JB and GS underwriting.",v:110,sev:"cat",geo:"Belgium"},
+  {y:2004,n:"Van Gogh Museum Amsterdam — Second Theft",t:"theft-heist",s:"museum-gallery",desc:"Two more Van Gogh paintings stolen from the Van Gogh Museum — this time 'View of the Sea at Scheveningen' and 'Congregation Leaving the Reformed Church in Nuenen.' Works recovered in 2016 in a drug raid in Naples. Fine art theft and international organised crime: the recovered works were used as collateral in criminal transactions.",v:30,sev:"mod",geo:"Netherlands"},
+  {y:2004,n:"Edvard Munch Museum Oslo — 'The Scream' (Second Theft)",t:"theft-heist",s:"museum-gallery",desc:"Two armed gunmen steal Munch's 'The Scream' and 'Madonna' from the Munch Museum in Oslo in broad daylight, in front of horrified visitors. Works recovered two years later in a police operation. The brazenness of the daytime armed theft prompts fundamental reconsideration of visitor access and security protocols at all European museums.",v:90,sev:"cat",geo:"Norway"},
+  {y:2005,n:"Hurricane Katrina — New Orleans Art Losses",t:"flood",s:"museum-gallery",desc:"Hurricane Katrina causes catastrophic flooding of New Orleans, damaging private collections, galleries and museum collections. Works in ground-floor and basement storage are destroyed by floodwater, mould and humidity. Conservation costs for affected works often exceed the value of the works themselves. First major demonstration of climate catastrophe risk to art collections in the USA.",v:80,sev:"maj",geo:"USA"},
+  {y:2007,n:"Richemont Jewel Train Robbery — Switzerland",t:"transit-damage",s:"bullion-transit",desc:"Armed thieves rob a Richemont luxury goods transport (watches and jewellery) in transit near Geneva. Estimated CHF 50m+ of high jewellery and watches stolen. The robbery underlines transit vulnerability even for professional high-value goods carriers with armed escorts — and the importance of route security, dummy runs and GPS tracking.",v:55,sev:"maj",geo:"Switzerland"},
+  {y:2008,n:"E.G. Bührle Foundation Zurich — 4 Impressionists",t:"theft-heist",s:"museum-gallery",desc:"Four armed thieves steal a Monet, Van Gogh, Cézanne and Degas from the Bührle Foundation in Zurich, value CHF 180m. Three works recovered within days — two in a car park, one in a psychiatric clinic — but the Monet remained missing for years. Demonstrates that speed of reporting to Art Loss Register and law enforcement is the key recovery factor.",v:200,sev:"cat",geo:"Switzerland"},
+  {y:2010,n:"Paris Museum of Modern Art — 5 Paintings",t:"theft-heist",s:"museum-gallery",desc:"A lone thief breaks into the Musée d'Art Moderne de la Ville de Paris and steals five works by Picasso, Matisse, Braque, Léger and Modigliani, est. value €500m. The thief subsequently claims to have destroyed the works after failing to find a buyer — only fragments reportedly recovered. The total loss of five major modern masterworks is the worst single-institution French art theft loss on record.",v:550,sev:"cat",geo:"France"},
+  {y:2011,n:"Knoedler Gallery Forgery — $80m Fake ABEx Works",t:"forgery-fraud",s:"auction-house",desc:"New York's Knoedler & Company gallery closes after 15 years of selling approximately $80m of forged Abstract Expressionist works — fake Rothkos, Pollocks and de Koonings created by Chinese-American artist Pei-Shen Qian. Major collectors deceived. Insurance claims arise for diminution in agreed value of 'authenticated' works that prove to be forgeries. Definitive modern art forgery insurance event.",v:80,sev:"cat",geo:"USA"},
+  {y:2013,n:"Brazilian Museum of Art Heist — Two Works",t:"theft-heist",s:"museum-gallery",desc:"Two Pablo Picasso and Candido Portinari works worth est. $50m+ stolen from the Museu de Arte de São Paulo (MASP) — the richest art museum in Latin America — by two men who pose as workers and carry the paintings out through an emergency exit. One work is recovered damaged; the other remains missing. Highlights Latin American art security vulnerabilities.",v:50,sev:"maj",geo:"Brazil"},
+  {y:2015,n:"Hatton Garden Safe Deposit Heist",t:"theft-heist",s:"specie-vault",desc:"Gang of elderly career criminals drill through the vault of the Hatton Garden Safe Deposit company over Easter 2015, stealing est. £14m in cash, jewellery and precious stones from safety deposit boxes. Much was uninsured by box holders. The heist prompts industry-wide review of vault specifications and insurance conditions for JB and specie risks in the London diamond and jewellery district.",v:18,sev:"maj",geo:"UK"},
+  {y:2015,n:"Port Freeport Concentration Risk Identified",t:"mysterious-disappearance",s:"specie-vault",desc:"Market analysis highlights growing concentration risk at Geneva, Luxembourg, Singapore and Delaware freeports — where high-net-worth collectors store artworks tax-free. Estimated 1.2m works held in freeport storage globally, valued at est. $100bn+. Fire, flood or security breach at a single freeport could trigger catastrophic aggregation loss. Lloyd's market begins requiring declarations of freeport-stored works.",v:0,sev:"mod",geo:"Switzerland/Singapore"},
+  {y:2018,n:"Brazilian National Museum Fire — 20 Million Artefacts",t:"fire",s:"museum-gallery",desc:"The Museu Nacional in Rio de Janeiro — Brazil's oldest and most important natural history and archaeology museum — is almost entirely destroyed by fire. An estimated 20 million artefacts, spanning 200 years of Brazilian cultural heritage, are lost. The museum had inadequate fire suppression systems and severely deficient insurance cover. A catastrophic failure of institutional risk management.",v:200,sev:"cat",geo:"Brazil"},
+  {y:2018,n:"Stéphane Breitwieser — Ongoing Restitution",t:"theft-heist",s:"museum-gallery",desc:"Prolific art thief Stéphane Breitwieser, who stole over 200 works from European museums in the 1990s (his mother destroyed many by cutting them up), is re-arrested for additional thefts in France. The case underlines that solo opportunistic thieves — not just organised gangs — remain a major threat to unguarded museum collections, particularly in rural and regional institutions.",v:60,sev:"mod",geo:"France/Europe"},
+  {y:2019,n:"Climate Damage — Humidity and Mould at Private Collectors",t:"flood",s:"private-collection",desc:"Multiple claims for mould and humidity damage to private art collections following extreme weather events in 2019 (extensive UK flooding; Mediterranean heatwave). Conservation costs for humidity-damaged works on paper (watercolours, prints, drawings) can exceed face value of the works. Environmental monitoring and climate control conditions increasingly standard in private collector policies.",v:10,sev:"mod",geo:"UK/Europe"},
+  {y:2019,n:"Dubai Gold Souk Jewellery Robbery",t:"theft-heist",s:"jewellery-retail",desc:"Armed robbery targeting a high-value jewellery retailer in the Dubai Gold Souk — est. AED 15m (approx. $4m) of high jewellery stolen from display cases during closing hour. Perpetrators exploit a security blind spot in CCTV coverage. Case highlights Middle East JB risks and the importance of close-of-business security protocols.",v:4,sev:"mod",geo:"UAE"},
+  {y:2020,n:"Dresden Kunstkammer Heist — €1bn Jewellery",t:"theft-heist",s:"museum-gallery",desc:"Thieves cut power to the city of Dresden and steal 21 pieces of 18th-century Saxon royal jewellery from the Dresden Grünes Gewölbe (Green Vault) — including the 'Dresden White Diamond.' Estimated value up to €1bn. Two suspects arrested in 2021; some pieces recovered in 2022 as part of a plea deal. Largest cultural property theft in modern Germany.",v:1000,sev:"cat",geo:"Germany"},
+  {y:2020,n:"Beirut Port Explosion — Museum and Gallery Losses",t:"fire",s:"museum-gallery",desc:"The catastrophic explosion at Beirut's port on 4 August 2020 destroys or damages dozens of galleries, auction houses and cultural institutions in the surrounding neighbourhood. Works by Lebanese and Arab artists are lost. The event raises questions about war/terrorism exclusions and the insurability of art in politically unstable territories.",v:40,sev:"maj",geo:"Lebanon"},
+  {y:2021,n:"Beeple 'Everydays' NFT — $69m Christie's",t:"forgery-fraud",s:"auction-house",desc:"Beeple's NFT sells for $69.3m at Christie's — the first major digital art auction. The sale triggers an unresolved debate: fine art policies cover physical loss of physical objects. An NFT is a digital token; phishing attacks can steal an NFT without physical loss. No standard fine art coverage product responds. Separate digital asset products needed.",v:69,sev:"mod",geo:"USA"},
+  {y:2021,n:"Jokhang Temple Tibet — Fire Losses",t:"fire",s:"museum-gallery",desc:"Fire damages sections of the Jokhang Temple in Lhasa, one of Tibet's most sacred Buddhist sites. Cultural artefacts including ancient thangkas and religious objects are damaged or destroyed. The event highlights the vulnerability of religious cultural heritage sites to fire — particularly those with traditional wooden construction and limited fire suppression systems.",v:25,sev:"mod",geo:"China (Tibet)"},
+  {y:2022,n:"Ukrainian Museum Collections — Wartime Losses",t:"looting",s:"museum-gallery",desc:"Russia's invasion of Ukraine in February 2022 results in the seizure, destruction or removal of cultural property from Ukrainian museums. Institutions in Kherson, Mariupol and Melitopol report looting of collections by Russian forces. Ukrainian museums rush to evacuate collections from Kyiv and Kharkiv. The scale of losses recalls WWII-era cultural plundering. War exclusions prevent commercial insurance recovery.",v:500,sev:"cat",geo:"Ukraine"},
+  {y:2023,n:"British Museum Insider Theft — 2,000 Items",t:"theft-heist",s:"museum-gallery",desc:"A British Museum employee is found to have stolen up to 2,000 Greek, Roman and Egyptian items from uncatalogued reserve collections over several years — gold jewellery, gems, glass and coins. Many items had never been digitally catalogued. The loss is the largest insider theft from a major cultural institution in modern history, and prompts fundamental review of museum cataloguing, access control and insider threat management worldwide.",v:10,sev:"cat",geo:"UK"},
+  {y:2023,n:"Rio Armoured Vehicle Robbery — Brazil",t:"transit-damage",s:"bullion-transit",desc:"Armed gang intercepts an armoured cash-in-transit vehicle near Rio de Janeiro, stealing est. R$15m ($3m) in banknotes. CIT losses in Brazil have increased significantly in 2022–24, driven by organised gangs using heavy weapons and explosives. Brazilian territory attracts significant surcharges in CT underwriting — up to 3× premium loading versus comparable UK risks.",v:3,sev:"mod",geo:"Brazil"},
+  {y:2024,n:"Gem Fair Munich — Smash-and-Grab",t:"theft-heist",s:"art-fair",desc:"Thieves conduct a smash-and-grab raid on a high-value gemstone exhibitor at the Munich Gem and Jewellery Fair, stealing est. €2m of unset diamonds and coloured stones. The attack exploits the crowded fair environment and the transitory nature of gem fair security. Underlines the importance of armoured display cases, manned security and comprehensive exhibition transit endorsements for JB fair cover.",v:2,sev:"mod",geo:"Germany"},
+  {y:2024,n:"Provenance Dispute — Klimt Restitution Claim",t:"looting",s:"private-collection",desc:"A major provenance dispute over a Gustav Klimt work in a European private collection — claimed by heirs of a Jewish family whose collection was seized in 1938 — results in a negotiated settlement and restitution. The case highlights the ongoing risk of title disputes on pre-1945 European artworks. Insurers with agreed-value policies on works subject to restitution claims face complex coverage questions.",v:35,sev:"mod",geo:"Austria/USA"}
+];
+
+const typeLabels = {
+  "theft-heist":"Theft / Heist","fire":"Fire","flood":"Flood / Water",
+  "transit-damage":"Transit Damage","forgery-fraud":"Forgery / Fraud",
+  "looting":"Looting","mysterious-disappearance":"Mysterious Disappearance","vandalism":"Vandalism"
+};
+const typeClass = {
+  "theft-heist":"tp-theft-heist","fire":"tp-fire","flood":"tp-flood",
+  "transit-damage":"tp-transit-damage","forgery-fraud":"tp-forgery-fraud",
+  "looting":"tp-looting","mysterious-disappearance":"tp-mysterious-disappearance","vandalism":"tp-vandalism"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function fmt(v) {
+  if (v===0) return 'N/A';
+  if (v>=1000) return '$'+(v/1000).toFixed(1)+'bn';
+  return '$'+v+'m';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${d.s.split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}</td>
+      <td>${fmt(d.v)}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">▼ Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

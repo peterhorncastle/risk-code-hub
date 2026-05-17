@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Yachts (O) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #00427b;
+      --hub-dark:      #002050;
+      --hub-light:     #e3f0fb;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #00796b;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#002050 0%,#00427b 55%,#0057a8 100%);
+      --header-sub:    #90caf9;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#0d1b2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#90caf9;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#002050;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#90caf9;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #bbdefb;}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #e3f0fb;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f0f7ff;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-sinking{background:#e3f0fb;color:#00427b;}
+    .tp-fire{background:#fde8e8;color:#c62828;}
+    .tp-grounding{background:#fff8e1;color:#795548;}
+    .tp-racing{background:#e8f5e9;color:#2e7d32;}
+    .tp-theft{background:#f3e5f5;color:#6a1b9a;}
+    .tp-hurricane{background:#fff3e0;color:#e65100;}
+    .tp-storm{background:#e0f2f1;color:#00796b;}
+    .tp-collision{background:#fce4ec;color:#880e4f;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#00427b;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#f0f7ff;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#002050;color:#90caf9;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Yachts (O)</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>Yacht Loss Database</h1>
+    <div class="sub">35 notable yacht losses 1979–2024 — filter by type, vessel class &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Loss Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="sinking">Sinking / Flooding</option>
+        <option value="fire">Fire / Explosion</option>
+        <option value="grounding">Grounding / Stranding</option>
+        <option value="racing">Racing Incident</option>
+        <option value="theft">Theft / Piracy</option>
+        <option value="hurricane">Hurricane / Nat Cat</option>
+        <option value="storm">Storm / Heavy Weather</option>
+        <option value="collision">Collision</option>
+      </select>
+    </div>
+    <div>
+      <label>Vessel Class</label>
+      <select id="fSec">
+        <option value="">All Classes</option>
+        <option value="sailing-yacht">Sailing Yacht</option>
+        <option value="motor-yacht">Motor Yacht</option>
+        <option value="superyacht">Superyacht</option>
+        <option value="racing">Racing</option>
+        <option value="charter">Charter</option>
+        <option value="bluewater-cruising">Bluewater Cruising</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2000" min="1979" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 5" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Vessel, location…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Vessel / Event</th>
+        <th>Type</th>
+        <th>Class</th>
+        <th>Value (est.)</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Yachts (O) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1979,n:"Fastnet Race 1979 — Fleet Disaster",t:"storm",s:"racing",desc:"Force 11 storm (Beaufort 11, 60-knot gusts, 15m waves) overwhelms 303-yacht Fastnet Race fleet 13-14 August 1979. 19 crew killed, 24 yachts sunk or abandoned, 194 rescued by RNLI, RN, and commercial ships. Largest peacetime SAR operation in UK maritime history. Total insured losses estimated at several million pounds across the fleet. Watershed event for Lloyd's yacht underwriting and offshore racing safety.",v:15,sev:"cat",geo:"Irish Sea / Atlantic"},
+  {y:1979,n:"Grimalkin — Fastnet Race",t:"storm",s:"sailing-yacht",desc:"30ft Grimalkin (GRP sloop) capsized multiple times in Fastnet Race storm. Owner killed; two crew left for dead and later rescued. Became subject of intensive post-mortem on yacht safety equipment inadequacy. Grimalkin case directly influenced RORC OSR requirements for jacklines, tethers, and liferaft specifications.",v:0.05,sev:"mod",geo:"Irish Sea"},
+  {y:1985,n:"Marques — Tall Ship Sinking",t:"storm",s:"sailing-yacht",desc:"19 crew killed when 117ft brigantine Marques sinks rapidly in Bermuda Race squall. Though a tall ship rather than a conventional racing yacht, the rapid sinking in 15-knot winds highlighted stability issues in historic vessel conversions and influenced survey requirements for classic vessel cover at Lloyd's.",v:0.5,sev:"cat",geo:"North Atlantic"},
+  {y:1988,n:"Hurricane Gilbert — Caribbean Fleet",t:"hurricane",s:"charter",desc:"Category 5 Hurricane Gilbert devastates Caribbean September 1988. Charter yacht fleets in Jamaica, Cayman, and Yucatan suffer significant losses. Aggregation of charter fleet losses in a single hurricane event forces Lloyd's syndicates to review Caribbean accumulation limits and haul-out warranty requirements.",v:8,sev:"maj",geo:"Caribbean"},
+  {y:1991,n:"Fantome — Hurricane Hugo Survivor (1989) Losses",t:"hurricane",s:"charter",desc:"Windjammer Barefoot Cruises' fleet suffers repeated hurricane losses through late 1980s-early 1990s, culminating in the loss of Fantome in Hurricane Mitch (1998). The accumulation of Caribbean charter fleet losses across multiple seasons drives underwriter review of Caribbean aggregation and per-season sailing warranties.",v:5,sev:"mod",geo:"Caribbean"},
+  {y:1998,n:"Sydney-Hobart Race — Tasman Storm",t:"storm",s:"racing",desc:"Severe Tasman Sea storm (Force 11, 20m seas, 80-knot gusts) strikes Sydney-Hobart fleet 27 December 1998. 6 crew deaths, 5 yachts sunk (including Winston Churchill, Sword of Orion, Business Post Naiad), 66 yachts retire, 55 sailors winched to safety. Second major offshore racing loss event after Fastnet 1979. Total insured losses estimated AUD $5m+.",v:6,sev:"cat",geo:"Bass Strait, Australia"},
+  {y:1999,n:"Vendée Globe — Multiple Dismastings",t:"storm",s:"racing",desc:"1996-97 and 1998-99 Vendée Globe solo singlehanded round-the-world races see multiple dismastings, capsizes, and rescues in Southern Ocean storms. IMOCA 60 class yachts face extreme structural loads in 50-60 knot Southern Ocean conditions. Rescue operations generate significant costs; IMOCA safety regulations strengthened.",v:2,sev:"mod",geo:"Southern Ocean"},
+  {y:2001,n:"Bow Peep — Piracy Gulf of Aden",t:"theft",s:"bluewater-cruising",desc:"UK sailing yacht Bow Peep hijacked by armed pirates in Gulf of Aden during Indian Ocean passage. Crew held for ransom; vessel ransacked. One of the first widely reported modern piracy incidents targeting pleasure craft on the increasingly dangerous Red Sea / Gulf of Aden transit route. Prompts Lloyd's underwriters to review war risk exclusions for bluewater cruising limits.",v:0.15,sev:"mod",geo:"Gulf of Aden"},
+  {y:2003,n:"Beken — Grounding, Gibraltar Strait",t:"grounding",s:"sailing-yacht",desc:"58ft sailing yacht grounds on rocks entering Strait of Gibraltar in poor visibility. Declared constructive total loss after salvage assessment confirms structural integrity compromised. Case highlights the risk of approaches to major straits in heavy traffic/poor visibility — navigation limits and watch-keeping standards reviewed by underwriter.",v:0.4,sev:"mod",geo:"Gibraltar"},
+  {y:2005,n:"Le Pingouin — North Atlantic Dismasting",t:"storm",s:"bluewater-cruising",desc:"50ft ocean racing yacht suffers complete dismasting in North Atlantic gale on transatlantic passage. Crew activate EPIRB; rescued by RCC Falmouth coordinating a merchant vessel diversion. Partial loss claim covers rig replacement and voyage interruption expenses. Illustrates value of EPIRB and proper watch-keeping on bluewater passages.",v:0.3,sev:"mod",geo:"North Atlantic"},
+  {y:2007,n:"Outremer Catamaran — Charter Total Loss, BVI",t:"grounding",s:"charter",desc:"45ft charter catamaran runs aground on reef at night in British Virgin Islands during bareboat charter. Constructive total loss — hull beyond economic repair. Charter company's commercial endorsement covers H&M agreed value. Charterer's liability for grounding due to navigation error raises coverage dispute between charter company H&M and charterer's liability cover.",v:0.35,sev:"mod",geo:"BVI, Caribbean"},
+  {y:2008,n:"Vestas Wind — Pre-Race Grounding (Southern Ocean 2011 repeat)",t:"grounding",s:"racing",desc:"Vestas Wind (Volvo Ocean Race) grounds on Cargados Carajos Shoals, Indian Ocean, November 2011. Total loss of Volvo Ocean 65 — crew evacuated safely. One of the most high-profile offshore racing groundings; shoal poorly charted. Insurance claim covers agreed value of race yacht; subrogation pursued against chart provider.",v:5,sev:"maj",geo:"Indian Ocean"},
+  {y:2010,n:"Piracy Surge — Gulf of Aden / Somali Basin",t:"theft",s:"bluewater-cruising",desc:"2008-2012 Somali piracy peak sees multiple sailing yachts attacked and hijacked in the Indian Ocean and Gulf of Aden. Quest (US yacht, 4 crew killed 2011), Tanit (French yacht, skipper killed 2009) are highest-profile cases. Lloyd's underwriters develop specific piracy exclusion zones for bluewater cruising limits; war and piracy endorsements repriced significantly.",v:0.5,sev:"cat",geo:"Indian Ocean / Gulf of Aden"},
+  {y:2011,n:"Quest — US Sailing Yacht Piracy, 4 Crew Killed",t:"theft",s:"bluewater-cruising",desc:"S/V Quest (58ft, US-flagged) hijacked by Somali pirates February 2011 in Indian Ocean. US Navy attempts rescue; pirates execute all four crew before being overpowered. Highest-profile fatal piracy attack on a pleasure yacht. War risk and piracy cover for the Quest area was available but not universally carried by bluewater cruisers — coverage gap for personal accident/crew death highlighted.",v:0.3,sev:"cat",geo:"Indian Ocean"},
+  {y:2013,n:"Artemis Racing AC72 — Capsized, Crew Death",t:"racing",s:"racing",desc:"Artemis Racing AC72 foiling catamaran capsizes during America's Cup training in San Francisco Bay May 2013. Swedish Olympic sailor Andrew 'Bart' Simpson killed. High-speed foiling catamaran capsize presents novel casualty dynamics — crew entrapment under inverted hull. Racing endorsements for AC-class foiling vessels require bespoke underwriting assessment.",v:10,sev:"cat",geo:"San Francisco Bay, USA"},
+  {y:2015,n:"Rambler 88 — Keel Failure, Fastnet Race",t:"racing",s:"racing",desc:"Maxi racing yacht Rambler 88 loses keel during Fastnet Race 2011 (noted in 2015 OSR review). Yacht inverts; all crew rescued. Keel attachment failure on high-performance racing yachts is a recurring catastrophic casualty mode. RORC OSR revised to address keel inspection requirements for racing class yachts.",v:3,sev:"maj",geo:"Irish Sea"},
+  {y:2017,n:"Hurricane Irma — BVI / Caribbean Fleet Destruction",t:"hurricane",s:"sailing-yacht",desc:"Category 5 Hurricane Irma (185mph sustained winds) devastates British Virgin Islands, St Martin, and Barbuda September 2017. Over 300 yachts destroyed or seriously damaged at Road Town, Nanny Cay, and Soper's Hole marinas. Yachts on the hard and afloat both suffer catastrophic losses. Total insured marine losses estimated at $1bn+ across yacht market. Largest single nat cat event for Lloyd's O market in decades.",v:200,sev:"cat",geo:"BVI / Caribbean"},
+  {y:2017,n:"Hurricane Maria — Puerto Rico / USVI Fleet",t:"hurricane",s:"sailing-yacht",desc:"Hurricane Maria (Category 4-5) strikes Puerto Rico and USVI September 2017, following Irma. Further significant yacht fleet losses compound the Caribbean nat cat season. Combined Irma/Maria losses represent the worst back-to-back hurricane season for Caribbean yacht underwriting since records began.",v:50,sev:"cat",geo:"Puerto Rico / USVI"},
+  {y:2018,n:"Ocean Emerald — Grounding, Scottish West Coast",t:"grounding",s:"motor-yacht",desc:"40m charter motor yacht runs aground on rocks off Mull, Scotland in sheltered water during charter operation. Significant hull damage requiring specialist dry-dock repair. Commercial charter endorsement responds. Scottish west coast chartering — with its unmarked rocks and tidal complexities — generates above-average grounding frequency for UK charter motor yachts.",v:1.2,sev:"mod",geo:"Scotland, UK"},
+  {y:2019,n:"Lady M — Superyacht Fire, Mediterranean",t:"fire",s:"superyacht",desc:"47m motor superyacht Lady M suffers major engine room fire in Mediterranean anchorage 2019. Fire originates in engine room; fixed CO2 suppression system activates but fire spreads to main saloon before being extinguished by fire brigade. Declared constructive total loss. Case highlights: engine room fire as leading superyacht peril, importance of CO2 system maintenance, and the rapid escalation risk in GRP-rich interior vessels.",v:6,sev:"maj",geo:"Mediterranean"},
+  {y:2019,n:"Yogi — Superyacht Fire, Mediterranean",t:"fire",s:"superyacht",desc:"54m motor superyacht Yogi destroyed by fire while moored in Mediterranean port 2019. Major structural damage; constructive total loss declared. Two fires on large motor yachts in the same season focussed Lloyd's underwriters on engine room fixed suppression, infrared monitoring, and hot-work permit procedures as underwriting conditions.",v:9,sev:"maj",geo:"Mediterranean"},
+  {y:2019,n:"Hurricane Dorian — Bahamas Marina Devastation",t:"hurricane",s:"motor-yacht",desc:"Category 5 Hurricane Dorian stalls over Grand Bahama and Abaco for 24+ hours September 2019. Marsh Harbour marina and boatyard suffer catastrophic damage — hundreds of vessels destroyed on the hard and at moorings. Marina buildings collapse onto vessels in the yard. Dorian loss reinforces storm haul-out warranty and tie-down standard requirements for Caribbean-based vessels.",v:40,sev:"cat",geo:"Bahamas"},
+  {y:2019,n:"Inca — Piracy Ransack, Gulf of Guinea",t:"theft",s:"bluewater-cruising",desc:"French sailing yacht Inca attacked and ransacked by armed pirates in Gulf of Guinea off Benin coast. Crew taken hostage briefly before release. Gulf of Guinea has overtaken Indian Ocean as world's most dangerous piracy hotspot by incident count. Lloyd's bluewater cruising limits reviewed to exclude Gulf of Guinea without specific war/piracy endorsement.",v:0.25,sev:"mod",geo:"Gulf of Guinea, West Africa"},
+  {y:2020,n:"Oceanos-Type Sinking — Charter Sailing Yacht, Greece",t:"sinking",s:"charter",desc:"32m charter sailing yacht develops hull flooding through stern gland failure during charter voyage in Greek islands. Evacuated overnight; vessel sinks in 40m. Constructive total loss. Case illustrates: stern gland monitoring as a key survey item, importance of bilge pump auto-start, and the liability implications of charter vessel sinking (passenger baggage, charter interruption, salvage/wreck removal costs).",v:0.8,sev:"mod",geo:"Aegean, Greece"},
+  {y:2020,n:"COVID Refit Delays — Market-Wide Partial Loss Cost Inflation",t:"storm",s:"superyacht",desc:"COVID-19 supply chain disruption causes major refit and repair delays across European superyacht yards (2020-2022). Labour costs rise 30-40%; specialist components face 12-18 month lead times. Partial loss claims costs escalate significantly as pre-pandemic agreed values diverge from post-pandemic replacement costs. Market-wide issue rather than single loss event.",v:25,sev:"maj",geo:"Europe-wide"},
+  {y:2021,n:"Amadea — Pre-Seizure Cover Dispute",t:"theft",s:"superyacht",desc:"87m superyacht Amadea (Cayman-registered, est. value $325m) subject of complex ownership disputes prior to US seizure April 2022. Insurance arrangements disputed between claimed owners and ultimate beneficial owners. Sanctions exclusions, war exclusion, and forfeiture clauses all relevant. Amadea case triggers market-wide review of UBO disclosure requirements and sanctions clause wording in superyacht policies.",v:325,sev:"cat",geo:"Pacific / USA"},
+  {y:2021,n:"Bayesian-Class Sailing Superyacht — MOB Mediterranean",t:"sinking",s:"superyacht",desc:"Superyacht crewman man-overboard incident in Mediterranean — failure to locate crew member in overnight search. MOB incidents on superyachts with inadequate AIS/personal locator beacon (PLB) protocols are a recurring safety issue. Lloyd's underwriters increasingly require crew PLB provision as a policy condition for commercially crewed superyacht placements.",v:0.1,sev:"mod",geo:"Mediterranean"},
+  {y:2022,n:"Amadea — Seized by US DOJ",t:"theft",s:"superyacht",desc:"US Department of Justice seizes 87m superyacht Amadea in Fiji, April 2022, under Russia sanctions (Suleiman Kerimov connection). Transported to San Diego. Cost of maintaining seized superyacht ($600k/month est.) highlights the liability exposure for authorities and insurers in sanctions seizure situations — who bears ongoing maintenance costs?",v:325,sev:"cat",geo:"Fiji / USA"},
+  {y:2022,n:"Russian Superyacht Fleet — Sanctions Wave",t:"theft",s:"superyacht",desc:"Following Russia's invasion of Ukraine, OFAC, OFSI and EU sanction dozens of Russian UHNWIs with superyacht assets. Tango ($15m, seized Spain), Ragnar ($90m, detained Norway), Sailing Yacht A ($400m+, detained Hamburg), among many others. Total est. value of affected fleet: $22bn+. Insurance void under sanctions clauses; war exclusions debated; wreck/abandonment liability for detained vessels unresolved.",v:22000,sev:"cat",geo:"Europe / Global"},
+  {y:2022,n:"Grounding Claim — Charter Catamaran, Red Sea",t:"grounding",s:"charter",desc:"48ft charter catamaran grounds on unmarked reef, Red Sea, during charter operation. Constructive total loss. Charter company's Red Sea bluewater endorsement covers H&M agreed value; charterer's bareboat agreement liability clause disputed. Case illustrates risk of chartering in poorly-charted coastal waters and the commercial charter endorsement requirements.",v:0.45,sev:"mod",geo:"Red Sea"},
+  {y:2023,n:"Titan Submersible — Analogue Event for Extreme Vessel Cover",t:"sinking",s:"superyacht",desc:"OceanGate Titan submersible implosion killing 5 passengers June 2023. Though not a yacht, the Titan case raised questions directly relevant to superyacht cover: adventure vessel safety standards, passenger safety obligations, regulatory oversight gaps, and the coverage interface between marine, personal accident, and public liability for experimental/extreme vessels operating outside conventional frameworks.",v:2,sev:"cat",geo:"North Atlantic"},
+  {y:2023,n:"Bayesian — Total Loss, Storm Sinking",t:"sinking",s:"superyacht",desc:"56m superyacht Bayesian (Perini Navi sloop) sinks rapidly off Sicily in localised storm August 2024. 7 of 22 aboard drowned including tech billionaire Mike Lynch and daughter. Yacht sinks in approximately 16 minutes — unprecedented for a vessel of this class and construction. Incident raises urgent questions about superyacht stability, watertight integrity, and rapid-sinking casualty protocols. Lloyd's market reviews 'flooding to sinking' speed risk for large sailing superyachts.",v:40,sev:"cat",geo:"Sicily, Mediterranean"},
+  {y:2023,n:"Lithium Battery Fire — Motor Yacht Netherlands",t:"fire",s:"motor-yacht",desc:"45ft electric-assist motor yacht suffers lithium-ion battery fire in Netherlands marina. Fire burns for 14 hours; conventional extinguishants ineffective. Adjacent vessels damaged. Case sparks Lloyd's review of lithium battery risk questions for motor yacht proposals and fire suppression adequacy for hybrid/electric vessels — a growing underwriting challenge as the fleet electrifies.",v:0.6,sev:"mod",geo:"Netherlands"},
+  {y:2024,n:"Hurricane Beryl — Caribbean Fleet Losses",t:"hurricane",s:"sailing-yacht",desc:"Hurricane Beryl (Cat 4 at peak) strikes Carriacou, Grenada, Barbados, and southern Caribbean islands July 2024. Carriacou harbours significant sailing fleet; multiple total losses. Beryl is earliest Category 4 Atlantic hurricane on record — climate change signal in earlier and more intense hurricane season noted by Lloyd's catastrophe modellers.",v:30,sev:"maj",geo:"Carriacou / Caribbean"},
+  {y:2024,n:"Superyacht Underwater Drone Threat — Red Sea",t:"theft",s:"superyacht",desc:"Houthi maritime drone (USV) threat in Red Sea and Gulf of Aden extended to include luxury vessels transiting the region. Superyachts with Middle Eastern owners or visiting regional ports face growing underwater and surface drone threat. Lloyd's war and piracy market develops specific Red Sea/Gulf of Aden endorsements for superyacht transits; standard bluewater limits typically exclude the area without specific extension.",v:5,sev:"mod",geo:"Red Sea / Gulf of Aden"}
+];
+
+const typeLabels = {
+  sinking:"Sinking / Flooding",fire:"Fire / Explosion",grounding:"Grounding",
+  racing:"Racing Incident",theft:"Theft / Piracy",hurricane:"Hurricane / Nat Cat",
+  storm:"Storm / Weather",collision:"Collision"
+};
+const typeClass = {
+  sinking:"tp-sinking",fire:"tp-fire",grounding:"tp-grounding",racing:"tp-racing",
+  theft:"tp-theft",hurricane:"tp-hurricane",storm:"tp-storm",collision:"tp-collision"
+};
+const secLabels = {
+  "sailing-yacht":"Sailing Yacht","motor-yacht":"Motor Yacht","superyacht":"Superyacht",
+  "racing":"Racing","charter":"Charter","bluewater-cruising":"Bluewater Cruising"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${secLabels[d.s]||d.s}</td>
+      <td>${d.v>=1000?'$'+(d.v/1000).toFixed(1)+'bn':'$'+d.v+'m'}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">&#9660; Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

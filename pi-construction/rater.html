@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <title>PI E&O – Construction & Engineering — Rater | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #37474f;
+      --hub-dark:      #102027;
+      --hub-light:     #eceff1;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #795548;
+      --header-gradient: linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%);
+      --header-sub:    #cfd8dc;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> ›
+    <a href="overview.html">PI E&O – Construction & Engineering</a> ›
+    Rater
+  </div>
+  <div class="tag">Lloyd's Risk Codes E6 · E7</div>
+  <h1>PI E&O – Construction & Engineering — Rating Tool</h1>
+  <p>Factor-based rating engine for pi e&o – construction & engineering insurance products. Base vs proposed comparison with P&amp;L waterfall analysis.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div id="rater-root"></div>
+
+<footer>
+  <p>PI E&O – Construction & Engineering Risk Code Hub — Rating Tool &copy; 2026</p>
+</footer>
+
+<script src="../shared/rater-engine.js"></script>
+<script src="../shared/rater-ui.js"></script>
+<script>
+(function () {
+  var schemaFiles = [
+    'rate-tables/E6.json',
+    'rate-tables/E7.json'
+  ];
+  Promise.all(schemaFiles.map(function (f) {
+    return fetch(f).then(function (r) { return r.json(); });
+  })).then(function (schemas) {
+    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
+  });
+})();
+</script>
+</body>
+</html>

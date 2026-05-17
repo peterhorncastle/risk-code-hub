@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Temporary Life &amp; Permanent Health (TL) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a1a7b;
+      --hub-dark:      #250a45;
+      --hub-light:     #f3e5ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #00796b;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#250a45 0%,#4a1a7b 55%,#6a1b9a 100%);
+      --header-sub:    #ce93d8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a0a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ce93d8;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#250a45;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ce93d8;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e1bee7;}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    canvas{max-width:100%;height:280px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #f3e5ff;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#faf0ff;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #00796b;}
+    .roe-card.base{border-top:4px solid #c8a84b;}
+    .roe-card.bear{border-top:4px solid #c62828;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#00796b;}
+    .roe-card.base .val{color:#c8a84b;}
+    .roe-card.bear .val{color:#c62828;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:240px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:#4a1a7b;}
+    .bar-out{background:#c62828;}
+    .bar-profit{background:#c8a84b;color:#000;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    footer{background:#250a45;color:#ce93d8;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Temporary Life &amp; Permanent Health (TL)</a> › Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">Market cycle, rate index, claims incidence trends, ROE scenarios &amp; P&amp;L waterfall</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Charts -->
+  <div class="section-title">Rate Index &amp; Claims Incidence Trends<span class="badge b-e">EST</span></div>
+
+  <div class="chart-wrap">
+    <h3>Chart 1 — Term Life Rate Index 2005–2026 (2005 = 100) — Individual Standard, Impaired Lives, Group Life</h3>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Claims Incidence Rate by Product Type (Annual Incidence per 1,000 Insured, Illustrative)</h3>
+    <canvas id="chartClaims"></canvas>
+  </div>
+
+  <!-- Market cycle -->
+  <div class="section-title">Market Cycle History<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Driver</th><th>Rate Movement</th><th>Lloyd's TL Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2000–2007</td><td>Soft — Longevity Tailwind</td><td>Improving UK mortality; longevity gains driven by healthcare advances; benign AIDS mortality post-HAART; CI market growing rapidly</td><td>Term life: −3 to −5% p.a. Group IP: flat to −2%</td><td>Capacity plentiful; impaired life rates competitive; CI product extensions offered</td></tr>
+      <tr><td>2008–2010</td><td>GFC — Minimal Direct Impact</td><td>Financial crisis hits investment income but not mortality directly; some elevated mental health IP claims from stress/redundancy. With-profits exits accelerate.</td><td>Broadly flat; some group IP hardening on mental health</td><td>Group IP underwriters note first material mental health claims uplift</td></tr>
+      <tr><td>2011–2019</td><td>Continuing Soft — Longevity Improvements</td><td>Sustained longevity improvement; reinsurers pass gains to cedants; competitive term life market; mental health IP claims begin escalating from 2015</td><td>Term life: −2 to −4% p.a. Group IP: +2 to +5% (mental health loading)</td><td>Lloyd's TL: competitive on substandard lives; group IP mental health loading introduced from ~2016</td></tr>
+      <tr><td>2020–2021</td><td>COVID Shock — Excess Mortality</td><td>~200,000 UK excess deaths in 2020–21; group life catastrophe claims; CI claims from COVID-linked cardiac events; IP claims surge. Longevity improvement trend paused.</td><td>Group life: +15 to +30%. Term life: +5 to +15%. Group IP: +10 to +25%</td><td>Lloyd's TL syndicates suspend new group life capacity for high-concentration risks; pandemic exclusion reviews</td></tr>
+      <tr><td>2022–2023</td><td>Post-COVID Adjustment</td><td>Long-COVID IP claims wave; post-COVID cardiovascular excess mortality persists; mental health claims surge continues; longevity recovery partial. Reinsurers firm up pandemic language.</td><td>Group IP: +10 to +20% (mental health). Term life: stabilising. Group life: −5 to flat (mortality normalising)</td><td>Lloyd's TL: EAP requirements for group IP; mental health loading standard; impaired life rates remain firmed post-COVID</td></tr>
+      <tr><td>2024–2026+</td><td>Selective Stabilisation</td><td>CMI 2023 tables show partial longevity recovery; long-COVID reserve development ongoing; mental health claims remain elevated; genetics moratorium expiry (2025) creates uncertainty</td><td>Group IP: +5 to +10% (selective). Term life: flat to −2%. Group life: flat</td><td>Lloyd's TL: selective group IP capacity; genetics moratorium watch; post-COVID impaired life repricing</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative £20m TL Portfolio<span class="badge b-e">EST</span></div>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+14%</div>
+      <div class="detail">Combined Ratio 82%<br>Longevity recovery; mental health claims stabilise; strong substandard life margins; selective group IP</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+8%</div>
+      <div class="detail">Combined Ratio 91%<br>Post-COVID normalisation; mental health claims elevated; long-COVID reserves developing; selective underwriting</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−5%</div>
+      <div class="detail">Combined Ratio 112%<br>Long-COVID mass disability; mental health claims surge; new pandemic event; genetics moratorium lapse adverse selection</div>
+    </div>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (£20m GWP, Illustrative TL Portfolio)</h3>
+    <div class="wf-row"><div class="wf-label">Gross Written Premium</div><div class="wf-bar bar-in" style="width:100%;">£20m</div><div class="wf-val">£20.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Broker Commission (22%)</div><div class="wf-bar bar-out" style="width:44%;">−£4.4m</div><div class="wf-val">−£4.4m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance Premium (RI treaty)</div><div class="wf-bar bar-out" style="width:18%;">−£2.2m</div><div class="wf-val">−£2.2m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Earned Premium</div><div class="wf-bar bar-in" style="width:67%;background:#6a1b9a;">£13.4m</div><div class="wf-val">£13.4m</div></div>
+    <div class="wf-row"><div class="wf-label">Term Life Death Claims</div><div class="wf-bar bar-out" style="width:28%;">−£3.8m</div><div class="wf-val">−£3.8m</div></div>
+    <div class="wf-row"><div class="wf-label">Group Life Claims (incl. COVID tail)</div><div class="wf-bar bar-out" style="width:20%;">−£2.6m</div><div class="wf-val">−£2.6m</div></div>
+    <div class="wf-row"><div class="wf-label">IP / PHI Claims (mental health)</div><div class="wf-bar bar-out" style="width:22%;">−£2.9m</div><div class="wf-val">−£2.9m</div></div>
+    <div class="wf-row"><div class="wf-label">Critical Illness Claims</div><div class="wf-bar bar-out" style="width:10%;">−£1.3m</div><div class="wf-val">−£1.3m</div></div>
+    <div class="wf-row"><div class="wf-label">Long-COVID IBNR Reserve</div><div class="wf-bar bar-out" style="width:8%;">−£0.8m</div><div class="wf-val">−£0.8m</div></div>
+    <div class="wf-row"><div class="wf-label">Expenses / Overhead (12%)</div><div class="wf-bar bar-out" style="width:12%;">−£2.4m</div><div class="wf-val">−£2.4m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (est.)</div><div class="wf-bar" style="width:4%;background:#c8a84b;color:#000;">+£0.5m</div><div class="wf-val">+£0.5m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Profit</strong></div><div class="wf-bar bar-profit" style="width:16%;"><strong>£0.1m</strong></div><div class="wf-val"><strong>~£0.1m (Base — 8% ROE after capital allocation)</strong></div></div>
+  </div>
+
+  <!-- IBNR note -->
+  <div class="section-title">IBNR &amp; Reserve Development Considerations</div>
+  <table>
+    <thead><tr><th>Factor</th><th>Impact on Reserves</th></tr></thead>
+    <tbody>
+      <tr><td>Long-COVID claim development</td><td>Claims notified 2021–24 are still developing; severity uncertain; functional assessment outcomes variable. Significant IBNR loading required for IP books with pre-COVID inception policies</td></tr>
+      <tr><td>Mental health IP claim duration</td><td>Average mental health IP claim duration extending post-COVID — was 2–3 years, now 3–4+ years. Reserves must reflect longer payment periods; recovery rates declining for complex mental health cases</td></tr>
+      <tr><td>Group life CAT XL treaty reinstatement</td><td>COVID group life losses may have eroded CAT XL cover; reinstatement premium and reduced CAT protection affect net position for subsequent years</td></tr>
+      <tr><td>Genetic testing moratorium expiry (2025)</td><td>Post-2025 framework uncertain — adverse selection risk if moratorium lapses without replacement. IBNR for lives with undisclosed Huntington's or BRCA test results may require uplift</td></tr>
+      <tr><td>Substandard life mortality development</td><td>EPM ratings on impaired lives require experience monitoring — actual mortality vs expected for diabetic, cardiac and cancer-survivor cohorts. Post-COVID mortality changes affect EPM calibration</td></tr>
+      <tr><td>Reinsurance credit risk</td><td>Life RI treaties with large retrocessionaires require credit review; Solvency II requires gross and net of RI reserves to be stated; RI counterparty default risk is low but must be monitored for long-duration books</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Temporary Life &amp; Permanent Health (TL) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation →</a></p>
+</footer>
+
+<script>
+// Chart 1 — Rate Index 2005–2026
+const years = [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type:'line',
+  data:{
+    labels: years,
+    datasets:[
+      {
+        label:'Individual Standard Term Life',
+        data:[100,97,93,90,87,84,81,78,76,74,72,70,68,67,66,73,80,83,83,82,81,80],
+        borderColor:'#4a1a7b',
+        backgroundColor:'rgba(74,26,123,0.08)',
+        tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'Impaired Lives / Substandard',
+        data:[100,99,98,97,96,95,95,94,93,92,92,91,91,93,94,104,112,116,115,114,113,112],
+        borderColor:'#c8a84b',
+        backgroundColor:'rgba(200,168,75,0.08)',
+        tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'Group Life',
+        data:[100,98,97,96,95,94,93,92,91,90,89,89,88,88,87,107,122,115,108,103,102,101],
+        borderColor:'#00796b',
+        backgroundColor:'rgba(0,121,107,0.06)',
+        tension:0.3,pointRadius:3
+      },
+      {
+        label:'Group Income Protection',
+        data:[100,100,101,103,105,105,106,107,108,109,111,113,115,118,120,133,148,160,168,172,175,176],
+        borderColor:'#c62828',
+        backgroundColor:'rgba(198,40,40,0.06)',
+        tension:0.3,pointRadius:3
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom'}},
+    scales:{y:{title:{display:true,text:'Rate Index (2005=100)'},beginAtZero:false}}
+  }
+});
+
+// Chart 2 — Claims Incidence
+new Chart(document.getElementById('chartClaims'), {
+  type:'bar',
+  data:{
+    labels:[
+      'IP — Mental Health\n(per 1,000)',
+      'IP — Musculoskeletal\n(per 1,000)',
+      'CI — Cancer\n(per 1,000)',
+      'CI — Heart Attack\n(per 1,000)',
+      'CI — Stroke\n(per 1,000)',
+      'Group Life\n(per 1,000)'
+    ],
+    datasets:[
+      {
+        label:'Pre-COVID (2019)',
+        data:[8.2, 9.4, 4.1, 1.8, 1.2, 2.4],
+        backgroundColor:'rgba(74,26,123,0.6)',
+        borderColor:'#4a1a7b',
+        borderWidth:1
+      },
+      {
+        label:'Post-COVID (2023)',
+        data:[13.8, 8.1, 4.3, 2.6, 1.6, 3.1],
+        backgroundColor:'rgba(198,40,40,0.6)',
+        borderColor:'#c62828',
+        borderWidth:1
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom'}},
+    scales:{
+      y:{title:{display:true,text:'Annual Incidence per 1,000 Insured (Illustrative)'},beginAtZero:true},
+      x:{ticks:{maxRotation:30}}
+    }
+  }
+});
+</script>
+</body>
+</html>

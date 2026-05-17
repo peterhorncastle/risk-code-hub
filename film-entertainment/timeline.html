@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Film &amp; Entertainment (PF) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #37003a;
+      --hub-dark:      #1a001c;
+      --hub-light:     #f9e8ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #c62828;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1a001c 0%,#37003a 55%,#56005a 100%);
+      --header-sub:    #e040fb;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1e001e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#e040fb;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1a001c;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#e040fb;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e8c8ff;}
+    .filter-bar{background:#fff;border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .filter-btn{padding:6px 14px;border-radius:20px;border:2px solid #ddd;background:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.18s;color:#444;}
+    .filter-btn.active,.filter-btn:hover{color:#fff;}
+    .filter-btn[data-t="all"].active{background:#37003a;border-color:#37003a;}
+    .filter-btn[data-t="on-set-accident"].active,.filter-btn[data-t="on-set-accident"]:hover{background:#c62828;border-color:#c62828;}
+    .filter-btn[data-t="pandemic"].active,.filter-btn[data-t="pandemic"]:hover{background:#e65100;border-color:#e65100;}
+    .filter-btn[data-t="legal-ip"].active,.filter-btn[data-t="legal-ip"]:hover{background:#1565c0;border-color:#1565c0;}
+    .filter-btn[data-t="market"].active,.filter-btn[data-t="market"]:hover{background:#6a1b9a;border-color:#6a1b9a;}
+    .filter-btn[data-t="technology"].active,.filter-btn[data-t="technology"]:hover{background:#00695c;border-color:#00695c;}
+    .filter-btn[data-t="regulatory"].active,.filter-btn[data-t="regulatory"]:hover{background:#1a5c2a;border-color:#1a5c2a;}
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#37003a,#56005a,#c8a84b);}
+    .tl-item{position:relative;margin-bottom:18px;display:none;}
+    .tl-item.visible{display:block;}
+    .tl-item::before{content:'';position:absolute;left:-26px;top:14px;width:12px;height:12px;border-radius:50%;background:#37003a;border:2px solid #fff;box-shadow:0 0 0 2px #37003a;}
+    .tl-item.on-set-accident::before{background:#c62828;box-shadow:0 0 0 2px #c62828;}
+    .tl-item.pandemic::before{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .tl-item.legal-ip::before{background:#1565c0;box-shadow:0 0 0 2px #1565c0;}
+    .tl-item.market::before{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .tl-item.technology::before{background:#00695c;box-shadow:0 0 0 2px #00695c;}
+    .tl-item.regulatory::before{background:#1a5c2a;box-shadow:0 0 0 2px #1a5c2a;}
+    .tl-card{background:#fff;border-radius:8px;padding:14px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card .tl-year{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);}
+    .tl-card h4{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin:3px 0 5px;}
+    .tl-card p{font-size:0.83rem;color:#444;line-height:1.5;}
+    .type-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:4px;}
+    .tag-on-set-accident{background:#fde8e8;color:#c62828;}
+    .tag-pandemic{background:#fff3e0;color:#e65100;}
+    .tag-legal-ip{background:#e3f2fd;color:#1565c0;}
+    .tag-market{background:#f3e5f5;color:#6a1b9a;}
+    .tag-technology{background:#e0f2f1;color:#00695c;}
+    .tag-regulatory{background:#e8f5e9;color:#1a5c2a;}
+    #tl-count{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    footer{background:#1a001c;color:#e040fb;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Film &amp; Entertainment (PF)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key film &amp; entertainment insurance events 1963–2024</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+  <div class="filter-bar">
+    <button class="filter-btn active" data-t="all" onclick="filterTimeline('all')">All Events (20)</button>
+    <button class="filter-btn" data-t="on-set-accident" onclick="filterTimeline('on-set-accident')">On-Set Accident</button>
+    <button class="filter-btn" data-t="pandemic" onclick="filterTimeline('pandemic')">Pandemic / Shutdown</button>
+    <button class="filter-btn" data-t="legal-ip" onclick="filterTimeline('legal-ip')">Legal / IP</button>
+    <button class="filter-btn" data-t="market" onclick="filterTimeline('market')">Market Structural</button>
+    <button class="filter-btn" data-t="technology" onclick="filterTimeline('technology')">Technology Shift</button>
+    <button class="filter-btn" data-t="regulatory" onclick="filterTimeline('regulatory')">Regulatory</button>
+  </div>
+  <div id="tl-count"></div>
+
+  <div class="timeline" id="timeline">
+
+    <div class="tl-item on-set-accident visible" data-t="on-set-accident">
+      <div class="tl-card">
+        <div class="tl-year">1963</div>
+        <span class="type-tag tag-on-set-accident">On-Set Accident</span>
+        <h4>Cleopatra — Cast Illness &amp; $44m Cost Overrun</h4>
+        <p>Elizabeth Taylor's near-fatal pneumonia shuts down production; combined with Richard Burton cast complications, total cost overruns reach ~$44m (est.), nearly bankrupting 20th Century Fox. The defining cast insurance event of the 20th century. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item on-set-accident visible" data-t="on-set-accident">
+      <div class="tl-card">
+        <div class="tl-year">1979</div>
+        <span class="type-tag tag-on-set-accident">On-Set Accident</span>
+        <h4>Apocalypse Now — Martin Sheen Heart Attack &amp; Typhoon</h4>
+        <p>Martin Sheen suffers a near-fatal heart attack during filming in the Philippines; typhoon damages sets and equipment. Multi-peril production insurance claims. Budget escalates from $12m to $31m. Production chaos becomes a case study in schedule risk. <sup>[I10]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item market visible" data-t="market">
+      <div class="tl-card">
+        <div class="tl-year">1980</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>Heaven's Gate — $44m Overrun, United Artists Collapses</h4>
+        <p>Michael Cimino's western costs UA $44m against a $7.5m budget. No adequate completion guarantee. United Artists is sold to MGM. Establishes completion bonds as an essential requirement for all major independent productions. Insurers and lenders revise financing conditions industry-wide.</p>
+      </div>
+    </div>
+
+    <div class="tl-item on-set-accident visible" data-t="on-set-accident">
+      <div class="tl-card">
+        <div class="tl-year">1982</div>
+        <span class="type-tag tag-on-set-accident">On-Set Accident</span>
+        <h4>Twilight Zone Movie — 3 Deaths, OSHA Investigation</h4>
+        <p>Helicopter and pyrotechnic accident kills Vic Morrow and two child actors during a night shoot. Criminal prosecution of director John Landis. OSHA investigation results in industry-wide safety reforms. Production liability premiums rise sharply. SAG/IATSE/DGA adopt new on-set safety protocols. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item on-set-accident visible" data-t="on-set-accident">
+      <div class="tl-card">
+        <div class="tl-year">1993</div>
+        <span class="type-tag tag-on-set-accident">On-Set Accident</span>
+        <h4>Brandon Lee Death — The Crow (Prop Gun)</h4>
+        <p>Actor Brandon Lee shot dead by a bullet fragment lodged in a prop gun. Production halted; liability claims follow. Armoury protocols strengthened across US studios. The incident is referenced repeatedly after Rust 2021 as a warning of recurring risk. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item legal-ip visible" data-t="legal-ip">
+      <div class="tl-card">
+        <div class="tl-year">1995</div>
+        <span class="type-tag tag-legal-ip">Legal / IP</span>
+        <h4>Buchwald v Paramount — "Coming to America" E&amp;O Profits Dispute</h4>
+        <p>Humorist Art Buchwald sues Paramount claiming the plot of Coming to America (1988) was adapted from his treatment without credit or payment. Landmark court ruling finds Paramount liable but awards minimal damages. Highlights E&amp;O and idea submission risks in Hollywood development. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item technology visible" data-t="technology">
+      <div class="tl-card">
+        <div class="tl-year">1999</div>
+        <span class="type-tag tag-technology">Technology Shift</span>
+        <h4>Digital Filmmaking Emerges — Negative to Digital Asset Risk</h4>
+        <p>The Blair Witch Project (1999) and early digital cinema (DV, Mini-DV) signal the shift from film negative to digital storage media. Underwriters begin developing "negative/digital asset" coverage replacing traditional negative film provisions. Digital footage is more fragile and lacks the recoverability of physical film.</p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory visible" data-t="regulatory">
+      <div class="tl-card">
+        <div class="tl-year">2001</div>
+        <span class="type-tag tag-regulatory">Regulatory</span>
+        <h4>9/11 — International Political Risk Enters Production Insurance</h4>
+        <p>September 11 attacks prompt review of international location shooting risk. War and terrorism exclusions reviewed; political risk endorsements become standard considerations for shoots in potentially unstable regions. International productions relocate from certain territories; terrorism riders see significant demand growth.</p>
+      </div>
+    </div>
+
+    <div class="tl-item legal-ip visible" data-t="legal-ip">
+      <div class="tl-card">
+        <div class="tl-year">2004</div>
+        <span class="type-tag tag-legal-ip">Legal / IP</span>
+        <h4>Music Sampling Copyright Claims — Rising E&amp;O Frequency</h4>
+        <p>Bridgeport Music v Dimension Films (6th Cir. 2004) and subsequent music sampling decisions drive increased E&amp;O claim frequency. Productions using pre-cleared music find existing licences challenged. E&amp;O underwriters tighten music clearance requirements; separate music copyright E&amp;O sublimits emerge. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item on-set-accident visible" data-t="on-set-accident">
+      <div class="tl-card">
+        <div class="tl-year">2008</div>
+        <span class="type-tag tag-on-set-accident">On-Set Accident</span>
+        <h4>The Dark Knight — Stunt Accident (Conway Wickliffe)</h4>
+        <p>Camera car driver Conway Wickliffe killed during stunt rehearsal for The Dark Knight in the UK. HSE investigation and inquest. Production liability claims. UK Health &amp; Safety at Work Act compliance obligations for productions in British territory reinforced. <sup>[L1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item market visible" data-t="market">
+      <div class="tl-card">
+        <div class="tl-year">2010</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>Netflix Original Content — Streaming Transforms Production Volumes</h4>
+        <p>Netflix launches original production with House of Cards (announced 2011, produced 2012). The streaming era begins: global content spend grows from near zero to $20bn+ annually. Lloyd's PF market benefits from dramatically increased production volumes — more productions, more premium. E&amp;O complexity increases with global simultaneous release.</p>
+      </div>
+    </div>
+
+    <div class="tl-item on-set-accident visible" data-t="on-set-accident">
+      <div class="tl-card">
+        <div class="tl-year">2013</div>
+        <span class="type-tag tag-on-set-accident">On-Set Accident</span>
+        <h4>Paul Walker Death — Fast &amp; Furious 7 Production Halt</h4>
+        <p>Actor Paul Walker dies in off-set road accident. Universal halts Fast &amp; Furious 7 production; cast insurance claim filed covering production interruption costs. Script rewritten; Walker's brothers used for remaining scenes. Settles for undisclosed sum. Confirms cast insurance covers off-set incidents. <sup>[I10]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item technology visible" data-t="technology">
+      <div class="tl-card">
+        <div class="tl-year">2015</div>
+        <span class="type-tag tag-technology">Technology Shift</span>
+        <h4>Drone Aerial Photography Replaces Helicopter Filming</h4>
+        <p>FAA Part 107 regulations (US, 2016) and CAA drone rules (UK) formalise commercial drone use in film production. Helicopter aerial cinematography — previously associated with catastrophic accident risk — is largely replaced. New drone liability and airspace violation exposures replace the old helicopter crash peril in production package underwriting.</p>
+      </div>
+    </div>
+
+    <div class="tl-item pandemic visible" data-t="pandemic">
+      <div class="tl-card">
+        <div class="tl-year">2020 Mar</div>
+        <span class="type-tag tag-pandemic">Pandemic / Shutdown</span>
+        <h4>COVID-19 — Global Production Shutdown</h4>
+        <p>All major film and TV production halts simultaneously worldwide. Estimated $3–5bn in industry losses. Pandemic exclusions become universal in cast insurance within weeks. The UK Production Insurance Facility (PIF) is established to provide government-backed COVID cover to restart the industry. <sup>[I9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory visible" data-t="regulatory">
+      <div class="tl-card">
+        <div class="tl-year">2020–2022</div>
+        <span class="type-tag tag-regulatory">Regulatory</span>
+        <h4>UK Production Insurance Facility (PIF) — Government COVID Backstop</h4>
+        <p>UK government launches PIF, administered by the BFI, providing cast insurance coverage for COVID-related abandonment/interruption that commercial insurers had excluded. PIF pays £183m in claims before closing April 2022. Regarded as a model government intervention; other territories did not replicate it at scale. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item on-set-accident visible" data-t="on-set-accident">
+      <div class="tl-card">
+        <div class="tl-year">2021 Oct</div>
+        <span class="type-tag tag-on-set-accident">On-Set Accident</span>
+        <h4>Rust Shooting — Halyna Hutchins Killed by Live Round</h4>
+        <p>Cinematographer Halyna Hutchins killed when Alec Baldwin fires a prop gun loaded with a live round during a rehearsal on the Rust set in New Mexico. Joel Souza wounded. Criminal charges, OSHA investigation, civil settlements. Industry-wide weapons protocol overhaul. Baldwin subsequently acquitted; armourer Hannah Gutierrez Reed convicted of involuntary manslaughter. <sup>[I3]</sup> <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory visible" data-t="regulatory">
+      <div class="tl-card">
+        <div class="tl-year">2022</div>
+        <span class="type-tag tag-regulatory">Regulatory</span>
+        <h4>Post-Rust Safety Guidelines — BECTU, IATSE, Producers Guild</h4>
+        <p>Production Guild of Great Britain, BECTU and IATSE publish new on-set weapons safety recommendations following Rust. Requirements: licensed armourer at all times when prop weapons present; no live ammunition on set; chain-of-custody log; all cast and crew trained in safe weapons handling. Underwriters begin requiring compliance confirmation. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item pandemic visible" data-t="pandemic">
+      <div class="tl-card">
+        <div class="tl-year">2023 May–Nov</div>
+        <span class="type-tag tag-pandemic">Pandemic / Shutdown</span>
+        <h4>SAG-AFTRA &amp; WGA Strikes — 118-Day Hollywood Shutdown</h4>
+        <p>Combined WGA (May–September) and SAG-AFTRA (July–November) strikes shut Hollywood production for 118 days — the longest dual strike in 60 years. Business interruption claims filed but most production policies exclude labour disputes. Estimated industry loss: $6.5bn (SAG-AFTRA economic impact analysis). <sup>[I9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item legal-ip visible" data-t="legal-ip">
+      <div class="tl-card">
+        <div class="tl-year">2023 Nov</div>
+        <span class="type-tag tag-legal-ip">Legal / IP</span>
+        <h4>SAG-AFTRA AI Likeness Agreement — New Insurance Frontier</h4>
+        <p>SAG-AFTRA 2023 CBA includes first-ever provisions governing the use of AI-generated digital likenesses of actors. Productions must now negotiate and compensate for AI use. Insurers begin developing "likeness insurance" concepts to cover rights disputes and breach of AI consent provisions. <sup>[L5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item technology visible" data-t="technology">
+      <div class="tl-card">
+        <div class="tl-year">2024</div>
+        <span class="type-tag tag-technology">Technology Shift</span>
+        <h4>AI in Production — Deepfake, Virtual Production &amp; Likeness Risk</h4>
+        <p>Virtual production (LED volumes replacing location shoots), AI-generated backgrounds, and deepfake de-ageing of actors become mainstream. New exposures emerge: AI likeness rights infringement, failure of virtual production technology mid-shoot, and the legal grey zone of AI-generated performances. Production package and E&amp;O wordings under active review by market.</p>
+      </div>
+    </div>
+
+  </div><!-- end timeline -->
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Film &amp; Entertainment (PF) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filterTimeline(type) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`[data-t="${type}"]`).classList.add('active');
+  const items = document.querySelectorAll('.tl-item');
+  let visible = 0;
+  items.forEach(item => {
+    if (type === 'all' || item.dataset.t === type) {
+      item.classList.add('visible');
+      visible++;
+    } else {
+      item.classList.remove('visible');
+    }
+  });
+  document.getElementById('tl-count').textContent = `Showing ${visible} of 20 events`;
+}
+filterTimeline('all');
+</script>
+</body>
+</html>

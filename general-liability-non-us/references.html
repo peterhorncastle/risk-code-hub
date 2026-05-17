@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>GL Non-USA: References | Risk Code Hub</title>
+  <style>
+    :root {
+      --gl:#1b5e20; --gl-dark:#0a2e0d; --intl:#006064;
+      --warn:#e65100; --liab:#1565c0; --prod:#6a1b9a;
+      --light:#f1f8f1; --text:#1a2e1a; --muted:#5a7060; --border:#c0d8c0;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1b5e20;
+    --hub-dark:      #0a2e0d;
+    --hub-light:     #e8f5e9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #006064;
+    --header-gradient:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%);
+    --header-sub:    #c8e6c9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90c895; margin-bottom:6px; }
+    .breadcrumb a { color:#a5d6a7; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#c8e6c9; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--gl); border-bottom-color:var(--warn); }
+    main { max-width:1050px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--gl); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    h3 { font-size:1.05rem; color:var(--gl-dark); margin:22px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+
+    /* Reference cards */
+    .ref-list { display:flex; flex-direction:column; gap:14px; margin:24px 0; }
+    .ref-item { background:#fff; border-radius:10px; padding:18px 22px; box-shadow:0 2px 6px rgba(0,0,0,.05); border-left:4px solid var(--gl); display:flex; gap:16px; align-items:flex-start; }
+    .ref-item.orange { border-left-color:var(--warn); }
+    .ref-item.blue { border-left-color:var(--liab); }
+    .ref-item.purple { border-left-color:var(--prod); }
+    .ref-item.teal { border-left-color:var(--intl); }
+    .ref-num { min-width:28px; height:28px; border-radius:50%; background:var(--gl); color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0; margin-top:2px; }
+    .ref-item.orange .ref-num { background:var(--warn); }
+    .ref-item.blue .ref-num { background:var(--liab); }
+    .ref-item.purple .ref-num { background:var(--prod); }
+    .ref-item.teal .ref-num { background:var(--intl); }
+    .ref-content strong { display:block; font-size:0.92rem; color:var(--text); margin-bottom:3px; }
+    .ref-content span { font-size:0.82rem; color:var(--muted); line-height:1.5; display:block; }
+    .ref-content a { font-size:0.8rem; color:var(--liab); word-break:break-all; }
+
+    /* Badge */
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin-left:4px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+    .b-gap { background:#fce4ec; color:#880e4f; }
+
+    /* Tables */
+    .tbl-wrap { overflow-x:auto; margin:24px 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.84rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    th { background:var(--gl); color:#fff; padding:11px 14px; text-align:left; font-weight:700; }
+    th:hover { background:var(--gl-dark); color:#fff; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:#f0f7f0; }
+    .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:2px 7px; border-radius:8px; margin:1px; }
+    .t-g { background:#e6f4ea; color:#1a5c28; }
+    .t-o { background:#fff3e0; color:#7a4500; }
+    .t-b { background:#e3f2fd; color:#0d47a1; }
+    .t-r { background:#fce4ec; color:#880e4f; }
+    .t-p { background:#f3e5f5; color:#4a148c; }
+
+    /* Dark box */
+    .dark-box { background:var(--gl-dark); color:#c8e0c8; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .dark-box h3 { color:#a5d6a7; margin-bottom:12px; font-size:1.05rem; }
+    .dark-box p, .dark-box li { font-size:0.9rem; line-height:1.7; color:#c8e0c8; }
+    .dark-box ul { padding-left:20px; margin:8px 0; }
+    .dark-box li { margin-bottom:6px; }
+
+    footer { background:var(--gl-dark); color:#90c895; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">GL Non-USA</a> › References</div>
+  <h1>References &amp; Source Audit — General Liability (Non-USA)</h1>
+  <p>Primary sources, per-module confidence audit (VER/EST/ILLUS/GAP) and known data gaps for the N/NC/NR/NS hub.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html" class="active">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Primary Sources</h2>
+  <p>Sources are categorised as Legislation (green), Case Law (orange), Regulatory/Industry Guidance (blue), Market/Statistical (purple), or International/Standard (teal). Each source is referenced by number in the per-module audit table below.</p>
+
+  <h3>Legislation &amp; Regulations</h3>
+  <div class="ref-list">
+    <div class="ref-item">
+      <div class="ref-num">1</div>
+      <div class="ref-content">
+        <strong>EU General Product Safety Regulation (EU) 2023/988 (GPSR 2024)</strong>
+        <span>Official Journal of the European Union, L 135, 23 May 2023. Effective 13 December 2024. Replaces GPSD 2001/95/EC. Applies to all non-food consumer products placed on the EU market including online marketplaces. <span class="badge b-v">VER</span></span>
+        <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32023R0988" target="_blank" rel="noopener">eur-lex.europa.eu — Regulation (EU) 2023/988</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">2</div>
+      <div class="ref-content">
+        <strong>EU Product Liability Directive 85/374/EEC (original)</strong>
+        <span>Council Directive 85/374/EEC of 25 July 1985 on the approximation of the laws, Member States concerning liability for defective products. First harmonised strict liability regime for defective products in the EU. <span class="badge b-v">VER</span></span>
+        <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A31985L0374" target="_blank" rel="noopener">eur-lex.europa.eu — Directive 85/374/EEC</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">3</div>
+      <div class="ref-content">
+        <strong>EU Revised Product Liability Directive (2024)</strong>
+        <span>Directive of the European Parliament and of the Council on liability for defective products (recast), 2024. Extends strict liability to software, AI systems, and circular economy products; narrows development risk defence; shifts disclosure burden. Member state implementation within 2 years. <span class="badge b-v">VER</span></span>
+        <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32024L2853" target="_blank" rel="noopener">eur-lex.europa.eu — Directive 2024/2853</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">4</div>
+      <div class="ref-content">
+        <strong>Consumer Protection Act 1987 (UK)</strong>
+        <span>UK Parliament. Implements EU Product Liability Directive 85/374/EEC into English law. Strict liability for defective products causing death, personal injury, or property damage exceeding £275. Development risk defence retained post-Brexit. <span class="badge b-v">VER</span></span>
+        <a href="https://www.legislation.gov.uk/ukpga/1987/43/contents" target="_blank" rel="noopener">legislation.gov.uk — Consumer Protection Act 1987</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">5</div>
+      <div class="ref-content">
+        <strong>REACH Regulation (EC) No 1907/2006</strong>
+        <span>Regulation of the European Parliament and of the Council concerning the Registration, Evaluation, Authorisation and Restriction of Chemicals. Cornerstone EU chemical safety legislation. <span class="badge b-v">VER</span></span>
+        <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32006R1907" target="_blank" rel="noopener">eur-lex.europa.eu — REACH Regulation</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">6</div>
+      <div class="ref-content">
+        <strong>EU Medical Device Regulation (EU) 2017/745 (MDR)</strong>
+        <span>Regulation of the European Parliament and of the Council on medical devices. Fully applicable from May 2021 (with transitional provisions). Replaces MDD 93/42/EEC. CE marking via Notified Body required for Classes IIa/IIb/III. <span class="badge b-v">VER</span></span>
+        <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017R0745" target="_blank" rel="noopener">eur-lex.europa.eu — MDR 2017/745</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">7</div>
+      <div class="ref-content">
+        <strong>EU Representative Actions Directive 2020/1828</strong>
+        <span>Directive of the European Parliament and of the Council on representative actions for the protection of the collective interests of consumers. Enables consumer organisations to bring collective redress actions across EU member states. Implementation by member states required by 2023. <span class="badge b-v">VER</span></span>
+        <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32020L1828" target="_blank" rel="noopener">eur-lex.europa.eu — Directive 2020/1828</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">8</div>
+      <div class="ref-content">
+        <strong>Construction (Design and Management) Regulations 2015 (CDM 2015)</strong>
+        <span>UK Statutory Instrument 2015 No. 51. Health and safety regulation for construction projects. Establishes Principal Designer and Principal Contractor roles; requires F10 notification for notifiable projects. <span class="badge b-v">VER</span></span>
+        <a href="https://www.legislation.gov.uk/uksi/2015/51/contents/made" target="_blank" rel="noopener">legislation.gov.uk — CDM 2015</a>
+      </div>
+    </div>
+    <div class="ref-item">
+      <div class="ref-num">9</div>
+      <div class="ref-content">
+        <strong>Occupiers' Liability Act 1957 &amp; 1984 (UK)</strong>
+        <span>UK Parliament. 1957 Act: common duty of care to lawful visitors. 1984 Act: duty of care in respect of trespassers. Foundation of premises public liability law in England and Wales. <span class="badge b-v">VER</span></span>
+        <a href="https://www.legislation.gov.uk/ukpga/Eliz2/5-6/31/contents" target="_blank" rel="noopener">legislation.gov.uk — Occupiers' Liability Act 1957</a>
+      </div>
+    </div>
+  </div>
+
+  <h3>Case Law</h3>
+  <div class="ref-list">
+    <div class="ref-item orange">
+      <div class="ref-num">10</div>
+      <div class="ref-content">
+        <strong>Donoghue v Stevenson [1932] AC 562 (House of Lords)</strong>
+        <span>The foundational negligence case establishing the modern neighbour principle and duty of care — including manufacturer liability to ultimate consumer regardless of privity of contract. Lord Atkin's judgment created the legal basis for products liability insurance. <span class="badge b-v">VER</span></span>
+        <a href="https://www.bailii.org/uk/cases/UKHL/1932/100.html" target="_blank" rel="noopener">bailii.org — Donoghue v Stevenson [1932]</a>
+      </div>
+    </div>
+    <div class="ref-item orange">
+      <div class="ref-num">11</div>
+      <div class="ref-content">
+        <strong>Rylands v Fletcher (1868) LR 3 HL 330</strong>
+        <span>House of Lords. Established strict liability for the escape of dangerous things from land. Foundational precedent for non-fault liability theory; underpins strict liability doctrine that informed later product liability legislation. <span class="badge b-v">VER</span></span>
+        <span>Available via Westlaw UK; BAILII: [1868] UKHL 1</span>
+      </div>
+    </div>
+    <div class="ref-item orange">
+      <div class="ref-num">12</div>
+      <div class="ref-content">
+        <strong>Volkswagen AG v Various Claimants (UK Dieselgate Litigation)</strong>
+        <span>UK civil litigation arising from the Dieselgate emissions fraud (2015–). Multiple proceedings in England and Wales courts; settled 2022. Distinct from US class action ($25bn). Demonstrates European civil liability route for corporate fraud affecting consumers. <span class="badge b-v">VER</span></span>
+        <span>See: Which? Ltd v Volkswagen AG &amp; Others; Merchant Cash Advance Ltd v Volkswagen Group United Kingdom Ltd</span>
+      </div>
+    </div>
+    <div class="ref-item orange">
+      <div class="ref-num">13</div>
+      <div class="ref-content">
+        <strong>Grenfell Tower Inquiry (2017 onwards)</strong>
+        <span>Phase 1 (October 2019) and Phase 2 (2022–2024) reports. 72 deaths; cladding system failed fire safety standards. Products liability claims against Arconic (ACM cladding manufacturer), Celotex (insulation), Kingspan (insulation). Long-term liability development ongoing. <span class="badge b-v">VER</span></span>
+        <a href="https://www.grenfelltowerinquiry.org.uk" target="_blank" rel="noopener">grenfelltowerinquiry.org.uk</a>
+      </div>
+    </div>
+  </div>
+
+  <h3>Regulatory &amp; Industry Guidance</h3>
+  <div class="ref-list">
+    <div class="ref-item blue">
+      <div class="ref-num">14</div>
+      <div class="ref-content">
+        <strong>Lloyd's Market Bulletin: Non-US General Liability Underwriting Guidelines</strong>
+        <span>Lloyd's of London. Periodic market bulletins on N/NC/NR/NS underwriting standards, aggregation management, and US/Canada exclusion requirements. See Lloyd's Market Association (LMA) library for current guidance. <span class="badge b-e">EST</span></span>
+        <a href="https://www.lloydsmba.com" target="_blank" rel="noopener">lloydsmba.com — LMA Library</a>
+      </div>
+    </div>
+    <div class="ref-item blue">
+      <div class="ref-num">15</div>
+      <div class="ref-content">
+        <strong>OECD Guidelines for Multinational Enterprises — Product Safety</strong>
+        <span>OECD. Guidance on product safety standards for multinational enterprises operating across jurisdictions. Referenced in global programme design for non-OECD country operations. <span class="badge b-v">VER</span></span>
+        <a href="https://www.oecd.org/corporate/mne/" target="_blank" rel="noopener">oecd.org — OECD Guidelines</a>
+      </div>
+    </div>
+    <div class="ref-item blue">
+      <div class="ref-num">16</div>
+      <div class="ref-content">
+        <strong>SAFETY Gate / RAPEX Annual Report (European Commission)</strong>
+        <span>European Commission. Annual report on dangerous products notified to the RAPEX (now SAFETY Gate) system. Key data source for NR product recall frequency and sector analysis. Published annually. <span class="badge b-v">VER</span></span>
+        <a href="https://ec.europa.eu/safety-gate-alerts/screen/webReport" target="_blank" rel="noopener">ec.europa.eu — SAFETY Gate portal</a>
+      </div>
+    </div>
+    <div class="ref-item blue">
+      <div class="ref-num">17</div>
+      <div class="ref-content">
+        <strong>UK OPSS Product Safety Annual Report</strong>
+        <span>Office for Product Safety &amp; Standards (OPSS), UK Government. Annual statistics on product safety enforcement, recalls, and market surveillance in the UK. Key source for post-Brexit UK product safety data. <span class="badge b-v">VER</span></span>
+        <a href="https://www.gov.uk/government/organisations/office-for-product-safety-and-standards" target="_blank" rel="noopener">gov.uk — OPSS</a>
+      </div>
+    </div>
+    <div class="ref-item blue">
+      <div class="ref-num">18</div>
+      <div class="ref-content">
+        <strong>Swiss Re Sigma: "Social Inflation in Liability Insurance" (2021)</strong>
+        <span>Swiss Re Institute. Sigma No. 4/2021. Analysis of social inflation drivers — litigation funding, nuclear verdicts, representative actions — and their impact on liability insurance pricing globally. Key source for social inflation risk quantification. <span class="badge b-e">EST</span> (specific figures are sigma estimates)</span>
+        <a href="https://www.swissre.com/institute/research/sigma-research.html" target="_blank" rel="noopener">swissre.com — Sigma Research</a>
+      </div>
+    </div>
+    <div class="ref-item blue">
+      <div class="ref-num">19</div>
+      <div class="ref-content">
+        <strong>Allianz Global Corporate &amp; Specialty: Global Claims Review — Liability</strong>
+        <span>AGCS. Annual review of major liability claims trends, average claim sizes, and emerging risks. Key source for sector-level claims severity data and product recall trends. Published annually. <span class="badge b-e">EST</span></span>
+        <a href="https://commercial.allianz.com/news-and-insights/reports/global-claims-review.html" target="_blank" rel="noopener">commercial.allianz.com — Global Claims Review</a>
+      </div>
+    </div>
+  </div>
+
+  <h3>International Standards</h3>
+  <div class="ref-list">
+    <div class="ref-item teal">
+      <div class="ref-num">20</div>
+      <div class="ref-content">
+        <strong>ISO 9001:2015 — Quality Management Systems Requirements</strong>
+        <span>International Organisation for Standardisation. The global standard for quality management systems. Widely used as underwriting risk indicator for manufacturing and service NR risks. <span class="badge b-v">VER</span></span>
+        <a href="https://www.iso.org/iso-9001-quality-management.html" target="_blank" rel="noopener">iso.org — ISO 9001</a>
+      </div>
+    </div>
+    <div class="ref-item teal">
+      <div class="ref-num">21</div>
+      <div class="ref-content">
+        <strong>ISO 13485:2016 — Medical Devices Quality Management Systems</strong>
+        <span>International Organisation for Standardisation. QMS requirements specific to medical devices — incorporates design controls, risk management per ISO 14971, and post-market surveillance. <span class="badge b-v">VER</span></span>
+        <a href="https://www.iso.org/standard/59752.html" target="_blank" rel="noopener">iso.org — ISO 13485</a>
+      </div>
+    </div>
+  </div>
+
+  <h2>Per-Module Confidence Audit</h2>
+  <p>The following table audits the key factual claims in each module of this hub against the confidence badge framework: <span class="badge b-v">VER</span> Verified (primary source confirmable) · <span class="badge b-e">EST</span> Estimate (plausible range; not primary-source confirmed) · <span class="badge b-i">ILLUS</span> Illustrative (training example; not real data) · <span class="badge b-gap">GAP</span> Data gap (not quantifiable from available sources).</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Module</th>
+          <th>Key Claim</th>
+          <th>Confidence</th>
+          <th>Source Ref.</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Overview</td>
+          <td>GPSR effective 13 December 2024</td>
+          <td><span class="badge b-v">VER</span></td>
+          <td>Ref 1</td>
+          <td>Confirmed in Regulation (EU) 2023/988 Article 50</td>
+        </tr>
+        <tr>
+          <td>Overview</td>
+          <td>£45bn global non-US GL GWP</td>
+          <td><span class="badge b-e">EST</span></td>
+          <td>Ref 18, 19</td>
+          <td>Derived from Swiss Re sigma global premium data; not Lloyd's-specific</td>
+        </tr>
+        <tr>
+          <td>Overview</td>
+          <td>£3bn Lloyd's non-US GL GWP</td>
+          <td><span class="badge b-e">EST</span></td>
+          <td>Ref 14</td>
+          <td>Estimated from Lloyd's annual report class-of-business data; not separately published by Lloyd's</td>
+        </tr>
+        <tr>
+          <td>Overview</td>
+          <td>~400,000 PIP implants worldwide</td>
+          <td><span class="badge b-e">EST</span></td>
+          <td>Ref 19</td>
+          <td>Widely cited figure; range in sources is 400,000–500,000</td>
+        </tr>
+        <tr>
+          <td>History</td>
+          <td>Donoghue v Stevenson [1932] AC 562 — neighbour principle</td>
+          <td><span class="badge b-v">VER</span></td>
+          <td>Ref 10</td>
+          <td>Primary source: BAILII; House of Lords judgment verbatim</td>
+        </tr>
+        <tr>
+          <td>History</td>
+          <td>Thalidomide — ~10,000 children affected worldwide</td>
+          <td><span class="badge b-v">VER</span></td>
+          <td>—</td>
+          <td>Widely confirmed in medical and legal literature; UK figure ~2,000</td>
+        </tr>
+        <tr>
+          <td>History</td>
+          <td>Bhopal ~15,000 deaths (est.)</td>
+          <td><span class="badge b-e">EST</span></td>
+          <td>—</td>
+          <td>Death toll estimates vary widely (3,700 official immediately; up to 25,000 long-term). Figure used is commonly cited mid-range estimate.</td>
+        </tr>
+        <tr>
+          <td>History</td>
+          <td>Bhopal Union Carbide settlement US$470m, 1989</td>
+          <td><span class="badge b-v">VER</span></td>
+          <td>—</td>
+          <td>Supreme Court of India settlement; widely confirmed in legal literature</td>
+        </tr>
+        <tr>
+          <td>History</td>
+          <td>EU PLD 85/374/EEC enacted 1985</td>
+          <td><span class="badge b-v">VER</span></td>
+          <td>Ref 2</td>
+          <td>Official Journal reference confirmed</td>
+        </tr>
+        <tr>
+          <td>History</td>
+          <td>Grenfell Tower — 72 deaths; cladding failure</td>
+          <td><span class="badge b-v">VER</span></td>
+          <td>Ref 13</td>
+          <td>Grenfell Tower Inquiry Phase 1 Report confirmed</td>
+        </tr>
+        <tr>
+          <td>Timeline</td>
+          <td>EU Representative Actions Directive 2020/1828 — implementation by 2023</td>
+          <td><span class="badge b-v">VER</span></td>
+          <td>Ref 7</td>
+          <td>Directive requires member state implementation; most states implemented 2023</td>
+        </tr>
+        <tr>
+          <td>Database</td>
+          <td>Individual claim events (Dieselgate, PIP, Grenfell etc.)</td>
+          <td><span class="badge b-v">VER</span></td>
+          <td>Refs 12, 13</td>
+          <td>Events confirmed; claim quantum for non-US portions estimated from press/court records</td>
+        </tr>
+        <tr>
+          <td>Database</td>
+          <td>Individual claim settlements (currency amounts)</td>
+          <td><span class="badge b-e">EST</span></td>
+          <td>Ref 19</td>
+          <td>Settlement figures from press reporting and industry databases; not all figures are publicly confirmed</td>
+        </tr>
+        <tr>
+          <td>Underwriting</td>
+          <td>Worked Example A (UK dairy manufacturer ~£6,600 premium)</td>
+          <td><span class="badge b-i">ILLUS</span></td>
+          <td>—</td>
+          <td>Entirely illustrative; for training purposes only</td>
+        </tr>
+        <tr>
+          <td>Underwriting</td>
+          <td>Worked Example B (urban metro contractor ~€261k project premium)</td>
+          <td><span class="badge b-i">ILLUS</span></td>
+          <td>—</td>
+          <td>Entirely illustrative; for training purposes only</td>
+        </tr>
+        <tr>
+          <td>Rates &amp; ROE</td>
+          <td>Rate index trends 2005–2024 (N/NR/NC)</td>
+          <td><span class="badge b-e">EST</span></td>
+          <td>Refs 18, 19</td>
+          <td>Directionally consistent with published market commentary; specific index values are illustrative</td>
+        </tr>
+        <tr>
+          <td>Rates &amp; ROE</td>
+          <td>Social inflation scores by jurisdiction (USA 95, Australia 72, Brazil 68)</td>
+          <td><span class="badge b-e">EST</span></td>
+          <td>Ref 18</td>
+          <td>Based on Swiss Re sigma qualitative rankings; numeric scores are illustrative conversions</td>
+        </tr>
+        <tr>
+          <td>Rates &amp; ROE</td>
+          <td>ROE scenarios (Bull +16%, Base +8%, Bear −12%)</td>
+          <td><span class="badge b-i">ILLUS</span></td>
+          <td>—</td>
+          <td>Illustrative scenario on hypothetical £500m portfolio; not Lloyd's published data</td>
+        </tr>
+        <tr>
+          <td>Risk Mitigation</td>
+          <td>GPSR 2024 obligations (mandatory risk assessment, traceability, SAFETY Gate notification)</td>
+          <td><span class="badge b-v">VER</span></td>
+          <td>Ref 1</td>
+          <td>Directly derived from Regulation (EU) 2023/988 text</td>
+        </tr>
+        <tr>
+          <td>Risk Mitigation</td>
+          <td>CDM 2015 F10 notification threshold (30 working days / 20 workers)</td>
+          <td><span class="badge b-v">VER</span></td>
+          <td>Ref 8</td>
+          <td>CDM 2015 Schedule 1, Regulation 6</td>
+        </tr>
+        <tr>
+          <td>Global Programme</td>
+          <td>Programme tower structure and DIC/DIL explanation</td>
+          <td><span class="badge b-i">ILLUS</span></td>
+          <td>Ref 14</td>
+          <td>Tower structure is illustrative of typical market practice; not a specific placed programme</td>
+        </tr>
+        <tr>
+          <td>Global Programme</td>
+          <td>Fronting fee range (3–7% of local premium)</td>
+          <td><span class="badge b-e">EST</span></td>
+          <td>—</td>
+          <td>Consistent with market practice commentary; not published data</td>
+        </tr>
+        <tr>
+          <td>Global Programme</td>
+          <td>FMCG case study (£480m turnover; £785k market premium)</td>
+          <td><span class="badge b-i">ILLUS</span></td>
+          <td>—</td>
+          <td>Entirely illustrative; for training purposes only</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Known Data Gaps</h2>
+  <div class="dark-box">
+    <h3>Data Limitations — GL Non-USA Hub</h3>
+    <p>The following are known limitations in the data underpinning this hub. Users should be aware of these gaps when applying hub content to real underwriting decisions.</p>
+    <ul>
+      <li><span class="badge b-gap">GAP</span> <strong>Lloyd's published breakdown of N/NC/NR/NS GWP by code:</strong> Lloyd's does not publish detailed GWP statistics at the sub-class level (N, NC, NR, NS separately). The £3bn Lloyd's non-US GL estimate is derived from aggregate liability class data and market commentary, not direct Lloyd's disclosure.</li>
+      <li><span class="badge b-gap">GAP</span> <strong>Non-US GL combined ratio by sub-class:</strong> Lloyd's publishes combined ratios at the "Liability" class level, not at the N/NC/NR/NS code level. The combined ratio estimates in the Rates &amp; ROE module are directional estimates derived from broker market analyses and academic sources.</li>
+      <li><span class="badge b-gap">GAP</span> <strong>Quantified impact of EU Representative Actions Directive on GL claims frequency:</strong> The Directive was implemented in 2023 by most member states. As of early 2025, insufficient claims development has occurred to quantify the frequency and severity impact. This remains a forward-looking risk rather than an empirically quantifiable exposure.</li>
+      <li><span class="badge b-gap">GAP</span> <strong>Australia social inflation loss cost data:</strong> Australian GL claims cost inflation data from APRA is available in aggregate but is not publicly broken down by liability class or by social inflation component specifically. The Australia social inflation score is derived from market commentary and Swiss Re qualitative analysis.</li>
+      <li><span class="badge b-gap">GAP</span> <strong>Revised EU PLD (2024) — Quantified premium impact:</strong> The revised EU Product Liability Directive (2024) extends strict liability to software and AI systems. No actuarial loss cost data exists for these newly covered product categories. Premium impact on NR technology products lines is currently unquantifiable and represents a significant forward-looking uncertainty.</li>
+    </ul>
+  </div>
+
+  <h2>Confidence Badge Key</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Badge</th><th>Label</th><th>Definition</th><th>Usage</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge b-v">VER</span></td>
+          <td>Verified</td>
+          <td>Confirmed from a primary source (legislation, judgment, official report)</td>
+          <td>Safe to use in underwriting decisions; cite the primary source</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-e">EST</span></td>
+          <td>Estimate</td>
+          <td>Plausible estimate from secondary source; not primary-source confirmed; directionally reliable</td>
+          <td>Use as directional guidance; verify against primary source before using in formal analysis</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-i">ILLUS</span></td>
+          <td>Illustrative</td>
+          <td>Fictional example constructed for training purposes; not real data</td>
+          <td>Training use only; do not cite as real data</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-gap">GAP</span></td>
+          <td>Data Gap</td>
+          <td>Information not available or not quantifiable from available sources</td>
+          <td>Treat as unknown; do not estimate; flag as data gap in formal analysis</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="font-size:0.82rem; color:var(--muted); margin-top:32px;">This hub is maintained for educational and training purposes within the Lloyd's market. All ILLUS figures are fictional. EST figures should be independently verified before use in live underwriting. VER figures are based on primary sources as cited. Last reviewed: April 2026. Version: 2.9.</p>
+
+</main>
+<footer>Risk Code Hub v2.9 · General Liability – Non-USA (N/NC/NR/NS) · For educational use</footer>
+</body>
+</html>

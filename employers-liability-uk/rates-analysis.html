@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Employers Liability UK (W3) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b5e00;
+      --hub-dark:      #3e2f00;
+      --hub-light:     #fdf8ec;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #4e342e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#3e2f00 0%,#7b5e00 55%,#a07c00 100%);
+      --header-sub:    #ffe082;
+      --bc:#7b5e00; --bc-dark:#3e2f00; --bc-light:#fdf8ec;
+      --bc-accent:#c8a84b; --bc-mid:#ffe082;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2b1f00;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.18) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ffe082;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#3e2f00;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ffe082;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #ffe082;}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    canvas{max-width:100%;height:280px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #fdf3d0;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fdf8ec;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #1a5c2a;}
+    .roe-card.base{border-top:4px solid #c8a84b;}
+    .roe-card.bear{border-top:4px solid #c62828;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#1a5c2a;}
+    .roe-card.base .val{color:#c8a84b;}
+    .roe-card.bear .val{color:#c62828;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:260px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:#7b5e00;}
+    .bar-out{background:#c62828;}
+    .bar-profit{background:#c8a84b;color:#000;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    .info-box{background:#fdf3d0;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3e2f00;line-height:1.6;}
+    footer{background:#3e2f00;color:#ffe082;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Employers Liability UK (W3)</a> › Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">UK EL market cycle, rate index, ROE scenarios &amp; P&amp;L waterfall</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Charts -->
+  <div class="section-title">Rate Index &amp; Loss Ratio Trends <span class="badge b-e">EST</span></div>
+  <div class="chart-wrap">
+    <h3>Chart 1 — UK EL Rate Index 2005–2026 by Sector (2005 = 100)</h3>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Gross Loss Ratio by Industry Segment (Illustrative)</h3>
+    <canvas id="chartLR"></canvas>
+  </div>
+
+  <!-- Market cycle table -->
+  <div class="section-title">UK EL Market Cycle History <span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Driver</th><th>Rate Movement</th><th>Lloyd's W3 Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2000–2007</td><td>Soft Market</td><td>Benign claims; portal not yet active; +2.5% Ogden rate; low severity</td><td>−3 to −5% p.a.</td><td>Broad capacity; package EL written competitively alongside GL</td></tr>
+      <tr><td>2007–2010</td><td>Claims Pressure Emerges</td><td>MOJ portal introduced (2010); CMC activity increases EL claim frequency; LASPO precursor debate</td><td>Flat to +5%</td><td>EL sublimits reviewed; claims management protocols tightened</td></tr>
+      <tr><td>2010–2015</td><td>Softening / Oversupply</td><td>LASPO 2012 reduces claimant costs temporarily; competitive pressure; benign large-loss activity</td><td>−2 to −4% p.a.</td><td>EL written as package loss leader; Lloyd's capacity plentiful</td></tr>
+      <tr><td>2015–2017</td><td>Pre-Ogden Hardening Begins</td><td>Asbestos IBNR development; stress claims rising; discount rate review anticipated</td><td>+5 to +10%</td><td>Disease reserving review; IBNR strengthening on long-tail programmes</td></tr>
+      <tr><td>2017–2019</td><td>Ogden Shock — Hard Market</td><td>Discount rate −0.75% (Feb 2017) — massive reserve strengthening; rate increases urgent</td><td>+20 to +40%</td><td>Lloyd's syndicates implement significant rate-on-line increases; some withdrawal from high-hazard</td></tr>
+      <tr><td>2019–2022</td><td>Stabilisation / COVID Disruption</td><td>Discount rate revised to +0.25%; COVID stress/mental health claims emerge; remote work DSE exposure</td><td>+5 to +15%</td><td>Mental health EL claims data collected; COVID latent claims monitored; selective hardening continues</td></tr>
+      <tr><td>2022–2026+</td><td>Selective Hardening</td><td>Mental health claims wave building; gig economy classification changes; inflation impact on damages</td><td>Flat to +10% (sector-dependent)</td><td>Selective hardening for healthcare, construction, logistics; office risks softening</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative £30m UK EL (W3) Portfolio <span class="badge b-e">EST</span></div>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+16%</div>
+      <div class="detail">Combined Ratio 78%<br>Clean book; no large disease development; hardening rates; strong H&amp;S selection</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+8.5%</div>
+      <div class="detail">Combined Ratio 90%<br>Normal frequency; moderate stress claims; stable Ogden rate; selected construction and logistics book</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−6%</div>
+      <div class="detail">Combined Ratio 112%<br>Disease IBNR development; COVID long-tail; mental health wave; discount rate cuts; asbestos reserve adverse</div>
+    </div>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (£30m GWP, illustrative)</h3>
+    <div class="wf-row"><div class="wf-label">Gross Written Premium</div><div class="wf-bar bar-in" style="width:100%;">£30m</div><div class="wf-val">£30.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Broker Commission (20%)</div><div class="wf-bar bar-out" style="width:40%;">−£6.0m</div><div class="wf-val">−£6.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance Premium (XL disease RI)</div><div class="wf-bar bar-out" style="width:16%;">−£2.4m</div><div class="wf-val">−£2.4m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Earned Premium</div><div class="wf-bar bar-in" style="width:72%;background:#a07c00;">£21.6m</div><div class="wf-val">£21.6m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Physical Injury / Accident</div><div class="wf-bar bar-out" style="width:30%;">−£5.6m</div><div class="wf-val">−£5.6m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Occupational Disease (current)</div><div class="wf-bar bar-out" style="width:16%;">−£2.4m</div><div class="wf-val">−£2.4m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Stress / Mental Health</div><div class="wf-bar bar-out" style="width:12%;">−£1.8m</div><div class="wf-val">−£1.8m</div></div>
+    <div class="wf-row"><div class="wf-label">IBNR — Disease Latency (asbestos/HAVS)</div><div class="wf-bar bar-out" style="width:10%;">−£1.5m</div><div class="wf-val">−£1.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Expenses / Overhead (13%)</div><div class="wf-bar bar-out" style="width:13%;">−£3.9m</div><div class="wf-val">−£3.9m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (est. 3.5%)</div><div class="wf-bar bar-in" style="width:7%;background:#c8a84b;color:#000;">+£0.8m</div><div class="wf-val">+£0.8m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Profit</strong></div><div class="wf-bar bar-profit" style="width:23%;"><strong>£7.2m</strong></div><div class="wf-val"><strong>£7.2m (8.5% ROE est.)</strong></div></div>
+  </div>
+
+  <!-- IBNR note -->
+  <div class="section-title">IBNR &amp; Long-Tail Development Considerations</div>
+  <table>
+    <thead><tr><th>Factor</th><th>Impact on EL Reserves</th></tr></thead>
+    <tbody>
+      <tr><td>Asbestos / mesothelioma latency</td><td>20–50 year latency means policies from 1960s–1990s still generating claims; long-tail IBNR is a permanent feature of any W3 portfolio with legacy construction/shipbuilding exposure</td></tr>
+      <tr><td>Occupational disease IBNR</td><td>HAVS, respiratory disease, chemical exposure disease claims develop slowly; COSHH breaches may not manifest in claims for 10–20 years; disease IBNR typically 40–60% of total EL reserves</td></tr>
+      <tr><td>Ogden discount rate uncertainty</td><td>+0.25% rate is subject to 5-year review — any reduction increases lump sum multipliers significantly; underwriters should sensitivity test reserves at 0% and −0.25% for high-severity long-duration claims</td></tr>
+      <tr><td>COVID-19 latent claims</td><td>Long COVID occupational disease claims (healthcare workers, care home staff) are still developing; causation evidence building; class actions anticipated 2024–2026. Prudent underwriters apply IBNR loading for 2020–2022 years</td></tr>
+      <tr><td>Mental health claims tail</td><td>Stress/PTSD claims typically notified 2–4 years after the stressful period — workload intensity during COVID means 2022–2025 notifications of 2020–2021 causation are expected. Claim duration also longer for psychiatric injuries</td></tr>
+      <tr><td>Claims inflation</td><td>Earnings-based claims (lost wages, care costs) are inflation-sensitive — UK wage inflation 2022–2024 significantly increases long-run income loss projections in serious injury cases</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <strong>Diffuse Mesothelioma Payment Scheme (DMPS):</strong> The DMPS (Mesothelioma Act 2014) provides lump sum payments to mesothelioma victims who cannot trace their employer's liability insurer. Funded by a levy on EL insurers proportional to market share. The scheme paid over £46m in 2022/23. Lloyd's syndicates writing W3 contribute to the levy. The scheme is a direct financial consequence of historic under-documentation of EL policies and underlines the importance of ELTO data submission for all current policies. <sup>[I7]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Employers Liability UK (W3) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation →</a></p>
+</footer>
+
+<script>
+// Chart 1 — Rate Index 2005–2026
+const years = [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type:'line',
+  data:{
+    labels: years,
+    datasets:[
+      {
+        label:'Commercial Construction',
+        data:[100,98,96,98,100,103,106,108,105,103,108,114,142,168,152,160,172,182,192,198,202,206],
+        borderColor:'#c62828',backgroundColor:'rgba(198,40,40,0.07)',tension:0.3,fill:false,pointRadius:3
+      },
+      {
+        label:'Clerical / Office',
+        data:[100,97,94,94,95,96,94,91,89,87,86,86,100,108,102,105,108,110,111,112,112,113],
+        borderColor:'#1565c0',backgroundColor:'rgba(21,101,192,0.07)',tension:0.3,fill:false,pointRadius:3
+      },
+      {
+        label:'Healthcare',
+        data:[100,99,98,100,102,104,106,104,102,101,105,110,138,158,148,162,176,188,196,204,210,215],
+        borderColor:'#7b5e00',backgroundColor:'rgba(123,94,0,0.07)',tension:0.3,fill:false,pointRadius:3
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom'}},
+    scales:{
+      y:{title:{display:true,text:'Rate Index (2005=100)'},beginAtZero:false,suggestedMin:80}
+    }
+  }
+});
+
+// Chart 2 — Gross LR by Segment
+new Chart(document.getElementById('chartLR'), {
+  type:'bar',
+  data:{
+    labels:['Clerical/Office','Retail/Dist.','Healthcare','Construction','Transport','Manufacturing','Agriculture','Underground Mining'],
+    datasets:[{
+      label:'Gross Loss Ratio % (illustrative mid)',
+      data:[32,52,57,63,57,55,69,77],
+      backgroundColor:['#1a5c2a','#c8a84b','#7b5e00','#c62828','#1565c0','#6a1b9a','#e65100','#3e2f00']
+    }]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{title:{display:true,text:'Gross Loss Ratio (%)'},max:100,beginAtZero:true}
+    }
+  }
+});
+</script>
+</body>
+</html>

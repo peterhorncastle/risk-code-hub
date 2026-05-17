@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Fine Art, Specie &amp; Jewellery — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a148c;
+      --hub-dark:      #250057;
+      --hub-light:     #f3e5ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#7b0020;
+      --header-gradient:linear-gradient(135deg,#250057 0%,#4a148c 55%,#6a1b9a 100%);
+      --header-sub:    #ce93d8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a0a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.18) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ce93d8;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#250057;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ce93d8;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e1bee7;}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    canvas{max-width:100%;height:280px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #f0e6ff;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#faf0ff;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #1a5c2a;}
+    .roe-card.base{border-top:4px solid var(--hub-accent);}
+    .roe-card.bear{border-top:4px solid #c62828;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#1a5c2a;}
+    .roe-card.base .val{color:var(--hub-accent);}
+    .roe-card.bear .val{color:#c62828;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:260px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:#4a148c;}
+    .bar-out{background:#c62828;}
+    .bar-profit{background:var(--hub-accent);color:#000;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    footer{background:#250057;color:#ce93d8;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Fine Art, Specie &amp; Jewellery</a> › Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">Market cycle, rate index, ROE scenarios &amp; P&amp;L waterfall — FA/GS/JB/CT</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Rate Index &amp; Loss Ratio Trends<span class="badge b-e">EST</span></div>
+
+  <div class="chart-wrap">
+    <h3>Chart 1 — Fine Art &amp; Specie Rate Index 2005–2026 (2005 = 100, by sub-class)</h3>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Gross Loss Ratio by Sub-Class (Illustrative Average)</h3>
+    <canvas id="chartLR"></canvas>
+  </div>
+
+  <!-- Market cycle -->
+  <div class="section-title">Market Cycle History<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Driver</th><th>Rate Movement</th><th>Lloyd's Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Pre-2001</td><td>Soft / Benign</td><td>Low theft frequency in preferred risks; art market rising — increased SI without commensurate premium uplift</td><td>−2 to −4% p.a.</td><td>Broad capacity; competition for institutional accounts</td></tr>
+      <tr><td>2001–2004</td><td>Post-9/11 Security Hardening</td><td>WTC art losses; security reviews at major institutions; terrorism risk reassessed for museum concentrations</td><td>+5 to +12%</td><td>Terrorism exclusions clarified; accumulation monitoring introduced</td></tr>
+      <tr><td>2005–2010</td><td>Softening</td><td>Art market boom driving higher SI; low theft claims at well-secured institutions; competition from continental markets</td><td>−1 to −3% p.a.</td><td>Capacity expands; new entrants to fine art market</td></tr>
+      <tr><td>2010–2015</td><td>Mixed — Museum Thefts</td><td>Paris Musée d'Art Moderne heist 2010; Bührle Foundation Zurich; Antwerp diamond district attention</td><td>Flat to +3%</td><td>Security conditions tightened for institutional clients; Antwerp surcharge increased</td></tr>
+      <tr><td>2015–2019</td><td>Selective Hardening</td><td>Hatton Garden 2015; art market price correction; knoedler fraud claims; JB Brazil/South Africa losses</td><td>+5 to +15%</td><td>Territory surcharges increased; JB vault conditions tightened</td></tr>
+      <tr><td>2020–2022</td><td>Hard Market</td><td>COVID lockdowns (temporary gallery closures, unmonitored storage); Beirut explosion; Ukrainian war losses; Dresden heist 2020</td><td>+10 to +25%</td><td>War exclusions reviewed; climate risk conditions added; freeport declaration requirements</td></tr>
+      <tr><td>2023–2026+</td><td>Selective Stabilisation</td><td>British Museum insider theft; NFT/digital art debate; climate risk awareness; art market softening at top end</td><td>Flat to +8%</td><td>Insider theft controls required; digital art exclusions clarified; climate conditions standard</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative £25m FA/Specie Portfolio<span class="badge b-e">EST</span></div>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+18%</div>
+      <div class="detail">Combined Ratio 76%<br>No catastrophic single-item losses; strong security selection; hard rates maintained; art market appreciating (higher SI renewals)</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+10%</div>
+      <div class="detail">Combined Ratio 88%<br>Moderate frequency of JB claims; one museum-sector claim; stable institutional market; art values broadly flat</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−8%</div>
+      <div class="detail">Combined Ratio 116%<br>Major single-institution loss (museum heist or fire); art market price correction eroding SI adequacy; insider theft claims; climate damage</div>
+    </div>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (£25m GWP, illustrative fine art &amp; specie book)</h3>
+    <div class="wf-row"><div class="wf-label">Gross Written Premium</div><div class="wf-bar bar-in" style="width:100%;">£25m</div><div class="wf-val">£25.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Broker Commission (20%)</div><div class="wf-bar bar-out" style="width:40%;">−£5.0m</div><div class="wf-val">−£5.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance Premium (cat XL, 8%)</div><div class="wf-bar bar-out" style="width:16%;">−£2.0m</div><div class="wf-val">−£2.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Earned Premium</div><div class="wf-bar bar-in" style="width:72%;background:#6a1b9a;">£18.0m</div><div class="wf-val">£18.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Fine Art Theft / Heist</div><div class="wf-bar bar-out" style="width:22%;">−£2.8m</div><div class="wf-val">−£2.8m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — JB / Specie Retail</div><div class="wf-bar bar-out" style="width:18%;">−£2.2m</div><div class="wf-val">−£2.2m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Transit Damage</div><div class="wf-bar bar-out" style="width:12%;">−£1.5m</div><div class="wf-val">−£1.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Fire / Flood / Other</div><div class="wf-bar bar-out" style="width:10%;">−£1.2m</div><div class="wf-val">−£1.2m</div></div>
+    <div class="wf-row"><div class="wf-label">IBNR Reserve Strengthening</div><div class="wf-bar bar-out" style="width:8%;">−£0.8m</div><div class="wf-val">−£0.8m</div></div>
+    <div class="wf-row"><div class="wf-label">Expenses / Overhead (14%)</div><div class="wf-bar bar-out" style="width:14%;">−£3.5m</div><div class="wf-val">−£3.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (est.)</div><div class="wf-bar bar-in" style="width:5%;background:var(--hub-accent);color:#000;">+£0.5m</div><div class="wf-val">+£0.5m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Profit</strong></div><div class="wf-bar bar-profit" style="width:21%;"><strong>£6.5m</strong></div><div class="wf-val"><strong>£6.5m (10.0% ROE)</strong></div></div>
+  </div>
+
+  <!-- IBNR note -->
+  <div class="section-title">IBNR &amp; Development Considerations</div>
+  <table>
+    <thead><tr><th>Factor</th><th>Impact on Reserves</th></tr></thead>
+    <tbody>
+      <tr><td>Long recovery process on theft claims</td><td>Stolen art takes months to years to confirm as unrecoverable; IBNR held pending ALR search and law enforcement investigation. Premature settlement at agreed value risks early closure of recovery efforts.</td></tr>
+      <tr><td>Conservation cost uncertainty</td><td>Where works are damaged rather than destroyed, the cost of professional conservation can be difficult to estimate at FNOL — conservators' assessments evolve as treatment progresses. Reserve at worst case then reduce as treatment nears completion.</td></tr>
+      <tr><td>Provenance/title dispute tail</td><td>Title disputes (Nazi looting restitution, UNESCO convention claims) can arise years after policy incept. Policies should consider whether coverage responds if a work is restituted out of an insured collection.</td></tr>
+      <tr><td>Art market valuation volatility</td><td>A rapid fall in art market values (as in 1990–1991) can make agreed values appear excessive at renewal; a rapid rise creates underinsurance risk. IBNR for open claims can be affected by market movement during the claims lifecycle.</td></tr>
+      <tr><td>Catastrophe accumulation (single location)</td><td>Art fair, museum loan concentration or freeport storage loss could generate multiple simultaneous total losses. Cat XL reinsurance is essential; PML scenarios for single-location concentrations should be modelled annually.</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Fine Art, Specie &amp; Jewellery (FA/GS/JB/CT) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation →</a></p>
+</footer>
+
+<script>
+// Chart 1 — Rate Index
+const years = [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type:'line',
+  data:{
+    labels: years,
+    datasets:[
+      {label:'Museum / Institutional Fine Art',data:[100,98,96,102,106,105,104,102,100,99,102,104,106,108,110,122,130,138,142,145,147,149],borderColor:'#4a148c',backgroundColor:'rgba(74,20,140,0.08)',tension:0.3,fill:true,pointRadius:3},
+      {label:'Private Collector',data:[100,97,94,100,104,103,101,99,96,95,98,100,104,107,110,124,135,145,150,154,157,160],borderColor:'#c8a84b',backgroundColor:'rgba(200,168,75,0.08)',tension:0.3,fill:true,pointRadius:3},
+      {label:'Jewellers Block (JB)',data:[100,98,97,104,108,108,107,106,104,104,112,116,120,126,132,148,162,178,184,188,191,194],borderColor:'#7b0020',backgroundColor:'rgba(123,0,32,0.06)',tension:0.3,pointRadius:3}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom'}},
+    scales:{y:{title:{display:true,text:'Rate Index (2005=100)'},beginAtZero:false}}
+  }
+});
+
+// Chart 2 — Gross LR by Sub-Class
+new Chart(document.getElementById('chartLR'), {
+  type:'bar',
+  data:{
+    labels:['FA Private','FA Institutional','Specie / Bullion','JB Retail','CIT Armoured','Art Transit','Specie Vault','Other / Mixed'],
+    datasets:[
+      {
+        label:'Gross Loss Ratio (mid estimate, %)',
+        data:[52,42,38,64,45,55,35,58],
+        backgroundColor:['#4a148c','#6a1b9a','#c8a84b','#7b0020','#1a5c2a','#e65100','#1565c0','#795548']
+      }
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{y:{title:{display:true,text:'Gross Loss Ratio (%)'},max:100,beginAtZero:true}}
+  }
+});
+</script>
+</body>
+</html>

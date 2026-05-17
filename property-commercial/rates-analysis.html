@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Rates &amp; ROE — Commercial Property — Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --prop:#5d4037; --prop-dark:#3e2723; --fire:#c62828;
+      --flood:#0277bd; --bi:#2e7d32; --cat:#6a1b9a;
+      --warn:#e65100; --light:#fdf6f0; --border:#d7ccc8;
+      --text:#2c1810; --muted:#7a5c52;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #5d4037;
+    --hub-dark:      #3e2723;
+    --hub-light:     #efebe9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#0277bd;
+    --header-gradient:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%);
+    --header-sub:    #d7ccc8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#bcaaa4; margin-bottom:6px; }
+    .breadcrumb a { color:#d7ccc8; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#bcaaa4; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#d7ccc8; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--prop); border-bottom-color:var(--fire); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--prop); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .chart-wrap { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; margin:24px 0; }
+    .chart-wrap h3 { font-size:1rem; color:var(--prop); margin-bottom:16px; }
+    .chart-wrap canvas { max-height:320px; }
+
+    .cycle-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px; margin:24px 0; }
+    .cycle-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-left:5px solid var(--prop); }
+    .cycle-card.hard { border-left-color:var(--fire); }
+    .cycle-card.soft { border-left-color:var(--bi); }
+    .cycle-card.turn { border-left-color:var(--warn); }
+    .cycle-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:6px; }
+    .cycle-card.hard h4 { color:var(--fire); }
+    .cycle-card.soft h4 { color:var(--bi); }
+    .cycle-card.turn h4 { color:var(--warn); }
+    .cycle-card p { font-size:0.82rem; color:#555; margin:0; line-height:1.55; }
+
+    .roe-table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; margin:20px 0; font-size:0.87rem; }
+    .roe-table th { background:var(--prop); color:#fff; padding:10px 14px; text-align:left; }
+    .roe-table td { padding:9px 14px; border-bottom:1px solid var(--border); }
+    .roe-table tr:last-child td { border-bottom:none; }
+    .roe-table tr:nth-child(even) td { background:#fdf0eb; }
+    .green { color:#1a7431; font-weight:700; }
+    .amber { color:#7a4500; font-weight:700; }
+    .red { color:#c62828; font-weight:700; }
+
+    .rate-bm { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; margin:20px 0; font-size:0.86rem; }
+    .rate-bm th { background:var(--prop-dark); color:#fff; padding:10px 14px; text-align:left; }
+    .rate-bm td { padding:9px 14px; border-bottom:1px solid var(--border); }
+    .rate-bm tr:last-child td { border-bottom:none; }
+    .rate-bm tr:nth-child(even) td { background:#fdf0eb; }
+
+    footer { background:var(--prop-dark); color:#bcaaa4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Commercial Property</a> › Rates &amp; ROE</div>
+  <div class="tag">Lloyd's Codes · P2 · P3 · P4 · P5 · P6 · P7 · B2 · B3 · B4 · B5</div>
+  <h1>Rates &amp; ROE Analysis</h1>
+  <p>Commercial property market cycle 2005–2024, combined ratio trends, cat loss impact and three ROE scenarios across hard, base and stressed cat years.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Rate Index — Commercial Property 2005–2024</h2>
+  <p>The commercial property market has been highly volatile — two major soft cycles (2005–2011, 2013–2016) punctuated by sharp hardening events (post-Katrina 2005, post-2017 HIM, post-COVID/Ian 2022). By 2024, non-cat property rates are broadly adequate while US cat-exposed (Florida, California) risks command significant risk-adjusted premium increases. <span class="badge b-i">ILLUS</span></p>
+
+  <div class="chart-wrap">
+    <h3>Rate Change Index (Base 2005 = 100) — Key Property Segments <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="rateChart"></canvas>
+  </div>
+
+  <h2>Combined Ratio — Property Market 2005–2024</h2>
+
+  <div class="chart-wrap">
+    <h3>Lloyd's Property Combined Ratio (Loss Ratio + Expense Ratio) — Estimated <span class="badge b-e">EST</span></h3>
+    <canvas id="crChart"></canvas>
+  </div>
+
+  <h2>Market Cycle Narrative</h2>
+
+  <div class="cycle-grid">
+    <div class="cycle-card hard">
+      <h4>2001–2004 · Hard — Post-9/11</h4>
+      <p>9/11 triggered immediate 30–50% rate increases on US commercial property and terrorism covers. New terrorism exclusions drove TRIA creation. Cat capacity reduced; rates adequate through 2004.</p>
+    </div>
+    <div class="cycle-card soft">
+      <h4>2005 · Katrina Shock — Brief Hard Turn</h4>
+      <p>Katrina/Rita/Wilma 2005 season caused $60bn insured losses. US cat rates increased 40%+. Lloyd's Gulf Coast capacity withdrawn or repriced. Lasted 2 years before new capital eroded gains.</p>
+    </div>
+    <div class="cycle-card soft">
+      <h4>2006–2011 · Soft — Capital Influx</h4>
+      <p>Post-Katrina capital influx (Bermuda Class of 2006) created overcapacity. Rates fell steadily 2007–2011. 2010/2011 nat cat year ($380bn total losses) absorbed capacity without market-turning rate response.</p>
+    </div>
+    <div class="cycle-card turn">
+      <h4>2012–2016 · Soft Continuation</h4>
+      <p>Benign US hurricane seasons; ILS capital growth; alternative capital ~25% of cat reinsurance capacity. Rates fell 3–8% annually. Attritional losses (flooding, SCS) began dragging combined ratios above 100.</p>
+    </div>
+    <div class="cycle-card hard">
+      <h4>2017–2018 · HIM Season — Hard Turn</h4>
+      <p>Harvey/Irma/Maria $43bn combined insured losses. First year in a decade that cat losses significantly exceeded the market's expected annual loss. Rates increased 15–25% on cat-exposed risks; reinsurance rates up 30–40%.</p>
+    </div>
+    <div class="cycle-card soft">
+      <h4>2019–2020 · Partial Softening</h4>
+      <p>COVID disruption to renewals; some softening in non-cat lines. COVID BI losses (2020) caused significant BI combined ratio deterioration; non-damage BI exclusions adopted universally.</p>
+    </div>
+    <div class="cycle-card hard">
+      <h4>2021–2024 · Sustained Hardening</h4>
+      <p>Ian 2022 ($60bn), Turkey 2023, 2023 SCS record year ($64bn US). Reinsurers repriced significantly at Jan 2023. US cat property rates increased 25–50% in 2022–2024. Florida market near-crisis; California E&S hardening. Market broadly adequate but SCS attritional losses persist.</p>
+    </div>
+  </div>
+
+  <h2>Rate Benchmark — Commercial Property Segments (2024 Market)</h2>
+  <table class="rate-bm">
+    <thead><tr><th>Segment</th><th>Lloyd's Code</th><th>Indicative Rate Range</th><th>Direction</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>UK Commercial (fire resistive, non-cat)</td><td>P2/P3</td><td>0.05–0.15% of TIV</td><td class="green">↗ +5–10%</td><td>Construction cost inflation driving TIV increases; adequate rates</td></tr>
+      <tr><td>UK Industrial / Manufacturing</td><td>P3</td><td>0.12–0.35% of TIV</td><td class="green">↗ +8–15%</td><td>Attritional fire losses; EV battery storage risks (+50–200%)</td></tr>
+      <tr><td>European Commercial (non-cat)</td><td>P3/P6</td><td>0.06–0.20% of TIV</td><td class="amber">→ flat/+5%</td><td>European flood loading increasing; SCS loading emerging</td></tr>
+      <tr><td>US Non-Cat Commercial (P5)</td><td>P5</td><td>0.08–0.25% of TIV</td><td class="green">↗ +10–15%</td><td>Adequate; inflation adjustments driving TIV and premium</td></tr>
+      <tr><td>US Cat-Exposed (FL/TX/CA coastal)</td><td>P5/B4</td><td>0.25–1.50%+ of TIV</td><td class="red">↑↑ +25–50%</td><td>Florida crisis; California wildfire E&S hardening; some non-renewal</td></tr>
+      <tr><td>US Excess Layers</td><td>P4/B4</td><td>0.04–0.12% of TIV (xs layer)</td><td class="green">↗ +10–20%</td><td>Reinsurance cost pass-through to excess layers</td></tr>
+      <tr><td>Asia-Pacific International</td><td>P6</td><td>0.10–0.40% of TIV</td><td class="green">↗ +10–20%</td><td>Japan/Australia/NZ cat loading; Taiwan quake loading increasing</td></tr>
+      <tr><td>Middle East Commercial</td><td>P6</td><td>0.08–0.25% of TIV</td><td class="amber">→ flat/+5%</td><td>Low nat cat; key risk is fire (petrochemical/industrial proximity)</td></tr>
+      <tr><td>Binders — UK SME (B2/B3)</td><td>B2/B3</td><td>0.10–0.30% of TIV</td><td class="green">↗ +8–12%</td><td>Coverholder quality; aggregate monitoring critical</td></tr>
+      <tr><td>Special Risks — Fine Art/Specie (P7)</td><td>P7/B5</td><td>Bespoke; 0.05–0.30%</td><td class="amber">→ flat</td><td>Limited market; AXA Art, Hiscox Art, Beazley dominate</td></tr>
+    </tbody>
+  </table>
+
+  <h2>ROE Scenarios — Lloyd's Property Portfolio</h2>
+
+  <table class="roe-table">
+    <thead><tr><th>Scenario</th><th>Cat Loss Assumption</th><th>Loss Ratio</th><th>Expense Ratio</th><th>Combined Ratio</th><th>ROE (est.)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>🟢 Bull — Benign Cat Year</strong></td>
+        <td>Below average; no $20bn+ events</td>
+        <td class="green">52–58%</td>
+        <td>32–34%</td>
+        <td class="green">86–92%</td>
+        <td class="green">+16–22%</td>
+      </tr>
+      <tr>
+        <td><strong>🟡 Base — Average Cat Year</strong></td>
+        <td>1–2 $10–20bn events; SCS normal</td>
+        <td class="amber">62–68%</td>
+        <td>32–34%</td>
+        <td class="amber">96–102%</td>
+        <td class="amber">+5–10%</td>
+      </tr>
+      <tr>
+        <td><strong>🔴 Bear — Major Cat Year</strong></td>
+        <td>$50bn+ US event (Ian-scale) + SCS</td>
+        <td class="red">85–100%</td>
+        <td>32–34%</td>
+        <td class="red">118–134%</td>
+        <td class="red">−15 to −28%</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.82rem;color:var(--muted);">ROE estimates are illustrative — based on Lloyd's published performance data and market analyst estimates for a representative Lloyd's property syndicate. <span class="badge b-i">ILLUS</span></p>
+
+  <h2>Nat Cat Loss Cost Inflation — Key Drivers</h2>
+
+  <div class="chart-wrap">
+    <h3>Components of Commercial Property Cat Loss Cost Inflation (Annualised %) <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="inflationChart"></canvas>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Commercial Property (P2–P7 · B2–B5) · Lloyd's Market Intelligence · v3.1 April 2026
+</footer>
+
+<script>
+// Rate Index chart
+const years = [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+new Chart(document.getElementById('rateChart'), {
+  type:'line',
+  data:{
+    labels:years,
+    datasets:[
+      { label:'UK/Europe Non-Cat (P2/P3)', data:[100,95,92,90,88,85,83,84,82,80,77,75,78,82,80,79,84,90,98,105], borderColor:'#5d4037', backgroundColor:'rgba(93,64,55,0.08)', tension:0.3, fill:false, pointRadius:3 },
+      { label:'US Cat-Exposed (P5 Florida/CA)', data:[100,90,82,78,75,72,68,70,67,63,58,54,65,74,70,68,76,100,128,148], borderColor:'#c62828', backgroundColor:'rgba(198,40,40,0.07)', tension:0.3, fill:false, pointRadius:3 },
+      { label:'International (P6 Asia-Pac)', data:[100,97,95,93,91,89,87,88,85,83,80,78,82,87,84,83,88,94,103,112], borderColor:'#0277bd', backgroundColor:'rgba(2,119,189,0.07)', tension:0.3, fill:false, pointRadius:3 },
+      { label:'US Non-Cat Commercial (P5)', data:[100,96,94,92,90,88,86,87,85,83,80,78,82,87,84,82,87,95,106,116], borderColor:'#2e7d32', backgroundColor:'rgba(46,125,50,0.07)', tension:0.3, fill:false, pointRadius:3 }
+    ]
+  },
+  options:{ responsive:true, plugins:{ legend:{ position:'bottom' } }, scales:{ y:{ title:{ display:true, text:'Index (2005 = 100)' } } } }
+});
+
+// Combined Ratio chart
+new Chart(document.getElementById('crChart'), {
+  type:'bar',
+  data:{
+    labels:years,
+    datasets:[
+      { label:'Loss Ratio (%)', data:[58,55,54,67,60,75,82,65,60,58,56,57,78,64,62,88,70,82,72,65], backgroundColor:'rgba(198,40,40,0.75)', stack:'cr' },
+      { label:'Expense Ratio (%)', data:[35,35,35,35,34,34,34,34,34,33,33,33,33,33,33,33,33,33,33,33], backgroundColor:'rgba(93,64,55,0.75)', stack:'cr' }
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{ legend:{ position:'bottom' }, tooltip:{ callbacks:{ afterBody: items => { const s=items.reduce((a,i)=>a+i.raw,0); return [`Combined: ${s}%`, s>100?'⚠️ Underwriting loss':'✅ Underwriting profit']; } } } },
+    scales:{ y:{ stacked:true, title:{ display:true, text:'Combined Ratio (%)' }, min:0, max:140 } }
+  }
+});
+
+// Inflation drivers
+new Chart(document.getElementById('inflationChart'), {
+  type:'bar',
+  data:{
+    labels:['Construction cost inflation','WUI expansion (wildfire)','Flood plain encroachment','Claims litigation costs','Social inflation (US)','Supply chain / rebuild delays','Climate change intensity','Demand surge (post-cat)'],
+    datasets:[{ label:'Annual % contribution to cat loss inflation', data:[5.2,4.8,4.0,3.2,2.8,2.5,2.0,1.8],
+      backgroundColor:['#c62828','#e65100','#0277bd','#6a1b9a','#5d4037','#2e7d32','#00838f','#f57f17'] }]
+  },
+  options:{
+    indexAxis:'y', responsive:true,
+    plugins:{ legend:{ display:false } },
+    scales:{ x:{ title:{ display:true, text:'Estimated % per annum (ILLUS)' } } }
+  }
+});
+</script>
+</body>
+</html>

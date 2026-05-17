@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Extended Warranty — Claims Database | Risk Code Hub</title>
+  <style>
+    :root {
+      --wa:#8c4a15; --wa-dark:#5c2f0c; --wa-light:#fdf0e6; --accent:#c8a84b;
+      --copper:#b06020; --teal:#0d7377;
+      --hub-primary:#8c4a15; --hub-dark:#5c2f0c; --hub-light:#fdf0e6;
+      --hub-accent:#c8a84b; --hub-secondary:#b06020;
+      --header-gradient:linear-gradient(135deg,#3d1c05 0%,#8c4a15 55%,#b06020 100%);
+      --header-sub:#e8c9a0;
+    }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:var(--header-gradient); color:#fff; padding:40px; }
+    .breadcrumb { font-size:.8rem; color:rgba(255,255,255,.6); margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:8px; color:var(--header-sub); font-size:.95rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--wa); border-bottom-color:var(--accent); }
+    main { max-width:1200px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--wa-dark); margin:0 0 20px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+
+    .filter-bar { background:#fff; border-radius:10px; padding:16px 20px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,.06); display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; }
+    .fg { display:flex; flex-direction:column; gap:4px; min-width:155px; }
+    .fg label { font-size:.75rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+    .fg select, .fg input { padding:.4rem .65rem; border:1.5px solid var(--border); border-radius:6px; font-size:.84rem; background:#fff; }
+    .fg select:focus, .fg input:focus { outline:none; border-color:var(--wa); }
+    .btn-r { padding:.4rem 1rem; background:var(--wa-light); color:var(--wa-dark); border:1.5px solid var(--wa); border-radius:6px; font-size:.84rem; font-weight:700; cursor:pointer; align-self:flex-end; }
+    .btn-r:hover { background:var(--wa); color:#fff; }
+    #rc { font-size:.84rem; color:var(--muted); align-self:flex-end; }
+
+    .tw { overflow-x:auto; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    table { width:100%; border-collapse:collapse; background:#fff; }
+    thead th { background:var(--wa-dark); color:#fff; padding:.65rem .9rem; font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; cursor:pointer; user-select:none; white-space:nowrap; }
+    thead th:hover { background:var(--wa); }
+    thead th.sa::after { content:' ▲'; font-size:.7rem; }
+    thead th.sd::after { content:' ▼'; font-size:.7rem; }
+    tbody tr { border-bottom:1px solid var(--border); }
+    tbody tr:hover { background:#fdf5ee; }
+    tbody td { padding:.6rem .9rem; font-size:.83rem; vertical-align:top; }
+    .yc { font-weight:700; color:var(--wa-dark); white-space:nowrap; }
+    .nc { font-weight:600; min-width:180px; }
+    .dc { color:#4b5563; min-width:220px; max-width:320px; }
+    .lc { font-weight:700; color:#dc2626; text-align:right; white-space:nowrap; }
+
+    .tag { display:inline-block; font-size:.7rem; font-weight:700; padding:.12rem .45rem; border-radius:10px; color:#fff; text-transform:uppercase; margin:.1rem .1rem 0 0; }
+    .t-defect   { background:#7c3aed; }
+    .t-fraud    { background:#374151; }
+    .t-reg      { background:#dc2626; }
+    .t-recall   { background:#be185d; }
+    .t-cyber    { background:#0369a1; }
+    .t-obsolete { background:#d97706; }
+    .t-mbi      { background:#047857; }
+    .t-home     { background:#8c4a15; }
+
+    .seg { display:inline-block; font-size:.7rem; font-weight:700; padding:.1rem .4rem; border-radius:4px; margin:.1rem .1rem 0 0; }
+    .s-elec   { background:#dbeafe; color:#1e3a5f; }
+    .s-white  { background:#e0f2fe; color:#0c4a6e; }
+    .s-mobile { background:#d1fae5; color:#064e3b; }
+    .s-motor  { background:#fce7f3; color:#831843; }
+    .s-home   { background:#fef3c7; color:#78350f; }
+    .s-gaming { background:#ede9fe; color:#4c1d95; }
+
+    footer { background:var(--wa-dark); color:rgba(255,255,255,.5); text-align:center; padding:24px; font-size:.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Extended Warranty</a> › Claims Database</div>
+  <h1>Extended Warranty — Claims Database</h1>
+  <p>35 notable claim events 1998–2024 — product defects, regulatory actions, fraud rings, and class actions</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+  <h2>Extended Warranty Claims Database</h2>
+  <div class="filter-bar">
+    <div class="fg">
+      <label>Claim Type</label>
+      <select id="ft">
+        <option value="">All Types</option>
+        <option value="defect">Product Defect</option>
+        <option value="fraud">Fraud / Misconduct</option>
+        <option value="reg">Regulatory Action</option>
+        <option value="recall">Product Recall Interface</option>
+        <option value="cyber">Cyber / Data</option>
+        <option value="obsolete">Obsolescence</option>
+        <option value="mbi">MBI / Motor</option>
+        <option value="home">Home / Appliance</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Segment</label>
+      <select id="fs">
+        <option value="">All Segments</option>
+        <option value="elec">Consumer Electronics</option>
+        <option value="white">White Goods</option>
+        <option value="mobile">Mobile / Wearables</option>
+        <option value="motor">Motor / MBI</option>
+        <option value="home">Home Systems</option>
+        <option value="gaming">Gaming</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Year Band</label>
+      <select id="fy">
+        <option value="">All Years</option>
+        <option value="1990">1990–1999</option>
+        <option value="2000">2000–2009</option>
+        <option value="2010">2010–2019</option>
+        <option value="2020">2020–2024</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Min. Value</label>
+      <select id="fm">
+        <option value="0">Any</option>
+        <option value="10">$10m+</option>
+        <option value="100">$100m+</option>
+        <option value="500">$500m+</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Search</label>
+      <input type="text" id="fq" placeholder="Product, brand, event…">
+    </div>
+    <button class="btn-r" onclick="reset()">Reset</button>
+    <span id="rc"></span>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="sort(0)">Year</th>
+          <th onclick="sort(1)">Event</th>
+          <th>Type</th>
+          <th>Segment</th>
+          <th>Description</th>
+          <th onclick="sort(5)">Est. Value</th>
+          <th>Geography</th>
+        </tr>
+      </thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+</main>
+<footer>Risk Code Hub — Extended Warranty Insurance | Lloyd's Code WA | Version 4.3</footer>
+<script>
+const D=[
+  {y:1998,n:"Sony PlayStation DRE — Disc Read Error",t:"defect",s:"gaming",desc:"Optical pickup failures in PS1 units. Mass warranty claims. Sony class action settled c.$24.5m. First major gaming warranty event.",v:25,geo:"US/Global"},
+  {y:2000,n:"Nokia 3310 Battery Recall Interface",t:"recall",s:"mobile",desc:"Early mobile phone battery recalls create warranty/recall boundary disputes — who bears replacement cost, manufacturer or warranty insurer?",v:5,geo:"EU"},
+  {y:2002,n:"UK Comet / Currys Warranty Mis-selling — OFT Complaint Wave",t:"reg",s:"elec",desc:"Wave of consumer complaints to OFT about high-pressure extended warranty sales tactics and refusal of claims. Precursor to Competition Commission inquiry.",v:0,geo:"UK"},
+  {y:2005,n:"Xbox 360 Red Ring of Death — Defect",t:"defect",s:"gaming",desc:"GPU overheating solder failure. Microsoft warranty extension ($1.05bn charge). Third-party warranty providers face mass claims. Failure rate 23–54% of units.",v:150,geo:"US/Global"},
+  {y:2006,n:"LG Plasma TV Capacitor Failures",t:"defect",s:"elec",desc:"LG 42/50-inch plasma TVs suffer widespread capacitor board failures causing display failure. Extended warranty claims surge. Class action settled c.$10m.",v:12,geo:"US"},
+  {y:2007,n:"Ford PowerShift Transmission — MBI Claims Surge",t:"mbi",s:"motor",desc:"Ford PowerShift dual-clutch transmission (Focus/Fiesta) develops systematic shudder and failure. MBI claims surge on affected vehicles. UK/EU class actions. Ford settlement £13.5m (UK 2021).",v:50,geo:"UK/EU/Australia"},
+  {y:2008,n:"US Service Contract Administrator Insolvencies — Financial Crisis",t:"fraud",s:"elec",desc:"Multiple US service contract administrators fail during the financial crisis, leaving consumers without warranty cover. CLIP market tested as backup obligor.",v:30,geo:"US"},
+  {y:2009,n:"Samsung LCD TV Capacitor Failure — Class Action",t:"defect",s:"elec",desc:"Samsung LCD TVs (2006–2008) suffer capacitor board failures causing screens to fail. Class action settled; extended warranty providers face coordinated claims. Settled $9m.",v:10,geo:"US"},
+  {y:2010,n:"Whirlpool Tumble Dryer Fire Risk — UK Recall Interface",t:"recall",s:"white",desc:"Whirlpool (Hotpoint/Indesit) tumble dryers subject to fire risk recall affecting 5.3m UK units. Extended warranty policies face claims on replaced units; recall complicates coverage triggers.",v:75,geo:"UK"},
+  {y:2011,n:"Apple iPhone 4 Antenna Gate — Refund Programme",t:"defect",s:"mobile",desc:"iPhone 4 antenna design flaw causing signal drop when held. Apple offers free cases and refunds. Extended warranty providers dispute whether antenna design flaw is a covered 'mechanical failure'.",v:175,geo:"US/Global"},
+  {y:2012,n:"Domestic & General — FCA Regulatory Review (UK)",t:"reg",s:"elec",desc:"FCA (then FSA) review of Domestic & General's warranty product terms and claims handling. Findings prompt improved disclosure requirements and claim settlement practices.",v:0,geo:"UK"},
+  {y:2013,n:"US Extended Warranty Fraud Ring — Staged Damage Claims",t:"fraud",s:"mobile",desc:"Organised fraud rings in major US cities submit staged accidental damage claims on smartphone protection plans. Asurion and SquareTrade report coordinated fraud. FBI investigations. Estimated losses $40m+ across market.",v:40,geo:"US"},
+  {y:2014,n:"LG Refrigerator Linear Compressor Failures",t:"defect",s:"white",desc:"LG refrigerators (2014–2019) suffer linear compressor failures, often within 5–7 years. Class action. LG settles $198m (2022). Extended warranty claims development over multiple years.",v:200,geo:"US"},
+  {y:2015,n:"Volkswagen Dieselgate — MBI/VSC Implication",t:"reg",s:"motor",desc:"VW emissions scandal causes uncertainty about resale values and mechanical integrity of affected vehicles. MBI/VSC underwriters assess exposure to higher claim frequency on affected diesel engines.",v:20,geo:"US/EU"},
+  {y:2016,n:"Samsung Galaxy Note 7 Battery Recall — Warranty Interface",t:"recall",s:"mobile",desc:"Samsung recalls all Note 7 units (c.4.3m units worldwide) after battery fires. Recall eliminates manufacturer warranty; some extended warranty providers face replacement cost claims. Insurance/recall boundary tested.",v:40,geo:"Global"},
+  {y:2017,n:"AmTrust Financial Restatements — Extended Warranty Capacity Disruption",t:"fraud",s:"elec",desc:"AmTrust Financial restates financials; extended warranty division sold/wound down. Multiple US retail warranty programmes lose their insurance backing and scramble for replacement capacity.",v:60,geo:"US"},
+  {y:2018,n:"Apple iPhone Battery Slowdown — Class Action",t:"defect",s:"mobile",desc:"Apple admits to throttling older iPhone performance due to degraded batteries without disclosure. Class action settlement $500m globally. Extended warranty providers assess whether battery degradation is a covered failure mode.",v:500,geo:"US/Global"},
+  {y:2019,n:"ASIC Add-on Insurance Review — Australian Market",t:"reg",s:"elec",desc:"ASIC publishes review finding loss ratios of 9–19% on some add-on extended warranty products. Deferred sales model proposed. Australian market restructuring begins.",v:0,geo:"Australia"},
+  {y:2019,n:"UK FCA — GAP Insurance and EW Fair Value Warning",t:"reg",s:"motor",desc:"FCA publishes market study warning about poor value in GAP insurance and add-on extended warranties sold through motor dealers. Foreshadows Consumer Duty application to motor EW products.",v:0,geo:"UK"},
+  {y:2020,n:"COVID-19 — Parts Unavailability Claims Inflation",t:"obsolete",s:"elec",desc:"Semiconductor shortage causes parts unavailability for consumer electronics warranty repairs. Insurers forced to replace units at inflated prices; claims costs rise 20–35%. Loss ratios spike on electronics and appliance programmes.",v:200,geo:"Global"},
+  {y:2020,n:"Dyson Vacuum Motor Failure — Class Action (UK)",t:"defect",s:"home",desc:"Dyson Dyson V-series cordless vacuums subject to motor failures after 2–3 years. Extended warranty providers face high-frequency claims. Dyson improves warranty terms voluntarily.",v:15,geo:"UK"},
+  {y:2021,n:"Australia Deferred Sales Model — EW Revenue Impact",t:"reg",s:"elec",desc:"ASIC's 4-day deferral rule effective October 2021. Retailer EW capture rates in Australia fall 30–50%. Extended warranty premium volumes drop; loss ratios improve as only deliberate purchasers remain.",v:0,geo:"Australia"},
+  {y:2021,n:"Suzuki MBI Class Action — Undisclosed Dealer Commission (UK)",t:"fraud",s:"motor",desc:"Class action against motor dealers selling MBI/VSC products without disclosing commission. Follows FCA focus on undisclosed commissions in credit and insurance markets. Settled c.£8m.",v:8,geo:"UK"},
+  {y:2022,n:"LG Refrigerator Class Action Settlement — $198m",t:"defect",s:"white",desc:"LG settles linear compressor class action for $198m covering refunds and repair costs. Extended warranty providers with US appliance book assess IBNR development. Drives tighter appliance quality audit requirements.",v:198,geo:"US"},
+  {y:2022,n:"Tesla Battery Degradation — EV Warranty Boundary Dispute",t:"mbi",s:"motor",desc:"Tesla owners dispute whether battery capacity degradation (below 70% at 8 years) triggers warranty replacement. Extended warranty providers offering EV cover face novel claims on degradation vs catastrophic failure trigger.",v:30,geo:"US/EU"},
+  {y:2022,n:"Samsung Washing Machine Drum Bearing — UK Class Action",t:"defect",s:"white",desc:"Samsung front-loader washing machines develop drum bearing failures within 3–5 years. Extended warranty claims surge. UK class action filed. Samsung improves service response under regulatory pressure.",v:20,geo:"UK"},
+  {y:2023,n:"UK FCA Consumer Duty — EW Fair Value Assessments Required",t:"reg",s:"elec",desc:"Consumer Duty (effective 31 July 2023) requires all UK EW providers to produce fair value assessments. Several products withdrawn or repriced. Commission transparency to retail distribution partners mandated.",v:0,geo:"UK"},
+  {y:2023,n:"iRobot / Roomba Repairs — Parts Obsolescence Claims",t:"obsolete",s:"home",desc:"iRobot discontinues production of older Roomba models; replacement parts unavailable for in-warranty repairs. Extended warranty providers forced to replace with current models at significantly higher cost. Obsolescence risk crystallises.",v:8,geo:"US"},
+  {y:2023,n:"Whirlpool US Recall — Dishwasher Fire Risk (Second Wave)",t:"recall",s:"white",desc:"Whirlpool recalls 1.7m dishwashers in the US (Whirlpool, Maytag, KitchenAid) for fire risk. Extended warranty interface — same boundary dispute as tumble dryer recall. Recall vs mechanical breakdown.",v:25,geo:"US"},
+  {y:2023,n:"US Auto Warranty Telemarketing Fraud — FTC Action",t:"fraud",s:"motor",desc:"FTC and state AGs take action against companies making billions of robocalls selling fake 'vehicle warranty expiry' products. Consumer losses estimated at hundreds of millions. Creates reputational damage for legitimate MBI market.",v:100,geo:"US"},
+  {y:2024,n:"EU Right to Repair — Extended Warranty Value Proposition Squeezed",t:"reg",s:"elec",desc:"EU Right to Repair Directive (2024/1799) extends statutory repair obligations for manufacturers. Extended warranty products in EU must pivot away from 'basic repair' cover (now statutory) toward accidental damage and rapid replacement value.",v:0,geo:"EU"},
+  {y:2024,n:"Apple iPhone Battery Replacement Surge — iOS Update Impact",t:"defect",s:"mobile",desc:"iOS updates alter battery performance diagnostics; wave of customers discover batteries below Apple's 80% health threshold. Extended warranty/ AppleCare+ battery replacement claims surge in Q1–Q2 2024.",v:30,geo:"Global"},
+  {y:2024,n:"EV Battery Extended Warranty — Market Launches",t:"mbi",s:"motor",desc:"Multiple TPAs (MotorEasy, Warrantywise, GardX) launch dedicated EV battery extended warranty products in UK/EU. Underwriting challenge: battery degradation vs failure trigger; parts availability for 5+ year old EVs; rapidly evolving technology.",v:5,geo:"UK/EU"},
+  {y:2024,n:"Home Warranty — HVAC Claims Inflation (US)",t:"home",s:"home",desc:"US home warranty companies face 25–40% HVAC replacement cost inflation due to refrigerant regulation changes (R-22 phase-out, R-410A transition). HVAC replacement costs rise sharply. American Home Shield adjusts pricing and sub-limits.",v:150,geo:"US"},
+  {y:2024,n:"UK Motor Finance Commission Review — MBI/VSC Implications",t:"reg",s:"motor",desc:"FCA's review of undisclosed motor finance commission expands to include MBI/VSC products sold through dealer F&I. Potential redress scheme could include MBI products sold on non-disclosed commission. Market watches for scope expansion.",v:0,geo:"UK"}
+];
+
+let sc=-1,sa=true;
+function dec(y){if(y<2000)return"1990";if(y<2010)return"2000";if(y<2020)return"2010";return"2020";}
+function tagH(t){const m={defect:"t-defect",fraud:"t-fraud",reg:"t-reg",recall:"t-recall",cyber:"t-cyber",obsolete:"t-obsolete",mbi:"t-mbi",home:"t-home"};const l={defect:"Defect",fraud:"Fraud/Misc",reg:"Regulatory",recall:"Recall",cyber:"Cyber",obsolete:"Obsolescence",mbi:"MBI/Motor",home:"Home"};return`<span class="tag ${m[t]||''}">${l[t]||t}</span>`;}
+function segH(s){const m={elec:"s-elec",white:"s-white",mobile:"s-mobile",motor:"s-motor",home:"s-home",gaming:"s-gaming"};const l={elec:"Electronics",white:"White Goods",mobile:"Mobile",motor:"Motor",home:"Home Sys",gaming:"Gaming"};return`<span class="seg ${m[s]||''}">${l[s]||s}</span>`;}
+function fmtV(v){if(v===0)return'—';if(v>=1000)return'$'+(v/1000).toFixed(1)+'bn';return'$'+v+'m';}
+function render(data){
+  const tb=document.getElementById('tb');tb.innerHTML='';
+  data.forEach(r=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="yc">${r.y}</td><td class="nc">${r.n}</td><td>${tagH(r.t)}</td><td>${segH(r.s)}</td><td class="dc">${r.desc}</td><td class="lc">${fmtV(r.v)}</td><td style="font-size:.8rem;color:var(--muted)">${r.geo}</td>`;
+    tb.appendChild(tr);
+  });
+  document.getElementById('rc').textContent=data.length+' events';
+}
+function apply(){
+  const t=document.getElementById('ft').value,s=document.getElementById('fs').value,y=document.getElementById('fy').value,m=parseInt(document.getElementById('fm').value)||0,q=document.getElementById('fq').value.toLowerCase();
+  let data=D.filter(r=>{
+    if(t&&r.t!==t)return false;
+    if(s&&r.s!==s)return false;
+    if(y&&dec(r.y)!==y)return false;
+    if(r.v<m)return false;
+    if(q&&!(r.n.toLowerCase().includes(q)||r.desc.toLowerCase().includes(q)))return false;
+    return true;
+  });
+  if(sc>=0)data.sort((a,b)=>{let va,vb;if(sc===0){va=a.y;vb=b.y;}else if(sc===1){va=a.n;vb=b.n;}else if(sc===5){va=a.v;vb=b.v;}else{va=0;vb=0;}return sa?(va>vb?1:-1):(va<vb?1:-1);});
+  render(data);
+}
+function sort(c){if(sc===c){sa=!sa;}else{sc=c;sa=true;}document.querySelectorAll('thead th').forEach((th,i)=>{th.classList.remove('sa','sd');if(i===c)th.classList.add(sa?'sa':'sd');});apply();}
+function reset(){['ft','fs','fy','fm'].forEach(id=>document.getElementById(id).value='');document.getElementById('fq').value='';sc=-1;sa=true;document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sa','sd'));apply();}
+['ft','fs','fy','fm'].forEach(id=>document.getElementById(id).addEventListener('change',apply));
+document.getElementById('fq').addEventListener('input',apply);
+apply();
+</script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Event Cancellation &amp; Contingency — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b005a;
+      --hub-dark:      #450030;
+      --hub-light:     #fce4f4;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#450030 0%,#7b005a 55%,#a0007a 100%);
+      --header-sub:    #f48fb1;
+      --bc:            #7b005a;
+      --bc-dark:       #450030;
+      --bc-light:      #fce4f4;
+      --bc-accent:     #c8a84b;
+      --bc-mid:        #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0020;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#f48fb1;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#450030;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#f48fb1;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--bc-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--bc);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--bc-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--bc-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #fce4f4;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fdf0f8;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-pandemic{background:#e8f5e9;color:#1a5c2a;}
+    .tp-weather{background:#e0f2f1;color:#00695c;}
+    .tp-terrorism{background:#ffebee;color:#c62828;}
+    .tp-nonappear{background:#f3e5f5;color:#6a1b9a;}
+    .tp-political{background:#e8eaf6;color:#1a237e;}
+    .tp-venue{background:#fff3e0;color:#e65100;}
+    .tp-prize{background:#fce4ec;color:#880e4f;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#1a5c2a;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--bc);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#fdf0f8;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    footer{background:#450030;color:#f48fb1;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Event Cancellation (PC/PA/PN/PU/PZ)</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>Event Cancellation Loss Database</h1>
+    <div class="sub">35 notable EC &amp; contingency incidents 1990–2024 — filter by type, sector &amp; severity <span class="badge b-e">EST</span></div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Event Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="pandemic">Pandemic / Disease</option>
+        <option value="weather">Weather</option>
+        <option value="terrorism">Terrorism / Security</option>
+        <option value="nonappear">Non-Appearance</option>
+        <option value="political">Political Cancellation</option>
+        <option value="venue">Venue Failure</option>
+        <option value="prize">Prize Won</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="music-concert">Music / Concert</option>
+        <option value="sporting-event">Sporting Event</option>
+        <option value="conference">Conference / Exhibition</option>
+        <option value="film-production">Film / TV Production</option>
+        <option value="wedding-corporate">Wedding / Corporate</option>
+        <option value="broadcasting">Broadcasting / Media</option>
+        <option value="festival">Outdoor Festival</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2010" min="1990" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 10" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Event, country…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event / Entity</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Value ($m)</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Event Cancellation &amp; Contingency (PC/PA/PN/PU/PZ) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1991,n:"Gulf War — International Event Cancellations",t:"political",s:"conference",desc:"Gulf War causes widespread cancellation of conferences, trade exhibitions and corporate events across the Middle East and internationally. EC policies with government order and political cancellation perils are tested for the first time at scale. Market estimates total insured EC losses at $200m+.",v:200,sev:"maj",geo:"Middle East/Global"},
+  {y:1999,n:"Woodstock 1999 — Festival Riots and Curtailment",t:"venue",s:"festival",desc:"Woodstock 1999 descends into riots and property destruction, forcing premature curtailment. EC claims arise from the organiser's losses but coverage is disputed where the immediate cause is the conduct of attendees rather than an insured peril. The event drives clearer policy drafting on voluntary vs forced curtailment.",v:12,sev:"mod",geo:"USA"},
+  {y:2001,n:"9/11 — US Event Cancellations",t:"terrorism",s:"sporting-event",desc:"September 11 attacks cause mass cancellation of US sporting events (NFL, MLB), concerts and corporate events in the week following. Estimated EC insured losses exceed $300m across all sectors. Terrorism is removed as a default included peril and becomes an optional separately-rated extension in all subsequent EC policies.",v:300,sev:"maj",geo:"USA"},
+  {y:2003,n:"SARS — Hong Kong and Asia Event Cancellations",t:"pandemic",s:"conference",desc:"SARS causes cancellation of major conferences, sporting events and entertainment shows across Hong Kong, Singapore and Toronto. Estimated EC losses of $50–80m in affected territories. Most policies do not contain communicable disease exclusions at this point — policies respond where government order or communicable disease is an insured peril.",v:65,sev:"mod",geo:"Hong Kong/Singapore/Canada"},
+  {y:2004,n:"Rolling Stones — Jagger Heart Surgery Tour Postponement",t:"nonappear",s:"music-concert",desc:"Mick Jagger undergoes emergency heart surgery, forcing postponement of the Licks World Tour. Non-appearance (PN) insurance responds, covering promoter advance costs and lost revenue from postponed US and European dates. Claim estimated at $8–12m across multiple promoters.",v:10,sev:"mod",geo:"USA/Europe"},
+  {y:2005,n:"New Orleans Jazz Fest — Hurricane Katrina Cancellation",t:"weather",s:"festival",desc:"Hurricane Katrina devastates New Orleans, forcing cancellation of the New Orleans Jazz & Heritage Festival. EC policy responds under weather and government order perils. The claim becomes one of the landmark US domestic weather EC losses of the decade.",v:15,sev:"mod",geo:"USA"},
+  {y:2006,n:"Ryder Cup Venue — Storm Damage Pre-Event",t:"weather",s:"sporting-event",desc:"Severe storm damage to the K Club golf course in Ireland in the weeks before the 2006 Ryder Cup forces emergency remediation work. EC/extra expenses cover is tested for costs of restoring the venue to playable condition under tight timescales.",v:5,sev:"min",geo:"Ireland"},
+  {y:2008,n:"Beijing Olympics — Security Perimeter Vendor Losses",t:"terrorism",s:"sporting-event",desc:"Extensive security measures around the Beijing 2008 Olympics exclude legitimate vendors and businesses from operating within large exclusion zones. EC and business interruption claims from affected businesses raise the question of whether security-government orders that indirectly affect events and associated businesses constitute EC triggers.",v:20,sev:"mod",geo:"China"},
+  {y:2009,n:"Michael Jackson — This Is It Tour Non-Appearance",t:"nonappear",s:"music-concert",desc:"Michael Jackson dies before the This Is It residency at London's O2 Arena commences. AEG Live had invested an estimated $30m+ in production and advance costs. Non-appearance insurance responds — one of the largest single PN claims in Lloyd's market history. The claim is instrumental in establishing PN as a material loss class.",v:35,sev:"maj",geo:"UK"},
+  {y:2009,n:"H1N1 Swine Flu — Event Cancellations Mexico/Americas",t:"pandemic",s:"conference",desc:"H1N1 pandemic causes cancellation of large public events in Mexico and surrounding countries under government public health orders. EC policies with communicable disease or government order perils respond in isolated cases. Aggregate insured EC losses estimated at $40–60m.",v:50,sev:"mod",geo:"Mexico/Americas"},
+  {y:2010,n:"Eyjafjallajökull Ash Cloud — European Event Cancellations",t:"weather",s:"conference",desc:"Six-day European airspace closure forces cancellation or postponement of hundreds of events as performers, speakers and delegates cannot travel. EC losses from events where key performers or speakers are grounded are estimated at £200m+ across Europe. Government-ordered airspace closure perils respond.",v:250,sev:"maj",geo:"Europe"},
+  {y:2012,n:"UK Festival — Flash Flooding Mid-Event",t:"weather",s:"festival",desc:"Flash flooding mid-performance at a major UK outdoor festival forces partial evacuation and curtailment. EC pluvius insurance triggers automatically. Extra expenses cover responds to costs of partial refunds and site remediation. Total claim approximately £4m.",v:5,sev:"min",geo:"UK"},
+  {y:2013,n:"Boston Marathon Bombing — Race Cancellation",t:"terrorism",s:"sporting-event",desc:"Pressure cooker bombs at the Boston Marathon finish line kill 3 and injure hundreds. The race is cancelled mid-event. EC terrorism extension claims arise from the Boston Athletic Association and associated sponsors. The event is a significant US terrorism EC loss — terrorism perils in road race and mass participation event policies are reviewed.",v:18,sev:"mod",geo:"USA"},
+  {y:2014,n:"FIFA World Cup Brazil — Venue Weather Delays",t:"weather",s:"sporting-event",desc:"Persistent heavy rainfall and lightning at multiple World Cup venues in Brazil causes match delays and additional operational costs. While no matches are cancelled, EC and extra expenses claims arise for additional venue preparation, lighting system modifications and rescheduled training sessions.",v:8,sev:"min",geo:"Brazil"},
+  {y:2015,n:"Paris Attacks — Bataclan Concert Cancellation",t:"terrorism",s:"music-concert",desc:"Islamist terrorist attack at the Bataclan concert venue during an Eagles of Death Metal performance kills 90 concert-goers. The concert is forcibly curtailed by the attack. EC terrorism claims arise from the promoter. The event triggers wholesale review of terrorism cover in European music venue policies.",v:8,sev:"mod",geo:"France"},
+  {y:2016,n:"Glastonbury Festival — Multi-Day Weather Curtailment",t:"weather",s:"festival",desc:"Persistent heavy rainfall at Glastonbury Festival 2016 causes severe mud conditions, partial site closures and significant operational disruption. EC and pluvius insurance responds. Additional costs of managing the site, replacing damaged infrastructure and partial attendee refunds generate a substantial claim.",v:12,sev:"mod",geo:"UK"},
+  {y:2017,n:"Manchester Arena Attack — Ariana Grande Concert",t:"terrorism",s:"music-concert",desc:"Suicide bomb attack at the Manchester Arena following an Ariana Grande concert kills 22 and injures hundreds. EC terrorism extension claims arise from the promoter and venue. The attack drives major review of terrorism cover adequacy and security requirements in large-venue music event policies.",v:10,sev:"mod",geo:"UK"},
+  {y:2019,n:"Hong Kong Protests — International Conference Cancellations",t:"political",s:"conference",desc:"Sustained political protests in Hong Kong from June 2019 cause widespread cancellation and relocation of international conferences, trade exhibitions and sporting events. EC political cancellation perils respond in some policies. Estimated EC insured losses of $150–200m from the conference and events sector.",v:175,sev:"maj",geo:"Hong Kong"},
+  {y:2020,n:"COVID-19 — Global Event Cancellation Catastrophe",t:"pandemic",s:"festival",desc:"The COVID-19 pandemic causes simultaneous cancellation of virtually the entire global events calendar from March 2020. Government prohibition orders across every major jurisdiction prevent public gatherings. EC insured losses estimated at $4–6bn across 2020–21 — by far the largest loss event in EC class history. Policies without pandemic exclusions respond; many pay in full.",v:5000,sev:"cat",geo:"Global"},
+  {y:2020,n:"Wimbledon 2020 — Pandemic Claim £141m",t:"pandemic",s:"sporting-event",desc:"The All England Lawn Tennis Club claims £141m on its pandemic event cancellation policy — purchased annually since 2003 at approximately £1.5m per year. One of the largest single EC claims ever paid. Wimbledon's unique foresight in purchasing pandemic cover following SARS results in full financial recovery while virtually all other event organisers bear uninsured losses.",v:175,sev:"cat",geo:"UK"},
+  {y:2020,n:"Tokyo Olympics 2020 Postponement",t:"pandemic",s:"sporting-event",desc:"The Tokyo 2020 Olympics are postponed by one year due to COVID-19 — an unprecedented event in the 124-year history of the modern Games. Additional costs estimated at $2bn+. The Games proceed in 2021 without spectators. Host-city government indemnities and commercial insurance structures both tested. Broadcasting rights renegotiated.",v:2000,sev:"cat",geo:"Japan"},
+  {y:2020,n:"Euro 2020 — One-Year Postponement",t:"pandemic",s:"sporting-event",desc:"UEFA Euro 2020 is postponed by one year to 2021. EC costs from the postponement — venue rebooking, ticket management, sponsor renegotiation, broadcasting contract adjustment — generate significant claims. UEFA's multi-territory event structure makes claims management complex.",v:180,sev:"maj",geo:"Europe"},
+  {y:2020,n:"Coachella Festival 2020 — Full Cancellation",t:"pandemic",s:"festival",desc:"Coachella Valley Music and Arts Festival cancels both 2020 weekends. The festival generates approximately $115m in gate revenue annually. EC claims filed for unrecoverable costs — artist fees, production, marketing. Without pandemic exclusions in the 2019-era policy, claims are partially successful.",v:80,sev:"maj",geo:"USA"},
+  {y:2020,n:"US Music Festival Industry — Aggregate COVID Losses",t:"pandemic",s:"festival",desc:"The US outdoor festival industry loses an estimated $9bn in revenue in 2020. EC insured losses across the sector are a fraction of the total economic loss — many organisers had no or inadequate EC insurance. The gap between economic and insured losses is the defining characteristic of the COVID EC catastrophe in the entertainment sector.",v:600,sev:"cat",geo:"USA"},
+  {y:2021,n:"Glastonbury 2021 — COVID Cancellation Second Year",t:"pandemic",s:"festival",desc:"Glastonbury Festival cancels for a second consecutive year due to COVID-19. EC claims for 2021 are affected by the pandemic exclusions newly inserted into post-2020 policies — many insurers contest claims for 2021 events where communicable disease exclusions apply. Coverage disputes arise.",v:30,sev:"mod",geo:"UK"},
+  {y:2021,n:"Travis Scott Astroworld — Crowd Crush Curtailment",t:"venue",s:"music-concert",desc:"Mass casualty crowd crush at Astroworld Festival in Houston kills 10 and injures hundreds, forcing curtailment. EC, venue liability and event organiser liability claims are extensive. The event raises questions about the interface between EC forced curtailment coverage and liability policies where the curtailment results from crowd management failure.",v:40,sev:"maj",geo:"USA"},
+  {y:2022,n:"Ukraine War — Eastern European Event Cancellations",t:"political",s:"conference",desc:"Russia's invasion of Ukraine in February 2022 causes widespread cancellation of events across Eastern Europe. Eurovision Song Contest relocates from Ukraine to Turin (Italy). International conferences, sporting events and music tours cancel or relocate. EC political cancellation perils are tested. Estimated EC losses in affected region: $100–150m.",v:120,sev:"maj",geo:"Ukraine/Eastern Europe"},
+  {y:2022,n:"Saudi Arabian GP — Red Sea Weather Smoke Interruption",t:"weather",s:"sporting-event",desc:"An oil storage facility fire adjacent to the Jeddah Corniche Circuit creates dense smoke during the 2022 Saudi Arabian Grand Prix, causing a lengthy red flag interruption and safety concerns. EC and race interruption insurance provisions are tested. The event also raises terrorism proximity questions given the deliberate nature of the fire (Houthi attack).",v:6,sev:"min",geo:"Saudi Arabia"},
+  {y:2022,n:"Sheffield Hallam University — Academic Conference Cancellation",t:"political",s:"conference",desc:"Major academic conference cancelled following political controversy about invited speakers and government guidance. EC 'government order' and 'political interference' perils debated but ultimately not triggered — a commercial decision rather than an insured peril. Illustrates the boundary between insured perils and commercial/reputational risks.",v:1,sev:"min",geo:"UK"},
+  {y:2023,n:"Taylor Swift Eras Tour — Venue Logistical Failure",t:"venue",s:"music-concert",desc:"Multiple Eras Tour dates face venue capacity and crowd management issues; one date is affected by a venue fire at a nearby facility requiring partial show delay. Extra expenses insurance responds for additional security and operational costs. The tour generates approximately $1.04bn gross revenue — the most lucrative tour in history. EC programme is the most complex non-appearance/EC structure of its era.",v:8,sev:"min",geo:"USA/Global"},
+  {y:2023,n:"Qatar World Cup Post-Event — Extreme Heat Scheduling",t:"weather",s:"sporting-event",desc:"Qatar 2022 World Cup (held November–December 2022 to avoid summer heat) generates claims from sponsors and broadcasters relating to schedule changes and reduced attendance at daytime matches. EC provisions relating to extreme heat and schedule modification costs are tested. The winter scheduling creates novel EC programme requirements.",v:15,sev:"mod",geo:"Qatar"},
+  {y:2023,n:"Hole-in-One Prize Indemnity — $1.2m Claimed",t:"prize",s:"sporting-event",desc:"A competitor at a corporate golf charity tournament achieves a hole-in-one on the designated hole, winning the $1.2m prize. The prize indemnity insurer pays the full prize amount to the organiser as indemnity. The event illustrates the clean, simple operation of PU prize indemnity claims — the weather measurement trigger equivalent for prize indemnity.",v:1,sev:"min",geo:"USA"},
+  {y:2023,n:"NBA Half-Court Shot Competition — $1m Prize Won",t:"prize",s:"sporting-event",desc:"A fan in an NBA halftime promotion sinks a half-court shot, winning the $1m prize. The team's prize indemnity insurer pays the claim. The probability of the shot being made had been actuarially assessed and priced accordingly. Prize indemnity claims in basketball half-time promotions occur at approximately the statistically expected frequency.",v:1,sev:"min",geo:"USA"},
+  {y:2024,n:"Paris Olympics 2024 — Seine River Water Quality",t:"venue",s:"sporting-event",desc:"Water quality concerns about the River Seine in Paris cause postponement of triathlon and open water swimming training sessions and create uncertainty about the main event schedule. EC provisions for venue-related delay costs are tested. The Games ultimately proceed with all aquatic events completing, but extra expenses for water quality monitoring and contingency planning generate claims.",v:10,sev:"mod",geo:"France"},
+  {y:2024,n:"UK Festival — Artist Visa Denial Non-Appearance",t:"nonappear",s:"festival",desc:"A major international headliner is denied a UK performing visa due to Home Office policy changes, unable to appear at a UK summer festival. The promoter invokes non-appearance (PN) insurance — visa denial is an insured peril in many PN policies. EC/PN claim of approximately £3m for lost headliner revenue and replacement artist costs.",v:4,sev:"min",geo:"UK"}
+];
+
+const typeLabels = {
+  pandemic:"Pandemic / Disease",weather:"Weather",terrorism:"Terrorism / Security",
+  nonappear:"Non-Appearance",political:"Political Cancellation",venue:"Venue Failure",prize:"Prize Won"
+};
+const typeClass = {
+  pandemic:"tp-pandemic",weather:"tp-weather",terrorism:"tp-terrorism",
+  nonappear:"tp-nonappear",political:"tp-political",venue:"tp-venue",prize:"tp-prize"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${d.s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</td>
+      <td>${d.v>=1000?'$'+(d.v/1000).toFixed(1)+'bn':'$'+d.v+'m'}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">&#9660; Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

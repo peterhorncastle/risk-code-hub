@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Agricultural Crop & Forestry — Underwriting | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:    #2d6a2d;
+      --hub-dark:       #1a3d1a;
+      --hub-light:      #e8f5e3;
+      --hub-accent:     #c8a84b;
+      --hub-secondary:  #8b4513;
+      --hub-secondary2: #1565c0;
+      --header-gradient: linear-gradient(135deg,#1a3d1a 0%,#2d6a2d 50%,#3d7a3d 100%);
+      --header-sub:     #b8d4b8;
+    }
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; margin:20px 0; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-top:4px solid var(--hub-primary); }
+    .factor-card.amber { border-top-color:#e65100; }
+    .factor-card.red   { border-top-color:#c0392b; }
+    .factor-card.green { border-top-color:var(--hub-secondary2); }
+    .factor-card.brown { border-top-color:var(--hub-secondary); }
+    .factor-card h4 { margin:0 0 8px; font-size:0.92rem; color:var(--hub-dark); }
+    .factor-card p  { margin:0; font-size:0.83rem; color:#4a5a6a; line-height:1.5; }
+    .factor-adj { display:inline-block; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:12px; margin-top:8px; }
+    .adj-up   { background:#fdecea; color:#c0392b; }
+    .adj-down { background:#e8f5e9; color:#2e7d32; }
+    .adj-neut { background:#fef3e2; color:#7a5700; }
+
+    .example { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px 28px; margin:20px 0; }
+    .example h3 { color:var(--hub-dark); margin-top:0; font-size:1.02rem; }
+    .example-tag { display:inline-block; font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; padding:3px 10px; border-radius:20px; background:var(--hub-light); color:var(--hub-primary); margin-bottom:12px; }
+    .calc-row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px dashed var(--border); font-size:0.88rem; }
+    .calc-row:last-child { border-bottom:none; font-weight:700; font-size:0.95rem; color:var(--hub-dark); }
+    .calc-label { color:#4a5a6a; }
+    .calc-val { font-weight:600; color:var(--hub-primary); }
+
+    .checklist { list-style:none; padding:0; margin:16px 0; }
+    .checklist li { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.88rem; }
+    .checklist li:last-child { border-bottom:none; }
+    .check-icon { flex-shrink:0; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:900; margin-top:1px; }
+    .ci-req  { background:#fdecea; color:#c0392b; }
+    .ci-pref { background:#fef3e2; color:#7a5700; }
+    .ci-info { background:#e8f5e9; color:#2d6a2d; }
+    .check-text strong { display:block; margin-bottom:2px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Agricultural Crop &amp; Forestry (HA/AG)</a> › Underwriting</div>
+  <div class="tag">Module 04 — Underwriting</div>
+  <h1>Agricultural Crop &amp; Forestry — Underwriting</h1>
+  <p>Rating methodology for MPCI, named-peril crop, and standing timber coverage — with factor cards, two worked pricing examples, and a pre-bind underwriting checklist for HA and AG risks.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>Agricultural underwriting is fundamentally actuarial — premium rates must reflect long-run expected loss derived from yield variability, crop value, peril frequency, and geographic risk. The challenge is that historical yield data may not adequately represent future risk in a changing climate, and that catastrophic events (drought, wildfire) can be correlated across very large areas — creating systemic exposure that requires carefully structured reinsurance. <span class="badge b-e">EST</span></p>
+
+  <!-- Crop rating formula -->
+  <div class="formula-box">
+    <div class="formula-title">MPCI Technical Premium Formula — Crop Insurance</div>
+    <div class="formula">
+      Premium = Liability × Pure Rate<br>
+      where: Liability = (Approved Yield × Coverage Level %) × Price Election × Planted Acres<br>
+      and: Pure Rate = f(APH variability, peril mix, county base rate, T-yield adjustments, climate loading)
+    </div>
+    <p style="margin:10px 0 0;font-size:0.85rem;color:#4a5a6a;">
+      <strong>APH (Actual Production History):</strong> 4–10 year farm yield history — primary rating input for US-style MPCI. Farms with low yield variability receive lower rates; high variability farms pay more.<br>
+      <strong>Coverage Level:</strong> 50%–85% of APH yield — policyholder selects; higher coverage = higher premium.<br>
+      <strong>Price Election:</strong> Commodity futures price (CBOT/CME) used to value the yield guarantee — set at planting; Revenue Protection uses harvest price if higher.<br>
+      <strong>County Base Rate:</strong> Actuarially derived rate reflecting county-level historical loss experience. <span class="badge b-v">VER</span>
+    </p>
+  </div>
+
+  <!-- Standing timber rating formula -->
+  <div class="formula-box" style="margin-top:16px;">
+    <div class="formula-title">Standing Timber Rating Formula — Forestry Insurance (AG)</div>
+    <div class="formula">
+      Premium = Declared Timber Value × Rate-on-Line<br>
+      where: RoL = Base Rate × Peril Factor × Species Factor × Site Risk Factor × Management Factor × Concentration Factor
+    </div>
+    <p style="margin:10px 0 0;font-size:0.85rem;color:#4a5a6a;">
+      <strong>Declared Value:</strong> Standing timber value at time of policy inception — must be professionally cruised (volume survey) for large estates. Market value of merchantable timber based on species, age class, and market price.<br>
+      <strong>Base Rate:</strong> 0.10%–0.50% RoL depending on primary peril (fire vs windstorm region) and management standard. <span class="badge b-e">EST</span><br>
+      <strong>Species Factor:</strong> Softwood conifer (pine, spruce) typically higher risk than hardwood (oak, beech) for fire; reverses for windstorm in exposed areas.
+    </p>
+  </div>
+
+  <!-- Crop rating factors -->
+  <h2>Crop Insurance (HA) Rating Factors</h2>
+  <div class="factor-grid">
+    <div class="factor-card">
+      <h4>Crop Type &amp; Yield Variability</h4>
+      <p>Different crops have fundamentally different yield variability profiles. Row crops (corn, soybeans) have moderate variability; specialty crops (wine grapes, vegetables, almonds) have high variability but also high per-acre values. APH coefficient of variation (standard deviation / mean) is the primary actuarial rating input.</p>
+      <span class="factor-adj adj-neut">Primary rating driver</span>
+    </div>
+    <div class="factor-card amber">
+      <h4>Geographic / County Risk Zone</h4>
+      <p>County-level base rates reflect cumulative historical loss experience. Drought-prone counties (Great Plains, Central Valley California) carry higher base rates than stable-yield counties (Iowa, Illinois Corn Belt). Critical importance: a single county rate applies to all farms within it — individual farm placement within the county adjusts around the county base.</p>
+      <span class="factor-adj adj-up">+20–100% for high-drought-risk counties</span>
+    </div>
+    <div class="factor-card amber">
+      <h4>Irrigation Status</h4>
+      <p>Irrigated crops have materially lower yield variability than dryland crops for drought-sensitive species. Rate reductions of 40–60% are standard for fully irrigated vs dryland corn or cotton in drought-prone regions. However, irrigation reduces but does not eliminate risk — excess moisture, flood, heat stress, and hail affect irrigated as well as dryland crops.</p>
+      <span class="factor-adj adj-down">−30–60% for fully irrigated</span>
+    </div>
+    <div class="factor-card red">
+      <h4>ENSO / Climate Forecast</h4>
+      <p>El Niño/La Niña (ENSO) patterns significantly affect seasonal precipitation in Australia, South America, Southeast Asia, and East Africa. For non-US international crop insurance, ENSO forecast at planting time should inform rate adequacy — La Niña associated with drought in East and Southern Africa; El Niño with drought in Australia and flooding in Peru. Climate loading adjustments required in changing ENSO frequency environments.</p>
+      <span class="factor-adj adj-up">+10–30% in forecast adverse ENSO year</span>
+    </div>
+    <div class="factor-card">
+      <h4>Coverage Level Selected</h4>
+      <p>Higher coverage levels (80–85%) protect more yield and cost more. Lower coverage levels (50–65%) are cheaper but leave more yield exposure on the farm. Adverse selection risk: in high-risk years, farmers select higher coverage. Rate should be actuarially adequate at each coverage level independently.</p>
+      <span class="factor-adj adj-neut">Premium scales with coverage %</span>
+    </div>
+    <div class="factor-card green">
+      <h4>Agronomic Practice Documentation</h4>
+      <p>Documented precision agriculture practices — soil testing, variable-rate application, optimised plant populations — typically associated with lower yield variability and better management response to stress. Precision agriculture adopters represent better risks. Satellite crop monitoring capability allows earlier loss detection.</p>
+      <span class="factor-adj adj-down">−5–15% for documented precision practices</span>
+    </div>
+    <div class="factor-card amber">
+      <h4>Specialty Crop / Perennial</h4>
+      <p>Perennial specialty crops (wine grapes, almonds, olives, avocados) have high per-acre insured values but also multi-year recovery costs if plants are killed. Frost, hail, and fire are the primary perils. Revenue insurance for specialty crops requires market price data that may be thin or illiquid. Estate-specific yield history is essential.</p>
+      <span class="factor-adj adj-up">Premium 2–5× field crop rate per acre</span>
+    </div>
+    <div class="factor-card">
+      <h4>Deductible / Coverage Structure</h4>
+      <p>MPCI deductibles work as coverage level elections (80% coverage = 20% deductible). Named-peril hail covers typically have % of sum insured deductibles (10–25%). Higher deductibles (lower coverage levels) reduce premium proportionately but increase basis risk for the farmer.</p>
+      <span class="factor-adj adj-neut">Deductible structure defines coverage layer</span>
+    </div>
+  </div>
+
+  <!-- Forestry rating factors -->
+  <h2>Standing Timber (AG) Rating Factors</h2>
+  <div class="factor-grid">
+    <div class="factor-card red">
+      <h4>Fire Risk — WUI Proximity &amp; Fire History</h4>
+      <p>Wildland-Urban Interface (WUI) proximity, local fire return interval, slope, aspect, and fuel loading are primary fire risk determinants. California, Australia, and Mediterranean-climate regions carry the highest fire rating factors. Access roads for fire suppression equipment and proximity to fire station significantly affect modelled fire severity.</p>
+      <span class="factor-adj adj-up">+50–300% for high WUI / fire history locations</span>
+    </div>
+    <div class="factor-card amber">
+      <h4>Windstorm Exposure</h4>
+      <p>Coastal and exposed upland sites face higher windthrow risk than sheltered valley floors. Edge effect — wind damage concentrated along stand edges — makes large clearcut areas and isolated forest blocks particularly vulnerable. European windstorm modelling (RMS, AIR) for Scandinavian and Central European forests is relatively mature.</p>
+      <span class="factor-adj adj-up">+20–80% for high-exposure coastal/upland sites</span>
+    </div>
+    <div class="factor-card">
+      <h4>Species Mix &amp; Age Class</h4>
+      <p>Monoculture softwood (Sitka spruce, Douglas fir, Scots pine) has higher fire and windthrow vulnerability than mixed-species stands. Older trees have higher per-unit value but also greater fire fuel load. Young plantations (pre-merchantable) have high total loss potential (replanting cost) but low per-hectare timber value.</p>
+      <span class="factor-adj adj-neut">Species and age determine value and peril profile</span>
+    </div>
+    <div class="factor-card amber">
+      <h4>Declared Value Accuracy</h4>
+      <p>Standing timber value must be professionally cruised for estates over 500 hectares. Outdated or undeclared values create average clause problems at claim — if actual value exceeds declared value, claims proportionately reduced. Many forestry insurance disputes arise from under-declaration of timber value, particularly in rapidly maturing plantations where prices have risen.</p>
+      <span class="factor-adj adj-up">Average clause applies — accurate declaration essential</span>
+    </div>
+    <div class="factor-card green">
+      <h4>Forest Management Standards</h4>
+      <p>FSC (Forest Stewardship Council) or PEFC-certified forests with documented management plans, fire break maintenance, thinning records, and pest management demonstrate lower risk. Certified forests have active management reducing fuel loads, improving tree health (reducing beetle susceptibility), and maintaining fire access roads.</p>
+      <span class="factor-adj adj-down">−10–20% for FSC/PEFC certified, maintained fire breaks</span>
+    </div>
+    <div class="factor-card red">
+      <h4>Pest/Disease Exclusion / Sub-Limit</h4>
+      <p>Bark beetle, root rot (Phytophthora, Heterobasidion), and fungal disease are almost always excluded from standard AG policies or sub-limited to 5–10% of total timber value. Where pest/disease cover is sought, actuarial data is sparse — underwriters must assess whether adjacent beetle populations, drought stress, or windthrow (beetle breeding material) creates imminent infestation risk.</p>
+      <span class="factor-adj adj-neut">Sub-limit standard — full cover exceptional</span>
+    </div>
+  </div>
+
+  <!-- Worked Example 1: MPCI -->
+  <h2>Worked Pricing Examples</h2>
+  <div class="example">
+    <div class="example-tag">Example A — Irrigated Corn Farm, Iowa</div>
+    <h3>Smith Family Farm LLC — 600 acres irrigated corn, Polk County, Iowa</h3>
+    <p><strong>Profile:</strong> 600 planted acres of irrigated corn (pivot irrigation). APH yield: 210 bu/acre (above county average of 195 bu/acre). Coverage level selected: 80%. Spring CBOT corn price election: $4.80/bu. 10-year claims-free record on MPCI. Precision agriculture: GPS-guided application, yield mapping. Seeking Revenue Protection (RP) MPCI. <span class="badge b-i">ILLUS</span></p>
+    <div class="calc-row"><span class="calc-label">Liability per acre (210 bu × 80% × $4.80)</span><span class="calc-val">$806.40/acre</span></div>
+    <div class="calc-row"><span class="calc-label">Total programme liability (600 acres)</span><span class="calc-val">$483,840</span></div>
+    <div class="calc-row"><span class="calc-label">County base rate — Polk Co. irrigated corn (actuarial)</span><span class="calc-val">3.2% of liability</span></div>
+    <div class="calc-row"><span class="calc-label">Gross premium before subsidy</span><span class="calc-val">$15,483</span></div>
+    <div class="calc-row"><span class="calc-label">Federal premium subsidy (80% coverage level — 48% subsidy rate)</span><span class="calc-val">−$7,432</span></div>
+    <div class="calc-row total"><span class="calc-label">Farmer-paid premium (after subsidy)</span><span class="calc-val">$8,051 ($13.42/acre)</span></div>
+    <p style="margin-top:14px;font-size:0.83rem;color:#4a5a6a;"><strong>Conditions:</strong> Deductible = first 20% of yield loss (APH × 20% = 42 bu/acre). RP includes harvest price option — if December corn futures exceed $4.80 at harvest, guarantee recalculated upward. Claims verified by crop adjuster; yield measured at bin/elevator. <span class="badge b-i">ILLUS</span></p>
+  </div>
+
+  <div class="example">
+    <div class="example-tag">Example B — Commercial Softwood Plantation, Scotland</div>
+    <h3>Glen Arvie Forest Estate — 2,400 ha Sitka spruce, Argyll, Scotland</h3>
+    <p><strong>Profile:</strong> 2,400 hectares of commercial Sitka spruce plantation (age class mix: 30% pre-merchantable 1–10yr, 40% merchantable 11–25yr, 30% mature 26–40yr). Declared timber value: £8.5 million. Coastal exposed location — windthrow risk rated High. Adjacent to low-risk agricultural land on south/east sides; open hill on north/west. FSC certified. Fire break network maintained. No claims in 12 years. Seeking windstorm + fire coverage; pest/disease excluded. <span class="badge b-i">ILLUS</span></p>
+    <div class="calc-row"><span class="calc-label">Declared timber value</span><span class="calc-val">£8,500,000</span></div>
+    <div class="calc-row"><span class="calc-label">Base rate — windstorm dominant (Scottish coastal exposed)</span><span class="calc-val">0.35% of declared value</span></div>
+    <div class="calc-row"><span class="calc-label">Fire rate — low WUI risk in Scotland</span><span class="calc-val">0.08% of declared value</span></div>
+    <div class="calc-row"><span class="calc-label">Combined base premium</span><span class="calc-val">£36,550</span></div>
+    <div class="calc-row"><span class="calc-label">Windstorm site exposure loading (+25% — coastal/exposed topography)</span><span class="calc-val">+£7,438</span></div>
+    <div class="calc-row"><span class="calc-label">Age class adjustment (30% pre-merchantable — higher replanting cost exposure)</span><span class="calc-val">+£3,000</span></div>
+    <div class="calc-row"><span class="calc-label">FSC/management credit (−12%)</span><span class="calc-val">−£5,640</span></div>
+    <div class="calc-row"><span class="calc-label">Claims-free credit 12 years (−8%)</span><span class="calc-val">−£3,309</span></div>
+    <div class="calc-row total"><span class="calc-label">Indicated Technical Premium</span><span class="calc-val">≈ £38,039 pa</span></div>
+    <p style="margin-top:14px;font-size:0.83rem;color:#4a5a6a;"><strong>Conditions:</strong> 10% deductible of any windthrow claim (first £850k on total loss). Reforestation cost endorsement: additional £2,000 pa for £200/ha replanting cost coverage. Average clause applies — annual timber valuation update required. Pest/disease excluded. Bark beetle risk specifically scheduled as uninsured peril. <span class="badge b-i">ILLUS</span></p>
+  </div>
+
+  <!-- Pre-bind checklist -->
+  <h2>Pre-Bind Underwriting Checklist</h2>
+
+  <ul class="checklist">
+    <li><div class="check-icon ci-req">R</div><div class="check-text"><strong>Crop Identification &amp; Acreage Declaration (HA)</strong> Exact crop species/variety, planted acreage by field, GPS field mapping. For MPCI: APH documentation (4–10 years individual farm yield records). For specialty crop: market price basis and production records.</div></li>
+    <li><div class="check-icon ci-req">R</div><div class="check-text"><strong>Timber Valuation / Cruise Survey (AG)</strong> For estates over 500 ha: professional timber cruise within last 3 years showing species, age class, volume per hectare, and market value. Declare total insurable timber value — average clause applies to under-declarations.</div></li>
+    <li><div class="check-icon ci-req">R</div><div class="check-text"><strong>Geographic Location &amp; Coordinates</strong> GPS coordinates of all insured fields/forest compartments. Required for peril modelling, accumulation analysis, and post-loss satellite verification. Mandatory for any risk over £500k.</div></li>
+    <li><div class="check-icon ci-req">R</div><div class="check-text"><strong>5-Year Loss History</strong> All crop or forestry insurance claims in prior 5 years — including settled, denied, and open claims with all insurers. Prior loss experience is the primary actuarial adjustment factor for individual risks.</div></li>
+    <li><div class="check-icon ci-req">R</div><div class="check-text"><strong>Irrigation Status (HA)</strong> Confirmation of irrigation system type (centre pivot, drip, flood), water source reliability, and percentage of acreage irrigated. Irrigated crops must be identified separately from dryland — mixing inflates the rate for irrigated and underpays for dryland.</div></li>
+    <li><div class="check-icon ci-pref">P</div><div class="check-text"><strong>Soil Type &amp; Drainage Classification (HA)</strong> USDA/national soil classification. Clay-heavy soils are more prone to waterlogging; sandy soils to drought. Soil water holding capacity directly affects drought sensitivity. Soil mapping increasingly available via satellite-based analysis.</div></li>
+    <li><div class="check-icon ci-pref">P</div><div class="check-text"><strong>Fire Break &amp; Access Road Map (AG)</strong> Location and maintenance status of firebreaks, access tracks, and water points. Required for forestry risks in fire-exposed regions (Australia, California, Mediterranean, British Columbia). Maintained firebreak network is a key rating credit.</div></li>
+    <li><div class="check-icon ci-pref">P</div><div class="check-text"><strong>Agronomic Practice Statement (HA)</strong> Evidence of precision agriculture practices: yield mapping, soil testing, satellite monitoring subscriptions. Documents that the grower is an active manager rather than a passive one — correlates with lower yield variability.</div></li>
+    <li><div class="check-icon ci-pref">P</div><div class="check-text"><strong>Forest Management Plan (AG)</strong> Current management plan for the estate. Should include thinning schedule, restocking plan, pest monitoring protocols, and fire management procedures. FSC/PEFC certification certificate if applicable.</div></li>
+    <li><div class="check-icon ci-info">I</div><div class="check-text"><strong>Reforestation / Replanting Cost Estimate (AG)</strong> For pre-merchantable timber: cost per hectare for site preparation and replanting. Reforestation cost coverage should be offered separately — standing timber value for young trees is often lower than the cost to re-establish them.</div></li>
+    <li><div class="check-icon ci-info">I</div><div class="check-text"><strong>ENSO Outlook / Seasonal Forecast (HA International)</strong> For non-US international crop insurance in ENSO-sensitive regions (Australia, India, East Africa, South America): include current IRI/NOAA ENSO forecast in underwriting file. Adverse ENSO outlook (La Niña in drought-sensitive regions) should trigger rate loading or coverage review.</div></li>
+    <li><div class="check-icon ci-info">I</div><div class="check-text"><strong>Government Programme Interaction</strong> Identify whether insured crop/forestry is also covered under any government-backed scheme (USDA RMA, PMFBY, Agroseguro). Policy must clearly address coordination of benefits — Lloyd's coverage should not duplicate government programme without explicit knowledge.</div></li>
+  </ul>
+
+  <div class="info-box" style="border-color:var(--hub-secondary);">
+    <strong>Key Accumulation Warning — Catastrophic Events:</strong> Agricultural and forestry risks share a fundamental accumulation problem: a single drought, wildfire, or windstorm event can simultaneously affect millions of insured acres/hectares in the same geographic region. Syndicates writing HA/AG must model aggregate exposure by peril zone and county/region, not just individual risk. Maximum foreseeable loss in a 1-in-100 year drought affecting the US Corn Belt could exceed $5 billion of insured exposure in the Lloyd's market alone. CAT modelling tools for US crop (RMS North America Crop) and European windstorm (RMS/AIR) should be used for any portfolio with more than £10m aggregate exposure. <span class="badge b-e">EST</span>
+  </div>
+
+</main>
+<footer>
+  <a href="../index.html">← Risk Code Hub</a> &nbsp;|&nbsp; Agricultural Crop &amp; Forestry (HA/AG) — Module 04 Underwriting &nbsp;|&nbsp; Version 3.8 · May 2026
+</footer>
+</body>
+</html>

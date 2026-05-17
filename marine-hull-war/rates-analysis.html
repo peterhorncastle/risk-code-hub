@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+<title>Marine Hull War — Rates & ROE | Risk Code Hub</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--war:#1a237e;--war-dark:#0d1442;--danger:#c62828;--mine:#e65100;--piracy:#6a1b9a;--jwc:#00695c;--warn:#f57f17;--bg:#f5f7fa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--radius:10px;    /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1a237e;
+    --hub-dark:      #0d1442;
+    --hub-light:     #e8ebf8;
+    --hub-accent:    #f57f17;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#e65100;
+    --header-gradient:linear-gradient(135deg,#0d1442 0%,#1a237e 50%,#283593 100%);
+    --header-sub:    #b8c8e8;
+  }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+header{background:linear-gradient(135deg,#0d1442 0%,#1a237e 50%,#283593 100%);color:#fff;padding:2rem 1.5rem 1.5rem;}
+.hub-label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75;margin-bottom:.4rem;}
+header h1{font-size:1.8rem;font-weight:700;}
+header p{opacity:.85;font-size:.95rem;}
+nav.tabs{background:#fff;border-bottom:2px solid var(--border);display:flex;flex-wrap:wrap;gap:0;overflow-x:auto}
+nav.tabs a{padding:.65rem 1.1rem;text-decoration:none;color:var(--muted);font-size:.82rem;font-weight:600;white-space:nowrap;border-bottom:3px solid transparent;transition:color .2s}
+nav.tabs a:hover{color:var(--war)}
+nav.tabs a.active{color:var(--war);border-bottom-color:var(--war)}
+.container{max-width:1080px;margin:0 auto;padding:1.5rem;}
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:1.4rem;margin-bottom:1.4rem;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.card h2{font-size:1.1rem;font-weight:700;margin-bottom:.9rem;padding-bottom:.5rem;border-bottom:2px solid var(--war);color:var(--war-dark);}
+.card h3{font-size:.93rem;font-weight:700;margin:.8rem 0 .4rem;color:var(--war-dark);}
+.badge{display:inline-block;padding:.13rem .48rem;border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.04em;white-space:nowrap;}
+.ver{background:#e6f4ea;color:#1b5e20;}.est{background:#fef3e2;color:#e65100;}.illus{background:#cce5ff;color:#1565c0;}.gap{background:#fdecea;color:#c62828;}
+.chart-wrap{position:relative;height:300px;margin:1rem 0;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th{background:var(--war-dark);color:#fff;padding:.55rem .7rem;text-align:left;font-weight:600;}
+td{padding:.48rem .7rem;border-bottom:1px solid var(--border);}
+tr:nth-child(even) td{background:#f9fafb;}
+.era-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.9rem;margin:.8rem 0;}
+.era-card{border-radius:8px;padding:.9rem;border-left:4px solid;}
+.era-card h4{font-size:.85rem;font-weight:700;margin-bottom:.35rem;}
+.era-card p{font-size:.8rem;color:var(--muted);}
+.roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:.8rem 0;}
+.roe-card{border-radius:8px;padding:1rem;text-align:center;}
+.roe-bull{background:#e8f5e9;border:2px solid #1b5e20;}
+.roe-base{background:#e3f2fd;border:2px solid #1565c0;}
+.roe-bear{background:#fdecea;border:2px solid #c62828;}
+.roe-val{font-size:1.8rem;font-weight:700;margin:.3rem 0;}
+.roe-lbl{font-size:.8rem;color:var(--muted);}
+.nav-strip{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem;}
+.nav-btn{display:inline-block;background:var(--war-dark);color:#fff;text-decoration:none;border-radius:6px;padding:.5rem 1rem;font-size:.82rem;font-weight:600;}
+footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem;}
+</style>
+</head>
+<body>
+<header>
+  <div class="hub-label">Lloyd's Risk Code Hub · Marine</div>
+  <h1>Marine Hull War — Rates &amp; ROE Analysis</h1>
+  <p>War risk rate cycles, AWRP spikes, loss ratios and return on equity scenarios across the W/WB/AW/WX portfolio.</p>
+</header>
+<nav class="tabs">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <!-- Chart 1: World-wide base rate and AWRP index -->
+  <div class="card">
+    <h2>Chart 1 — Marine War Rate Index: Base Rate &amp; Red Sea AWRP (2010–2024) <span class="badge illus">ILLUS</span></h2>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:.5rem;">Base world-wide war rate and Red Sea AWRP index (100 = 2010 baseline). Illustrates soft market 2012–2021 and hard spike 2022–2024. <span class="badge illus">ILLUS</span></p>
+    <div class="chart-wrap"><canvas id="rateChart"></canvas></div>
+  </div>
+
+  <!-- Chart 2: Loss ratio -->
+  <div class="card">
+    <h2>Chart 2 — Marine War Combined Loss Ratio (2010–2024) <span class="badge illus">ILLUS</span></h2>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:.5rem;">Blended war market loss ratio — illustrating peak Somali piracy years, soft trough, Ukraine/Red Sea spike. <span class="badge illus">ILLUS</span></p>
+    <div class="chart-wrap"><canvas id="lossChart"></canvas></div>
+  </div>
+
+  <!-- Chart 3: AWRP Red Sea spike -->
+  <div class="card">
+    <h2>Chart 3 — Red Sea AWRP Per Transit (% of Hull Value) 2022–2024 <span class="badge illus">ILLUS</span></h2>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:.5rem;">Red Sea per-transit AWRP illustrating the Houthi-driven 10-fold surge from December 2023. <span class="badge illus">ILLUS</span></p>
+    <div class="chart-wrap"><canvas id="awrpChart"></canvas></div>
+  </div>
+
+  <!-- Market cycle eras -->
+  <div class="card">
+    <h2>Market Cycle — Key Eras</h2>
+    <div class="era-grid">
+      <div class="era-card" style="border-color:#c62828;background:#fff5f5;">
+        <h4 style="color:#c62828;">2008–12 — Somali Piracy Peak</h4>
+        <p>War market hardened significantly. AWRP for Indian Ocean/Gulf of Aden reached multi-year highs. War syndicates profitable despite large individual piracy claims. BMP/PCASP introduction drove sharp reversal from 2012.</p>
+      </div>
+      <div class="era-card" style="border-color:#1565c0;background:#f0f4ff;">
+        <h4 style="color:#1565c0;">2012–21 — Prolonged Soft Market</h4>
+        <p>Somali piracy collapsed; rates fell year-on-year. Gulf of Guinea maintained modest AWRP; Iran/Hormuz elevated in 2019. Overall war market loss ratios benign; base rates at historic lows by 2021. Many syndicates reducing war capacity or combining with other marine classes.</p>
+      </div>
+      <div class="era-card" style="border-color:#c62828;background:#fff5f5;">
+        <h4 style="color:#c62828;">2022 — Ukraine Hard Reset</h4>
+        <p>Russia invades Ukraine — Black Sea JWC designation, vessel detentions, mine damage. $1bn+ estimated war losses. 48-hour cancellations issued; Black Sea AWRP surged from near-zero to 0.5–3.0%+ per voyage. AW (aviation confiscation) event simultaneously: ~$10–15bn.</p>
+      </div>
+      <div class="era-card" style="border-color:#e65100;background:#fff8f0;">
+        <h4 style="color:#e65100;">2023–24 — Red Sea Crisis</h4>
+        <p>Houthi campaign from November 2023; JWC Listed Area December 2023; Red Sea AWRP 10-fold surge. First vessel total losses (MV Rubymar, MV True Confidence). Cape rerouting by container lines. War market most profitable since Somali piracy peak. <span class="badge est">EST</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rate benchmark 2024 -->
+  <div class="card">
+    <h2>2024 Rate &amp; AWRP Benchmark <span class="badge illus">ILLUS</span></h2>
+    <table>
+      <thead><tr><th>Product / Vessel Type</th><th>Pre-2022 Rate</th><th>2024 Rate</th><th>Direction</th><th>Primary Driver</th></tr></thead>
+      <tbody>
+        <tr><td>Annual W base rate — VLCC tanker</td><td>0.03% p.a.</td><td>0.07% p.a.</td><td>▲ +133%</td><td>Elevated geopolitical background risk</td></tr>
+        <tr><td>Annual W base rate — container vessel</td><td>0.02% p.a.</td><td>0.05% p.a.</td><td>▲ +150%</td><td>Red Sea/Ukraine systemic risk</td></tr>
+        <tr><td>Red Sea AWRP per transit</td><td>0.05–0.07%</td><td>0.3–1.0%+</td><td>▲ +500–1,400%</td><td>Houthi drone/missile/ASCM campaign</td></tr>
+        <tr><td>Black Sea AWRP per voyage</td><td>~0.01%</td><td>0.5–3.0%+</td><td>▲ +5,000%+</td><td>Ukraine war; mines; missile attacks</td></tr>
+        <tr><td>Hormuz AWRP per transit</td><td>0.02%</td><td>0.05–0.25%</td><td>▲ +150–1,150%</td><td>Iran seizure risk; IRGC provocations</td></tr>
+        <tr><td>Gulf of Guinea AWRP per call</td><td>0.10–0.15%</td><td>0.05–0.20%</td><td>▼ Slightly lower</td><td>Nigerian Deep Blue Project improving security</td></tr>
+        <tr><td>AW annual rate (aviation war) — wide-body</td><td>0.03% p.a.</td><td>0.05–0.10% p.a.</td><td>▲ Up</td><td>Russia confiscation event; airspace risk</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">All rates illustrative as % of insured value per transit or per annum. <span class="badge illus">ILLUS</span></p>
+  </div>
+
+  <!-- ROE scenarios -->
+  <div class="card">
+    <h2>ROE Scenarios — Lloyd's Marine War Portfolio <span class="badge illus">ILLUS</span></h2>
+    <div class="roe-grid">
+      <div class="roe-card roe-bull">
+        <div class="roe-lbl">Bull Scenario</div>
+        <div class="roe-val" style="color:#1b5e20;">+18–28%</div>
+        <div style="font-size:.78rem;color:var(--muted);">Houthi campaign ends; Red Sea AWRP normalises at higher-than-pre-crisis level (0.10–0.15%); no new major conflict theatre; Black Sea/Ukraine resolution; aviation confiscation claims settled below full exposure; elevated base rates retained</div>
+      </div>
+      <div class="roe-card roe-base">
+        <div class="roe-lbl">Base Scenario</div>
+        <div class="roe-val" style="color:#1565c0;">+8–15%</div>
+        <div style="font-size:.78rem;color:var(--muted);">Red Sea campaign continues at current intensity; 2–4 vessel total losses per annum; AWRP maintained 0.3–0.5% per transit; Black Sea risk persists; aviation confiscation claims partially settled; base rates elevated but sustainable combined ratio</div>
+      </div>
+      <div class="roe-card roe-bear">
+        <div class="roe-lbl">Bear Scenario</div>
+        <div class="roe-val" style="color:#c62828;">−20–40%</div>
+        <div style="font-size:.78rem;color:var(--muted);">Major fleet sinking event (VLCC or ULCV in Red Sea); Hormuz closure; VLCC used as weapon (tanker war scenario); Iran–Israel direct conflict destroying multiple vessels; AW confiscation settled at full exposure; war between major powers</div>
+      </div>
+    </div>
+
+    <h3>Bear Scenario Trigger Events</h3>
+    <table>
+      <thead><tr><th>Trigger</th><th>Estimated Market Impact</th></tr></thead>
+      <tbody>
+        <tr><td>VLCC sunk in Hormuz / Red Sea (single loss)</td><td>$100–200m+ single hull war loss; cargo war; P&amp;I crew claims; oil spill</td></tr>
+        <tr><td>Hormuz closure (all tanker traffic stopped)</td><td>Catastrophic: multiple vessel seizures; global energy supply crisis; war market capacity crisis</td></tr>
+        <tr><td>Houthi ASCM sinks container vessel (ULCV)</td><td>$200–500m+ hull war loss; cargo war ($1bn+ cargo); port disruption; RI market shock</td></tr>
+        <tr><td>Iran–Israel direct naval conflict in Gulf</td><td>Multiple vessel casualties; mine warfare; immediate Black Sea/Hormuz/Red Sea closure; market-wide war risk premium surge</td></tr>
+        <tr><td>Russia confiscation (AW) — full claims settled against market</td><td>$10–15bn aviation war claims if settled at full hull value — exceeds any historical single class loss event</td></tr>
+        <tr><td>India-Pakistan naval conflict (Arabian Sea)</td><td>Major tanker trade route closure; Lloyd's war market capacity stressed; government backstop potentially required</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="nav-strip">
+    <a class="nav-btn" href="underwriting.html">← Underwriting</a>
+    <a class="nav-btn" href="risk-mitigation.html">Risk Mitigation →</a>
+  </div>
+</div>
+
+<script>
+const yrs=['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'];
+
+new Chart(document.getElementById('rateChart'),{
+  type:'line',
+  data:{labels:yrs,datasets:[
+    {label:'Base World-Wide War Rate Index',data:[100,110,105,95,85,75,68,65,62,65,63,60,80,100,130],borderColor:'#1a237e',backgroundColor:'rgba(26,35,126,.1)',tension:.3,fill:true,borderWidth:2},
+    {label:'Red Sea AWRP Index',data:[60,65,70,68,65,62,60,65,68,75,70,65,120,180,800],borderColor:'#c62828',backgroundColor:'rgba(198,40,40,.08)',tension:.3,borderWidth:2},
+    {label:'Gulf of Guinea AWRP Index',data:[80,85,100,110,115,118,115,110,108,110,108,105,110,108,100],borderColor:'#6a1b9a',backgroundColor:'rgba(106,27,154,.05)',tension:.3,borderDash:[5,3]},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{title:{display:true,text:'Rate Index (2010=100)'},min:0}}}
+});
+
+new Chart(document.getElementById('lossChart'),{
+  type:'bar',
+  data:{labels:yrs,datasets:[{
+    label:'Loss Ratio %',
+    data:[85,95,88,72,65,60,55,58,60,68,55,52,105,120,88],
+    backgroundColor:yrs.map((_,i)=>(i>=11&&i<=13)?'rgba(198,40,40,.75)':'rgba(26,35,126,.65)'),
+    borderWidth:0
+  }]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'Loss Ratio %'},min:0,max:135,ticks:{callback:v=>v+'%'}}}}
+});
+
+const months=['Jan 22','Apr 22','Jul 22','Oct 22','Jan 23','Apr 23','Jul 23','Oct 23','Dec 23','Jan 24','Mar 24','Jun 24','Sep 24','Dec 24'];
+new Chart(document.getElementById('awrpChart'),{
+  type:'line',
+  data:{labels:months,datasets:[{
+    label:'Red Sea AWRP (% per transit)',
+    data:[0.01,0.05,0.08,0.07,0.07,0.07,0.07,0.08,0.35,0.70,0.90,0.80,0.65,0.55],
+    borderColor:'#c62828',backgroundColor:'rgba(198,40,40,.15)',tension:.3,fill:true,borderWidth:2,pointRadius:4
+  }]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'AWRP % of hull value per transit'},ticks:{callback:v=>v+'%'}}}}
+});
+</script>
+<footer>Risk Code Hub · Marine Hull War · Rates &amp; ROE · All rates and scenarios illustrative <span class="badge illus">ILLUS</span> · Not for regulatory use</footer>
+</body>
+</html>

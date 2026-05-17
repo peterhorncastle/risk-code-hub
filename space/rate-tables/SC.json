@@ -1,0 +1,132 @@
+{
+  "riskCode": "SC",
+  "label": "Space — Launch",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "insuredValue",
+    "label": "Insured Value ($)",
+    "defaultValue": 300000000,
+    "hint": "Satellite/launch value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.08
+  },
+  "ratingFactors": [
+    {
+      "key": "missionType",
+      "label": "Mission Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "geo_comms",
+      "options": {
+        "geo_comms": {
+          "label": "GEO Communications",
+          "factor": 1
+        },
+        "leo_constellation": {
+          "label": "LEO Constellation",
+          "factor": 1.15
+        },
+        "earth_observation": {
+          "label": "Earth Observation",
+          "factor": 0.95
+        },
+        "scientific": {
+          "label": "Scientific/Government",
+          "factor": 0.9
+        },
+        "crewed": {
+          "label": "Crewed Mission",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "launchVehicle",
+      "label": "Launch Vehicle",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "proven",
+      "options": {
+        "proven": {
+          "label": "Proven (Falcon 9/Ariane)",
+          "factor": 0.85
+        },
+        "heritage": {
+          "label": "Heritage (Atlas/Soyuz)",
+          "factor": 1
+        },
+        "new": {
+          "label": "New/Limited Track Record",
+          "factor": 1.4
+        },
+        "reusable": {
+          "label": "Reusable (2nd+ flight)",
+          "factor": 0.8
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "manufacturer",
+      "label": "Satellite Manufacturer",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "tier1",
+      "options": {
+        "tier1": {
+          "label": "Tier 1 (Airbus/Boeing/SSL)",
+          "factor": 0.9
+        },
+        "tier2": {
+          "label": "Tier 2 (Thales/NorthropG)",
+          "factor": 1
+        },
+        "tier3": {
+          "label": "Tier 3 / New Space",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "designLife",
+      "label": "Design Life",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "short": {
+          "label": "Short (<5 years)",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard (5-15 years)",
+          "factor": 1
+        },
+        "extended": {
+          "label": "Extended (>15 years)",
+          "factor": 1.2
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 20000,
+    "claimsHandlingPerClaim": 100000,
+    "systemOverheadPerYear": 10000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.01,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.15,
+    "reinsuranceRate": 0.15
+  },
+  "targetProfitMargin": 0.05
+}

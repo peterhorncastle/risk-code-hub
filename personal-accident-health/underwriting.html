@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+<title>PA&H — Underwriting | Risk Code Hub</title>
+<style>
+:root{--pah:#00695c;--pah-dark:#003d33;--acc:#c62828;--med:#1565c0;--travel:#e65100;--sport:#6a1b9a;--warn:#f57f17;--bg:#f5f7fa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--radius:10px;    /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #00695c;
+    --hub-dark:      #003d33;
+    --hub-light:     #e8f5f2;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #1565c0;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#003d33 0%,#00695c 50%,#00796b 100%);
+    --header-sub:    #b8ddd8;
+  }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+header{background:linear-gradient(135deg,#003d33 0%,#00695c 50%,#00796b 100%);color:#fff;padding:2rem 1.5rem 1.5rem;}
+.hub-label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75;margin-bottom:.4rem;}
+header h1{font-size:1.8rem;font-weight:700;}
+header p{opacity:.85;font-size:.95rem;}
+nav.breadcrumb{background:#fff;border-bottom:1px solid var(--border);padding:.6rem 1.5rem;font-size:.82rem;color:var(--muted);}
+nav.breadcrumb a{color:var(--pah);text-decoration:none;}
+.container{max-width:1080px;margin:0 auto;padding:1.5rem;}
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:1.4rem;margin-bottom:1.4rem;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.card h2{font-size:1.1rem;font-weight:700;margin-bottom:.9rem;padding-bottom:.5rem;border-bottom:2px solid var(--pah);color:var(--pah-dark);}
+.card h3{font-size:.95rem;font-weight:700;margin:.9rem 0 .4rem;color:var(--pah-dark);}
+.badge{display:inline-block;padding:.13rem .48rem;border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.04em;white-space:nowrap;}
+.ver{background:#e6f4ea;color:#1b5e20;}.est{background:#fef3e2;color:#e65100;}.illus{background:#cce5ff;color:#1565c0;}.gap{background:#fdecea;color:#c62828;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th{background:var(--pah-dark);color:#fff;padding:.55rem .7rem;text-align:left;font-weight:600;}
+td{padding:.48rem .7rem;border-bottom:1px solid var(--border);}
+tr:nth-child(even) td{background:#f9fafb;}
+.formula-box{background:#003d33;color:#a5d6a7;border-radius:8px;padding:1.1rem 1.3rem;font-family:monospace;font-size:.92rem;margin:1rem 0;line-height:1.9;}
+.factor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;margin-top:.8rem;}
+.factor-card{border-radius:8px;padding:1rem;border-left:4px solid;}
+.f-occ{border-color:var(--acc);background:#fff5f5;}
+.f-age{border-color:var(--med);background:#f0f4ff;}
+.f-sport{border-color:var(--sport);background:#f8f0ff;}
+.f-med{border-color:var(--pah);background:#f0fff4;}
+.f-sum{border-color:var(--warn);background:#fffdf0;}
+.f-exp{border-color:var(--travel);background:#fff8f0;}
+.factor-card h4{font-size:.88rem;font-weight:700;margin-bottom:.5rem;}
+.factor-card ul{list-style:none;font-size:.8rem;color:var(--muted);}
+.factor-card ul li::before{content:"• ";color:var(--pah);}
+.example-box{background:#e8f5e9;border-left:4px solid var(--pah);border-radius:6px;padding:1rem 1.2rem;margin:.8rem 0;font-size:.88rem;}
+.example-box strong{display:block;margin-bottom:.5rem;color:var(--pah-dark);font-size:.95rem;}
+.example-box table{margin-top:.5rem;}
+.scorecard{width:100%;border-collapse:collapse;font-size:.83rem;}
+.scorecard th{background:#003d33;color:#fff;padding:.5rem .7rem;}
+.scorecard td{padding:.45rem .7rem;border-bottom:1px solid var(--border);}
+.pri-H{color:#c62828;font-weight:700;}
+.pri-M{color:#e65100;font-weight:600;}
+.pri-L{color:#1b5e20;}
+.nav-strip{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem;}
+.nav-btn{display:inline-block;background:var(--pah-dark);color:#fff;text-decoration:none;border-radius:6px;padding:.5rem 1rem;font-size:.82rem;font-weight:600;}
+footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem;}
+</style>
+</head>
+<body>
+<header>
+  <div class="hub-label">Lloyd's Risk Code Hub · Accident &amp; Health</div>
+  <h1>Personal Accident &amp; Health — Underwriting</h1>
+  <p>Rating methodology, key factors, product sub-class approaches and worked examples across the K-series PA&amp;H portfolio.</p>
+</header>
+<nav class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Personal Accident &amp; Health</a> › Underwriting  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <!-- Rating formula -->
+  <div class="card">
+    <h2>PA&H Rating Formula — Core Structure</h2>
+    <div class="formula-box">
+Annual Premium = Base Morbidity Rate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× Sum Insured Factor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× Occupation Class Loading<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× Age/Gender Factor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× Benefit/Indemnity Period Factor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× Deferred Period Discount<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× Sports/Leisure Loading<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× Claims Experience Factor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× Geographic Territory Factor
+    </div>
+    <p style="font-size:.83rem;color:var(--muted);">Base rates derived from morbidity tables (CMI data, insurer experience). All rates illustrative. <span class="badge illus">ILLUS</span></p>
+
+    <h3>Occupation Classification — The Most Critical Rating Factor</h3>
+    <p style="font-size:.88rem;margin-bottom:.7rem;">Occupation class is typically the primary rating variable for PA (KA/KG). Standard Lloyd's occupation class definitions distinguish five or more categories:</p>
+    <table>
+      <thead><tr><th>Class</th><th>Description</th><th>Examples</th><th>Rate Loading vs. Class 1</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Class 1</strong></td><td>Professional / managerial — desk-based</td><td>Solicitor, accountant, executive, teacher</td><td>Benchmark (×1.0)</td></tr>
+        <tr><td><strong>Class 2</strong></td><td>Supervisory / light manual</td><td>Sales rep, shop manager, light factory supervisor</td><td>×1.2–1.5 <span class="badge illus">ILLUS</span></td></tr>
+        <tr><td><strong>Class 3</strong></td><td>Skilled manual</td><td>Electrician, plumber, carpenter, nurse</td><td>×1.5–2.0 <span class="badge illus">ILLUS</span></td></tr>
+        <tr><td><strong>Class 4</strong></td><td>Heavy manual / hazardous</td><td>Construction worker, miner, HGV driver, scaffolder</td><td>×2.5–4.0 <span class="badge illus">ILLUS</span></td></tr>
+        <tr><td><strong>Class 5+</strong></td><td>Extra-hazardous / declined</td><td>Offshore oil worker, demolition, deep-sea fisherman</td><td>Individually rated or declined</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Key rating factors -->
+  <div class="card">
+    <h2>Key Rating Factors by Sub-Class</h2>
+    <div class="factor-grid">
+      <div class="factor-card f-occ">
+        <h4 style="color:var(--acc);">Personal Accident (KA) — Key Factors</h4>
+        <ul>
+          <li>Occupation class (Class 1–5)</li>
+          <li>Age and gender (morbidity tables)</li>
+          <li>Benefit type: AD&amp;D vs. disability income vs. both</li>
+          <li>Deferred period (1, 4, 13, 26, 52 weeks)</li>
+          <li>Benefit period (2yr, 5yr, to retirement)</li>
+          <li>Sum insured / benefit amount</li>
+          <li>Sports/leisure endorsements</li>
+          <li>Pre-existing condition status (IMU or moratorium)</li>
+        </ul>
+      </div>
+      <div class="factor-card f-med">
+        <h4 style="color:var(--pah);">Medical Expenses / PMI (KC/KG) — Key Factors</h4>
+        <ul>
+          <li>Age at entry (primary driver of medical claims cost)</li>
+          <li>Geographic scope (UK-only vs. worldwide)</li>
+          <li>Hospital list access (full list vs. guided)</li>
+          <li>Mental health coverage extent</li>
+          <li>Pre-existing condition basis (MORI/IMU/continued)</li>
+          <li>Aggregate excess / co-payment level</li>
+          <li>Out-patient treatment limits</li>
+          <li>Medical inflation trend loading</li>
+        </ul>
+      </div>
+      <div class="factor-card f-age">
+        <h4 style="color:var(--med);">Travel Insurance (KT) — Key Factors</h4>
+        <ul>
+          <li>Trip type: single trip vs. annual multi-trip</li>
+          <li>Destination region (Europe / worldwide / USA+Canada)</li>
+          <li>Age (major rating factor; significant loading 65+)</li>
+          <li>Duration of trip</li>
+          <li>Pre-existing medical conditions</li>
+          <li>Winter sports extension</li>
+          <li>Cancellation sum insured</li>
+          <li>Excess amount / co-payment</li>
+        </ul>
+      </div>
+      <div class="factor-card f-sport">
+        <h4 style="color:var(--sport);">Sports Disability (KS) — Key Factors</h4>
+        <ul>
+          <li>Sport type and contact level (rugby front row vs. cricket batsman)</li>
+          <li>Playing level: professional / semi-professional / amateur</li>
+          <li>Player position (prop / flanker / backs in rugby)</li>
+          <li>Contract value and earnings protected</li>
+          <li>Existing injuries / medical history</li>
+          <li>Sum insured (career earnings estimate)</li>
+          <li>Waiting/elimination period (first 26 or 52 weeks)</li>
+          <li>Club/team vs. individual policy</li>
+        </ul>
+      </div>
+      <div class="factor-card f-sum">
+        <h4 style="color:var(--warn);">Group A&H (KG) — Key Factors</h4>
+        <ul>
+          <li>Group size (free cover limit increases with size)</li>
+          <li>Industry / SIC code of employer</li>
+          <li>Geographic spread of employees</li>
+          <li>Benefit structure (level/multiples of salary)</li>
+          <li>Mental health claims history</li>
+          <li>Age profile of workforce</li>
+          <li>Absence management / rehabilitation services</li>
+          <li>Group claims experience (3–5 year basis)</li>
+        </ul>
+      </div>
+      <div class="factor-card f-exp">
+        <h4 style="color:var(--travel);">Maritime PA &amp; K&amp;R (KM) — Key Factors</h4>
+        <ul>
+          <li>Crew nationality mix (mortality/morbidity tables vary)</li>
+          <li>Vessel type and trade route</li>
+          <li>Operating territory (JWC HRA, piracy risk areas)</li>
+          <li>Crew certification and vessel flag</li>
+          <li>MLC 2006 compliance status</li>
+          <li>K&amp;R: territory, ransom limit, insured's profile</li>
+          <li>Prior kidnap incidents (claims experience)</li>
+          <li>Medical evacuation logistics costs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Age factor table -->
+  <div class="card">
+    <h2>Age Rating Tables — Medical Expenses / Group PMI <span class="badge illus">ILLUS</span></h2>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:.7rem;">Age is the primary rating factor for medical expenses. Indicative rate indices relative to age 35 baseline.</p>
+    <table>
+      <thead><tr><th>Age Band</th><th>Rate Index vs. Age 35</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>16–25</td><td>0.6–0.8×</td><td>Low morbidity; low claims utilisation</td></tr>
+        <tr><td>26–35</td><td>1.0× (benchmark)</td><td>Moderate utilisation; baseline</td></tr>
+        <tr><td>36–45</td><td>1.2–1.5×</td><td>Increasing diagnostic and specialist use</td></tr>
+        <tr><td>46–55</td><td>1.8–2.5×</td><td>Cardiac, orthopaedic, cancer screenings increase</td></tr>
+        <tr><td>56–65</td><td>3.0–4.5×</td><td>High utilisation; chronic condition management</td></tr>
+        <tr><td>66–74</td><td>5.0–7.0×</td><td>Significant medical intervention frequency</td></tr>
+        <tr><td>75+</td><td>8.0–12.0×</td><td>Major loading; often declined or limited benefit</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Travel rate table -->
+  <div class="card">
+    <h2>Travel Insurance — Destination &amp; Age Rate Bands <span class="badge illus">ILLUS</span></h2>
+    <table>
+      <thead><tr><th>Coverage Region</th><th>Age 18–35</th><th>Age 36–55</th><th>Age 56–70</th><th>Age 70+</th></tr></thead>
+      <tbody>
+        <tr><td>Europe (Schengen area)</td><td>~£18–25 p.a.</td><td>~£30–50 p.a.</td><td>~£70–120 p.a.</td><td>~£150–400 p.a.</td></tr>
+        <tr><td>Worldwide (excl. USA/Canada)</td><td>~£35–55 p.a.</td><td>~£60–90 p.a.</td><td>~£130–220 p.a.</td><td>~£280–600 p.a.</td></tr>
+        <tr><td>Worldwide (incl. USA/Canada)</td><td>~£55–90 p.a.</td><td>~£100–160 p.a.</td><td>~£220–380 p.a.</td><td>~£400–900 p.a.</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.8rem;color:var(--muted);margin-top:.5rem;">Annual multi-trip policy, standard conditions, no pre-existing conditions declared. Online aggregator market rates. <span class="badge illus">ILLUS</span></p>
+  </div>
+
+  <!-- Worked example 1: Group PA -->
+  <div class="card">
+    <h2>Worked Example A — Group Personal Accident Scheme (KG) <span class="badge illus">ILLUS</span></h2>
+    <div class="example-box">
+      <strong>Risk: Manufacturing employer — 500 employees (Leeds, UK)</strong>
+      <table>
+        <tr><td><strong>Industry</strong></td><td>Light manufacturing / assembly (SIC 2811)</td></tr>
+        <tr><td><strong>Employees</strong></td><td>500; age profile 30–55 (average 41)</td></tr>
+        <tr><td><strong>Benefit</strong></td><td>AD&amp;D: 3× annual salary; TTD: 52-week benefit; PTD: lump sum 5× salary</td></tr>
+        <tr><td><strong>Average salary</strong></td><td>£34,000</td></tr>
+        <tr><td><strong>Deferred period</strong></td><td>13 weeks (Employer SSP covers first 13 weeks)</td></tr>
+        <tr><td><strong>Occupation class</strong></td><td>Mix: 30% Class 1 (admin/management), 70% Class 3 (production floor)</td></tr>
+        <tr><td><strong>Prior claims experience</strong></td><td>3 years: 2 minor injury claims; nil AD&amp;D claims</td></tr>
+      </table>
+      <br>
+      <table>
+        <tr><td><strong>Base PA rate (Class 3 average)</strong></td><td>~0.30% of covered benefit <span class="badge illus">ILLUS</span></td></tr>
+        <tr><td><strong>Occupation loading applied</strong></td><td>×1.4 (Class 3 weighting) <span class="badge illus">ILLUS</span></td></tr>
+        <tr><td><strong>Age factor</strong></td><td>×1.2 (average age 41) <span class="badge illus">ILLUS</span></td></tr>
+        <tr><td><strong>Experience discount</strong></td><td>×0.85 (favourable 3-year loss record) <span class="badge illus">ILLUS</span></td></tr>
+        <tr><td><strong>Total covered benefit</strong></td><td>500 × £34,000 × 5 (PTD multiple) = £85,000,000</td></tr>
+        <tr><td><strong>Indicative annual premium</strong></td><td>~£85m × 0.30% × 1.4 × 1.2 × 0.85 ≈ <strong>~£363,000 p.a.</strong> <span class="badge illus">ILLUS</span></td></tr>
+      </table>
+      <p style="margin-top:.6rem;font-size:.83rem;color:var(--muted);">Illustrative only. Actual premium depends on syndicate appetite, benefit structure detail, reinsurance arrangements and market conditions at time of placement.</p>
+    </div>
+  </div>
+
+  <!-- Worked example 2: Sports disability -->
+  <div class="card">
+    <h2>Worked Example B — Professional Footballer Career-Ending Disability (KS) <span class="badge illus">ILLUS</span></h2>
+    <div class="example-box">
+      <strong>Risk: Premier League footballer — career-ending disability protection</strong>
+      <table>
+        <tr><td><strong>Sport</strong></td><td>Association football (Premier League)</td></tr>
+        <tr><td><strong>Position</strong></td><td>Central midfielder</td></tr>
+        <tr><td><strong>Age at inception</strong></td><td>24</td></tr>
+        <tr><td><strong>Contract value</strong></td><td>£5m per annum (3-year contract remaining)</td></tr>
+        <tr><td><strong>Sum insured</strong></td><td>£12m (projected career earnings to age 32) <span class="badge illus">ILLUS</span></td></tr>
+        <tr><td><strong>Trigger</strong></td><td>Permanent total disablement: inability to play professional football as a result of accidental bodily injury</td></tr>
+        <tr><td><strong>Medical history</strong></td><td>One ACL reconstruction (right knee, 2022) — rated; ligament issues excluded for 2 years</td></tr>
+      </table>
+      <br>
+      <table>
+        <tr><td><strong>Base rate (professional footballer, midfielder)</strong></td><td>~0.8–1.2% of sum insured p.a. <span class="badge illus">ILLUS</span></td></tr>
+        <tr><td><strong>Prior ACL loading</strong></td><td>+0.30% p.a. with exclusion period <span class="badge illus">ILLUS</span></td></tr>
+        <tr><td><strong>Age discount</strong></td><td>×0.90 (age 24; peak physical condition)</td></tr>
+        <tr><td><strong>Indicative annual premium</strong></td><td>~£12m × 1.1% × 0.90 ≈ <strong>~£119,000 p.a.</strong> <span class="badge illus">ILLUS</span></td></tr>
+      </table>
+      <p style="margin-top:.6rem;font-size:.83rem;color:var(--muted);">Heavily illustrative. Sports disability rates in the Lloyd's market are individually negotiated based on sport, position, medical history and market appetite.</p>
+    </div>
+  </div>
+
+  <!-- Risk scorecard -->
+  <div class="card">
+    <h2>Pre-Binding Risk Assessment Scorecard</h2>
+    <table class="scorecard">
+      <thead><tr><th>Check</th><th>Priority</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Occupation class confirmed and documented</td><td class="pri-H">CRITICAL</td><td>Misstated occupation is primary moral hazard vector</td></tr>
+        <tr><td>Disability definition: own-occ vs. any-occ vs. suited</td><td class="pri-H">CRITICAL</td><td>Defines effective coverage trigger; must match insured's expectation</td></tr>
+        <tr><td>Pre-existing conditions declared / IMU completed</td><td class="pri-H">CRITICAL</td><td>PEC non-disclosure is leading cause of PA claim disputes</td></tr>
+        <tr><td>Deferred period and benefit period confirmed</td><td class="pri-H">CRITICAL</td><td>Mismatched deferred period creates gap between SSP and IP benefit</td></tr>
+        <tr><td>Sports / hazardous leisure activities declared</td><td class="pri-M">IMPORTANT</td><td>Standard PA often excludes or limits: motorsport, contact sports, diving</td></tr>
+        <tr><td>Geographic territory and travel frequency</td><td class="pri-M">IMPORTANT</td><td>War zones, FCDO advised territories may trigger exclusions</td></tr>
+        <tr><td>Benefit calculation basis (salary multiple / fixed / agreed value)</td><td class="pri-M">IMPORTANT</td><td>Agreed value vs. loss of earnings basis has different claims implications</td></tr>
+        <tr><td>Group size / free cover limit applicability</td><td class="pri-M">IMPORTANT</td><td>Lives above free cover limit require individual medical evidence</td></tr>
+        <tr><td>Mental health coverage scope and limits confirmed</td><td class="pri-M">IMPORTANT</td><td>FCA Consumer Duty requires clarity on mental health coverage position</td></tr>
+        <tr><td>Claims experience: 3–5 year history obtained</td><td class="pri-L">USEFUL</td><td>Key for group scheme pricing; individual may have nil experience</td></tr>
+        <tr><td>Rehabilitation service integration</td><td class="pri-L">USEFUL</td><td>Early intervention reduces disability duration — confirms carrier service</td></tr>
+        <tr><td>IPID issued (retail products)</td><td class="pri-H">CRITICAL</td><td>FCA requirement for consumer-facing PA&amp;H products (Consumer Duty)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="nav-strip">
+    <a class="nav-btn" href="database.html">← Claims Database</a>
+    <a class="nav-btn" href="rates-analysis.html">Rates &amp; ROE →</a>
+  </div>
+</div>
+<footer>Risk Code Hub · Personal Accident &amp; Health · Underwriting · All rates illustrative <span class="badge illus">ILLUS</span> · Not for regulatory use</footer>
+</body>
+</html>

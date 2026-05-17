@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marine Liability — Global Programme | Risk Code Hub</title>
+<link rel="stylesheet" href="../hub-styles.css">
+<style>
+  :root {
+    --hub-primary:    #005a6b;
+    --hub-dark:       #002d35;
+    --hub-light:      #e8f5f7;
+    --hub-accent:     #c8a84b;
+    --hub-secondary:  #1a5c28;
+    --hub-secondary2: #7b1a1a;
+    --header-gradient: linear-gradient(135deg,#002d35 0%,#005a6b 50%,#006e82 100%);
+    --header-sub:     #a8d8e0;
+  }
+  header { background: var(--header-gradient); color:#fff; padding:2rem 1.5rem 1.5rem; }
+  header h1 { margin:0 0 0.3rem; font-size:2rem; color:#fff; }
+  header p  { margin:0; color:var(--header-sub); font-size:1rem; }
+  nav { background:var(--hub-dark); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.3rem; }
+  nav a { color:#a8d8e0; text-decoration:none; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.85rem; }
+  nav a:hover, nav a.active { background:var(--hub-primary); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+  h2 { font-size:1.25rem; color:var(--hub-primary); margin:2rem 0 0.8rem; border-bottom:2px solid var(--hub-accent); padding-bottom:0.4rem; }
+  h3 { font-size:1.05rem; color:var(--hub-secondary); margin:1.2rem 0 0.5rem; }
+  p { line-height:1.8; color:#333; margin-bottom:0.8rem; font-size:0.93rem; }
+
+  .b-v { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#e6f4ea; color:#1a5c28; vertical-align:middle; }
+  .b-e { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#fef3e2; color:#7a4500; vertical-align:middle; }
+  .b-i { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#cce5ff; color:#004085; vertical-align:middle; }
+  .b-g { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#f8d7da; color:#721c24; vertical-align:middle; }
+
+  /* Structure cards */
+  .struct-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:0.8rem; margin:1rem 0 1.5rem; }
+  .struct-card { background:#fff; border-radius:8px; padding:1rem 1.1rem; border:1px solid #c0dde0; border-top:4px solid var(--hub-primary); }
+  .struct-card.alt1 { border-top-color:var(--hub-secondary); }
+  .struct-card.alt2 { border-top-color:var(--hub-accent); }
+  .struct-card.alt3 { border-top-color:var(--hub-secondary2); }
+  .struct-card h4 { margin:0 0 0.35rem; font-size:0.95rem; color:#222; }
+  .struct-card p  { margin:0; font-size:0.82rem; color:#444; line-height:1.6; }
+  .struct-card .sc-label { font-size:0.72rem; font-weight:700; color:var(--hub-primary); text-transform:uppercase; letter-spacing:.4px; margin-bottom:0.3rem; display:block; }
+  .struct-card.alt1 .sc-label { color:var(--hub-secondary); }
+  .struct-card.alt2 .sc-label { color:#7a5a00; }
+  .struct-card.alt3 .sc-label { color:var(--hub-secondary2); }
+
+  /* Coverage tower */
+  .tower-wrap { margin:1rem 0 1.5rem; }
+  .tower-layer { display:flex; align-items:center; gap:0.8rem; margin-bottom:0.4rem; }
+  .tower-bar { border-radius:6px; padding:0.6rem 1rem; color:#fff; font-size:0.83rem; font-weight:600; flex:1; display:flex; justify-content:space-between; align-items:center; }
+  .tower-bar .lim { font-size:0.75rem; font-weight:400; opacity:.88; }
+  .tl-ig-ret  { background:#004d5c; }
+  .tl-ig-pool { background:#005a6b; }
+  .tl-ig-ov   { background:#006e82; }
+  .tl-g-prim  { background:#1a5c28; }
+  .tl-gx1     { background:#2e7d32; }
+  .tl-gx2     { background:#c8a84b; color:#2a1800; }
+  .tl-gx3     { background:#7b1a1a; }
+  .tower-note { font-size:0.78rem; color:#666; min-width:160px; }
+
+  /* Tables */
+  .tbl-wrap { overflow-x:auto; margin:0.5rem 0 1.5rem; }
+  table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+  thead th { background:var(--hub-primary); color:#fff; padding:0.55rem 0.7rem; text-align:left; }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid #d8eef0; vertical-align:top; }
+  tbody tr:nth-child(even) { background:#f0f9fb; }
+  .tick  { color:#1a5c28; font-weight:700; }
+  .cross { color:#7b1a1a; font-weight:700; }
+  .cert-y { display:inline-block; font-size:0.7rem; font-weight:700; padding:1px 6px; border-radius:10px; background:#e6f4ea; color:#1a5c28; }
+  .cert-n { display:inline-block; font-size:0.7rem; font-weight:700; padding:1px 6px; border-radius:10px; background:#f8d7da; color:#721c24; }
+  .cert-p { display:inline-block; font-size:0.7rem; font-weight:700; padding:1px 6px; border-radius:10px; background:#fef3e2; color:#7a4500; }
+
+  /* Workflow steps */
+  .workflow { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:0.7rem; margin:0.8rem 0 1.5rem; }
+  .wf-step { background:#fff; border-radius:8px; padding:0.85rem 1rem; border:1px solid #c0dde0; display:flex; gap:0.7rem; align-items:flex-start; }
+  .wf-num  { background:var(--hub-primary); color:#fff; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:800; flex-shrink:0; margin-top:1px; }
+  .wf-step p { margin:0; font-size:0.82rem; color:#333; line-height:1.55; }
+  .wf-step strong { display:block; font-size:0.83rem; color:#222; margin-bottom:0.15rem; }
+
+  /* Case study */
+  .case-box { background:#fff; border-radius:10px; border:2px solid var(--hub-accent); padding:1.3rem 1.5rem; margin:1rem 0 1.5rem; }
+  .case-box .case-header { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--hub-accent); margin-bottom:0.4rem; }
+  .case-box h4 { margin:0 0 0.5rem; font-size:1rem; color:var(--hub-primary); }
+  .case-facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:0.5rem; margin:0.8rem 0; }
+  .case-fact { background:var(--hub-light); border-radius:6px; padding:0.5rem 0.7rem; }
+  .case-fact .cf-label { font-size:0.68rem; color:#666; text-transform:uppercase; letter-spacing:.3px; }
+  .case-fact .cf-val   { font-size:0.9rem; font-weight:700; color:var(--hub-primary); }
+  .case-outcome { background:#e6f4ea; border-radius:6px; padding:0.8rem 1rem; margin-top:0.8rem; font-size:0.85rem; color:#1a3a20; }
+
+  .warn-box  { background:#fff3cd; border-left:4px solid var(--hub-accent); border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#5a4000; }
+  .info-box  { background:var(--hub-light); border-left:4px solid var(--hub-primary); border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#00303a; }
+  .alert-box { background:#f8d7da; border-left:4px solid #c0392b; border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#5a0010; }
+
+  footer { background:var(--hub-dark); color:#a8d8e0; text-align:center; padding:1rem; font-size:0.82rem; margin-top:2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Marine Liability</h1>
+  <p>Lloyd's Risk Codes G · GC · GX &nbsp;|&nbsp; Module 07: Global Programme Structuring</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <h2>Marine Liability Programme Structures</h2>
+  <p>Marine liability insurance for ocean-going vessels typically involves a layered structure combining mutual P&amp;I club cover with Lloyd's fixed-premium placements. The precise architecture depends on vessel type, trading area, flag state certificate requirements, and the shipowner's appetite for mutual governance versus fixed-premium certainty. Lloyd's codes G, GC, and GX each play a distinct role within a complete marine liability programme. <span class="b-e">EST</span></p>
+
+  <div class="struct-grid">
+    <div class="struct-card">
+      <span class="sc-label">Structure 1 — Standard</span>
+      <h4>IG P&amp;I Club — Full Mutual Entry</h4>
+      <p>Shipowner enters vessel into an International Group member club. Club provides P&amp;I (injury, pollution, collision 1/4th) up to the pool/reinsurance limit. Appropriate for standard ocean-going commercial tonnage &gt;500 GT seeking mutual governance, pooling, and unlimited (in practice) cover. No Lloyd's G involvement except as GX reinsurer to the pool.</p>
+    </div>
+    <div class="struct-card alt1">
+      <span class="sc-label">Structure 2 — Fixed Premium Primary</span>
+      <h4>Lloyd's G Fixed-Premium — Full P&amp;I Equivalent</h4>
+      <p>Shipowner places full P&amp;I-equivalent cover directly in Lloyd's market under code G. Common for: smaller fleets that prefer fixed renewal certainty; vessels ineligible for IG club entry (age, flag, class); yachts; fishing vessels; inland waterway craft; specialist workboats. Limit typically $100m–$500m. No supplementary calls.</p>
+    </div>
+    <div class="struct-card alt2">
+      <span class="sc-label">Structure 3 — Hybrid</span>
+      <h4>Club Primary + Lloyd's GX Excess Layer</h4>
+      <p>Club provides primary P&amp;I up to pool limit; Lloyd's GX provides excess above the pool for VLCC/ULCC tankers, cruise lines, and large containerships where exposures exceed the $3.1bn IG pool. Also used for specific perils excluded or sub-limited by the club (e.g., US Gulf pollution excess, Athens Convention passenger liability top-up).</p>
+    </div>
+    <div class="struct-card alt3">
+      <span class="sc-label">Structure 4 — Coverholder / Binder</span>
+      <h4>Lloyd's GC Coverholder — SRL / PTOL / Yacht Schemes</h4>
+      <p>A Lloyd's approved coverholder (marine broker or MGA) binds Shiprepairers' Liability (SRL), Port/Terminal/Operator Liability (PTOL), Freight Forwarder (FF), or Yacht schemes under an annual binder. Coverholder underwrites individual risks within agreed parameters; Lloyd's syndicates provide capacity. Provides market access for smaller operators and specialist sub-classes.</p>
+    </div>
+  </div>
+
+  <h2>Illustrative Marine Liability Coverage Tower</h2>
+  <p>Programme tower for a large VLCC tanker fleet (4 vessels, 320,000 GT aggregate) trading worldwide including US Gulf. Total programme limit: $1.5bn. <span class="b-i">ILLUS</span></p>
+
+  <div class="tower-wrap">
+    <div class="tower-layer">
+      <div class="tower-bar tl-ig-ret">
+        <span>IG P&amp;I Club — Owned Retention (UK Club)</span>
+        <span class="lim">$0 – $10m per vessel</span>
+      </div>
+      <div class="tower-note">Club absorbs individual claims below retention threshold; no Lloyd's involvement</div>
+    </div>
+    <div class="tower-layer">
+      <div class="tower-bar tl-ig-pool">
+        <span>IG P&amp;I Club — Club Retained Layer</span>
+        <span class="lim">$10m – $100m per vessel</span>
+      </div>
+      <div class="tower-note">Club's own balance sheet; rated by S&amp;P/Moody's; ISM/STCW compliance required</div>
+    </div>
+    <div class="tower-layer">
+      <div class="tower-bar tl-ig-ov">
+        <span>IG Pooling Agreement — 13 Club Pool</span>
+        <span class="lim">$100m – $3.1bn per vessel</span>
+      </div>
+      <div class="tower-note">Mutual pool of 13 IG clubs; reinsured in commercial market (Lloyd's/London, Bermuda)</div>
+    </div>
+    <div class="tower-layer">
+      <div class="tower-bar tl-g-prim">
+        <span>Lloyd's G — Fixed Premium P&amp;I Equivalent (US Gulf OPA 90 Supplement)</span>
+        <span class="lim">Top-up layer / specific peril xs Club</span>
+      </div>
+      <div class="tower-note">Code G; provides OPA 90 certainty and fixed-premium alternative for US Gulf trading</div>
+    </div>
+    <div class="tower-layer">
+      <div class="tower-bar tl-gx1">
+        <span>Lloyd's GX — Excess of Pool Layer 1</span>
+        <span class="lim">$3.1bn – $750m xs $3.1bn</span>
+      </div>
+      <div class="tower-note">Code GX; specialist Lloyd's syndicates; very limited market; long-term relationships</div>
+    </div>
+    <div class="tower-layer">
+      <div class="tower-bar tl-gx2">
+        <span>Lloyd's GX — Excess of Pool Layer 2</span>
+        <span class="lim">$750m xs $3.85bn (aggregate)</span>
+      </div>
+      <div class="tower-note">Code GX; Bermuda/Lloyd's co-placement; catastrophe-layer pricing; infrequent activation</div>
+    </div>
+    <div class="tower-layer">
+      <div class="tower-bar tl-gx3">
+        <span>Lloyd's GX — High-Limit Pollution Excess (OPA 90 / CLC)</span>
+        <span class="lim">Bespoke limit above GX Layer 2</span>
+      </div>
+      <div class="tower-note">Code GX; oil major charterer requirement; IOPC Fund supplementary interfaces here</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>IOPC Fund Interface:</strong> For tanker pollution claims in CLC states, the IOPC Fund 1992 supplements the shipowner's CLC liability up to SDR 203m (first-tier fund) and SDR 750m (supplementary fund, Nairobi 2003 Protocol states). GX excess layers activating above the IOPC supplementary fund are the true catastrophe layer for tanker pollution — rarely triggered, but critical for VLCC/ULCC fleet operators. The Haven tanker loss (1991, $5–6bn total cost) remains the benchmark scenario.
+  </div>
+
+  <h2>Compulsory Certificate Matrix by Jurisdiction</h2>
+  <p>Lloyd's underwriters must verify that the insured holds all compulsory insurance certificates required by flag state and trading area. Missing certificates are grounds for port state detention and may void coverage. <span class="b-v">VER</span></p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Certificate</th>
+          <th>Convention / Authority</th>
+          <th>Vessels Required</th>
+          <th>Issuing Party</th>
+          <th>US Waters</th>
+          <th>EU Waters</th>
+          <th>Key Ports (non-EU/US)</th>
+          <th>Underwriting Check</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CLC Certificate</strong></td>
+          <td>CLC 1992 / IMO</td>
+          <td>Tankers &gt;2,000 GT carrying persistent oil</td>
+          <td>P&amp;I Club or Lloyd's insurer</td>
+          <td><span class="cert-n">N/A</span> OPA 90 governs</td>
+          <td><span class="cert-y">Required</span></td>
+          <td><span class="cert-y">Required</span> (92 states)</td>
+          <td>Verify expiry date; issuing club/syndicate</td>
+        </tr>
+        <tr>
+          <td><strong>COFR (Certificate of Financial Responsibility)</strong></td>
+          <td>OPA 90 / USCG</td>
+          <td>Vessels &gt;300 GT in US waters; any vessel with OPA exposure</td>
+          <td>USCG-approved guarantor (club or Lloyd's)</td>
+          <td><span class="cert-y">Required</span></td>
+          <td><span class="cert-n">N/A</span></td>
+          <td><span class="cert-n">N/A</span></td>
+          <td>Check USCG COFR database; verify worst-case discharge scenario</td>
+        </tr>
+        <tr>
+          <td><strong>Bunkers Convention Certificate</strong></td>
+          <td>Bunkers Conv. 2001 / IMO</td>
+          <td>Non-tanker ships &gt;1,000 GT</td>
+          <td>P&amp;I Club or Lloyd's insurer</td>
+          <td><span class="cert-n">N/A</span> (US not party)</td>
+          <td><span class="cert-y">Required</span></td>
+          <td><span class="cert-p">Partial</span> (97 states)</td>
+          <td>Verify all non-tanker vessels &gt;1,000 GT hold valid certificate</td>
+        </tr>
+        <tr>
+          <td><strong>Nairobi WRC Certificate</strong></td>
+          <td>Nairobi Conv. 2007 / IMO</td>
+          <td>Ships &gt;300 GT in Convention states' EEZ</td>
+          <td>P&amp;I Club or Lloyd's insurer</td>
+          <td><span class="cert-n">N/A</span> (US not party)</td>
+          <td><span class="cert-y">Required</span></td>
+          <td><span class="cert-p">Partial</span> (55+ states)</td>
+          <td>Check flag state WRC issuance; coverage includes wreck removal costs</td>
+        </tr>
+        <tr>
+          <td><strong>MLC Financial Security — Abandonment</strong></td>
+          <td>MLC 2006 / ILO</td>
+          <td>Commercial ships &gt;500 GT</td>
+          <td>P&amp;I Club or Lloyd's syndicate</td>
+          <td><span class="cert-y">Required</span> (US ratified)</td>
+          <td><span class="cert-y">Required</span></td>
+          <td><span class="cert-y">Required</span> (100+ states)</td>
+          <td>Separate from P&amp;I cover; verify current MLC certificate</td>
+        </tr>
+        <tr>
+          <td><strong>MLC Financial Security — Injury/Death</strong></td>
+          <td>MLC 2006 Amendment 2014</td>
+          <td>Commercial ships &gt;500 GT</td>
+          <td>P&amp;I Club or Lloyd's syndicate</td>
+          <td><span class="cert-y">Required</span></td>
+          <td><span class="cert-y">Required</span></td>
+          <td><span class="cert-y">Required</span></td>
+          <td>Often combined with abandonment certificate; confirm dual coverage</td>
+        </tr>
+        <tr>
+          <td><strong>Athens Convention Certificate (PAL 2002)</strong></td>
+          <td>Athens Conv. / PAL 2002</td>
+          <td>Passenger ships &gt;12 passengers, international voyages</td>
+          <td>P&amp;I Club or Lloyd's insurer</td>
+          <td><span class="cert-n">N/A</span> (US not party)</td>
+          <td><span class="cert-y">Required</span> (EU Reg. 392/2009)</td>
+          <td><span class="cert-p">Partial</span></td>
+          <td>SDR 250,000 terrorism; SDR 400,000 standard — very limited Lloyd's capacity</td>
+        </tr>
+        <tr>
+          <td><strong>ISM DOC &amp; SMC</strong></td>
+          <td>ISM Code / SOLAS IX</td>
+          <td>Ships &gt;500 GT international trade</td>
+          <td>Flag State / RO (class society)</td>
+          <td><span class="cert-y">Required</span></td>
+          <td><span class="cert-y">Required</span></td>
+          <td><span class="cert-y">Required</span></td>
+          <td>Company DOC + vessel SMC; both must be current; audit cycle every 2.5 yr</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>8-Step Placement Workflow</h2>
+  <p>Standard Lloyd's marine liability placement process for a fleet account (G primary + GX excess). <span class="b-e">EST</span></p>
+
+  <div class="workflow">
+    <div class="wf-step"><div class="wf-num">1</div><p><strong>Fleet &amp; Risk Profiling</strong>Compile vessel schedule (name, IMO, flag, GT, type, build year, class society, trading area). Obtain loss runs (5 years, all classes). Confirm IG club status and existing certificates.</p></div>
+    <div class="wf-step"><div class="wf-num">2</div><p><strong>Certificate &amp; Compliance Audit</strong>Verify ISM DOC/SMC, COFR (if US trading), CLC, Bunkers, Nairobi WRC, MLC financial security certificates — all current and correctly issued. Note any expirations within programme period.</p></div>
+    <div class="wf-step"><div class="wf-num">3</div><p><strong>Vetting &amp; PSC Review</strong>Run PSC detention checks (THETIS, Paris/Tokyo MOU portals) for last 36 months. Request SIRE/CDI/RightShip inspection reports for tankers and bulk carriers. Flag any adverse findings to lead underwriter.</p></div>
+    <div class="wf-step"><div class="wf-num">4</div><p><strong>Slip Preparation</strong>Draft Lloyd's slip with full risk details: vessel schedule, limits, deductibles, trading warranties, sanctions clause (LMA3100), ISM warranty, class warranty, COFR confirmation, war exclusion (LMA3030).</p></div>
+    <div class="wf-step"><div class="wf-num">5</div><p><strong>Lead Underwriter Engagement</strong>Present to chosen lead syndicate (typically a marine specialist). Negotiate rate, terms, deductibles, and any bespoke endorsements (OPA 90 COFR guaranty, HOA BMP6 warranty, dark fleet AIS warranty).</p></div>
+    <div class="wf-step"><div class="wf-num">6</div><p><strong>Following Market Placement</strong>With lead scratching, approach following market to complete line. GX excess layers placed simultaneously or sequentially. Lloyd's China and international markets may participate as following market.</p></div>
+    <div class="wf-step"><div class="wf-num">7</div><p><strong>Certificate Issuance</strong>On binding, issue CLC, Bunkers, Nairobi WRC, MLC, and Athens Convention certificates via Lloyd's wordings team or specialist certificate-issuing bureau. COFR guaranty submitted to USCG where applicable.</p></div>
+    <div class="wf-step"><div class="wf-num">8</div><p><strong>Renewal Management &amp; Mid-Term Monitoring</strong>Track PSC inspections, SIRE/CDI updates, and any mid-term incidents monthly. Prepare renewal submission 90 days before expiry. Flag any sanctions-screening changes in fleet ownership or management.</p></div>
+  </div>
+
+  <h2>Case Study: Adriatica Shipping SRL — P&amp;I Restructuring</h2>
+  <div class="case-box">
+    <div class="case-header">Illustrative Case Study — Fixed-Premium Migration</div>
+    <h4>Adriatica Shipping SRL: Migrating from P&amp;I Club to Lloyd's Fixed-Premium (G)</h4>
+    <p>A Greek-managed fleet of six general cargo vessels (aggregate 42,000 GT) previously entered with a mid-tier IG P&amp;I club. The club issued a supplementary call of 22.5% following a heavy claims year, and subsequently declined renewal for three vessels over 22 years of age. The fleet operator approached the Lloyd's market through a specialist marine broker seeking fixed-premium certainty.</p>
+
+    <div class="case-facts">
+      <div class="case-fact"><div class="cf-label">Fleet</div><div class="cf-val">6 general cargo</div></div>
+      <div class="case-fact"><div class="cf-label">Aggregate GT</div><div class="cf-val">42,000 GT</div></div>
+      <div class="case-fact"><div class="cf-label">Oldest Vessel</div><div class="cf-val">26 years</div></div>
+      <div class="case-fact"><div class="cf-label">Flag</div><div class="cf-val">Malta / Liberia</div></div>
+      <div class="case-fact"><div class="cf-label">Trading</div><div class="cf-val">Mediterranean + Black Sea</div></div>
+      <div class="case-fact"><div class="cf-label">Limit Required</div><div class="cf-val">$100m P&amp;I equiv.</div></div>
+      <div class="case-fact"><div class="cf-label">Prior Club Premium</div><div class="cf-val">~€480k + 22.5% call</div></div>
+      <div class="case-fact"><div class="cf-label">5-Year LR</div><div class="cf-val">68% (attritional)</div></div>
+    </div>
+
+    <p><strong>Underwriting Approach:</strong> Lloyd's lead syndicate accepted the fleet under code G with the following conditions: (i) vessels over 20 years subject to class survey condition within 90 days; (ii) Black Sea trading warranty (no Azov Sea or Ukrainian port calls without prior approval post-2022); (iii) ISM warranty with DOC/SMC copies attached; (iv) $50,000 deductible per claim; (v) annual PSC inspection report to be provided at first request. Age factors applied: three youngest vessels 1.0×, two mid-age 1.35×, one oldest vessel 2.0×. MLC financial security certificates issued by the Lloyd's syndicate.</p>
+
+    <div class="case-outcome">
+      <strong>Outcome:</strong> Lloyd's fixed-premium G placement: €$527,000 p.a. (vs prior club advance call ~€480k before supplementary call). Fleet operator gained fixed-cost certainty, avoided supplementary call exposure, and retained coverage for the three older vessels declined by the club. Age-loading on the oldest vessel was accepted as commercially preferable to non-renewal. ISM class condition fulfilled at 60 days.
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <strong>⚠ DIC/DIL Gap Warning:</strong> Where a fleet is entered part in a P&amp;I club and part in Lloyd's fixed-premium (G), differences in conditions (DIC) and differences in limits (DIL) must be carefully reviewed. P&amp;I club rules contain mutual governance provisions — supplementary calls, cesser of cover for non-payment, discretionary cover for war risks — that may not align with Lloyd's fixed-premium policy terms. A claim arising from a peril that is discretionary under club rules but excluded under the Lloyd's policy (or vice versa) can create an uncovered gap. Programme architects must obtain and reconcile full copies of both the club rules and the Lloyd's policy wording before finalising the programme.
+  </div>
+
+  <div class="alert-box">
+    <strong>⚠ Sanctions &amp; Dark Fleet Compliance:</strong> All Lloyd's marine liability programmes must include the LMA Sanctions Limitation and Exclusion Clause (LMA3100). Underwriters must conduct enhanced due diligence before binding or renewing any risk with connections to: vessels previously flagged by OFAC, EU, or UK sanctions lists; fleets managed by entities with Russian, Iranian, or Venezuelan ownership links; vessels that have conducted ship-to-ship (STS) transfers in AIS-dark zones in the past 12 months. The Lloyd's Market Association Sanctions Advisory (updated 2024) provides current guidance. Failure to conduct adequate sanctions screening exposes syndicates to regulatory action from the FCA and US OFAC. <span class="b-v">VER</span>
+  </div>
+
+</div><!-- /container -->
+
+<footer>Risk Code Hub — Marine Liability G/GC/GX | Module 07: Global Programme Structuring | v4.2</footer>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Event Cancellation &amp; Contingency — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b005a;
+      --hub-dark:      #450030;
+      --hub-light:     #fce4f4;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#450030 0%,#7b005a 55%,#a0007a 100%);
+      --header-sub:    #f48fb1;
+      --bc:            #7b005a;
+      --bc-dark:       #450030;
+      --bc-light:      #fce4f4;
+      --bc-accent:     #c8a84b;
+      --bc-mid:        #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0020;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#f48fb1;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#450030;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#f48fb1;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--bc-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--bc-dark);margin-bottom:16px;}
+    canvas{max-width:100%;height:300px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--bc-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #fce4f4;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fdf0f8;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #1a5c2a;}
+    .roe-card.base{border-top:4px solid #c8a84b;}
+    .roe-card.bear{border-top:4px solid #c62828;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#1a5c2a;}
+    .roe-card.base .val{color:#c8a84b;}
+    .roe-card.bear .val{color:#c62828;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--bc-dark);margin-bottom:16px;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:240px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:#7b005a;}
+    .bar-out{background:#c62828;}
+    .bar-profit{background:#c8a84b;color:#000;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    .info-box{background:#fce4f4;border-left:4px solid var(--bc);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3b0028;line-height:1.6;}
+    footer{background:#450030;color:#f48fb1;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Event Cancellation (PC/PA/PN/PU/PZ)</a> › Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">Market cycle, rate index, COVID catastrophe impact, ROE scenarios &amp; P&amp;L waterfall</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Charts -->
+  <div class="section-title">Rate Index Trends 2010–2026<span class="badge b-e">EST</span></div>
+  <div class="chart-wrap">
+    <h3>Chart 1 — EC Rate Index 2010–2026 (2010 = 100) — by Event Type</h3>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Claims Frequency by Event Type (Illustrative — % of Policies with a Claim per Year)</h3>
+    <canvas id="chartFreq"></canvas>
+  </div>
+
+  <!-- Market cycle table -->
+  <div class="section-title">Market Cycle History<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Driver</th><th>Rate Movement</th><th>Lloyd's Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2000–2009</td><td>Soft / Competitive</td><td>Benign loss experience post-9/11; strong competition; no systemic events</td><td>−2 to −4% p.a.</td><td>Broad coverage, low rates; pandemic exclusions not considered necessary</td></tr>
+      <tr><td>2010–2012</td><td>Modest Hardening</td><td>Ash cloud losses; post-GFC capacity review; 2011 Japan earthquake affects events</td><td>Flat to +8%</td><td>Coverage terms reviewed; some tightening of government-order definitions</td></tr>
+      <tr><td>2013–2019</td><td>Soft Market Returns</td><td>Benign loss years; new capacity enters; strong competition for premium; soft rates</td><td>−3 to −5% p.a.</td><td>Capacity plentiful; pandemic risk not priced or excluded; rates near historic lows</td></tr>
+      <tr><td>2020</td><td>CATASTROPHE</td><td>COVID-19 — simultaneous global cancellation of entire events calendar; $4–6bn estimated loss</td><td>N/A — catastrophe year</td><td>Claims paid across portfolio; capacity withdrawal; market enters emergency rewrite</td></tr>
+      <tr><td>2021</td><td>Hard Market / Rewrite</td><td>Post-COVID rewrite: pandemic exclusions inserted; terrorism wordings reviewed; capacity restricted</td><td>+50 to +150%</td><td>Pandemic/communicable disease exclusion now universal; significant rate increases on all classes</td></tr>
+      <tr><td>2022–2023</td><td>Hard but Stabilising</td><td>Rates remain elevated; pandemic exclusions standard; capacity selectively returns; recovery event booking surge</td><td>+10 to +25%</td><td>Selective capacity; high standards for venue contracts, artist health disclosure</td></tr>
+      <tr><td>2024–2026</td><td>Gradual Normalisation</td><td>Post-COVID event industry recovery; climate weather risk increasing; terrorism risk in flux</td><td>Flat to +8%</td><td>Weather exposure increasing; terrorism pricing reviewed for new geopolitical environment</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative £15m EC Portfolio<span class="badge b-e">EST</span></div>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+20.0%</div>
+      <div class="detail">Combined Ratio 72%<br>Benign weather; no major non-appearance; post-COVID rates hold; hard market continues</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+10.0%</div>
+      <div class="detail">Combined Ratio 88%<br>Normal weather frequency; one or two PN claims; selective underwriting; recovering market</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−25.0%</div>
+      <div class="detail">Combined Ratio 135%<br>Severe weather season; major PN loss; terrorism event; demonstrates extreme EC tail risk</div>
+    </div>
+  </div>
+
+  <!-- Bear scenario note -->
+  <div class="info-box">
+    <strong>Why Event Cancellation Has Extreme Tail Risk:</strong> The bear scenario (−25% ROE) illustrates what the EC market learned from COVID: this class is exposed to correlated catastrophe events that can simultaneously affect the entire portfolio. Even with pandemic exclusions, a major terrorism wave, extreme weather season, or geopolitical crisis could produce correlated losses across many policy years simultaneously. The EC book must be sized accordingly — it is not a high-volume, low-severity class. One catastrophe year can eliminate multiple years of profitable underwriting. <sup>[I2]</sup>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (£15m GWP EC Portfolio, illustrative)</h3>
+    <div class="wf-row"><div class="wf-label">Gross Written Premium</div><div class="wf-bar bar-in" style="width:100%;">£15m</div><div class="wf-val">£15.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Broker Commission (25%)</div><div class="wf-bar bar-out" style="width:50%;">−£3.75m</div><div class="wf-val">−£3.75m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance Premium (XL)</div><div class="wf-bar bar-out" style="width:20%;">−£1.5m</div><div class="wf-val">−£1.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Earned Premium</div><div class="wf-bar bar-in" style="width:65%;background:#a0007a;">£9.75m</div><div class="wf-val">£9.75m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Weather / Pluvius</div><div class="wf-bar bar-out" style="width:28%;">−£2.5m</div><div class="wf-val">−£2.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Non-Appearance (PN)</div><div class="wf-bar bar-out" style="width:22%;">−£1.8m</div><div class="wf-val">−£1.8m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Cancellation (Other perils)</div><div class="wf-bar bar-out" style="width:15%;">−£1.2m</div><div class="wf-val">−£1.2m</div></div>
+    <div class="wf-row"><div class="wf-label">IBNR / Reserve Strengthening</div><div class="wf-bar bar-out" style="width:7%;">−£0.5m</div><div class="wf-val">−£0.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Expenses / Overhead (12%)</div><div class="wf-bar bar-out" style="width:12%;">−£1.8m</div><div class="wf-val">−£1.8m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (est.)</div><div class="wf-bar bar-in" style="width:4%;background:#c8a84b;color:#000;">+£0.3m</div><div class="wf-val">+£0.3m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Profit</strong></div><div class="wf-bar bar-profit" style="width:24%;"><strong>£2.25m</strong></div><div class="wf-val"><strong>£2.25m (10.0% ROE)</strong></div></div>
+  </div>
+
+  <!-- Claims notes -->
+  <div class="section-title">Claims Development and IBNR Considerations</div>
+  <table>
+    <thead><tr><th>Factor</th><th>Impact on Reserves</th></tr></thead>
+    <tbody>
+      <tr><td>Short-tail nature (mostly)</td><td>Most EC claims are notified quickly — a cancelled event produces an immediate claim notification. However, quantum dispute and extra expenses assessment can extend claims to 12–18 months.</td></tr>
+      <tr><td>COVID tail claims (2020–21 books)</td><td>Coverage disputes from 2020–21 policies without pandemic exclusions continue to develop. Some disputes reach litigation — IBNR for contested COVID EC claims must be maintained in older books.</td></tr>
+      <tr><td>Large PN claims — long tail</td><td>Non-appearance claims involving contested medical causation (was illness pre-existing? Was the individual truly incapacitated?) can extend to 2–4 years litigation.</td></tr>
+      <tr><td>Terrorism claims — criminal proceedings</td><td>Where terrorism is the insured peril, criminal investigations may delay final claims resolution pending attribution of the event.</td></tr>
+      <tr><td>Prize indemnity — no IBNR needed</td><td>Prize indemnity claims are instantaneous — prize won = trigger met. No development period. Clean, short-tail claims profile.</td></tr>
+      <tr><td>Climate attribution — pluvius reserves</td><td>As extreme weather becomes more frequent, pluvius frequency may increase beyond actuarial expectations. Prudent reserve strengthening for outdoor festival books in an era of increasing weather extremes.</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Event Cancellation &amp; Contingency (PC/PA/PN/PU/PZ) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation →</a></p>
+</footer>
+
+<script>
+// Chart 1 — Rate Index 2010–2026
+const years = [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type:'line',
+  data:{
+    labels: years,
+    datasets:[
+      {
+        label:'Outdoor Music Festival',
+        data:[100,102,108,104,100,96,93,90,88,85,null,210,240,235,228,222,218],
+        borderColor:'#7b005a',backgroundColor:'rgba(123,0,90,0.08)',tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'Major Sporting Event',
+        data:[100,100,105,102,99,96,93,91,89,87,null,195,225,218,212,208,205],
+        borderColor:'#c8a84b',backgroundColor:'rgba(200,168,75,0.08)',tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'Conference / Exhibition',
+        data:[100,99,103,100,97,94,91,90,88,86,null,175,200,192,186,182,180],
+        borderColor:'#1a237e',backgroundColor:'rgba(26,35,126,0.06)',tension:0.3,pointRadius:3
+      }
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'bottom'},
+      annotation:{},
+      tooltip:{
+        callbacks:{
+          afterBody: function(context){
+            if(context[0].dataIndex===10) return ['2020: COVID catastrophe — no meaningful rate (market in crisis)'];
+            return [];
+          }
+        }
+      }
+    },
+    scales:{y:{title:{display:true,text:'Rate Index (2010=100)'},beginAtZero:false}}
+  }
+});
+
+// Chart 2 — Claims frequency by event type
+new Chart(document.getElementById('chartFreq'), {
+  type:'bar',
+  data:{
+    labels:['Multi-day Outdoor Festival','Single-day Outdoor Festival','Indoor Concert (Arena)','Indoor Conference','Major Sporting Event','Corporate/Award Ceremony','Film/TV Production','Prize Indemnity'],
+    datasets:[{
+      label:'Claims Frequency (% policies per year)',
+      data:[28,18,12,8,14,6,10,4],
+      backgroundColor:['#7b005a','#a0007a','#c8a84b','#1a237e','#1a5c2a','#00695c','#6a1b9a','#c62828']
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{y:{title:{display:true,text:'Claim Frequency (% of policies)'},max:40,beginAtZero:true}}
+  }
+});
+</script>
+</body>
+</html>

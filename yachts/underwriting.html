@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Underwriting — Yachts (O) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #00427b;
+      --hub-dark:      #002050;
+      --hub-light:     #e3f0fb;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #00796b;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#002050 0%,#00427b 55%,#0057a8 100%);
+      --header-sub:    #90caf9;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#0d1b2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#90caf9;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#002050;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#90caf9;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #bbdefb;}
+    .factors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .factor{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);}
+    .factor.high{border-left-color:#c62828;}
+    .factor.med{border-left-color:#e65100;}
+    .factor.low{border-left-color:#00427b;}
+    .factor .impact{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .factor h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .factor p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .factor .rate{font-size:0.78rem;font-weight:700;color:#c62828;margin-top:6px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #e3f0fb;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f0f7ff;}
+    .formula-box{background:#002050;color:#90caf9;border-radius:8px;padding:20px 24px;font-family:monospace;font-size:0.88rem;line-height:1.8;margin-bottom:24px;}
+    .formula-box .comment{color:#c8a84b;}
+    .worked{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px;border-top:4px solid var(--hub-primary);}
+    .worked.alt{border-top-color:var(--hub-accent);}
+    .worked h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .worked table{box-shadow:none;margin-bottom:0;}
+    .worked th{background:#00427b;}
+    .info-box{background:#e3f0fb;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#0d1b2e;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#00427b;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    footer{background:#002050;color:#90caf9;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Yachts (O)</a> › Underwriting</div>
+    <div class="tag">Module 04</div>
+    <h1>Underwriting Methodology</h1>
+    <div class="sub">Rating factors, rate benchmarks, worked examples &amp; key exclusions for Lloyd's O (Yachts)</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- High impact factors -->
+  <div class="section-title">Rating Factors — High Impact</div>
+  <div class="factors-grid">
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Vessel Agreed Value</h4>
+      <p>The agreed value (hull, machinery, and equipment) is the primary rating base. Established by survey at inception for vessels over a specified age or value threshold (typically 15+ years or £100k+ agreed value). Annual revaluation required for superyachts (24m+) where market values fluctuate significantly. Agreed value inflation post-COVID requires underwriter vigilance. <sup>[I3]</sup></p>
+      <div class="rate">Primary rating base: rate × agreed value; higher values attract proportionally lower rates (size benefit)</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Navigation Limits</h4>
+      <p>The single most important geographic rating variable. Inland/coastal limits attract the lowest rates; bluewater/worldwide navigation (including piracy-risk zones) the highest. Seasonal endorsements (Mediterranean summer, Caribbean winter) allow rate adjustments for lay-up periods. Navigation limit breach can void cover — must be clearly communicated to insured. <sup>[I3]</sup></p>
+      <div class="rate">Loading: Coastal 1.0× → Offshore 1.3× → Bluewater/worldwide 1.6–2.0× (ex-piracy zones)</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Vessel Type &amp; Size</h4>
+      <p>Motor yachts have higher fire frequency than sailing yachts (engine room ignition sources). Superyachts (24m+) have higher absolute loss amounts but lower loss ratios (better maintained, survey-compliant). Racing yachts require separate endorsement and different base rate. Foiling yachts (AC75 class, IMOCA foiling) require bespoke assessment. <sup>[I3]</sup></p>
+      <div class="rate">Sailing cruiser 1.0× base; motor yacht +15–25%; superyacht specialist rates; racing endorsement separately rated</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Owner / Skipper Experience</h4>
+      <p>RYA Yachtmaster Offshore/Ocean qualifications are the standard Lloyd's benchmark for owner experience. Commercially crewed superyachts require OOW-level MCA certificates. Offshore miles logged, prior cruising history, and professional skipper use all affect the experience assessment. Inexperienced owners on offshore navigation limits attract significant loadings. <sup>[I5]</sup></p>
+      <div class="rate">RYA Yachtmaster credit: −10 to −15%; inexperienced owner + offshore limit: +30 to +50%</div>
+    </div>
+  </div>
+
+  <!-- Medium impact factors -->
+  <div class="section-title">Rating Factors — Medium Impact</div>
+  <div class="factors-grid">
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Racing Endorsement</h4>
+      <p>Racing cover is excluded under standard cruising policies and separately rated as an endorsement. Rates depend on the race category (club racing, offshore passage racing, ocean racing), number of racing days, and offshore area. RORC OSR compliance is a standard condition. Aggregate limits apply for racing syndicate/fleet programmes. <sup>[L9]</sup></p>
+      <div class="rate">Racing endorsement: +0.05–0.20% of agreed value per annum depending on race category</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Charter Use</h4>
+      <p>Commercial charter (bareboat or crewed charter) significantly changes the risk profile — increased utilisation, inexperienced charterers, higher wear rates, and commercial crew employment liability. MCA commercial code (LY3/MCA Cat) compliance required for Lloyd's commercial charter endorsement. Rate loading reflects the step-change in exposure. <sup>[L2]</sup></p>
+      <div class="rate">Commercial charter endorsement: +25 to +50% H&M loading; separate P&I/liability limit required</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Lay-Up Warranties</h4>
+      <p>Vessels laid up ashore or in a secure marina for a defined period (typically winter, Oct–Apr in North Europe) attract a reduced in-commission rate for the lay-up period. Lay-up warranties require written notification to underwriters; breach by using the vessel during lay-up without prior endorsement can void the seasonal discount and attract claims dispute. <sup>[I3]</sup></p>
+      <div class="rate">Lay-up credit: −30 to −50% of the in-commission rate for the lay-up period</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Crew Qualifications (Superyacht)</h4>
+      <p>For commercially crewed superyachts, the Master's and Chief Officer's MCA STCW certification level is a key rating input. MCA OOW/Master certificate (Yacht) with appropriate GT limits confirms competence for vessel size. MLC 2006 crew welfare documentation compliance is reviewed. Under-qualified crew significantly increases exposure. <sup>[L3]</sup></p>
+      <div class="rate">MCA Master (Yacht) 3000GT: standard rate; downgrade loading if crew qualifications are below vessel requirement</div>
+    </div>
+  </div>
+
+  <!-- Lower impact factors -->
+  <div class="section-title">Rating Factors — Lower Impact</div>
+  <div class="factors-grid">
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Home Port &amp; Mooring</h4>
+      <p>Marina security, tidal range, exposure to prevailing weather, and hurricane zone status (Caribbean, Gulf of Mexico) all affect the mooring risk. Vessels permanently based in Category 5 hurricane zones require hurricane endorsements and/or haul-out warranties for the June–November season. Marina theft statistics and security cameras are supportive evidence.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Safety Equipment</h4>
+      <p>EPIRB (406MHz, registered to vessel), Category A or B liferaft, jacklines, PLBs for crew, AIS transponder (Class B), VHF DSC radio, and flares (current date) are standard Lloyd's safety equipment requirements for offshore navigation limits. Some syndicates offer equipment credit for above-standard fit-out (SART, satellite communicator). <sup>[L5]</sup></p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Survey Requirements</h4>
+      <p>Vessels over 10 years old and/or with agreed value over £100k typically require a pre-inception Lloyd's survey (marine surveyor approved). Vessels 15+ years old and superyachts typically require 5-yearly out-of-water surveys. Survey currency is a standard underwriting condition — lapsed survey warranty can void cover for structural or osmosis-related claims.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Claims History</h4>
+      <p>Three-year claims history is standard Lloyd's yacht underwriting input. Frequency of small claims (grounding, collision, theft) is a stronger predictor of future losses than single large losses. Claims-free discounts of 5–15% are common on renewal. Claims-laden history (3+ claims in 5 years) may make the risk unacceptable to standard yacht syndicates. <sup>[I10]</sup></p>
+    </div>
+  </div>
+
+  <!-- Rate table -->
+  <div class="section-title">Indicative Rate on Agreed Value by Vessel Class<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Vessel Class</th><th>Navigation</th><th>H&amp;M Rate (% AV p.a.)</th><th>Typical 3rd Party Limit</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Small craft (under 8m)</td><td>Inland / coastal</td><td>0.30–0.60%</td><td>£1m–£2m</td><td>Mass market; often on household extension</td></tr>
+      <tr><td>Sailing yacht 8–15m</td><td>Coastal / territorial</td><td>0.50–0.90%</td><td>£2m–£5m</td><td>Core Lloyd's private client market</td></tr>
+      <tr><td>Sailing yacht 15–24m</td><td>Offshore / Mediterranean</td><td>0.65–1.10%</td><td>£5m–£10m</td><td>Higher rebuild costs; offshore nav loading</td></tr>
+      <tr><td>Motor yacht 8–24m</td><td>Coastal / offshore</td><td>0.70–1.20%</td><td>£3m–£10m</td><td>Fire peril loading; machinery complexity</td></tr>
+      <tr><td>Superyacht 24–40m</td><td>Territorial / Mediterranean</td><td>0.55–0.90%</td><td>£10m–£25m</td><td>LY3 compliance; survey-current required</td></tr>
+      <tr><td>Superyacht 40–60m</td><td>Bluewater / worldwide</td><td>0.65–1.10%</td><td>£25m–£50m</td><td>Co-insurance; specialist syndicate placement</td></tr>
+      <tr><td>Megayacht 60m+</td><td>Worldwide</td><td>0.80–1.50%</td><td>£50m+</td><td>Bespoke; war/piracy endorsement typically needed</td></tr>
+      <tr><td>Bluewater cruising (ocean)</td><td>Worldwide inc Southern Ocean</td><td>1.00–2.50%</td><td>£5m–£10m</td><td>Piracy exclusions; Southern Ocean loading</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Formula -->
+  <div class="section-title">Premium Rating Framework</div>
+  <div class="formula-box">
+    <span class="comment">// Yacht H&M — indicative rating framework</span><br>
+    Base Premium = Agreed Value × Base H&M Rate<br><br>
+    Adjusted Premium = Base Premium<br>
+    &nbsp;&nbsp;× Navigation Limit Factor    <span class="comment">// 1.0× (coastal) → 2.0× (bluewater ex-piracy zones)</span><br>
+    &nbsp;&nbsp;× Vessel Type Loading        <span class="comment">// 1.0× (sailing) → 1.25× (motor); racing: separate</span><br>
+    &nbsp;&nbsp;× Owner Experience Factor    <span class="comment">// −15% (RYA Yachtmaster Ocean) → +50% (inexperienced)</span><br>
+    &nbsp;&nbsp;× Claims History Loading     <span class="comment">// −12% (5yr clean) → +40% (3+ claims)</span><br>
+    &nbsp;&nbsp;× Lay-Up Credit              <span class="comment">// −30 to −50% of rate for lay-up months</span><br>
+    &nbsp;&nbsp;× Charter Loading            <span class="comment">// +25–50% if commercial charter use</span><br>
+    + Third Party Liability          <span class="comment">// separately rated; £1m–£50m+ limit</span><br>
+    + Racing Endorsement             <span class="comment">// separately rated; per race / per season</span><br>
+    + Personal Accident              <span class="comment">// per head / blanket crew PA cover</span>
+  </div>
+
+  <!-- Worked Example A -->
+  <div class="worked">
+    <h3>Worked Example A — 14m Sailing Yacht, Mediterranean Navigation, Owner-Operated</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Agreed Value</td><td>14m GRP sloop, 2015 build — agreed value £120,000</td><td>£120,000</td></tr>
+        <tr><td>Base H&M Rate</td><td>0.75% p.a. × £120,000</td><td>£900</td></tr>
+        <tr><td>Navigation Limit</td><td>Mediterranean (Apr–Oct) — territorial limit</td><td>1.05× = £945</td></tr>
+        <tr><td>Owner Experience</td><td>RYA Coastal Skipper — adequate for nav limit</td><td>−8% = −£76</td></tr>
+        <tr><td>Lay-Up Credit</td><td>Oct–Mar laid up ashore, Lefkada boatyard (6 months)</td><td>−40% of 6/12 = −£178</td></tr>
+        <tr><td>Claims Loading</td><td>One grounding claim £3,500 in 3 years — minor</td><td>+10% = £87</td></tr>
+        <tr><td>H&M Sub-total</td><td>—</td><td>£778</td></tr>
+        <tr><td>Third Party Liability</td><td>£3m limit — Mediterranean sailing</td><td>£185</td></tr>
+        <tr><td>Personal Accident</td><td>Owner + 3 crew; £50k death / £25k disability per head</td><td>£90</td></tr>
+        <tr><td><strong>Total GWP</strong></td><td>—</td><td><strong>~£1,053</strong></td></tr>
+        <tr><td>Rate on Agreed Value</td><td>H&M effective rate</td><td>0.65% AV</td></tr>
+        <tr><td>Loss Ratio Benchmark</td><td>Sailing yacht, Mediterranean, owner-operated</td><td>55%</td></tr>
+        <tr><td>Claims Estimate</td><td>£1,053 × 55%</td><td>£579</td></tr>
+        <tr><td>Commission (25%)</td><td>—</td><td>£263</td></tr>
+        <tr><td><strong>Underwriting Result</strong></td><td>—</td><td><strong>£211 profit (20.0% margin)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Worked Example B -->
+  <div class="worked alt">
+    <h3>Worked Example B — 35m Motor Superyacht, Worldwide Navigation, Commercial Charter</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Agreed Value</td><td>35m motor superyacht, 2018 build, Italian yard — agreed value £8,500,000</td><td>£8,500,000</td></tr>
+        <tr><td>Base H&M Rate</td><td>0.70% p.a. × £8,500,000</td><td>£59,500</td></tr>
+        <tr><td>Navigation Limit</td><td>Worldwide (including Mediterranean, Caribbean, UAE)</td><td>1.35× = £80,325</td></tr>
+        <tr><td>Charter Loading</td><td>Commercial crewed charter — MCA LY3 compliant</td><td>+35% = £28,114</td></tr>
+        <tr><td>Crew Qualifications</td><td>MCA Master (Yacht) 3000GT, MLC 2006 compliant crew</td><td>Standard rate</td></tr>
+        <tr><td>Claims Loading</td><td>5-year clean</td><td>−8% = −£8,674</td></tr>
+        <tr><td>Survey</td><td>Lloyd's survey current (2023); LY3 compliance certificate</td><td>Standard rate</td></tr>
+        <tr><td>H&M Sub-total</td><td>—</td><td>£99,765</td></tr>
+        <tr><td>P&I / 3rd Party Liability</td><td>£20m limit — charter + bluewater liability</td><td>£18,500</td></tr>
+        <tr><td>Personal Accident</td><td>Crew (8) + Charter Passengers (12) blanket; PA £100k/head</td><td>£4,200</td></tr>
+        <tr><td>Charter Liability Extension</td><td>Passenger liability, charter interruption</td><td>£3,800</td></tr>
+        <tr><td><strong>Total GWP</strong></td><td>—</td><td><strong>~£126,265</strong></td></tr>
+        <tr><td>Rate on Agreed Value</td><td>H&M effective rate inc charter loading</td><td>1.17% AV</td></tr>
+        <tr><td>Loss Ratio Benchmark</td><td>Superyacht commercial charter, worldwide</td><td>58%</td></tr>
+        <tr><td>Claims Estimate</td><td>£126,265 × 58%</td><td>£73,234</td></tr>
+        <tr><td>Commission (20%)</td><td>—</td><td>£25,253</td></tr>
+        <tr><td>Expenses (10%)</td><td>—</td><td>£12,627</td></tr>
+        <tr><td><strong>Underwriting Result</strong></td><td>—</td><td><strong>£15,151 profit (12.0% margin)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Key exclusions -->
+  <div class="section-title">Key Exclusions</div>
+  <table>
+    <thead>
+      <tr><th>Exclusion</th><th>Rationale</th><th>Potential Endorsement</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Racing (without endorsement)</td><td>Distinct peril profile; separate rating required</td><td>Racing endorsement — per race or per season</td></tr>
+      <tr><td>Commercial charter (without endorsement)</td><td>Change of use; commercial code compliance required</td><td>Commercial charter endorsement (MCA LY3 required)</td></tr>
+      <tr><td>War, capture, seizure</td><td>Standard marine war exclusion (Institute War Clauses)</td><td>Separate war and piracy cover (significant additional premium)</td></tr>
+      <tr><td>Navigation outside agreed limits</td><td>Material change of risk; rating basis changes</td><td>Prior endorsement for extended navigation</td></tr>
+      <tr><td>Wear, tear, gradual deterioration</td><td>Maintenance obligations; not insurable fortuitous events</td><td>Not available — maintenance obligation of owner</td></tr>
+      <tr><td>Osmosis (pre-existing condition)</td><td>Latent defect; not a fortuitous peril</td><td>Not generally available; sometimes covered post-survey</td></tr>
+      <tr><td>Piracy zones (without endorsement)</td><td>Gulf of Aden, Gulf of Guinea, Somali Basin — high war/piracy risk</td><td>Institute War and Strikes Clauses extension</td></tr>
+      <tr><td>Nuclear / radioactive contamination</td><td>Standard exclusion across all marine</td><td>Not available</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Info box -->
+  <div class="info-box">
+    <strong>Osmosis and Pre-Existing Conditions:</strong> GRP (fibreglass) hulls are susceptible to osmotic blistering when water permeates the gelcoat over time. Osmosis is a maintenance/latent defect issue and is universally excluded from yacht hull policies as a non-fortuitous peril. Survey reports at inception frequently note osmosis condition — severe osmosis is a material fact requiring disclosure. Post-survey epoxy barrier coatings and osmosis treatment are typically owner responsibilities; failed treatment costs are not covered. <sup>[I9]</sup>
+  </div>
+
+  <!-- Warn box -->
+  <div class="warn-box">
+    <strong>Navigation Limit Warranty — Automatic Voidance Risk:</strong> Navigation limit clauses in yacht policies typically operate as <strong>warranties</strong> under the Marine Insurance Act 1906 (as modified by the Insurance Act 2015 for commercial policies). Breach of a navigation warranty voids cover from the date of breach — not just for the incident caused by the breach. Underwriters should ensure the policy clearly states the consequences of navigation limit breach and that insureds understand prior endorsement requirements. This is particularly relevant for superyachts making ocean passages outside their agreed navigation limits. <sup>[L8]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Yachts (O) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="rates-analysis.html">Next: Rates &amp; ROE →</a></p>
+</footer>
+
+</body>
+</html>

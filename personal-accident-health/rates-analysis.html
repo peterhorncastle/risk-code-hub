@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+<title>PA&H — Rates & ROE Analysis | Risk Code Hub</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--pah:#00695c;--pah-dark:#003d33;--acc:#c62828;--med:#1565c0;--travel:#e65100;--sport:#6a1b9a;--warn:#f57f17;--bg:#f5f7fa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--radius:10px;    /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #00695c;
+    --hub-dark:      #003d33;
+    --hub-light:     #e8f5f2;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #1565c0;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#003d33 0%,#00695c 50%,#00796b 100%);
+    --header-sub:    #b8ddd8;
+  }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+header{background:linear-gradient(135deg,#003d33 0%,#00695c 50%,#00796b 100%);color:#fff;padding:2rem 1.5rem 1.5rem;}
+.hub-label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75;margin-bottom:.4rem;}
+header h1{font-size:1.8rem;font-weight:700;}
+header p{opacity:.85;font-size:.95rem;}
+nav.breadcrumb{background:#fff;border-bottom:1px solid var(--border);padding:.6rem 1.5rem;font-size:.82rem;color:var(--muted);}
+nav.breadcrumb a{color:var(--pah);text-decoration:none;}
+.container{max-width:1080px;margin:0 auto;padding:1.5rem;}
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:1.4rem;margin-bottom:1.4rem;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.card h2{font-size:1.1rem;font-weight:700;margin-bottom:.9rem;padding-bottom:.5rem;border-bottom:2px solid var(--pah);color:var(--pah-dark);}
+.card h3{font-size:.93rem;font-weight:700;margin:.8rem 0 .4rem;color:var(--pah-dark);}
+.badge{display:inline-block;padding:.13rem .48rem;border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.04em;white-space:nowrap;}
+.ver{background:#e6f4ea;color:#1b5e20;}.est{background:#fef3e2;color:#e65100;}.illus{background:#cce5ff;color:#1565c0;}.gap{background:#fdecea;color:#c62828;}
+.chart-wrap{position:relative;height:300px;margin:1rem 0;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th{background:var(--pah-dark);color:#fff;padding:.55rem .7rem;text-align:left;font-weight:600;}
+td{padding:.48rem .7rem;border-bottom:1px solid var(--border);}
+tr:nth-child(even) td{background:#f9fafb;}
+.era-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.9rem;margin:.8rem 0;}
+.era-card{border-radius:8px;padding:.9rem;border-left:4px solid;}
+.era-card h4{font-size:.85rem;font-weight:700;margin-bottom:.35rem;}
+.era-card p{font-size:.8rem;color:var(--muted);}
+.roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:.8rem 0;}
+.roe-card{border-radius:8px;padding:1rem;text-align:center;}
+.roe-bull{background:#e8f5e9;border:2px solid #1b5e20;}
+.roe-base{background:#e3f2fd;border:2px solid #1565c0;}
+.roe-bear{background:#fdecea;border:2px solid #c62828;}
+.roe-card .roe-val{font-size:1.8rem;font-weight:700;margin:.3rem 0;}
+.roe-card .roe-lbl{font-size:.8rem;color:var(--muted);}
+.nav-strip{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem;}
+.nav-btn{display:inline-block;background:var(--pah-dark);color:#fff;text-decoration:none;border-radius:6px;padding:.5rem 1rem;font-size:.82rem;font-weight:600;}
+footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem;}
+</style>
+</head>
+<body>
+<header>
+  <div class="hub-label">Lloyd's Risk Code Hub · Accident &amp; Health</div>
+  <h1>Personal Accident &amp; Health — Rates &amp; ROE Analysis</h1>
+  <p>Market cycle dynamics, pricing trends, loss ratios and return on equity scenarios across PA&amp;H sub-classes.</p>
+</header>
+<nav class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Personal Accident &amp; Health</a> › Rates &amp; ROE  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <!-- Chart 1: PA&H Rate Index -->
+  <div class="card">
+    <h2>Chart 1 — PA&amp;H Rate Index by Sub-Class (2010–2024) <span class="badge illus">ILLUS</span></h2>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:.7rem;">Rate change index: 100 = 2010 baseline. All data illustrative of market direction. <span class="badge illus">ILLUS</span></p>
+    <div class="chart-wrap"><canvas id="rateChart"></canvas></div>
+  </div>
+
+  <!-- Chart 2: Loss ratio -->
+  <div class="card">
+    <h2>Chart 2 — PA&amp;H Combined Loss Ratio (2010–2024) <span class="badge illus">ILLUS</span></h2>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:.7rem;">Blended PA&amp;H loss ratio illustrating COVID-19 spike and post-pandemic hardening. <span class="badge illus">ILLUS</span></p>
+    <div class="chart-wrap"><canvas id="lossChart"></canvas></div>
+  </div>
+
+  <!-- Chart 3: Medical inflation -->
+  <div class="card">
+    <h2>Chart 3 — UK Private Medical Inflation vs. CPI (2015–2024) <span class="badge illus">ILLUS</span></h2>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:.7rem;">Medical inflation consistently outpaces CPI, driving PMI and group IP re-rating. <span class="badge illus">ILLUS</span></p>
+    <div class="chart-wrap"><canvas id="inflChart"></canvas></div>
+  </div>
+
+  <!-- Market cycle eras -->
+  <div class="card">
+    <h2>Market Cycle — Key Eras</h2>
+    <div class="era-grid">
+      <div class="era-card" style="border-color:#1565c0;background:#f0f4ff;">
+        <h4 style="color:#1565c0;">2010–2015 — Soft Market</h4>
+        <p>Sustained softening. Low interest rates compressed investment returns. A&H capacity abundant; group PMI rates competitive. Travel insurance consolidated via aggregators driving down premium.</p>
+      </div>
+      <div class="era-card" style="border-color:#00695c;background:#f0fff4;">
+        <h4 style="color:#00695c;">2016–2019 — Stable / Mildly Hardening</h4>
+        <p>Post-PPI regulation improves conduct. Sports disability losses in rugby prompt selective hardening. Mental health frequency begins rising. Group IP duration risk re-emerges. Modest rate increases in disability lines.</p>
+      </div>
+      <div class="era-card" style="border-color:#c62828;background:#fff5f5;">
+        <h4 style="color:#c62828;">2020–2021 — COVID Shock</h4>
+        <p>Travel (KT) collapses. Pandemic exclusions deployed en masse. Long-COVID disability uncertainty. Lloyd's A&H losses elevated. Group life mortality increases in heavily affected regions. Capacity reduces in travel reinsurance.</p>
+      </div>
+      <div class="era-card" style="border-color:#e65100;background:#fff8f0;">
+        <h4 style="color:#e65100;">2022–2023 — Hard Cycle Begins</h4>
+        <p>Mental health claims +40% vs. pre-pandemic (EST). Long-COVID disability duration uncertainty. Medical inflation 8–10% p.a. (UK). Group PMI and IP re-rated. Travel rebuilds but pandemic exclusions remain. War PA active (Ukraine, Middle East).</p>
+      </div>
+      <div class="era-card" style="border-color:#f57f17;background:#fffdf0;">
+        <h4 style="color:#f57f17;">2024 — Sustained Hard Market</h4>
+        <p>Group IP pricing +10–25% in worst-affected segments (EST). PMI double-digit rate increases driven by NHS waiting list driven demand and medical inflation. Travel consolidating post-COVID losses. FCA Consumer Duty compliance costs impacting margins.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rate benchmark table -->
+  <div class="card">
+    <h2>2024 Rate Benchmark Table <span class="badge illus">ILLUS</span></h2>
+    <table>
+      <thead><tr><th>Sub-class</th><th>2019 Base Rate</th><th>2024 Rate</th><th>Direction</th><th>Primary Driver</th></tr></thead>
+      <tbody>
+        <tr><td>Individual PA (KA) — Class 1</td><td>~0.15–0.25% of benefit</td><td>~0.18–0.30%</td><td>▲ +10–20%</td><td>Mental health; disability definition broadening</td></tr>
+        <tr><td>Group Income Protection (KG)</td><td>~0.5–1.5% of payroll</td><td>~0.8–2.2%</td><td>▲ +30–50%</td><td>Long-COVID duration; mental health claims surge</td></tr>
+        <tr><td>Group PMI (KG)</td><td>~£1,200–1,800 PEPY</td><td>~£1,700–2,800 PEPY</td><td>▲ +30–55%</td><td>Medical inflation 8–10% p.a.; NHS waiting list demand</td></tr>
+        <tr><td>Travel — Europe annual (KT)</td><td>~£20–30 (age 18–35)</td><td>~£25–45 (age 18–35)</td><td>▲ +15–30%</td><td>Post-COVID loss absorption; medical cost abroad</td></tr>
+        <tr><td>Travel — USA/Worldwide (KT)</td><td>~£55–90 (age 18–35)</td><td>~£80–130 (age 18–35)</td><td>▲ +25–45%</td><td>US medical costs; claims frequency recovery</td></tr>
+        <tr><td>Sports Disability (KS) — Rugby</td><td>~0.8–1.5% of SI</td><td>~1.2–2.2% of SI</td><td>▲ +30–50%</td><td>Concussion / CTE concern; spinal injury; mental health</td></tr>
+        <tr><td>Creditor Protection (KP)</td><td>Rebuilding post-PPI</td><td>Recovering with stronger governance</td><td>→ Flat</td><td>Market rebuilding; FCA PROD compliance costs</td></tr>
+        <tr><td>Maritime PA / Crew (KM)</td><td>~0.3–0.8% of crew payroll</td><td>~0.4–1.0%</td><td>▲ +15–25%</td><td>Red Sea war risk; piracy risk areas; MLC 2006 obligations</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">PEPY = per employee per year. All rates illustrative. <span class="badge illus">ILLUS</span></p>
+  </div>
+
+  <!-- ROE scenarios -->
+  <div class="card">
+    <h2>ROE Scenarios — Lloyd's PA&amp;H Portfolio <span class="badge illus">ILLUS</span></h2>
+    <div class="roe-grid">
+      <div class="roe-card roe-bull">
+        <div class="roe-lbl">Bull Scenario</div>
+        <div class="roe-val" style="color:#1b5e20;">+14–20%</div>
+        <div style="font-size:.78rem;color:var(--muted);">Mental health frequency stabilises; medical inflation moderates to 5%; long-COVID duration shorter than reserved; travel recovers fully; hard pricing sustained</div>
+      </div>
+      <div class="roe-card roe-base">
+        <div class="roe-lbl">Base Scenario</div>
+        <div class="roe-val" style="color:#1565c0;">+6–12%</div>
+        <div style="font-size:.78rem;color:var(--muted);">Mental health claims remain elevated but manageable; medical inflation 8% p.a.; long-COVID reserves hold; group IP re-rated to adequate levels; Consumer Duty compliance cost absorbed</div>
+      </div>
+      <div class="roe-card roe-bear">
+        <div class="roe-lbl">Bear Scenario</div>
+        <div class="roe-val" style="color:#c62828;">−10–20%</div>
+        <div style="font-size:.78rem;color:var(--muted);">New pandemic event; long-COVID duration far exceeds reserving assumptions; mental health claims frequency doubles; medical inflation 12%+; regulatory intervention on premium increases</div>
+      </div>
+    </div>
+    <h3>Bear Scenario Trigger Events</h3>
+    <table>
+      <thead><tr><th>Trigger</th><th>Estimated Market Impact</th></tr></thead>
+      <tbody>
+        <tr><td>New pandemic event (COVID-comparable severity)</td><td>Travel collapses; group PA/IP claims surge; billions across Lloyd's A&amp;H book</td></tr>
+        <tr><td>Long-COVID: disability duration 5+ years (avg) for severe cases</td><td>Group IP reserve strengthening; adverse development charges across market</td></tr>
+        <tr><td>Mental health claims frequency +100% (systemic social health crisis)</td><td>Group PMI and IP combined ratio breaks 120%; capacity withdraws</td></tr>
+        <tr><td>FCA enforcement action on Consumer Duty A&amp;H failures</td><td>Redress obligations; reputation damage to distribution channels (cf. PPI)</td></tr>
+        <tr><td>UK recession → employer group scheme cancellations</td><td>Volume reduction; remaining book adversely selected (ill employees more likely to retain)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="nav-strip">
+    <a class="nav-btn" href="underwriting.html">← Underwriting</a>
+    <a class="nav-btn" href="risk-mitigation.html">Risk Mitigation →</a>
+  </div>
+</div>
+
+<script>
+const yrs=['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'];
+
+// Chart 1: Rate index
+new Chart(document.getElementById('rateChart'),{
+  type:'line',
+  data:{
+    labels:yrs,
+    datasets:[
+      {label:'Group Income Protection',data:[100,98,96,95,94,93,95,98,103,108,110,118,138,158,175],borderColor:'#00695c',backgroundColor:'rgba(0,105,92,.1)',tension:.3,fill:true},
+      {label:'Group PMI',data:[100,102,103,104,105,105,107,110,115,118,115,120,135,155,175],borderColor:'#1565c0',backgroundColor:'rgba(21,101,192,.08)',tension:.3},
+      {label:'Travel Insurance (KT)',data:[100,99,98,96,95,94,93,92,90,88,65,70,82,95,105],borderColor:'#e65100',backgroundColor:'rgba(230,81,0,.08)',tension:.3},
+      {label:'Sports Disability (KS)',data:[100,102,105,108,112,115,120,125,128,130,128,132,145,158,170],borderColor:'#6a1b9a',backgroundColor:'rgba(106,27,154,.08)',tension:.3},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{title:{display:true,text:'Rate Index (2010=100)'},beginAtZero:false,min:60,max:200}}}
+});
+
+// Chart 2: Loss ratio
+new Chart(document.getElementById('lossChart'),{
+  type:'bar',
+  data:{
+    labels:yrs,
+    datasets:[
+      {label:'Loss Ratio %',data:[72,70,68,67,68,67,65,64,66,68,105,92,80,78,75],backgroundColor:yrs.map((_,i)=>i>=10&&i<=11?'rgba(198,40,40,.75)':'rgba(0,105,92,.65)'),borderWidth:0},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},annotation:{annotations:{line:{type:'line',yMin:75,yMax:75,borderColor:'#e65100',borderWidth:2,label:{content:'75% target',enabled:true,position:'end',font:{size:10}}}}}},scales:{y:{title:{display:true,text:'Loss Ratio %'},min:50,max:115,ticks:{callback:v=>v+'%'}}}}
+});
+
+// Chart 3: Medical inflation
+new Chart(document.getElementById('inflChart'),{
+  type:'line',
+  data:{
+    labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+    datasets:[
+      {label:'UK Private Medical Inflation',data:[5.1,5.3,6.0,6.4,6.8,5.5,6.2,8.0,9.5,10.0],borderColor:'#c62828',backgroundColor:'rgba(198,40,40,.1)',tension:.3,fill:true,borderWidth:2},
+      {label:'UK CPI Inflation',data:[0.0,0.7,2.7,2.5,1.8,-0.1,3.1,9.0,6.7,2.6],borderColor:'#1565c0',backgroundColor:'rgba(21,101,192,.08)',tension:.3,borderDash:[5,3]},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{title:{display:true,text:'Annual % Change'},ticks:{callback:v=>v+'%'}}}}
+});
+</script>
+<footer>Risk Code Hub · Personal Accident &amp; Health · Rates &amp; ROE · All rates and scenarios illustrative <span class="badge illus">ILLUS</span> · Not for regulatory use</footer>
+</body>
+</html>

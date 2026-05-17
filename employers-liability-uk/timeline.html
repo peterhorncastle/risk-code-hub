@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Employers Liability UK (W3) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b5e00;
+      --hub-dark:      #3e2f00;
+      --hub-light:     #fdf8ec;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #4e342e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#3e2f00 0%,#7b5e00 55%,#a07c00 100%);
+      --header-sub:    #ffe082;
+      --bc:#7b5e00; --bc-dark:#3e2f00; --bc-light:#fdf8ec;
+      --bc-accent:#c8a84b; --bc-mid:#ffe082;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2b1f00;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.18) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ffe082;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#3e2f00;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ffe082;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #ffe082;}
+    .filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+    .filter-btn{padding:6px 14px;border:2px solid #ddd;border-radius:20px;background:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filter-btn:hover{border-color:var(--hub-accent);}
+    .filter-btn.active{background:var(--hub-primary);color:#fff;border-color:var(--hub-primary);}
+    .filter-btn.f-legislative{border-color:#c62828;}
+    .filter-btn.f-legislative.active,.filter-btn.f-legislative:hover{background:#c62828;border-color:#c62828;color:#fff;}
+    .filter-btn.f-caselaw{border-color:#1565c0;}
+    .filter-btn.f-caselaw.active,.filter-btn.f-caselaw:hover{background:#1565c0;border-color:#1565c0;color:#fff;}
+    .filter-btn.f-market{border-color:#6a1b9a;}
+    .filter-btn.f-market.active,.filter-btn.f-market:hover{background:#6a1b9a;border-color:#6a1b9a;color:#fff;}
+    .filter-btn.f-disease{border-color:#1a5c2a;}
+    .filter-btn.f-disease.active,.filter-btn.f-disease:hover{background:#1a5c2a;border-color:#1a5c2a;color:#fff;}
+    .filter-btn.f-fraud{border-color:#e65100;}
+    .filter-btn.f-fraud.active,.filter-btn.f-fraud:hover{background:#e65100;border-color:#e65100;color:#fff;}
+    .filter-btn.f-tech{border-color:#00838f;}
+    .filter-btn.f-tech.active,.filter-btn.f-tech:hover{background:#00838f;border-color:#00838f;color:#fff;}
+    .tl-item{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;gap:20px;align-items:flex-start;transition:all 0.2s;}
+    .tl-item:not(.show){display:none;}
+    .tl-item.show{display:flex;}
+    .tl-year{font-size:1.1rem;font-weight:700;color:var(--hub-primary);min-width:48px;flex-shrink:0;}
+    .tl-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+    .dot-legislative{background:#c62828;}
+    .dot-caselaw{background:#1565c0;}
+    .dot-market{background:#6a1b9a;}
+    .dot-disease{background:#1a5c2a;}
+    .dot-fraud{background:#e65100;}
+    .dot-tech{background:#00838f;}
+    .tl-body{flex:1;}
+    .tl-badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 6px;border-radius:4px;margin-bottom:6px;}
+    .tb-legislative{background:#c62828;color:#fff;}
+    .tb-caselaw{background:#1565c0;color:#fff;}
+    .tb-market{background:#6a1b9a;color:#fff;}
+    .tb-disease{background:#1a5c2a;color:#fff;}
+    .tb-fraud{background:#e65100;color:#fff;}
+    .tb-tech{background:#00838f;color:#fff;}
+    .tl-body h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-body p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#444;}
+    .legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+    footer{background:#3e2f00;color:#ffe082;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Employers Liability UK (W3)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key events in UK employers' liability law, regulation and market development — 1880 to 2024</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#c62828;"></span> Legislative</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#1565c0;"></span> Case Law</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#6a1b9a;"></span> Market Structural</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#1a5c2a;"></span> Occupational Disease</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e65100;"></span> Fraud / Reform</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#00838f;"></span> Technology Shift</div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterTL('all',this)">All Events</button>
+    <button class="filter-btn f-legislative" onclick="filterTL('legislative',this)">Legislative</button>
+    <button class="filter-btn f-caselaw" onclick="filterTL('caselaw',this)">Case Law</button>
+    <button class="filter-btn f-market" onclick="filterTL('market',this)">Market Structural</button>
+    <button class="filter-btn f-disease" onclick="filterTL('disease',this)">Occupational Disease</button>
+    <button class="filter-btn f-fraud" onclick="filterTL('fraud',this)">Fraud / Reform</button>
+    <button class="filter-btn f-tech" onclick="filterTL('tech',this)">Technology Shift</button>
+  </div>
+
+  <div id="timeline-container">
+
+    <div class="tl-item show" data-type="legislative">
+      <div class="tl-year">1880</div>
+      <div class="tl-dot dot-legislative"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-legislative">LEGISLATIVE</span>
+        <h4>Employers' Liability Act 1880</h4>
+        <p>First UK legislation partially abolishing the doctrine of common employment — workers could sue employers for injuries caused by fellow employees in specified circumstances. Limited in scope and subject to contracting-out, but established the principle of employer liability in English law.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="legislative">
+      <div class="tl-year">1897</div>
+      <div class="tl-dot dot-legislative"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-legislative">LEGISLATIVE</span>
+        <h4>Workmen's Compensation Act 1897</h4>
+        <p>Landmark no-fault compensation legislation for workers in factories, mines, railways and quarries. Employer liable regardless of fault; compensation fixed at 50% of average weekly earnings. First de facto compulsory employer liability market created in the UK. Extended to all occupations by the 1906 Act. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="legislative">
+      <div class="tl-year">1969</div>
+      <div class="tl-dot dot-legislative"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-legislative">LEGISLATIVE</span>
+        <h4>Employers' Liability (Compulsory Insurance) Act 1969</h4>
+        <p>Foundational legislation requiring every UK employer to hold approved EL insurance. Criminal offence not to hold cover; fine up to £2,500 per day per employer. Minimum indemnity limit later set at £5 million by SI 1998/2573. Came into force 1 January 1972. <sup>[L1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="legislative">
+      <div class="tl-year">1974</div>
+      <div class="tl-dot dot-legislative"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-legislative">LEGISLATIVE</span>
+        <h4>Health and Safety at Work Act 1974</h4>
+        <p>Created the Health and Safety Executive (HSE) and established the general employer duty to ensure health, safety and welfare "so far as is reasonably practicable." Foundation of modern workplace safety regulation; breach creates both criminal and civil liability. RIDDOR reporting obligations established under subsequent regulations. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="legislative">
+      <div class="tl-year">1988</div>
+      <div class="tl-dot dot-legislative"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-legislative">LEGISLATIVE</span>
+        <h4>Control of Substances Hazardous to Health Regulations 1988 (COSHH)</h4>
+        <p>Imposed systematic duties on employers to assess and control workers' exposure to hazardous substances — chemicals, biological agents, dust, fumes. Key regulatory framework underpinning occupational disease EL claims for chemical exposure, coal dust, silica and other respiratory hazards. Regularly updated; COSHH 2002 is the current version.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="disease">
+      <div class="tl-year">1990</div>
+      <div class="tl-dot dot-disease"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-disease">OCCUPATIONAL DISEASE</span>
+        <h4>Asbestos Disease Claims Wave Begins</h4>
+        <p>Mesothelioma cases — with 20–50 year latency from asbestos exposure in the 1940s–1970s — begin appearing in courts in large numbers. Shipyard workers, construction workers and insulators suffer disproportionately. Turner &amp; Newall (Cape plc) faces claims exceeding £800m. Lloyd's asbestos reserves require decades of development. <sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="market">
+      <div class="tl-year">1998</div>
+      <div class="tl-dot dot-market"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-market">MARKET STRUCTURAL</span>
+        <h4>EL (Compulsory Insurance) Regulations 1998 — Limit Raised to £5m</h4>
+        <p>SI 1998/2573 raised the minimum indemnity limit under the EL (Compulsory Insurance) Act 1969 from £2 million to £5 million per occurrence — reflecting inflation and increasing severity of serious injury claims. <sup>[L2]</sup> Certificates now had to be kept available for 40 years (later reduced) to address long-tail disease claims requiring policy archaeology.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="disease">
+      <div class="tl-year">1999</div>
+      <div class="tl-dot dot-disease"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-disease">OCCUPATIONAL DISEASE</span>
+        <h4>British Coal HAVS/VWF Group Settlement — approx. £2bn</h4>
+        <p>Government settles group action by former British Coal miners suffering hand-arm vibration syndrome (vibration white finger / HAVS) from decades of pneumatic drill use. Approximately £2 billion settlement — the largest occupational disease compensation settlement in UK history at that time. Established benchmark for large group disease actions. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="caselaw">
+      <div class="tl-year">2002</div>
+      <div class="tl-dot dot-caselaw"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-caselaw">CASE LAW</span>
+        <h4>Fairchild v Glenhaven Funeral Services [2002] UKHL 22</h4>
+        <p>House of Lords establishes the "Fairchild exception" — where scientific uncertainty prevents a mesothelioma claimant from proving which employer's asbestos exposure caused the cancer, any employer who materially contributed to the risk of exposure is liable. Dramatically extended mesothelioma defendant pool. Later modified by Barker v Corus [2006] and Compensation Act 2006. <sup>[L4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="caselaw">
+      <div class="tl-year">2006</div>
+      <div class="tl-dot dot-caselaw"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-caselaw">CASE LAW</span>
+        <h4>Barker v Corus UK [2006] UKHL 20</h4>
+        <p>House of Lords modifies Fairchild — held that where multiple employers contributed to asbestos exposure risk, each defendant is only proportionately liable (not jointly and severally). Claimant bears risk of insolvent defendants. Parliament reversed this by Section 3 of the Compensation Act 2006 — restoring joint and several liability for mesothelioma. <sup>[L7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="market">
+      <div class="tl-year">2003</div>
+      <div class="tl-dot dot-market"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-market">MARKET STRUCTURAL</span>
+        <h4>Courts Act 2003 — Ogden Tables Statutory Basis</h4>
+        <p>Courts Act 2003 <sup>[L8]</sup> gave the Ogden Tables (Government Actuary's Department actuarial tables for personal injury multipliers) statutory basis, ensuring courts use them for calculating future loss lump sums. The discount rate applied to Ogden multipliers — then +2.5% — became a key variable for EL long-tail reserving. Later Ogden editions refined mortality assumptions and gender-neutral tables.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="fraud">
+      <div class="tl-year">2010</div>
+      <div class="tl-dot dot-fraud"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-fraud">FRAUD / REFORM</span>
+        <h4>MOJ EL/PL Claims Portal Launch</h4>
+        <p>Ministry of Justice launches the online portal for EL and PL claims up to £10,000 (later raised to £25,000) with fixed recoverable costs and strict timetables. Aimed at reducing friction and legal costs. Generated significant claims management company (CMC) activity. Whiplash and minor injury claims surge through portal; mixed impact on overall EL claims economics.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="legislative">
+      <div class="tl-year">2012</div>
+      <div class="tl-dot dot-legislative"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-legislative">LEGISLATIVE</span>
+        <h4>Legal Aid, Sentencing and Punishment of Offenders Act 2012 (LASPO)</h4>
+        <p>Jackson reforms implemented: success fees under CFAs no longer recoverable from defendants; ATE premiums no longer recoverable. Qualified One Way Costs Shifting (QOCS) introduced — personal injury claimants protected from adverse costs orders. Fundamentally changed the economics of EL litigation for both claimants and defendants. <sup>[L6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="market">
+      <div class="tl-year">2017</div>
+      <div class="tl-dot dot-market"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-market">MARKET STRUCTURAL</span>
+        <h4>Ogden Discount Rate Set at −0.75%</h4>
+        <p>Lord Chancellor Liz Truss sets Ogden discount rate at −0.75% in February 2017 — far below market expectations of approximately 0% to +1%. Catastrophic for reserving: every £1m of future losses required a much larger lump sum at a negative rate. Lloyd's and commercial EL insurers collectively reserved hundreds of millions in additional IBNR. ABI estimated industry cost of £6bn+. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="legislative">
+      <div class="tl-year">2018</div>
+      <div class="tl-dot dot-legislative"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-legislative">LEGISLATIVE</span>
+        <h4>Civil Liability Act 2018</h4>
+        <p>Reformed the discount rate-setting mechanism — new 5-year review cycle by Lord Chancellor using "low risk" investment assumption. Also introduced whiplash soft tissue injury tariffs (RTA claims below £5,000) implemented via the OIC portal. Provided structural relief for the Ogden rate shock, enabling rates to be set at +0.25% in 2019. <sup>[L5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="market">
+      <div class="tl-year">2019</div>
+      <div class="tl-dot dot-market"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-market">MARKET STRUCTURAL</span>
+        <h4>Ogden Discount Rate Revised to +0.25%</h4>
+        <p>Under the new Civil Liability Act 2018 framework, Lord Chancellor sets discount rate at +0.25% — partial relief from −0.75% shock. Rate expected to remain stable until next 5-year review. +0.25% remains significantly lower than the +2.5% that applied 2001–2017, with structural impact on large injury award sizes. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="tech">
+      <div class="tl-year">2020</div>
+      <div class="tl-dot dot-tech"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-tech">TECHNOLOGY SHIFT</span>
+        <h4>COVID-19 — Key Worker EL Claims and Mental Health Surge</h4>
+        <p>COVID-19 pandemic generates new EL claims landscape: healthcare, care home, retail and transport workers pursue claims arguing employers failed to provide adequate PPE or implement social distancing. PTSD and work-related stress claims surge from frontline workers. Remote working creates new DSE (display screen equipment) and ergonomic EL exposures. Latent COVID claims still developing. <sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="tech">
+      <div class="tl-year">2021</div>
+      <div class="tl-dot dot-tech"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-tech">TECHNOLOGY SHIFT</span>
+        <h4>OIC Portal — Whiplash Tariff Implementation</h4>
+        <p>Official Injury Claim (OIC) portal launched for road traffic whiplash claims under the new Civil Liability Act tariff system. While primarily affecting motor/liability, the technology shift to online dispute resolution has influenced expectations for EL small claims handling. CMC activity redirected toward EL stress and disease claims as whiplash returns reduced.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="legislative">
+      <div class="tl-year">2023</div>
+      <div class="tl-dot dot-legislative"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-legislative">LEGISLATIVE</span>
+        <h4>Data (Use and Access) Act 2023 (DSA) — Employer Data Obligations</h4>
+        <p>Digital and data reform legislation affecting how employers process and retain employee health data. Relevant to EL underwriting information gathering and claims handling — medical records, rehabilitation data and occupational health information are sensitive data under UK GDPR. DSA modernises data sharing frameworks with implications for claims evidence and employer HR systems.</p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-type="disease">
+      <div class="tl-year">2024</div>
+      <div class="tl-dot dot-disease"></div>
+      <div class="tl-body">
+        <span class="tl-badge tb-disease">OCCUPATIONAL DISEASE</span>
+        <h4>Mesothelioma Claims Continue — HSE Reports ~2,700 Deaths p.a.</h4>
+        <p>HSE confirms approximately 2,700 mesothelioma deaths annually in Great Britain — a plateau after decades of increase as older exposure cohorts die. Claims management through the Mesothelioma Payment Scheme (for uninsured employer claims) and Employers' Liability Tracing Office (ELTO) database continue to support claimants against insolvent or untraceable employers. <sup>[I7]</sup></p>
+      </div>
+    </div>
+
+  </div><!-- end timeline-container -->
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Employers Liability UK (W3) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filterTL(type, btn) {
+  // Update button states
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // Show/hide items
+  document.querySelectorAll('.tl-item').forEach(item => {
+    if (type === 'all' || item.dataset.type === type) {
+      item.classList.add('show');
+    } else {
+      item.classList.remove('show');
+    }
+  });
+}
+</script>
+</body>
+</html>

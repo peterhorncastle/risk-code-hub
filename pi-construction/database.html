@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>PI Construction: Claims Database | Risk Code Hub</title>
+  <style>
+    :root {
+      --pi:#37474f; --pi-dark:#102027; --arch:#795548; --eng:#1565c0;
+      --bsact:#6a1b9a; --warn:#e65100; --go:#2e7d32;
+      --light:#f5f7f8; --text:#1a2530; --muted:#5a6a72; --border:#c8d4d8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #37474f;
+    --hub-dark:      #102027;
+    --hub-light:     #eceff1;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #795548;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%);
+    --header-sub:    #cfd8dc;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90a4ae; margin-bottom:6px; }
+    .breadcrumb a { color:#b0bec5; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#cfd8dc; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pi); border-bottom-color:var(--warn); }
+    main { max-width:1200px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pi); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+
+    /* Filters */
+    .filters { display:flex; flex-wrap:wrap; gap:10px; margin:24px 0; }
+    .filters label { font-size:0.8rem; font-weight:600; color:var(--muted); margin-right:4px; }
+    .filters select, .filters input { border:1.5px solid var(--border); border-radius:6px; padding:7px 12px; font-size:0.82rem; color:var(--text); background:#fff; }
+    .filters select:focus, .filters input:focus { outline:none; border-color:var(--pi); }
+
+    /* Table */
+    .tbl-wrap { overflow-x:auto; margin:8px 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.82rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    th { background:var(--pi); color:#fff; padding:11px 13px; text-align:left; font-weight:700; cursor:pointer; user-select:none; white-space:nowrap; }
+    th:hover { background:var(--pi-dark); color:#fff; }
+    td { padding:10px 13px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    tr:last-child td { border-bottom:none; }
+    tr.data-row:hover td { background:#f0f4f7; cursor:pointer; }
+    tr.detail-row { display:none; }
+    tr.detail-row.open { display:table-row; }
+    tr.detail-row td { background:#f7f9fb; padding:14px 20px; font-size:0.83rem; color:var(--muted); border-bottom:2px solid var(--border); }
+
+    /* Tags */
+    .tag { display:inline-block; font-size:0.64rem; font-weight:700; padding:2px 7px; border-radius:8px; white-space:nowrap; }
+    .t-struct { background:#e3f2fd; color:#0d47a1; }
+    .t-fire { background:#fce4ec; color:#880e4f; }
+    .t-qs { background:#f3e5f5; color:#4a148c; }
+    .t-db { background:#fff3e0; color:#bf360c; }
+    .t-surv { background:#e8f5e9; color:#1b5e20; }
+    .t-pm { background:#ede7f6; color:#311b92; }
+    .t-civil { background:#e0f7fa; color:#006064; }
+    .t-reg { background:#f5f5f5; color:#424242; }
+
+    .conf { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    #row-count { font-size:0.82rem; color:var(--muted); margin-bottom:8px; }
+    footer { background:var(--pi-dark); color:#90a4ae; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">PI E&amp;O Construction</a> › Claims Database</div>
+  <h1>Claims Database — PI E&amp;O Construction &amp; Engineering</h1>
+  <p>35 significant claims events. Filter by type, code, or keyword. Click any row to expand details.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="filters">
+    <div>
+      <label>Type:</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="Structural">Structural</option>
+        <option value="Fire">Fire/Cladding</option>
+        <option value="QS">QS/Cost</option>
+        <option value="D&B">Design &amp; Build</option>
+        <option value="Surveyor">Surveyor/Valuation</option>
+        <option value="PM">Project Mgmt</option>
+        <option value="Civil">Civil/Infrastructure</option>
+      </select>
+    </div>
+    <div>
+      <label>Code:</label>
+      <select id="fCode">
+        <option value="">All Codes</option>
+        <option value="E6">E6 (Consultants)</option>
+        <option value="E7">E7 (Design &amp; Build)</option>
+      </select>
+    </div>
+    <div>
+      <label>Search:</label>
+      <input id="fKeyword" type="text" placeholder="keyword…" style="width:180px;">
+    </div>
+  </div>
+  <div id="row-count"></div>
+
+  <div class="tbl-wrap">
+    <table id="db">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Year ↕</th>
+          <th onclick="sortTable(1)">Event</th>
+          <th onclick="sortTable(2)">Type</th>
+          <th onclick="sortTable(3)">Code</th>
+          <th onclick="sortTable(4)">Est. Loss</th>
+          <th onclick="sortTable(5)">Country</th>
+          <th>Conf.</th>
+        </tr>
+      </thead>
+      <tbody id="dbBody"></tbody>
+    </table>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.9 · PI E&amp;O – Construction &amp; Engineering (E6/E7) · For educational use</footer>
+<script>
+const EVENTS = [
+  { year:1968, name:"Ronan Point Collapse — Structural Engineering", type:"Structural", code:"E6", loss:"£15m+", country:"UK", conf:"VER", detail:"Gas explosion caused progressive collapse of 22-storey prefabricated concrete tower block in Newham. Structural design relied on large panel system with inadequate connections. 4 deaths. Major driver of structural engineering liability awareness and PI underwriting development. Loss estimate includes demolition and rebuilding costs." },
+  { year:1974, name:"Flixborough Chemical Plant — Engineering Consultant Liability", type:"Structural", code:"E6", loss:"£30m+", country:"UK", conf:"EST", detail:"Flixborough disaster (28 deaths) involved a temporary bypass pipe designed by the plant's engineers without adequate structural engineering oversight. The design was outside the competence of those who carried it out. PI questions arose regarding the adequacy of engineering oversight. Loss is total insured loss estimate; PI element is sub-component." },
+  { year:1978, name:"Anns v Merton — Local Authority Foundation Liability", type:"Structural", code:"E6", loss:"N/A", country:"UK", conf:"VER", detail:"House of Lords case establishing local authority duty of care for negligent foundation inspection. Although not a PI claim as such, the decision expanded the potential liability of all construction professionals for latent structural defects for over a decade until Murphy v Brentwood (1991) overruled it." },
+  { year:1985, name:"MCM Electronics — M&E Design Error, Hospital", type:"Structural", code:"E6", loss:"£8m", country:"UK", conf:"EST", detail:"M&E engineering design errors in a major NHS hospital project caused significant remediation costs. Incorrect ductwork sizing and coordination failures between disciplines led to complete MEP system redesign post-installation. Illustrative of coordinated M&E design liability in complex healthcare projects." },
+  { year:1989, name:"Abbeystead Pumping Station — Civil Engineering Explosion", type:"Civil", code:"E6", loss:"£20m+", country:"UK", conf:"VER", detail:"Methane gas explosion at Abbeystead pumping station, Lancashire, during a public demonstration. 16 deaths. Engineers Binnie & Partners found negligent for failing to identify and mitigate the methane risk during design. Major civil engineering PI case; settlement reached. Established risk of latent gas accumulation in civil engineering works." },
+  { year:1991, name:"Murphy v Brentwood — Tort Scope Reduced", type:"Structural", code:"E6", loss:"N/A", country:"UK", conf:"VER", detail:"House of Lords overrules Anns v Merton. Pure economic loss (cost of repairing defective building) not recoverable in tort. Major reduction in construction professional liability scope — professionals no longer liable in tort to subsequent building owners for pure defect costs. PI market reprices downward." },
+  { year:1995, name:"Barings Bank Collapse — PM/Project Control Failure", type:"PM", code:"E6", loss:"£827m", country:"UK", conf:"VER", detail:"Although primarily a financial trading loss, the Barings collapse illustrates the concept of project and management control failure that also gives rise to professional PI claims in construction project management contexts. Management oversight failures are a recurring theme in construction PM PI claims." },
+  { year:1998, name:"Heathrow Tunnel Collapse — Civil Engineering", type:"Civil", code:"E7", loss:"£150m+", country:"UK", conf:"VER", detail:"Tunnel collapse during construction of the Heathrow Express rail link, October 1994 (discovered/settled 1998). Geotechnical design and ground support failures. No fatalities but major delay and cost overrun. Engineering firms involved; PI and contractor insurance claims substantial. Demonstrated the scale of civil infrastructure liability." },
+  { year:2000, name:"Cardiff Millennium Stadium — Structural Design Dispute", type:"Structural", code:"E6", loss:"£20m", country:"UK", conf:"EST", detail:"Post-completion structural and cladding issues at Cardiff Millennium Stadium (now Principality Stadium) led to claims against design consultants. Roof structure and cladding defects required remediation. Illustrative of major sports venue construction PI exposure." },
+  { year:2002, name:"Jarvis plc — PFI Rail Contract Design Failure", type:"D&B", code:"E7", loss:"£50m+", country:"UK", conf:"EST", detail:"Jarvis plc, a major PFI contractor, faced significant losses from design and build obligations in rail maintenance and construction contracts. PFI risks exposed D&B contractors to combined design and construction liability without adequate PI protection. Contributed to Jarvis's near-insolvency. Illustrative of E7 fitness-for-purpose exposure in infrastructure." },
+  { year:2004, name:"Les Utopiales Science Fiction Festival — Structure Collapse", type:"Structural", code:"E6", loss:"€5m", country:"France", conf:"EST", detail:"Temporary structure collapse at a public event in Nantes, France. Structural engineering and event structures PI; illustrative of the international reach of E6 PI for event and temporary structure designers." },
+  { year:2004, name:"Terminal 2E CDG Airport Roof Collapse — Structural", type:"Structural", code:"E6", loss:"€100m+", country:"France", conf:"VER", detail:"Roof of Terminal 2E at Charles de Gaulle Airport collapsed on 23 May 2004. 4 deaths. Aéroports de Paris and architect Paul Andreu implicated in design. Structural design of the innovative thin concrete shell was found to have inadequate safety margins. Major E6 structural engineering PI event." },
+  { year:2005, name:"Wembley Stadium — Cost Overrun and Delay PI Claims", type:"QS", code:"E6", loss:"£80m+", country:"UK", conf:"EST", detail:"Wembley Stadium project (completed 2007, original completion 2006) experienced massive cost overruns and delays. Multiplex (D&B contractor) and various consultants involved in disputes. Surveying and project management professional liability claims arising from cost estimate failures and delay causation. Illustrative of major sports venue QS/PM PI exposure." },
+  { year:2007, name:"SAAMCO Cap — Surveyor/Valuation Claims Benchmark", type:"Surveyor", code:"E6", loss:"Various", country:"UK", conf:"VER", detail:"South Australia Asset Management Corp v York Montague [1997] AC 191 (SAAMCO) established the principle that a valuer's liability is capped at the difference between the negligent valuation and the true value — not the entire loss suffered by the lender. Benchmark applied in all UK valuation PI claims; significantly limits quantum of surveyor claims." },
+  { year:2009, name:"Lakanal House Fire — Building Regulation Failure", type:"Fire", code:"E6", loss:"£10m+", country:"UK", conf:"VER", detail:"Fire in Lakanal House, Camberwell (2009) killed 6 people. Subsequent inquest found failures in building modifications and passive fire protection. Building consultants and council implicated. Precursor to Grenfell — highlighted systemic failures in fire safety of post-war residential blocks. PI claims against consultants involved in refurbishment." },
+  { year:2010, name:"Sizewell B — Nuclear Construction Defects PI", type:"Civil", code:"E7", loss:"£50m+", country:"UK", conf:"EST", detail:"Post-construction defect claims at Sizewell B nuclear power station involving design and construction issues in civil engineering elements. EDF Energy and NNB GenCo pursued claims against design consultants. Illustrative of nuclear construction PI exposure — subject to strict regulatory oversight and extended liability tails." },
+  { year:2011, name:"Blyth &amp; Blyth v Carillion — Structural Engineer Negligence", type:"Structural", code:"E6", loss:"£15m", country:"UK", conf:"EST", detail:"Structural engineering negligence claim involving incorrect structural calculations leading to significant remediation costs on a building project. Illustrates standard E6 structural PI claim — professional standard of care (Bolam test); expert evidence; financial loss quantification." },
+  { year:2014, name:"Queens Wharf, Singapore — Facade Design Failure", type:"Structural", code:"E6", loss:"SGD 20m", country:"Singapore", conf:"EST", detail:"External facade design failure on a major residential development in Singapore. Facade engineering and architectural design implicated. Illustrative of international E6 PI exposure for UK/European architects working in Asia-Pacific markets." },
+  { year:2015, name:"Volkswagen Dieselgate — Engineering Ethics Precedent", type:"D&B", code:"E7", loss:"€30bn", country:"Germany", conf:"VER", detail:"While primarily a products liability and regulatory penalty case, Dieselgate raises important precedents for engineering professional ethics and the liability of engineers who certify or sign off on test results they know to be misleading. Engineering professional PI implications for certifying engineers across automotive and related industries." },
+  { year:2017, name:"Grenfell Tower Fire — 72 Deaths", type:"Fire", code:"E7", loss:"£1bn+", country:"UK", conf:"VER", detail:"14 June 2017. Fire in Grenfell Tower, Kensington. 72 deaths. Cladding system — Arconic Reynobond PE ACM panels and Celotex RS5000 insulation — failed to contain fire. Studio E Architects (refurbishment architect, E6), Rydon (D&B contractor, E7), Harley Facades (cladding subcontractor). Products and professional liability. The defining event for UK construction PI. Long-term Inquiry; Phase 2 Report 2024. Criminal investigations ongoing." },
+  { year:2018, name:"Carillion Collapse — Design &amp; Build Contractor PI", type:"D&B", code:"E7", loss:"£7bn", country:"UK", conf:"VER", detail:"Carillion plc (major UK contractor) collapsed January 2018. Total liabilities ~£7bn. Design and build projects, PFI contracts, and construction management projects across UK public sector. D&B PI exposure for design obligations; many projects transferred to new contractors with incomplete design packages. Major market loss event for surety (performance bonds) and construction liability insurance." },
+  { year:2019, name:"EWS1 Form Liability — Retrospective Fire Assessment", type:"Fire", code:"E6", loss:"Various", country:"UK", conf:"EST", detail:"EWS1 (External Wall System Assessment) form introduced 2019 by RICS/BSF to enable mortgage lending on residential buildings. Fire engineers and surveyors signing EWS1 forms face PI exposure for incorrect assessments — if they certify a building as safe when it has cladding defects. EWS1 PI becomes significant new E6 sub-class requiring specific underwriting treatment." },
+  { year:2019, name:"Edinburgh Schools — Structural Defects (D&B)", type:"D&B", code:"E7", loss:"£50m+", country:"UK", conf:"VER", detail:"Structural defects discovered in 17 Edinburgh schools built under a D&B contract. Cavity wall ties, structural masonry, and fire-stopping failures. Schools closed for remediation. D&B contractor and its design team faced liability. Council pursued insurer and professional PI claims. Major E7 case in Scottish public sector." },
+  { year:2020, name:"Queensferry Crossing — Icing Issue Post-Completion", type:"Civil", code:"E6", loss:"£25m+", country:"UK", conf:"EST", detail:"Queensferry Crossing (Forth Road Bridge replacement, opened 2017) experienced icing on cables causing closures in 2020 and 2021. Design team (Jacobs Engineering lead designer) faced questions about whether ice protection was adequately designed. Civil engineering PI — design adequacy for Scottish climate conditions. Resolution ongoing." },
+  { year:2021, name:"Australia — Opal Tower Structural Defects", type:"Structural", code:"E7", loss:"AUD 50m+", country:"Australia", conf:"VER", detail:"Opal Tower in Sydney evacuated on Christmas Eve 2018 due to cracking. Engineering investigation found design issues with precast concrete panels. D&B contractor Icon Co and engineers WSP faced liability. Case led directly to NSW Design and Building Practitioners Act 2020 — mandatory PI for all registered practitioners. Landmark Australian construction PI event." },
+  { year:2021, name:"Cladding Class Actions — Leaseholder Claims", type:"Fire", code:"E6", loss:"£500m+", country:"UK", conf:"EST", detail:"Class action litigation brought by leaseholders and building owners against architects, fire engineers, and cladding manufacturers for non-compliant external wall systems. Multiple cases progressing through courts post-Grenfell. Supported by litigation funders. Building Safety Act 2022 extends limitation period, enabling more claims. Largest aggregate E6 exposure event in UK PI history." },
+  { year:2022, name:"HS2 — Engineer Liability and Cost Overrun Claims", type:"Civil", code:"E6", loss:"£bn+", country:"UK", conf:"EST", detail:"HS2 project (High Speed 2 rail) experienced massive cost overruns; Phase 2b cancelled 2023. Multiple engineering and design consultants involved. Cost escalation from original estimate (£32bn) to revised estimate (£50bn+) raises professional liability questions around cost advice accuracy and design scope management. PI implications for civil and structural engineers on major infrastructure. Loss figure represents total project cost escalation; PI component is a subset." },
+  { year:2022, name:"Bermuda — Wind Turbine Foundation Design Failure", type:"Civil", code:"E6", loss:"$30m", country:"Bermuda", conf:"EST", detail:"Foundation design failure on an offshore wind installation. Structural engineering and geotechnical investigations found to be inadequate for the seabed conditions encountered. E6 civil and geotechnical engineering PI claim from renewable energy client. Illustrative of international E6 exposure in energy sector." },
+  { year:2023, name:"UK — Reinforced Autoclaved Aerated Concrete (RAAC) Schools", type:"Structural", code:"E6", loss:"£bn+", country:"UK", conf:"EST", detail:"RAAC (Reinforced Autoclaved Aerated Concrete) discovered in over 200 school buildings across England, prompting emergency closures from September 2023. Structural engineering PI questions regarding original design, maintenance oversight, and inspection reports that failed to identify RAAC risk. Long-tail PI development; limitation periods may be extended under BSA for buildings within scope. Major E6 structural engineering tail event." },
+  { year:2023, name:"Dubai — Hotel Tower Foundation Failure (Construction)", type:"Civil", code:"E7", loss:"$60m", country:"UAE", conf:"EST", detail:"Foundation failure during construction of a hotel tower in Dubai caused partial collapse and structural damage to adjacent property. D&B contractor's geotechnical design implicated. E7 PI claim; illustrative of Middle East construction design liability for UK/European firms operating as international consultants or D&B designers." },
+  { year:2023, name:"Australian DBPA 2020 — First Major NSW PI Claims", type:"D&B", code:"E7", loss:"AUD 30m+", country:"Australia", conf:"EST", detail:"First significant PI claims under the Design and Building Practitioners Act 2020 (NSW) following its full implementation. Mandatory PI for registered designers and builders in NSW residential sector. Claims testing scope and coverage of mandatory PI policies. Market implications for Lloyd's Australian E6/E7 book." },
+  { year:2024, name:"Grenfell Inquiry Phase 2 — Systemic Failures Confirmed", type:"Fire", code:"E6", loss:"Ongoing", country:"UK", conf:"VER", detail:"Grenfell Tower Inquiry Phase 2 Report (September 2024) confirms systemic failures by multiple parties including architects, D&B contractor, manufacturers, and government. Phase 2 findings expected to trigger further civil litigation and potentially criminal prosecutions. Construction PI tail continues to develop; underwriters extending IBNR reserves." },
+  { year:2024, name:"BSA 2022 — First Building Liability Orders", type:"Structural", code:"E6", loss:"TBC", country:"UK", conf:"EST", detail:"First Building Liability Orders (BLOs) under the Building Safety Act 2022 expected to be granted in 2024. BLOs make associated entities (parent companies, group companies) liable for fire and structural safety-related liabilities of a company that cannot pay. Major PI implication for group structures where subsidiary performs design work — parent may be exposed to historic PI claims of subsidiaries." },
+  { year:2024, name:"AI-Assisted Design — First Professional Liability Questions", type:"Structural", code:"E6", loss:"TBC", country:"International", conf:"EST", detail:"As generative AI and AI structural optimisation tools enter professional design practice, the first professional liability questions arise: if an engineer relies on AI-generated structural analysis without adequate independent checking, and the AI output is incorrect, what is the professional's standard of care? Lloyd's market beginning to consider AI design liability endorsements. No settled case law as of 2024." }
+];
+
+const tbody = document.getElementById('dbBody');
+let sortDir = {};
+
+function render(data){
+  tbody.innerHTML='';
+  document.getElementById('row-count').textContent = data.length + ' events shown';
+  data.forEach((e,i)=>{
+    const confCls = e.conf==='VER'?'b-v':e.conf==='EST'?'b-e':'b-i';
+    const typeCls = {Structural:'t-struct',Fire:'t-fire',QS:'t-qs','D&B':'t-db',Surveyor:'t-surv',PM:'t-pm',Civil:'t-civil'}[e.type]||'t-reg';
+    const codeCls = e.code==='E7'?'style="color:#880e4f;font-weight:700"':'style="color:#0d47a1;font-weight:700"';
+    const tr = document.createElement('tr');
+    tr.className='data-row';
+    tr.innerHTML=`<td>${e.year}</td><td><strong>${e.name}</strong></td><td><span class="tag ${typeCls}">${e.type}</span></td><td><span ${codeCls}>${e.code}</span></td><td>${e.loss}</td><td>${e.country}</td><td><span class="conf ${confCls}">${e.conf}</span></td>`;
+    const det = document.createElement('tr');
+    det.className='detail-row';
+    det.innerHTML=`<td colspan="7">${e.detail}</td>`;
+    tr.addEventListener('click',()=>{ det.classList.toggle('open'); });
+    tbody.appendChild(tr);
+    tbody.appendChild(det);
+  });
+}
+
+function filtered(){
+  const t=document.getElementById('fType').value;
+  const c=document.getElementById('fCode').value;
+  const k=document.getElementById('fKeyword').value.toLowerCase();
+  return EVENTS.filter(e=>{
+    if(t && e.type!==t) return false;
+    if(c && e.code!==c) return false;
+    if(k && !(e.name.toLowerCase().includes(k)||e.detail.toLowerCase().includes(k)||e.country.toLowerCase().includes(k))) return false;
+    return true;
+  });
+}
+
+function sortTable(col){
+  const keys=['year','name','type','code','loss','country'];
+  const k=keys[col];
+  sortDir[k]=!sortDir[k];
+  const d=[...filtered()].sort((a,b)=>{
+    let av=a[k],bv=b[k];
+    if(k==='year'){av=+av;bv=+bv;}
+    if(av<bv)return sortDir[k]?-1:1;
+    if(av>bv)return sortDir[k]?1:-1;
+    return 0;
+  });
+  render(d);
+}
+
+['fType','fCode','fKeyword'].forEach(id=>document.getElementById(id).addEventListener('input',()=>render(filtered())));
+render(EVENTS);
+</script>
+</body>
+</html>

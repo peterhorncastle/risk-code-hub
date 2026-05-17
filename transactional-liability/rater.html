@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <title>Transactional Liability (W&I / Tax) — Rater | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a148c;
+      --hub-dark:      #311b92;
+      --hub-light:     #f3e5f5;
+      --hub-accent:    #c8a84b;
+      --header-gradient: linear-gradient(135deg,#1a0a3a 0%,#4a148c 55%,#311b92 100%);
+      --header-sub:    #d1c4e9;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> ›
+    <a href="overview.html">Transactional Liability (W&I / Tax)</a> ›
+    Rater
+  </div>
+  <div class="tag">Lloyd's Risk Codes D8 · D9 · TA · TB · CD · CE</div>
+  <h1>Transactional Liability (W&I / Tax) — Rating Tool</h1>
+  <p>Factor-based rating engine for transactional liability (w&i / tax) insurance products. Base vs proposed comparison with P&amp;L waterfall analysis.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div id="rater-root"></div>
+
+<footer>
+  <p>Transactional Liability (W&I / Tax) Risk Code Hub — Rating Tool &copy; 2026</p>
+</footer>
+
+<script src="../shared/rater-engine.js"></script>
+<script src="../shared/rater-ui.js"></script>
+<script>
+(function () {
+  var schemaFiles = [
+    'rate-tables/D8.json',
+    'rate-tables/D9.json',
+    'rate-tables/TA.json',
+    'rate-tables/TB.json',
+    'rate-tables/CD.json',
+    'rate-tables/CE.json'
+  ];
+  Promise.all(schemaFiles.map(function (f) {
+    return fetch(f).then(function (r) { return r.json(); });
+  })).then(function (schemas) {
+    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Terrorism &amp; Political Violence — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #3a0a0a;
+      --hub-dark:      #1a0000;
+      --hub-light:     #fce8e8;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1a0000 0%,#3a0a0a 55%,#5c1010 100%);
+      --header-sub:    #ef9a9a;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1e1010;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1a0000;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #f5c6c6;}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #fce8e8;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fff0f0;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-explosion{background:#fce4e4;color:#b71c1c;}
+    .tp-vehicle-attack{background:#fff3e0;color:#e65100;}
+    .tp-active-assailant{background:#f3e5f5;color:#6a1b9a;}
+    .tp-cyberterrorism{background:#e3f2fd;color:#1565c0;}
+    .tp-political-violence{background:#e0f2f1;color:#00695c;}
+    .tp-war-land{background:#eceff1;color:#37474f;}
+    .tp-nbcr-threat{background:#fce4ec;color:#880e4f;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#1a5c2a;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#fff5f5;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#1a0000;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Terrorism &amp; Political Violence</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>Terrorism &amp; Political Violence Loss Database</h1>
+    <div class="sub">35 notable incidents 1993–2024 — filter by attack type, sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Attack Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="explosion">Explosion / Bomb</option>
+        <option value="vehicle-attack">Vehicle Attack</option>
+        <option value="active-assailant">Active Assailant</option>
+        <option value="cyberterrorism">Cyber-Terrorism</option>
+        <option value="political-violence">Political Violence</option>
+        <option value="war-land">War on Land</option>
+        <option value="nbcr-threat">NBCR Threat</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="commercial-property">Commercial Property</option>
+        <option value="hospitality-tourism">Hospitality &amp; Tourism</option>
+        <option value="transport-infrastructure">Transport &amp; Infrastructure</option>
+        <option value="government-buildings">Government Buildings</option>
+        <option value="financial-district">Financial District</option>
+        <option value="retail-soft-target">Retail / Soft Target</option>
+        <option value="energy-infrastructure">Energy &amp; Infrastructure</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2010" min="1993" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 50" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Event, country…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Insured Loss</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Terrorism &amp; Political Violence (TO/TU/TW/RS/RW/WL) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1993,n:"World Trade Center Bombing — First Attack",t:"explosion",s:"commercial-property",desc:"IRA-linked truck bomb in the underground car park of the World Trade Center, New York. Six killed, 1,042 injured. Major structural damage to the complex. Insured losses estimated at $750m across property damage and BI. Absorbed in standard property policies — no structural change to US terrorism market results.",v:750,sev:"cat",geo:"USA"},
+  {y:1993,n:"Bishopsgate Bombing — IRA, London",t:"explosion",s:"financial-district",desc:"IRA truck bomb in Bishopsgate, City of London. One killed; approximately £350m in insured property losses. NatWest Tower and surrounding buildings heavily damaged. Pool Re activated for the first time. Reinforces need for government backstop for UK commercial property terrorism.",v:420,sev:"cat",geo:"UK"},
+  {y:1995,n:"Oklahoma City Federal Building Bombing",t:"explosion",s:"government-buildings",desc:"Timothy McVeigh truck bomb at Alfred P. Murrah Federal Building. 168 killed, 680 injured. Insured losses ~$125m across property damage, BI and workers' compensation. Absorbed within standard US property policies. First major domestic terrorism attack on a US government building.",v:125,sev:"cat",geo:"USA"},
+  {y:1996,n:"Canary Wharf (Docklands) Bombing — IRA",t:"explosion",s:"commercial-property",desc:"IRA truck bomb at South Quay Plaza, Docklands. Two killed; £185m insured loss. First significant Pool Re payout — confirms pool mechanism functions. Lloyd's specialty terrorism capacity grows in response to confirmed demand from commercial property owners.",v:220,sev:"cat",geo:"UK"},
+  {y:1996,n:"Khobar Towers Bombing — Saudi Arabia",t:"explosion",s:"government-buildings",desc:"Truck bomb at Khobar Towers military complex housing US Air Force personnel. 19 US service members killed. Insured losses primarily liability and property for US government facilities. Demonstrates that US interests overseas face significant terrorism exposure — early impetus for international terrorism coverage.",v:40,sev:"maj",geo:"Saudi Arabia"},
+  {y:1998,n:"US Embassy Bombings — Kenya &amp; Tanzania",t:"explosion",s:"government-buildings",desc:"Al-Qaeda simultaneous bombings of US embassies in Nairobi and Dar es Salaam. 224 killed, 4,000+ injured. Major property losses to embassy buildings and surrounding commercial properties. Political violence and terrorism insurance claims in sub-Saharan Africa. Demonstrates coordinated international terrorism exposure.",v:60,sev:"maj",geo:"Kenya/Tanzania"},
+  {y:2001,n:"September 11 Attacks — World Trade Center, Pentagon",t:"explosion",s:"commercial-property",desc:"Four coordinated al-Qaeda attacks using hijacked aircraft. 2,977 killed. WTC Twin Towers destroyed; Pentagon severely damaged. Insured losses $40–47bn across property, BI, aviation, liability, workers' comp and life — the largest terrorism insurance loss in history. Universal terrorism exclusions inserted market-wide within weeks. TRIA enacted 2002.",v:43000,sev:"cat",geo:"USA"},
+  {y:2002,n:"Bali Nightclub Bombings — Kuta",t:"explosion",s:"hospitality-tourism",desc:"Jemaah Islamiyah bombs targeting tourist nightclubs in Kuta, Bali. 202 killed, 240 injured — primarily foreign tourists. Major hospitality and tourism BI losses. Demonstrates that resort destinations in Southeast Asia face severe terrorism exposure. Tourism-sector standalone terrorism policies become standard post-Bali.",v:150,sev:"cat",geo:"Indonesia"},
+  {y:2003,n:"Riyadh Compound Bombings",t:"explosion",s:"hospitality-tourism",desc:"Al-Qaeda bombs targeting expatriate residential compounds in Riyadh. 35 killed. Significant property damage to residential and hospitality complexes. Political risk and terrorism insurance claims for multinational corporations with Saudi Arabia operations. Drives demand for TO coverage for EM operations.",v:35,sev:"maj",geo:"Saudi Arabia"},
+  {y:2004,n:"Madrid Atocha Train Bombings",t:"explosion",s:"transport-infrastructure",desc:"Al-Qaeda coordinated bomb attacks on four Madrid commuter trains. 193 killed, 2,050 injured. Consorcio de Compensación de Seguros (Spain's government pool) responds. Insured losses ~€50m in property and BI. Demonstrates European government pool structures working outside UK. Train operator BI and infrastructure damage significant.",v:60,sev:"cat",geo:"Spain"},
+  {y:2005,n:"London 7/7 Transport Bombings",t:"explosion",s:"transport-infrastructure",desc:"Four coordinated suicide bombings on three London Underground trains and a bus. 52 killed, 700 injured. Pool Re responds to property element. Insured losses ~£50m. Key learning: rapid emergency response and transport network resilience significantly reduces BI loss period. London commercial property BI claims from restricted access zone.",v:60,sev:"cat",geo:"UK"},
+  {y:2005,n:"Sharm el-Sheikh Resort Bombings",t:"explosion",s:"hospitality-tourism",desc:"Al-Qaeda bomb attacks at Egyptian resort hotels — Ghazala Gardens Hotel and other sites. 88 killed. Major BI losses for Egyptian tourism industry. Demonstrates hospitality and tourism sector vulnerability; European tourist operators face significant BI and liability exposure.",v:45,sev:"maj",geo:"Egypt"},
+  {y:2006,n:"Mumbai Train Bombings",t:"explosion",s:"transport-infrastructure",desc:"Seven coordinated bomb blasts on Mumbai suburban railway network. 209 killed, 700+ injured. Property damage to trains and stations; BI for transport operator. Demonstrates scale of terrorism exposure in major South Asian cities. Indian political violence and terrorism market develops in response.",v:25,sev:"maj",geo:"India"},
+  {y:2008,n:"Mumbai Taj Hotel &amp; Trident Attack",t:"active-assailant",s:"hospitality-tourism",desc:"Lashkar-e-Taiba coordinated attacks across Mumbai including 3-day siege at Taj Mahal Palace Hotel and Trident Hotel. 175 killed. Insured losses ~$40m for hotels; broader casualties and BI significant. First major global terrorism event demonstrating luxury hotel sector vulnerability to extended siege/active assailant scenario.",v:40,sev:"maj",geo:"India"},
+  {y:2010,n:"Moscow Domodedovo Airport Bombing",t:"explosion",s:"transport-infrastructure",desc:"Suicide bomber detonates device in arrivals hall of Domodedovo International Airport. 37 killed, 173 injured. Insured losses primarily airport property damage, BI and liability. Demonstrates aviation infrastructure vulnerability to landside terrorism attacks outside security perimeter.",v:30,sev:"maj",geo:"Russia"},
+  {y:2011,n:"Libya Civil War — Political Violence Claims",t:"political-violence",s:"energy-infrastructure",desc:"Libyan civil war following Arab Spring. Major political violence insurance claims for multinational oil companies and project finance lenders with Libya exposure. RW claims triggered by armed insurgency and civil war. Significant property damage to energy infrastructure. First major test of RW (revolution and war) policies in North Africa.",v:800,sev:"cat",geo:"Libya"},
+  {y:2013,n:"Boston Marathon Bombing",t:"explosion",s:"retail-soft-target",desc:"Tsarnaev brothers detonate two pressure-cooker bombs near Boston Marathon finish line. Three killed, 264 injured. Insured losses ~$350m across medical, liability, BI (city lockdown and business closures), event cancellation and property damage. TRIA certification not triggered. Highlights BI loss from restricted access zone beyond immediate damage.",v:350,sev:"cat",geo:"USA"},
+  {y:2013,n:"In Amenas Gas Plant Attack — Algeria",t:"active-assailant",s:"energy-infrastructure",desc:"AQIM/Mokhtar Belmokhtar militants attack BP/Statoil/Sonatrach gas plant near In Amenas. 39 hostages killed from eight countries. Major political violence and energy property insurance claims. Highlights energy sector vulnerability to terrorism in remote locations. BP and Statoil face significant insured losses.",v:120,sev:"cat",geo:"Algeria"},
+  {y:2014,n:"Ukraine — First Political Violence Claims",t:"political-violence",s:"commercial-property",desc:"Russian annexation of Crimea and armed conflict in eastern Ukraine (Donbas) generates first wave of political violence and war on land insurance claims from Ukraine-based businesses. RW policies triggered by armed conflict involving Russian-backed separatists. Foreshadows the far larger losses from the 2022 full-scale invasion.",v:200,sev:"maj",geo:"Ukraine"},
+  {y:2015,n:"Paris Bataclan &amp; Coordinated Attacks",t:"active-assailant",s:"retail-soft-target",desc:"IS coordinated attacks across six sites in Paris including Bataclan concert hall, restaurants and stade de France. 130 killed. Insured losses ~€400m across property, BI, event cancellation and liability. GAREAT responds. Largest European terrorism insured loss since 9/11. Drives rapid expansion of active assailant product development.",v:470,sev:"cat",geo:"France"},
+  {y:2016,n:"Brussels Airport &amp; Metro Bombings",t:"explosion",s:"transport-infrastructure",desc:"IS coordinated suicide bombings at Brussels Airport departures hall and Maalbeek metro station. 35 killed, 340 injured. Insured losses include Brussels Airport property damage, BI and aviation disruption. Airport operator BI and third-party claims significant. Belgium TRIP (terrorism pool) responds.",v:80,sev:"maj",geo:"Belgium"},
+  {y:2016,n:"Nice Bastille Day Vehicle Attack",t:"vehicle-attack",s:"retail-soft-target",desc:"Mohamed Lahouaiej-Bouhlel drives a 19-tonne truck into crowds celebrating Bastille Day on the Promenade des Anglais. 86 killed, 458 injured. No property damage trigger — insured losses primarily casualty, BI and event cancellation. Archetypal 'soft target' vehicle attack that drove active assailant product innovation.",v:50,sev:"maj",geo:"France"},
+  {y:2017,n:"Manchester Arena Suicide Bombing",t:"explosion",s:"retail-soft-target",desc:"Salman Abedi suicide bombing in the foyer of Manchester Arena at an Ariana Grande concert. 22 killed, 1,017 injured. Insured losses ~£100m across property, BI (arena closure), casualty and liability. Pool Re responds. Landmark case on venue operator duty of care to protect from foreseeable terrorism.",v:120,sev:"cat",geo:"UK"},
+  {y:2017,n:"Las Vegas Harvest Festival — Mass Shooting",t:"active-assailant",s:"retail-soft-target",desc:"Stephen Paddock fires from Mandalay Bay Hotel on 22,000 concert-goers at Route 91 Harvest festival. 60 killed, 400+ injured. Insured losses estimated at $750m+ across active assailant, general liability, event cancellation, medical and workers' comp. Largest mass shooting insurance loss in history. Defines AA as a mainstream Lloyd's product.",v:750,sev:"cat",geo:"USA"},
+  {y:2017,n:"Stockholm Truck Attack — Drottninggatan",t:"vehicle-attack",s:"retail-soft-target",desc:"Rakhmat Akilov drives a truck into pedestrians on Drottninggatan shopping street. Five killed, 14 injured. Insured losses relatively modest but highlights soft target retail street vulnerability. Swedish terrorism insurance market reviews adequacy of coverage for vehicle attacks on pedestrian zones.",v:15,sev:"mod",geo:"Sweden"},
+  {y:2018,n:"Sri Lanka Easter Sunday Church &amp; Hotel Bombings",t:"explosion",s:"hospitality-tourism",desc:"IS-linked coordinated suicide bombings at three Colombo luxury hotels (Shangri-La, Cinnamon Grand, Kingsbury) and three churches. 269 killed. Insured losses ~$175m across hotel property damage, BI and liability. Sri Lankan tourism sector devastated — BI period extends to 18+ months. Demonstrates luxury hotel vulnerability in South Asia.",v:175,sev:"cat",geo:"Sri Lanka"},
+  {y:2019,n:"Christchurch Mosque Shootings — New Zealand",t:"active-assailant",s:"retail-soft-target",desc:"Brenton Tarrant opens fire at two mosques in Christchurch. 51 killed, 49 injured. Insured losses primarily property damage and BI (mosque closures), crisis management and third-party liability. Active assailant policies respond. New Zealand terrorism and AA insurance market reviewed following event.",v:25,sev:"maj",geo:"New Zealand"},
+  {y:2019,n:"London Bridge Van Attack — Borough Market",t:"vehicle-attack",s:"hospitality-tourism",desc:"IS-inspired attack — van mows down pedestrians on London Bridge; three attackers stab victims at Borough Market. Eight killed, 48 injured. BI losses for Borough Market traders significant; restaurant closures for several weeks. Pool Re and standalone terrorism BI policies respond. Highlights urban hospitality district vulnerability.",v:30,sev:"maj",geo:"UK"},
+  {y:2020,n:"Mozambique LNG Attack — Cabo Delgado",t:"political-violence",s:"energy-infrastructure",desc:"Islamist militants (ISCAP/Ansar al-Sunna) attack and occupy Mocímboa da Praia, near Total's Mozambique LNG project. Total declares force majeure in 2021 and suspends the $20bn project. Insured losses across political violence, political risk and construction policies estimated at $1bn+. Major test of energy sector RW coverage.",v:1000,sev:"cat",geo:"Mozambique"},
+  {y:2021,n:"South Africa KZN Riots — Largest RS Event",t:"political-violence",s:"retail-soft-target",desc:"Widespread riots, looting and arson in KwaZulu-Natal and Gauteng following Jacob Zuma's imprisonment. 354 killed; over 3,000 businesses looted or destroyed. Insured losses estimated at $1.7bn — the largest riot & strike (RS) insurance event in history. SASRIA (South African Special Risks Insurance Association) responds but faces solvency concerns.",v:1700,sev:"cat",geo:"South Africa"},
+  {y:2022,n:"Ukraine Infrastructure Attacks — War on Land",t:"war-land",s:"energy-infrastructure",desc:"Russia's full-scale invasion of Ukraine from February 2022 produces sustained infrastructure attacks — power stations, bridges, grain storage, industrial facilities, residential buildings. Lloyd's WL policies activated for Ukraine-based commercial property and infrastructure. Estimated insured losses under WL policies in the tens of billions (ongoing). First major WL claims since Cold War.",v:5000,sev:"cat",geo:"Ukraine"},
+  {y:2022,n:"Pakistan Floods with Political Violence Context",t:"political-violence",s:"energy-infrastructure",desc:"Severe flooding combined with ongoing domestic terrorism (TTP) and political violence in Pakistan. Insurance claims complex — flood vs political violence perils. Demonstrates interplay between natural catastrophe and political violence in contested territories. Political risk policies tested on government interference and expropriation elements.",v:80,sev:"maj",geo:"Pakistan"},
+  {y:2023,n:"Israel/Gaza Conflict — RW/WL Claims",t:"war-land",s:"commercial-property",desc:"Hamas attacks on Israel (7 October 2023) and subsequent Israeli military operations in Gaza generate political violence, terrorism and war on land insurance claims. RW and WL policies for multinational insured with Israel and Palestinian territory exposure activated. Regional geopolitical risk across Middle East increases TO/TW pricing.",v:500,sev:"cat",geo:"Israel/Gaza"},
+  {y:2023,n:"Nairobi DusitD2 Hotel — Kenya",t:"active-assailant",s:"hospitality-tourism",desc:"Al-Shabaab attack on DusitD2 Hotel complex, Nairobi. 21 killed in 12-hour siege involving simultaneous suicide bombing and active shooter scenario. Insured losses across property damage, BI (hotel closure) and liability. Active assailant policies respond. Demonstrates East African hospitality sector vulnerability.",v:35,sev:"maj",geo:"Kenya"},
+  {y:2024,n:"Drone/UAV Infrastructure Attacks — Multiple Regions",t:"war-land",s:"energy-infrastructure",desc:"Continuing drone and UAV attacks on energy infrastructure in Ukraine, Red Sea commercial shipping threats and drone terrorism attempts in Europe. Emerging peril testing whether terrorism and WL policies respond to drone-delivered explosive attacks. Lloyd's market developing drone/UAV exclusion and endorsement wording. No single large insured event but accumulation of mid-sized losses.",v:200,sev:"maj",geo:"Multiple"}
+];
+
+const typeLabels = {
+  explosion:"Explosion / Bomb",
+  "vehicle-attack":"Vehicle Attack",
+  "active-assailant":"Active Assailant",
+  cyberterrorism:"Cyber-Terrorism",
+  "political-violence":"Political Violence",
+  "war-land":"War on Land",
+  "nbcr-threat":"NBCR Threat"
+};
+const typeClass = {
+  explosion:"tp-explosion",
+  "vehicle-attack":"tp-vehicle-attack",
+  "active-assailant":"tp-active-assailant",
+  cyberterrorism:"tp-cyberterrorism",
+  "political-violence":"tp-political-violence",
+  "war-land":"tp-war-land",
+  "nbcr-threat":"tp-nbcr-threat"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function fmtVal(v) {
+  if (v >= 1000) return '$' + (v/1000).toFixed(1) + 'bn';
+  return '$' + v + 'm';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${d.s.split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}</td>
+      <td>${fmtVal(d.v)} est.</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">▼ Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

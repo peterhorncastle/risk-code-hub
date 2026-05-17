@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Risk Mitigation — Workers Compensation USA (W5/W6) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #1a237e;
+      --hub-dark:      #0d1257;
+      --hub-light:     #e8eaf6;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #b71c1c;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#0d1257 0%,#1a237e 55%,#283593 100%);
+      --header-sub:    #9fa8da;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#9fa8da;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#0d1257;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#9fa8da;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #c5cae9;}
+    .controls-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:28px;}
+    .control-card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .control-card.prevent{border-left:5px solid #1a237e;}
+    .control-card.detect{border-left:5px solid #1a5c2a;}
+    .control-card .cat{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .control-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .control-card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .rtw-list{background:#fff;border-radius:10px;padding:20px 24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .rtw-list h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:14px;}
+    .rtw-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #e8eaf6;}
+    .rtw-item:last-child{border-bottom:none;}
+    .rtw-num{background:var(--hub-primary);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;margin-top:2px;}
+    .rtw-body h5{font-size:0.88rem;font-weight:700;color:var(--hub-dark);margin-bottom:3px;}
+    .rtw-body p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .score-matrix{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .score-matrix th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    .score-matrix td{padding:9px 12px;font-size:0.81rem;border-bottom:1px solid #e8eaf6;}
+    .score-matrix tr:last-child td{border-bottom:none;}
+    .pill-g{display:inline-block;background:#e8f5e9;color:#1a5c2a;font-size:0.72rem;font-weight:700;padding:2px 8px;border-radius:10px;}
+    .pill-a{display:inline-block;background:#fff8e1;color:#e65100;font-size:0.72rem;font-weight:700;padding:2px 8px;border-radius:10px;}
+    .pill-r{display:inline-block;background:#fce4ec;color:#b71c1c;font-size:0.72rem;font-weight:700;padding:2px 8px;border-radius:10px;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .info-box{background:#e8eaf6;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a1a3e;line-height:1.6;}
+    .actions-list{background:#fff;border-radius:10px;padding:20px 24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .actions-list h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:14px;}
+    .action-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #e8eaf6;font-size:0.84rem;color:#333;}
+    .action-item:last-child{border-bottom:none;}
+    .action-num{background:var(--hub-accent);color:#000;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0;margin-top:2px;}
+    footer{background:#0d1257;color:#9fa8da;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> &rsaquo; <a href="overview.html">Workers Comp USA (W5/W6)</a> &rsaquo; Risk Mitigation</div>
+    <div class="tag">Module 06</div>
+    <h1>Risk Mitigation</h1>
+    <div class="sub">OSHA controls, ergonomics, RTW programme, opioid management &amp; programme quality scoring</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- PREVENT controls -->
+  <div class="section-title">PREVENT Controls (6)</div>
+  <div class="controls-grid">
+    <div class="control-card prevent">
+      <div class="cat">Prevent</div>
+      <h4>OSHA Compliance Programme</h4>
+      <p>Written safety programme addressing OSHA's industry-specific standards (29 C.F.R. Part 1910/1926). Includes hazard communication, LOTO, fall protection, PPE. VPP (Voluntary Protection Programme) Star Status is the gold standard — these employers have WC frequency typically 50% below industry average. OSHA 300 log DART rate vs BLS benchmark is a key underwriting metric.<sup>[L4]</sup></p>
+    </div>
+    <div class="control-card prevent">
+      <div class="cat">Prevent</div>
+      <h4>Job Hazard Analysis (JHA)</h4>
+      <p>Systematic review of each job task to identify hazards and implement controls before injury occurs. Written JHAs for high-risk tasks (work at height, confined space entry, heavy lifting, electrical work) demonstrate proactive safety management. Pre-task JHAs on construction sites are associated with 30–40% reduction in struck-by and fall incident rates.<sup>[I8]</sup></p>
+    </div>
+    <div class="control-card prevent">
+      <div class="cat">Prevent</div>
+      <h4>Ergonomics / Musculoskeletal Programme</h4>
+      <p>Musculoskeletal disorders (MSDs) — back strain, carpal tunnel, shoulder impingement — account for ~33% of all WC lost-time claims by number and a similar proportion by cost. Formal ergonomics programme: workstation assessment, engineering controls (lift assists, conveyor height adjustment), administrative controls (rotation, rest breaks), early symptom reporting. Best-practice programmes reduce MSD WC frequency by 40–60%.<sup>[I8]</sup></p>
+    </div>
+    <div class="control-card prevent">
+      <div class="cat">Prevent</div>
+      <h4>Fleet / Driver Safety</h4>
+      <p>Motor vehicle accidents are the leading cause of WC fatalities in most non-construction industries. Fleet safety programme components: MVR screening at hire and annually, telematics (speed, hard braking, phone use monitoring), defensive driving training, distracted driving policy, vehicle maintenance standards. Telematics programmes reduce fleet accident frequency by 20–35%.</p>
+    </div>
+    <div class="control-card prevent">
+      <div class="cat">Prevent</div>
+      <h4>Substance Abuse Programme (DOT-Compliant)</h4>
+      <p>Post-accident drug and alcohol testing (where permitted by state law) deters impaired working and may reduce WC benefit eligibility. DOT-regulated employers (commercial drivers, aviation, maritime) must have compliant drug testing programmes — failure is both a regulatory violation and an underwriting red flag. Pre-employment screening also reduces hire-in of workers with substance use history.<sup>[L4]</sup></p>
+    </div>
+    <div class="control-card prevent">
+      <div class="cat">Prevent</div>
+      <h4>Contractor Safety Prequalification</h4>
+      <p>General contractors and large commercial operators managing subcontractors should prequalify subs on safety performance — OSHA DART rate, EMR, safety programme documentation, training records. Unqualified subcontractor WC exposure may be passed up to the GC via employers liability and additional insured obligations. ISNetworld and Avetta are leading prequalification platforms used by major US employers.</p>
+    </div>
+  </div>
+
+  <!-- DETECT controls -->
+  <div class="section-title">DETECT Controls (4)</div>
+  <div class="controls-grid">
+    <div class="control-card detect">
+      <div class="cat">Detect</div>
+      <h4>Incident Investigation — Root-Cause Analysis</h4>
+      <p>Thorough post-incident investigation within 24 hours identifies root causes (physical hazard, system failure, behavioural) and generates corrective actions that prevent recurrence. OSHA requires investigation of fatalities, hospitalisations and significant injuries. Near-miss reporting systems capture precursor events before they generate WC claims — a leading indicator of WC loss potential.<sup>[L4]</sup></p>
+    </div>
+    <div class="control-card detect">
+      <div class="cat">Detect</div>
+      <h4>Early Medical Intervention</h4>
+      <p>3-day contact rule: injured worker contacted by employer within 3 days of injury to confirm medical treatment access, express concern and initiate RTW planning. Designated occupational health physician relationship enables appropriate treatment, early functional capacity assessment and light-duty recommendations. Early medical intervention reduces WC claim severity by 30–50%.<sup>[I2]</sup></p>
+    </div>
+    <div class="control-card detect">
+      <div class="cat">Detect</div>
+      <h4>Fraud Indicator Monitoring (SIU Referral)</h4>
+      <p>WC fraud indicators: injuries reported late or on Monday mornings, inconsistent injury mechanism, prior WC claims history, no witness, claimant involvement in recreational activities inconsistent with claimed disability, attorney representation at day 1. SIU referral protocols for flagged claims: surveillance, background investigation, recorded statement. WC fraud estimated at $7bn annually in the US (NICB est.).<sup>[I5]</sup></p>
+    </div>
+    <div class="control-card detect">
+      <div class="cat">Detect</div>
+      <h4>Wearable Sensor Programme</h4>
+      <p>IoT wearables monitoring biomechanical stress (bend, lift, twist), fatigue (heart rate variability, reaction time), environmental hazards (heat, gas, vibration) and fall detection. Real-time alerts enable supervisors to intervene before injury occurs. Best results in warehouse, construction and manufacturing — operations with high repetitive-motion and manual handling exposure. Regulatory questions around privacy and data use in WC claims management remain evolving.<sup>[I8]</sup></p>
+    </div>
+  </div>
+
+  <!-- RTW Checklist -->
+  <div class="section-title">Return-to-Work (RTW) Programme Checklist</div>
+  <div class="rtw-list">
+    <h3>8-Point RTW Framework</h3>
+    <div class="rtw-item">
+      <div class="rtw-num">1</div>
+      <div class="rtw-body">
+        <h5>Light Duty Job Bank</h5>
+        <p>Maintain a written inventory of modified/transitional duty assignments for each department. Pre-identified light duty tasks allow injured workers to return productively within their functional restrictions without ad hoc improvisation. Reduces TTD duration — the single largest driver of WC claim cost after catastrophic injury.</p>
+      </div>
+    </div>
+    <div class="rtw-item">
+      <div class="rtw-num">2</div>
+      <div class="rtw-body">
+        <h5>Designated Occupational Physician</h5>
+        <p>Employer-preferred physician (EPP) or employer-panel physician relationship ensures consistent treatment protocols, appropriate functional capacity evaluation, and cooperation with RTW restrictions. In states with employer panel rights (most jurisdictions), directing claimants to panel physicians significantly reduces treatment duration and claim costs.<sup>[L1]</sup></p>
+      </div>
+    </div>
+    <div class="rtw-item">
+      <div class="rtw-num">3</div>
+      <div class="rtw-body">
+        <h5>3-Day Contact Rule</h5>
+        <p>Supervisor or HR contact within 72 hours of injury report — before legal representation, before entrenched disability narrative. Express concern, confirm medical treatment, introduce RTW programme, set expectations for communication. Claims with early employer contact close 40% faster on average than those without.</p>
+      </div>
+    </div>
+    <div class="rtw-item">
+      <div class="rtw-num">4</div>
+      <div class="rtw-body">
+        <h5>Modified Duty Offers (Written)</h5>
+        <p>Formal written offer of modified duty within the treating physician's restrictions, dated and delivered to the claimant. Creates a documented record that TTD benefits are appropriately managed; in many states, refusal of bona fide modified duty offer suspends TTD benefit entitlement. Offer must be genuine and within medical restrictions.<sup>[L1]</sup></p>
+      </div>
+    </div>
+    <div class="rtw-item">
+      <div class="rtw-num">5</div>
+      <div class="rtw-body">
+        <h5>FMLA Coordination</h5>
+        <p>Workers Compensation leave runs concurrently with FMLA leave where the injury qualifies under both statutes. Employers must designate FMLA leave correctly to avoid extending FMLA entitlement beyond WC leave. Failure to coordinate correctly can extend the period of FMLA protection and complicate RTW timelines.<sup>[L8]</sup></p>
+      </div>
+    </div>
+    <div class="rtw-item">
+      <div class="rtw-num">6</div>
+      <div class="rtw-body">
+        <h5>ADA Accommodation Review</h5>
+        <p>When an injured worker returns with permanent restrictions, ADA interactive process may be required — employer must determine whether a reasonable accommodation enables the employee to perform the essential functions of any available position. Failure to engage in the ADA interactive process is a common source of parallel ADA/FEHA litigation alongside WC claims.<sup>[L7]</sup></p>
+      </div>
+    </div>
+    <div class="rtw-item">
+      <div class="rtw-num">7</div>
+      <div class="rtw-body">
+        <h5>Claim Reserve Management</h5>
+        <p>Monthly reserve review for claims exceeding 60 days open. Catastrophic claim management protocol for TBI, spinal cord, amputation, severe burns — early activation of nurse case manager, structured settlement evaluation, catastrophic claims coordinator. Adequate initial reserves reduce adverse development and IBNR uncertainty.</p>
+      </div>
+    </div>
+    <div class="rtw-item">
+      <div class="rtw-num">8</div>
+      <div class="rtw-body">
+        <h5>Litigation Trigger Review</h5>
+        <p>Monitor for attorney representation at day 1 (a significant claim severity indicator — attorney-represented claims average 2–4× higher cost), denial disputes, IME conflicts, and appeals. Systematic defence attorney assignment protocol for claims over $50k reserve. Mediation and structured settlement programmes reduce litigation tail and reserve uncertainty.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Programme Quality Scoring -->
+  <div class="section-title">Programme Quality Scoring Matrix</div>
+  <table class="score-matrix">
+    <thead>
+      <tr><th>Control Area</th><th>Green (Best Practice)</th><th>Amber (Adequate)</th><th>Red (Deficient)</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>OSHA Compliance</strong></td>
+        <td><span class="pill-g">VPP Star / DART &lt;50% BLS</span></td>
+        <td><span class="pill-a">Written programme; DART near BLS avg</span></td>
+        <td><span class="pill-r">OSHA citations; no written programme</span></td>
+      </tr>
+      <tr>
+        <td><strong>Return-to-Work</strong></td>
+        <td><span class="pill-g">Formal RTW; light duty bank; &lt;10 day avg TTD</span></td>
+        <td><span class="pill-a">Some modified duty; ad hoc coordination</span></td>
+        <td><span class="pill-r">No RTW programme; full duty or nothing</span></td>
+      </tr>
+      <tr>
+        <td><strong>Fraud Control</strong></td>
+        <td><span class="pill-g">SIU protocol; fraud indicators tracked; &lt;2% claims disputed</span></td>
+        <td><span class="pill-a">Ad hoc SIU referrals; some monitoring</span></td>
+        <td><span class="pill-r">No SIU; no fraud monitoring; high suspicious claims rate</span></td>
+      </tr>
+      <tr>
+        <td><strong>Medical Management</strong></td>
+        <td><span class="pill-g">Designated physician; UR; ODG treatment guidelines; PDMP</span></td>
+        <td><span class="pill-a">Panel physicians; some UR</span></td>
+        <td><span class="pill-r">No medical direction; free choice of physician only</span></td>
+      </tr>
+      <tr>
+        <td><strong>Safety Training</strong></td>
+        <td><span class="pill-g">Annual verified training; JHAs; toolbox talks; records maintained</span></td>
+        <td><span class="pill-a">New hire training; annual safety meeting</span></td>
+        <td><span class="pill-r">No documented training; high near-miss rate</span></td>
+      </tr>
+      <tr>
+        <td><strong>Claims Reporting</strong></td>
+        <td><span class="pill-g">Same-day reporting; 3-day contact; EMR 0.90 or below</span></td>
+        <td><span class="pill-a">3–5 day reporting; some delay in contact; EMR 0.90–1.05</span></td>
+        <td><span class="pill-r">Delayed reporting; attorney contact before employer; EMR &gt;1.10</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Opioid warning -->
+  <div class="warn-box">
+    <strong>Opioid Crisis — Medical Management Alert:</strong> Despite significant improvement since 2018, opioid prescribing in WC remains a major medical cost driver. Underwriters should specifically ask whether the insured's WC medical management programme includes: (1) prescription drug monitoring programme (PDMP) access and utilisation by treating physicians; (2) Official Disability Guidelines (ODG) treatment protocols adopted by the employer/TPA; (3) treatment plan review for any claimant receiving opioids for more than 90 days; (4) co-prescribing monitoring (opioids + benzodiazepines = elevated overdose mortality risk). Pre-2018 open claims with long-term opioid prescribing should be flagged for reserve adequacy review.<sup>[I4]</sup>
+  </div>
+
+  <!-- Top 7 actions -->
+  <div class="section-title">Top 7 Actions for Insureds</div>
+  <div class="actions-list">
+    <h3>Priority Actions to Reduce WC Costs</h3>
+    <div class="action-item">
+      <div class="action-num">1</div>
+      <strong>Review and improve EMR proactively</strong> — Understand the 3-year loss history feeding into next EMR calculation; dispute any misclassified claims before NCCI computes the modification.
+    </div>
+    <div class="action-item">
+      <div class="action-num">2</div>
+      <strong>Implement a formal RTW programme with light duty job bank</strong> — The single highest-ROI WC cost reduction measure available to any employer with &gt;50 employees.
+    </div>
+    <div class="action-item">
+      <div class="action-num">3</div>
+      <strong>Establish a designated physician panel</strong> — In states where employer panel rights exist, direct claimants to occupational health physicians familiar with RTW principles.
+    </div>
+    <div class="action-item">
+      <div class="action-num">4</div>
+      <strong>Request an OSHA audit / voluntary compliance assessment</strong> — Proactive identification and correction of hazards prevents injuries and demonstrates best practice to WC underwriters for schedule credit purposes.
+    </div>
+    <div class="action-item">
+      <div class="action-num">5</div>
+      <strong>Adopt ODG prescribing guidelines</strong> — Official Disability Guidelines provide evidence-based treatment duration and prescribing benchmarks that reduce opioid over-prescribing and unnecessary treatment extension.
+    </div>
+    <div class="action-item">
+      <div class="action-num">6</div>
+      <strong>Prequalify contractors and require WC certificates</strong> — Verify subcontractor WC coverage before each job; contractual hold harmless and additional insured provisions only as backup — certificates of insurance are primary.
+    </div>
+    <div class="action-item">
+      <div class="action-num">7</div>
+      <strong>Monitor the gig economy classification risk</strong> — If using platform workers, delivery contractors or temporary staffing, review state-specific ABC test compliance and consult WC counsel in CA, NJ and IL where misclassification risk is highest.
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation USA (W5 / W6) &nbsp;|&nbsp; <a href="../index.html">&#8592; Hub Index</a> &nbsp;|&nbsp; <a href="global-program.html">Next: Global Programme &#8594;</a></p>
+</footer>
+
+</body>
+</html>

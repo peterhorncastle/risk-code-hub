@@ -1,0 +1,110 @@
+{
+  "riskCode": "W",
+  "label": "Marine War — Hull",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "insuredValue",
+    "label": "Insured Value ($)",
+    "defaultValue": 50000000,
+    "hint": "Hull value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.0005
+  },
+  "ratingFactors": [
+    {
+      "key": "warZone",
+      "label": "War Risk Zone",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "safe": {
+          "label": "Safe Passage",
+          "factor": 0.7
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "listed": {
+          "label": "JWC Listed Area",
+          "factor": 1.4
+        },
+        "high_risk": {
+          "label": "High Risk (Red Sea/Ukraine)",
+          "factor": 2
+        },
+        "active_conflict": {
+          "label": "Active Conflict Zone",
+          "factor": 3
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "vesselType",
+      "label": "Vessel Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "cargo",
+      "options": {
+        "cargo": {
+          "label": "Cargo (bulk/container)",
+          "factor": 1
+        },
+        "tanker": {
+          "label": "Tanker",
+          "factor": 1.1
+        },
+        "passenger": {
+          "label": "Passenger/Cruise",
+          "factor": 1.2
+        },
+        "special": {
+          "label": "Special Purpose",
+          "factor": 1.15
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "duration",
+      "label": "Voyage Duration",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "single",
+      "options": {
+        "single": {
+          "label": "Single Voyage",
+          "factor": 1
+        },
+        "annual": {
+          "label": "Annual Cover",
+          "factor": 0.85
+        },
+        "spot": {
+          "label": "Spot/Breach",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 3000,
+    "claimsHandlingPerClaim": 20000,
+    "systemOverheadPerYear": 1000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.01,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.2,
+    "reinsuranceRate": 0.08
+  },
+  "targetProfitMargin": 0.05
+}

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Extended Warranty — Timeline | Risk Code Hub</title>
+  <style>
+    :root {
+      --wa:#8c4a15; --wa-dark:#5c2f0c; --wa-light:#fdf0e6; --accent:#c8a84b;
+      --copper:#b06020; --teal:#0d7377;
+      --hub-primary:#8c4a15; --hub-dark:#5c2f0c; --hub-light:#fdf0e6;
+      --hub-accent:#c8a84b; --hub-secondary:#b06020;
+      --header-gradient:linear-gradient(135deg,#3d1c05 0%,#8c4a15 55%,#b06020 100%);
+      --header-sub:#e8c9a0;
+    }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:var(--header-gradient); color:#fff; padding:40px; }
+    .breadcrumb { font-size:.8rem; color:rgba(255,255,255,.6); margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:8px; color:var(--header-sub); font-size:.95rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--wa); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--wa-dark); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    sup { font-size:.7rem; color:var(--wa); font-weight:700; }
+
+    .legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:28px; padding:14px 18px; background:#fff; border-radius:10px; border:1px solid var(--border); }
+    .leg-item { display:flex; align-items:center; gap:6px; font-size:.82rem; color:var(--text); }
+    .dot { width:13px; height:13px; border-radius:50%; flex-shrink:0; }
+    .d-reg { background:#dc2626; } .d-loss { background:#7c3aed; } .d-market { background:#047857; }
+    .d-legal { background:#0369a1; } .d-tech { background:#d97706; } .d-fraud { background:#374151; }
+
+    .tl { position:relative; padding-left:3rem; }
+    .tl::before { content:''; position:absolute; left:1rem; top:0; bottom:0; width:3px; background:linear-gradient(to bottom,var(--wa),var(--copper)); }
+
+    .ev { position:relative; margin-bottom:1.6rem; }
+    .ev-dot { position:absolute; left:-2.3rem; top:.35rem; width:17px; height:17px; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px currentColor,0 2px 4px rgba(0,0,0,.2); z-index:1; }
+    .ev.reg .ev-dot  { background:#dc2626; color:#dc2626; }
+    .ev.loss .ev-dot { background:#7c3aed; color:#7c3aed; }
+    .ev.market .ev-dot { background:#047857; color:#047857; }
+    .ev.legal .ev-dot { background:#0369a1; color:#0369a1; }
+    .ev.tech .ev-dot  { background:#d97706; color:#d97706; }
+    .ev.fraud .ev-dot { background:#374151; color:#374151; }
+
+    .ev-card { background:#fff; border-radius:8px; padding:14px 18px; box-shadow:0 1px 4px rgba(0,0,0,.07); border-left:4px solid transparent; }
+    .ev.reg .ev-card  { border-color:#dc2626; }
+    .ev.loss .ev-card { border-color:#7c3aed; }
+    .ev.market .ev-card { border-color:#047857; }
+    .ev.legal .ev-card { border-color:#0369a1; }
+    .ev.tech .ev-card  { border-color:#d97706; }
+    .ev.fraud .ev-card { border-color:#374151; }
+
+    .ev-hdr { display:flex; align-items:baseline; gap:10px; margin-bottom:5px; flex-wrap:wrap; }
+    .ev-yr  { font-weight:800; font-size:.95rem; color:var(--wa-dark); min-width:3.2rem; }
+    .ev-badge { font-size:.7rem; font-weight:700; padding:.15rem .5rem; border-radius:10px; color:#fff; text-transform:uppercase; }
+    .ev.reg .ev-badge  { background:#dc2626; }
+    .ev.loss .ev-badge { background:#7c3aed; }
+    .ev.market .ev-badge { background:#047857; }
+    .ev.legal .ev-badge { background:#0369a1; }
+    .ev.tech .ev-badge  { background:#d97706; }
+    .ev.fraud .ev-badge { background:#374151; }
+    .ev-title { font-weight:700; font-size:.92rem; color:var(--wa-dark); flex:1; }
+    .ev-body  { font-size:.86rem; color:#4b5563; margin-bottom:4px; }
+    .ev-impact { font-size:.8rem; color:var(--muted); font-style:italic; }
+
+    .decade { text-align:center; position:relative; margin:2rem 0 1.5rem; left:-3rem; width:calc(100% + 3rem); }
+    .decade span { background:var(--wa-dark); color:#fff; font-weight:700; font-size:.85rem; padding:.3rem 1.2rem; border-radius:20px; }
+
+    footer { background:var(--wa-dark); color:rgba(255,255,255,.5); text-align:center; padding:24px; font-size:.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Extended Warranty</a> › Timeline</div>
+  <h1>Extended Warranty — Major Events Timeline</h1>
+  <p>20 events 1975–2024 — regulatory action, mass claim events, market shifts, and fraud</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Major Events Timeline (1975–2024)</h2>
+  <div class="legend">
+    <div class="leg-item"><div class="dot d-reg"></div>Regulatory</div>
+    <div class="leg-item"><div class="dot d-loss"></div>Mass Claim / Loss Event</div>
+    <div class="leg-item"><div class="dot d-market"></div>Market Structural</div>
+    <div class="leg-item"><div class="dot d-legal"></div>Legal / Legislation</div>
+    <div class="leg-item"><div class="dot d-tech"></div>Technology Shift</div>
+    <div class="leg-item"><div class="dot d-fraud"></div>Fraud / Misconduct</div>
+  </div>
+
+  <div class="tl">
+    <div class="decade"><span>1970s — Legislative Foundations</span></div>
+
+    <div class="ev legal">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">1975</span><span class="ev-badge">Legislation</span><span class="ev-title">Magnuson–Moss Warranty Act — United States</span></div>
+        <div class="ev-body">First federal warranty disclosure law in the US. Requires clear "full" or "limited" warranty labels; prohibits tie-in service requirements; sharpens the boundary between service contracts (not insurance) and insurance products. Creates the legal framework within which the extended warranty market develops.<sup>[1]</sup></div>
+        <div class="ev-impact">Market impact: Compliance industry develops around warranty disclosure. State-level service contract regulation begins. Insurance backing requirement formalises.</div>
+      </div>
+    </div>
+
+    <div class="decade"><span>1980s — Retail Warranty Boom</span></div>
+
+    <div class="ev market">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">1984</span><span class="ev-badge">Market Structural</span><span class="ev-title">UK Extended Warranty Market Emerges — Retailers Discover Margin</span></div>
+        <div class="ev-body">UK electrical retailers including Currys and Comet begin selling extended warranties as a systematic point-of-sale product. Loss ratios below 30%; gross margins of 50–70% on extended warranty revenue. The product rapidly becomes the highest-margin item in the store. Staff incentivised with commission significantly in excess of product sales.<sup>[2]</sup></div>
+        <div class="ev-impact">Market impact: Extended warranty becomes embedded in UK retail P&amp;L. Insurers scramble for capacity. Seeds of OFT investigation planted by persistent consumer complaints.</div>
+      </div>
+    </div>
+
+    <div class="ev fraud">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">1989</span><span class="ev-badge">Fraud / Misconduct</span><span class="ev-title">US Service Contract Administrator Insolvencies — Consumer Loss</span></div>
+        <div class="ev-body">Multiple US service contract administrators fail in the late 1980s, leaving consumers holding worthless extended warranty contracts. Without insurance backing or reserve requirements, the administrator's bankruptcy extinguished consumer rights. Media coverage drives state legislators to require insurance backing or surety bonds.<sup>[3]</sup></div>
+        <div class="ev-impact">Market impact: State service contract statutes require administrator net worth or insurance backing. CLIP market grows rapidly. Lloyd's capacity begins to enter the US-backed programme market.</div>
+      </div>
+    </div>
+
+    <div class="decade"><span>1990s — Regulatory Scrutiny Begins</span></div>
+
+    <div class="ev reg">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">1994</span><span class="ev-badge">Regulatory</span><span class="ev-title">UK OFT Investigation — "Unacceptably High" Margins</span></div>
+        <div class="ev-body">The UK Office of Fair Trading publishes its first investigation into extended warranties on consumer electrical goods. It finds profit margins of 50–80% on extended warranty sales, significant consumer confusion about statutory rights, and aggressive sales tactics. OFT stops short of regulatory intervention but flags the market for further review.<sup>[4]</sup></div>
+        <div class="ev-impact">Market impact: First public acknowledgement of mis-selling risk in the UK market. Insurers begin reviewing exposure to potential regulatory remedies.</div>
+      </div>
+    </div>
+
+    <div class="ev loss">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">1998</span><span class="ev-badge">Mass Claim Event</span><span class="ev-title">Sony PlayStation 1 DRE (Disc Read Error) — Mass Warranty Claims</span></div>
+        <div class="ev-body">Sony PlayStation units develop disc read errors due to a defective optical pickup mechanism. Hundreds of thousands of units affected. Extended warranty holders submit repair claims en masse. Sony faces both manufacturer warranty and extended warranty (third-party) claims. Sony settles a US class action for c.$24.5m in repairs and cash.<sup>[5]</sup></div>
+        <div class="ev-impact">Market impact: First major consumer electronics product defect to trigger simultaneous mass extended warranty claims. Underwriters begin tracking product recall/warranty interface risk.</div>
+      </div>
+    </div>
+
+    <div class="ev legal">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">1999</span><span class="ev-badge">Legislation</span><span class="ev-title">EU Sale of Consumer Goods Directive — 2-Year Statutory Baseline</span></div>
+        <div class="ev-body">EU Directive 1999/44/EC harmonises the minimum statutory guarantee for consumer goods across member states at 2 years. Establishes the baseline over which extended warranty products operate — and which consumers often do not know they have. Future regulatory scrutiny in multiple countries centres on whether extended warranties offer genuine value above this statutory right.<sup>[6]</sup></div>
+        <div class="ev-impact">Market impact: Defines the regulatory floor for all EU extended warranty products. Creates ongoing mis-selling risk where warranties are sold without disclosure of existing statutory rights.</div>
+      </div>
+    </div>
+
+    <div class="decade"><span>2000s — Regulatory Intervention</span></div>
+
+    <div class="ev reg">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2003</span><span class="ev-badge">Regulatory</span><span class="ev-title">UK Competition Commission Final Report — Market Restructuring</span></div>
+        <div class="ev-body">Competition Commission finds the UK extended warranty market produces "adverse effects on competition" to the detriment of consumers. Retailer monopoly on point-of-sale capture; low consumer price sensitivity; loss ratios well below levels consistent with competitive market. Recommends mandatory cooling-off, portability, and price-to-insure disclosure.<sup>[7]</sup></div>
+        <div class="ev-impact">Market impact: Triggers the 2005 EW Order. Major retailers (Currys/PC World, Comet) lose captive customer base. Independent warranty providers (Domestic &amp; General, Warranty Direct) gain market share.</div>
+      </div>
+    </div>
+
+    <div class="ev loss">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2005</span><span class="ev-badge">Mass Claim Event</span><span class="ev-title">Xbox 360 Red Ring of Death — Mass Failure</span></div>
+        <div class="ev-body">Microsoft's Xbox 360, launched late 2005, suffers a catastrophic hardware defect (GPU/CPU overheating causing solder failure — the "Red Ring of Death"). Failure rates estimated at 23–54% of units sold. Microsoft extends warranty to 3 years for RROD failures, taking a $1.05bn charge in Q2 2007. Extended warranty providers and retailers holding third-party cover face coordinated mass claims.<sup>[8]</sup></div>
+        <div class="ev-impact">Market impact: Largest single consumer electronics warranty event to that date. Extended warranty underwriters reassess new gaming console launch exposure. Product defect vs wear-and-tear coverage trigger debated.</div>
+      </div>
+    </div>
+
+    <div class="ev tech">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2007</span><span class="ev-badge">Technology Shift</span><span class="ev-title">iPhone Launch — Smartphone Era Transforms Mobile Warranty</span></div>
+        <div class="ev-body">Apple's iPhone launch (June 2007) creates the modern smartphone market. Devices costing £500+ with fragile glass screens and complex electronics create high-severity accidental damage risk. Mobile device protection products (combining accidental damage, theft, and breakdown) emerge as the fastest-growing extended warranty sub-class. Asurion in the US becomes the largest warranty provider by revenue.<sup>[9]</sup></div>
+        <div class="ev-impact">Market impact: Mobile device protection becomes a major Lloyd's WA segment. Screen replacement frequency drives claims; waterproofing improvements (IP rating) later reduce water damage claims. Parametric repair products emerge.</div>
+      </div>
+    </div>
+
+    <div class="decade"><span>2010s — Scale, Acquisition and Digital</span></div>
+
+    <div class="ev tech">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2011</span><span class="ev-badge">Technology Shift</span><span class="ev-title">AppleCare+ Launch — OEM Accidental Damage Cover Mainstream</span></div>
+        <div class="ev-body">Apple launches AppleCare+ in the US, extending its warranty to include accidental damage for a fixed fee. First major OEM to include accidental damage in a branded extended warranty product. AppleCare+ revenues estimated at $5–7bn annually by 2023, making Apple one of the largest extended warranty programmes in the world without being underwritten at Lloyd's (Apple uses a self-insurance/reinsurance structure).<sup>[10]</sup></div>
+        <div class="ev-impact">Market impact: Raises consumer expectations for OEM extended warranties. Competitors (Samsung, Google) follow. Third-party warranty providers forced to compete on service quality and digital claims experience.</div>
+      </div>
+    </div>
+
+    <div class="ev loss">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2014</span><span class="ev-badge">Mass Claim Event</span><span class="ev-title">LG Refrigerator Linear Compressor Failures — Class Action</span></div>
+        <div class="ev-body">LG refrigerators manufactured 2014–2019 experience widespread linear compressor failures, often within 5–7 years. Class action lawsuits filed in US claiming LG knew of the defect. Extended warranty claims surge — refrigerator failures are high severity (full unit replacement c.$1,500–$3,000). LG settles class action for $198m (2022). Extended warranty underwriters with US appliance book face significant IBNR development.<sup>[11]</sup></div>
+        <div class="ev-impact">Market impact: Appliance extended warranty underwriters tighten LG refrigerator terms. Linear compressor failure added to product-specific exclusion consideration. Product quality audit processes tightened.</div>
+      </div>
+    </div>
+
+    <div class="ev market">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2017</span><span class="ev-badge">Market Structural</span><span class="ev-title">Allstate Acquires SquareTrade ($1.4bn)</span></div>
+        <div class="ev-body">Allstate Insurance acquires SquareTrade — a leading third-party extended warranty provider for electronics and appliances — for $1.4bn. The largest acquisition in the extended warranty sector, validating it as a mainstream insurance product. SquareTrade had revenues of c.$300m at time of acquisition. The deal signals the mainstreaming of extended warranty within large insurance group structures.<sup>[12]</sup></div>
+        <div class="ev-impact">Market impact: M&amp;A activity intensifies. Domestic &amp; General (UK) acquired by Centerbridge Partners (2017) and later Warburg Pincus. AmTrust Financial Services extended warranty division sold to various buyers post-AmTrust collapse (2018).</div>
+      </div>
+    </div>
+
+    <div class="ev fraud">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2018</span><span class="ev-badge">Fraud / Misconduct</span><span class="ev-title">AmTrust Financial — Extended Warranty Division Collapse</span></div>
+        <div class="ev-body">AmTrust Financial Services — a major US writer of extended warranty and service contract insurance — suffers accounting restatements and goes private after regulatory scrutiny. Its extended warranty division, which backed many large US retailer programmes, was sold at distressed valuations. Programmes relying on AmTrust paper scramble to find replacement capacity. Several programmes fail in the transition.<sup>[13]</sup></div>
+        <div class="ev-impact">Market impact: Counterparty risk for extended warranty programmes elevated. Multi-insurer backing and collateral requirements increase. Lloyd's capacity benefits as alternative to US-admitted fronts.</div>
+      </div>
+    </div>
+
+    <div class="decade"><span>2020s — COVID, EV and Consumer Duty</span></div>
+
+    <div class="ev loss">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2021–22</span><span class="ev-badge">Mass Claim Event</span><span class="ev-title">COVID Supply Chain Crisis — Parts Inflation &amp; Replacement Surge</span></div>
+        <div class="ev-body">Global semiconductor shortages and supply chain disruptions cause repair parts to become unavailable for many consumer electronics and appliance categories. Extended warranty insurers unable to source parts for covered repairs are forced to replace units at inflated prices. Replacement costs for consumer electronics rise 20–35%. Claims costs exceed reserves on several programmes. Loss ratios spike industry-wide in 2021–2022.<sup>[14]</sup></div>
+        <div class="ev-impact">Market impact: Obsolescence risk becomes a key underwriting variable. "Replace not repair" policies reviewed. Programme costing models updated to include parts availability risk. Inflation escalation clauses introduced in reinsurance treaties.</div>
+      </div>
+    </div>
+
+    <div class="ev reg">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2021</span><span class="ev-badge">Regulatory</span><span class="ev-title">Australia Deferred Sales Model — Add-on Insurance Reform</span></div>
+        <div class="ev-body">ASIC implements the deferred sales model (effective 5 October 2021), requiring a mandatory 4-day deferral period between the sale of a principal product and the sale of add-on insurance (including extended warranty). Follows ASIC's finding of loss ratios of 9–19% on some add-on products. Extended warranty programmes relying on point-of-sale capture in Australia face a structural revenue decline.<sup>[15]</sup></div>
+        <div class="ev-impact">Market impact: Australian EW market restructures toward direct-to-consumer and subscription models. Retailers lose the impulse-purchase dynamic. Claims ratios improve (purchasers are now more deliberate), but volumes fall.</div>
+      </div>
+    </div>
+
+    <div class="ev tech">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2022–24</span><span class="ev-badge">Technology Shift</span><span class="ev-title">EV Battery Warranty — Emerging High-Severity Sub-Class</span></div>
+        <div class="ev-body">Electric vehicle battery pack failures emerge as a high-severity extended warranty exposure. Battery replacement costs: $10,000–$20,000+ for most EV models. Battery degradation (capacity loss) vs catastrophic failure creates coverage trigger disputes. OEMs (Tesla, VW, GM, Hyundai) provide statutory battery warranties (typically 8 years / 100,000 miles in major markets) but independent EV extended warranty products are launched by multiple TPAs. Underwriters wrestle with battery obsolescence risk and parts availability for early-model EVs.<sup>[16]</sup></div>
+        <div class="ev-impact">Market impact: EV warranty becomes a specialist underwriting class. Battery State of Health (SoH) diagnostics required at policy inception. Maximum term limits imposed (typically 3–5 years). Reinsurers impose per-battery sub-limits.</div>
+      </div>
+    </div>
+
+    <div class="ev reg">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2023</span><span class="ev-badge">Regulatory</span><span class="ev-title">FCA Consumer Duty — Fair Value Obligation</span></div>
+        <div class="ev-body">The FCA's Consumer Duty comes into force (31 July 2023), requiring all UK retail financial product manufacturers and distributors to demonstrate that their products deliver fair value — that price is proportionate to benefit. Extended warranty providers must produce fair value assessments demonstrating that consumers receive reasonable benefit relative to cost. Historically low loss ratios (under 40% on some products) come under regulatory scrutiny.<sup>[17]</sup></div>
+        <div class="ev-impact">Market impact: UK extended warranty providers review pricing, coverage, and distribution margins. Some products withdrawn; others repriced. Commission disclosure to retail distribution partners tightened. Lloyd's syndicates writing UK WA business review programme terms.</div>
+      </div>
+    </div>
+
+    <div class="ev legal">
+      <div class="ev-dot"></div>
+      <div class="ev-card">
+        <div class="ev-hdr"><span class="ev-yr">2024</span><span class="ev-badge">Legislation</span><span class="ev-title">EU Right to Repair Directive — Statutory Repair Obligations Extended</span></div>
+        <div class="ev-body">The EU Right to Repair Directive (Directive 2024/1799) requires manufacturers to offer repair services for covered product categories for 5–10 years after the product is placed on the market, at reasonable cost. Covers household appliances, mobile phones, and electronics. Manufacturers must provide spare parts and repair tools to independent repairers. This extends the statutory baseline above which extended warranties must justify their value.<sup>[18]</sup></div>
+        <div class="ev-impact">Market impact: Narrows the value proposition of extended warranties in the EU — statutory repair rights now extend further. Extended warranty products must pivot toward accidental damage, rapid service, and replacement guarantees that go beyond the statutory repair obligation.</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+<footer>Risk Code Hub — Extended Warranty Insurance | Lloyd's Code WA | Version 4.3</footer>
+</body>
+</html>

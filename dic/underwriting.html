@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Underwriting — Difference in Conditions (DC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #2a1a5c;
+      --hub-dark:      #110a30;
+      --hub-light:     #ede8ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#37474f;
+      --header-gradient:linear-gradient(135deg,#110a30 0%,#2a1a5c 55%,#3d2880 100%);
+      --header-sub:    #b39ddb;
+      --mid:           #d1c4e9;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1430;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#b39ddb;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#110a30;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#b39ddb;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--mid);}
+    .factors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .factor{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);}
+    .factor.high{border-left-color:#c62828;}
+    .factor.med{border-left-color:#e65100;}
+    .factor.low{border-left-color:#1a5c2a;}
+    .factor .impact{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .factor h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .factor p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .factor .rate{font-size:0.78rem;font-weight:700;color:#c62828;margin-top:6px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #ede8ff;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f5f0ff;}
+    .formula-box{background:#110a30;color:#b39ddb;border-radius:8px;padding:20px 24px;font-family:monospace;font-size:0.88rem;line-height:1.8;margin-bottom:24px;}
+    .formula-box .comment{color:#7e57c2;}
+    .worked{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px;border-top:4px solid var(--hub-primary);}
+    .worked.alt{border-top-color:var(--hub-accent);}
+    .worked h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .worked table{box-shadow:none;margin-bottom:0;}
+    .worked th{background:var(--hub-primary);}
+    .info-box{background:#ede8ff;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a1430;line-height:1.6;}
+    .warn-box{background:#fff8e1;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    footer{background:#110a30;color:#b39ddb;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Difference in Conditions (DC)</a> › Underwriting</div>
+    <div class="tag">Module 04</div>
+    <h1>Underwriting Methodology</h1>
+    <div class="sub">Rating factors, loss benchmarks, worked examples &amp; key exclusions for DIC/DIL master programmes</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Rating factors — High -->
+  <div class="section-title">Rating Factors — High Impact</div>
+  <div class="factors-grid">
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Total Insured Value (TIV) Across Global Portfolio</h4>
+      <p>The primary exposure measure. DIC/DIL premium is fundamentally a function of the global TIV across all insured locations, weighted by the DIC/DIL exposure at each location (i.e., the gap between local admitted policy terms/limits and master programme standard). Accurate TIV declaration is essential — undervaluation is the most common cause of DIC/DIL inadequacy. <sup>[I2]</sup></p>
+      <div class="rate">Base rate: 0.01–0.06% of global TIV for property DIC/DIL depending on NatCat and DIC scope</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>NatCat Exposure — PML Modelling Essential</h4>
+      <p>For property DIC/DIL, NatCat probable maximum loss (PML) modelling using AIR Worldwide or RMS is non-negotiable. Flood, earthquake and windstorm exposures by geography must be mapped against local admitted policy sublimits to quantify the DIC/DIL gap. Thailand 2011 and Harvey 2017 demonstrated the catastrophic cost of unmodelled NatCat accumulation in DIC books. <sup>[I10]</sup></p>
+      <div class="rate">NatCat loading: 0.5× to 3.0× depending on concentration of TIV in high-hazard zones</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Local Admitted Policy Terms — What DIC Must Fill</h4>
+      <p>The scope of DIC coverage is entirely determined by what the local admitted policies exclude or sublimit. Underwriters must review local policy terms in every jurisdiction to identify: (a) perils excluded locally but covered by master, (b) sublimits below master standard, and (c) conditions/warranties in local policies that may create additional coverage gaps. <sup>[I4]</sup></p>
+      <div class="rate">DIC scope wider = higher risk; pure DIL (limit top-up only) = lower risk and lower rate</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Jurisdictions Covered — Number and Country Risk</h4>
+      <p>Programme complexity and admitted rules compliance risk increase with number of jurisdictions. High-risk jurisdictions (BRIC, Southeast Asia, Latin America) require fronting or reinsurance structures that create additional friction and coverage gaps. Each country adds admitted rules analysis, local policy review, and claims coordination complexity. <sup>[I3]</sup></p>
+      <div class="rate">Loading: +5–10% per high-risk jurisdiction added; regulatory compliance costs are standalone</div>
+    </div>
+  </div>
+
+  <div class="section-title">Rating Factors — Medium Impact</div>
+  <div class="factors-grid">
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>DIC vs DIL Split</h4>
+      <p>DIC (covering perils the local insurer declined) is inherently riskier than pure DIL (topping up a limit for a peril the local insurer accepted). A programme that is predominantly DIL (limit top-up for a well-covered peril) attracts significantly lower rates than one requiring DIC for excluded perils such as flood in Thailand or earthquake in Japan. <sup>[I2]</sup></p>
+      <div class="rate">Pure DIL programme: −20 to −35% vs DIC + DIL combined</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>BI Period and Supply Chain Complexity</h4>
+      <p>Business interruption DIC/DIL is increasingly significant and materially more complex than property DIC/DIL. Thailand 2011 and Japan 2011 demonstrated that BI recovery periods of 12–24 months vastly exceed local policy indemnity period sublimits (often 6 months). Supply chain mapping is essential — the CBI DIC exposure can exceed direct property DIC exposure. <sup>[I10]</sup></p>
+      <div class="rate">BI DIC/DIL: typically rated separately from property DIC at 15–25% additional premium</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Admitted Policy Quality — Local Carrier Strength</h4>
+      <p>Where local admitted policies are placed with financially strong, reputable carriers (Zurich, AXA, Tokio Marine local subsidiaries), the DIC programme operates with confidence that local policies will pay correctly and promptly. Where local carriers are financially weak or of uncertain quality, there is risk of local policy non-performance, which could inadvertently trigger DIC claims. <sup>[I3]</sup></p>
+      <div class="rate">Loading: +10–20% where local admitted carriers are non-investment-grade or state-controlled in weak markets</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Claims Coordination Complexity</h4>
+      <p>DIC/DIL claims require precise coordination between the local admitted insurer and the DIC master underwriter. The DIC underwriter must obtain: (a) evidence of local policy response (or declination), (b) local claim quantum, (c) agreement on DIC trigger mechanism. Follow-the-settlements clauses in master policies are essential — without them, DIC litigation risk is high. <sup>[I9]</sup></p>
+      <div class="rate">Claims coordination complexity loading: +5–15% for programmes without established claims protocols</div>
+    </div>
+  </div>
+
+  <div class="section-title">Rating Factors — Lower Impact</div>
+  <div class="factors-grid">
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>BEPS Compliance — Transfer Pricing Documentation</h4>
+      <p>Well-documented arm's-length premium allocation between parent and subsidiaries reduces tax authority challenge risk. Poor BEPS compliance does not directly affect DIC coverage but creates premium disallowance risk that may lead to mid-term programme restructuring. BEPS compliance is increasingly a broker/buyer pre-placement checklist item. <sup>[L4]</sup></p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Broker / Programme Manager Experience</h4>
+      <p>Experienced multinational programme brokers (Marsh, Aon, WTW multinational divisions) bring strong local network relationships, admitted rules knowledge, and programme management capability. Less experienced brokers increase programme gaps risk — local policies may not align precisely with master terms, creating inadvertent DIC/DIL disputes at claims stage.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Currency of Local vs Master Policy</h4>
+      <p>Currency mismatch between local admitted policy (e.g., THB Thai baht) and master DIC/DIL policy (USD or GBP) creates FX risk at claims stage. Post-loss depreciation of local currency (common in disaster-affected emerging markets) can reduce the local policy payout in master currency terms, affecting DIL attachment calculation. Currency matching is best practice.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Regulatory Inspection History</h4>
+      <p>A track record of regulatory compliance — no adverse findings from local regulators, no non-admitted violations, no premium tax disputes — supports a clean programme structure. Regulatory violations in any jurisdiction can void local policy coverage, inadvertently triggering DIC claims on the master and creating insurer/insured disputes.</p>
+    </div>
+  </div>
+
+  <!-- Rate derivation formula -->
+  <div class="section-title">DIC/DIL Rate Derivation Approach</div>
+  <div class="formula-box">
+    <span class="comment">// DIC/DIL DC — indicative premium derivation approach</span><br><br>
+    <span class="comment">// Method 1: Rate on TIV (Property DIC/DIL)</span><br>
+    GWP = Global TIV × DIC/DIL Rate<br>
+    &nbsp;&nbsp;DIC/DIL Rate = Base Rate (by class) × NatCat Loading × Scope Factor<br><br>
+    <span class="comment">// Method 2: % of Local Admitted Premium (common for pure DIL)</span><br>
+    GWP = Sum of Local Admitted Premiums × DIL Rate<br>
+    &nbsp;&nbsp;DIL Rate range: 5–15% of admitted premium (pure limit top-up)<br>
+    &nbsp;&nbsp;DIC Rate range: 15–35% of admitted premium (broader coverage gap fill)<br><br>
+    <span class="comment">// Method 3: Exposure-based for Financial Lines DIC</span><br>
+    Financial Lines DIC GWP = Local D&amp;O/PI GWP × Financial Lines DIC Multiplier<br>
+    &nbsp;&nbsp;D&O DIC multiplier: 1.2–2.0× local D&amp;O premium (broader terms + higher limits)
+  </div>
+
+  <!-- Loss benchmarks -->
+  <div class="section-title">Combined Ratio Benchmarks by DIC/DIL Type<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>DIC/DIL Type</th><th>Primary Peril</th><th>Gross Combined Ratio</th><th>Peak Year CR</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Property DIL Only (limit top-up)</td><td>Wind/fire limit extension</td><td>45–65%</td><td>80–90% (NatCat yr)</td><td>Lower risk — local insurer accepted peril</td></tr>
+      <tr><td>Property DIC (flood exclusion fill)</td><td>Flood — excluded locally</td><td>55–80%</td><td>120–200% (Thailand type)</td><td>Catastrophe aggregate exposure — primary DIC risk</td></tr>
+      <tr><td>Property DIC (earthquake fill)</td><td>EQ excluded/sublimited</td><td>50–75%</td><td>110–180% (Japan type)</td><td>Correlated aggregate in seismic zones</td></tr>
+      <tr><td>BI DIC/DIL (indemnity period extension)</td><td>BI following property DIC</td><td>60–90%</td><td>150%+ (supply chain year)</td><td>Highly complex; supply chain correlation risk</td></tr>
+      <tr><td>Financial Lines DIC (D&O/PI)</td><td>Securities claims gap, broader terms</td><td>50–75%</td><td>100–130% (loss year)</td><td>Legal complexity; long-tail development</td></tr>
+      <tr><td>Casualty DIL (GL limit top-up)</td><td>GL limit extension — international</td><td>40–60%</td><td>70–90%</td><td>Generally lower frequency</td></tr>
+      <tr><td>NatCat Sublimit Top-Up (DIL)</td><td>Flood/EQ/wind above sublimit</td><td>55–85%</td><td>200%+ (Thailand/NZ)</td><td>Most volatile — peaks in major NatCat years</td></tr>
+      <tr><td>Cyber DIC (international gap fill)</td><td>Cyber coverage gap locally</td><td>65–100%</td><td>n/a (developing market)</td><td>Emerging — limited actuarial history</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Worked Example A -->
+  <div class="worked">
+    <h3>Worked Example A — US Electronics MNC: Property DIC/DIL for NatCat Sublimit Gaps</h3>
+    <p style="font-size:0.85rem;color:#555;margin-bottom:12px;">US electronics manufacturer, operations in 12 countries ($2bn global TIV), significant manufacturing in Thailand (flood) and Japan (earthquake). Local admitted programmes have NatCat sublimits. Lloyd's DIC/DIL fills sublimit gaps.</p>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Global TIV</td><td>$2bn across 12 countries; Thailand 25% ($500m), Japan 20% ($400m)</td><td>$2,000m</td></tr>
+        <tr><td>Local admitted premium</td><td>Aggregate local admitted premiums across all markets</td><td>~$4.2m p.a.</td></tr>
+        <tr><td>DIC scope</td><td>Flood DIC (Thailand — excluded locally), EQ DIC (Japan — separate Jishin Hoken), NatCat sublimit DIL (all markets)</td><td>DIC + DIL</td></tr>
+        <tr><td>NatCat PML modelling</td><td>AIR flood Thailand 1-in-100: $180m; AIR EQ Japan 1-in-250: $220m — well above local sublimits</td><td>Modelled PML $220m</td></tr>
+        <tr><td>DIC/DIL Rate on TIV</td><td>0.025% base × 2.0× NatCat loading (Thailand/Japan concentration)</td><td>0.05% of TIV</td></tr>
+        <tr><td>Indicative GWP</td><td>$2,000m × 0.05%</td><td>~$1,000,000</td></tr>
+        <tr><td>BI DIC/DIL addendum</td><td>18-month indemnity period DIC; supply chain BI extension</td><td>+$250,000</td></tr>
+        <tr><td><strong>Total DIC/DIL GWP</strong></td><td>Property + BI DIC/DIL</td><td><strong>~$1,250,000</strong></td></tr>
+        <tr><td>Assumed Gross LR</td><td>NatCat-exposed DIC — long-run with periodic large loss years</td><td>68%</td></tr>
+        <tr><td>Claims Estimate</td><td>$1.25m × 68%</td><td>$850,000</td></tr>
+        <tr><td>Commission (20%)</td><td>Multinational programme — lower commission than retail</td><td>$250,000</td></tr>
+        <tr><td>Expenses (10%)</td><td>—</td><td>$125,000</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>$25,000 (2.0% margin — NatCat years may be large losses)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Worked Example B -->
+  <div class="worked alt">
+    <h3>Worked Example B — German Automotive Group: D&amp;O DIC/DIL Financial Lines Programme</h3>
+    <p style="font-size:0.85rem;color:#555;margin-bottom:12px;">German automotive OEM with subsidiaries in 18 countries. Local D&amp;O policies in each country placed on local terms. Lloyd's master D&amp;O DIC/DIL provides broader terms (including US securities coverage) and higher master programme limits.</p>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Programme structure</td><td>18 local D&amp;O policies; master D&amp;O DIC/DIL at Lloyd's £100m limit</td><td>18 countries</td></tr>
+        <tr><td>Local D&amp;O aggregate GWP</td><td>18 local admitted D&amp;O policies — total annual premium</td><td>~€2.8m</td></tr>
+        <tr><td>DIC scope</td><td>US securities claims coverage (excluded in European local D&amp;O), broader entity cover, Side C USA extension</td><td>Material DIC component</td></tr>
+        <tr><td>DIL scope</td><td>Master limit €100m vs local limits averaging €15m — substantial DIL in each jurisdiction</td><td>Major DIL component</td></tr>
+        <tr><td>D&amp;O DIC/DIL multiplier</td><td>1.6× local D&amp;O premium (broad DIC terms + significant DIL)</td><td>Multiplier: 1.6×</td></tr>
+        <tr><td>DIC/DIL GWP</td><td>€2.8m × 1.6× = base; plus US securities uplift</td><td>~€4.8m</td></tr>
+        <tr><td>US securities risk uplift</td><td>US-listed ADR; SEC investigation history — material loading</td><td>+€600k</td></tr>
+        <tr><td><strong>Total D&amp;O DIC/DIL GWP</strong></td><td>—</td><td><strong>~€5.4m</strong></td></tr>
+        <tr><td>Assumed Gross LR</td><td>Financial lines DIC — long-tail development; D&amp;O benchmark</td><td>62%</td></tr>
+        <tr><td>Claims Estimate</td><td>€5.4m × 62%</td><td>€3.35m</td></tr>
+        <tr><td>Commission (18%)</td><td>—</td><td>€0.97m</td></tr>
+        <tr><td>Expenses (10%)</td><td>—</td><td>€0.54m</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>€0.54m (10.0% margin)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Key exclusions -->
+  <div class="section-title">Key Exclusions</div>
+  <table>
+    <thead>
+      <tr><th>Exclusion</th><th>Rationale</th><th>Potential Endorsement / Workaround</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Losses fully covered by local admitted policy</td><td>DIC/DIL pays only the DIFFERENCE — not a duplicate of local cover</td><td>Claims coordination clause essential to prevent overlap disputes</td></tr>
+      <tr><td>War (without endorsement)</td><td>Standard exclusion; Ukraine 2022 applies war exclusion across all lines</td><td>War DIC rarely written; specialist political risk cover separate</td></tr>
+      <tr><td>Nuclear / radiation</td><td>Standard market exclusion</td><td>Nuclear energy pool coverage separate</td></tr>
+      <tr><td>BEPS non-compliant premium arrangements</td><td>Regulatory risk — premium disallowance may void local policy structure</td><td>Transfer pricing documentation required; specialist BEPS review</td></tr>
+      <tr><td>Local policy non-performance (carrier insolvency)</td><td>DIC is not a credit guarantee for local admitted insurer; financial failure of local carrier is not a DIC trigger</td><td>Local carrier financial strength review; credit endorsement separate</td></tr>
+      <tr><td>Currency exchange losses</td><td>DIC pays in master policy currency; local currency depreciation post-loss not covered</td><td>Currency matching in local and master policies; FX endorsement rare</td></tr>
+      <tr><td>Pandemic / government order (standard BI DIC)</td><td>COVID-19 test: standard BI DIC does not convert pandemic exclusion into covered peril</td><td>Specialist pandemic cover required; not standard DIC provision</td></tr>
+      <tr><td>Intentional non-compliance with local admitted rules</td><td>If insured deliberately avoids admitted insurance in restrictive market, DIC master may be voided by local regulator</td><td>Fronting structure required in restrictive markets (Brazil, China, India)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <strong>DIC Rate Derivation Note:</strong> Unlike most insurance classes, DIC/DIL has no independent exposure base — its exposure is entirely defined by the <em>gap</em> between local admitted policy terms/limits and master programme standard. This makes DIC rating inherently dependent on a full review of all local admitted policies in the programme. Underwriters who skip local policy review are pricing blindly. The "5–15% of admitted premium" heuristic for pure DIL is widely used as a first-pass estimate but should always be validated against actual sublimit gaps and PML modelling for NatCat-exposed programmes. <sup>[I2]</sup>
+  </div>
+
+  <div class="warn-box">
+    <strong>NatCat Accumulation Risk:</strong> The Thailand floods 2011 demonstrated that DIC underwriters face <em>correlated aggregate losses</em> — multiple policyholders with the same DIC trigger (Thai flood exclusion) triggering simultaneously. Unlike single-risk insurance, DIC accumulation across a syndicate's book can produce catastrophic aggregate losses in a single NatCat event. PML modelling at the portfolio level, not just per risk, is essential for NatCat DIC underwriting. Lloyd's requires syndicate-level NatCat DIC aggregate monitoring. <sup>[I10]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Difference in Conditions (DC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="rates-analysis.html">Next: Rates &amp; ROE →</a></p>
+</footer>
+
+</body>
+</html>

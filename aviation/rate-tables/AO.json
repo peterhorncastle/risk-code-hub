@@ -1,0 +1,101 @@
+{
+  "riskCode": "AO",
+  "label": "Aviation Products Liability",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "productsExposure",
+    "label": "Products Exposure Base ($)",
+    "defaultValue": 500000000,
+    "hint": "Fleet-in-service value × risk factor + deliveries exposure"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate on Exposure",
+    "value": 0.0008
+  },
+  "ratingFactors": [
+    {
+      "key": "productCriticality",
+      "label": "Product Criticality",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "flight_critical",
+      "hint": "Criticality of manufactured component",
+      "options": {
+        "flight_critical": { "label": "Flight Critical (engines, flight controls)", "factor": 1.50 },
+        "major":           { "label": "Major Systems (landing gear, avionics)",     "factor": 1.20 },
+        "minor":           { "label": "Minor Systems (cabin, galley, IFE)",         "factor": 0.70 },
+        "ground_support":  { "label": "Ground Support Equipment",                   "factor": 0.50 }
+      }
+    },
+    {
+      "key": "fleetInService",
+      "label": "Units in Service",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 5000,
+      "hint": "Number of aircraft/units in active service with this product",
+      "bands": [
+        { "min": 0,     "max": 100,   "factor": 0.70 },
+        { "min": 100,   "max": 1000,  "factor": 0.85 },
+        { "min": 1000,  "max": 5000,  "factor": 1.00 },
+        { "min": 5000,  "max": 15000, "factor": 1.15 },
+        { "min": 15000, "max": 99999, "factor": 1.30 }
+      ]
+    },
+    {
+      "key": "groundingSublimit",
+      "label": "Grounding Sublimit",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "hint": "Sub-limit for fleet grounding losses",
+      "options": {
+        "excluded":  { "label": "Grounding excluded",     "factor": 0.75 },
+        "sublimited":{ "label": "Sublimited ($100m)",     "factor": 0.90 },
+        "standard":  { "label": "Standard ($250m)",       "factor": 1.00 },
+        "full":      { "label": "Full limit ($500m+)",    "factor": 1.25 }
+      }
+    },
+    {
+      "key": "lossHistory",
+      "label": "Products Loss History (10yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean":        { "label": "No claims / minor only",     "factor": 0.85 },
+        "attritional":  { "label": "Attritional claims only",    "factor": 1.00 },
+        "significant":  { "label": "Significant claim history",  "factor": 1.40 },
+        "catastrophic": { "label": "Catastrophic loss (MAX-type)", "factor": 2.00 }
+      }
+    },
+    {
+      "key": "qualitySystem",
+      "label": "Quality / Certification",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "oem_certified",
+      "options": {
+        "oem_certified":   { "label": "OEM / Part 21 Design Org",  "factor": 0.90 },
+        "part145_approved":{ "label": "Part 145 MRO approved",      "factor": 1.00 },
+        "pma_supplier":    { "label": "PMA parts supplier",         "factor": 1.15 },
+        "non_certified":   { "label": "Non-certified / DER repairs","factor": 1.40 }
+      }
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 25000,
+    "claimsHandlingPerClaim": 250000,
+    "systemOverheadPerYear": 10000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.005,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.18,
+    "reinsuranceRate": 0.10
+  },
+  "targetProfitMargin": 0.05
+}

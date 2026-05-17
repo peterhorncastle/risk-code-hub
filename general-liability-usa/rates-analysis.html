@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>General Liability USA — Rates & ROE | Risk Code Hub</title>
+<link rel="stylesheet" href="../hub-styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --hub-primary:    #7b1a1a;
+    --hub-dark:       #4a0d0d;
+    --hub-light:      #fdf0f0;
+    --hub-accent:     #c8a84b;
+    --hub-secondary:  #1c2e6b;
+    --hub-secondary2: #2e7d32;
+    --header-gradient: linear-gradient(135deg,#4a0d0d 0%,#7b1a1a 50%,#8b2020 100%);
+    --header-sub:     #e8b0a0;
+  }
+  header { background: var(--header-gradient); color:#fff; padding:2rem 1.5rem 1.5rem; }
+  header h1 { margin:0 0 0.3rem; font-size:2rem; color:#fff; }
+  header p  { margin:0; color:var(--header-sub); font-size:1rem; }
+  nav { background:var(--hub-dark); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.3rem; }
+  nav a { color:#e8c0b0; text-decoration:none; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.85rem; }
+  nav a:hover, nav a.active { background:var(--hub-primary); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+  h2 { font-size:1.25rem; color:var(--hub-primary); margin:2rem 0 0.8rem; border-bottom:2px solid var(--hub-accent); padding-bottom:0.4rem; }
+  h3 { font-size:1.05rem; color:var(--hub-secondary); margin:1.2rem 0 0.5rem; }
+  p { line-height:1.8; color:#333; margin-bottom:0.8rem; font-size:0.93rem; }
+
+  /* Confidence badges */
+  .b-v { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#e6f4ea; color:#1a5c28; vertical-align:middle; }
+  .b-e { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#fef3e2; color:#7a4500; vertical-align:middle; }
+  .b-i { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#cce5ff; color:#004085; vertical-align:middle; }
+  .b-g { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:8px; background:#f8d7da; color:#721c24; vertical-align:middle; }
+
+  /* Market cycle cards */
+  .cycle-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:0.8rem; margin:1rem 0 1.5rem; }
+  .cycle-card { background:#fff; border-radius:8px; padding:1rem 1.1rem; border-top:4px solid; border:1px solid #e0c0c0; border-top:4px solid var(--hub-primary); }
+  .cycle-card.soft { border-top-color:var(--hub-secondary2); }
+  .cycle-card.hard { border-top-color:var(--hub-primary); }
+  .cycle-card.mixed { border-top-color:var(--hub-accent); }
+  .cycle-card.current { border-top-color:var(--hub-secondary); }
+  .cycle-card .era { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--hub-primary); margin-bottom:0.4rem; }
+  .cycle-card.soft .era { color:var(--hub-secondary2); }
+  .cycle-card.hard .era { color:var(--hub-primary); }
+  .cycle-card.mixed .era { color:#7a5a00; }
+  .cycle-card.current .era { color:var(--hub-secondary); }
+  .cycle-card h4 { margin:0 0 0.4rem; font-size:0.95rem; color:#222; }
+  .cycle-card p { font-size:0.83rem; color:#444; margin:0; }
+
+  /* Rate benchmark table */
+  .tbl-wrap { overflow-x:auto; margin:0.5rem 0 1.5rem; }
+  table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+  thead th { background:var(--hub-primary); color:#fff; padding:0.55rem 0.7rem; text-align:left; }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid #f0dada; }
+  tbody tr:nth-child(even) { background:#fdf5f5; }
+  .dir-up   { color:#c0392b; font-weight:700; }
+  .dir-flat { color:#888; font-weight:700; }
+  .dir-dn   { color:#2e7d32; font-weight:700; }
+
+  /* Chart containers */
+  .chart-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:1.5rem; margin:1.2rem 0 2rem; }
+  .chart-box { background:#fff; border-radius:10px; padding:1.2rem; border:1px solid #e0c0c0; }
+  .chart-box h4 { font-size:0.9rem; color:var(--hub-primary); margin:0 0 0.8rem; }
+  .chart-box canvas { max-height:260px; }
+
+  /* ROE scenarios */
+  .roe-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.8rem; margin:1rem 0 1.5rem; }
+  .roe-card { background:#fff; border-radius:8px; padding:1.1rem; text-align:center; border:1px solid #e0c0c0; }
+  .roe-card .roe-label { font-size:0.78rem; text-transform:uppercase; letter-spacing:.5px; font-weight:700; color:#888; margin-bottom:0.4rem; }
+  .roe-card .roe-val { font-size:2rem; font-weight:800; }
+  .roe-card.bull .roe-val { color:var(--hub-secondary2); }
+  .roe-card.base .roe-val { color:var(--hub-secondary); }
+  .roe-card.bear .roe-val { color:var(--hub-primary); }
+  .roe-card p { font-size:0.8rem; color:#555; margin:0.4rem 0 0; }
+
+  .warn-box { background:#fff3cd; border-left:4px solid var(--hub-accent); border-radius:6px; padding:0.9rem 1.1rem; margin:1.2rem 0; font-size:0.87rem; color:#5a4000; }
+  footer { background:var(--hub-dark); color:#e8c0b0; text-align:center; padding:1rem; font-size:0.82rem; margin-top:2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>General Liability — USA</h1>
+  <p>Lloyd's Risk Codes UA · UC · UR · US &nbsp;|&nbsp; Module 05: Rates &amp; ROE Analysis</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <h2>US GL Market Rate Cycle</h2>
+  <p>US General Liability experienced a dramatic shift from a prolonged soft market to sustained hardening from 2019 onwards, driven by social inflation, nuclear verdict proliferation, PFAS/mass tort reserve strengthening, and withdrawal of capacity from high-hazard segments. Lloyd's E&amp;S market hardened earlier and more sharply than the admitted market, given its disproportionate exposure to the most hazardous risks. <span class="b-e">EST</span></p>
+
+  <div class="cycle-grid">
+    <div class="cycle-card soft">
+      <div class="era">2010–2016 — Soft Market</div>
+      <h4>Benign Loss Environment, Competitive Pricing</h4>
+      <p>Low interest rates drove capacity expansion. Social inflation not yet measurable. Rates flat to −5% annually. Lloyd's E&amp;S market competed aggressively on price, particularly for premises and products GL. PCOH underpriced for latent development.</p>
+    </div>
+    <div class="cycle-card mixed">
+      <div class="era">2017–2018 — Early Inflection</div>
+      <h4>Social Inflation Emerges; Rates Begin to Rise</h4>
+      <p>Nuclear verdicts &gt;$10m begin appearing in Florida, Georgia, Texas. Trucking GL losses accelerate. Lloyd's begins non-renewing high-hazard hospitality and construction risks. Rates +5–15% for nuclear verdict classes. Market still broadly competitive for low-hazard risks.</p>
+    </div>
+    <div class="cycle-card hard">
+      <div class="era">2019–2022 — Hard Market</div>
+      <h4>Capacity Withdrawal, Disciplined Pricing</h4>
+      <p>PFAS mass tort reserves increase sharply. Opioid litigation settles for $50bn+. SAM lookback windows open in major states. Construction GL (especially NY §240) becomes effectively uninsurable in admitted market. Lloyd's E&amp;S rates +20–60% across nuclear verdict segments. High-hazard classes see +80–120%.</p>
+    </div>
+    <div class="cycle-card current">
+      <div class="era">2023–2024 — Selective Stabilisation</div>
+      <h4>Rate Adequacy in Some Segments; Sustained Pressure in Others</h4>
+      <p>Low-hazard accounts (professional offices, retail — non-nuclear states): rates flat to +5%. High-hazard (nuclear verdict states, construction, healthcare, trucking): continued +10–25%. Mass tort exclusions fully embedded. E&amp;S capacity still limited for highest-hazard classes. Social inflation trend shows no sign of reversal.</p>
+    </div>
+  </div>
+
+  <h2>Rate Benchmarks by Segment (2020–2024)</h2>
+  <p>Rate on line (RoL) and loss ratio benchmarks by US GL sub-segment. All figures are indicative market estimates — actual Lloyd's syndicate data is proprietary. <span class="b-e">EST</span></p>
+  <div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Segment / Class</th>
+        <th>2020 RoL</th>
+        <th>2022 RoL</th>
+        <th>2024 RoL</th>
+        <th>2020 LR</th>
+        <th>2024 LR</th>
+        <th>Trend</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Retail GL (low hazard, non-nuclear state)</td><td>0.85%</td><td>1.00%</td><td>1.05%</td><td>58%</td><td>55%</td><td class="dir-flat">→</td><td>Stable; well-modelled frequency</td></tr>
+      <tr><td>Retail GL (FL/GA/TX — nuclear verdict)</td><td>1.20%</td><td>1.75%</td><td>1.90%</td><td>68%</td><td>62%</td><td class="dir-up">↑</td><td>Rate adequacy improving; continued social inflation watch</td></tr>
+      <tr><td>Restaurant / Hospitality (liquor)</td><td>1.40%</td><td>2.10%</td><td>2.20%</td><td>72%</td><td>65%</td><td class="dir-up">↑</td><td>Dram shop + nuclear verdict combination; E&amp;S dominated</td></tr>
+      <tr><td>Construction GC (ex-NY, non-nuclear state)</td><td>1.80%</td><td>2.50%</td><td>2.60%</td><td>74%</td><td>68%</td><td class="dir-flat">→</td><td>Completed operations tail material; SIR preferred</td></tr>
+      <tr><td>Construction GC (NY §240)</td><td>3.50%</td><td>5.20%</td><td>5.50%</td><td>85%</td><td>80%</td><td class="dir-up">↑</td><td>Very limited Lloyd's capacity; sublimit/exclusion common</td></tr>
+      <tr><td>Manufacturing — light (consumer goods)</td><td>0.90%</td><td>1.20%</td><td>1.25%</td><td>62%</td><td>58%</td><td class="dir-flat">→</td><td>Products PCOH tail; mass tort screening critical</td></tr>
+      <tr><td>Manufacturing — heavy / industrial</td><td>1.60%</td><td>2.20%</td><td>2.30%</td><td>70%</td><td>65%</td><td class="dir-up">↑</td><td>PFAS and chemical exposure screening mandatory</td></tr>
+      <tr><td>Trucking / Fleet (long-haul)</td><td>2.80%</td><td>4.50%</td><td>4.80%</td><td>88%</td><td>78%</td><td class="dir-up">↑</td><td>Nuclear verdict hotspot; many admitted carriers withdrawn</td></tr>
+      <tr><td>Senior Living / Nursing Home</td><td>2.20%</td><td>3.80%</td><td>4.20%</td><td>82%</td><td>75%</td><td class="dir-up">↑</td><td>Florida virtually uninsurable without very high SIR</td></tr>
+      <tr><td>Cannabis (E&amp;S only)</td><td>3.50%</td><td>4.80%</td><td>5.00%</td><td>N/A</td><td>62%</td><td class="dir-flat">→</td><td>Specialty E&amp;S market; limited data; growing capacity</td></tr>
+      <tr><td>Youth-Serving Orgs (SAM endorsed)</td><td>1.50%</td><td>2.80%</td><td>3.00%</td><td>N/A</td><td>N/A</td><td class="dir-up">↑</td><td>Lookback window exposure; standalone SAM required</td></tr>
+      <tr><td>Umbrella / Excess (UC) — standard class</td><td>0.40%</td><td>0.80%</td><td>0.85%</td><td>55%</td><td>52%</td><td class="dir-flat">→</td><td>Price adequacy returning; still below 2019 levels for high-hazard</td></tr>
+      <tr><td>Umbrella / Excess (UC) — nuclear verdict class</td><td>0.90%</td><td>1.80%</td><td>2.00%</td><td>72%</td><td>68%</td><td class="dir-up">↑</td><td>Punitive damage exposure; capacity constrained</td></tr>
+      <tr><td>UR Treaty Reinsurance — GL XL</td><td>6.0% RoL</td><td>9.5% RoL</td><td>10.0% RoL</td><td>62%</td><td>60%</td><td class="dir-flat">→</td><td>Social inflation IBNR uncertainty makes treaty pricing difficult</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="warn-box"><strong>⚠ Pro-Cyclicality Warning:</strong> US GL loss development is heavily right-skewed and socially inflated. Reported loss ratios in 2020–2022 appeared manageable in many segments, but IBNR development on nuclear verdict years (particularly 2018–2021) has continued to develop adversely through 2024. Underwriters relying solely on reported loss ratios without IBNR and social inflation development loads are materially under-reserving.</div>
+
+  <!-- Charts -->
+  <h2>Market Cycle Charts</h2>
+  <div class="chart-grid">
+    <div class="chart-box">
+      <h4>Rate Index by Segment (2015=100) <span class="b-e">EST</span></h4>
+      <canvas id="rateChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>Combined Loss Ratio by Year — Lloyd's US GL Portfolio (Illustrative) <span class="b-i">ILLUS</span></h4>
+      <canvas id="lrChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>Portfolio Mix by Code — Illustrative Lloyd's US GL Book <span class="b-i">ILLUS</span></h4>
+      <canvas id="mixChart"></canvas>
+    </div>
+  </div>
+
+  <h2>ROE Scenario Analysis — Illustrative £250m US GL Portfolio</h2>
+  <p>Three scenarios modelled for an illustrative Lloyd's syndicate US GL portfolio ($250m GWP, approximately 55% UA / 30% UC / 10% UR / 5% US by premium). Based on 2024 market conditions. <span class="b-i">ILLUS</span></p>
+
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="roe-label">Bull Scenario</div>
+      <div class="roe-val">+14.8%</div>
+      <p>Loss ratio 58%. Social inflation stabilises. Nuclear verdict frequency plateaus. No new mass tort category emerges. Rate +5% on renewal. IBNR development benign.</p>
+    </div>
+    <div class="roe-card base">
+      <div class="roe-label">Base Scenario</div>
+      <div class="roe-val">+7.2%</div>
+      <p>Loss ratio 68%. Social inflation continues at 8% p.a. trend. Nuclear verdicts elevated but not escalating. 2–3 significant mass tort reserve development events. Rate flat to +3%.</p>
+    </div>
+    <div class="roe-card bear">
+      <div class="roe-label">Bear Scenario</div>
+      <div class="roe-val">−12.5%</div>
+      <p>Loss ratio 88%. New mass tort category emerges (e.g. AI product liability, microplastics). Nuclear verdict frequency accelerates. SAM lookback window expansion triggers major IBNR development. Rate inadequate relative to loss cost.</p>
+    </div>
+  </div>
+
+  <h3>Scenario Assumptions Detail <span class="b-i">ILLUS</span></h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Metric</th><th>Bull</th><th>Base</th><th>Bear</th></tr></thead>
+    <tbody>
+      <tr><td>Gross loss ratio</td><td>58%</td><td>68%</td><td>88%</td></tr>
+      <tr><td>Expense ratio (incl. brokerage)</td><td>34%</td><td>34%</td><td>34%</td></tr>
+      <tr><td>Combined ratio</td><td>92%</td><td>102%</td><td>122%</td></tr>
+      <tr><td>Investment income (3.8% yield on reserves)</td><td>8.5%</td><td>7.2%</td><td>5.8%</td></tr>
+      <tr><td>IBNR development (prior years)</td><td>Benign</td><td>+3% load</td><td>+12% shock</td></tr>
+      <tr><td>Social inflation trend assumption</td><td>5% p.a.</td><td>8% p.a.</td><td>12% p.a.</td></tr>
+      <tr><td>Nuclear verdict year (1 major >$500m verdict)</td><td>None</td><td>1 in 3yr</td><td>2 in 3yr</td></tr>
+      <tr><td>New mass tort category (PFAS-equivalent)</td><td>No</td><td>Partial</td><td>Yes</td></tr>
+      <tr><td>Return on equity</td><td>+14.8%</td><td>+7.2%</td><td>−12.5%</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The base scenario ROE of +7.2% is adequate but below Lloyd's target return of ~12–15% for a class with US GL's loss volatility and long-tail development. This explains continued market discipline on high-hazard segments and capacity restriction in nuclear verdict states. The bear scenario reflects the genuine tail risk of a new mass tort category — which historically has materialised approximately once per decade in the US GL market. <span class="b-e">EST</span></p>
+
+</div>
+<footer>Risk Code Hub · General Liability USA (UA · UC · UR · US) · Module 05: Rates &amp; ROE Analysis · v4.1 May 2026</footer>
+
+<script>
+// Rate Index Chart
+const rateCtx = document.getElementById('rateChart').getContext('2d');
+new Chart(rateCtx, {
+  type: 'line',
+  data: {
+    labels: ['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+    datasets: [
+      { label:'Retail (non-nuclear)', data:[100,98,100,103,108,118,128,132,135,137], borderColor:'#2e7d32', tension:.4, fill:false, borderWidth:2 },
+      { label:'Construction GC (ex-NY)', data:[100,99,102,108,118,135,155,168,172,175], borderColor:'#1c2e6b', tension:.4, fill:false, borderWidth:2 },
+      { label:'Trucking / Fleet', data:[100,100,105,115,138,175,215,248,260,268], borderColor:'#7b1a1a', tension:.4, fill:false, borderWidth:2 },
+      { label:'Umbrella UC (std class)', data:[100,96,97,100,108,140,168,180,185,188], borderColor:'#c8a84b', tension:.4, fill:false, borderWidth:2 }
+    ]
+  },
+  options: { responsive:true, plugins:{ legend:{ position:'bottom', labels:{font:{size:10}} } }, scales:{ y:{ beginAtZero:false, title:{display:true,text:'Index (2015=100)',font:{size:10}} } } }
+});
+
+// Loss Ratio Chart
+const lrCtx = document.getElementById('lrChart').getContext('2d');
+new Chart(lrCtx, {
+  type: 'bar',
+  data: {
+    labels: ['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+    datasets: [
+      { label:'Attritional LR', data:[48,50,52,55,57,56,54,52,50,50], backgroundColor:'rgba(28,46,107,0.65)' },
+      { label:'Large Loss / Mass Tort LR', data:[12,13,16,20,22,18,16,14,12,12], backgroundColor:'rgba(123,26,26,0.75)' }
+    ]
+  },
+  options: {
+    responsive:true, plugins:{ legend:{ position:'bottom', labels:{font:{size:10}} },
+      annotation:{ annotations:{ line1:{ type:'line', yMin:100, yMax:100, borderColor:'red', borderWidth:1.5, label:{content:'100% CLR',enabled:true,position:'end',font:{size:9}} } } } },
+    scales:{ x:{ stacked:true }, y:{ stacked:true, max:100, title:{display:true,text:'Combined Loss Ratio (%)',font:{size:10}} } }
+  }
+});
+
+// Portfolio Mix Doughnut
+const mixCtx = document.getElementById('mixChart').getContext('2d');
+new Chart(mixCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['UA Retail/Hospitality','UA Construction','UA Manufacturing','UA Technology','UA Other','UC Umbrella (std)','UC Umbrella (high-haz)','UR Reinsurance','US Surplus Lines'],
+    datasets: [{ data:[20,15,12,8,10,12,8,8,7],
+      backgroundColor:['#7b1a1a','#1c2e6b','#c8a84b','#2e7d32','#888','#4a6fa5','#b03030','#6a5acd','#555'] }]
+  },
+  options: { responsive:true, plugins:{ legend:{ position:'bottom', labels:{ font:{size:9}, boxWidth:12 } } } }
+});
+</script>
+</body>
+</html>

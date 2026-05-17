@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Crime / Fidelity – Financial Institutions (BB) — Risk Code Hub</title>
+  <style>
+    :root {
+      --crime:#7b1e1e; --crime-dark:#3d0000; --fi:#0d3b6b;
+      --fid:#1b5e20; --fraud:#c62828; --cyber:#6a1b9a;
+      --social:#e65100; --gold:#b8860b;
+      --light:#faf5f5; --mid:#f0e8e8; --text:#1e1e2e;
+      --muted:#6b7c93; --border:#d4c8c8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #7b1e1e;
+    --hub-dark:      #3d0000;
+    --hub-light:     #faf5f5;
+    --hub-accent:    #b8860b;
+    --hub-secondary: #0d3b6b;
+    --hub-secondary2:#1b5e20;
+    --header-gradient:linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%);
+    --header-sub:    #e8c8c8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header {
+      background:linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%);
+      color:#fff; padding:40px; position:relative; overflow:hidden;
+    }
+    header::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(184,134,11,0.15) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(13,59,107,0.18) 0%,transparent 50%);
+    }
+    header .inner { position:relative; z-index:1; }
+    .breadcrumb { font-size:0.8rem; color:#cc9988; margin-bottom:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#e8c8c8; font-size:0.95rem; max-width:760px; line-height:1.7; }
+
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--crime); border-bottom-color:var(--gold); }
+
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--crime); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--gold); }
+    h3 { font-size:1.05rem; color:var(--crime-dark); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    /* Confidence badges */
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; vertical-align:middle; margin-left:3px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+    .b-g { background:#f8d7da; color:#721c24; }
+
+    /* Stats */
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(175px,1fr)); gap:14px; margin:28px 0; }
+    .stat-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; text-align:center; }
+    .stat-card .val { font-size:1.55rem; font-weight:800; color:var(--crime); line-height:1.1; }
+    .stat-card .val.fi { color:var(--fi); }
+    .stat-card .val.fid { color:var(--fid); }
+    .stat-card .val.gold { color:var(--gold); }
+    .stat-card .lbl { font-size:0.74rem; color:var(--muted); margin-top:5px; line-height:1.4; }
+
+    /* Coverage grid */
+    .cov-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr)); gap:16px; margin:24px 0; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--crime); }
+    .cov-card.fi-top { border-top-color:var(--fi); }
+    .cov-card.fid-top { border-top-color:var(--fid); }
+    .cov-card.cyber-top { border-top-color:var(--cyber); }
+    .cov-card.social-top { border-top-color:var(--social); }
+    .cov-card.gold-top { border-top-color:var(--gold); }
+    .cov-card h4 { font-size:0.9rem; font-weight:700; color:var(--crime); margin-bottom:8px; }
+    .cov-card.fi-top h4 { color:var(--fi); }
+    .cov-card.fid-top h4 { color:var(--fid); }
+    .cov-card.cyber-top h4 { color:var(--cyber); }
+    .cov-card.social-top h4 { color:var(--social); }
+    .cov-card ul { padding-left:16px; }
+    .cov-card li { font-size:0.84rem; margin-bottom:5px; line-height:1.5; }
+
+    /* Code table */
+    .code-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:24px 0; }
+    .code-table table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .code-table th { background:var(--crime); color:#fff; padding:10px 16px; text-align:left; }
+    .code-table td { padding:10px 16px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .code-table tr:last-child td { border-bottom:none; }
+    .code-table tr:nth-child(even) td { background:#fdf8f8; }
+    .code-chip { display:inline-block; font-weight:800; font-size:0.8rem; padding:2px 10px; border-radius:12px; letter-spacing:1px; margin-right:4px; color:#fff; background:var(--crime); }
+
+    /* Info box */
+    .info-box { background:var(--crime-dark); color:#f0d8d8; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:var(--gold); margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    /* Definitions */
+    .def-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin:20px 0; }
+    .def-card { background:#fff; border-left:4px solid var(--crime); border-radius:0 8px 8px 0; padding:14px 18px; }
+    .def-card h4 { font-size:0.88rem; font-weight:700; color:var(--crime-dark); margin-bottom:6px; }
+    .def-card p { font-size:0.83rem; margin:0; line-height:1.6; }
+
+    /* Market table */
+    .mkt-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:24px 0; }
+    .mkt-table table { width:100%; border-collapse:collapse; font-size:0.87rem; }
+    .mkt-table th { background:var(--fi); color:#fff; padding:9px 14px; text-align:left; }
+    .mkt-table td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .mkt-table tr:last-child td { border-bottom:none; }
+    .mkt-table tr:nth-child(even) td { background:#f8fafc; }
+
+    /* Module grid */
+    .module-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:24px 0; }
+    .mod-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; text-decoration:none; color:var(--text); transition:box-shadow 0.2s,border-color 0.2s; display:block; }
+    .mod-card:hover { box-shadow:0 4px 16px rgba(123,30,30,0.12); border-color:var(--crime); }
+    .mod-card .mod-num { font-size:0.7rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--crime); margin-bottom:4px; }
+    .mod-card h4 { font-size:0.9rem; font-weight:700; color:var(--crime-dark); margin-bottom:4px; }
+    .mod-card p { font-size:0.8rem; color:var(--muted); margin:0; line-height:1.4; }
+
+    footer { background:var(--crime-dark); color:#aa8888; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer a { color:var(--gold); text-decoration:none; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Crime &amp; Financial Lines</div>
+    <div class="tag">Lloyd's Risk Code BB</div>
+    <h1>Crime / Fidelity — Financial Institutions</h1>
+    <p>Bankers blanket bond, fidelity and financial institution crime insurance covering employee dishonesty, forgery, computer crime, funds transfer fraud, and social engineering for banks, investment managers, broker-dealers and other financial entities.</p>
+  </div>
+</header>
+<nav>
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~$3.5bn</div>
+      <div class="lbl">Est. global FI crime &amp; fidelity GWP (2024)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val fi">$14.8m</div>
+      <div class="lbl">Median FI crime loss per major event (FBI IC3 2023)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val fraud">~68%</div>
+      <div class="lbl">FI crime losses with internal employee element</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val gold">$7.1bn</div>
+      <div class="lbl">SocGen/Kerviel rogue trader loss (2008) — largest single FI crime event</div>
+      <span class="badge b-v">VER</span>
+    </div>
+    <div class="stat-card">
+      <div class="val fid">48hrs</div>
+      <div class="lbl">Typical BEC funds transfer fraud detection window</div>
+      <span class="badge b-e">EST</span>
+    </div>
+  </div>
+
+  <!-- ── CODE DEFINITION ── -->
+  <h2>Risk Code BB — Scope &amp; Definition</h2>
+  <p>Lloyd's risk code <strong>BB</strong> covers fidelity and financial institution crime insurance for entities whose primary business is financial services. It is distinct from <strong>BC</strong> (commercial crime/fidelity for non-financial corporates) and from <strong>BD</strong> (miscellaneous crime). The BB market originated in the American <em>Bankers Blanket Bond (BBB)</em> — a composite policy covering the principal crime and fidelity exposures of banks — which was adapted into the Lloyd's market from the 1960s onwards.</p>
+
+  <div class="code-table">
+    <table>
+      <thead><tr><th>Code</th><th>Full Name</th><th>Primary Insured Entities</th><th>Typical Policy Form</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="code-chip">BB</span></td>
+          <td>Crime / Fidelity — Financial Institutions</td>
+          <td>Banks, credit unions, investment managers, hedge funds, broker-dealers, exchanges, payment processors, insurance companies, central banks</td>
+          <td>Lloyd's FI Crime Policy; Bankers Blanket Bond (Form 24); FINRA-compliant fidelity bond; Investment Company Act bond</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box">
+    <h3>Bankers Blanket Bond — Historical Foundation</h3>
+    <p>The Bankers Blanket Bond (BBB) was first standardised in the United States in the 1920s and remains the conceptual foundation of all modern FI crime policies. The term "blanket" means all employees are covered without individual scheduling — an important distinction from named-employee fidelity bonds. Key features that have persisted into modern Lloyd's BB wordings: <strong>employee dishonesty (fidelity)</strong>, <strong>on-premises loss</strong>, <strong>in-transit loss</strong>, <strong>forgery and alteration</strong>, <strong>securities loss</strong>, and <strong>computer crime</strong> (added progressively from the 1980s). <span class="badge b-v">VER</span></p>
+  </div>
+
+  <!-- ── COVERAGE TAXONOMY ── -->
+  <h2>Coverage Taxonomy — BB Insuring Agreements</h2>
+  <p>Modern Lloyd's BB policies are structured around discrete insuring agreements, each covering a defined category of crime or dishonesty. Underwriters may write all agreements together or offer modular coverage.</p>
+
+  <div class="cov-grid">
+    <div class="cov-card">
+      <h4>🏦 Employee Dishonesty / Fidelity</h4>
+      <ul>
+        <li>Loss caused directly by dishonest acts of employees</li>
+        <li>Requires manifest intent to cause loss and personal financial benefit</li>
+        <li>Covers theft, embezzlement, fraudulent trading, collusion</li>
+        <li>Discovery basis: loss discovered during policy period regardless of when committed</li>
+        <li>Key trigger: Barings/Leeson, SocGen/Kerviel, Adoboli/UBS <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="cov-card fi-top">
+      <h4>📋 Forgery &amp; Alteration</h4>
+      <ul>
+        <li>Fraudulent signing of financial instruments in the insured's name</li>
+        <li>Covers cheques, drafts, promissory notes, bonds</li>
+        <li>Alteration of genuine instruments to increase face value</li>
+        <li>Third-party forgery (external cheque fraud, identity theft)</li>
+        <li>Excludes counterfeiting (currency notes are separate cover)</li>
+      </ul>
+    </div>
+    <div class="cov-card fid-top">
+      <h4>🏛️ On-Premises / In-Transit</h4>
+      <ul>
+        <li>Physical loss of money, securities, property on premises</li>
+        <li>Robbery, burglary, safe-cracking, mysterious disappearance</li>
+        <li>In-transit: loss while money conveyed by armoured car or employee</li>
+        <li>Covers vault damage from break-in (not fire unless added)</li>
+        <li>Less significant post-ATM era but still relevant for cash-intensive FIs</li>
+      </ul>
+    </div>
+    <div class="cov-card cyber-top">
+      <h4>💻 Computer Crime / Electronic Funds Transfer</h4>
+      <ul>
+        <li>Unauthorised entry into computer systems to transfer funds</li>
+        <li>Fraudulent electronic instructions to debit accounts</li>
+        <li>Covers SWIFT messaging fraud, ACH fraud, wire fraud</li>
+        <li>Distinct from cyber liability (cyber BI, privacy, data costs not included)</li>
+        <li>Bangladesh Bank heist ($81m via SWIFT, 2016) <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="cov-card social-top">
+      <h4>📧 Social Engineering / BEC</h4>
+      <ul>
+        <li>Business Email Compromise — fraudulent payment instructions</li>
+        <li>Impersonation of CEO/CFO/vendor directing wire transfers</li>
+        <li>Deepfake audio/video voice fraud (emerging 2023–24)</li>
+        <li>Requires voluntary transfer by employee (vs. unauthorised computer crime)</li>
+        <li>Sub-limited in most policies: typically $250k–$5m sublimit <span class="badge b-e">EST</span></li>
+      </ul>
+    </div>
+    <div class="cov-card gold-top">
+      <h4>📜 Securities &amp; Counterfeiting</h4>
+      <ul>
+        <li>Loss through receipt of counterfeit securities or currency</li>
+        <li>Bearer bond fraud, fraudulent certificates of deposit</li>
+        <li>Loss arising from trading forged or stolen securities</li>
+        <li>Diminished with dematerialisation of securities</li>
+        <li>Residual exposure: physical settlement markets, private placements</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── KEY DEFINITIONS ── -->
+  <h2>Key Policy Definitions</h2>
+  <div class="def-grid">
+    <div class="def-card">
+      <h4>Employee Dishonesty — Trigger Elements</h4>
+      <p>Three elements required: (1) the act must be by an <em>employee</em> (as defined); (2) there must be <em>manifest intent</em> to cause loss; (3) the employee must intend to obtain <em>financial benefit</em> for themselves or a third party. Negligence alone does not trigger fidelity cover.</p>
+    </div>
+    <div class="def-card">
+      <h4>Discovery Basis</h4>
+      <p>BB policies are written on a <em>discovery</em> basis — the loss is covered if it is <em>discovered</em> during the policy period, regardless of when the dishonest act occurred. Extended discovery periods (typically 12–24 months post-cancellation) are standard. <span class="badge b-v">VER</span></p>
+    </div>
+    <div class="def-card">
+      <h4>Loss Sustained vs. Discovery</h4>
+      <p><em>Discovery</em> basis (standard for BB) covers all losses discovered during the policy period. <em>Loss sustained</em> basis (used in some US forms) only covers losses both occurring and discovered within the period. Discovery basis offers broader protection for long-running embezzlement schemes.</p>
+    </div>
+    <div class="def-card">
+      <h4>Manifest Intent</h4>
+      <p>The employee must manifestly intend to cause loss — reckless or negligent acts that cause financial loss to the employer do not trigger the fidelity insuring agreement. Proof standard varies: some wordings require criminal conviction; others require the insurer to establish dishonest intent on a balance of probabilities.</p>
+    </div>
+    <div class="def-card">
+      <h4>Computer Crime vs. Social Engineering</h4>
+      <p>A key coverage boundary. <em>Computer crime</em> requires an <em>unauthorised</em> entry into the computer system. <em>Social engineering/BEC</em> involves an <em>authorised</em> employee being deceived into making a payment — a voluntary act that falls outside computer crime and requires a specific social engineering insuring agreement.</p>
+    </div>
+    <div class="def-card">
+      <h4>Financial Institution — Scope</h4>
+      <p>BB cover is restricted to entities whose primary business is financial services: banks, savings institutions, credit unions, investment managers, hedge funds, broker-dealers, central counterparties, exchanges, insurance companies. Non-financial corporates with treasury functions require BC (commercial crime) cover instead.</p>
+    </div>
+  </div>
+
+  <!-- ── MARKET PARTICIPANTS ── -->
+  <h2>Lloyd's Market Participants</h2>
+  <div class="mkt-table">
+    <table>
+      <thead><tr><th>Participant Type</th><th>Examples</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Lloyd's BB Specialist Syndicates</td>
+          <td>Beazley (623), Hiscox (33), CNA Hardy (382), Atrium (609), Tokio Marine Kiln</td>
+          <td>Lead underwriters; set rates, wordings, terms for FI crime risks. Crime teams within specialist financial lines divisions.</td>
+        </tr>
+        <tr>
+          <td>Company Market — Global Insurers</td>
+          <td>AIG / Chubb (formerly ACE), Zurich, Allianz, AXA XL, Liberty Mutual, Travelers</td>
+          <td>Primary market alongside Lloyd's; particularly dominant in US domestic FI crime for large banks (FDIC-member institutions).</td>
+        </tr>
+        <tr>
+          <td>London Market Brokers</td>
+          <td>Aon, Marsh, WTW, Gallagher, BMS, Lockton</td>
+          <td>Placement brokers for Lloyd's FI crime. Financial institutions practice teams within each broker house.</td>
+        </tr>
+        <tr>
+          <td>Reinsurers</td>
+          <td>Munich Re, Swiss Re, Hannover Re, Gen Re</td>
+          <td>Treaty reinsurance for crime portfolios; facultative RI for large single-risk placements (&gt;$100m limits).</td>
+        </tr>
+        <tr>
+          <td>US Specialist Market</td>
+          <td>Surety &amp; Fidelity Association of America (SFAA); FDIC-approved bond providers</td>
+          <td>US domestic fidelity bonds for FDIC-insured institutions; Investment Company Act bonds for registered funds (SEC requirement).</td>
+        </tr>
+        <tr>
+          <td>MGA / Delegated</td>
+          <td>Various crime MGAs operating on Lloyd's BB binder capacity</td>
+          <td>Smaller FI crime placements (&lt;$5m limits); credit unions, community banks, smaller investment managers.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── INSURED ENTITY TYPES ── -->
+  <h2>Insured Entity Types — Risk Profile by Segment</h2>
+  <div class="cov-grid">
+    <div class="cov-card fi-top">
+      <h4>Retail &amp; Commercial Banks</h4>
+      <ul>
+        <li>Primary exposure: employee embezzlement, branch cashier theft, cheque fraud</li>
+        <li>Electronic exposure: ACH/wire fraud, SWIFT messaging attacks</li>
+        <li>FDIC-insured US banks: mandatory fidelity bond requirement</li>
+        <li>Large banks: programme limits $100m–$500m+ <span class="badge b-e">EST</span></li>
+      </ul>
+    </div>
+    <div class="cov-card">
+      <h4>Investment Managers &amp; Hedge Funds</h4>
+      <ul>
+        <li>Primary exposure: rogue trading, fraudulent valuation, Ponzi schemes</li>
+        <li>SEC: Investment Company Act s.17(g) — registered funds must maintain fidelity bond equal to 10% of funds' value (min $2,500) <span class="badge b-v">VER</span></li>
+        <li>Hedge funds: unregulated but institutional investors require proof of cover</li>
+        <li>Key risk: redemption fraud, NAV manipulation</li>
+      </ul>
+    </div>
+    <div class="cov-card cyber-top">
+      <h4>Broker-Dealers &amp; Exchanges</h4>
+      <ul>
+        <li>FINRA Rule 4360: broker-dealers must maintain fidelity bond covering at least the minimum net capital requirement <span class="badge b-v">VER</span></li>
+        <li>Key risks: securities theft, rogue trading, clearing house fraud</li>
+        <li>Central counterparties (CCPs): systemic risk; specialist wordings required</li>
+        <li>Crypto exchanges: emerging BB sub-class; custody fraud, rug pulls</li>
+      </ul>
+    </div>
+    <div class="cov-card social-top">
+      <h4>Payment Processors &amp; Fintechs</h4>
+      <ul>
+        <li>Fastest-growing BB segment 2020–2024 <span class="badge b-e">EST</span></li>
+        <li>Primary exposure: BEC/social engineering, API fraud, synthetic identity fraud</li>
+        <li>Regulatory: PSD2/PSR 2023 (UK) authorised push payment (APP) fraud reimbursement obligations create fidelity-adjacent exposure</li>
+        <li>Crypto custodians: hot wallet theft, employee private key fraud</li>
+      </ul>
+    </div>
+    <div class="cov-card fid-top">
+      <h4>Insurance Companies</h4>
+      <ul>
+        <li>FI crime exposure: premium embezzlement, agent fraud, claims fraud collusion</li>
+        <li>Lloyd's syndicates themselves are insured FI entities under BB</li>
+        <li>Solvency II / PRA: operational risk capital charge includes crime loss scenarios</li>
+        <li>Reinsurance fraud: cedant manipulation of loss data</li>
+      </ul>
+    </div>
+    <div class="cov-card gold-top">
+      <h4>Central Banks &amp; Supranationals</h4>
+      <ul>
+        <li>Sovereign FI crime cover: limited market; specialist Lloyd's placement</li>
+        <li>Bangladesh Bank ($81m SWIFT heist 2016) — archetypal central bank FI crime event <span class="badge b-v">VER</span></li>
+        <li>Development banks: IFC, EBRD require FI crime cover via Lloyd's or multilateral captives</li>
+        <li>Typically low attritional frequency but very high severity per event</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── MODULE NAVIGATION ── -->
+  <h2>Hub Modules</h2>
+  <div class="module-grid">
+    <a class="mod-card" href="history.html">
+      <div class="mod-num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From bankers blanket bond 1916 to BEC and deepfake fraud 2024</p>
+    </a>
+    <a class="mod-card" href="timeline.html">
+      <div class="mod-num">Module 02</div>
+      <h4>Major Events Timeline</h4>
+      <p>20 landmark events 2001–2024 — rogue traders, SWIFT heists, BEC fraud</p>
+    </a>
+    <a class="mod-card" href="database.html">
+      <div class="mod-num">Module 03</div>
+      <h4>Loss Database</h4>
+      <p>35 searchable FI crime events with type, severity and detail</p>
+    </a>
+    <a class="mod-card" href="underwriting.html">
+      <div class="mod-num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>Rating factors, worked examples, limit adequacy and pre-binding checklist</p>
+    </a>
+    <a class="mod-card" href="rates-analysis.html">
+      <div class="mod-num">Module 05</div>
+      <h4>Rates &amp; ROE Analysis</h4>
+      <p>Market cycle, rate index 2010–2024, 3 ROE scenarios</p>
+    </a>
+    <a class="mod-card" href="risk-mitigation.html">
+      <div class="mod-num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Internal controls, dual controls, MFA, regulatory standards</p>
+    </a>
+    <a class="mod-card" href="global-program.html">
+      <div class="mod-num">Module 07</div>
+      <h4>Global Programme</h4>
+      <p>Multi-jurisdictional FI crime programmes, US regulatory bonds, case study</p>
+    </a>
+    <a class="mod-card" href="references.html">
+      <div class="mod-num">Module 08</div>
+      <h4>References &amp; Sources</h4>
+      <p>Clauses, cases, ACFE data, FBI IC3, confidence audit, data gaps</p>
+    </a>
+  </div>
+
+</main>
+<footer>
+  <a href="../index.html">Risk Code Hub</a> &nbsp;·&nbsp; Crime / Fidelity – Financial Institutions (BB) &nbsp;·&nbsp; Version 3.6 · April 2026<br>
+  <span style="font-size:0.78rem;opacity:0.7;">Confidence: <span class="badge b-v">VER</span> verified &nbsp; <span class="badge b-e">EST</span> estimated &nbsp; <span class="badge b-i">ILLUS</span> illustrative &nbsp; <span class="badge b-g">GAP</span> data gap &nbsp;·&nbsp; For training purposes only</span>
+</footer>
+</body>
+</html>

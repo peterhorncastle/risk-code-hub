@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Legal Expenses (LE) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #455a64;
+      --hub-dark:      #1c313a;
+      --hub-light:     #eceff1;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1c313a 0%,#455a64 55%,#607d8b 100%);
+      --header-sub:    #b0bec5;
+      --le-mid:        #cfd8dc;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2a31;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(69,90,100,0.2) 0%,transparent 50%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:2rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;margin-bottom:16px;}
+    .code-pill{display:inline-block;background:rgba(200,168,75,0.25);border:1px solid var(--hub-accent);
+      color:var(--hub-accent);padding:3px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;margin-right:6px;}
+    nav.hub-nav{background:#1c313a;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+    .stat-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-top:4px solid var(--hub-primary);}
+    .stat-card .val{font-size:1.7rem;font-weight:700;color:var(--hub-primary);margin-bottom:4px;}
+    .stat-card .lbl{font-size:0.78rem;color:#555;line-height:1.3;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#455a64;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--le-mid);}
+    .code-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px;}
+    .code-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .code-card h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .code-card p{font-size:0.85rem;color:#444;line-height:1.5;}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:28px;}
+    .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid var(--hub-primary);}
+    .card.accent{border-top-color:var(--hub-accent);}
+    .card.blue{border-top-color:#1565c0;}
+    .card.purple{border-top-color:#6a1b9a;}
+    .card.red{border-top-color:#c62828;}
+    .card.teal{border-top-color:#00695c;}
+    .card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .info-box{background:#eceff1;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a2a31;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px;}
+    .nav-card{display:block;background:#fff;border-radius:10px;padding:16px 18px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);transition:all 0.2s;}
+    .nav-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12);border-left-color:var(--hub-accent);}
+    .nav-card .num{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .nav-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);}
+    .nav-card p{font-size:0.78rem;color:#555;margin-top:4px;}
+    footer{background:#1c313a;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Liability &amp; Legal › Legal Expenses</div>
+    <div class="tag">Legal Expenses Insurance</div>
+    <h1>Legal Expenses</h1>
+    <div class="sub">Before-the-event and after-the-event legal costs insurance for individuals, SMEs and corporates</div>
+    <div>
+      <span class="code-pill">LE</span>
+      <span class="code-pill" style="border-color:#b0bec5;color:#b0bec5;">BTE &amp; ATE</span>
+    </div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">£650m<span class="badge b-e">EST</span></div>
+      <div class="lbl">UK LEI market GWP (est. 2023)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">25m<span class="badge b-e">EST</span></div>
+      <div class="lbl">BTE policies in force UK (est.) — mostly motor/home add-ons</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">2012<span class="badge b-v">VER</span></div>
+      <div class="lbl">LASPO enacted — ATE premiums no longer recoverable from losing party</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">£30–80k<span class="badge b-e">EST</span></div>
+      <div class="lbl">Avg UK commercial legal case cost (est.)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">100k+<span class="badge b-v">VER</span></div>
+      <div class="lbl">Employment tribunal claims per year UK (ACAS 2022/23)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">GDPR<span class="badge b-v">VER</span></div>
+      <div class="lbl">Data protection disputes — fastest-growing commercial LEI trigger since 2018</div>
+    </div>
+  </div>
+
+  <!-- Code card -->
+  <div class="section-title">Lloyd's Risk Code Coverage</div>
+  <div class="code-grid">
+    <div class="code-card">
+      <h3>LE — Legal Expenses Insurance</h3>
+      <p>Lloyd's risk code LE covers legal expenses insurance (LEI) — both before-the-event (BTE) and after-the-event (ATE) — for individuals, SMEs and corporates. Policies pay solicitors' fees, barristers' fees, court fees and expert witness fees when the insured is involved in a legal dispute, whether pursuing a claim or defending one. Also covers costs and disbursements insurance for litigation funders.<sup>[L5]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#1565c0;">
+      <h3>BTE vs ATE — The Fundamental Divide</h3>
+      <p><strong>Before-the-event (BTE)</strong> LEI is purchased before a dispute arises, typically as a standard add-on to motor, home or commercial package policies. It is a mass-market product with low individual premiums. <strong>After-the-event (ATE)</strong> LEI is purchased <em>after</em> a specific dispute has arisen, to cover adverse costs risk (losing party paying the winner's legal costs). The ATE market was fundamentally reshaped by LASPO 2012.<sup>[L1]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#1a5c2a;">
+      <h3>Key Distinction from Liability Insurance</h3>
+      <p>Legal expenses insurance is fundamentally different from liability insurance. <strong>Liability insurance</strong> pays the <em>other party's</em> claim against the insured. <strong>Legal expenses insurance</strong> pays the insured's own legal costs — either to pursue a claim or to defend against one. LEI enables access to justice without the insured bearing legal costs directly. Commercial LEI covers employment disputes, contract disputes, tax investigations, GDPR disputes and regulatory investigations.<sup>[L4]</sup></p>
+    </div>
+  </div>
+
+  <!-- Coverage taxonomy -->
+  <div class="section-title">Coverage Taxonomy</div>
+  <div class="cards-grid">
+    <div class="card">
+      <h4>BTE — Pursuit (Claimant Costs)</h4>
+      <p>Costs of the insured <em>bringing</em> a claim: solicitors' and barristers' fees, court fees, expert witness fees on the claimant side. Most common in employment disputes (unfair dismissal), consumer disputes and personal injury claims. BTE panels provide approved solicitors to manage costs. <sup>[L8]</sup></p>
+    </div>
+    <div class="card accent">
+      <h4>BTE — Defence (Respondent Costs)</h4>
+      <p>Costs of the insured <em>defending</em> a claim brought against them: solicitors' fees for defending employment tribunal, contract or regulatory proceedings. Important for SME employers defending unfair dismissal, discrimination or redundancy claims. Often bundled with commercial package policies as standard.<sup>[I9]</sup></p>
+    </div>
+    <div class="card blue">
+      <h4>ATE — Adverse Costs (After-the-Event)</h4>
+      <p>Purchased <em>after</em> a specific dispute arises. Covers the risk that the insured loses and must pay the winning party's legal costs (adverse costs order). Post-LASPO 2012, ATE premiums are no longer recoverable from the losing party — the insured or funder must bear this cost directly. Critical for commercial litigation and clinical negligence.<sup>[L1]</sup></p>
+    </div>
+    <div class="card purple">
+      <h4>Employment Disputes</h4>
+      <p>The highest-frequency commercial LEI trigger. Covers unfair dismissal, wrongful dismissal, discrimination, redundancy, TUPE, equal pay and whistleblower claims. ACAS early conciliation now mandatory pre-tribunal.<sup>[L9]</sup> Employment tribunal claims surged post-COVID — redundancy, furlough disputes and flexible working disputes all generated significant LEI activity. <sup>[I4]</sup></p>
+    </div>
+    <div class="card red">
+      <h4>Tax Investigation (HMRC Enquiry)</h4>
+      <p>Covers solicitors' and accountants' fees for responding to HMRC investigations and enquiries: VAT investigations, corporation tax enquiries, PAYE compliance checks, IR35 status disputes. A significant commercial LEI sub-market — specialist tax investigation insurance is available as a standalone product or bundled with commercial LEI.<sup>[I9]</sup></p>
+    </div>
+    <div class="card teal">
+      <h4>Contract Disputes &amp; Property</h4>
+      <p>Covers costs of commercial contract disputes (breach of contract, debt recovery above small claims threshold), property disputes (boundary disputes, lease terms, landlord/tenant), GDPR/data protection disputes and regulatory investigations. GDPR data breach disputes are the fastest-growing commercial LEI trigger since 2018.<sup>[L6]</sup></p>
+    </div>
+  </div>
+
+  <!-- Access to justice callout -->
+  <div class="info-box">
+    <strong>Access to Justice &amp; the Jackson Reforms:</strong> Legal expenses insurance is politically and socially significant because it enables individuals and SMEs to pursue legal claims they could not otherwise afford. Lord Justice Jackson's <em>Review of Civil Litigation Costs</em> (2010)<sup>[L8]</sup> transformed the UK market. The resulting LASPO 2012 reforms made success fees and ATE premiums non-recoverable from the losing party — damaging the claimant funding model. However, Qualified One-Way Cost Shifting (QOCS) for personal injury partially restores balance, protecting individual claimants from adverse costs orders. The tension between access to justice and controlling litigation costs remains a defining dynamic of the LE market.<sup>[I10]</sup>
+  </div>
+
+  <!-- LASPO warning -->
+  <div class="warn-box">
+    <strong>LASPO 2012 — Fundamental Market Discontinuity:</strong> The Legal Aid, Sentencing and Punishment of Offenders Act 2012 (in force April 2013 for costs provisions) made ATE insurance premiums and conditional fee agreement success fees <em>non-recoverable</em> from the losing party.<sup>[L1]</sup> This eliminated the pre-LASPO ATE market model where the losing defendant paid the claimant's ATE premium. Post-LASPO, ATE premiums must be funded by the claimant or litigation funder — fundamentally changing pricing, coverage structure and market participants. The personal injury ATE market collapsed in volume; the clinical negligence and commercial ATE markets adapted at higher premium rates.
+  </div>
+
+  <!-- Module nav -->
+  <div class="section-title">Hub Modules</div>
+  <div class="nav-grid">
+    <a href="history.html" class="nav-card">
+      <div class="num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>DAS 1928 to LASPO 2012 — the legal expenses market from Germany to global</p>
+    </a>
+    <a href="timeline.html" class="nav-card">
+      <div class="num">Module 02</div>
+      <h4>Events Timeline</h4>
+      <p>20 key legislative, case law and market events 1928–2024</p>
+    </a>
+    <a href="database.html" class="nav-card">
+      <div class="num">Module 03</div>
+      <h4>Loss Database</h4>
+      <p>35 market events and dispute categories 1990–2024 — filterable</p>
+    </a>
+    <a href="underwriting.html" class="nav-card">
+      <div class="num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>BTE and ATE rating factors, merits assessment, worked examples</p>
+    </a>
+    <a href="rates-analysis.html" class="nav-card">
+      <div class="num">Module 05</div>
+      <h4>Rates &amp; ROE</h4>
+      <p>Rate index charts, market cycle, ROE scenarios &amp; P&amp;L waterfall</p>
+    </a>
+    <a href="risk-mitigation.html" class="nav-card">
+      <div class="num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Employment controls, GDPR compliance, litigation avoidance checklist</p>
+    </a>
+    <a href="global-program.html" class="nav-card">
+      <div class="num">Module 07</div>
+      <h4>Global Programme</h4>
+      <p>Multinational LE structures, jurisdiction comparison, litigation funding</p>
+    </a>
+    <a href="references.html" class="nav-card">
+      <div class="num">Sources</div>
+      <h4>References</h4>
+      <p>Legal, regulatory &amp; industry citations [L1]–[L9], [I1]–[I10]</p>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Legal Expenses (LE) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Sources &amp; Citations</a></p>
+</footer>
+
+</body>
+</html>

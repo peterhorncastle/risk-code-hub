@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Workers Compensation International (W4) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #00575c;
+      --hub-dark:      #002c30;
+      --hub-light:     #e0f4f5;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#7b5e00;
+      --header-gradient:linear-gradient(135deg,#002c30 0%,#00575c 55%,#00838f 100%);
+      --header-sub:    #80deea;
+      --hub-mid:       #b2ebf2;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2e30;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#80deea;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#002c30;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#80deea;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1000px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+    .filters button{padding:6px 14px;border-radius:20px;border:2px solid var(--hub-primary);background:#fff;color:var(--hub-primary);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filters button.active,.filters button:hover{background:var(--hub-primary);color:#fff;}
+    .filters button[data-t="military"]{border-color:#c62828;}
+    .filters button[data-t="military"].active,.filters button[data-t="military"]:hover{background:#c62828;border-color:#c62828;color:#fff;}
+    .filters button[data-t="regulatory"]{border-color:#1a237e;}
+    .filters button[data-t="regulatory"].active,.filters button[data-t="regulatory"]:hover{background:#1a237e;border-color:#1a237e;color:#fff;}
+    .filters button[data-t="market"]{border-color:#6a1b9a;}
+    .filters button[data-t="market"].active,.filters button[data-t="market"]:hover{background:#6a1b9a;border-color:#6a1b9a;color:#fff;}
+    .filters button[data-t="pandemic"]{border-color:#00695c;}
+    .filters button[data-t="pandemic"].active,.filters button[data-t="pandemic"]:hover{background:#00695c;border-color:#00695c;color:#fff;}
+    .filters button[data-t="conflict"]{border-color:#e65100;}
+    .filters button[data-t="conflict"].active,.filters button[data-t="conflict"]:hover{background:#e65100;border-color:#e65100;color:#fff;}
+    .filters button[data-t="technology"]{border-color:#00838f;}
+    .filters button[data-t="technology"].active,.filters button[data-t="technology"]:hover{background:#00838f;border-color:#00838f;color:#fff;}
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--hub-mid);}
+    .tl-item{position:relative;margin-bottom:24px;display:none;}
+    .tl-item.show{display:block;}
+    .dot{position:absolute;left:-28px;top:4px;width:16px;height:16px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--hub-primary);}
+    .dot.military{background:#c62828;box-shadow:0 0 0 2px #c62828;}
+    .dot.regulatory{background:#1a237e;box-shadow:0 0 0 2px #1a237e;}
+    .dot.market{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .dot.pandemic{background:#00695c;box-shadow:0 0 0 2px #00695c;}
+    .dot.conflict{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .dot.technology{background:#00838f;box-shadow:0 0 0 2px #00838f;}
+    .tl-card{background:#fff;border-radius:8px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card .yr{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .tl-card h4{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.84rem;color:#444;line-height:1.5;}
+    .type-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;}
+    .tag-military{background:#ffebee;color:#c62828;}
+    .tag-regulatory{background:#e8eaf6;color:#1a237e;}
+    .tag-market{background:#f3e5f5;color:#6a1b9a;}
+    .tag-pandemic{background:#e0f2f1;color:#00695c;}
+    .tag-conflict{background:#fff3e0;color:#e65100;}
+    .tag-technology{background:#e0f7fa;color:#00838f;}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#555;}
+    .legend-dot{width:12px;height:12px;border-radius:50%;}
+    footer{background:#002c30;color:#80deea;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Workers Comp International (W4)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key W4 / DBA events 1941–2024</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#c62828;"></div> Military / DBA</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1a237e;"></div> Regulatory</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6a1b9a;"></div> Market Structural</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00695c;"></div> Pandemic / Health</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100;"></div> Conflict Zone</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00838f;"></div> Technology</div>
+  </div>
+
+  <div class="filters">
+    <button class="active" onclick="filterAll()">All Events</button>
+    <button data-t="military" onclick="filterType('military')">Military / DBA</button>
+    <button data-t="regulatory" onclick="filterType('regulatory')">Regulatory</button>
+    <button data-t="market" onclick="filterType('market')">Market Structural</button>
+    <button data-t="pandemic" onclick="filterType('pandemic')">Pandemic / Health</button>
+    <button data-t="conflict" onclick="filterType('conflict')">Conflict Zone</button>
+    <button data-t="technology" onclick="filterType('technology')">Technology</button>
+  </div>
+
+  <div class="timeline" id="timeline">
+
+    <div class="tl-item show" data-t="military">
+      <div class="dot military"></div>
+      <div class="tl-card">
+        <div class="yr">1941</div>
+        <span class="type-tag tag-military">Military / DBA</span>
+        <h4>Defence Base Act Enacted — 42 U.S.C. § 1651</h4>
+        <p>The DBA extends LHWCA WC benefits to US government contractors working overseas. Enacted August 1941, pre-Pearl Harbor, in anticipation of large-scale civilian contractor deployment. Establishes the US overseas WC statutory framework that remains in force today. <sup>[L1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="military">
+      <div class="dot military"></div>
+      <div class="tl-card">
+        <div class="yr">1942</div>
+        <span class="type-tag tag-military">Military / DBA</span>
+        <h4>War Hazards Compensation Act — US Government War Risk Backstop</h4>
+        <p>The WHCA provides that the US government reimburses DBA insurers for claims attributable to war hazards — hostile fire, enemy action, terrorism. This backstop makes DBA commercially insurable in active war zones without unlimited war risk retention by commercial markets. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="military">
+      <div class="dot military"></div>
+      <div class="tl-card">
+        <div class="yr">1950</div>
+        <span class="type-tag tag-military">Military / DBA</span>
+        <h4>Korean War — First Major Wartime DBA Deployment</h4>
+        <p>US civilian contractors provide logistics and construction support for UN/US forces in Korea. DBA claims arising from Korean War operations establish procedural precedents for WHCA reimbursement claims and DOL/OWCP administration of war-zone DBA cases. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="military">
+      <div class="dot military"></div>
+      <div class="tl-card">
+        <div class="yr">1965</div>
+        <span class="type-tag tag-military">Military / DBA</span>
+        <h4>Vietnam Escalation — RMK-BRJ and the DBA Market</h4>
+        <p>US escalation in Vietnam drives massive civilian contractor deployment. The RMK-BRJ consortium (later Brown &amp; Root) constructs military bases, ports and infrastructure throughout South Vietnam. DBA claims volume reaches Vietnam-era peak. Lloyd's specialty market develops DBA expertise in response to scale of exposure. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="regulatory">
+      <div class="dot regulatory"></div>
+      <div class="tl-card">
+        <div class="yr">1969</div>
+        <span class="type-tag tag-regulatory">Regulatory</span>
+        <h4>UK Employers Liability (Compulsory Insurance) Act 1969</h4>
+        <p>UK EL compulsory insurance enacted. Whilst primarily a domestic statute (W3), its extraterritorial scope provisions — covering UK employers with employees working temporarily overseas — begin to create the legal framework for international EL compliance that W4 programmes must address. <sup>[L4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="market">
+      <div class="dot market"></div>
+      <div class="tl-card">
+        <div class="yr">1974</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>Lloyd's W4 Specialty Market Emerges — Oil Major Expat Cover</h4>
+        <p>The oil price shock and Middle East energy development boom drives large-scale expat deployment by oil majors. Lloyd's syndicates begin structuring dedicated international WC / expat PA programmes for Shell, BP, Exxon and others. The forerunner of the modern W4 market takes shape outside the DBA segment. <sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="military">
+      <div class="dot military"></div>
+      <div class="tl-card">
+        <div class="yr">1991</div>
+        <span class="type-tag tag-military">Military / DBA</span>
+        <h4>Gulf War (Desert Storm) — LOGCAP Contract Transforms DBA Scale</h4>
+        <p>Desert Storm reactivates wartime DBA. Brown &amp; Root Services wins the first major LOGCAP contract (1992) following the war, embedding the large-scale civilian contractor logistics support model that will dominate US military operations for the next 30 years. DBA market capacity tested as contractors deploy to Saudi Arabia, Kuwait and Iraq. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="conflict">
+      <div class="dot conflict"></div>
+      <div class="tl-card">
+        <div class="yr">1993</div>
+        <span class="type-tag tag-conflict">Conflict Zone</span>
+        <h4>Somalia — Contractor Exposure and PMC Growth</h4>
+        <p>US intervention in Somalia (Operation Restore Hope / Gothic Serpent). Civilian contractors provide logistical support alongside military forces. The failed mission accelerates the growth of private military company (PMC) market — companies providing armed security and force protection services that generate novel DBA coverage questions around armed contractor status. <sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="conflict">
+      <div class="dot conflict"></div>
+      <div class="tl-card">
+        <div class="yr">1999</div>
+        <span class="type-tag tag-conflict">Conflict Zone</span>
+        <h4>Kosovo — NATO Contractor DBA / NATO SOFA Interface</h4>
+        <p>NATO operations in Kosovo create contractor WC/EL coverage questions around Status of Forces Agreements (SOFAs) and DBA applicability for multinational coalition contractor workforces. Lloyd's W4 underwriters begin developing expertise in coalition operations contractor coverage — a precursor to the Iraq/Afghanistan market. <sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="military">
+      <div class="dot military"></div>
+      <div class="tl-card">
+        <div class="yr">2001</div>
+        <span class="type-tag tag-military">Military / DBA</span>
+        <h4>9/11 and Afghanistan — DBA Reactivated for Global War on Terror</h4>
+        <p>Operation Enduring Freedom deploys civilian contractors to Afghanistan. DBA premium volumes begin rising sharply. Lloyd's and US specialty markets reassess DBA hostile zone rating as contractor casualty rates in Afghanistan escalate from 2005 onwards. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="military">
+      <div class="dot military"></div>
+      <div class="tl-card">
+        <div class="yr">2003</div>
+        <span class="type-tag tag-military">Military / DBA</span>
+        <h4>Iraq Invasion — Largest DBA Event in Act's History</h4>
+        <p>Operation Iraqi Freedom deploys a contractor workforce that eventually exceeds uniformed US personnel. KBR/Halliburton LOGCAP generates billions in contract value and the largest DBA insurance exposure in history. Third-Country Nationals (TCNs) — Filipinos, Indians, Nepalis — form the majority of the workforce. DOL/OWCP processes thousands of DBA claims. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="market">
+      <div class="dot market"></div>
+      <div class="tl-card">
+        <div class="yr">2004–07</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>DBA Rate Hardening — Hostile Zone Multipliers Applied</h4>
+        <p>Surge in Iraq and Afghanistan DBA claims drives significant premium rate increases. Lloyd's syndicates apply hostile zone territory multipliers (Zone E rate: 4–8× standard). Premium income for W4 DBA segment reaches estimated peak during this period. Aggregate DBA market GWP estimated at $400–600m (est.) at peak. <sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="conflict">
+      <div class="dot conflict"></div>
+      <div class="tl-card">
+        <div class="yr">2010</div>
+        <span class="type-tag tag-conflict">Conflict Zone</span>
+        <h4>Fukushima — International Contractor Radiation Exposure</h4>
+        <p>The Fukushima Daiichi nuclear disaster (2011) deploys international contractors alongside Japanese workers in radiation-affected cleanup operations. International WC/EL programmes face novel occupational disease exposure (radiation) with long latency periods. W4 underwriters review policy coverage for nuclear/radiological occupational disease exclusions. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="conflict">
+      <div class="dot conflict"></div>
+      <div class="tl-card">
+        <div class="yr">2011</div>
+        <span class="type-tag tag-conflict">Conflict Zone</span>
+        <h4>Libya Civil War — European Contractor Mass Evacuation</h4>
+        <p>Libya's civil war following the Arab Spring forces mass evacuation of European energy and construction contractors. W4 war risk endorsements activated for the first time at scale for European multinationals. Claims include injuries during evacuation, hostage situations, and temporary total disability for workers who cannot return to their projects. <sup>[I9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="regulatory">
+      <div class="dot regulatory"></div>
+      <div class="tl-card">
+        <div class="yr">2013</div>
+        <span class="type-tag tag-regulatory">Regulatory</span>
+        <h4>DBA DOL Reform Discussions — Benefit Schedule Review</h4>
+        <p>US Congress and advocacy groups push for DBA reform, arguing that the LHWCA benefit schedule (dating from 1927 with amendments) inadequately compensates modern contractor casualties. Issues: inadequate survivor benefits for TCN families, below-market PPD ratings, complex DOL/OWCP procedures. Reform legislation introduced but not enacted. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="conflict">
+      <div class="dot conflict"></div>
+      <div class="tl-card">
+        <div class="yr">2015</div>
+        <span class="type-tag tag-conflict">Conflict Zone</span>
+        <h4>Yemen and Syria — New Conflict Zone W4 Demand</h4>
+        <p>Conflict escalation in Yemen (2015) and Syria drives further W4 demand from NGOs, humanitarian organisations and energy companies withdrawing employees. W4 underwriters grapple with cumulative conflict zone accumulation — simultaneous hostile zone exposures across Iraq, Syria, Yemen, Libya and Afghanistan stretch Lloyd's W4 aggregate modelling. <sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="pandemic">
+      <div class="dot pandemic"></div>
+      <div class="tl-card">
+        <div class="yr">2020</div>
+        <span class="type-tag tag-pandemic">Pandemic / Health</span>
+        <h4>COVID-19 — Mass Repatriation of Overseas Workers</h4>
+        <p>COVID-19 pandemic triggers mass repatriation of offshore oil workers, seafarers, construction workers in the Middle East and Africa. W4 insurers activate emergency repatriation benefits. Disease coverage debates: is COVID contracted on an overseas work assignment a covered occupational disease? Medical costs and repatriation logistics costs surge. ISOS and Healix manage thousands of simultaneous cases. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="conflict">
+      <div class="dot conflict"></div>
+      <div class="tl-card">
+        <div class="yr">2022</div>
+        <span class="type-tag tag-conflict">Conflict Zone</span>
+        <h4>Ukraine — European Contractor War Risk Claims</h4>
+        <p>Russia's full-scale invasion of Ukraine (February 2022) triggers mass contractor withdrawal. European construction, energy and infrastructure companies with Ukrainian operations activate W4 war risk endorsements. Worker injuries, deaths and captivity claims arise. War risk territorial definitions scrutinised. New demand for W4 cover for reconstruction contractors entering Ukraine. <sup>[I9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="technology">
+      <div class="dot technology"></div>
+      <div class="tl-card">
+        <div class="yr">2023</div>
+        <span class="type-tag tag-technology">Technology</span>
+        <h4>AI and Remote Monitoring — W4 Risk Assessment Innovation</h4>
+        <p>Specialist W4 underwriters and Assistance companies begin deploying AI-driven country risk assessment tools, real-time security alerts, and GPS-based employee tracking for international workforce management. Underwriters consider whether superior real-time risk data justifies rate credits for employers using advanced monitoring technology. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="technology">
+      <div class="dot technology"></div>
+      <div class="tl-card">
+        <div class="yr">2024</div>
+        <span class="type-tag tag-technology">Technology</span>
+        <h4>Gig Economy and Supply Chain Complexity — W4 Status Disputes</h4>
+        <p>Growth of gig economy and labour intermediary platforms in international construction and services creates widespread employee vs independent contractor status disputes. W4 underwriters increase scrutiny of insured's workforce classification practices. Multiple jurisdictions (UAE, Qatar, UK) tighten employment tests. W4 premium adequacy assessed against growing uninsured/under-insured contractor population. <sup>[I6]</sup></p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation International (W4) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filterAll(){
+  document.querySelectorAll('.tl-item').forEach(el=>el.classList.add('show'));
+  document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.filters button:first-child').classList.add('active');
+}
+function filterType(t){
+  document.querySelectorAll('.tl-item').forEach(el=>{
+    el.classList.toggle('show', el.dataset.t===t);
+  });
+  document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));
+  const btn = document.querySelector(`.filters button[data-t="${t}"]`);
+  if(btn) btn.classList.add('active');
+}
+</script>
+</body>
+</html>

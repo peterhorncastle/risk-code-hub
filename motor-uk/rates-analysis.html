@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Motor – UK: Rates & ROE | Risk Code Hub</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --motor:#c0392b; --motor-dark:#7b1010; --road:#263238;
+      --signal:#e67e22; --speed:#1565c0; --go:#2e7d32;
+      --light:#fdf5f5; --text:#1e2a2e; --muted:#6b7280; --border:#e0cece;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #c0392b;
+    --hub-dark:      #7b1010;
+    --hub-light:     #fdecea;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #e67e22;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#1a0808 0%,#c0392b 50%,#7b1010 100%);
+    --header-sub:    #f0c8c8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#1a0808 0%,#c0392b 50%,#7b1010 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#c8a090; margin-bottom:6px; }
+    .breadcrumb a { color:var(--signal); text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#f0c8c8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--motor); border-bottom-color:var(--signal); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--motor); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--signal); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .chart-wrap { background:#fff; border-radius:12px; padding:28px; box-shadow:0 2px 8px rgba(0,0,0,.06); margin:24px 0; }
+    .chart-wrap h3 { font-size:1rem; font-weight:700; color:var(--road); margin-bottom:16px; }
+    canvas { max-height:320px; }
+
+    .cycle-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:24px 0; }
+    .cycle-card { background:#fff; border-radius:10px; padding:20px 22px; border-left:5px solid var(--motor); box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .cycle-card.amber { border-left-color:var(--signal); }
+    .cycle-card.blue { border-left-color:var(--speed); }
+    .cycle-card.green { border-left-color:var(--go); }
+    .cycle-card.road { border-left-color:var(--road); }
+    .cycle-card h4 { font-size:0.88rem; font-weight:700; color:var(--motor); margin-bottom:6px; }
+    .cycle-card.amber h4 { color:var(--signal); }
+    .cycle-card.blue h4 { color:var(--speed); }
+    .cycle-card.green h4 { color:var(--go); }
+    .cycle-card.road h4 { color:var(--road); }
+    .cycle-card p { font-size:0.82rem; line-height:1.6; margin:0; color:#555; }
+
+    .rate-tbl { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.06); margin:24px 0; }
+    .rate-tbl table { width:100%; border-collapse:collapse; font-size:0.84rem; }
+    .rate-tbl th { background:var(--road); color:#fff; padding:10px 14px; text-align:left; }
+    .rate-tbl th:hover { background:#1a2328; color:#fff; }
+    .rate-tbl td { padding:10px 14px; border-bottom:1px solid var(--border); }
+    .rate-tbl tr:last-child td { border-bottom:none; }
+    .rate-tbl tr:nth-child(even) td { background:#f8fafa; }
+
+    .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:24px 0; }
+    .roe-card { border-radius:12px; padding:22px; text-align:center; color:#fff; }
+    .roe-bull { background:linear-gradient(135deg,var(--go),#1b5e20); }
+    .roe-base { background:linear-gradient(135deg,var(--speed),#0d47a1); }
+    .roe-bear { background:linear-gradient(135deg,var(--motor),var(--motor-dark)); }
+    .roe-card h4 { font-size:0.9rem; font-weight:700; margin-bottom:10px; opacity:0.9; }
+    .roe-card .pct { font-size:2.0rem; font-weight:900; }
+    .roe-card p { font-size:0.78rem; opacity:0.85; margin-top:8px; line-height:1.5; }
+
+    footer { background:var(--road); color:#aabbc4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Motor – UK</a> › Rates & ROE</div>
+  <h1>Rates &amp; ROE Analysis — UK Motor</h1>
+  <p>Market cycle, premium rate movement, claims inflation drivers and three ROE scenarios on a Lloyd's UK motor portfolio.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates & ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Premium Rate Index — UK Motor 2010–2024</h2>
+  <p>UK motor premium rates are highly cyclical. The chart below shows an illustrative rate index (2015=100) reflecting key structural drivers: whiplash reform, Ogden rate shock, FCA pricing reform and post-COVID claims inflation. <span class="badge b-i">ILLUS</span></p>
+
+  <div class="chart-wrap">
+    <h3>Illustrative UK Motor Premium Rate Index (2015 = 100) — Personal Lines &amp; Fleet <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="rateChart"></canvas>
+  </div>
+
+  <h2>Market Cycle Narrative</h2>
+  <div class="cycle-grid">
+    <div class="cycle-card">
+      <h4>2010–2012: Hard Market — PI Claims Crisis</h4>
+      <p>Whiplash claims industrialisation, CFA expansion and rising bodily injury costs drove a hard market cycle. Average personal lines premium rose 30–40% from 2010–2012. <span class="badge b-e">EST</span> LASPO reforms then partially deflated rates from 2013.</p>
+    </div>
+    <div class="cycle-card amber">
+      <h4>2013–2016: Soft Drift — Reform Optimism</h4>
+      <p>LASPO impact, referral fee bans and early signs of falling whiplash volumes encouraged competition. Rates softened; combined ratios improved to near-breakeven 100–105% for best operators. <span class="badge b-e">EST</span></p>
+    </div>
+    <div class="cycle-card blue">
+      <h4>2017: Ogden Shock — Abrupt Market Hardening</h4>
+      <p>PIDR cut to –0.75% in March 2017 forced immediate reserve strengthening industry-wide. Average personal lines premium rose ~15–20% within 12 months. <span class="badge b-e">EST</span> Lloyd's motor portfolio required significant IBNR uplift. <span class="badge b-v">VER</span></p>
+    </div>
+    <div class="cycle-card green">
+      <h4>2018–2020: Ogden Reversal &amp; COVID Dislocation</h4>
+      <p>Ogden rate corrected to +0.25% (2019), reducing reserve pressure. COVID-19 lockdowns slashed claims frequency in 2020 — some insurers issued premium rebates. Short-term profitability improved dramatically. <span class="badge b-v">VER</span></p>
+    </div>
+    <div class="cycle-card road">
+      <h4>2021–2022: FCA Reform &amp; Inflation Emergence</h4>
+      <p>FCA pricing rules restructured renewal pricing — end of new-business discounting. Simultaneously, post-COVID claims severity began rising sharply: parts shortages, EV total losses, labour cost inflation. <span class="badge b-v">VER</span></p>
+    </div>
+    <div class="cycle-card">
+      <h4>2023–2024: Claims Inflation Peak — Premium Catch-Up</h4>
+      <p>Average UK comprehensive premium rose 29% in 2023 (ABI) <span class="badge b-v">VER</span> — the steepest annual increase on record. Rates began outpacing loss inflation by H2 2024 as pricing discipline held and frequency moderated. <span class="badge b-v">VER</span></p>
+    </div>
+  </div>
+
+  <h2>Claims Inflation Decomposition — 2022–2024</h2>
+  <div class="chart-wrap">
+    <h3>UK Motor Claims Cost Drivers 2022–2024 — Illustrative Index Decomposition <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="inflChart"></canvas>
+  </div>
+
+  <h2>Rate Benchmarks — UK Motor by Segment</h2>
+  <div class="rate-tbl">
+    <table>
+      <thead><tr><th>Segment (Code)</th><th>Rate Metric</th><th>Indicative 2024 Level</th><th>Trend vs 2022</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Private car standard (M2)</strong></td>
+          <td>Average annual premium</td>
+          <td>~£630 comprehensive <span class="badge b-v">VER</span></td>
+          <td>+29% (2023); moderating 2024</td>
+          <td>ABI data; UK average includes all age groups</td>
+        </tr>
+        <tr>
+          <td><strong>Classic / HNW car (M2)</strong></td>
+          <td>% of agreed value p.a.</td>
+          <td>0.4–0.7% <span class="badge b-i">ILLUS</span></td>
+          <td>+5–10% vs 2022</td>
+          <td>Lloyd's specialist; agreed value basis; low mileage discounts applied</td>
+        </tr>
+        <tr>
+          <td><strong>Motorcycle (M4)</strong></td>
+          <td>Average annual premium</td>
+          <td>~£350–800 <span class="badge b-e">EST</span></td>
+          <td>+15–25%</td>
+          <td>Wide range by engine size; high-performance 600cc+ at upper end</td>
+        </tr>
+        <tr>
+          <td><strong>Commercial van/LCV (M3)</strong></td>
+          <td>Average annual premium</td>
+          <td>~£900–1,400 <span class="badge b-e">EST</span></td>
+          <td>+20–30%</td>
+          <td>Courier/PHV at upper end; trade plated vans; cat conv theft driving surcharges</td>
+        </tr>
+        <tr>
+          <td><strong>Corporate fleet (M5)</strong></td>
+          <td>Rate on vehicle value (%)</td>
+          <td>1.4–2.2% p.a. <span class="badge b-i">ILLUS</span></td>
+          <td>+10–20% for non-telematics</td>
+          <td>Telematics-deployed fleets receiving 8–15% credit vs non-telematics</td>
+        </tr>
+        <tr>
+          <td><strong>EV fleet premium loading</strong></td>
+          <td>Additional % vs equivalent ICE</td>
+          <td>+10–25% <span class="badge b-e">EST</span></td>
+          <td>Increasing as loss data matures</td>
+          <td>Battery write-off, repair cost, thermal runaway loading varies by insurer</td>
+        </tr>
+        <tr>
+          <td><strong>Motor trade combined (M6)</strong></td>
+          <td>Annual combined premium</td>
+          <td>£5,000–£100,000+ <span class="badge b-i">ILLUS</span></td>
+          <td>+15–25%</td>
+          <td>Highly variable by trade type, stock value and premises risk</td>
+        </tr>
+        <tr>
+          <td><strong>Young driver (17–25, telematics)</strong></td>
+          <td>Average annual premium</td>
+          <td>£1,200–2,500 <span class="badge b-e">EST</span></td>
+          <td>Moderating for telematics; rising for non-telematics</td>
+          <td>Black box pricing now dominant for under-25; non-telematics increasingly difficult to place</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Combined Ratio — Illustrative UK Motor Portfolio 2014–2024</h2>
+  <div class="chart-wrap">
+    <h3>Combined Ratio — UK Motor (Lloyd's Specialist Portfolio) <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="crChart"></canvas>
+  </div>
+
+  <h2>ROE Scenarios — £200m UK Motor Portfolio</h2>
+  <p>Three return-on-equity scenarios on a hypothetical £200m GWP Lloyd's UK motor portfolio (specialist mix: 35% fleet M5, 30% specialist private M2, 20% commercial M3, 10% motor trade M6, 5% motorcycle M4). Assumptions: 35% expense ratio; 60% combined ratio target on underwriting; investment income at 3.5% on float. <span class="badge b-i">ILLUS</span></p>
+
+  <div class="roe-grid">
+    <div class="roe-card roe-bull">
+      <h4>Bull Scenario</h4>
+      <div class="pct">+18%</div>
+      <p>Loss ratio 58%; combined 93%; investment income £7m; profit £36m on £200m equity base. Favourable: claims inflation moderating, telematics driving frequency reduction, OIC portal limiting BI severity. ILLUS</p>
+    </div>
+    <div class="roe-card roe-base">
+      <h4>Base Scenario</h4>
+      <div class="pct">+9%</div>
+      <p>Loss ratio 68%; combined 103%; investment income £7m; profit £18m. Near-breakeven underwriting; investment float generates acceptable return. EV losses and BI severity offset by rate increases. ILLUS</p>
+    </div>
+    <div class="roe-card roe-bear">
+      <h4>Bear Scenario</h4>
+      <div class="pct">−7%</div>
+      <p>Loss ratio 82%; combined 117%; large bodily injury claims, Ogden-type reserve shock or EV battery fire cluster event. Investment income partially offsets. Loss £14m. Demonstrates motor volatility vs other Lloyd's classes. ILLUS</p>
+    </div>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.8 · Motor – UK (M2/M3/M4/M5/M6) · For educational use</footer>
+<script>
+// Rate Index Chart
+const rateCtx=document.getElementById('rateChart').getContext('2d');
+new Chart(rateCtx,{
+  type:'line',
+  data:{
+    labels:['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+    datasets:[
+      {label:'Personal Lines Rate Index (2015=100)',data:[80,95,108,105,100,100,96,115,112,108,102,107,118,152,162],borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.08)',borderWidth:2.5,tension:0.4,fill:true,pointBackgroundColor:'#c0392b'},
+      {label:'Fleet Rate Index (2015=100)',data:[88,92,98,97,96,100,98,112,110,108,104,108,116,138,148],borderColor:'#1565c0',backgroundColor:'rgba(21,101,192,0.05)',borderWidth:2,tension:0.4,fill:false,pointBackgroundColor:'#1565c0'}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'Index (2015 = 100)'}}}}
+});
+
+// Claims inflation chart
+const inflCtx=document.getElementById('inflChart').getContext('2d');
+new Chart(inflCtx,{
+  type:'bar',
+  data:{
+    labels:['Parts & Components','Labour Rates','Paint & Consumables','EV Battery Write-offs','Bodily Injury (PI)','Replacement Vehicle','Total Loss Values'],
+    datasets:[{
+      label:'Estimated Cost Increase 2022–2024 (%)',
+      data:[38,22,28,45,18,24,31],
+      backgroundColor:['#c0392b','#e67e22','#c0392b','#1565c0','#7b1010','#e67e22','#c0392b'],
+      borderRadius:6
+    }]
+  },
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'% Increase 2022–2024'},max:55}}}
+});
+
+// Combined ratio chart
+const crCtx=document.getElementById('crChart').getContext('2d');
+const crData=[97,103,100,98,96,102,99,118,113,105,92,98,116,108,100];
+new Chart(crCtx,{
+  type:'bar',
+  data:{
+    labels:['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+    datasets:[{
+      label:'Combined Ratio (%)',
+      data:crData,
+      backgroundColor:crData.map(v=>v<=100?'rgba(46,125,50,0.75)':'rgba(192,57,43,0.75)'),
+      borderRadius:5
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},annotation:{annotations:{line100:{type:'line',yMin:100,yMax:100,borderColor:'#263238',borderWidth:2,borderDash:[6,3]}}}},
+    scales:{y:{title:{display:true,text:'Combined Ratio (%)'},min:80,max:130}}
+  }
+});
+</script>
+</body>
+</html>

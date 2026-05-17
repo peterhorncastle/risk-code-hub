@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>PI E&O Financial Institutions — Loss Database | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:    #2c5282;
+      --hub-dark:       #1a3050;
+      --hub-light:      #ebf4ff;
+      --hub-accent:     #c8a84b;
+      --hub-secondary:  #c0392b;
+      --hub-secondary2: #2e7d32;
+      --header-gradient: linear-gradient(135deg,#1a3050 0%,#2c5282 50%,#3a6298 100%);
+      --header-sub:     #b8ccdf;
+    }
+
+    /* Filter bar */
+    .filter-bar { display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 22px; align-items:center; }
+    .filter-bar label { font-size:0.82rem; font-weight:600; color:var(--muted); }
+    .filter-bar select { padding:6px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.85rem; background:#fff; color:var(--text); cursor:pointer; }
+    .filter-bar select:focus { outline:2px solid var(--hub-primary); }
+    .filter-count { font-size:0.82rem; color:var(--muted); margin-left:auto; }
+
+    /* Loss table */
+    .loss-table { width:100%; border-collapse:collapse; font-size:0.85rem; margin-top:8px; }
+    .loss-table th { background:var(--hub-dark); color:#fff; padding:10px 12px; text-align:left; font-size:0.78rem; font-weight:700; letter-spacing:0.5px; white-space:nowrap; }
+    .loss-table td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .loss-table tr:last-child td { border-bottom:none; }
+    .loss-table tr:hover td { background:#f7f9fc; }
+    .loss-table tr.hidden { display:none; }
+
+    /* Expandable detail row */
+    .loss-table tr.detail-row td { background:#f0f5ff; padding:10px 16px; font-size:0.83rem; color:#344a65; border-bottom:2px solid #d4e2f4; }
+    .loss-table tr.detail-row.hidden { display:none; }
+    .expand-btn { background:none; border:none; cursor:pointer; color:var(--hub-primary); font-size:0.8rem; font-weight:700; padding:0; text-decoration:underline; white-space:nowrap; }
+
+    /* Type tags in table */
+    .tt { display:inline-block; font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; padding:2px 8px; border-radius:12px; white-space:nowrap; }
+    .tt-advice  { background:#ebf4ff; color:#2c5282; }
+    .tt-misc    { background:#fdecea; color:#c0392b; }
+    .tt-reg     { background:#fef3e2; color:#7a5700; }
+    .tt-struct  { background:#f3e5f5; color:#6a1b9a; }
+    .tt-digit   { background:#e8f5e9; color:#2e7d32; }
+
+    /* Severity */
+    .sev { font-weight:700; }
+    .sev-cat { color:#c0392b; }
+    .sev-maj { color:#e65100; }
+    .sev-mod { color:#c8a84b; }
+    .sev-min { color:var(--hub-secondary2); }
+
+    .loss-amt { font-weight:700; color:var(--hub-primary); white-space:nowrap; }
+    .yr { white-space:nowrap; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">PI E&O Financial Institutions (F2/F3)</a> › Loss Database</div>
+  <div class="tag">Module 03 — Loss Database</div>
+  <h1>PI E&amp;O Financial Institutions — Loss Database</h1>
+  <p>35 significant FI professional indemnity loss events from 1994 to 2024. Filter by claim type and severity. Click any row to expand claim details, coverage response, and key lessons.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>Loss amounts represent total industry redress/settlement where publicly reported; insured FI PI exposure is a subset. Amounts in original currency; GBP/USD approximate at time of settlement. <span class="badge b-v">VER</span> claims reference public sources; <span class="badge b-e">EST</span> claims reference market consensus estimates. <span class="badge b-i">ILLUS</span> entries are constructed composites illustrating typical claim characteristics.</p>
+
+  <div class="filter-bar">
+    <label>Type:</label>
+    <select id="typeFilter" onchange="applyFilters()">
+      <option value="all">All Types</option>
+      <option value="advice">Advice / Mis-selling</option>
+      <option value="misc">Major Scandal / Fraud</option>
+      <option value="reg">Regulatory / Legal</option>
+      <option value="struct">Structural / Market</option>
+      <option value="digit">Digital / Emerging</option>
+    </select>
+    <label>Severity:</label>
+    <select id="sevFilter" onchange="applyFilters()">
+      <option value="all">All Severities</option>
+      <option value="cat">Catastrophic (&gt;£500m)</option>
+      <option value="maj">Major (£50m–£500m)</option>
+      <option value="mod">Moderate (£5m–£50m)</option>
+      <option value="min">Minor (&lt;£5m)</option>
+    </select>
+    <span class="filter-count" id="filterCount">Showing 35 of 35 events</span>
+  </div>
+
+  <div style="overflow-x:auto;">
+  <table class="loss-table" id="lossTable">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event / Claim</th>
+        <th>Type</th>
+        <th>Loss / Redress</th>
+        <th>Severity</th>
+        <th>Source</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="lossBody">
+
+      <!-- 1 -->
+      <tr data-type="advice" data-sev="cat">
+        <td class="yr">1994–2002</td>
+        <td><strong>UK Pensions Transfer Mis-Selling</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£12bn+</td>
+        <td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(1)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d1">
+        <td colspan="7"><strong>What happened:</strong> 2 million people incorrectly advised to transfer from defined-benefit occupational pensions to personal pensions (1988–1994). FSA ordered systematic review 1994; firms required to compensate victims. Many small IFA firms had insufficient PI cover, leading to insolvencies.<br><br><strong>PI coverage response:</strong> Negligent advice claims against IFAs and tied agents; some claims run directly against insurers after IFA insolvency via FSCS. Retroactive date clipping critical — many claims discovered well after advice date.<br><br><strong>Key lesson:</strong> Systemic mis-selling creates long-tail discovery risk. Underwriters must assess IFA's product mix history, not just current book.</td>
+      </tr>
+
+      <!-- 2 -->
+      <tr data-type="advice" data-sev="cat">
+        <td class="yr">1988–2006</td>
+        <td><strong>Endowment Mortgage Mis-Selling</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£3.5bn est.</td>
+        <td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(2)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d2">
+        <td colspan="7"><strong>What happened:</strong> Endowment mortgages sold on assumptions of 10–12% annual equity growth consistently underperformed; FSA issued millions of 'red letter' warnings 2000 onwards. Redress letters sent from 2000; total compensation ran through to 2006.<br><br><strong>PI coverage response:</strong> Negligent advice claims against life companies and IFAs; aggregate excess of loss treaties impacted across multiple syndicates. Illustrates how optimistic return assumptions can generate systemic liability.<br><br><strong>Key lesson:</strong> Product illustration assumptions are an underwriting exposure. High forecast returns relative to risk profile = red flag.</td>
+      </tr>
+
+      <!-- 3 -->
+      <tr data-type="misc" data-sev="cat">
+        <td class="yr">2002–2004</td>
+        <td><strong>Split Capital Trust Collapse</strong></td>
+        <td><span class="tt tt-misc">Scandal</span></td>
+        <td class="loss-amt">£700m</td>
+        <td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(3)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d3">
+        <td colspan="7"><strong>What happened:</strong> 50,000 retail investors lost ~£700m in split capital investment trusts that had cross-invested in each other, creating hidden systematic leverage. FSA fined 21 firms for misleading promotion.<br><br><strong>PI coverage response:</strong> Civil claims against advisers who recommended split cap funds without understanding cross-investment leverage. Coverage disputes around whether recommending a product without reading the prospectus constitutes negligence (generally: yes).<br><br><strong>Key lesson:</strong> Complexity in product structure is a PI underwriting red flag. Assess whether insured's advisers have capacity to understand what they're selling.</td>
+      </tr>
+
+      <!-- 4 -->
+      <tr data-type="reg" data-sev="cat">
+        <td class="yr">2003</td>
+        <td><strong>Global Analyst Research Settlement (US)</strong></td>
+        <td><span class="tt tt-reg">Regulatory</span></td>
+        <td class="loss-amt">$1.4bn</td>
+        <td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(4)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d4">
+        <td colspan="7"><strong>What happened:</strong> Ten major US investment banks settled with NASD, NYSE and SEC over analyst conflicts of interest following dot-com bubble. Public settlement absorbed regulatory liability; civil investor claims followed.<br><br><strong>PI coverage response:</strong> Regulatory defence costs insured under FI PI; civil investor claims covered where advice nexus established. Multi-jurisdiction complexity where US banks operated through London branches. Regulatory settlements generally not indemnifiable; defence costs are.<br><br><strong>Key lesson:</strong> Regulatory investigation triggers defence cost coverage immediately. Underwriters must assess exposure to multi-jurisdictional enforcement.</td>
+      </tr>
+
+      <!-- 5 -->
+      <tr data-type="misc" data-sev="cat">
+        <td class="yr">2008</td>
+        <td><strong>Lehman Structured Notes — Global Distributor Claims</strong></td>
+        <td><span class="tt tt-misc">Scandal</span></td>
+        <td class="loss-amt">Multi-£bn</td>
+        <td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(5)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d5">
+        <td colspan="7"><strong>What happened:</strong> Lehman's Chapter 11 left retail investors globally holding structured notes sold as 'capital protected'. Distributors in Europe, Hong Kong, Singapore and Australia faced negligent advice claims — the notes were not suitable for retail investors despite the marketing.<br><br><strong>PI coverage response:</strong> Negligent recommendation claims covered under FI PI where distributor/adviser nexus established. Hong Kong SFC and Singapore MAS regulatory investigations ran parallel to civil claims.<br><br><strong>Key lesson:</strong> 'Capital protection' labels do not guarantee capital. Underwriters must assess counterparty credit risk in structured note distribution books.</td>
+      </tr>
+
+      <!-- 6 -->
+      <tr data-type="misc" data-sev="cat">
+        <td class="yr">2008</td>
+        <td><strong>Madoff Feeder Fund — Adviser Due Diligence Claims</strong></td>
+        <td><span class="tt tt-misc">Scandal</span></td>
+        <td class="loss-amt">$64.8bn stated</td>
+        <td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(6)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d6">
+        <td colspan="7"><strong>What happened:</strong> Madoff's Ponzi scheme collapsed with $64.8bn stated losses. Fund managers who recommended feeder fund investments without adequate due diligence faced negligent recommendation claims — Madoff's dishonesty was root cause, but the advisers were negligent for not investigating adequately.<br><br><strong>PI coverage response:</strong> Coverage responds for negligent due diligence failure. Key exclusion battleground: dishonesty exclusion does not apply to the adviser's negligence (only Madoff's dishonesty). Fidelity coverage does not respond unless adviser's own employee was dishonest.<br><br><strong>Key lesson:</strong> Due diligence standard is fundamental. Underwriters should require documented investment process for all product recommendations.</td>
+      </tr>
+
+      <!-- 7 -->
+      <tr data-type="reg" data-sev="cat">
+        <td class="yr">2012–2015</td>
+        <td><strong>LIBOR Manipulation — Civil Counterparty Claims</strong></td>
+        <td><span class="tt tt-reg">Regulatory</span></td>
+        <td class="loss-amt">$9bn+ fines</td>
+        <td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(7)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d7">
+        <td colspan="7"><strong>What happened:</strong> Regulatory settlements with Barclays, UBS, RBS, Deutsche Bank, SocGen and others. Civil litigation from counterparties whose LIBOR-referenced contracts were affected by manipulation. Claims intersected D&O, fidelity and FI PI coverage.<br><br><strong>PI coverage response:</strong> Civil claims for negligent advice to enter into LIBOR-referenced contracts (separate from manipulation itself) potentially covered by FI PI. Multi-line disputes about which policy responds required experienced coverage counsel.<br><br><strong>Key lesson:</strong> Benchmark manipulation creates secondary adviser liability. Underwriters must assess benchmark exposure in derivatives and loan advice books.</td>
+      </tr>
+
+      <!-- 8 -->
+      <tr data-type="advice" data-sev="cat">
+        <td class="yr">2000–2019</td>
+        <td><strong>PPI Mis-Selling — Branch Adviser Claims</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£38bn total</td>
+        <td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(8)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d8">
+        <td colspan="7"><strong>What happened:</strong> Payment Protection Insurance sold without adequate suitability assessment across banks and financial service providers. FCA mandated systematic redress; £38bn total industry cost. Branch advisers face professional liability claims for negligent suitability assessments.<br><br><strong>PI coverage response:</strong> FI PI covers negligent advice by individual advisers; banks typically self-insure at primary layer. Adjunct claims against introducers and mortgage brokers who recommended PPI alongside primary products represent pure FI PI exposure.<br><br><strong>Key lesson:</strong> Commission-driven sales without documented suitability is a systemic liability generator. Assess incentive structures at underwriting.</td>
+      </tr>
+
+      <!-- 9 -->
+      <tr data-type="advice" data-sev="maj">
+        <td class="yr">2018–2021</td>
+        <td><strong>British Steel Pension — DB Transfer Wave</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£1bn+ est.</td>
+        <td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(9)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d9">
+        <td colspan="7"><strong>What happened:</strong> IFAs gave negligent transfer value analysis (TVAS) advice to British Steel workers, recommending transfer from guaranteed DB scheme to personal pensions. FCA withdrew permissions from multiple firms; those with coverage faced PI claims.<br><br><strong>PI coverage response:</strong> Negligent DB transfer advice directly covered by FI PI. Where firm insolvent, FSCS steps in (subject to FSCS limits). Retroactive date issues arise where advice given in prior policy years.<br><br><strong>Key lesson:</strong> DB transfer advice is the highest-risk advice category for IFAs. Underwriters should apply DB transfer sub-limits or surcharges for firms with significant DB transfer volumes.</td>
+      </tr>
+
+      <!-- 10 -->
+      <tr data-type="misc" data-sev="maj">
+        <td class="yr">2019</td>
+        <td><strong>London Capital &amp; Finance (LCF) Collapse</strong></td>
+        <td><span class="tt tt-misc">Scandal</span></td>
+        <td class="loss-amt">£237m</td>
+        <td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(10)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d10">
+        <td colspan="7"><strong>What happened:</strong> LCF sold unregulated mini-bonds to 11,600 retail investors via misleading marketing materials. FCA identified serious regulatory failures including inadequate oversight of appointed representatives. FSCS paid £57.6m; government scheme paid additional £120m.<br><br><strong>PI coverage response:</strong> Claims against auditors for failing to identify misleading marketing; claims against introducers for recommending LCF. FCA enforcement findings establish civil negligence standard.<br><br><strong>Key lesson:</strong> Appointed representative oversight is a critical underwriting assessment. FI PI underwriters should review the AR network due diligence procedures of any insured that manages ARs.</td>
+      </tr>
+
+      <!-- 11 -->
+      <tr data-type="advice" data-sev="maj">
+        <td class="yr">2012</td>
+        <td><strong>Rubenstein v HSBC — Rate-Linked Fund Mis-Selling</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£1.5m (individual)</td>
+        <td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(11)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d11">
+        <td colspan="7"><strong>What happened:</strong> Court of Appeal found HSBC breached duty of care by recommending an AIG bond fund (marketed as 'cash equivalent') to a low-risk client. Fund lost 70% in GFC. Landmark suitability ruling now cited routinely in FI PI litigation.<br><br><strong>PI coverage response:</strong> Negligent advice covered by FI PI; HSBC's own internal PI programme responds. Case sets evidential precedent: adviser must demonstrate positive inquiry about client risk appetite, not assume from investor type.<br><br><strong>Key lesson:</strong> 'Cash equivalent' product descriptions create adviser liability when the product is not equivalent to cash. Underwriters should review how insured firms describe and categorise products internally.</td>
+      </tr>
+
+      <!-- 12 -->
+      <tr data-type="misc" data-sev="maj">
+        <td class="yr">2012</td>
+        <td><strong>CPDO (ABN AMRO / Standard &amp; Poors) — Negligent Rating</strong></td>
+        <td><span class="tt tt-misc">Scandal</span></td>
+        <td class="loss-amt">AUD 20m (Bathurst)</td>
+        <td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(12)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d12">
+        <td colspan="7"><strong>What happened:</strong> Federal Court of Australia finds S&P liable for negligent credit ratings on CPDO structures; ABN AMRO liable for assisting in issuing misleading information. Australian councils lost AUD 20m. First successful legal challenge to a rating agency's ratings for structured credit products.<br><br><strong>PI coverage response:</strong> Rating agency professional liability directly covered by FI PI; placement agent (ABN AMRO) covered under separate E&O programme. Landmark for rating agency liability globally.<br><br><strong>Key lesson:</strong> Rating agencies face PI exposure directly. Underwriters writing E&O for rating agencies or placement agents in structured credit must assess CPDO/CLO/CDO exposure specifically.</td>
+      </tr>
+
+      <!-- 13 -->
+      <tr data-type="advice" data-sev="maj">
+        <td class="yr">2016–2020</td>
+        <td><strong>Foreign Exchange Advice — SME Rate Mis-Selling</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£150m+ est.</td>
+        <td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(13)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d13">
+        <td colspan="7"><strong>What happened:</strong> Banks and FX advisers recommended hedging strategies to SMEs that resulted in significant losses when GBP appreciated. Claims allege negligent advice about currency risk and unsuitable hedging product recommendations to SME clients with limited FX expertise.<br><br><strong>PI coverage response:</strong> FI PI responds where FX adviser provided negligent suitability assessment. Key issue: was the advice regulated, and was there a duty of care? Many FX transactions structured as execution-only to avoid liability.<br><br><strong>Key lesson:</strong> 'Execution-only' labelling does not automatically eliminate PI exposure if adviser actively recommended a direction. Assess how FX transactions are actually conducted, not how they are documented.</td>
+      </tr>
+
+      <!-- 14 -->
+      <tr data-type="advice" data-sev="maj">
+        <td class="yr">2018–2022</td>
+        <td><strong>Discretionary Fund Manager — ESG Product Suitability</strong></td>
+        <td><span class="tt tt-digit">Emerging</span></td>
+        <td class="loss-amt">£80m+ est.</td>
+        <td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(14)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d14">
+        <td colspan="7"><strong>What happened:</strong> DFMs marketed ESG-screened portfolios with sustainability characteristics that did not reflect underlying holdings. Clients suffered losses and complained products were not as described; greenwashing allegations followed regulatory review.<br><br><strong>PI coverage response:</strong> Claims for negligent product characterisation covered by FI PI. Regulatory investigation costs also covered. ESG sub-limits increasingly required where insured manages dedicated ESG mandates.<br><br><strong>Key lesson:</strong> ESG product characterisation without robust underlying analysis is a credible PI exposure. Underwriters should assess ESG screening methodology and disclosure documentation as part of underwriting review.</td>
+      </tr>
+
+      <!-- 15 -->
+      <tr data-type="misc" data-sev="maj">
+        <td class="yr">2003–2006</td>
+        <td><strong>Equitable Life — Adviser Liability Tail</strong></td>
+        <td><span class="tt tt-misc">Scandal</span></td>
+        <td class="loss-amt">£4bn losses</td>
+        <td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(15)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d15">
+        <td colspan="7"><strong>What happened:</strong> Equitable Life closed to new business 2000 after House of Lords ruling on GAR obligations. IFAs who had recommended Equitable policies faced PI claims from investors alleging negligent advice to remain in or transfer to Equitable policies after warning signs emerged. UK government eventually paid £1.5bn compensation scheme (2010).<br><br><strong>PI coverage response:</strong> Claims against IFAs for recommending Equitable policies post-warning-signs; discovery basis claims under then-current policies. Long-tail run-off risk highlighted importance of retroactive date management.<br><br><strong>Key lesson:</strong> Warning signals (credit rating downgrades, regulatory concerns, press coverage) put advisers on inquiry; continuing to recommend after warning signs significantly increases PI exposure.</td>
+      </tr>
+
+      <!-- 16 -->
+      <tr data-type="advice" data-sev="mod">
+        <td class="yr">2015–2019</td>
+        <td><strong>Structured Product — Capital-at-Risk Mis-Description</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£35m est.</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(16)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d16">
+        <td colspan="7"><strong>What happened:</strong> Composite illustrative case: IFA recommends structured products with conditional capital protection to low-risk clients; barrier condition triggers during market volatility; clients lose 30–50% of invested capital. Claims allege negligent advice and inadequate description of barrier mechanism.<br><br><strong>PI coverage response:</strong> Negligent advice and product mis-description covered by FI PI. Defence: adviser relied on product provider's marketing materials (partial; does not excuse failure to understand the product). Aggregate excess of loss treaties respond for multiple small claims.<br><br><strong>Key lesson:</strong> Barrier structures require active explanation at point of advice. Underwriters should treat structured product advice as higher risk than straightforward fund recommendations.</td>
+      </tr>
+
+      <!-- 17 -->
+      <tr data-type="digit" data-sev="mod">
+        <td class="yr">2022</td>
+        <td><strong>Crypto Advice — Retail Investor Losses</strong></td>
+        <td><span class="tt tt-digit">Emerging</span></td>
+        <td class="loss-amt">Variable</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(17)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d17">
+        <td colspan="7"><strong>What happened:</strong> 2022 crypto market collapse (Bitcoin -75%, Luna/TerraUSD to near zero) generates claims from retail investors who received professional advice to invest, or were not adequately warned of risks. FCA guidance on high-risk investment suitability obligations cited in support of claims.<br><br><strong>PI coverage response:</strong> Standard FI PI policies cover negligent advice to invest in digital assets where the adviser had a duty of care. Many policies now have crypto sub-limits (£500k-£1m) or require explicit endorsement for digital asset advice. Exclusions where client received crypto advice from an unregulated source.<br><br><strong>Key lesson:</strong> Crypto advice requires specific regulatory authority and documented suitability. Underwriters should apply sub-limits or exclusions for digital asset advice unless insured has demonstrated appropriate competency.</td>
+      </tr>
+
+      <!-- 18 -->
+      <tr data-type="digit" data-sev="mod">
+        <td class="yr">2022–2023</td>
+        <td><strong>DWS Greenwashing — ESG Enforcement Precedent</strong></td>
+        <td><span class="tt tt-digit">Emerging</span></td>
+        <td class="loss-amt">$25m (SEC)</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(18)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d18">
+        <td colspan="7"><strong>What happened:</strong> SEC charged DWS Investment Management with misleading investors about ESG investment process ($25m settlement, September 2023). BaFin separately investigated DWS parent Deutsche Bank. First major ESG enforcement action by a US securities regulator against an asset manager.<br><br><strong>PI coverage response:</strong> Regulatory defence costs covered under FI PI. Civil investor claims expected to follow SEC enforcement (typical 2–3 year lag). FI PI underwriters treating ESG enforcement as a leading indicator for civil liability claims 2025–2027.<br><br><strong>Key lesson:</strong> Regulatory ESG enforcement precedes civil claims. Underwriters writing DFM/asset manager risks should assess ESG policy documentation, fund labelling, and SFDR/SDR compliance for all ESG-marketed products.</td>
+      </tr>
+
+      <!-- 19 -->
+      <tr data-type="advice" data-sev="mod">
+        <td class="yr">2020–2023</td>
+        <td><strong>SIPP Introducer — Unsuitable Pension Transfers</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£45m est.</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(19)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d19">
+        <td colspan="7"><strong>What happened:</strong> SIPP (Self-Invested Personal Pension) operators allowed introducers to direct client pension funds into non-standard investments (storage pods, hotel rooms, car parks) without adequate due diligence. Multiple SIPP operators subject to FCA enforcement; investors suffered significant losses.<br><br><strong>PI coverage response:</strong> Claims against SIPP operators for negligent acceptance of non-standard assets; claims against introducers for unsuitable recommendations. Court of Appeal in Adams v Options (2021) confirmed SIPP operators owe duty of care in certain circumstances.<br><br><strong>Key lesson:</strong> SIPP operators have PI exposure even where they do not give advice, if they accepted non-standard assets without adequate due diligence. Underwriters must assess SIPP operator's non-standard asset acceptance process.</td>
+      </tr>
+
+      <!-- 20 -->
+      <tr data-type="struct" data-sev="mod">
+        <td class="yr">2023</td>
+        <td><strong>SVB Collapse — Investment Adviser Bond Duration Claims</strong></td>
+        <td><span class="tt tt-struct">Structural</span></td>
+        <td class="loss-amt">Multi-£m est.</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(20)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d20">
+        <td colspan="7"><strong>What happened:</strong> Silicon Valley Bank collapsed March 2023 following mark-to-market losses on long-duration bond portfolio. Institutional clients who had received advice to hold long-duration fixed-income in rising rate environment bring claims against investment advisers. Treasury management consultants also potentially exposed.<br><br><strong>PI coverage response:</strong> Investment advice claims covered under FI PI where duty of care established. Key issue: was advice on bond duration given, and was there a recommendation to hold long duration in rising rate environment?<br><br><strong>Key lesson:</strong> Rate environment change can rapidly convert investment advice into PI exposure. Underwriters should track insured's client exposure to rate-sensitive advice categories during monetary policy transition periods.</td>
+      </tr>
+
+      <!-- 21 -->
+      <tr data-type="advice" data-sev="mod">
+        <td class="yr">2019–2022</td>
+        <td><strong>CFD / Leveraged Product Retail Mis-Selling</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£40m+ est.</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(21)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d21">
+        <td colspan="7"><strong>What happened:</strong> ESMA imposed leverage limits on CFDs and banned binary options to retail clients (2018). Prior to restrictions, retail investors received recommendations from introducing brokers and online platforms for leveraged CFD positions that caused significant losses. Multiple FCA enforcement actions against CFD providers.<br><br><strong>PI coverage response:</strong> Introducing broker recommendations covered by FI PI. Platform liability more complex — if platform providing execution only, PI exposure limited; if recommendation given, fully covered.<br><br><strong>Key lesson:</strong> Leverage ratio and risk warnings must be appropriate for client profile. Underwriters writing online platform risks should assess regulatory status (execution-only vs advised) and leverage product mix.</td>
+      </tr>
+
+      <!-- 22 -->
+      <tr data-type="advice" data-sev="mod">
+        <td class="yr">2014–2017</td>
+        <td><strong>Mortgage Advice — Affordability Assessment Failures</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£30m est.</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(22)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d22">
+        <td colspan="7"><strong>What happened:</strong> Mortgage Market Review (MMR, 2014) changed affordability assessment requirements. Brokers who failed to update affordability models or used historical income data without stress-testing created PI exposure where clients subsequently defaulted on mortgages the broker recommended.<br><br><strong>PI coverage response:</strong> Negligent affordability assessment covered by FI PI for mortgage brokers. FCA's mortgage lender conduct reviews identified systemic failures in affordability documentation at multiple brokers.<br><br><strong>Key lesson:</strong> Regulatory change creates immediate advice standard uplift. Underwriters should track regulatory reform dates and assess insured's documented process updates.</td>
+      </tr>
+
+      <!-- 23 -->
+      <tr data-type="struct" data-sev="mod">
+        <td class="yr">2021–2022</td>
+        <td><strong>Archegos Capital — Prime Brokerage Advice Claims</strong></td>
+        <td><span class="tt tt-struct">Structural</span></td>
+        <td class="loss-amt">$10bn+ losses</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(23)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d23">
+        <td colspan="7"><strong>What happened:</strong> Archegos Capital Management's leveraged equity positions collapsed March 2021, causing $10bn+ losses across Credit Suisse, Nomura, Morgan Stanley and others. Credit Suisse alone lost $5.5bn. Regulatory investigations into prime brokerage risk management; civil claims against advisers who maintained positions without adequate margin assessment.<br><br><strong>PI coverage response:</strong> Primarily D&O exposure for bank management failures; FI PI responds for any third-party adviser claims where advice nexus exists. Credit Suisse's prime brokerage failures primarily an internal risk management failure.<br><br><strong>Key lesson:</strong> Concentration and leverage risk in single client relationships requires active adviser monitoring. Underwriters should understand insured's position risk management for concentrated accounts.</td>
+      </tr>
+
+      <!-- 24 -->
+      <tr data-type="advice" data-sev="mod">
+        <td class="yr">2016–2020</td>
+        <td><strong>Defined Benefit Transfer — Multiple IFA Claims</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£25m est.</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(24)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d24">
+        <td colspan="7"><strong>What happened:</strong> Composite illustrative: IFA practice writes 120 DB transfer recommendations over 4 years. FCA review finds 60% of recommendations were unsuitable. Claims run across all unsuitable recommendations; PI programme aggregates against £1m any-one-claim limit (£120k average claim). Aggregate sub-limit of £2m exhausted.<br><br><strong>PI coverage response:</strong> Individual claim limits and aggregate sub-limits for DB transfer advice highlight importance of aggregate controls. Where aggregate exhausted, FSCS may step in for insolvent firms.<br><br><strong>Key lesson:</strong> DB transfer sub-limits and aggregate controls are essential underwriting tools for IFA risks with significant DB transfer volumes.</td>
+      </tr>
+
+      <!-- 25 -->
+      <tr data-type="reg" data-sev="mod">
+        <td class="yr">2016</td>
+        <td><strong>Consumer Credit Act — Interest Rate Advice Claims</strong></td>
+        <td><span class="tt tt-reg">Regulatory</span></td>
+        <td class="loss-amt">£20m est.</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(25)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d25">
+        <td colspan="7"><strong>What happened:</strong> Composite: Mortgage advisers who failed to explain the full cost of lifetime mortgage or equity release products post-consumer credit regulation changes face claims from elderly clients or estates where products cost significantly more than expected. FCA enforcement on lifetime mortgage mis-selling.<br><br><strong>PI coverage response:</strong> Negligent advice on equity release and lifetime mortgage products covered by FI PI. Elderly/vulnerable client exposure typically attracts FCA regulatory investigation alongside civil claims.<br><br><strong>Key lesson:</strong> Elderly and vulnerable clients require enhanced advice documentation. Underwriters should assess what proportion of insured's book is equity release or lifetime mortgage advice to elderly clients.</td>
+      </tr>
+
+      <!-- 26 -->
+      <tr data-type="advice" data-sev="min">
+        <td class="yr">2019</td>
+        <td><strong>ISA Advice — Bed &amp; ISA Tax Timing Failure</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£2.5m est.</td>
+        <td><span class="sev sev-min">Minor</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(26)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d26">
+        <td colspan="7"><strong>What happened:</strong> Composite: IFA fails to complete bed-and-ISA transactions before year-end, causing clients to lose annual ISA allowance. HMRC penalties and lost tax benefits become PI claims. Procedural error rather than negligent advice per se — but breach of duty of care established.<br><br><strong>PI coverage response:</strong> Administrative errors causing financial loss covered by FI PI as breach of duty. Small claims accumulate across insured's client base. Often handled as an aggregate retention matter rather than individual claims.<br><br><strong>Key lesson:</strong> Process failures and administrative errors generate PI claims as well as negligent advice. Underwriters should assess insured's workflow management and error prevention procedures.</td>
+      </tr>
+
+      <!-- 27 -->
+      <tr data-type="reg" data-sev="min">
+        <td class="yr">2021</td>
+        <td><strong>MiFID II PRIIP KID — Non-Compliance Claim</strong></td>
+        <td><span class="tt tt-reg">Regulatory</span></td>
+        <td class="loss-amt">£1.8m est.</td>
+        <td><span class="sev sev-min">Minor</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(27)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d27">
+        <td colspan="7"><strong>What happened:</strong> Composite: Adviser fails to provide Key Information Document (KID) before client invests in packaged retail investment and insurance product (PRIIP). Client suffers loss; claims adviser's failure to provide KID prevented informed decision-making. FCA regulatory action for documentation failure.<br><br><strong>PI coverage response:</strong> Regulatory defence costs and civil claims both covered. Key issue: causation — did the missing KID cause the investment decision or the loss?<br><br><strong>Key lesson:</strong> Documentation compliance is a PI exposure in itself. Underwriters should assess document management systems for regulatory compliance documentation.</td>
+      </tr>
+
+      <!-- 28 -->
+      <tr data-type="digit" data-sev="mod">
+        <td class="yr">2023–2024</td>
+        <td><strong>AI-Generated Investment Research — Accuracy Claims</strong></td>
+        <td><span class="tt tt-digit">Emerging</span></td>
+        <td class="loss-amt">Emerging</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(28)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d28">
+        <td colspan="7"><strong>What happened:</strong> Financial advisers and research providers using generative AI tools produce investment research containing factual inaccuracies ('hallucinations'). Clients who act on inaccurate AI-generated research suffer losses and bring negligence claims. FCA notes AI in regulated advice requires same standard as human advice.<br><br><strong>PI coverage response:</strong> Standard FI PI covers negligent advice regardless of whether AI tools were used in preparation — the adviser is responsible for the advice given. AI tool exclusions not yet standard in Lloyd's market (as of 2024).<br><br><strong>Key lesson:</strong> AI tool use does not reduce the adviser's professional duty of care. Underwriters should include AI governance questions in proposal forms from 2024 renewals.</td>
+      </tr>
+
+      <!-- 29 -->
+      <tr data-type="reg" data-sev="mod">
+        <td class="yr">2020–2023</td>
+        <td><strong>FCA Enforcement — Pension Scam Facilitators</strong></td>
+        <td><span class="tt tt-reg">Regulatory</span></td>
+        <td class="loss-amt">£15m+ est.</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(29)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d29">
+        <td colspan="7"><strong>What happened:</strong> FCA identifies networks of regulated IFAs who knowingly or negligently facilitated pension liberation scams — transferring clients' pension savings to fraudulent overseas schemes. Regulatory action and civil claims against facilitators. Some firms claim they were deceived by introducers.<br><br><strong>PI coverage response:</strong> Negligent facilitation covered; knowing participation may trigger dishonesty exclusion. Regulatory defence costs covered pending investigation outcome. FCA regulatory action findings typically establish the negligence standard for civil claims.<br><br><strong>Key lesson:</strong> Introducer due diligence is critical. Underwriters should review insured's introducer vetting procedures, particularly for overseas pension transfer advice.</td>
+      </tr>
+
+      <!-- 30 -->
+      <tr data-type="advice" data-sev="min">
+        <td class="yr">2022–2024</td>
+        <td><strong>Consumer Duty — Early Complaints Wave</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">Emerging</td>
+        <td><span class="sev sev-min">Minor</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(30)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d30">
+        <td colspan="7"><strong>What happened:</strong> FCA Consumer Duty (July 2023) raises the bar to 'good consumer outcomes'. Early complaints under the Duty allege advisers failed to monitor whether previously recommended products continued to deliver good outcomes as market conditions changed. New 'ongoing advice' obligation creates recurring rather than point-in-time liability.<br><br><strong>PI coverage response:</strong> FI PI responds for breach of Consumer Duty obligation. Key underwriting question: does the policy cover ongoing monitoring obligations, or only advice given at point of sale?<br><br><strong>Key lesson:</strong> Consumer Duty creates an ongoing monitoring duty — potentially converting point-in-time advice into an ongoing contract. Underwriters should clarify policy wording to address Consumer Duty ongoing obligation exposures.</td>
+      </tr>
+
+      <!-- 31 -->
+      <tr data-type="struct" data-sev="maj">
+        <td class="yr">2023</td>
+        <td><strong>Credit Suisse AT1 Wipeout — Investor Advice Claims</strong></td>
+        <td><span class="tt tt-struct">Structural</span></td>
+        <td class="loss-amt">CHF 16bn</td>
+        <td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(31)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d31">
+        <td colspan="7"><strong>What happened:</strong> FINMA ordered CHF 16bn Credit Suisse AT1 bonds written down to zero as part of UBS rescue merger (March 2023). Bondholders — some of whom received advice to hold AT1 instruments as 'safe' relative to equity — brought negligence claims against advisers and distributors globally.<br><br><strong>PI coverage response:</strong> Adviser claims covered by FI PI where advice on AT1 instrument suitability established. Regulatory claims under Swiss FINMA processes; civil adviser claims in UK, Singapore, Hong Kong. Class actions in multiple jurisdictions.<br><br><strong>Key lesson:</strong> AT1/CoCo bond advice requires specialist knowledge of bail-in triggers. Underwriters should identify insured firms advising on AT1 instruments and assess their product governance framework for these products.</td>
+      </tr>
+
+      <!-- 32 -->
+      <tr data-type="advice" data-sev="mod">
+        <td class="yr">2021</td>
+        <td><strong>Green Bonds — Unsuitable Recommendation to Retail</strong></td>
+        <td><span class="tt tt-digit">Emerging</span></td>
+        <td class="loss-amt">£18m est.</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(32)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d32">
+        <td colspan="7"><strong>What happened:</strong> Composite: Adviser recommends green bond investments to retail clients based on ESG alignment without adequate credit analysis. Bond issuer faces financial distress; retail clients suffer capital losses and allege adviser failed to distinguish between ESG quality and credit quality.<br><br><strong>PI coverage response:</strong> Negligent recommendation covered by FI PI. Key defence issue: adviser's documentation of separate ESG and credit analysis. Many green bond recommendations relied solely on ESG rating agency output without independent credit assessment.<br><br><strong>Key lesson:</strong> ESG alignment and credit quality are separate assessments. Underwriters should require that insured ESG advisers conduct and document independent credit analysis alongside ESG scoring.</td>
+      </tr>
+
+      <!-- 33 -->
+      <tr data-type="advice" data-sev="mod">
+        <td class="yr">2017–2020</td>
+        <td><strong>Inheritance Tax Planning — HMRC Challenge Claims</strong></td>
+        <td><span class="tt tt-advice">Advice</span></td>
+        <td class="loss-amt">£22m est.</td>
+        <td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(33)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d33">
+        <td colspan="7"><strong>What happened:</strong> Composite: Financial planners advise use of IHT planning schemes (business property relief, loan trusts) that HMRC subsequently challenges successfully. Clients face unexpected IHT liability and bring claims against advisers for negligent tax planning. HMRC wins key BPR challenges (2018–2020).<br><br><strong>PI coverage response:</strong> Tax planning advice covered by FI PI. Key issue: did the adviser warn the client of the risk HMRC might challenge? Well-documented advice with explicit risk warning may defeat the claim.<br><br><strong>Key lesson:</strong> Tax planning advice carries a duty to explain HMRC challenge risk. Underwriters should assess what proportion of insured's book involves aggressive IHT or capital gains planning schemes.</td>
+      </tr>
+
+      <!-- 34 -->
+      <tr data-type="struct" data-sev="min">
+        <td class="yr">2020</td>
+        <td><strong>COVID-19 Business Interruption — BI Insurance Advice Claim</strong></td>
+        <td><span class="tt tt-struct">Structural</span></td>
+        <td class="loss-amt">£3m est.</td>
+        <td><span class="sev sev-min">Minor</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(34)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d34">
+        <td colspan="7"><strong>What happened:</strong> Composite: Insurance broker advises client that business interruption policy does not cover pandemic events. COVID-19 government lockdown triggers FCA test case (January 2021) — Supreme Court finds many BI policies do cover COVID-19 losses. Client sues broker for negligent coverage advice.<br><br><strong>PI coverage response:</strong> Broker's professional liability covered by broker's own PI programme. This is a cross-insurance-class claim — broker's E&O, not FI PI. Included here as an example of advice about insurance products generating PI exposure for financial advisers.<br><br><strong>Key lesson:</strong> Advice about insurance coverage is a professional liability exposure in itself. FI advisers who advise on insurance products as part of a financial plan should ensure their FI PI coverage includes insurance advice liability.</td>
+      </tr>
+
+      <!-- 35 -->
+      <tr data-type="digit" data-sev="mod">
+        <td class="yr">2024</td>
+        <td><strong>FCA Car Finance Review — Motor Commission Redress</strong></td>
+        <td><span class="tt tt-digit">Emerging</span></td>
+        <td class="loss-amt">£16bn+ est.</td>
+        <td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(35)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d35">
+        <td colspan="7"><strong>What happened:</strong> Court of Appeal ruling (October 2024) on motor finance discretionary commission arrangements generates estimated £16bn+ industry redress exposure. FCA review into historical commission disclosure across consumer credit. Finance brokers who arranged motor finance with undisclosed discretionary commission face professional liability claims from consumers who paid higher interest rates.<br><br><strong>PI coverage response:</strong> Consumer credit advice/arrangement professional liability covered by FI PI for credit brokers. Volume of claims across mass market creates aggregate exposure risk. Some underwriters applying sub-limits for consumer credit commission disclosure claims pending FCA outcome.<br><br><strong>Key lesson:</strong> Commission disclosure obligations are a material PI exposure in consumer credit. Underwriters writing credit broker FI PI should assess historical DCAs and commission disclosure procedures across the book.</td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+</main>
+<footer>
+  <a href="../index.html">← Risk Code Hub</a> &nbsp;|&nbsp; PI E&amp;O Financial Institutions (F2/F3) — Module 03 Loss Database &nbsp;|&nbsp; Version 3.7 · May 2026
+</footer>
+
+<script>
+  function toggle(id) {
+    const row = document.getElementById('d' + id);
+    const btn = row.previousElementSibling.querySelector('.expand-btn');
+    if (row.classList.contains('hidden')) {
+      row.classList.remove('hidden');
+      btn.textContent = '▾ Close';
+    } else {
+      row.classList.add('hidden');
+      btn.textContent = '▸ Details';
+    }
+  }
+
+  function applyFilters() {
+    const typeVal = document.getElementById('typeFilter').value;
+    const sevVal  = document.getElementById('sevFilter').value;
+    const body    = document.getElementById('lossBody');
+    const rows    = body.querySelectorAll('tr[data-type]');
+    let visible   = 0;
+
+    rows.forEach(row => {
+      const typeMatch = (typeVal === 'all') || (row.dataset.type === typeVal);
+      const sevMatch  = (sevVal  === 'all') || (row.dataset.sev  === sevVal);
+      const match     = typeMatch && sevMatch;
+
+      row.classList.toggle('hidden', !match);
+      // Also hide associated detail row if main row is hidden
+      const detailId = row.querySelector('.expand-btn') ? row.querySelector('.expand-btn').getAttribute('onclick').match(/\d+/)[0] : null;
+      if (detailId) {
+        const detail = document.getElementById('d' + detailId);
+        if (!match && detail) { detail.classList.add('hidden'); row.querySelector('.expand-btn').textContent = '▸ Details'; }
+      }
+      if (match) visible++;
+    });
+
+    document.getElementById('filterCount').textContent = `Showing ${visible} of 35 events`;
+  }
+</script>
+</body>
+</html>

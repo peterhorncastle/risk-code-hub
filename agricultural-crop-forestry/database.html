@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Agricultural Crop & Forestry — Loss Database | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:    #2d6a2d;
+      --hub-dark:       #1a3d1a;
+      --hub-light:      #e8f5e3;
+      --hub-accent:     #c8a84b;
+      --hub-secondary:  #8b4513;
+      --hub-secondary2: #1565c0;
+      --header-gradient: linear-gradient(135deg,#1a3d1a 0%,#2d6a2d 50%,#3d7a3d 100%);
+      --header-sub:     #b8d4b8;
+    }
+    .filter-bar { display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 22px; align-items:center; }
+    .filter-bar label { font-size:0.82rem; font-weight:600; color:var(--muted); }
+    .filter-bar select { padding:6px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.85rem; background:#fff; color:var(--text); cursor:pointer; }
+    .filter-count { font-size:0.82rem; color:var(--muted); margin-left:auto; }
+
+    .loss-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .loss-table th { background:var(--hub-dark); color:#fff; padding:10px 12px; text-align:left; font-size:0.78rem; font-weight:700; white-space:nowrap; }
+    .loss-table td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .loss-table tr:hover td { background:#f4faf4; }
+    .loss-table tr.hidden { display:none; }
+    .loss-table tr.detail-row td { background:#f0f8f0; padding:10px 16px; font-size:0.83rem; color:#344a65; border-bottom:2px solid #c8e0c8; }
+    .loss-table tr.detail-row.hidden { display:none; }
+    .expand-btn { background:none; border:none; cursor:pointer; color:var(--hub-primary); font-size:0.8rem; font-weight:700; padding:0; text-decoration:underline; white-space:nowrap; }
+
+    .tt { display:inline-block; font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; padding:2px 8px; border-radius:12px; white-space:nowrap; }
+    .tt-drought  { background:#fef9ec; color:#7a5700; }
+    .tt-flood    { background:#e3f2fd; color:#0d47a1; }
+    .tt-wildfire { background:#fdecea; color:#b71c1c; }
+    .tt-wind     { background:#fdf0e8; color:#6d3008; }
+    .tt-bio      { background:#f3e5f5; color:#4a148c; }
+    .tt-reg      { background:#e8f5e9; color:#1b5e20; }
+    .tt-market   { background:#e0f7fa; color:#00605b; }
+
+    .sev { font-weight:700; }
+    .sev-cat { color:#c0392b; }
+    .sev-maj { color:#e65100; }
+    .sev-mod { color:#c8a84b; }
+    .sev-min { color:#2d6a2d; }
+    .loss-amt { font-weight:700; color:var(--hub-primary); white-space:nowrap; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Agricultural Crop &amp; Forestry (HA/AG)</a> › Loss Database</div>
+  <div class="tag">Module 03 — Loss Database</div>
+  <h1>Agricultural Crop &amp; Forestry — Loss Database</h1>
+  <p>35 significant agricultural and forestry loss events from 1988 to 2024. Filter by peril type and severity. Click any row to expand event details, coverage response, and underwriting lessons.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>Loss amounts represent total agricultural/forestry economic losses where reported; insured losses are typically a fraction of total losses outside the US MPCI programme. <span class="badge b-v">VER</span> = primary public source; <span class="badge b-e">EST</span> = market consensus; <span class="badge b-i">ILLUS</span> = constructed composite illustrating typical claim characteristics.</p>
+
+  <div class="filter-bar">
+    <label>Peril:</label>
+    <select id="typeFilter" onchange="applyFilters()">
+      <option value="all">All Perils</option>
+      <option value="drought">Drought / Heat</option>
+      <option value="flood">Flood / Moisture</option>
+      <option value="wildfire">Wildfire / Fire</option>
+      <option value="wind">Windstorm</option>
+      <option value="bio">Biological / Disease</option>
+      <option value="reg">Regulatory / Market</option>
+    </select>
+    <label>Severity:</label>
+    <select id="sevFilter" onchange="applyFilters()">
+      <option value="all">All Severities</option>
+      <option value="cat">Catastrophic (&gt;$5bn)</option>
+      <option value="maj">Major ($500m–$5bn)</option>
+      <option value="mod">Moderate ($50m–$500m)</option>
+      <option value="min">Minor (&lt;$50m)</option>
+    </select>
+    <span class="filter-count" id="filterCount">Showing 35 of 35 events</span>
+  </div>
+
+  <div style="overflow-x:auto;">
+  <table class="loss-table" id="lossTable">
+    <thead>
+      <tr><th>Year</th><th>Event</th><th>Peril</th><th>Loss / Insured</th><th>Severity</th><th>Source</th><th></th></tr>
+    </thead>
+    <tbody id="lossBody">
+
+      <tr data-type="drought" data-sev="cat">
+        <td>1988</td><td><strong>US Great Plains Drought</strong></td>
+        <td><span class="tt tt-drought">Drought</span></td>
+        <td class="loss-amt">$8bn total</td><td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(1)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d1"><td colspan="7"><strong>What happened:</strong> Most severe US drought since the 1930s affects the Great Plains and Corn Belt. Corn and soybean yields fall 30–40% in affected areas. Government disaster payments dominate response — crop insurance indemnities are relatively small because participation is still low pre-1994 Reform Act.<br><br><strong>Coverage response:</strong> FCIC-backed crop insurance pays indemnities where farmers hold policies; majority of losses uninsured at this stage of US programme development. Disaster assistance payments eventually exceed crop insurance payouts significantly.<br><br><strong>Key lesson:</strong> The 1988 drought's large uninsured component drove the 1994 Reform Act mandating crop insurance participation. Pre-reform loss experience shows that voluntary MPCI programmes suffer fatal adverse selection.</td></tr>
+
+      <tr data-type="flood" data-sev="cat">
+        <td>1993</td><td><strong>Great Midwest Flood — USA</strong></td>
+        <td><span class="tt tt-flood">Flood</span></td>
+        <td class="loss-amt">$5bn agricultural</td><td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(2)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d2"><td colspan="7"><strong>What happened:</strong> Missouri and Mississippi River flooding inundates 20 million acres of cropland. Excess moisture prevents planting in spring; standing crops flooded in summer. Soybean and corn yields severely impacted across Missouri, Illinois, Iowa, Minnesota, Wisconsin.<br><br><strong>Coverage response:</strong> MPCI excess moisture peril responds; hail policies not triggered by flooding. Demonstrates importance of MPCI covering both drought and flood — named-peril hail policies provide no protection for this type of loss.<br><br><strong>Key lesson:</strong> Excess moisture is as important a peril as drought for US Midwest crop insurance — both must be included in an MPCI policy for comprehensive protection.</td></tr>
+
+      <tr data-type="wind" data-sev="cat">
+        <td>1999</td><td><strong>Windstorm Lothar — European Forestry</strong></td>
+        <td><span class="tt tt-wind">Windstorm</span></td>
+        <td class="loss-amt">€3bn forestry</td><td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(3)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d3"><td colspan="7"><strong>What happened:</strong> Windstorm Lothar (26 December 1999) destroys approximately 200 million cubic metres of standing timber across France, Switzerland, and Germany in a single event. Total forestry losses estimated at €3 billion. The wind-thrown timber creates secondary infestation risk (bark beetle in blow-down) complicating recovery.<br><br><strong>Coverage response:</strong> Standing timber windstorm policies respond; major losses for European forestry insurers. Wind throw creates salvage challenges — beetle-infested blow-down loses value rapidly if not harvested quickly.<br><br><strong>Key lesson:</strong> Windstorm is the primary catastrophic peril for European forest estates. Underwriters must model accumulation across large estates — a single storm can affect millions of hectares simultaneously.</td></tr>
+
+      <tr data-type="drought" data-sev="cat">
+        <td>2003</td><td><strong>European Heat Wave — Crop Failure</strong></td>
+        <td><span class="tt tt-drought">Drought</span></td>
+        <td class="loss-amt">€13bn economic</td><td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(4)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d4"><td colspan="7"><strong>What happened:</strong> Record temperatures across Europe in summer 2003. French wheat yields fall approximately 20%; wine harvests significantly impacted by heat stress and early ripening. Total European agricultural losses estimated at €13 billion across France, Germany, Italy, Spain, Portugal, UK.<br><br><strong>Coverage response:</strong> MPCI drought covers respond where purchased; named-peril hail policies do not cover heat stress. Underinsured losses far exceed insured because European MPCI was not yet widely adopted. The event triggers significant investment in European MPCI product development.<br><br><strong>Key lesson:</strong> Heat stress and drought are underinsured in European agriculture. The gap between economic loss and insured loss revealed by 2003 directly drove EU CAP reform and encouragement of MPCI adoption.</td></tr>
+
+      <tr data-type="bio" data-sev="cat">
+        <td>2003–2012</td><td><strong>BC Mountain Pine Beetle Epidemic</strong></td>
+        <td><span class="tt tt-bio">Biological</span></td>
+        <td class="loss-amt">700m m³ timber</td><td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(5)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d5"><td colspan="7"><strong>What happened:</strong> Mountain pine beetle (Dendroctonus ponderosae) epidemic devastates over 700 million cubic metres of lodgepole pine in British Columbia, Canada — triggered by successive mild winters allowing beetle populations to survive and explode. The infestation covers an area approximately the size of Britain.<br><br><strong>Coverage response:</strong> Almost entirely uninsured — most standing timber policies explicitly exclude pest and disease, or sub-limit coverage to very small amounts. Forest owners faced total loss with minimal insurance recovery.<br><br><strong>Key lesson:</strong> Pest and disease exclusions are the norm in AG forestry policies but represent a major uninsured catastrophe risk for forest estate owners. The BC beetle epidemic is cited as the reason why pest/disease sub-limits became a standard underwriting discussion in forestry programme renewals from 2010 onwards.</td></tr>
+
+      <tr data-type="drought" data-sev="cat">
+        <td>2012</td><td><strong>US Corn Belt Drought — Record MPCI Loss</strong></td>
+        <td><span class="tt tt-drought">Drought</span></td>
+        <td class="loss-amt">$17.3bn insured</td><td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(6)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d6"><td colspan="7"><strong>What happened:</strong> The worst US drought since the 1950s — 80% of agricultural land in drought conditions. Corn and soybean yields collapse; corn production falls 13%. USDA RMA pays $17.3 billion in crop insurance indemnities — the largest single-year US crop insurance payment on record.<br><br><strong>Coverage response:</strong> MPCI Revenue Protection and Yield Protection policies respond across 80+ million insured acres. Private AIPs are reinsured by FCIC; excess loss layers spread to private and international reinsurers including Lloyd's capacity.<br><br><strong>Key lesson:</strong> The 2012 drought validated the post-1994 MPCI structure as a systemic safety net. However, it also revealed the programme's fiscal vulnerability — a single drought year can cost more than a decade of premiums. This drives ongoing discussion about FCIC reinsurance structure and private market participation at excess layers.</td></tr>
+
+      <tr data-type="wind" data-sev="maj">
+        <td>2007</td><td><strong>Windstorm Kyrill — European Forestry</strong></td>
+        <td><span class="tt tt-wind">Windstorm</span></td>
+        <td class="loss-amt">€500m forestry</td><td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(7)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d7"><td colspan="7"><strong>What happened:</strong> Windstorm Kyrill (January 2007) causes significant forestry losses across Germany, Poland, Czech Republic, and the UK. German forestry losses estimated at €500 million; Poland and Czech Republic also significantly affected.<br><br><strong>Coverage response:</strong> Standing timber windstorm coverage responds. European forestry insurers face their second major windstorm event in 8 years following Lothar (1999), compounding concerns about windstorm accumulation in softwood plantation areas.<br><br><strong>Key lesson:</strong> European windstorm events recur on 5–10 year cycles. Forestry underwriters must hold adequate CAT reserves and model accumulation across entire forest portfolio, not just individual estates.</td></tr>
+
+      <tr data-type="bio" data-sev="cat">
+        <td>2018–2020</td><td><strong>African Swine Fever — China</strong></td>
+        <td><span class="tt tt-bio">Biological</span></td>
+        <td class="loss-amt">100m pigs lost</td><td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(8)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d8"><td colspan="7"><strong>What happened:</strong> ASF spreads through China's pig population from 2018. By 2020, an estimated 40–50% of China's pig herd — approximately 100 million animals — has been lost to disease and culling. Pork prices surge globally; agricultural GDP in pig-producing provinces severely impacted.<br><br><strong>Coverage response:</strong> Chinese government-backed livestock insurance provides partial compensation; international reinsurers bear significant exposure through QS treaties with Chinese agricultural insurers. Event reveals that livestock mortality programmes were not adequately modelling biological catastrophe scenarios.<br><br><strong>Key lesson:</strong> Livestock disease is a true catastrophe peril requiring aggregate management — it can simultaneously affect millions of animals across a continent. Reinsurers and underwriters must stress-test livestock books against pandemic disease scenarios.</td></tr>
+
+      <tr data-type="wildfire" data-sev="cat">
+        <td>2019–2020</td><td><strong>Australian Black Summer Fires</strong></td>
+        <td><span class="tt tt-wildfire">Wildfire</span></td>
+        <td class="loss-amt">A$2bn agricultural</td><td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(9)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d9"><td colspan="7"><strong>What happened:</strong> Australia's 2019–2020 wildfire season burns 18.6 million hectares including significant agricultural land. Livestock mortality — particularly sheep and cattle in fire-affected pastoral areas — is severe. Commercial timber plantations in Victoria and New South Wales suffer major standing timber losses. Total agricultural insured losses approximately A$2 billion.<br><br><strong>Coverage response:</strong> Livestock mortality fire covers respond; standing timber fire policies triggered for plantation forestry. Reforestation cost coverage proves critical — replanting costs after major wildfire can exceed the value of destroyed timber.<br><br><strong>Key lesson:</strong> Wildfire is an agricultural AND forestry catastrophe peril. Underwriters writing both crop and forestry risks in Australia must model combined wildfire accumulation across the same geographic regions.</td></tr>
+
+      <tr data-type="wildfire" data-sev="cat">
+        <td>2023</td><td><strong>Canada Record Wildfire Season</strong></td>
+        <td><span class="tt tt-wildfire">Wildfire</span></td>
+        <td class="loss-amt">18.4m ha burned</td><td><span class="sev sev-cat">Catastrophic</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(10)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d10"><td colspan="7"><strong>What happened:</strong> Canada's 2023 wildfire season burns 18.4 million hectares — more than double the previous record (1995). BC, Alberta, Nova Scotia, and Quebec all severely impacted. Commercial plantation losses and natural forest destruction generate significant AG claims. Smoke affects air quality as far south as New York.<br><br><strong>Coverage response:</strong> Standing timber fire policies triggered across multiple provinces. Business interruption for forestry operations (log supply disruption) also generates claims. Reforestation cost coverage critical for plantation owners.<br><br><strong>Key lesson:</strong> Climate change is driving wildfire risk northward and into previously low-risk forest regions. Historical loss data understates current and future wildfire risk. Underwriters must incorporate climate trend adjustments in pricing Canadian forestry risks.</td></tr>
+
+      <tr data-type="drought" data-sev="maj">
+        <td>2011</td><td><strong>Texas Drought — Cattle &amp; Crop Loss</strong></td>
+        <td><span class="tt tt-drought">Drought</span></td>
+        <td class="loss-amt">$7.6bn economic</td><td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(11)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d11"><td colspan="7"><strong>What happened:</strong> Texas experiences its worst single-year drought on record in 2011 — the driest year since records began in 1895. Agricultural losses reach $7.6 billion, including cotton, corn, sorghum, and livestock. Cattle ranchers liquidate herds due to lack of grazing and water.<br><br><strong>Coverage response:</strong> MPCI drought covers respond for insured crops; livestock forage insurance (Livestock Forage Disaster Program — LFP) triggers for ranchers. Cotton is heavily MPCI-insured in Texas — cotton farmers have among the highest crop insurance participation rates nationally.<br><br><strong>Key lesson:</strong> Multi-peril drought coverage for both cash crops AND livestock/forage is essential for full farm risk management. A drought that affects both crops and grazing doubles the farm's revenue exposure if forage is not separately insured.</td></tr>
+
+      <tr data-type="bio" data-sev="maj">
+        <td>2022–2024</td><td><strong>H5N1 Avian Influenza — Global Poultry Losses</strong></td>
+        <td><span class="tt tt-bio">Biological</span></td>
+        <td class="loss-amt">100m+ birds culled (US)</td><td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(12)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d12"><td colspan="7"><strong>What happened:</strong> H5N1 HPAI (Highly Pathogenic Avian Influenza) maintains its largest ever outbreak globally from late 2021. Over 100 million birds culled in the US alone — primarily laying hens and turkeys. EU and UK also severely affected. Egg and poultry prices surge to record levels. The virus is also detected in US dairy cattle herds (2024), expanding livestock risk exposure.<br><br><strong>Coverage response:</strong> Poultry mortality and culling cost coverage responds where held. USDA emergency compensation schemes supplement insurance. Biosecurity failure claims rarely covered. Business interruption for egg producers generates secondary claims where facilities quarantined.<br><br><strong>Key lesson:</strong> Avian influenza is now endemic in wild bird populations globally — the era of disease-free intervals between outbreaks may have ended. Poultry underwriters must price for recurring annual outbreak exposure rather than periodic catastrophic events.</td></tr>
+
+      <tr data-type="flood" data-sev="maj">
+        <td>2010</td><td><strong>Pakistan Floods — Agricultural Devastation</strong></td>
+        <td><span class="tt tt-flood">Flood</span></td>
+        <td class="loss-amt">$5bn agricultural</td><td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(13)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d13"><td colspan="7"><strong>What happened:</strong> Pakistan's monsoon flooding in 2010 affects one-fifth of the country's landmass. Agricultural losses include cotton, sugar cane, rice, wheat, and vegetable crops; total agricultural losses reach $5 billion. Pakistan's agricultural insurance market is minimal — international aid rather than insurance provides the primary response.<br><br><strong>Coverage response:</strong> Very limited insurance penetration in Pakistan. Index insurance pilots in the region provide limited parametric payouts. Event demonstrates the massive gap between agricultural risk exposure in emerging markets and insurance penetration.<br><br><strong>Key lesson:</strong> Emerging markets have the highest agricultural climate vulnerability and the lowest crop insurance penetration — the fundamental market development challenge for international agricultural reinsurers including Lloyd's.</td></tr>
+
+      <tr data-type="wildfire" data-sev="maj">
+        <td>2017</td><td><strong>Portugal Wildfires — Eucalyptus Plantation Loss</strong></td>
+        <td><span class="tt tt-wildfire">Wildfire</span></td>
+        <td class="loss-amt">€1.3bn total</td><td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(14)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d14"><td colspan="7"><strong>What happened:</strong> Portugal's 2017 wildfire season — particularly the Pedrógão Grande fire (June) and October fires — burn approximately 440,000 hectares including large areas of eucalyptus plantations. Eucalyptus forests are grown commercially for pulp and paper production (Eucalyptus globulus). Total economic losses reach €1.3 billion; 114 people killed. Agricultural crop and livestock losses additional to forestry damage.<br><br><strong>Coverage response:</strong> Standing timber fire coverage responds for insured plantation owners. Eucalyptus recovery is relatively rapid (fast-growing species) but reforestation still takes 8–12 years to commercial maturity. Government pressure to diversify away from monoculture eucalyptus following fires creates ongoing uncertainty for plantation investment.<br><br><strong>Key lesson:</strong> Monoculture plantation forestry — particularly fast-growing species in drought-prone countries — is highly vulnerable to catastrophic wildfire. Underwriters must assess species mix, topography, and fire suppression access when rating forestry risks in Mediterranean-climate regions.</td></tr>
+
+      <tr data-type="drought" data-sev="maj">
+        <td>2018</td><td><strong>Australian East Coast Drought</strong></td>
+        <td><span class="tt tt-drought">Drought</span></td>
+        <td class="loss-amt">A$3bn+</td><td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(15)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d15"><td colspan="7"><strong>What happened:</strong> Severe drought affects New South Wales, Queensland, and parts of Victoria in 2018–2019 — drought conditions prevail across 98% of NSW at peak. Cattle and sheep farmers forced to sell stock at distressed prices or truck in expensive supplemental feed. Crop yields severely reduced. Total economic losses exceed A$3 billion.<br><br><strong>Coverage response:</strong> Limited MPCI penetration in Australia means most agricultural losses are uninsured. Named-peril fire and hail policies provide no drought protection. Government provides drought loans and Farm Household Allowance — effectively substituting for insurance.<br><br><strong>Key lesson:</strong> Australian crop insurance penetration is among the lowest of any major agricultural economy. Government drought support creates moral hazard — farmers do not need to purchase insurance if they can rely on government disaster payments. A consistent challenge for market development.</td></tr>
+
+      <tr data-type="flood" data-sev="maj">
+        <td>2019</td><td><strong>US Midwest Spring Floods — Planting Delays</strong></td>
+        <td><span class="tt tt-flood">Flood</span></td>
+        <td class="loss-amt">$1.6bn indemnities</td><td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(16)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d16"><td colspan="7"><strong>What happened:</strong> Record spring flooding prevents timely planting across millions of acres in the Corn Belt in 2019. "Prevent plant" provisions in MPCI policies are triggered at scale — USDA RMA pays approximately $1.6 billion in prevent plant indemnities as farmers cannot plant within the policy's final planting date window.<br><br><strong>Coverage response:</strong> Prevent plant provisions in MPCI cover 55–60% of the established yield guarantee when the insured crop cannot be planted due to excess moisture. Significant claims processing challenge for AIPs handling simultaneous prevent plant claims across multiple states.<br><br><strong>Key lesson:</strong> Prevent plant claims are a significant but often overlooked component of US MPCI exposure. Underwriters must model excess moisture / late planting scenarios separately from in-season drought.</td></tr>
+
+      <tr data-type="drought" data-sev="maj">
+        <td>2021–2022</td><td><strong>South American Drought — Soy and Corn</strong></td>
+        <td><span class="tt tt-drought">Drought</span></td>
+        <td class="loss-amt">$5bn+ est.</td><td><span class="sev sev-maj">Major</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(17)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d17"><td colspan="7"><strong>What happened:</strong> La Niña-driven drought affects Argentina and southern Brazil through 2021–2022 growing seasons. Argentina's soybean production falls 24% in 2022 — the worst harvest in two decades. Brazil's Paraná River basin drought affects corn and sugar. Combined South American crop losses across two seasons exceed $5 billion.<br><br><strong>Coverage response:</strong> Argentine private crop insurance and Brazilian rural credit insurance (PROAGRO/PSR) respond. International reinsurers including Lloyd's market provide capacity for excess layers. La Niña forecasting accuracy allows some advance premium adjustment in well-structured programmes.<br><br><strong>Key lesson:</strong> South America is a critical global food production region with growing weather-linked crop insurance markets. ENSO (El Niño/La Niña) forecasting should be integrated into crop insurance underwriting decisions for South American risks.</td></tr>
+
+      <tr data-type="wind" data-sev="mod">
+        <td>2018</td><td><strong>Windstorm Friederike — German Forestry</strong></td>
+        <td><span class="tt tt-wind">Windstorm</span></td>
+        <td class="loss-amt">€400m forestry</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(18)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d18"><td colspan="7"><strong>What happened:</strong> Windstorm Friederike (January 2018) sweeps through central and northern Europe, causing significant forestry losses in Germany, the Netherlands, and the UK. German forest losses estimated at €400 million; the storm throws 10–15 million cubic metres of timber. Compounded by drought stress in 2018 that weakened tree root systems.<br><br><strong>Coverage response:</strong> Windstorm forestry policies respond. Wind throw creates salvage value — quickly harvesting blown-down timber reduces economic loss but requires rapid response and sufficient logging capacity.<br><br><strong>Key lesson:</strong> Multiple windstorm events in the same region create cumulative bark beetle infestation risk — beetles colonise wind-thrown timber and spread to adjacent standing trees. Post-windstorm bark beetle risk should be covered or sub-limited explicitly in forestry policies.</td></tr>
+
+      <tr data-type="bio" data-sev="mod">
+        <td>2018–2024</td><td><strong>Ash Dieback — European Forest Disease</strong></td>
+        <td><span class="tt tt-bio">Biological</span></td>
+        <td class="loss-amt">Billions in tree value</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(19)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d19"><td colspan="7"><strong>What happened:</strong> Hymenoscyphus fraxineus (ash dieback fungus) spreads across Europe, killing the vast majority of European ash trees (Fraxinus excelsior). UK estimates that 80% of ash trees (estimated 130 million trees) will ultimately be killed. Commercial forestry losses for ash timber estates are significant; highway authority liability for road-edge ash trees is an additional exposure.<br><br><strong>Coverage response:</strong> Most forestry policies exclude pest and disease — ash dieback losses largely uninsured. Where pest/disease sub-limits are purchased, they quickly exhaust against the scale of loss. Road authority liability for falling dead ash trees is covered under public liability policies.<br><br><strong>Key lesson:</strong> Tree disease is an emerging, slow-developing catastrophe that is essentially uninsurable under standard forestry policy terms. Estate owners must adjust forest composition to reduce single-species concentration risk.</td></tr>
+
+      <tr data-type="drought" data-sev="mod">
+        <td>2022</td><td><strong>European Drought — Crop &amp; River Navigation</strong></td>
+        <td><span class="tt tt-drought">Drought</span></td>
+        <td class="loss-amt">€4.9bn EU crops</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(20)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d20"><td colspan="7"><strong>What happened:</strong> Severe drought across Western and Southern Europe in 2022 — Rhine, Loire, and Po rivers fall to historic lows. EU crop losses estimated at €4.9 billion across affected regions. River navigation disruption creates secondary agricultural losses as grain and fertiliser transport is disrupted. Spain, Portugal, and Italy worst affected; France and Germany also impacted.<br><br><strong>Coverage response:</strong> MPCI drought covers respond where purchased; penetration remains low in many affected EU countries. Index insurance triggers at some thresholds in Spain (Agroseguro) and Italy. River navigation BI losses covered under trade disruption policies for grain traders.<br><br><strong>Key lesson:</strong> Drought in Europe is no longer a rare event — 2003, 2018, 2022 represent a pattern of increasing frequency and severity consistent with IPCC projections. European agricultural underwriters must apply upward climate trend adjustments to historical yield data.</td></tr>
+
+      <tr data-type="reg" data-sev="mod">
+        <td>2016</td><td><strong>India PMFBY — Launch and Early Loss Years</strong></td>
+        <td><span class="tt tt-reg">Regulatory</span></td>
+        <td class="loss-amt">Programme scale: $4bn pa premium</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(21)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d21"><td colspan="7"><strong>What happened:</strong> India's PMFBY programme launches in 2016 with massive government premium subsidisation. The early years produce significant loss ratios as inadequate premium rates (set by government tender at uneconomic levels) meet actual weather losses — 2016 kharif season produces loss ratios exceeding 200% for some insurers.<br><br><strong>Coverage response:</strong> International reinsurers including Lloyd's syndicates provide quota share and excess of loss capacity through reinsurance treaties with PMFBY insurers. High loss ratios in early years create pressure for premium rate adjustment.<br><br><strong>Key lesson:</strong> Government-tender crop insurance programmes in emerging markets can price below technical levels — creating significant losses for reinsurers who have not adequately assessed actuarial adequacy. Lloyd's syndicates writing Indian crop reinsurance must conduct independent actuarial review rather than relying on government-published rates.</td></tr>
+
+      <tr data-type="bio" data-sev="mod">
+        <td>2013–2015</td><td><strong>Fusarium Wilt — Banana Plantations (Cavendish Threat)</strong></td>
+        <td><span class="tt tt-bio">Biological</span></td>
+        <td class="loss-amt">Emerging catastrophe risk</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(22)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d22"><td colspan="7"><strong>What happened:</strong> Fusarium oxysporum TR4 (Tropical Race 4) — the fungal disease that wiped out the Gros Michel banana variety in the 1950s — spreads through Cavendish banana plantations globally from 2013. First confirmed in Southeast Asia; by 2019 identified in multiple producing regions including Australia, India, Colombia, Peru, and Lebanon. The Cavendish is the world's most exported banana — an epidemic threatens global supply chains.<br><br><strong>Coverage response:</strong> Plantation crop insurance policies for banana growers typically do not include fungal disease coverage. Where coverage is sought, premiums reflect the existential threat posed by TR4 — coverage is difficult to obtain for non-mitigated TR4 exposure.<br><br><strong>Key lesson:</strong> Monoculture crop production creates systemic disease risk. Insurers must assess genetic diversity and disease resistance in crop portfolios — high concentration in a single crop variety is a red flag for potential catastrophe loss.</td></tr>
+
+      <tr data-type="flood" data-sev="mod">
+        <td>2011</td><td><strong>Thailand Floods — Rice and Manufacturing</strong></td>
+        <td><span class="tt tt-flood">Flood</span></td>
+        <td class="loss-amt">$5bn rice/agricultural</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(23)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d23"><td colspan="7"><strong>What happened:</strong> Thailand's 2011 monsoon floods — the worst in 50 years — affect 65 provinces and inundate major rice-growing regions in the central plains. Agricultural losses include rice, cassava, and sugar cane. Total agricultural sector loss approximately $5 billion; total economic loss (including industrial parks) $45 billion.<br><br><strong>Coverage response:</strong> Thai government rice insurance scheme provides modest coverage for rice farmers. Private market coverage for commercial crop operations responds where purchased. The manufacturing sector losses (Honda, Toyota, Western Digital factories) dwarf the agricultural losses in insured impact.<br><br><strong>Key lesson:</strong> Southeast Asian flood events simultaneously affect agricultural and industrial supply chains in the same geographic regions — combined accumulation must be considered by insurers writing both crop and property risks in Thailand and Vietnam.</td></tr>
+
+      <tr data-type="wildfire" data-sev="mod">
+        <td>2015</td><td><strong>Indonesia Peat Fires — Palm Oil &amp; Timber</strong></td>
+        <td><span class="tt tt-wildfire">Wildfire</span></td>
+        <td class="loss-amt">$16bn economic</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(24)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d24"><td colspan="7"><strong>What happened:</strong> El Niño-driven drought triggers catastrophic peat fires in Sumatra and Kalimantan (Borneo). Palm oil plantations, pulpwood (acacia) plantations, and natural forest burned. Smoke haze affects neighbouring Malaysia and Singapore. Total economic loss estimated at $16 billion (World Bank); agricultural losses include palm oil and timber.<br><br><strong>Coverage response:</strong> International reinsurers exposed through treaties with Indonesian agricultural insurers. Peat fire risk is now specifically assessed in Southeast Asian plantation underwriting — regular burning as land clearance creates moral hazard complications.<br><br><strong>Key lesson:</strong> Peat fire in Southeast Asia is a deliberately set as well as naturally occurring risk — land clearance burning that spreads to adjacent peat areas creates a moral hazard exposure that is fundamentally different from natural wildfire risk.</td></tr>
+
+      <tr data-type="bio" data-sev="mod">
+        <td>2010–2012</td><td><strong>US Wheat Streak Mosaic Virus — Hard Winter Wheat</strong></td>
+        <td><span class="tt tt-bio">Biological</span></td>
+        <td class="loss-amt">$200m+ est.</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(25)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d25"><td colspan="7"><strong>What happened:</strong> Composite illustrative: Warm autumn weather allows wheat curl mite vectors to persist and spread Wheat Streak Mosaic Virus across winter wheat fields in Kansas, Oklahoma, and Nebraska. Yield losses in affected fields range from 20–80%. MPCI claims triggered on individual farm yield deficits.<br><br><strong>Coverage response:</strong> MPCI yield protection responds for individual farm yield deficits caused by disease — disease is a covered peril in US MPCI. Claims adjudication requires determination of whether the yield shortfall is due to the insured disease peril or other factors.<br><br><strong>Key lesson:</strong> Disease claims in MPCI are among the most contested — causation disputes between weather, disease, and agronomic management decisions require specialist loss adjustment. Clear policy wording on disease exclusions and inclusions is essential.</td></tr>
+
+      <tr data-type="drought" data-sev="mod">
+        <td>2006</td><td><strong>Australian Millennium Drought — Grain and Wool</strong></td>
+        <td><span class="tt tt-drought">Drought</span></td>
+        <td class="loss-amt">A$10bn total</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(26)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d26"><td colspan="7"><strong>What happened:</strong> The Millennium Drought (1997–2009) reaches its worst year in 2006. Australian grain production falls to its lowest in 12 years; the 2006 winter crop is approximately 60% of normal. Total agricultural losses across the drought period reach A$10 billion. Wool clip and livestock numbers severely impacted in southern Australia.<br><br><strong>Coverage response:</strong> Largely uninsured — Australia has no MPCI programme at this stage. Government drought assistance payments and Farm Management Deposits Scheme provide relief. The event reinforces the structural absence of private crop insurance in Australia.<br><br><strong>Key lesson:</strong> Australia's Millennium Drought represents the most significant uninsured agricultural loss gap of any developed economy. The lack of MPCI infrastructure creates vulnerability to climate events that comparable markets (US, Canada, EU) are insured against.</td></tr>
+
+      <tr data-type="wildfire" data-sev="mod">
+        <td>2021</td><td><strong>Greece &amp; Turkey Wildfires — Olive and Timber Losses</strong></td>
+        <td><span class="tt tt-wildfire">Wildfire</span></td>
+        <td class="loss-amt">€500m+ agricultural</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(27)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d27"><td colspan="7"><strong>What happened:</strong> Extreme heat wave and drought conditions in summer 2021 drive unprecedented wildfires in Greece (Evia island, Attica) and Turkey (Aegean and Mediterranean coast). Olive groves, fruit orchards, pine forests, and livestock pastures burned. Greek and Turkish agricultural losses exceed €500 million combined.<br><br><strong>Coverage response:</strong> Greek and Turkish agricultural insurance penetration is low — most losses are uninsured. Government emergency compensation provides partial relief. Perennial crop losses (olive trees, fruit orchards) are particularly costly — replacement trees take 5–15 years to reach productive maturity.<br><br><strong>Key lesson:</strong> Perennial crop losses (orchards, vineyards, olive groves) are categorically different from annual crop losses — they involve multi-year revenue loss plus replanting cost. Underwriters must reflect the long recovery profile of perennial crops in policy terms and premium rates.</td></tr>
+
+      <tr data-type="flood" data-sev="min">
+        <td>2021</td><td><strong>UK Autumn Flooding — Autumn Sown Crop Delays</strong></td>
+        <td><span class="tt tt-flood">Flood</span></td>
+        <td class="loss-amt">£120m est.</td><td><span class="sev sev-min">Minor</span></td>
+        <td><span class="badge b-i">ILLUS</span></td>
+        <td><button class="expand-btn" onclick="toggle(28)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d28"><td colspan="7"><strong>What happened:</strong> Composite: Persistent autumn rainfall prevents timely sowing of winter wheat and oilseed rape across eastern England. Fields too wet for machinery access; drilling windows missed. Some farms forced to abandon winter sowings entirely and carry unproductive land through winter.<br><br><strong>Coverage response:</strong> UK private crop insurance — principally hail and named-peril covers from companies including NFU Mutual and RSA — does not generally cover prevent-plant or late-sowing scenarios without specific endorsement. MPCI-style cover remains nascent in the UK market post-CAP reform.<br><br><strong>Key lesson:</strong> UK post-Brexit agricultural policy creates gaps in crop risk protection — CAP mutual fund schemes are no longer available, and UK MPCI remains underdeveloped. Lloyd's syndicates have an opportunity to fill the gap with MPCI-style products but face the challenge of insufficient historical yield data at field level.</td></tr>
+
+      <tr data-type="bio" data-sev="min">
+        <td>2020</td><td><strong>Locust Swarms — East Africa &amp; South Asia</strong></td>
+        <td><span class="tt tt-bio">Biological</span></td>
+        <td class="loss-amt">$8.5bn food security risk</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(29)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d29"><td colspan="7"><strong>What happened:</strong> The worst desert locust (Schistocerca gregaria) outbreak in East Africa for 70 years sweeps through Ethiopia, Kenya, Somalia, Uganda, and the Arabian Peninsula in 2020, then spreads to India and Pakistan. FAO estimates $8.5 billion in food security risk across affected countries; agricultural crops stripped by swarms of up to 150km² area.<br><br><strong>Coverage response:</strong> Very limited insurance coverage — most East African and South Asian smallholder farmers have no crop insurance. Weather index insurance programmes provide some parametric payouts in Kenya and Ethiopia. The event triggers new interest in parametric locust outbreak insurance, with satellite detection of locust swarms potentially providing an objective trigger.<br><br><strong>Key lesson:</strong> Locust outbreak is an objectively detectable biological peril that is increasingly predictable using satellite monitoring — creating the possibility of parametric locust insurance that could reach smallholder farmers without the need for individual yield assessment.</td></tr>
+
+      <tr data-type="wildfire" data-sev="mod">
+        <td>2017</td><td><strong>Napa/Sonoma Wine Country Fires</strong></td>
+        <td><span class="tt tt-wildfire">Wildfire</span></td>
+        <td class="loss-amt">$450m wine industry</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(30)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d30"><td colspan="7"><strong>What happened:</strong> October 2017 wildfires in California's Napa and Sonoma counties destroy vineyards, winery facilities, and unharvested grape crops during the harvest season. Smoke taint on harvested grapes causes additional crop losses beyond direct fire damage. Wine industry losses exceed $450 million including crop, property, and business interruption.<br><br><strong>Coverage response:</strong> Vineyard crop policies and specialty wine industry packages respond for fire damage to vines and unharvested fruit. Smoke taint — which affects the quality of wine made from smoke-exposed grapes even without direct fire contact — creates novel coverage disputes. Some policies include smoke taint as a named peril; many do not.<br><br><strong>Key lesson:</strong> Smoke taint is an increasingly material crop quality risk for viticulture in wildfire-exposed regions. Standard fire crop policies should be reviewed to ensure smoke taint is addressed — this is now an expected coverage question in California, Oregon, and Australian viticulture insurance.</td></tr>
+
+      <tr data-type="drought" data-sev="mod">
+        <td>2016</td><td><strong>Southern Africa El Niño Drought — Maize Failure</strong></td>
+        <td><span class="tt tt-drought">Drought</span></td>
+        <td class="loss-amt">$1.5bn food aid needed</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(31)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d31"><td colspan="7"><strong>What happened:</strong> El Niño-driven drought causes catastrophic maize crop failure across southern Africa in 2015–2016. Zimbabwe, Malawi, Zambia, Mozambique, and South Africa all severely affected. 28 million people face food insecurity. South Africa — normally a maize exporter — becomes a net importer. Livestock losses from lack of grazing compound crop losses.<br><br><strong>Coverage response:</strong> Insurance penetration in small-scale farming in southern Africa is negligible. South African commercial farming has some private crop insurance; international food aid provides the primary humanitarian response. Weather index insurance pilots in Malawi and Zimbabwe cover small numbers of farmers but represent a tiny fraction of the population at risk.<br><br><strong>Key lesson:</strong> El Niño events in southern Africa follow a predictable pattern — seasonal forecast models (ENSO predictions) can identify high-risk years 3–6 months in advance, enabling parametric insurance products to be structured around forecast triggers.</td></tr>
+
+      <tr data-type="reg" data-sev="min">
+        <td>2023</td><td><strong>EU Deforestation Regulation — Forestry Trade Impact</strong></td>
+        <td><span class="tt tt-reg">Regulatory</span></td>
+        <td class="loss-amt">Market disruption</td><td><span class="sev sev-min">Minor</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(32)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d32"><td colspan="7"><strong>What happened:</strong> EU Deforestation Regulation (EUDR, effective December 2024) requires due diligence proof that commodities (timber, soya, beef, palm oil, coffee, cocoa, rubber) were not produced on land deforested after December 2020. Creates compliance burden for forestry operations exporting to EU and may affect timber values and trade flows.<br><br><strong>Coverage response:</strong> Regulatory risk is not covered under AG standing timber policies. Trade disruption from EUDR compliance failures could affect timber merchant stock policies and marine cargo covers for timber products.<br><br><strong>Key lesson:</strong> ESG regulation is creating new compliance-linked risks for agricultural and forestry exporters. Underwriters writing timber merchant, marine cargo, and trade credit risks for forestry clients should assess EUDR compliance status as a material underwriting consideration.</td></tr>
+
+      <tr data-type="drought" data-sev="min">
+        <td>2024</td><td><strong>UK Wheat Yield — Late Drilling &amp; Wet Spring</strong></td>
+        <td><span class="tt tt-flood">Flood</span></td>
+        <td class="loss-amt">£500m UK crop shortfall</td><td><span class="sev sev-min">Minor</span></td>
+        <td><span class="badge b-e">EST</span></td>
+        <td><button class="expand-btn" onclick="toggle(33)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d33"><td colspan="7"><strong>What happened:</strong> An exceptionally wet 2023–24 autumn and winter in the UK causes the smallest UK wheat area planted since 1985 — approximately 1.45 million hectares vs a 5-year average of 1.8 million. Wet soils prevent autumn and spring machinery access. AHDB estimates the 2024 UK wheat harvest at approximately 13 million tonnes vs 15+ million in normal years.<br><br><strong>Coverage response:</strong> UK named-peril crop insurance does not cover excess moisture prevent-plant scenarios. NFU Mutual and Agrii provide hail and fire covers but not MPCI-style yield protection. The yield shortfall is largely uninsured — illustrating the gap in UK post-Brexit crop risk management infrastructure.<br><br><strong>Key lesson:</strong> The UK's 2024 experience highlights the practical absence of MPCI-equivalent coverage for UK arable farmers. Lloyd's market MPCI product development for UK crops is an emerging opportunity.</td></tr>
+
+      <tr data-type="bio" data-sev="min">
+        <td>2019</td><td><strong>Xylella fastidiosa — Italian Olive Grove Destruction</strong></td>
+        <td><span class="tt tt-bio">Biological</span></td>
+        <td class="loss-amt">€1.2bn economic impact</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(34)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d34"><td colspan="7"><strong>What happened:</strong> Xylella fastidiosa (the bacterium causing Pierce's disease in grapevines and olive quick decline syndrome) devastates centuries-old olive groves in Puglia, Italy. Over 21 million olive trees affected or destroyed. The European Food Safety Authority classifies Xylella as the most dangerous plant pathogen in Europe. Total economic impact to Puglia olive oil industry estimated at €1.2 billion.<br><br><strong>Coverage response:</strong> Italian agricultural insurance does not cover Xylella-related losses — the disease is classified as an uninsurable event by Italian insurers due to its systemic, irreversible character. Government compensation schemes provide partial relief.<br><br><strong>Key lesson:</strong> Systemic plant disease affecting perennial crops is fundamentally different from annual crop disease — it destroys productive capacity for decades. Underwriters must specifically exclude or sub-limit systemic perennial crop diseases when writing olive grove, vineyard, or orchard coverage.</td></tr>
+
+      <tr data-type="reg" data-sev="min">
+        <td>2022</td><td><strong>Ukraine War — Global Grain Market Disruption</strong></td>
+        <td><span class="tt tt-reg">Regulatory</span></td>
+        <td class="loss-amt">$10bn+ crop market impact</td><td><span class="sev sev-mod">Moderate</span></td>
+        <td><span class="badge b-v">VER</span></td>
+        <td><button class="expand-btn" onclick="toggle(35)">▸ Details</button></td>
+      </tr>
+      <tr class="detail-row hidden" id="d35"><td colspan="7"><strong>What happened:</strong> Russia's invasion of Ukraine (February 2022) disrupts the world's largest wheat and sunflower oil exporting region. Ukraine and Russia together account for 28% of global wheat exports, 75% of sunflower oil. Black Sea port blockades, crop field damage, and population displacement reduce Ukrainian crop production. Global food commodity prices surge — wheat peaks at $13/bushel vs $8 pre-war. Revenue Protection MPCI in the US pays out less than expected (high prices offset yield losses) creating basis risk discussions.<br><br><strong>Coverage response:</strong> War damage to Ukrainian farms and infrastructure is explicitly excluded from standard HA/AG policies (war exclusion). Revenue Protection MPCI in the US and Canada partially offset yield losses with higher price guarantees. Global food price inflation creates secondary agricultural losses for input-dependent producers (fertiliser from Russia/Belarus became unavailable or unaffordable).<br><br><strong>Key lesson:</strong> Geopolitical risk is increasingly a secondary driver of agricultural insurance claims via commodity price channels. Revenue Protection products — which settle on commodity futures prices — are exposed to geopolitical price spikes in unexpected ways.</td></tr>
+
+    </tbody>
+  </table>
+  </div>
+
+</main>
+<footer>
+  <a href="../index.html">← Risk Code Hub</a> &nbsp;|&nbsp; Agricultural Crop &amp; Forestry (HA/AG) — Module 03 Loss Database &nbsp;|&nbsp; Version 3.8 · May 2026
+</footer>
+
+<script>
+  function toggle(id) {
+    const row = document.getElementById('d' + id);
+    const btn = row.previousElementSibling.querySelector('.expand-btn');
+    if (row.classList.contains('hidden')) { row.classList.remove('hidden'); btn.textContent = '▾ Close'; }
+    else { row.classList.add('hidden'); btn.textContent = '▸ Details'; }
+  }
+  function applyFilters() {
+    const tv = document.getElementById('typeFilter').value;
+    const sv = document.getElementById('sevFilter').value;
+    const rows = document.querySelectorAll('#lossBody tr[data-type]');
+    let n = 0;
+    rows.forEach(r => {
+      const tm = tv === 'all' || r.dataset.type === tv;
+      const sm = sv === 'all' || r.dataset.sev === sv;
+      const show = tm && sm;
+      r.classList.toggle('hidden', !show);
+      if (!show) {
+        const btn = r.querySelector('.expand-btn');
+        if (btn) {
+          const id = btn.getAttribute('onclick').match(/\d+/)[0];
+          const dr = document.getElementById('d' + id);
+          if (dr) { dr.classList.add('hidden'); btn.textContent = '▸ Details'; }
+        }
+      }
+      if (show) n++;
+    });
+    document.getElementById('filterCount').textContent = `Showing ${n} of 35 events`;
+  }
+</script>
+</body>
+</html>

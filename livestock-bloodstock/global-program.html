@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Global Programme — Livestock &amp; Bloodstock (NB/NX) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4e342e;
+      --hub-dark:      #260f0a;
+      --hub-light:     #fbe9e7;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#1a237e;
+      --header-gradient:linear-gradient(135deg,#260f0a 0%,#4e342e 55%,#6d4c41 100%);
+      --header-sub:    #ffccbc;
+      --hub-mid:       #d7ccc8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1209;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ffccbc;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#260f0a;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ffccbc;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .layer-diagram{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;}
+    .layer{border-radius:8px;padding:16px 20px;position:relative;}
+    .layer-1{background:#f3e5f5;border-left:5px solid #6a1b9a;}
+    .layer-2{background:#e8eaf6;border-left:5px solid var(--hub-secondary2);}
+    .layer-3{background:#e8f5e9;border-left:5px solid var(--hub-secondary);}
+    .layer-4{background:#fbe9e7;border-left:5px solid var(--hub-primary);}
+    .layer .layer-label{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+    .ll-1{color:#6a1b9a;} .ll-2{color:var(--hub-secondary2);} .ll-3{color:var(--hub-secondary);} .ll-4{color:var(--hub-primary);}
+    .layer h4{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .layer p{font-size:0.83rem;color:#444;line-height:1.5;}
+    .sale-circuit{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px;}
+    .sale-hub{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:4px solid var(--hub-accent);text-align:center;}
+    .sale-hub .location{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:6px;}
+    .sale-hub h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .sale-hub p{font-size:0.78rem;color:#555;line-height:1.4;}
+    .jurisdiction-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:24px;}
+    .jur{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .jur.ie{border-left-color:var(--hub-secondary);}
+    .jur.us{border-left-color:var(--hub-secondary2);}
+    .jur.au{border-left-color:#e65100;}
+    .jur.fr{border-left-color:#1565c0;}
+    .jur.ae{border-left-color:#c8a84b;}
+    .jur .flag{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .jur h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .jur ul{padding-left:16px;font-size:0.81rem;color:#444;line-height:1.6;}
+    .case-study{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;border-top:4px solid var(--hub-accent);}
+    .case-study h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .case-study p{font-size:0.85rem;color:#444;line-height:1.6;margin-bottom:10px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #f3e8e6;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fdf0ee;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    .info-box{background:#fbe9e7;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#260f0a;line-height:1.6;}
+    footer{background:#260f0a;color:#ffccbc;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Livestock &amp; Bloodstock (NB/NX)</a> › Global Programme</div>
+    <div class="tag">Module 07</div>
+    <h1>Global Programme</h1>
+    <div class="sub">International bloodstock structures, jurisdiction profiles, sales circuit map &amp; case study</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Programme structure -->
+  <div class="section-title">International Bloodstock Programme — 4-Layer Structure</div>
+  <div class="layer-diagram">
+    <div class="layer layer-1">
+      <div class="layer-label ll-1">Layer 4 — Top</div>
+      <h4>XL Aggregate Reinsurance (Catastrophe Stop-Loss)</h4>
+      <p>Catastrophe excess of loss reinsurance providing aggregate protection against correlated mortality events — a single disease event (equine herpes, equine influenza) affecting multiple insured horses simultaneously, or a single transit disaster. XL aggregate reinsurance absorbs losses above a specified aggregate retention. Essential for any syndicate carrying significant NX bloodstock accumulation from major stud operations or racing circuits. Priced based on expected correlation of individual equine mortality events.<sup>[I6]</sup></p>
+    </div>
+    <div class="layer layer-2">
+      <div class="layer-label ll-2">Layer 3 — Master</div>
+      <h4>Lloyd's International Master Bloodstock Policy</h4>
+      <p>The core of the global bloodstock programme — a Lloyd's master policy covering all named horses across all territories where they operate. Agreed value per horse, with automatic reinstatement for new acquisitions within pre-agreed value limits. The master policy is the primary source of coverage for elite racing and breeding operations whose horses move across jurisdictions. Covers mortality, permanent infertility, prospective foal cover and transit on an all-risks basis. Administered by a London specialist bloodstock broker with global access to Lloyd's syndicates.<sup>[I6]</sup></p>
+    </div>
+    <div class="layer layer-3">
+      <div class="layer-label ll-3">Layer 2 — Local</div>
+      <h4>Local Admitted Livestock Insurance (Per Country)</h4>
+      <p>Certain jurisdictions (particularly the USA, Australia and some EU states) require locally admitted insurance policies for commercial livestock operations — Lloyd's non-admitted placement may not be permissible for all risks or may require surplus lines compliance. Local admitted policies provide regulatory compliance and may interface with state-level disease compensation schemes (e.g. USDA/APHIS ELAP in the USA). The local policy must dovetail precisely with the master policy to avoid gaps or double insurance.</p>
+    </div>
+    <div class="layer layer-4">
+      <div class="layer-label ll-4">Layer 1 — Base</div>
+      <h4>Government Disease Compensation Schemes (Gap-Fill Layer)</h4>
+      <p>Government compensation is the base layer for NB livestock disease losses in most countries — not insurance but a statutory payment scheme triggered by compulsory slaughter under a disease control order. The commercial insurance programme provides a gap-fill above government compensation — bridging between government valuation methodology and actual market value. Understanding each jurisdiction's disease compensation scheme (payment rates, eligible species, valuation methodology, payment timeline) is essential for structuring the commercial insurance gap-fill layer.<sup>[L1]</sup></p>
+    </div>
+  </div>
+
+  <!-- Global bloodstock sale circuit -->
+  <div class="section-title">Global Bloodstock Sale Circuit — Annual Insurance Pipeline</div>
+  <div class="sale-circuit">
+    <div class="sale-hub">
+      <div class="location">Lexington, Kentucky, USA</div>
+      <h4>Keeneland Association</h4>
+      <p>Spring 2-year-old sale + September Yearling Sale. Top lot: $3.7m (2021). Annual turnover $350m+. Primary North American market for yearling insurance placements.<sup>[I10]</sup></p>
+    </div>
+    <div class="sale-hub">
+      <div class="location">Newmarket, UK</div>
+      <h4>Tattersalls</h4>
+      <p>October Book 1 Yearling Sale + December Mares Sale. Top lot: 3.3m gns (2022). Annual turnover £350m+ gns. Primary European market for new NX insurance placements.<sup>[I4]</sup></p>
+    </div>
+    <div class="sale-hub">
+      <div class="location">The Curragh, Ireland</div>
+      <h4>Goffs</h4>
+      <p>Orby Yearling Sale + November Breeding Stock Sale. Ireland's premier sale; home to Coolmore's commercial yearling consignments. Irish foal registrations feed into London NX market.</p>
+    </div>
+    <div class="sale-hub">
+      <div class="location">Gold Coast, Australia</div>
+      <h4>Magic Millions</h4>
+      <p>January Yearling Sale. Top lot: A$3.4m (2023). Australian market increasingly significant; northern hemisphere sires covering southern hemisphere mares creates cross-border insurance coordination needs.</p>
+    </div>
+    <div class="sale-hub">
+      <div class="location">Deauville, France</div>
+      <h4>Arqana</h4>
+      <p>August Yearling Sale. European-bred yearlings for French and international buyers. French racing system (PMU) maintains a large domestic foal crop feeding the Arqana pipeline.</p>
+    </div>
+    <div class="sale-hub">
+      <div class="location">Ocala, Florida, USA</div>
+      <h4>OBS / Fasig-Tipton</h4>
+      <p>April 2-year-olds in training sale. American Quarter Horse and thoroughbred training sales; Fasig-Tipton Saratoga yearling sale (August) is prestige venue for elite yearlings.</p>
+    </div>
+  </div>
+
+  <!-- Jurisdiction profiles -->
+  <div class="section-title">Jurisdiction Profiles — Key Global Markets</div>
+  <div class="jurisdiction-grid">
+    <div class="jur">
+      <div class="flag">UNITED KINGDOM</div>
+      <h4>UK — Lloyd's Dominant; APHA Regulatory; BCMS Traceability</h4>
+      <ul>
+        <li>Lloyd's syndicates dominate NX bloodstock; NFU Mutual and other admitted carriers for NB livestock</li>
+        <li>APHA (Animal and Plant Health Agency) is the competent authority for disease control and compensation</li>
+        <li>BCMS provides lifetime cattle movement traceability — essential for NB claims verification</li>
+        <li>DEFRA disease compensation under Animal Health Act 1981 — commercial top-up policies fill the gap</li>
+        <li>BHA (British Horseracing Authority) — regulatory body for flat and NH racing; equine passport mandatory</li>
+        <li>Tattersalls Newmarket — primary UK NX new business pipeline<sup>[I4]</sup></li>
+      </ul>
+    </div>
+    <div class="jur ie">
+      <div class="flag">IRELAND</div>
+      <h4>Ireland — Coolmore/Godolphin Hub; Shared FMD Risk with UK</h4>
+      <ul>
+        <li>Home to Coolmore Stud (Galileo, Frankel, Camelot at stud) — highest concentration of NX stallion value globally</li>
+        <li>Irish Horseracing Regulatory Board (IHRB) — regulates Irish racing and breeding; equine passport system</li>
+        <li>Agricultural diseases shared risk with UK — common border disease control zones (FMD, Avian Flu)</li>
+        <li>Department of Agriculture, Food and the Marine (DAFM) — animal disease compensation schemes</li>
+        <li>BVD eradication programme — mandatory testing and slaughter of PI cattle creates NB claims volume</li>
+        <li>Goffs (The Curragh) and Tattersalls Ireland — major yearling and breeding stock sale venues</li>
+      </ul>
+    </div>
+    <div class="jur us">
+      <div class="flag">UNITED STATES</div>
+      <h4>USA — USDA/APHIS; State Agriculture Depts; Keeneland Hub</h4>
+      <ul>
+        <li>USDA/APHIS (Animal and Plant Health Inspection Service) — federal disease control authority; ELAP compensation scheme for qualifying livestock losses</li>
+        <li>State agriculture departments — primary livestock regulation; disease compensation varies significantly by state</li>
+        <li>Keeneland (Lexington, KY) and Fasig-Tipton — primary NX yearling insurance pipeline</li>
+        <li>Surplus lines (E&amp;S) placement commonly required for NX risks exceeding admitted carrier capacity; Lloyd's dominant for elite bloodstock</li>
+        <li>Equine Infectious Anaemia (EIA) Coggins test — required for interstate horse movement; material to NX underwriting</li>
+        <li>PRRS (Porcine Reproductive and Respiratory Syndrome) endemic in US pig herds — primary NB pig peril<sup>[I9]</sup></li>
+      </ul>
+    </div>
+    <div class="jur au">
+      <div class="flag">AUSTRALIA</div>
+      <h4>Australia — AQIS Strict Biosecurity; Magic Millions; Drought Exposure</h4>
+      <ul>
+        <li>AQIS (Australian Quarantine and Inspection Service) — world's most stringent biosecurity controls; strict import requirements for all livestock</li>
+        <li>Australia is FMD-free — fiercely protected status; single FMD incursion would be catastrophic for export market worth A$30bn</li>
+        <li>Magic Millions (Gold Coast) — primary Australian NX yearling sale; growing international profile</li>
+        <li>Racing Australia / state racing authorities — regulatory framework for thoroughbred racing and breeding</li>
+        <li>Drought and bushfire exposure — multi-year droughts cause mass livestock destocking; a critical NB natural perils risk</li>
+        <li>Australia's livestock industry is export-dependent — UK and Asian disease events affect Australian livestock values via trade<sup>[I9]</sup></li>
+      </ul>
+    </div>
+    <div class="jur fr">
+      <div class="flag">FRANCE</div>
+      <h4>France — Haras Nationaux Breeding; PMU Racing; FMD-Free Status</h4>
+      <ul>
+        <li>France-Haras (formerly Les Haras Nationaux) — national stud organisation; French breeding industry is major supplier to European racing</li>
+        <li>PMU (Pari Mutuel Urbain) — national off-course betting operator that funds significant prize money; underpins commercial bloodstock values</li>
+        <li>France is FMD-free and maintains strict border controls; shares EU Animal Health Regulation framework (2016/429)</li>
+        <li>Arqana (Deauville) — primary French NX yearling and breeding stock sale market</li>
+        <li>French agricultural insurance (Groupama, Pacifica) serves the NB domestic market; Lloyd's for high-value NX</li>
+        <li>France-based Coolmore France (Grosbois) and Darley (Banstead) stallion satellite operations create cross-border NX programme needs</li>
+      </ul>
+    </div>
+    <div class="jur ae">
+      <div class="flag">UNITED ARAB EMIRATES</div>
+      <h4>UAE — Meydan/IFAH; Dubai World Cup; Summer Rest; Heat Mortality</h4>
+      <ul>
+        <li>Meydan Racecourse (Dubai) — hosts the Dubai World Cup (world's richest race; $12m prize); attracts leading horses from global racing circuits</li>
+        <li>IFAH (International Federation for Animal Health) — international animal health regulatory framework relevant to UAE biosecurity</li>
+        <li>UAE operates two racing seasons — winter (Oct–Mar) and summer rest period. Horses stabled in UAE during summer face extreme heat (45°C+) and humidity mortality risk</li>
+        <li>Dubai Racing Club — regulatory authority; equine testing and passport requirements</li>
+        <li>Arabian horse racing — a separate major NX sub-class in the UAE; Arabian horse values exceed thoroughbred values in the Gulf states</li>
+        <li>Racing camel insurance — a specialist Lloyd's exotic livestock sub-class for the Gulf market; individual racing camel values reach AED 20m+</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Case study -->
+  <div class="case-study">
+    <h3>Case Study — Global Thoroughbred Operation (Godolphin / Coolmore Model): Lloyd's International Bloodstock Programme</h3>
+    <p><strong>Risk Profile:</strong> A major global thoroughbred operation maintains horses in training in the UK, France, USA and Australia simultaneously; covering stallions at stud in Ireland (5 stallions, combined agreed value £150m); broodmares in Kentucky (80 mares, average agreed value £200k each); yearlings in Newmarket training preparation (30 animals, average agreed value £500k); active racehorses at Dubai training base for winter season. Total NX portfolio: £220m+ agreed value across 4 continents.<sup>[I5]</sup></p>
+    <p><strong>Programme Structure:</strong> Lloyd's international master bloodstock policy — a single policy document issued by a Lloyd's specialist bloodstock syndicate (with co-subscribing syndicates for capacity). The master policy covers all horses worldwide on an agreed-value all-risks mortality basis, with permanent infertility extension for all 5 covering stallions. Automatic addition of new purchases within pre-agreed value limits (up to £5m per horse without specific notification); horses above £5m require individual agreement and veterinary examination confirmation.</p>
+    <p><strong>Transit Extensions:</strong> Annual blanket transit extension covering all air, sea and road movements of covered horses between training bases. Specific notification required for international air transit of horses above £2m agreed value. Dubai winter season transit (UK/France to UAE) is a high-frequency risk event — multiple horses moved by specialist equine air cargo operators (Peden Bloodstock, Flying Stallions) each October and returning March/April.</p>
+    <p><strong>Government Compensation Interface:</strong> Irish government disease compensation applies to the Irish stud premises under DAFM provisions; UK DEFRA applies to Newmarket training facilities. Programme is structured so that government compensation is the first layer — the Lloyd's master policy responds only above government compensation and for non-government-compensable losses.</p>
+    <p><strong>Key Underwriting Considerations:</strong> Accumulation of stallion values at the Irish stud (£150m+ on a single premises) represents a catastrophic single-site loss potential. The main exposure: catastrophic disease event (equine herpes virus myeloencephalopathy — EHVM) affecting multiple stallions simultaneously. EHVM can cause neurological damage and death in adult horses — a potential total-loss event for a stud operation. Underwriters apply an accumulation loading to the Irish stud element and require segregation of stallion boxes at the stud.<sup>[I6]</sup></p>
+  </div>
+
+  <!-- Government compensation comparison table -->
+  <div class="section-title">Government FMD Compensation vs Insurance Top-up — 5 Country Comparison<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>FMD Status</th>
+        <th>Compensation Authority</th>
+        <th>Basis of Compensation</th>
+        <th>Typical Shortfall vs Market Value</th>
+        <th>Commercial Top-up Available</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>UK</strong></td>
+        <td>FMD-free (last UK case 2001)</td>
+        <td>DEFRA / APHA</td>
+        <td>Market value at date of slaughter order (RICS valuer); fair market value principle</td>
+        <td>5–30% shortfall typical — market depressed by outbreak itself; welfare costs and business interruption excluded</td>
+        <td>Yes — Lloyd's NB top-up widely available; underwriting currently cautious on accumulation</td>
+      </tr>
+      <tr>
+        <td><strong>Ireland</strong></td>
+        <td>FMD-free (shared risk with UK)</td>
+        <td>DAFM (Dept. Agriculture Food &amp; Marine)</td>
+        <td>Market value at date of slaughter; farmer can challenge government valuation</td>
+        <td>Similar to UK: 5–25% shortfall; delays in payment common (12–24 months post-event)</td>
+        <td>Yes — London market NB top-up available for Irish livestock operations</td>
+      </tr>
+      <tr>
+        <td><strong>USA</strong></td>
+        <td>FMD-free (last US case 1929)</td>
+        <td>USDA/APHIS; state agriculture departments; ELAP scheme for weather losses</td>
+        <td>Fair market value; USDA Livestock Indemnity Program (LIP) for qualifying disease losses — complex eligibility criteria</td>
+        <td>Variable 10–40%; LIP caps at 75% of fair market value; no business interruption compensation</td>
+        <td>Yes — E&amp;S market (Lloyd's surplus lines) for commercial livestock; admitted carriers for standard farm livestock</td>
+      </tr>
+      <tr>
+        <td><strong>Australia</strong></td>
+        <td>FMD-free (highest risk — if FMD occurred, catastrophic)</td>
+        <td>Australian government (CCEAD — Cost Sharing for Endemic Animal Diseases); state governments</td>
+        <td>Determined under national cost-sharing arrangements; government-industry EADRA (Emergency Animal Disease Response Agreement) formula</td>
+        <td>Potentially 20–50% shortfall for commercial producers; payment delays during mass slaughter events</td>
+        <td>Limited — market cautious on FMD aggregate; specialist coverage available for individual producers</td>
+      </tr>
+      <tr>
+        <td><strong>France</strong></td>
+        <td>FMD-free (EU status)</td>
+        <td>French Ministry of Agriculture (DGAL)</td>
+        <td>Market value at date of slaughter; French FMSE (Fonds de Mutualisation des Risques Sanitaires et Environnementaux) — mutual disease fund supplements government compensation</td>
+        <td>Generally 5–15% shortfall; FMSE reduces gap significantly vs UK; faster payment via mutual fund mechanism</td>
+        <td>Yes — Groupama, Pacifica for domestic market; Lloyd's for high-value NX and commercial livestock</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <strong>Lloyd's Market Position — Global Bloodstock:</strong> The Lloyd's bloodstock market is the undisputed global centre for NX thoroughbred insurance. No other insurance market combines the capacity (individual agreed values up to £50m+), underwriting expertise (specialist bloodstock syndicates with deep veterinary and bloodstock industry knowledge), policy flexibility (permanent infertility, prospective foal, agreed value basis) and global programme coordination capability that Lloyd's provides. The market is served by a small number of specialist Lloyd's bloodstock brokers — including BFL, Falcon Insurance and others — who act as the intermediary between major bloodstock clients and Lloyd's syndicates. These brokers maintain the relationships with major studs and racing operations worldwide that channel the annual premium flow into the London market.<sup>[I6]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Livestock &amp; Bloodstock (NB / NX) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Next: References →</a></p>
+</footer>
+
+</body>
+</html>

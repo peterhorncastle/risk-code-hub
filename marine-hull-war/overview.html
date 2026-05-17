@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+<title>Marine Hull War — Overview | Risk Code Hub</title>
+<style>
+:root{
+  --war:#1a237e;--war-dark:#0d1442;--danger:#c62828;--mine:#e65100;
+  --piracy:#6a1b9a;--jwc:#00695c;--warn:#f57f17;
+  --bg:#f5f7fa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;
+  --border:#e5e7eb;--radius:10px;
+    /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1a237e;
+    --hub-dark:      #0d1442;
+    --hub-light:     #e8ebf8;
+    --hub-accent:    #f57f17;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#e65100;
+    --header-gradient:linear-gradient(135deg,#0d1442 0%,#1a237e 50%,#283593 100%);
+    --header-sub:    #b8c8e8;
+  }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+header{background:linear-gradient(135deg,#0d1442 0%,#1a237e 50%,#283593 100%);color:#fff;padding:2rem 1.5rem 1.5rem;}
+.hub-label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75;margin-bottom:.4rem;}
+header h1{font-size:2rem;font-weight:700;margin-bottom:.3rem;}
+header p{opacity:.85;font-size:1rem;max-width:700px;}
+.codes-strip{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.9rem;}
+.code-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:4px;padding:.2rem .55rem;font-size:.78rem;font-weight:600;letter-spacing:.04em;}
+nav.tabs{background:#fff;border-bottom:2px solid var(--border);display:flex;flex-wrap:wrap;gap:0;overflow-x:auto}
+nav.tabs a{padding:.65rem 1.1rem;text-decoration:none;color:var(--muted);font-size:.82rem;font-weight:600;white-space:nowrap;border-bottom:3px solid transparent;transition:color .2s}
+nav.tabs a:hover{color:var(--war)}
+nav.tabs a.active{color:var(--war);border-bottom-color:var(--war)}
+.container{max-width:1100px;margin:0 auto;padding:1.5rem;}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:1rem;margin-bottom:1.8rem;}
+.stat-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:1.1rem 1.2rem;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.stat-val{font-size:1.7rem;font-weight:700;color:var(--war);margin-bottom:.2rem;}
+.stat-lbl{font-size:.78rem;color:var(--muted);line-height:1.3;}
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:1.4rem;margin-bottom:1.4rem;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.card h2{font-size:1.15rem;font-weight:700;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--war);color:var(--war-dark);}
+.card h3{font-size:.95rem;font-weight:700;margin:1rem 0 .5rem;color:var(--war-dark);}
+table{width:100%;border-collapse:collapse;font-size:.88rem;}
+th{background:var(--war-dark);color:#fff;padding:.55rem .7rem;text-align:left;font-weight:600;}
+td{padding:.5rem .7rem;border-bottom:1px solid var(--border);vertical-align:top;}
+tr:nth-child(even) td{background:#f9fafb;}
+.badge{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.72rem;font-weight:700;letter-spacing:.04em;white-space:nowrap;}
+.ver{background:#e6f4ea;color:#1b5e20;}.est{background:#fef3e2;color:#e65100;}.illus{background:#cce5ff;color:#1565c0;}.gap{background:#fdecea;color:#c62828;}
+.cov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1rem;}
+.cov-card{border-radius:8px;padding:1rem;border-left:4px solid;}
+.c-war{border-color:var(--danger);background:#fff5f5;}
+.c-mine{border-color:var(--mine);background:#fff8f0;}
+.c-piracy{border-color:var(--piracy);background:#f8f0ff;}
+.c-av{border-color:var(--war);background:#f0f2ff;}
+.c-ext{border-color:var(--jwc);background:#f0fff4;}
+.c-wb{border-color:var(--warn);background:#fffdf0;}
+.cov-card h4{font-size:.88rem;font-weight:700;margin-bottom:.5rem;}
+.cov-card ul{list-style:none;font-size:.8rem;color:var(--muted);}
+.cov-card ul li::before{content:"✓ ";color:var(--war);}
+.def-box{background:#e8eaf6;border-left:4px solid var(--war);border-radius:6px;padding:1rem 1.2rem;margin:.8rem 0;font-size:.88rem;}
+.def-box strong{display:block;margin-bottom:.3rem;color:var(--war-dark);}
+.alert-box{background:#fdecea;border-left:4px solid var(--danger);border-radius:6px;padding:1rem 1.2rem;margin:.8rem 0;font-size:.88rem;}
+.alert-box strong{display:block;margin-bottom:.3rem;color:var(--danger);}
+.participant-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.9rem;margin-top:.8rem;}
+.part-card{background:#f9fafb;border:1px solid var(--border);border-radius:8px;padding:.9rem;}
+.part-card h4{font-size:.85rem;font-weight:700;color:var(--war-dark);margin-bottom:.4rem;}
+.part-card p{font-size:.8rem;color:var(--muted);}
+footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem;}
+</style>
+</head>
+<body>
+<header>
+  <div class="hub-label">Lloyd's Risk Code Hub · Marine</div>
+  <h1>Marine Hull War</h1>
+  <p>Specialist war risk insurance for vessel hulls, aviation assets and extended war perils — covering war, mines, piracy, terrorism and confiscation across the Lloyd's W-series codes.</p>
+  <div class="codes-strip">
+    <span class="code-badge">W – Marine Hull War (direct/fac)</span>
+    <span class="code-badge">WB – War Binder (delegated)</span>
+    <span class="code-badge">AW – Aviation War</span>
+    <span class="code-badge">WX – Extended War Perils</span>
+  </div>
+</header>
+<nav class="tabs">
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates Analysis</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val">~$600m</div><div class="stat-lbl">Lloyd's marine war GWP (est.)<br><span class="badge est">EST</span></div></div>
+    <div class="stat-card"><div class="stat-val">0.5–1.0%</div><div class="stat-lbl">Red Sea per-transit war rate (peak 2024)<br><span class="badge est">EST</span></div></div>
+    <div class="stat-card"><div class="stat-val">48 hrs</div><div class="stat-lbl">Standard war cancellation notice<br><span class="badge ver">VER</span></div></div>
+    <div class="stat-card"><div class="stat-val">~$1bn+</div><div class="stat-lbl">Ukraine Black Sea war losses (est.)<br><span class="badge est">EST</span></div></div>
+    <div class="stat-card"><div class="stat-val">Dec 2023</div><div class="stat-lbl">JWC Red Sea Listed Area designation<br><span class="badge ver">VER</span></div></div>
+  </div>
+
+  <!-- Code definitions -->
+  <div class="card">
+    <h2>Lloyd's W-Series Code Definitions</h2>
+    <table>
+      <thead><tr><th>Code</th><th>Class</th><th>Scope &amp; Typical Risks</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td><strong>W</strong></td><td>Marine Hull War (Direct/Fac)</td><td>War risks for ship hulls written on direct or facultative basis. Primary Institute War and Strikes Clauses Hulls—Time (CL.280) wording. Covers war, mines, piracy, terrorism, confiscation, capture and seizure. Separate from H&amp;M (hull &amp; machinery) which contains the F.C.&amp;S. exclusion.</td><td><span class="badge ver">VER</span></td></tr>
+        <tr><td><strong>WB</strong></td><td>War Binder (Delegated Authority)</td><td>Marine war risks written under binding authority / coverholder arrangement. MGA/coverholder produces W-class risks under delegated underwriting agreement. Common for fleet war cover schemes.</td><td><span class="badge est">EST</span></td></tr>
+        <tr><td><strong>AW</strong></td><td>Aviation War</td><td>War, hijacking and related political violence perils for aircraft hulls. Activates where the AVN52 exclusion (the aviation equivalent of the marine F.C.&amp;S. clause) is excluded from the H&amp;M aviation policy. Includes governmental confiscation, sabotage and terrorism losses.</td><td><span class="badge est">EST</span></td></tr>
+        <tr><td><strong>WX</strong></td><td>Extended War / Miscellaneous War</td><td>Extended and miscellaneous war perils not elsewhere classified. Includes breach voyage cover (vessel trading into contractually excluded areas), war perils for offshore assets, war cargo extensions, and bespoke political violence marine products.</td><td><span class="badge est">EST</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="def-box" style="margin-top:1rem;">
+      <strong>The F.C.&amp;S. Clause — Foundation of the War Market</strong>
+      The <em>Free of Capture and Seizure (F.C.&amp;S.)</em> clause in H&amp;M (hull &amp; machinery) policies excludes all war perils from the standard hull policy, creating the separate war market. Without F.C.&amp;S., H&amp;M underwriters would bear war risk that is unpriceable on a standard actuarial basis. The war market specialist — writing code W — takes the risks excluded by F.C.&amp;S. This bifurcation has been the structural foundation of the Lloyd's marine market since the nineteenth century. <span class="badge ver">VER</span>
+    </div>
+  </div>
+
+  <!-- Coverage grid -->
+  <div class="card">
+    <h2>Coverage Architecture — Institute War &amp; Strikes Clauses Hulls (CL.280)</h2>
+    <p style="font-size:.86rem;color:var(--muted);margin-bottom:.8rem;">The Institute War and Strikes Clauses Hulls—Time (1983, CL.280) is the standard Lloyd's marine war wording. Six covered perils under Clause 1:</p>
+    <div class="cov-grid">
+      <div class="cov-card c-war">
+        <h4 style="color:var(--danger);">Clause 1.1 — War &amp; Hostilities</h4>
+        <ul>
+          <li>War, civil war, revolution, rebellion</li>
+          <li>Insurrection or civil strife</li>
+          <li>Hostile act by/against a belligerent power</li>
+          <li>Includes declared and undeclared wars</li>
+        </ul>
+      </div>
+      <div class="cov-card c-mine">
+        <h4 style="color:var(--mine);">Clause 1.2 &amp; 1.3 — Capture, Seizure &amp; Mines</h4>
+        <ul>
+          <li>Capture, seizure, arrest, restraint, detainment</li>
+          <li>Consequences of detention (CTL)</li>
+          <li>Derelict mines, torpedoes, bombs</li>
+          <li>Derelict weapons of war</li>
+        </ul>
+      </div>
+      <div class="cov-card c-piracy">
+        <h4 style="color:var(--piracy);">Clause 1.4 &amp; 1.5 — Strikes &amp; Terrorism / Piracy</h4>
+        <ul>
+          <li>Strikers and locked-out workmen</li>
+          <li>Labour disturbances, riots</li>
+          <li>Terrorists or persons acting from political motive</li>
+          <li>Piracy (Schedule risk under war, not H&amp;M)</li>
+        </ul>
+      </div>
+      <div class="cov-card c-av">
+        <h4 style="color:var(--war);">Clause 1.6 — Confiscation &amp; Expropriation</h4>
+        <ul>
+          <li>Confiscation by a government</li>
+          <li>Expropriation by a government</li>
+          <li>Note: own government often sub-limited or excluded</li>
+          <li>Distinguishes confiscation from nationalisation</li>
+        </ul>
+      </div>
+      <div class="cov-card c-ext">
+        <h4 style="color:var(--jwc);">Extended Perils (WX)</h4>
+        <ul>
+          <li>Breach voyage cover (trading in excluded areas)</li>
+          <li>Chemical / biological attack (sub-limited)</li>
+          <li>Cyber war extensions (contested post-NotPetya)</li>
+          <li>War delay / loss of hire (separate)</li>
+        </ul>
+      </div>
+      <div class="cov-card c-wb">
+        <h4 style="color:var(--warn);">Key Exclusions (CL.280)</h4>
+        <ul>
+          <li>Nuclear / radiological contamination (NBCR)</li>
+          <li>Wilful misconduct of owners</li>
+          <li>Ordinary judicial process (arrest by own country)</li>
+          <li>Trading warranty breach (unless WX breach voyage)</li>
+          <li>War between P5 powers (some wordings)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alert-box" style="margin-top:1rem;">
+      <strong>48-Hour War Cancellation Clause</strong>
+      Standard in all hull war policies: underwriters may cancel war cover at 48 hours' notice (7 days for War Protection &amp; Indemnity under some P&amp;I club rules). This gives the market the ability to re-price or withdraw capacity within 48 hours of a major escalation — as occurred when Russia invaded Ukraine (February 2022) and during the Houthi Red Sea campaign (late 2023). Cancellation triggers automatic re-rating negotiations. <span class="badge ver">VER</span>
+    </div>
+  </div>
+
+  <!-- JWC Listed Areas -->
+  <div class="card">
+    <h2>Joint War Committee (JWC) — High Risk Listed Areas</h2>
+    <p style="font-size:.88rem;margin-bottom:.8rem;">The <strong>Joint War Committee (JWC)</strong> — a Lloyd's / IUA joint body — publishes and updates the <em>Hull War, Strikes, Terrorism and Related Perils Listed Areas</em>. Vessels transiting Listed Areas require specific underwriter approval and attract Additional War Risk Premium (AWRP). <span class="badge ver">VER</span></p>
+    <table>
+      <thead><tr><th>Territory / Area</th><th>JWC Status (c.2024)</th><th>Primary Threat</th><th>AWRP Range</th></tr></thead>
+      <tbody>
+        <tr><td>Red Sea / Gulf of Aden (incl. Bab-el-Mandeb)</td><td style="color:#c62828;font-weight:700;">Listed — High Risk</td><td>Houthi drone and missile attacks; vessel boarding</td><td>0.3–1.0%+ per transit <span class="badge est">EST</span></td></tr>
+        <tr><td>Black Sea (Ukraine conflict zone)</td><td style="color:#c62828;font-weight:700;">Listed — High Risk</td><td>Naval mines, missile attacks, vessel detention</td><td>0.5–3.0%+ per transit <span class="badge est">EST</span></td></tr>
+        <tr><td>Gulf of Guinea (West Africa)</td><td style="color:#e65100;font-weight:600;">Listed</td><td>Armed robbery, vessel boarding, crew kidnap</td><td>0.05–0.30% per transit <span class="badge est">EST</span></td></tr>
+        <tr><td>Strait of Hormuz / Persian Gulf</td><td style="color:#e65100;font-weight:600;">Listed (monitored)</td><td>Iran tanker seizures; IRGC provocations</td><td>0.05–0.25% per transit <span class="badge est">EST</span></td></tr>
+        <tr><td>Libya / Libyan coast</td><td style="color:#e65100;font-weight:600;">Listed</td><td>Armed militia; vessel confiscation risk</td><td>0.10–0.50% per call <span class="badge est">EST</span></td></tr>
+        <tr><td>Somalia / Indian Ocean (residual piracy)</td><td style="color:#f57f17;font-weight:600;">Reduced risk / residual</td><td>Piracy (reduced from peak); dhow motherships</td><td>0.02–0.08% per transit <span class="badge est">EST</span></td></tr>
+        <tr><td>Venezuela</td><td style="color:#f57f17;font-weight:600;">Listed (selective)</td><td>Vessel seizure; sanctions risk</td><td>Case by case <span class="badge est">EST</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">AWRP rates are illustrative and change rapidly — always obtain current market terms. JWC Listed Areas list updated periodically; check lloyds.com market bulletins. <span class="badge est">EST</span></p>
+  </div>
+
+  <!-- AW Aviation War -->
+  <div class="card">
+    <h2>Aviation War (AW) — Hull War for Aircraft</h2>
+    <p style="font-size:.88rem;margin-bottom:.7rem;">The <strong>AVN52 exclusion clause</strong> in standard aviation H&amp;M (hull &amp; machinery) policies excludes war, hijacking and related perils — the aviation equivalent of the marine F.C.&amp;S. clause. Code AW covers these excluded aviation war perils, including:</p>
+    <table>
+      <thead><tr><th>AW Peril</th><th>Examples</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>War and hostilities (aviation)</td><td>Aircraft destroyed by missile/military action; MH17 (Malaysia Airlines, 2014, shot down over Ukraine by BUK missile)</td><td>State v. state or non-state armed conflict</td></tr>
+        <tr><td>Hijacking</td><td>Diversion by armed persons; politically motivated aircraft seizure</td><td>AW covers hijacking where AVN52 applies; H&amp;M does not</td></tr>
+        <tr><td>Sabotage</td><td>Explosive devices placed on aircraft by political actors</td><td>Distinguished from criminal acts not politically motivated</td></tr>
+        <tr><td>Governmental confiscation</td><td>Aircraft seized by foreign government; sanction-related detention (Russia 2022 — ~$10bn+ leased aircraft stranded)</td><td>Own-country confiscation exclusion common</td></tr>
+        <tr><td>Terrorism (aviation)</td><td>9/11 attacks (four hijacked aircraft); USS Cole (maritime parallel)</td><td>Post-9/11: market re-structured extensively; aviation war pools formed temporarily</td></tr>
+      </tbody>
+    </table>
+    <div class="def-box" style="margin-top:.8rem;">
+      <strong>Russia 2022 — Aviation War's Largest Modern Loss Event</strong>
+      Following Russia's invasion of Ukraine (February 2022), Western lessors were unable to recover approximately 400–500 leased aircraft stranded in Russia as Moscow refused repatriation. Total hull value involved was estimated at $10–15 billion. <span class="badge est">EST</span> Aviation war/confiscation policies were triggered; claims disputes between lessors, airlines and underwriters are ongoing. The event dwarfs any previous aviation war loss and has fundamentally reshaped aviation war capacity and pricing.
+    </div>
+  </div>
+
+  <!-- Market participants -->
+  <div class="card">
+    <h2>Market Participants</h2>
+    <div class="participant-grid">
+      <div class="part-card">
+        <h4>Lloyd's Specialist War Syndicates</h4>
+        <p>The marine war market is concentrated among a small number of Lloyd's specialist syndicates with long-standing expertise. War risks are a leading Lloyd's specialism globally — the market's reputation for writing difficult political risks dates to the Lloyd's Coffee House era.</p>
+      </div>
+      <div class="part-card">
+        <h4>P&amp;I Clubs (War P&amp;I)</h4>
+        <p>P&amp;I clubs (Gard, Skuld, Standard, Britannia etc.) provide war P&amp;I (third-party liability for war events) separately from hull war. Coordination between hull war underwriters and war P&amp;I is critical in total loss scenarios. War P&amp;I is pooled through the International Group of P&amp;I Clubs (IG).</p>
+      </div>
+      <div class="part-card">
+        <h4>Specialist War Brokers</h4>
+        <p>Marine war is placed by specialist brokers with expertise in JWC areas, AWRP negotiations and political risk assessment. Major shipbroking firms maintain dedicated war risk desks (Marsh, WTW, Gallagher, Tysers/BMS).</p>
+      </div>
+      <div class="part-card">
+        <h4>JWC (Joint War Committee)</h4>
+        <p>Joint body of Lloyd's and IUA underwriters that monitors geopolitical risk globally and designates/updates Listed Areas. JWC market bulletins are the primary reference for AWRP triggering and area-specific rate adjustments.</p>
+      </div>
+      <div class="part-card">
+        <h4>UKMTO (UK Maritime Trade Operations)</h4>
+        <p>Royal Navy-operated maritime security coordination centre based in Dubai. UKMTO provides real-time intelligence to commercial vessels transiting high-risk areas (HRA) and is the primary reporting point for incidents. Essential reference for war underwriters monitoring evolving threats.</p>
+      </div>
+      <div class="part-card">
+        <h4>Reinsurance Market</h4>
+        <p>Marine war is predominantly retained within the Lloyd's market with limited traditional reinsurance. Catastrophe scenarios (world war, major state conflict destroying multiple vessels simultaneously) are a key tail risk. Some syndicates purchase industry loss warranty (ILW) protection.</p>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<footer>Risk Code Hub · Marine Hull War (W/WB/AW/WX) · Lloyd's market reference · <span class="badge est">EST</span> = estimated · Not for regulatory use</footer>
+</body>
+</html>

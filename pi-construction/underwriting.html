@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>PI Construction: Underwriting | Risk Code Hub</title>
+  <style>
+    :root {
+      --pi:#37474f; --pi-dark:#102027; --arch:#795548; --eng:#1565c0;
+      --bsact:#6a1b9a; --warn:#e65100; --go:#2e7d32;
+      --light:#f5f7f8; --text:#1a2530; --muted:#5a6a72; --border:#c8d4d8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #37474f;
+    --hub-dark:      #102027;
+    --hub-light:     #eceff1;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #795548;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%);
+    --header-sub:    #cfd8dc;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#102027 0%,#37474f 50%,#263238 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90a4ae; margin-bottom:6px; }
+    .breadcrumb a { color:#b0bec5; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#cfd8dc; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--pi); border-bottom-color:var(--warn); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--pi); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    h3 { font-size:1.05rem; color:var(--pi-dark); margin:20px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+
+    /* Formula */
+    .formula { background:#fff; border-radius:12px; padding:22px 28px; margin:24px 0; border-left:5px solid var(--pi); box-shadow:0 2px 8px rgba(0,0,0,.06); font-family:'Courier New',monospace; font-size:0.9rem; line-height:2; }
+    .formula strong { color:var(--pi); }
+    .formula .note { font-family:'Segoe UI',Arial,sans-serif; font-size:0.8rem; color:var(--muted); margin-top:8px; font-style:italic; }
+
+    /* Cards */
+    .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:20px; margin:24px 0; }
+    .card { background:#fff; border-radius:12px; padding:22px; box-shadow:0 2px 8px rgba(0,0,0,.06); border-top:4px solid var(--pi); }
+    .card.arch { border-top-color:var(--arch); }
+    .card.eng { border-top-color:var(--eng); }
+    .card.bsact { border-top-color:var(--bsact); }
+    .card.warn { border-top-color:var(--warn); }
+    .card.go { border-top-color:var(--go); }
+    .card h4 { font-size:0.95rem; font-weight:700; color:var(--pi); margin-bottom:10px; }
+    .card.arch h4 { color:var(--arch); }
+    .card.eng h4 { color:var(--eng); }
+    .card.bsact h4 { color:var(--bsact); }
+    .card.warn h4 { color:var(--warn); }
+    .card.go h4 { color:var(--go); }
+    .card p, .card li { font-size:0.86rem; line-height:1.6; color:var(--text); }
+    .card ul { padding-left:16px; margin-top:8px; }
+    .card li { margin-bottom:5px; }
+
+    /* Tables */
+    .tbl-wrap { overflow-x:auto; margin:24px 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    th { background:var(--pi); color:#fff; padding:11px 14px; text-align:left; font-weight:700; }
+    th:hover { background:var(--pi-dark); color:#fff; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:#f0f4f7; }
+    .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:2px 7px; border-radius:8px; margin:1px; }
+    .t-g { background:#e8f5e9; color:#1b5e20; }
+    .t-a { background:#fff8e1; color:#f57f17; }
+    .t-r { background:#ffebee; color:#c62828; }
+
+    /* Scorecard */
+    .scorecard { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:20px 0; }
+    .sc-item { border-radius:10px; padding:16px 18px; }
+    .sc-green { background:#e8f5e9; border-left:4px solid #2e7d32; }
+    .sc-amber { background:#fff8e1; border-left:4px solid #f57f17; }
+    .sc-red { background:#ffebee; border-left:4px solid #c62828; }
+    .sc-item strong { display:block; font-size:0.82rem; font-weight:700; margin-bottom:4px; }
+    .sc-green strong { color:#1b5e20; }
+    .sc-amber strong { color:#e65100; }
+    .sc-red strong { color:#c62828; }
+    .sc-item span { font-size:0.8rem; color:var(--muted); }
+
+    /* Worked example */
+    .example { background:#fff; border-radius:12px; padding:28px 32px; margin:28px 0; box-shadow:0 2px 8px rgba(0,0,0,.06); border:2px solid var(--pi); }
+    .example h3 { color:var(--pi); font-size:1.1rem; margin-bottom:14px; }
+    .ex-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:16px 0; }
+    @media(max-width:600px){ .ex-grid { grid-template-columns:1fr; } }
+    .ex-box { background:var(--light); border-radius:8px; padding:16px; }
+    .ex-box h4 { font-size:0.85rem; font-weight:700; color:var(--pi-dark); margin-bottom:8px; }
+    .ex-box p, .ex-box li { font-size:0.84rem; color:var(--text); line-height:1.6; }
+    .ex-box ul { padding-left:16px; margin-top:6px; }
+    .ex-box li { margin-bottom:4px; }
+    .ex-total { background:var(--pi-dark); color:#cfd8dc; border-radius:8px; padding:16px 20px; margin-top:16px; font-size:0.9rem; }
+    .ex-total strong { color:#fff; }
+
+    /* Dark box */
+    .dark-box { background:var(--pi-dark); color:#cfd8dc; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .dark-box h3 { color:#b0bec5; margin-bottom:12px; font-size:1.05rem; }
+    .dark-box p, .dark-box li { font-size:0.9rem; line-height:1.7; color:#cfd8dc; }
+    .dark-box ul { padding-left:20px; margin:8px 0; }
+    .dark-box li { margin-bottom:6px; }
+
+    /* Badge */
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    footer { background:var(--pi-dark); color:#90a4ae; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">PI E&amp;O Construction</a> › Underwriting</div>
+  <h1>Underwriting — PI E&amp;O Construction &amp; Engineering</h1>
+  <p>Rating methodology, key underwriting factors, E6 vs E7 risk differentiation, scorecard, and worked examples for construction and engineering PI.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Rating Formula</h2>
+  <div class="formula">
+    <strong>E6 Premium</strong> = Fee Income × Base Rate % × Profession Factor × Sector Factor × HRB Loading × Territory Factor × Claims Loading<br><br>
+    <strong>E7 Premium</strong> = Design Fee Equivalent × Base Rate % × D&amp;B Factor (1.3–2.0×) × Fitness-for-Purpose Factor × Project Type × Territory Factor × Claims Loading<br><br>
+    <strong>Limit Factor (ILF)</strong> applied where requested limit exceeds base limit (typically £1m or £2m)<br><br>
+    <strong>Retroactive Date Loading:</strong> Clean retro date (inception) = base rate; full prior acts coverage (back to firm founding) = +15–30% loading for long-established practices<br>
+    <div class="note">Note: Fee income is the standard premium base for E6 professional PI. For E7 Design &amp; Build, the "design fee equivalent" is extracted from the total contract sum — typically 8–15% of contract value for building works; 12–20% for complex/specialist structures. All figures illustrative.</div>
+  </div>
+
+  <h2>Key Underwriting Factors — E6 Consultants</h2>
+  <div class="cards">
+    <div class="card">
+      <h4>Profession Type</h4>
+      <p>The profession is the primary underwriting differentiator within E6. Base rates vary significantly by profession and claim frequency history.</p>
+      <ul>
+        <li><strong>Architect:</strong> Highest base rate E6 sub-class post-Grenfell; residential high-rise = highest loading. Current base rate ~1.5–3.0% of fee income (range wide post-BSA)</li>
+        <li><strong>Structural engineer:</strong> High; RAAC and BSA retrospective tail uncertainty. ~1.0–2.5%</li>
+        <li><strong>QS/surveyor:</strong> Moderate; SAAMCO cap limits quantum; high frequency low severity. ~0.8–1.8%</li>
+        <li><strong>M&amp;E engineer:</strong> Moderate; BIM coordination risk; fire engineering = uplift. ~0.8–1.5%</li>
+        <li><strong>Civil/infrastructure:</strong> Variable; major infrastructure = lower frequency but higher severity. ~0.7–1.4%</li>
+        <li><strong>Project manager:</strong> Moderate; delay and cost overrun claims. ~0.9–1.8%</li>
+      </ul>
+    </div>
+    <div class="card arch">
+      <h4>Building Type &amp; HRB Exposure</h4>
+      <p>The Building Safety Act 2022 creates a mandatory risk distinction between Higher Risk Buildings (HRBs, >18m / 7+ storeys residential) and all other buildings.</p>
+      <ul>
+        <li>HRB residential work: +40–80% loading on base premium; some underwriters decline entirely</li>
+        <li>HRB mixed-use (residential element >7 storeys): +25–50% loading</li>
+        <li>Commercial high-rise (non-residential, no HRB definition): +10–20% loading for fire strategy work</li>
+        <li>Low-rise residential (&lt;7 storeys): base rate, no HRB loading</li>
+        <li>Infrastructure, civil, industrial: base rate for non-residential structural work</li>
+      </ul>
+    </div>
+    <div class="card eng">
+      <h4>Retroactive Date &amp; Run-Off</h4>
+      <p>Claims-made policies require careful retroactive date management — the fundamental structural issue for construction PI.</p>
+      <ul>
+        <li>Inception date retro (no prior acts): cleanest risk; base rate</li>
+        <li>Full prior acts (retro to firm founding): highest risk; +15–30% loading; requires full claims history review</li>
+        <li>Run-off premium: 200–300% year 1; 150% year 2; 100% year 3; 50% year 4; 25% year 5–6; nil thereafter (6-year standard run-off; 30 years for BSA-exposed practices)</li>
+        <li>BSA 2022 tail: for architects and structural engineers with HRB work pre-2017, run-off tails potentially extend to 30 years — run-off pricing models being revised</li>
+      </ul>
+    </div>
+    <div class="card bsact">
+      <h4>Claims History</h4>
+      <p>Claims-made PI underwriting relies heavily on claims history as the primary frequency predictor.</p>
+      <ul>
+        <li>5-year claim-free: −10–15% loading (rate credit)</li>
+        <li>1 claim (resolved): neutral or minor uplift (+5–10%)</li>
+        <li>1 open claim: +20–35% loading; may require facultative reinsurance at higher limits</li>
+        <li>2+ claims in 5 years: +40–80%; possible restrictions on cover; senior underwriter authority</li>
+        <li>Unresolved cladding/fire claim: possible declination or exclusion endorsement</li>
+        <li>Never presented for PI: treat as unknown risk — apply neutral loading; request explanation</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <h4>Limit &amp; Excess Structure</h4>
+      <p>Limit adequacy is a critical underwriting issue in construction PI — inadequate limits are frequently a source of dispute between client and professional.</p>
+      <ul>
+        <li>Minimum limit guidance: ARB recommends limit proportionate to contract value; RICS recommends £1m minimum for most regulated activities</li>
+        <li>ILF schedule: £1m base; £2m ~1.4×; £5m ~2.0×; £10m ~2.8×; £25m ~4.5×; £50m ~7.0× (illustrative ILF curve)</li>
+        <li>Aggregate vs. per-claim: construction PI typically per-claim; aggregate sub-limits for some high-risk categories (cladding, HRB)</li>
+        <li>Excess: minimum £1,000–£5,000 for small firms; £25,000–£100,000 for large practices; E7 excess typically £50,000–£250,000</li>
+      </ul>
+    </div>
+    <div class="card go">
+      <h4>International Work &amp; Jurisdiction</h4>
+      <p>UK-based construction professionals frequently work on projects in Middle East, Asia-Pacific, and Europe — each carrying different PI risk profiles.</p>
+      <ul>
+        <li>UK/EU only: base rate; EU professional liability law broadly similar standard</li>
+        <li>Middle East (UAE, Saudi, Qatar): +10–20% loading; FIDIC contracts; ICC arbitration; no equivalent professional PI mandatory requirements</li>
+        <li>Australia: +15–25% loading; social inflation increasing; NSW DBPA 2020 mandatory PI regime</li>
+        <li>USA/Canada: excluded from standard E6/E7 PI; separate E2/E3 (US PI class) required</li>
+        <li>Developing markets: +20–40% loading; governance and contract enforcement risk</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>E7 Design &amp; Build — Additional Rating Factors</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Factor</th>
+          <th>Green (Base / Discount)</th>
+          <th>Amber (Loading)</th>
+          <th>Red (Significant Loading / Refer)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Design proportion</strong></td>
+          <td><span class="tag t-g">Design &lt;15% of contract value</span></td>
+          <td><span class="tag t-a">Design 15–30% of value</span></td>
+          <td><span class="tag t-r">Design &gt;30% (architect-led D&B)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Fitness for purpose</strong></td>
+          <td><span class="tag t-g">FfP expressly excluded in contract; R,S&C only</span></td>
+          <td><span class="tag t-a">Contract ambiguous; no explicit FfP exclusion</span></td>
+          <td><span class="tag t-r">FfP warranty accepted; output specification contract</span></td>
+        </tr>
+        <tr>
+          <td><strong>Design team quality</strong></td>
+          <td><span class="tag t-g">RIBA/IStructE/ICE members; QMS certified; PI independently placed</span></td>
+          <td><span class="tag t-a">Competent team; no accreditation; self-assessed QMS</span></td>
+          <td><span class="tag t-r">Design team not named; sub-design unverified; no PI coordination</span></td>
+        </tr>
+        <tr>
+          <td><strong>Project type</strong></td>
+          <td><span class="tag t-g">Commercial/industrial (non-HRB)</span></td>
+          <td><span class="tag t-a">Mixed-use; infrastructure; PFI</span></td>
+          <td><span class="tag t-r">HRB residential; nuclear; offshore</span></td>
+        </tr>
+        <tr>
+          <td><strong>Design novation</strong></td>
+          <td><span class="tag t-g">Consultant design novated; no breaks in responsibility</span></td>
+          <td><span class="tag t-a">Partial novation; some design continuity risk</span></td>
+          <td><span class="tag t-r">Abortive design adopted without review; gap in design responsibility</span></td>
+        </tr>
+        <tr>
+          <td><strong>Past E7 PI claims</strong></td>
+          <td><span class="tag t-g">5+ years claim-free; no open claims</span></td>
+          <td><span class="tag t-a">1 claim (closed) in 5 years</span></td>
+          <td><span class="tag t-r">2+ claims; open cladding/fire claim; litigation active</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Risk Scorecard — E6 Profession</h2>
+  <div class="scorecard">
+    <div class="sc-green"><strong>RIBA/ARB Registered Architect</strong><span>Regulated; mandatory CPD; ethical standards; complaint mechanism. Rate credit.</span></div>
+    <div class="sc-green"><strong>ISO 9001 QMS Certified</strong><span>Documented quality management system; corrective action process; file management. Rate credit.</span></div>
+    <div class="sc-green"><strong>5+ Years Claim-Free</strong><span>Clean history; low frequency signal. Rate credit −10–15%.</span></div>
+    <div class="sc-green"><strong>Commercial/Industrial Only</strong><span>No HRB residential; no fire engineering; lower cladding tail risk. Base rate.</span></div>
+    <div class="sc-green"><strong>Written Contract with Clients</strong><span>Scope of service defined; limitation of liability clause in favour of professional. Risk management signal.</span></div>
+    <div class="sc-amber"><strong>Residential Low-Rise (&lt;7 storeys)</strong><span>Below HRB threshold but still Defective Premises Act 1972 exposure. Modest loading.</span></div>
+    <div class="sc-amber"><strong>Some Middle East / International Work</strong><span>FIDIC contracts; different legal system; manageable with appropriate territorial endorsement.</span></div>
+    <div class="sc-amber"><strong>EWS1 Assessor (Limited)</strong><span>EWS1 PI exposure present but capped in scope and number of assessments. Requires endorsement.</span></div>
+    <div class="sc-amber"><strong>1 Resolved Claim in 5 Years</strong><span>Isolated event; root cause identified; corrective action taken. Minor uplift.</span></div>
+    <div class="sc-red"><strong>HRB Residential Architect (Post-2000 cladding era)</strong><span>Potential legacy liability under BSA 2022; 30-year tail; cladding/fire exclusion likely required.</span></div>
+    <div class="sc-red"><strong>Fire Engineer / Fire Strategy Author</strong><span>High exposure post-Grenfell; EWS1; BSA 2022 gateway requirements. Senior underwriter authority.</span></div>
+    <div class="sc-red"><strong>Open Cladding / Fire Safety Claim</strong><span>Active liability; potential to develop significantly; restrict limits or decline.</span></div>
+    <div class="sc-red"><strong>RAAC Structural Assessor</strong><span>RAAC school/public building assessments — potential mass claim event; treat as high-risk sub-class.</span></div>
+  </div>
+
+  <h2>Worked Example A — E6: Architectural Practice</h2>
+  <div class="example">
+    <h3>Example A: Mid-Size Architectural Practice — Commercial &amp; Education Sector <span class="badge b-i">ILLUS</span></h3>
+    <div class="ex-grid">
+      <div class="ex-box">
+        <h4>Practice Profile</h4>
+        <ul>
+          <li>12-partner architectural practice, RIBA/ARB registered</li>
+          <li>Annual fee income: £3,200,000</li>
+          <li>Work split: 60% commercial offices, 25% education (schools, universities), 15% industrial</li>
+          <li>No residential work; no HRB work</li>
+          <li>ISO 9001 certified; QMS audit 2023 passed</li>
+          <li>5-year claims history: 1 resolved claim (2021, £45k settlement, subrogated architect error, roof specification)</li>
+          <li>Retroactive date: 2008 (15 years prior acts)</li>
+          <li>Territory: UK only</li>
+        </ul>
+      </div>
+      <div class="ex-box">
+        <h4>Rating Calculation</h4>
+        <ul>
+          <li>Fee income: £3,200,000</li>
+          <li>Base rate (architect, commercial sector): 1.2%</li>
+          <li>Profession factor (RIBA/ARB, ISO 9001): 0.90 (credit)</li>
+          <li>Sector factor (commercial/education, no HRB): 1.00</li>
+          <li>HRB loading: 0% (no residential/HRB)</li>
+          <li>Claims loading (1 resolved claim 2021): +8%</li>
+          <li>Prior acts loading (15-year retro date): +12%</li>
+          <li>Territory: UK only — no loading</li>
+          <li>Calculated premium: £3,200,000 × 1.2% × 0.90 × 1.00 × 1.08 × 1.12</li>
+          <li>= £3,200,000 × 1.313% = <strong>~£42,000</strong></li>
+          <li>Minimum premium check: satisfied</li>
+          <li>Requested limit: £5m each and every claim / £10m aggregate</li>
+          <li>ILF (base £2m → £5m/£10m): ×1.65</li>
+          <li>Final premium: ~£42,000 × 1.65 = <strong>~£69,300</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ex-total"><strong>Indicative premium: ~£69,300</strong> for £5m/£10m aggregate limit, £50k excess, UK territory, 1-year claims-made, retro date 2008. Minimum excess £50,000 applied. ILLUS — for training use only.</div>
+  </div>
+
+  <h2>Worked Example B — E7: Design &amp; Build Contractor</h2>
+  <div class="example">
+    <h3>Example B: Regional D&amp;B Contractor — Commercial &amp; Industrial <span class="badge b-i">ILLUS</span></h3>
+    <div class="ex-grid">
+      <div class="ex-box">
+        <h4>Contractor Profile</h4>
+        <ul>
+          <li>Regional D&amp;B contractor; annual turnover £45m</li>
+          <li>Design work (extracted): typically 12% of contract sum = £5,400,000 design value equivalent</li>
+          <li>Project type: commercial warehouses (40%), industrial units (35%), retail fit-out (25%)</li>
+          <li>No residential; no HRB</li>
+          <li>In-house architect and structural engineer; external M&amp;E consultant</li>
+          <li>JCT D&amp;B 2016 contract — cl. 2.17.1 reasonable skill and care included (no FfP warranty)</li>
+          <li>5-year claims history: nil</li>
+          <li>Retroactive date: inception (no prior acts required)</li>
+          <li>Territory: UK only</li>
+        </ul>
+      </div>
+      <div class="ex-box">
+        <h4>Rating Calculation</h4>
+        <ul>
+          <li>Design fee equivalent: £5,400,000</li>
+          <li>Base rate (D&B contractor, commercial): 1.8%</li>
+          <li>D&B multiplier (design 12%; R,S&C only; no FfP): 1.15</li>
+          <li>Fitness-for-purpose factor: 1.00 (FfP excluded in JCT cl. 2.17.1)</li>
+          <li>Sector factor (commercial/industrial, no HRB): 1.00</li>
+          <li>Claims loading (5-year nil claims): −10%</li>
+          <li>Retroactive date (inception only): 0% loading</li>
+          <li>Territory: UK only</li>
+          <li>Calculated premium: £5,400,000 × 1.8% × 1.15 × 1.00 × 0.90</li>
+          <li>= £5,400,000 × 1.863% = <strong>~£100,600</strong></li>
+          <li>Requested limit: £5m each and every claim / £10m aggregate</li>
+          <li>ILF (base £2m → £5m/£10m): ×1.65</li>
+          <li>Final premium: ~£100,600 × 1.65 = <strong>~£166,000</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ex-total"><strong>Indicative premium: ~£166,000</strong> for £5m/£10m aggregate limit, £100k excess, UK territory, 1-year claims-made, inception retro date. Fitness-for-purpose exclusion endorsement applied per JCT cl.2.17.1 confirmation. ILLUS — for training use only.</div>
+  </div>
+
+  <div class="dark-box">
+    <h3>Claims-Made Basis — Critical Structural Issues for Construction PI</h3>
+    <p>Construction PI is almost universally written on a claims-made basis — the policy responds to claims first made during the policy period, not to the date of the negligent act. This is essential for construction given the 15–30 year latency of building defect claims. Underwriters must be vigilant about three structural issues:</p>
+    <ul>
+      <li><strong>Retroactive date continuity:</strong> Any gap in claims-made cover creates an uninsured period for claims from work done in that gap. Professionals must maintain continuous cover from the date of their earliest unresolved work. Underwriters should request evidence of continuous cover going back to the retroactive date.</li>
+      <li><strong>Run-off on firm dissolution:</strong> When a practice dissolves (merger, retirement, insolvency), the claims-made policy lapses — but claims from historic work may arrive for years or decades. Run-off cover is the solution. ARB requires continuing PI for architects for 6 years after ceasing practice. BSA 2022 implications potentially extend this requirement informally for HRB-exposed practices.</li>
+      <li><strong>Circumstance notification:</strong> On claims-made policies, a circumstance that might give rise to a claim must be notified to the current insurer even if no formal claim has been received. Failure to notify a known circumstance before policy expiry = uninsured. Underwriters should include clear "circumstance notification" wording and ensure insureds understand the obligation.</li>
+    </ul>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.9 · PI E&amp;O – Construction &amp; Engineering (E6/E7) · For educational use</footer>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Global Programme — Engineering &amp; Construction (CB/CC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #37474f;
+      --hub-dark:      #1c2b31;
+      --hub-light:     #eceff1;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #e65100;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1c2b31 0%,#37474f 55%,#546e7a 100%);
+      --header-sub:    #b0bec5;
+      --hub-mid:       #cfd8dc;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2327;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#b0bec5;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1c2b31;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#b0bec5;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .tower{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .tower-layer{padding:14px 20px;border-bottom:1px solid #eceff1;display:flex;align-items:center;gap:14px;}
+    .tower-layer:last-child{border-bottom:none;}
+    .layer-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff;flex-shrink:0;}
+    .l1{background:#b71c1c;}
+    .l2{background:#37474f;}
+    .l3{background:#1565c0;}
+    .l4{background:#1a5c2a;}
+    .l5{background:#6a1b9a;}
+    .l6{background:#546e7a;}
+    .layer-body{flex:1;}
+    .layer-body strong{font-size:0.88rem;color:var(--hub-dark);display:block;margin-bottom:2px;}
+    .layer-body span{font-size:0.8rem;color:#555;}
+    .layer-amt{font-size:0.82rem;font-weight:700;color:var(--hub-accent);flex-shrink:0;}
+    .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+    .compare-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:4px solid var(--hub-primary);}
+    .compare-card.alt{border-top-color:var(--hub-accent);}
+    .compare-card h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .compare-card ul{padding-left:16px;}
+    .compare-card li{font-size:0.82rem;color:#444;line-height:1.55;margin-bottom:4px;}
+    .juris-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .juris{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .juris.eu{border-left-color:#1565c0;}
+    .juris.us{border-left-color:#c62828;}
+    .juris.me{border-left-color:#c8a84b;}
+    .juris.ap{border-left-color:#6a1b9a;}
+    .juris.af{border-left-color:#795548;}
+    .juris h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .juris p{font-size:0.82rem;color:#444;line-height:1.45;}
+    .case-study{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;border-left:6px solid var(--hub-accent);}
+    .case-study h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:4px;}
+    .case-study .brief{font-size:0.82rem;color:#555;margin-bottom:14px;}
+    .case-study table{width:100%;border-collapse:collapse;margin-bottom:12px;}
+    .case-study th{background:#37474f;color:#fff;padding:8px 12px;font-size:0.78rem;text-align:left;}
+    .case-study td{padding:8px 12px;font-size:0.81rem;border-bottom:1px solid #eceff1;}
+    .case-study tr:last-child td{border-bottom:none;}
+    .info-box{background:#eceff1;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a2327;line-height:1.6;}
+    .fidic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:24px;}
+    .fidic-card{background:#fff;border-radius:8px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,0.07);border-top:3px solid var(--hub-primary);}
+    .fidic-card.yellow{border-top-color:#c8a84b;}
+    .fidic-card.silver{border-top-color:#546e7a;}
+    .fidic-card.gold{border-top-color:#e65100;}
+    .fidic-card .book{font-size:0.7rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .fidic-card h4{font-size:0.87rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .fidic-card p{font-size:0.78rem;color:#444;line-height:1.4;}
+    footer{background:#1c2b31;color:#b0bec5;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+    @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Engineering &amp; Construction (CB/CC)</a> › Global Programme</div>
+    <div class="tag">Module 07</div>
+    <h1>Global Programme</h1>
+    <div class="sub">International construction programme structure, FIDIC contracts, jurisdiction profiles &amp; case study</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Programme Tower -->
+  <div class="section-title">International Construction Programme — 6-Layer Tower</div>
+  <div class="tower">
+    <div class="tower-layer">
+      <div class="layer-num l1">6</div>
+      <div class="layer-body">
+        <strong>XL / Aggregate Reinsurance Layer</strong>
+        <span>Catastrophic excess of loss and aggregate stop-loss — placed by Lloyd's lead syndicate through reinsurance market. Absorbs accumulation of NatCat losses and large single event losses exceeding primary/international capacity. Annual aggregate structure common for large engineering writers.</span>
+      </div>
+      <div class="layer-amt">Per occurrence XL</div>
+    </div>
+    <div class="tower-layer">
+      <div class="layer-num l2">5</div>
+      <div class="layer-body">
+        <strong>Lloyd's International Wrap (Difference in Conditions)</strong>
+        <span>London market lead syndicate provides DIC/DIL cover — picks up coverage gaps in local admitted policies, higher limits, broader LEG clauses, and DSU/ALOP not available locally. Acts as the quality control and coverage completion layer for the global programme.</span>
+      </div>
+      <div class="layer-amt">DIC/DIL</div>
+    </div>
+    <div class="tower-layer">
+      <div class="layer-num l3">4</div>
+      <div class="layer-body">
+        <strong>Primary CAR/EAR — Local Admitted or London Direct</strong>
+        <span>Primary layer covering contract works, contractors' plant, TPL and (where available locally) DSU. London direct for territories without local admitted requirements; local admitted policy where regulatorily mandated (see jurisdiction profiles below).</span>
+      </div>
+      <div class="layer-amt">£50–200m limits</div>
+    </div>
+    <div class="tower-layer">
+      <div class="layer-num l4">3</div>
+      <div class="layer-body">
+        <strong>Local Admitted Policies — Key Jurisdictions</strong>
+        <span>Locally admitted CAR/EAR policies placed with fronting insurers in jurisdictions requiring local insurance (USA, Germany, France, Australia). Locally admitted policies satisfy local regulatory requirements but may be limited in coverage and limits — hence the Lloyd's DIC/DIL wrap above.</span>
+      </div>
+      <div class="layer-amt">Local minimum</div>
+    </div>
+    <div class="tower-layer">
+      <div class="layer-num l5">2</div>
+      <div class="layer-body">
+        <strong>Subcontractor PI &amp; Contractors PI</strong>
+        <span>Professional Indemnity insurance for the design team (architects, engineers, specialist consultants) and design-and-build contractors. Separate from CAR; critical for defects subrogation recovery. Coordinated notification protocols essential to prevent PI and CAR policies responding to the same event in a contradictory manner.</span>
+      </div>
+      <div class="layer-amt">PI policy</div>
+    </div>
+    <div class="tower-layer">
+      <div class="layer-num l6">1</div>
+      <div class="layer-body">
+        <strong>SIR / Deductible Layer (Self-Insured Retention)</strong>
+        <span>Principal's retained risk at the base of the programme. Typically £250k–£5m per occurrence depending on project size and principal's risk appetite. SIR must be maintained for full policy period; evidence of SIR funding (parent company guarantee or escrow) may be required by insurers.</span>
+      </div>
+      <div class="layer-amt">SIR £250k–£5m</div>
+    </div>
+  </div>
+
+  <!-- Master vs Project-specific comparison -->
+  <div class="section-title">Master vs Project-Specific Policy</div>
+  <div class="compare-grid">
+    <div class="compare-card">
+      <h3>Master Annual Programme (MAP)</h3>
+      <ul>
+        <li>Single annual policy covering all projects started during the programme year, up to a declared project value threshold</li>
+        <li>Premium based on annual turnover or anticipated project values — adjustable at year end</li>
+        <li>Suitable for contractors with regular, homogeneous project profile (e.g. residential housebuilder, infrastructure O&amp;M contractor)</li>
+        <li>Individual project limits apply; mega-projects exceeding threshold require separate notification/endorsement</li>
+        <li>Simplified administration but potentially inadequate limits for large one-off projects</li>
+        <li>DSU typically not available on MAP basis — requires project-specific attachment</li>
+      </ul>
+    </div>
+    <div class="compare-card alt">
+      <h3>Project-Specific Policy</h3>
+      <ul>
+        <li>Single policy for a named project, tailored to the specific contract sum, duration, location and risk profile</li>
+        <li>Allows bespoke coverage: LEG 3, DSU/ALOP, specific T&amp;C section, vessel schedule (offshore), NatCat zone loading calibrated to site geocode</li>
+        <li>Required for major infrastructure (£50m+), mega-projects, offshore, nuclear, and projects in high NatCat zones</li>
+        <li>Higher acquisition cost but more accurate pricing and coverage alignment</li>
+        <li>Enables London market lead with full control of coverage terms and conditions</li>
+        <li>DSU/ALOP, Subcontractors' All Risks (SAR) and endorsements all available at project level</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Jurisdiction profiles -->
+  <div class="section-title">Jurisdiction Profiles — 6 Key Markets</div>
+  <div class="juris-grid">
+    <div class="juris">
+      <h4>United Kingdom</h4>
+      <p>JCT (Joint Contracts Tribunal) standard building contracts and NEC4 contracts dominate. ICE conditions for major civil works. Employers' Liability (EL) insurance compulsory under Employers' Liability (Compulsory Insurance) Act 1969 — written separately from CAR/TPL. Building Safety Act 2022 creates new duty holders and 30-year latent defect liability for higher-risk buildings (18m+). Construction (Design &amp; Management) Regulations 2015 (CDM) impose mandatory Principal Designer and Principal Contractor roles. <sup>[L4][L5]</sup></p>
+    </div>
+    <div class="juris eu">
+      <h4>European Union</h4>
+      <p>CE marking requirements for construction products (CPR Regulation EU 305/2011). Eurocodes (EN 1990 series) govern structural design standards. Local admitted CAR/EAR required in France (French Construction Decennial — Dommages Ouvrage — is a mandatory 10-year latent defect cover for buildings, separate from CAR). Germany requires Bauherrenhaftpflicht (developer TPL) and local engineering insurance placement for publicly funded projects. Public procurement Directive 2014/24/EU mandates insurance requirements in tender specifications. <sup>[L6]</sup></p>
+    </div>
+    <div class="juris us">
+      <h4>United States</h4>
+      <p>AIA (American Institute of Architects) standard contracts dominate commercial building. EJCDC (Engineers Joint Contract Documents Committee) for civil infrastructure. Builder's Risk (US equivalent of CAR contract works cover) and Commercial General Liability (CGL equivalent of TPL) are the standard products. Surety bonds (bid bond, performance bond, payment bond) are contractually required on federal/public projects under the Miller Act. Admitted insurance required in most states; Lloyd's S&amp;L placement common for complex/large risks. Strict project close-out and PC certificate notice obligations. <sup>[L7]</sup></p>
+    </div>
+    <div class="juris me">
+      <h4>Middle East</h4>
+      <p>FIDIC contracts (Red, Silver, Gold Book) are the dominant standard for major infrastructure — standard on World Bank, Islamic Development Bank and Abu Dhabi/Dubai government-funded projects. Clause 18 (Insurance) of FIDIC 1999/2017 prescribes minimum CAR/EAR/TPL insurance requirements. Local insurance regulators (SAMA Saudi Arabia, CBUAE UAE) increasingly require local admitted placement. QA/QC requirements stringent on Vision 2030 Saudi Arabia mega-projects. Accumulation of construction exposure in UAE (Expo 2020 legacy, NEOM Saudi) driven significant market activity. <sup>[L2]</sup></p>
+    </div>
+    <div class="juris ap">
+      <h4>Asia-Pacific</h4>
+      <p>Diverse market: Japan, South Korea, Australia (well-developed, admitted required); South-East Asia and Pacific Islands (emerging, significant NatCat exposure). Typhoon (Japan, Philippines, China), earthquake (Japan, New Zealand, Taiwan) and flood (Bangladesh, Vietnam, Thailand) are primary NatCat perils. Australia requires local admitted placement; Suncorp, QBE and IAG are domestic leaders with Lloyd's often reinsuring. Chinese domestic market has PICC and People's Insurance as dominant CAR writers; international programmes for multinational EPC contractors may have London DIC components.</p>
+    </div>
+    <div class="juris af">
+      <h4>Africa</h4>
+      <p>Infrastructure investment boom driven by China Belt &amp; Road Initiative, World Bank infrastructure financing, and African Development Bank projects generates significant CAR/EAR exposure. Fronting requirements in many jurisdictions (Nigeria, Kenya, South Africa) require local admitted policy — fronting insurer reinsures 90%+ to London. Currency risk (premium and claims in local currency vs USD/GBP programme) is a significant programme design challenge. Political Risk interface (civil unrest, government action, currency inconvertibility) for remote infrastructure projects. Lloyd's international wrap critical to provide coverage depth unavailable from local markets.</p>
+    </div>
+  </div>
+
+  <!-- FIDIC explainer -->
+  <div class="section-title">FIDIC Contract Types — Insurance Relevance</div>
+  <div class="fidic-grid">
+    <div class="fidic-card">
+      <div class="book">Red Book</div>
+      <h4>Conditions of Contract for Construction (1999/2017)</h4>
+      <p>Traditional civil engineering — employer designs, contractor builds. Clause 18 requires CAR (works), TPL, and employer/contractor liability insurance. Contractor bears construction risk. Standard for World Bank infrastructure. Risk allocation favours employer.</p>
+    </div>
+    <div class="fidic-card yellow">
+      <div class="book">Yellow Book</div>
+      <h4>Conditions of Contract for Plant &amp; Design-Build (1999/2017)</h4>
+      <p>Contractor designs and builds — EAR relevance higher as contractor takes design risk. Clause 18 insurance requirements broadly similar to Red Book but contractor's design risk increases PI interface with EAR LEG clause selection. T&C testing obligations specified.</p>
+    </div>
+    <div class="fidic-card silver">
+      <div class="book">Silver Book</div>
+      <h4>EPC / Turnkey (1999/2017)</h4>
+      <p>Contractor takes full engineering, procurement and construction risk — turn-key delivery. Dominant in power generation, process plant. Contractor bears greater design risk — LEG 3 most appropriate. DSU/ALOP critical for principal protecting revenue. Risk-heavy for contractor; requires robust EAR programme.</p>
+    </div>
+    <div class="fidic-card gold">
+      <div class="book">Gold Book</div>
+      <h4>Design-Build-Operate (2008)</h4>
+      <p>Contractor designs, builds and operates for a concession period. Insurance transitions from CAR (construction) to property/MB (operational) at practical completion. DSU transitions to business interruption post-completion. Complex programme design: construction insurer and operational insurer must coordinate on handover.</p>
+    </div>
+  </div>
+
+  <!-- Case Study -->
+  <div class="section-title">Case Study — €800m Hydroelectric Dam, West Africa</div>
+  <div class="case-study">
+    <h3>€800m Hydroelectric Dam — West African River Basin</h3>
+    <div class="brief">Belgian EPC contractor, 48-month construction programme, FIDIC Silver Book, Lloyd's international programme with local fronting. Joint venture with Chinese civil engineering subcontractor.</div>
+    <table>
+      <thead><tr><th>Programme Element</th><th>Structure</th><th>Coverage / Comment</th></tr></thead>
+      <tbody>
+        <tr><td>Contract Works (CAR)</td><td>Lloyd's lead syndicate — project-specific policy</td><td>All-risks; LEG 3; flood sub-limit: €300m (rainy season cofferdam risk); earthquake zone: low hazard</td></tr>
+        <tr><td>Plant &amp; Equipment</td><td>Included in CAR programme</td><td>€80m plant schedule; tunnel boring machines, cranes, concrete batching plant</td></tr>
+        <tr><td>EAR — Turbines &amp; Generators</td><td>Separate EAR section (CC code)</td><td>€200m installed value; LEG 3; T&C section 8 months; rated at 0.45% on EV</td></tr>
+        <tr><td>Third Party Liability (TPL)</td><td>Lloyd's CAR TPL section</td><td>€50m limit; includes downstream flood indemnity (dam break scenario); cross-liability</td></tr>
+        <tr><td>DSU / ALOP</td><td>36-month MIP; revenue basis</td><td>€8m/month power sales revenue; rated at 40% of base CAR/EAR premium; IPM required</td></tr>
+        <tr><td>Local Fronting (West African jurisdiction)</td><td>Local admitted insurer, 90% quota share to London</td><td>Required by regulator; local claims handling protocol agreed; claims cooperation clause</td></tr>
+        <tr><td>Subcontractor PI</td><td>Belgian EPC contractor's PI — Chinese JV partner's PI separately placed</td><td>Coordinated notification protocol. €30m PI limit for structural engineering design</td></tr>
+        <tr><td>Political Risk / SRCC</td><td>Standalone Political Risk policy (separate PR hub)</td><td>Cover for expropriation, civil unrest, currency inconvertibility during programme — particularly for rainy-season construction periods</td></tr>
+        <tr><td>Performance Bond</td><td>10% of contract sum — €80m</td><td>Required by West African government as condition of contract award</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.82rem;color:#555;margin-top:12px;line-height:1.5;"><strong>Programme Restructuring Note:</strong> Initial submission presented only a local fronting policy with limited coverage. Lloyd's broker restructured the programme to include London DIC/DIL wrap (picking up LEG 3, DSU, and TPL flood indemnity not available locally), appointed an IPM (required for DSU), and co-ordinated the Belgian EPC contractor's PI cover with the CAR programme. Total programme GWP approximately €5.8m (across all sections). Combined ratio target: 89% base scenario.</p>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Engineering &amp; Construction (CB/CC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Next: References →</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Event Cancellation &amp; Contingency — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b005a;
+      --hub-dark:      #450030;
+      --hub-light:     #fce4f4;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#450030 0%,#7b005a 55%,#a0007a 100%);
+      --header-sub:    #f48fb1;
+      --bc:            #7b005a;
+      --bc-dark:       #450030;
+      --bc-light:      #fce4f4;
+      --bc-accent:     #c8a84b;
+      --bc-mid:        #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0020;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#f48fb1;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#450030;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#f48fb1;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1000px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--bc-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+    .filters button{padding:6px 14px;border-radius:20px;border:2px solid var(--bc);background:#fff;color:var(--bc);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filters button.active,.filters button:hover{background:var(--bc);color:#fff;}
+    .filters button[data-t="pandemic"]{border-color:#1a5c2a;}
+    .filters button[data-t="pandemic"].active,.filters button[data-t="pandemic"]:hover{background:#1a5c2a;border-color:#1a5c2a;color:#fff;}
+    .filters button[data-t="weather"]{border-color:#00695c;}
+    .filters button[data-t="weather"].active,.filters button[data-t="weather"]:hover{background:#00695c;border-color:#00695c;color:#fff;}
+    .filters button[data-t="terrorism"]{border-color:#c62828;}
+    .filters button[data-t="terrorism"].active,.filters button[data-t="terrorism"]:hover{background:#c62828;border-color:#c62828;color:#fff;}
+    .filters button[data-t="market"]{border-color:#6a1b9a;}
+    .filters button[data-t="market"].active,.filters button[data-t="market"]:hover{background:#6a1b9a;border-color:#6a1b9a;color:#fff;}
+    .filters button[data-t="loss"]{border-color:#e65100;}
+    .filters button[data-t="loss"].active,.filters button[data-t="loss"]:hover{background:#e65100;border-color:#e65100;color:#fff;}
+    .filters button[data-t="regulatory"]{border-color:#1a237e;}
+    .filters button[data-t="regulatory"].active,.filters button[data-t="regulatory"]:hover{background:#1a237e;border-color:#1a237e;color:#fff;}
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--bc-mid);}
+    .tl-item{position:relative;margin-bottom:24px;display:none;}
+    .tl-item.show{display:block;}
+    .dot{position:absolute;left:-28px;top:4px;width:16px;height:16px;border-radius:50%;border:3px solid #fff;}
+    .dot.pandemic{background:#1a5c2a;box-shadow:0 0 0 2px #1a5c2a;}
+    .dot.weather{background:#00695c;box-shadow:0 0 0 2px #00695c;}
+    .dot.terrorism{background:#c62828;box-shadow:0 0 0 2px #c62828;}
+    .dot.market{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .dot.loss{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .dot.regulatory{background:#1a237e;box-shadow:0 0 0 2px #1a237e;}
+    .tl-card{background:#fff;border-radius:8px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card .yr{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .tl-card h4{font-size:0.92rem;font-weight:700;color:var(--bc-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.84rem;color:#444;line-height:1.5;}
+    .type-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;}
+    .tag-pandemic{background:#e8f5e9;color:#1a5c2a;}
+    .tag-weather{background:#e0f2f1;color:#00695c;}
+    .tag-terrorism{background:#ffebee;color:#c62828;}
+    .tag-market{background:#f3e5f5;color:#6a1b9a;}
+    .tag-loss{background:#fbe9e7;color:#e65100;}
+    .tag-regulatory{background:#e8eaf6;color:#1a237e;}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#555;}
+    .legend-dot{width:12px;height:12px;border-radius:50%;}
+    footer{background:#450030;color:#f48fb1;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Event Cancellation (PC/PA/PN/PU/PZ)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key event cancellation &amp; contingency events 1972–2024</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#1a5c2a;"></div> Pandemic / Disease</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00695c;"></div> Weather</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#c62828;"></div> Terrorism / Security</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6a1b9a;"></div> Market Structural</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100;"></div> Major Loss</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1a237e;"></div> Regulatory</div>
+  </div>
+
+  <div class="filters">
+    <button class="active" onclick="filterTL('all',this)">All Events</button>
+    <button data-t="pandemic" onclick="filterTL('pandemic',this)">Pandemic / Disease</button>
+    <button data-t="weather" onclick="filterTL('weather',this)">Weather</button>
+    <button data-t="terrorism" onclick="filterTL('terrorism',this)">Terrorism / Security</button>
+    <button data-t="market" onclick="filterTL('market',this)">Market Structural</button>
+    <button data-t="loss" onclick="filterTL('loss',this)">Major Loss</button>
+    <button data-t="regulatory" onclick="filterTL('regulatory',this)">Regulatory</button>
+  </div>
+
+  <div class="timeline" id="tl">
+
+    <div class="tl-item show" data-t="terrorism">
+      <div class="dot terrorism"></div>
+      <div class="tl-card">
+        <div class="yr">1972</div>
+        <span class="type-tag tag-terrorism">Terrorism / Security</span>
+        <h4>Munich Olympics Massacre — Terrorism as an EC Peril</h4>
+        <p>Palestinian terrorists kill 11 Israeli athletes and coaches at the Munich Olympic Games. The 1972 Games are suspended for 34 hours — the first major international sporting event interrupted by terrorism. The incident begins a long debate in the EC market about how terrorism should be treated as an insured peril, culminating in post-9/11 terrorism extensions. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="market">
+      <div class="dot market"></div>
+      <div class="tl-card">
+        <div class="yr">1980s</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>Non-Appearance Insurance Matures for Concert Tours</h4>
+        <p>Lloyd's specialist contingency syndicates develop structured PN (non-appearance) policies for major concert tour promoters. Health clauses, pre-existing condition exclusions, and age-related loading become standard underwriting features. Prize indemnity (PU) for golf hole-in-one competitions grows rapidly as corporate golf tournaments proliferate. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="loss">
+      <div class="dot loss"></div>
+      <div class="tl-card">
+        <div class="yr">1991</div>
+        <span class="type-tag tag-loss">Major Loss</span>
+        <h4>Gulf War — International Event Cancellations</h4>
+        <p>The Gulf War triggers widespread cancellation of events across the Middle East and internationally. EC policies are tested on whether geopolitical government orders constitute an insured peril. Underwriters clarify that government orders arising from international security crises can trigger event cancellation cover where government order is a named peril. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="weather">
+      <div class="dot weather"></div>
+      <div class="tl-card">
+        <div class="yr">1990s</div>
+        <span class="type-tag tag-weather">Weather</span>
+        <h4>Glastonbury Festival Weather Claims — A Recurring Exposure</h4>
+        <p>Glastonbury Festival generates a series of weather-related EC and pluvius claims through the 1990s and 2000s as persistent mud and rainfall affects attendee numbers, site operations and revenues. Glastonbury becomes one of the most consistently discussed outdoor festival weather risks in the Lloyd's contingency market, driving the development of sophisticated pluvius structures. <sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="terrorism">
+      <div class="dot terrorism"></div>
+      <div class="tl-card">
+        <div class="yr">2001</div>
+        <span class="type-tag tag-terrorism">Terrorism / Security</span>
+        <h4>9/11 — Terrorism Becomes Optional EC Extension</h4>
+        <p>The September 11 attacks cause mass cancellation of US sporting and entertainment events in the days following. EC insurers review terrorism as a default included peril and move to separately-rated terrorism extensions in EC policies. For the first time, event promoters must explicitly purchase and pay an additional premium for terrorism cover — a structural market change that persists today. Pool Re covers property terrorism losses in the UK; EC terrorism remains a Lloyd's specialist market. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="pandemic">
+      <div class="dot pandemic"></div>
+      <div class="tl-card">
+        <div class="yr">2003</div>
+        <span class="type-tag tag-pandemic">Pandemic / Disease</span>
+        <h4>SARS — First Pandemic Debate; Wimbledon Acts</h4>
+        <p>SARS causes event cancellations in Hong Kong, Singapore and Toronto. The Lloyd's EC market debates whether communicable disease should be excluded from event cancellation policies. Most underwriters do not act. The All England Lawn Tennis Club (Wimbledon) — almost uniquely — begins purchasing pandemic-specific EC cover in direct response to SARS. This annual cover will pay £141m 17 years later. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="loss">
+      <div class="dot loss"></div>
+      <div class="tl-card">
+        <div class="yr">2004</div>
+        <span class="type-tag tag-loss">Major Loss</span>
+        <h4>Rolling Stones Tour Cancellation — Heart Surgery</h4>
+        <p>Mick Jagger undergoes emergency heart surgery, forcing postponement of the Rolling Stones' Licks World Tour. Non-appearance insurance responds, covering the promoter's advance costs and lost revenue from postponed dates. The claim is among the first high-profile PN losses to generate significant media coverage and illustrates the value of non-appearance cover for major touring artists. <sup>[I9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="pandemic">
+      <div class="dot pandemic"></div>
+      <div class="tl-card">
+        <div class="yr">2009</div>
+        <span class="type-tag tag-pandemic">Pandemic / Disease</span>
+        <h4>H1N1 Swine Flu — Second Pandemic Warning</h4>
+        <p>H1N1 influenza pandemic prompts public health concerns about large gatherings. Some events are voluntarily cancelled or modified. The EC market again debates communicable disease exclusions but does not adopt them universally — the pandemic proved shorter-lived and less economically devastating than feared, reducing underwriting pressure. In retrospect, a second missed warning. <sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="weather">
+      <div class="dot weather"></div>
+      <div class="tl-card">
+        <div class="yr">2010</div>
+        <span class="type-tag tag-weather">Weather</span>
+        <h4>Eyjafjallajökull Ash Cloud — European Airspace Closed 6 Days</h4>
+        <p>The eruption of Icelandic volcano Eyjafjallajökull closes European airspace for six days, disrupting approximately 100,000 flights. Event cancellation losses arise because performers and speakers cannot reach events. The ash cloud is classified as a government-ordered airspace closure rather than an act of God directly — EC policies with "government order" as an insured peril respond. Total travel and event losses estimated at over £1.3bn. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="market">
+      <div class="dot market"></div>
+      <div class="tl-card">
+        <div class="yr">2012</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>London Olympics 2012 — Largest Peacetime Event Insurance Programme</h4>
+        <p>The London 2012 Olympics involves one of the most complex event insurance programmes ever assembled — combining government indemnities, Lloyd's commercial EC cover, terrorism insurance (Pool Re-adjacent structures), and venue liability. The Games proceed without major insured losses and demonstrate the viability of the public-private insurance model for mega-events. <sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="loss">
+      <div class="dot loss"></div>
+      <div class="tl-card">
+        <div class="yr">2016</div>
+        <span class="type-tag tag-loss">Major Loss</span>
+        <h4>Glastonbury 2016 Festival Curtailment</h4>
+        <p>Extreme mud conditions at Glastonbury following prolonged rainfall result in partial curtailment of site operations and significant additional costs. The festival's EC and pluvius insurance structures are tested. The event highlights the cumulative financial impact of weather on multi-day outdoor events even where the event is not formally cancelled — and the importance of covering extra expenses as well as revenue loss. <sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="terrorism">
+      <div class="dot terrorism"></div>
+      <div class="tl-card">
+        <div class="yr">2017</div>
+        <span class="type-tag tag-terrorism">Terrorism / Security</span>
+        <h4>Manchester Arena Attack — EC Security Reviews</h4>
+        <p>The terrorist bombing at the Ariana Grande concert at Manchester Arena kills 22 and injures hundreds. While the event was ongoing at the time of the attack, the incident triggers industry-wide review of EC and venue terrorism coverage, security requirements for large events, and the adequacy of terrorism sublimits in EC policies. Subsequent events are subject to heightened police security liaison requirements. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="regulatory">
+      <div class="dot regulatory"></div>
+      <div class="tl-card">
+        <div class="yr">2019</div>
+        <span class="type-tag tag-regulatory">Regulatory</span>
+        <h4>Pre-COVID: Competitive Soft Market, No Pandemic Exclusions</h4>
+        <p>By 2019, the Lloyd's EC market is characterised by competitive soft market conditions, declining rates, broad policy wordings and — critically — no standard pandemic or communicable disease exclusion. Many underwriters are unaware of or have not modelled the systemic risk of a global pandemic simultaneously cancelling the entire events calendar. The Insurance Act 2015 fair presentation obligation applies to all placements. <sup>[L1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="pandemic">
+      <div class="dot pandemic"></div>
+      <div class="tl-card">
+        <div class="yr">2020</div>
+        <span class="type-tag tag-pandemic">Pandemic / Disease</span>
+        <h4>COVID-19 — Entire Global Events Calendar Cancelled</h4>
+        <p>Government prohibition orders across virtually every jurisdiction cause the simultaneous cancellation of the entire global events calendar from March 2020. Concerts, festivals, sporting events, conferences, trade shows, weddings, award ceremonies — all cancelled. EC insurers face claims from their entire portfolio at once. Estimated insured losses: $4–6bn across 2020–21, the largest loss event in EC class history by a very large margin. <sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="loss">
+      <div class="dot loss"></div>
+      <div class="tl-card">
+        <div class="yr">2020</div>
+        <span class="type-tag tag-loss">Major Loss</span>
+        <h4>Wimbledon Pandemic Claim — £141m Paid</h4>
+        <p>The All England Lawn Tennis Club claims £141m on its pandemic-specific event cancellation policy — purchased annually since 2003 at a total cost of approximately £27m in cumulative premiums. The claim is one of the largest single EC claims ever paid and represents a remarkable vindication of disciplined long-term risk management. Wimbledon is the exceptional case: virtually no other major event organiser had pandemic cover. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="loss">
+      <div class="dot loss"></div>
+      <div class="tl-card">
+        <div class="yr">2020</div>
+        <span class="type-tag tag-loss">Major Loss</span>
+        <h4>Tokyo Olympics 2020 Postponement — $2bn+ Additional Cost</h4>
+        <p>The Tokyo 2020 Olympics are postponed by one year — an unprecedented event in the 124-year history of the modern Games. The organisers estimate additional costs of $2bn+ from the postponement. Host-city government indemnities and commercial insurance structures are tested. The Games ultimately proceed in 2021 without spectators — creating further revenue loss claims. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="market">
+      <div class="dot market"></div>
+      <div class="tl-card">
+        <div class="yr">2021</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>Post-COVID Market Rewrite — Pandemic Exclusion Universal</h4>
+        <p>By 2021, the Lloyd's EC market completes its structural rewrite. Pandemic and communicable disease exclusions are inserted into every event cancellation policy as a non-negotiable standard. Rates harden materially across all event types. Capacity partially withdraws and then selectively returns. The market's approach to systemic risk is fundamentally changed — EC underwriters now explicitly model correlated catastrophe scenarios. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="terrorism">
+      <div class="dot terrorism"></div>
+      <div class="tl-card">
+        <div class="yr">2022</div>
+        <span class="type-tag tag-terrorism">Terrorism / Security</span>
+        <h4>Ukraine War — European Event Cancellations and Market Caution</h4>
+        <p>Russia's invasion of Ukraine in February 2022 causes cancellations of events across Eastern Europe and generates broader market caution about political risk in EC policies. Eurovision Song Contest is relocated from Ukraine to the UK (Turin 2022, Liverpool 2023). Several major sporting events and concerts in the region are cancelled. Political cancellation perils in EC policies are reviewed for adequacy. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="market">
+      <div class="dot market"></div>
+      <div class="tl-card">
+        <div class="yr">2023</div>
+        <span class="type-tag tag-market">Market Structural</span>
+        <h4>Taylor Swift Eras Tour — Largest Tour Insurance Programme</h4>
+        <p>Taylor Swift's Eras Tour — the highest-grossing concert tour in history — generates one of the most complex and high-value non-appearance and event cancellation insurance programmes ever arranged. Gross revenues exceed $1bn. The tour's insurance structure (non-appearance, terrorism extension, weather, extra expenses) is studied by the EC market as a benchmark for large-scale touring event programmes. <sup>[I9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item show" data-t="weather">
+      <div class="dot weather"></div>
+      <div class="tl-card">
+        <div class="yr">2024</div>
+        <span class="type-tag tag-weather">Weather</span>
+        <h4>Extreme Weather Events — Climate Attribution and EC Exposure</h4>
+        <p>A series of extreme weather events in 2024 — including record-breaking heat waves affecting outdoor events in Europe and the Middle East, flash flooding at UK festivals, and hurricane-season disruptions to Caribbean events — increases EC underwriter focus on climate-related weather risk. The Paris Agreement's attribution science framework links extreme weather increasingly to climate change, raising questions about the long-term pluvius rate adequacy. <sup>[L5]</sup></p>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Event Cancellation &amp; Contingency (PC/PA/PN/PU/PZ) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filterTL(type, btn) {
+  document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tl-item').forEach(el => {
+    el.classList.toggle('show', type === 'all' || el.dataset.t === type);
+  });
+}
+</script>
+</body>
+</html>

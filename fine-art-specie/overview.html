@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Fine Art, Specie &amp; Jewellery (FA/GS/JB/CT) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a148c;
+      --hub-dark:      #250057;
+      --hub-light:     #f3e5ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#7b0020;
+      --header-gradient:linear-gradient(135deg,#250057 0%,#4a148c 55%,#6a1b9a 100%);
+      --header-sub:    #ce93d8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a0a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.18) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(123,0,32,0.15) 0%,transparent 50%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ce93d8;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:2rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;margin-bottom:16px;}
+    .code-pill{display:inline-block;background:rgba(200,168,75,0.25);border:1px solid var(--hub-accent);
+      color:var(--hub-accent);padding:3px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;margin-right:6px;}
+    nav.hub-nav{background:#250057;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ce93d8;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+    .stat-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-top:4px solid var(--hub-primary);}
+    .stat-card .val{font-size:1.7rem;font-weight:700;color:var(--hub-primary);margin-bottom:4px;}
+    .stat-card .lbl{font-size:0.78rem;color:#555;line-height:1.3;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e1bee7;}
+    .code-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px;}
+    .code-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .code-card.gs{border-left-color:#c8a84b;}
+    .code-card.jb{border-left-color:#7b0020;}
+    .code-card.ct{border-left-color:#1a5c2a;}
+    .code-card h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .code-card p{font-size:0.85rem;color:#444;line-height:1.5;}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:28px;}
+    .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid var(--hub-primary);}
+    .card.gold{border-top-color:var(--hub-accent);}
+    .card.green{border-top-color:#1a5c2a;}
+    .card.red{border-top-color:#7b0020;}
+    .card.teal{border-top-color:#00695c;}
+    .card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .info-box{background:#f3e5ff;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a0a2e;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px;}
+    .nav-card{display:block;background:#fff;border-radius:10px;padding:16px 18px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);transition:all 0.2s;}
+    .nav-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12);border-left-color:var(--hub-accent);}
+    .nav-card .num{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .nav-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);}
+    .nav-card p{font-size:0.78rem;color:#555;margin-top:4px;}
+    footer{background:#250057;color:#ce93d8;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Specie &amp; Fine Art</div>
+    <div class="tag">Fine Art &amp; Specie</div>
+    <h1>Fine Art, Specie &amp; Jewellery</h1>
+    <div class="sub">Agreed-value cover for artworks, precious metals, gemstones, jewellers block &amp; cash in transit — a Lloyd's-dominant specialist class</div>
+    <div>
+      <span class="code-pill">FA</span>
+      <span class="code-pill">GS</span>
+      <span class="code-pill">JB</span>
+      <span class="code-pill">CT</span>
+    </div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">$65bn<span class="badge b-v">VER</span></div>
+      <div class="lbl">Global fine art market sales 2023 (Art Basel / UBS)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">$600m<span class="badge b-e">EST</span></div>
+      <div class="lbl">Lloyd's fine art &amp; specie GWP (estimated)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">$6–8bn<span class="badge b-e">EST</span></div>
+      <div class="lbl">Annual global fine art theft losses (much uninsured)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">€100m+<span class="badge b-v">VER</span></div>
+      <div class="lbl">Antwerp diamond heist 2003 — largest specie theft</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">$500m<span class="badge b-e">EST</span></div>
+      <div class="lbl">Gardner Museum heist 1990 — largest unrecovered art loss</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">€2–3bn<span class="badge b-e">EST</span></div>
+      <div class="lbl">Antwerp diamond district — estimated daily insured exposure</div>
+    </div>
+  </div>
+
+  <!-- Code cards -->
+  <div class="section-title">Lloyd's Risk Code Coverage</div>
+  <div class="code-grid">
+    <div class="code-card">
+      <h3>FA — Fine Art</h3>
+      <p>All-risks agreed-value insurance for artworks, antiques and collectibles. Covers paintings, sculptures, prints, drawings, ceramics, tapestries and decorative arts. Clients include private collectors, museums, galleries, art dealers and auction houses. Lloyd's is the dominant global market; many of the world's most significant private and institutional collections are insured here.<sup>[I5]</sup></p>
+    </div>
+    <div class="code-card gs">
+      <h3>GS — Gold &amp; Silver / Specie</h3>
+      <p>Insurance of precious metals (gold, silver, platinum), loose gemstones (unset diamonds, rubies, emeralds), bullion in transit and specie held at refineries, mints or central bank vaults. Covers single shipments worth $50–200m+. Transit cover is a dominant exposure; storage cover at approved vaults available. High concentration of global gold bullion transit risk placed at Lloyd's.<sup>[I5]</sup></p>
+    </div>
+    <div class="code-card jb">
+      <h3>JB — Jewellers Block</h3>
+      <p>All-risks cover for jewellery businesses covering stock on premises, in transit, at exhibitions, in showcase displays and in customer custody for repairs/cleaning. The standard product for jewellery manufacturers, wholesale diamantaires, retailers and repair shops. Peak exposure events (Christmas, Valentine's Day, Baselworld/GIA gem shows) are a critical underwriting consideration.<sup>[I6]</sup></p>
+    </div>
+    <div class="code-card ct">
+      <h3>CT — Cash in Transit / Specie</h3>
+      <p>Insurance of cash, negotiable instruments, banknotes and other valuables during transportation by armoured vehicle or secure courier. Covers bank-to-bank transfers, ATM replenishment runs, casino cash movements and high-value retail cash collection. Typically written on a per-shipment or blanket annual basis. Territory is a key rating variable — South Africa and Brazil attract material surcharges.<sup>[I6]</sup></p>
+    </div>
+  </div>
+
+  <!-- Coverage taxonomy -->
+  <div class="section-title">Coverage Taxonomy</div>
+  <div class="cards-grid">
+    <div class="card">
+      <h4>All-Risks Physical Loss / Damage</h4>
+      <p>The core insuring agreement. Covers accidental loss or damage from any cause not excluded — including theft, fire, flood, transit damage, accidental breakage and malicious damage. Written on <strong>agreed value basis</strong>: the sum insured is the agreed settlement; no depreciation or underinsurance argument applies. Expert appraisal is critical.<sup>[1]</sup></p>
+    </div>
+    <div class="card gold">
+      <h4>Transit Cover (Nail-to-Nail)</h4>
+      <p>Full cover from the moment an artwork or specie item leaves its home location to its return — encompassing packing, road/air transit, temporary exhibition, and unpacking. Also called "wall-to-wall." Loan exhibitions, art fairs and international transport are major transit exposures. Armoured vehicle specification and qualified art handling conditions apply.<sup>[2]</sup></p>
+    </div>
+    <div class="card green">
+      <h4>Mysterious Disappearance</h4>
+      <p>Unexplained disappearance — where no evidence of theft exists but an item cannot be accounted for. A standard insuring agreement in fine art policies, addressing the reality that inventory checks reveal missing items without apparent forced entry. Jewellers block policies also cover this for stock items. Subject to proof of ownership and valuation.<sup>[3]</sup></p>
+    </div>
+    <div class="card">
+      <h4>Restoration &amp; Conservation Costs</h4>
+      <p>Where a work of art is damaged (rather than destroyed), the policy pays the reasonable cost of professional conservation and restoration, up to the agreed value. Conservation must be carried out by approved specialist conservators. This distinguishes fine art cover from standard property insurance which would pay market value less salvage.<sup>[4]</sup></p>
+    </div>
+    <div class="card red">
+      <h4>Title / Authentication Risk</h4>
+      <p>A limited-specialist coverage addressing financial loss from forgery discovery or provenance dispute — e.g., where a purchased work is found to be a fake (Knoedler gallery fraud) or subject to Nazi-era looting restitution claim. Very few insurers offer this; typically a standalone product with rigorous due diligence requirements and low limits.<sup>[5]</sup></p>
+    </div>
+    <div class="card teal">
+      <h4>Third-Party Liability (Bailee)</h4>
+      <p>Where a gallery, museum or jeweller holds artworks or jewellery belonging to a third party — as bailee — liability cover for loss of or damage to those items in custody. Museums holding loan exhibitions from other institutions, jewellers holding items for repair, auction houses holding consignments — all face bailee liability exposure.<sup>[6]</sup></p>
+    </div>
+  </div>
+
+  <!-- Regulatory context -->
+  <div class="info-box">
+    <strong>Lloyd's Market Dominance:</strong> The global fine art and specie insurance market is centred at Lloyd's of London. The specialist syndicates operating in this class have developed unique wordings — including the "Velasquez" fine art wording and bespoke jewellers block clauses — that have become market standards. Lloyd's syndicates write a significant proportion of the world's major museum collections, private billionaire collections, central bank gold transit and the Antwerp diamond district's daily specie exposure. The Art Loss Register (headquartered in London) is the world's largest database of stolen art, and Lloyd's market participants are its principal supporters.<sup>[I2]</sup>
+  </div>
+
+  <!-- Art market note -->
+  <div class="warn-box">
+    <strong>Emerging Risk — NFT / Digital Art:</strong> The 2021 boom in non-fungible tokens (NFTs), culminating in Beeple's "Everydays" selling for $69m at Christie's, raised novel coverage questions. A physical artwork has physical loss exposure; an NFT exists purely on a blockchain. Standard fine art policies require "physical loss or damage" — an NFT wallet hack or platform failure does not trigger physical loss. New digital art coverage products are in development, but as of 2026 no standard market wording exists. Underwriters must establish whether a client's "digital art" collection has physical manifestation (prints, displays) or is purely digital title.<sup>[7]</sup>
+  </div>
+
+  <!-- Module nav -->
+  <div class="section-title">Hub Modules</div>
+  <div class="nav-grid">
+    <a href="history.html" class="nav-card">
+      <div class="num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From Lloyd's coffee house to post-war art market boom and modern specialist syndicates</p>
+    </a>
+    <a href="timeline.html" class="nav-card">
+      <div class="num">Module 02</div>
+      <h4>Events Timeline</h4>
+      <p>20 key fine art &amp; specie events 1945–2024 — heists, frauds, disasters &amp; market shifts</p>
+    </a>
+    <a href="database.html" class="nav-card">
+      <div class="num">Module 03</div>
+      <h4>Loss Database</h4>
+      <p>35 notable fine art &amp; specie losses — filterable by type, sector &amp; size</p>
+    </a>
+    <a href="underwriting.html" class="nav-card">
+      <div class="num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>Rating factors, rate-on-value tables, worked examples &amp; key exclusions</p>
+    </a>
+    <a href="rates-analysis.html" class="nav-card">
+      <div class="num">Module 05</div>
+      <h4>Rates &amp; ROE</h4>
+      <p>Market cycle, rate index charts, ROE scenarios &amp; P&amp;L waterfall</p>
+    </a>
+    <a href="risk-mitigation.html" class="nav-card">
+      <div class="num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Security controls, Art Loss Register, transit checklists &amp; NFT emerging risk</p>
+    </a>
+    <a href="global-program.html" class="nav-card">
+      <div class="num">Module 07</div>
+      <h4>Global Programme</h4>
+      <p>Nail-to-nail structure, government indemnity schemes &amp; multinational case study</p>
+    </a>
+    <a href="references.html" class="nav-card">
+      <div class="num">Sources</div>
+      <h4>References</h4>
+      <p>Legal, regulatory &amp; industry citations — [L1]–[L9] and [I1]–[I10]</p>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Fine Art, Specie &amp; Jewellery (FA/GS/JB/CT) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Sources &amp; Citations</a></p>
+</footer>
+
+</body>
+</html>

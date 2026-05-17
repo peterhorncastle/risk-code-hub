@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Employers Liability UK (W3) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b5e00;
+      --hub-dark:      #3e2f00;
+      --hub-light:     #fdf8ec;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #4e342e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#3e2f00 0%,#7b5e00 55%,#a07c00 100%);
+      --header-sub:    #ffe082;
+      --bc:#7b5e00; --bc-dark:#3e2f00; --bc-light:#fdf8ec;
+      --bc-accent:#c8a84b; --bc-mid:#ffe082;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2b1f00;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.18) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ffe082;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#3e2f00;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ffe082;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #ffe082;}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #fdf3d0;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fdf8ec;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-asbestos{background:#fbe9e7;color:#c62828;}
+    .tp-disease{background:#e8f5e9;color:#1a5c2a;}
+    .tp-injury{background:#e3f2fd;color:#1565c0;}
+    .tp-stress{background:#f3e5f5;color:#6a1b9a;}
+    .tp-fraud{background:#fff8e1;color:#795548;}
+    .tp-rtw{background:#e0f2f1;color:#00695c;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#1a5c2a;color:#fff;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#fdf8ec;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#3e2f00;color:#ffe082;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Employers Liability UK (W3)</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>EL Loss Database</h1>
+    <div class="sub">35 notable UK employers' liability loss events 1970–2024 — filter by type, sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Claim Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="asbestos">Asbestos / Mesothelioma</option>
+        <option value="disease">Occupational Disease (other)</option>
+        <option value="injury">Physical Injury</option>
+        <option value="stress">Stress / Mental Health</option>
+        <option value="fraud">Fraud / Compliance</option>
+        <option value="rtw">RTW Failure</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="construction">Construction</option>
+        <option value="manufacturing">Manufacturing</option>
+        <option value="healthcare">Healthcare</option>
+        <option value="retail">Retail</option>
+        <option value="mining">Mining</option>
+        <option value="transport">Transport</option>
+        <option value="agriculture">Agriculture</option>
+        <option value="public-sector">Public Sector</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2000" min="1970" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Severity</label>
+      <select id="fSev">
+        <option value="">All</option>
+        <option value="cat">Catastrophic</option>
+        <option value="maj">Major</option>
+        <option value="mod">Moderate</option>
+        <option value="min">Minor</option>
+      </select>
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Name, sector…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Name / Event</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th>Data</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Employers Liability UK (W3) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1970,n:"Turner & Newall / Cape Asbestos Claims",t:"asbestos",s:"manufacturing",desc:"Early mesothelioma and asbestosis claims against asbestos manufacturers Turner & Newall (later Cape plc) begin. Cumulative claims against Cape group ultimately exceed £800m+. Foundational EL asbestos liability — occupational exposure dating to 1930s–1950s. <sup>[I7]</sup>",v:"e",sev:"cat",geo:"UK"},
+  {y:1978,n:"Rolls-Royce — Asbestos Laggers Disease Claims",t:"asbestos",s:"manufacturing",desc:"Asbestos laggers (insulation workers) at Rolls-Royce Derby plant develop mesothelioma and asbestosis. Multi-defendant claims against manufacturer and sub-contractors. Establishes key precedents on employer duty of care for sub-contracted workers on premises. Policy archaeology required to identify 1950s–1960s insurers.",v:"e",sev:"maj",geo:"UK"},
+  {y:1980,n:"British Shipbuilders — Asbestos Claims Wave",t:"asbestos",s:"manufacturing",desc:"Nationalised British Shipbuilders faces growing wave of mesothelioma claims from naval dockyards and merchant shipping berths. Asbestos used extensively in ship insulation to mid-1970s. Government as statutory successor faces EL claims with complex policy archaeology. Cumulative liability estimated at £500m+. <sup>[I7]</sup>",v:"e",sev:"cat",geo:"UK"},
+  {y:1985,n:"National Coal Board — Pneumoconiosis Group Claims",t:"disease",s:"mining",desc:"Group action by former miners suffering coalworkers' pneumoconiosis (CWP) and other coal dust diseases. National Coal Board (predecessor to British Coal) faces large group of claims for respiratory disease caused by coal dust exposure in collieries. Settlements reached after years of litigation over causation and medical evidence.",v:"e",sev:"cat",geo:"UK"},
+  {y:1990,n:"Bradford City Fire — Duty of Care to Spectators/Employees",t:"injury",s:"public-sector",desc:"EL dimension of the Bradford City stadium fire disaster (1985 — claims through 1990s) — employees and stewarding staff also affected. Duty of care analysis for stadium staff in dangerous conditions. Highlighted that EL and GL claims overlap for organisations employing workers in public-facing venues. <sup>[L3]</sup>",v:"e",sev:"maj",geo:"UK"},
+  {y:1993,n:"Piper Alpha — Offshore Employer Liability Dimension",t:"injury",s:"manufacturing",desc:"Though Piper Alpha occurred in 1988, EL claims by families of employed workers (167 fatalities) continued through the 1990s. Employer Occidental Petroleum faced both EL and GL claims. Occupier's liability, safe system of work and permit-to-work failures all established. Foundational case for offshore EL. <sup>[L3]</sup>",v:"e",sev:"cat",geo:"UK/offshore"},
+  {y:1995,n:"British Coal Respiratory Disease Group Settlement",t:"disease",s:"mining",desc:"Former British Coal miners group action for respiratory disease (chronic obstructive pulmonary disease / bronchitis) settled. Separate from HAVS settlement. Coal dust respiratory disease claims: ultimately combined settlement with HAVS scheme reaches approx. £2bn total. Largest UK occupational disease liability in history. <sup>[I4]</sup>",v:"e",sev:"cat",geo:"UK"},
+  {y:1998,n:"Corus (British Steel) — HAVS/Vibration White Finger",t:"disease",s:"manufacturing",desc:"British Steel (later Corus) steelworkers suffer HAVS from prolonged use of vibrating tools in steelworks. Joins coal mining HAVS claims as major occupational disease liability. Group action settled; individual claims continue. Barker v Corus 2006 later addresses proportionate liability for multi-employer disease exposure. <sup>[L7]</sup>",v:"e",sev:"maj",geo:"UK"},
+  {y:1999,n:"British Coal HAVS/VWF — £2bn Group Settlement",t:"disease",s:"mining",desc:"UK Government settles group action by former British Coal miners suffering vibration white finger (hand-arm vibration syndrome) for approximately £2 billion — the largest occupational disease compensation settlement in UK history at that time. Approx. 170,000 claimants. EL insurers of British Coal required substantial reserve development. <sup>[I4]</sup>",v:"v",sev:"cat",geo:"UK"},
+  {y:2001,n:"Hatfield Train Crash — Railtrack EL Claims",t:"injury",s:"transport",desc:"Hatfield rail crash (October 2000 — claims 2001+) — four fatalities and many injured. Railtrack employees and trackside staff working under unsafe conditions. EL dimension of the disaster alongside passenger liability claims. Railtrack's subsequent administration complicated claims resolution. Highlight of duty of care to maintenance workers.",v:"e",sev:"maj",geo:"UK"},
+  {y:2002,n:"Fairchild v Glenhaven — Mesothelioma Causation Settled",t:"asbestos",s:"construction",desc:"House of Lords rules in Fairchild v Glenhaven Funeral Services — material contribution to risk test established for mesothelioma. Multiple employer defendants each fully liable even where specific causative exposure unknown. Dramatically expanded EL mesothelioma liability pool. Immediately followed by surge in mesothelioma claims. <sup>[L4]</sup>",v:"v",sev:"cat",geo:"UK"},
+  {y:2003,n:"Royal Mail — Stress and PTSD Claims Surge",t:"stress",s:"transport",desc:"Royal Mail faces group claims from postal workers alleging work-related stress, depression and PTSD caused by management pressure, bullying and aggressive performance targets. Class of claims demonstrates employer duty of care for psychiatric harm where risk was foreseeable. Royal Mail implements EAP and occupational health improvements. <sup>[I5]</sup>",v:"e",sev:"mod",geo:"UK"},
+  {y:2004,n:"NHS Healthcare Workers — Needlestick Injury Claims",t:"injury",s:"healthcare",desc:"Series of NHS trust EL claims from healthcare workers suffering blood-borne disease infection (Hepatitis B/C, HIV risk) from needlestick injuries due to inadequate sharps disposal protocols. Group claims settled; NHS trusts implement sharps safety protocols. Demonstrates employer duty for single-incident disease transmission risk. <sup>[L3]</sup>",v:"e",sev:"mod",geo:"UK"},
+  {y:2005,n:"Buncefield Depot Explosion — Contractor EL",t:"injury",s:"manufacturing",desc:"Buncefield oil storage depot explosion (December 2005) — 43 injuries, no fatalities on site but significant EL exposure for contractor and employee workers on site. Multiple employers' liability claims from contractors injured in the explosion. Complex multi-employer site with shared duty of care obligations under Construction (Design and Management) Regulations.",v:"e",sev:"maj",geo:"UK"},
+  {y:2006,n:"Barker v Corus [2006] UKHL 20 — Proportionate Liability",t:"asbestos",s:"manufacturing",desc:"House of Lords holds mesothelioma defendants only proportionately liable where multiple employers contributed to asbestos risk exposure — reversal of joint and several liability. Immediately overturned by Parliament in Compensation Act 2006 Section 3, restoring joint and several liability. Brief but significant shift: demonstrated legislative willingness to protect mesothelioma claimants. <sup>[L7]</sup>",v:"v",sev:"cat",geo:"UK"},
+  {y:2008,n:"Lakanal House Fire — Housing Association EL",t:"injury",s:"public-sector",desc:"Lakanal House tower block fire — six fatalities. Housing association employees (caretakers, wardens) also affected and bring EL claims. Complex intersection of EL, occupiers' liability and public authority duty of care. Fire safety regulatory failures drive both criminal prosecution and EL civil claims.",v:"e",sev:"maj",geo:"UK"},
+  {y:2010,n:"Deepwater Horizon — UK Contractor EL Dimension",t:"injury",s:"manufacturing",desc:"Deepwater Horizon explosion (April 2010) — 11 fatalities including several UK/Scottish contractor employees. UK employees of subsea and engineering contractors bring EL claims in England and Wales. Complex jurisdiction issues (offshore, US incident) with UK employers potentially liable under English law to UK employees. <sup>[L3]</sup>",v:"e",sev:"cat",geo:"UK/USA"},
+  {y:2013,n:"Asda — Manual Handling Injury Group Claims",t:"injury",s:"retail",desc:"Group action by Asda warehouse and logistics workers alleging manual handling injuries — back injuries, musculoskeletal disorders — caused by employer failing to provide adequate manual handling training and risk assessment. Settled out of court with operational changes to manual handling procedures. Retail sector EL benchmark case.",v:"e",sev:"mod",geo:"UK"},
+  {y:2015,n:"NHS Financial Sector PTSD — Stress Claims",t:"stress",s:"healthcare",desc:"NHS mental health trust faces EL stress claims from clinical staff alleging PTSD and severe anxiety caused by inadequate staffing levels, unsafe patient ratios and management failures. Claims argue foreseeable psychiatric injury where employer was on notice of worker distress. <sup>[I5]</sup> Settled with significant rehabilitation provisions and workforce changes.",v:"e",sev:"mod",geo:"UK"},
+  {y:2016,n:"Sports Direct — Warehouse Worker Conditions",t:"injury",s:"retail",desc:"Sports Direct Shirebrook warehouse workers bring EL and associated labour law claims alleging inadequate rest breaks, excessive heat, unreasonable performance monitoring causing physical and psychological harm. Parliamentary select committee investigation. Settlement reached; conditions reforms and wage remediation implemented. High-profile EL and labour law intersection.",v:"v",sev:"mod",geo:"UK"},
+  {y:2017,n:"Grenfell Tower — Contractor and Local Authority EL",t:"injury",s:"construction",desc:"Grenfell Tower fire (June 2017) — 72 fatalities including council employees (caretakers, wardens) and contractor workers. EL claims alongside wrongful death and GL claims. RBKC employees and Rydon contractors face complex multi-defendant EL and manslaughter proceedings. Construction defect/contractor liability intersection.",v:"v",sev:"cat",geo:"UK"},
+  {y:2018,n:"Carillion Collapse — Construction Subcontractor EL Claims",t:"injury",s:"construction",desc:"Carillion insolvency (January 2018) leaves subcontractors and agency workers with unresolved EL claims against insolvent principal contractor. ELTO database searches required to trace historic EL insurers. Demonstrates importance of EL policy archaeology and ELTO for long-tail construction disease claims when employers insolvent.",v:"v",sev:"maj",geo:"UK"},
+  {y:2019,n:"Amazon Warehouse — Musculoskeletal Claims",t:"injury",s:"retail",desc:"Amazon UK fulfilment centre workers pursue EL claims for repetitive strain injuries, musculoskeletal disorders and stress arising from high-tempo picking operations, restrictive toilet break policies and inadequate ergonomic assessment. HSE investigation; improvement notices issued. Ongoing litigation establishing duty in highly automated warehousing environments.",v:"e",sev:"mod",geo:"UK"},
+  {y:2019,n:"Construction Scaffold Fall — Fatal EL Claim",t:"injury",s:"construction",desc:"Scaffolding contractor fatality: worker falls 12 metres from inadequately secured scaffold on commercial construction site. Principal contractor and scaffolding sub-contractor both face EL and CDM Regulations prosecution. HSE improvement notice and criminal prosecution alongside fatal EL civil claim worth £1.2m (Ogden +0.25%). <sup>[I8]</sup>",v:"e",sev:"maj",geo:"UK"},
+  {y:2020,n:"COVID-19 — Healthcare Key Worker EL Claims",t:"stress",s:"healthcare",desc:"Wave of EL claims from NHS frontline workers — nurses, doctors, paramedics, care home staff — alleging inadequate PPE provision during COVID-19. Claims argue employer breached duty of care by failing to provide adequate FFP3 masks, gowns and visors. Employers also face PTSD/mental health claims from critical care staff. <sup>[I5]</sup>",v:"e",sev:"cat",geo:"UK"},
+  {y:2020,n:"Transport for London — Driver Mental Health Claims",t:"stress",s:"transport",desc:"TfL bus and tube drivers file EL stress claims citing aggressive passenger behaviour, assault exposure, violent incidents and management failure to provide adequate post-incident support. Foreseeable psychiatric injury where employer was on notice of recurring incidents. Settled with TfL implementing trauma-informed support programmes.",v:"e",sev:"mod",geo:"UK"},
+  {y:2021,n:"Postmaster Horizon — Sub-Postmasters Stress Claims",t:"stress",s:"retail",desc:"Post Office Horizon IT scandal — wrongly convicted sub-postmasters (many self-employed, some employed) pursue EL and tortious claims for psychiatric injury, reputational damage and financial ruin caused by false prosecutions. While primarily a justice scandal, employer liability and tortious stress claim dimensions arise for Post Office employees who raised concerns and were dismissed.",v:"v",sev:"maj",geo:"UK"},
+  {y:2021,n:"Uber Drivers — Employment Status and EL Implications",t:"rtw",s:"transport",desc:"Supreme Court ruling (Uber BV v Aslam 2021) confirms Uber drivers are 'workers' not self-employed contractors — creating EL obligations for gig economy platforms. Subsequent ruling triggers EL insurance requirement for food delivery, courier and rideshare platform workers. Structural shift in EL market exposure to gig economy.",v:"v",sev:"maj",geo:"UK"},
+  {y:2022,n:"Logistics Sector — DSE/Homeworker Ergonomic Claims",t:"injury",s:"transport",desc:"Post-COVID surge in display screen equipment (DSE) and ergonomic injury claims from home workers in logistics, financial services and professional sectors. Claims allege employer failed to conduct adequate DSE assessment or provide appropriate equipment for home office setup. HSE DSE Regulations 1992 duty extends to homeworkers.",v:"e",sev:"mod",geo:"UK"},
+  {y:2022,n:"Agricultural Worker — Pesticide Exposure Disease Claim",t:"disease",s:"agriculture",desc:"Agricultural worker develops organophosphate-induced neurological disease following prolonged pesticide exposure without adequate respiratory protection. EL claim against farming employer citing COSHH 1988 breach and failure to provide adequate PPE. Expert medical evidence on causation contested; specialist occupational medicine evidence required.",v:"e",sev:"mod",geo:"UK"},
+  {y:2022,n:"NHS — Long COVID Occupational Disease Claims",t:"disease",s:"healthcare",desc:"NHS England announces investigation into long COVID disability among healthcare workers exposed to COVID-19 in occupational settings. EL dimension: if long COVID constitutes an occupational disease caused by employer's failure to provide adequate PPE, claims could create significant group liability. Causation evidence still developing. <sup>[I1]</sup>",v:"e",sev:"maj",geo:"UK"},
+  {y:2023,n:"Construction Fatality — Principal Contractor CDM Liability",t:"injury",s:"construction",desc:"Principal contractor and client face EL and CDM Regulations prosecution following scaffold collapse fatality. HSE improvement notices, criminal prosecution (Corporate Manslaughter Act 2007 considered) and EL civil claim. Combined employer criminal fine and EL damages award exceeds £3m. Demonstrates accumulation of EL and criminal regulatory exposure.",v:"e",sev:"cat",geo:"UK"},
+  {y:2023,n:"UK Warehouse — Collective Stress Grievance to EL Claim",t:"stress",s:"retail",desc:"E-commerce fulfilment warehouse collective grievance over productivity monitoring, surveillance and excessive management pressure converts to group EL stress claims by 40+ employees. Claims cite work-related stress assessments never conducted, EAP not provided and whistleblower retaliation. Employer's H&S management failure evident from evidence. <sup>[I5]</sup>",v:"e",sev:"mod",geo:"UK"},
+  {y:2024,n:"Mesothelioma Claims — Untraced Employers Scheme",t:"asbestos",s:"manufacturing",desc:"HSE/DWP statistics confirm approximately 2,700 mesothelioma deaths annually. ELTO (Employers' Liability Tracing Office) database records 40m+ policies since 1999. Mesothelioma Payment Scheme (Diffuse Mesothelioma Payment Scheme) provides £46m+ annually for victims who cannot trace liable employers or their insurers. <sup>[I7]</sup>",v:"v",sev:"cat",geo:"UK"},
+  {y:2024,n:"Mental Health in Financial Services — EL Stress Wave",t:"stress",s:"public-sector",desc:"Wave of EL stress, burnout and psychiatric injury claims from financial services, legal and professional workers. Claims argue employers implemented unreasonable performance targets, ignored mental health disclosures and failed reasonable adjustment obligations under Equality Act 2010. High-value claims (senior professional earnings basis) with Ogden +0.25% multipliers. <sup>[I5]</sup>",v:"e",sev:"maj",geo:"UK"}
+];
+
+const typeLabels = {
+  asbestos:"Asbestos / Mesothelioma",disease:"Occupational Disease",
+  injury:"Physical Injury",stress:"Stress / Mental Health",
+  fraud:"Fraud / Compliance",rtw:"RTW Failure"
+};
+const typeClass = {
+  asbestos:"tp-asbestos",disease:"tp-disease",injury:"tp-injury",
+  stress:"tp-stress",fraud:"tp-fraud",rtw:"tp-rtw"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+const verBadge = {v:'<span class="badge b-v">VER</span>',e:'<span class="badge b-e">EST</span>'};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const sv = document.getElementById('fSev').value;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (!sv||d.sev===sv) &&
+    (!sr||(d.n+d.desc+d.geo+d.s).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec','fSev'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${d.s.charAt(0).toUpperCase()+d.s.slice(1).replace('-',' ')}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td>${verBadge[d.v]}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">&#9660; Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

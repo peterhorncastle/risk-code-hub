@@ -1,0 +1,100 @@
+{
+  "riskCode": "L3",
+  "label": "GA / Corporate Liability",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "cslLimit",
+    "label": "CSL Limit Required ($)",
+    "defaultValue": 100000000,
+    "hint": "Combined Single Limit for liability coverage"
+  },
+  "baseRate": {
+    "key": "baseRateOnLimit",
+    "label": "Base Rate on Limit",
+    "value": 0.0025
+  },
+  "ratingFactors": [
+    {
+      "key": "aircraftType",
+      "label": "Aircraft Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "corporate_jet",
+      "options": {
+        "corporate_jet":    { "label": "Corporate Jet",          "factor": 0.85 },
+        "turboprop":        { "label": "Turboprop",              "factor": 1.00 },
+        "piston":           { "label": "Piston (single/twin)",   "factor": 1.10 },
+        "helicopter":       { "label": "Helicopter",             "factor": 1.30 },
+        "uav":              { "label": "UAV / Drone",            "factor": 1.50 }
+      }
+    },
+    {
+      "key": "passengerSeats",
+      "label": "Passenger Seats",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 8,
+      "bands": [
+        { "min": 0,  "max": 4,   "factor": 0.70 },
+        { "min": 4,  "max": 10,  "factor": 1.00 },
+        { "min": 10, "max": 20,  "factor": 1.20 },
+        { "min": 20, "max": 50,  "factor": 1.40 },
+        { "min": 50, "max": 100, "factor": 1.60 }
+      ]
+    },
+    {
+      "key": "annualHours",
+      "label": "Annual Flying Hours",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 400,
+      "hint": "Total annual flight hours",
+      "bands": [
+        { "min": 0,    "max": 200,  "factor": 0.80 },
+        { "min": 200,  "max": 500,  "factor": 1.00 },
+        { "min": 500,  "max": 1000, "factor": 1.15 },
+        { "min": 1000, "max": 5000, "factor": 1.30 }
+      ]
+    },
+    {
+      "key": "useType",
+      "label": "Use Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "corporate",
+      "options": {
+        "private":       { "label": "Private non-commercial",  "factor": 0.90 },
+        "corporate":     { "label": "Corporate transport",     "factor": 1.00 },
+        "charter":       { "label": "Charter / air taxi",      "factor": 1.20 },
+        "training":      { "label": "Flight training",         "factor": 1.50 },
+        "aerial_work":   { "label": "Aerial work / survey",    "factor": 1.25 }
+      }
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Primary Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "international",
+      "options": {
+        "non_us":        { "label": "Non-US only",        "factor": 0.85 },
+        "international": { "label": "International/mixed","factor": 1.00 },
+        "us_included":   { "label": "US routes included", "factor": 1.25 }
+      }
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 1500,
+    "claimsHandlingPerClaim": 20000,
+    "systemOverheadPerYear": 800,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.02,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+}

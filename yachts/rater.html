@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <title>Yachts — Rater | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #0277bd;
+      --hub-dark:      #01579b;
+      --hub-light:     #e1f5fe;
+      --hub-accent:    #c8a84b;
+      --header-gradient: linear-gradient(135deg,#01579b 0%,#0277bd 55%,#0288d1 100%);
+      --header-sub:    #b3e5fc;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> ›
+    <a href="overview.html">Yachts</a> ›
+    Rater
+  </div>
+  <div class="tag">Lloyd's Risk Code O</div>
+  <h1>Yachts — Rating Tool</h1>
+  <p>Factor-based rating engine for yachts insurance products. Base vs proposed comparison with P&amp;L waterfall analysis.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div id="rater-root"></div>
+
+<footer>
+  <p>Yachts Risk Code Hub — Rating Tool &copy; 2026</p>
+</footer>
+
+<script src="../shared/rater-engine.js"></script>
+<script src="../shared/rater-ui.js"></script>
+<script>
+(function () {
+  var schemaFiles = [
+    'rate-tables/O.json'
+  ];
+  Promise.all(schemaFiles.map(function (f) {
+    return fetch(f).then(function (r) { return r.json(); });
+  })).then(function (schemas) {
+    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
+  });
+})();
+</script>
+</body>
+</html>

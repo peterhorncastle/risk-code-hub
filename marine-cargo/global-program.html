@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Global Programme — Marine Cargo — Risk Code Hub</title>
+  <style>
+    :root {
+      --mc:#1565c0; --mc-dark:#0d2137; --icc:#00695c;
+      --fire:#c62828; --ga:#6a1b9a; --warn:#e65100;
+      --light:#e3f2fd; --border:#bbdefb; --text:#0d1b2e; --muted:#546e7a;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1565c0;
+    --hub-dark:      #0d2137;
+    --hub-light:     #e8f0fa;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #00695c;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%);
+    --header-sub:    #bbdefb;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90caf9; margin-bottom:6px; }
+    .breadcrumb a { color:#bbdefb; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#90caf9; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#bbdefb; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--mc); border-bottom-color:var(--fire); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--mc); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; margin:24px 0; }
+    .card { background:#fff; border-radius:12px; padding:22px; border-top:4px solid var(--mc); box-shadow:0 1px 3px rgba(0,0,0,0.07); }
+    .card.icc { border-top-color:var(--icc); }
+    .card.fire { border-top-color:var(--fire); }
+    .card.ga { border-top-color:var(--ga); }
+    .card.warn { border-top-color:var(--warn); }
+    .card-label { font-size:0.68rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--mc); margin-bottom:6px; }
+    .card.icc .card-label { color:var(--icc); }
+    .card.fire .card-label { color:var(--fire); }
+    .card.ga .card-label { color:var(--ga); }
+    .card.warn .card-label { color:var(--warn); }
+    .card h3 { font-size:0.97rem; margin-bottom:9px; }
+    .card ul { padding-left:16px; }
+    .card li { font-size:0.84rem; margin-bottom:5px; line-height:1.55; }
+
+    .info-box { background:var(--mc-dark); color:#bbdefb; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#e3f2fd; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .prog-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:20px 0; font-size:0.83rem; }
+    .prog-table th { background:var(--mc); color:#fff; padding:10px 13px; text-align:left; }
+    .prog-table td { padding:9px 13px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .prog-table tr:last-child td { border-bottom:none; }
+    .prog-table tr:hover td { background:#e8f4fd; }
+
+    .case-study { background:#fff; border:1px solid var(--border); border-radius:14px; padding:28px 32px; margin:28px 0; border-left:6px solid var(--icc); }
+    .cs-label { font-size:0.7rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--icc); margin-bottom:8px; }
+    .case-study h3 { font-size:1.1rem; margin-bottom:14px; }
+    .cs-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:16px 0; }
+    @media(max-width:600px){.cs-grid{grid-template-columns:1fr;}}
+    .cs-box { background:var(--light); border-radius:8px; padding:14px 16px; }
+    .cs-box h4 { font-size:0.85rem; color:var(--mc); margin-bottom:7px; }
+    .cs-box p, .cs-box li { font-size:0.83rem; line-height:1.6; }
+    .cs-box ul { padding-left:14px; }
+    .cs-box li { margin-bottom:4px; }
+    .cs-total { background:var(--mc-dark); color:#bbdefb; border-radius:8px; padding:14px 18px; margin-top:14px; }
+    .cs-total p { font-size:0.9rem; color:#e3f2fd; margin:0; }
+
+    footer { background:var(--mc-dark); color:#90caf9; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Cargo</a> › Global Programme</div>
+  <div class="tag">Lloyd's Codes · V · Q · VL · VX</div>
+  <h1>Global Programme Structure</h1>
+  <p>Open cover architecture, stock throughput policies, commodity trade finance structures, multinational programme frameworks, and a worked case study for a global FMCG supply chain.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>Large multinational corporations — consumer goods companies, commodity traders, pharmaceutical manufacturers, automotive OEMs — typically do not purchase individual voyage policies for every shipment. They operate under master open cover agreements that provide continuing coverage for all qualifying shipments on pre-agreed terms, with automatic cover attaching at the moment goods leave the warehouse (or seller's premises) without the need for individual placement on each shipment. Understanding open cover structure is essential for any marine cargo underwriter.</p>
+
+  <h2>1. The Open Cover — Structure and Mechanics</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">Master Policy</div>
+      <h3>How an Open Cover Works</h3>
+      <ul>
+        <li>An open cover (also called a floating policy or master policy) is an agreement between the insured and the insurer(s) to cover all qualifying shipments during the policy period — typically 12 months, annual renewal</li>
+        <li><strong>Automatic coverage:</strong> Cover attaches automatically on each shipment that falls within the open cover's description of subject matter — insured does not need to notify each shipment to trigger cover</li>
+        <li><strong>Declaration obligation:</strong> The insured must declare all shipments (typically monthly or on a shipment-by-shipment basis if above a threshold); the insurer issues certificates of insurance for individual shipments as evidence of cover</li>
+        <li><strong>Automatic limit:</strong> The maximum value that attaches automatically per vessel/conveyance without specific declaration — typically $1m–$50m depending on account size. Shipments above this limit require specific declaration and agreement</li>
+        <li><strong>Estimated annual turnover:</strong> Premium is calculated on estimated annual cargo value × rate. Provisional premium paid quarterly or annually; adjusted at end of year based on actual declared turnover (deposit and adjustment basis)</li>
+      </ul>
+    </div>
+    <div class="card icc">
+      <div class="card-label">Policy Structure</div>
+      <h3>Key Open Cover Clauses</h3>
+      <ul>
+        <li><strong>Transit clause:</strong> Warehouse to warehouse — cover attaches when cargo leaves the warehouse at origin and ceases at the warehouse at destination (or 60 days after discharge, whichever first)</li>
+        <li><strong>Change of voyage clause:</strong> Cover continues if the transit is extended or changed due to circumstances beyond the insured's control (carrier failure, port closure)</li>
+        <li><strong>Termination of contract of carriage (Clause 10 ICC 2009):</strong> If the contract of carriage terminates at an intermediate port, cover continues until goods are delivered or 60 days after discharge</li>
+        <li><strong>Institute Classification Clause:</strong> Vessel class and age requirements; breach requires specific agreement (otherwise coverage may be limited)</li>
+        <li><strong>War and Strikes clauses:</strong> Written as separate endorsements on open cover; may be cancellable on 48-hour or 7-day notice (war) vs. non-cancellable (ICC perils)</li>
+        <li><strong>Cancellation:</strong> Open covers typically include a 30-day cancellation clause for both parties; war risk extension may include shorter JWC-standard notice periods</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <div class="card-label">Certificate of Insurance</div>
+      <h3>Evidence of Cover for Individual Shipments</h3>
+      <ul>
+        <li>When a specific shipment requires evidence of insurance (required under Incoterms CIF/CIP, or requested by a bank under a letter of credit), the insured or broker issues a <strong>Certificate of Insurance</strong> referencing the master open cover</li>
+        <li>The certificate is negotiable — it can be transferred with the shipping documents under a letter of credit, transferring the right to claim to the bank or buyer holding the documents</li>
+        <li><strong>Lloyd's cargo certificate:</strong> The Lloyd's standard cargo certificate is an internationally recognised instrument accepted by banks worldwide under UCP 600 (the ICC's Uniform Customs and Practice for Documentary Credits)</li>
+        <li>Underwriters should brief insureds clearly on the declaration obligation — failure to declare material changes in cargo type, value, or trade lane can lead to coverage disputes</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>2. Stock Throughput Policy (STP)</h2>
+  <p>A Stock Throughput Policy (STP) extends the open cover framework to cover goods throughout the entire supply chain — not just in transit, but during storage at all stages including manufacturer's warehouse, distribution centres, retail stock rooms, and in-transit. It is the most comprehensive cargo product available and is particularly suitable for manufacturers and distributors with complex multinational supply chains.</p>
+
+  <div class="info-box">
+    <h3>STP vs. Standard Open Cover — Key Differences</h3>
+    <ul>
+      <li><strong>Storage coverage:</strong> STP covers goods at rest in all warehouses throughout the supply chain — manufacture, distribution, retail — on an all-risks basis. Standard open cover typically provides transit coverage only (or limited storage of 60 days transit extension)</li>
+      <li><strong>Single policy:</strong> STP replaces multiple separate covers — cargo open cover, warehouse-keepers' legal liability, goods-in-transit inland. Simplifies insurance administration and eliminates coverage gaps between transit and storage</li>
+      <li><strong>Valuation basis:</strong> STP is typically valued at agreed price (cost of goods + agreed profit margin) across the entire supply chain — as goods are processed and their value increases, the sum insured increases accordingly</li>
+      <li><strong>Rating approach:</strong> Blended rate across transit and storage exposures — typically lower than buying transit and storage separately due to improved loss visibility and the insurer's ability to price the full picture. Typical blended STP rates: 0.08–0.35% of annual throughput value <span class="badge b-i">ILLUS</span></li>
+      <li><strong>Suitable for:</strong> Consumer goods manufacturers (FMCG), pharmaceutical companies, electronics OEMs, automotive parts suppliers — any company with significant storage exposure in multiple locations globally</li>
+    </ul>
+  </div>
+
+  <h2>3. Commodity Trade Finance Structure</h2>
+  <p>One of the most specialised segments of the London marine cargo market is commodity trade finance — the insurance of goods being financed under letters of credit, commodity finance facilities, or structured trade finance arrangements. The bank or commodity trader providing the finance requires cargo insurance as collateral protection.</p>
+
+  <div class="card-grid">
+    <div class="card fire">
+      <div class="card-label">Bank Interest</div>
+      <h3>Letter of Credit &amp; Loss Payee</h3>
+      <ul>
+        <li>Under a documentary letter of credit (L/C), the bank releases funds against presentation of shipping documents including the cargo insurance certificate. The insurance must be: (a) on ICC (A) or equivalent all-risks basis; (b) for 110% of the CIF value; (c) issued by an insurer acceptable to the bank</li>
+        <li><strong>Loss payee endorsement:</strong> The bank is named as loss payee — in the event of a claim, the insurer pays the bank (not the buyer/seller) directly. This protects the bank's security interest in the goods</li>
+        <li><strong>Cancellation notice:</strong> Banks require minimum 30-day (sometimes 60-day) cancellation notice — the insurance cannot be cancelled without the bank being notified, giving it time to demand alternative security</li>
+        <li>UCP 600 Article 28 specifies the exact insurance document requirements for L/C purposes — underwriters writing trade finance cargo must be familiar with UCP 600 <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="card ga">
+      <div class="card-label">Commodity Finance</div>
+      <h3>Structured Commodity Trade Cover</h3>
+      <ul>
+        <li>Commodity traders (Glencore, Vitol, Trafigura, Cargill) finance the purchase and transit of bulk commodities — oil, metals, grains — using revolving commodity finance facilities. Cargo insurance is required as security throughout the transit</li>
+        <li><strong>Blanket commodity facility:</strong> A master insurance facility covering all shipments under a trader's commodity finance programme — often $500m–$5bn annual turnover; Lloyd's specialist syndicates compete to lead these programmes</li>
+        <li><strong>Contamination cover:</strong> Bulk commodity trades require contamination coverage — oil blending errors, grain contamination, metal purity disputes. Standard ICC A excludes contamination; Institute Commodity Trades Clauses (grain, oil, metals) provide extended cover</li>
+        <li><strong>Ports of loading/discharge:</strong> Commodity finance cargo often transits multiple discharge ports and may be blended or transshipped — wording must accommodate the complex transit pattern</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>4. Multinational Programme — Territory Matrix</h2>
+  <table class="prog-table">
+    <thead>
+      <tr>
+        <th>Territory / Trade</th>
+        <th>Typical Policy Form</th>
+        <th>Key Considerations</th>
+        <th>War Risk Status (2024)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Europe — Intra-EU</strong></td>
+        <td>Open cover, ICC A, road/rail/sea</td>
+        <td>CMR convention liability of road carriers; EU customs documents; high security road crime (M1/A1 UK equivalents in each country)</td>
+        <td>Standard — no HRA</td>
+      </tr>
+      <tr>
+        <td><strong>Asia–Europe (Sea)</strong></td>
+        <td>Open cover, ICC A/B, sea</td>
+        <td>Two route options post-Red Sea crisis: Suez (war risk surcharge) or Cape of Good Hope (no surcharge, +10–14 days); ULCV accumulation risk</td>
+        <td>Red Sea: JWC HRA — surcharge required for Suez transit</td>
+      </tr>
+      <tr>
+        <td><strong>Trans-Pacific (Asia–USA)</strong></td>
+        <td>Open cover, ICC A, sea + US inland</td>
+        <td>US Customs CBP security filing requirements; LA/Long Beach port accumulation risk; US inland transit high-theft (electronics, pharma)</td>
+        <td>Standard — no HRA</td>
+      </tr>
+      <tr>
+        <td><strong>West Africa</strong></td>
+        <td>Open cover, ICC A + theft endorsement</td>
+        <td>Gulf of Guinea piracy loading; Lagos port theft; inspection at destination critical; ISPS compliance of smaller feeder ports varies</td>
+        <td>Gulf of Guinea: JWC HRA — war risk surcharge for vessels operating offshore</td>
+      </tr>
+      <tr>
+        <td><strong>Black Sea / Ukraine</strong></td>
+        <td>Specific voyage (if written at all)</td>
+        <td>Most Lloyd's syndicates withdrawn since Feb 2022; very limited specialist appetite; war risk rates 1.5–3.0%+; Ukraine grain deal partially restored via Danube routes</td>
+        <td>JWC HRA — most cargo insurers declined or withdrawn</td>
+      </tr>
+      <tr>
+        <td><strong>South America</strong></td>
+        <td>Open cover, ICC A + theft endorsement</td>
+        <td>Santos (Brazil) and Buenos Aires (Argentina) high theft ports; road cargo hijacking on Brazil BR-116; customs delays increase theft exposure; agricultural exports require contamination cover</td>
+        <td>Standard — no HRA</td>
+      </tr>
+      <tr>
+        <td><strong>Indian Subcontinent</strong></td>
+        <td>Open cover, ICC A or B</td>
+        <td>Indian domestic market requires local insurer involvement (regulatory); Lloyd's open cover used for import/export; monsoon season weather risk for outdoor storage; pilferage in transit</td>
+        <td>Standard — no HRA; Middle East routes via Red Sea carry HRA surcharge</td>
+      </tr>
+      <tr>
+        <td><strong>Middle East (GCC)</strong></td>
+        <td>Open cover, ICC A, sea/road</td>
+        <td>Jebel Ali port accumulation (world's 9th busiest port); Dubai warehousing; Qatar LNG exports — specialist bulk cover. GCC political stability generally good</td>
+        <td>Gulf of Aden (access route): JWC HRA</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5. Worked Case Study — Global FMCG Supply Chain Open Cover</h2>
+
+  <div class="case-study">
+    <div class="cs-label">Illustrative Case Study · ILLUS</div>
+    <h3>UK-Based Global FMCG Manufacturer — Open Cover Programme</h3>
+    <p>A UK-headquartered FMCG manufacturer (household cleaning products, personal care) sources raw materials (palm oil, chemicals) from Southeast Asia and the Middle East; manufactures in UK, Poland, and Malaysia; distributes to 60+ countries. Annual cargo turnover: $420m. Existing insurer: Lloyd's syndicate leading at 35% with five following market participants.</p>
+
+    <div class="cs-grid">
+      <div class="cs-box">
+        <h4>Programme Structure</h4>
+        <ul>
+          <li><strong>Master open cover:</strong> ICC (A), warehouse-to-warehouse, annual renewable</li>
+          <li><strong>War &amp; Strikes:</strong> Institute War Clauses (Cargo) + Institute Strikes Clauses; JWC advisory notice compliance; 48hr war cancellation</li>
+          <li><strong>Automatic limit:</strong> $5m per vessel / $2m per road/air conveyance</li>
+          <li><strong>Annual estimated turnover:</strong> $420m (basis premium calculation)</li>
+          <li><strong>Coverage territory:</strong> Worldwide including Red Sea (subject to HRA surcharge on declaration)</li>
+          <li><strong>Storage:</strong> Extended storage 90 days (transit + 60 days ICC + 30 days extension) at nominated DCs</li>
+          <li><strong>Deductible:</strong> $5,000 per claim (waived for total loss or General Average)</li>
+        </ul>
+      </div>
+      <div class="cs-box">
+        <h4>Rate Calculation</h4>
+        <ul>
+          <li>Base blended rate (FMCG, ICC A): 0.14%</li>
+          <li>West Africa trade lane loading (10% of turnover): +0.01%</li>
+          <li>Red Sea: routing via Cape in 2024 — no war surcharge on current routing; rate includes Cape route contingency</li>
+          <li>Loss record (5yr LR): 55% — 5% credit</li>
+          <li>Risk management credit (GPS tracking, approved carriers): 3% credit</li>
+          <li><strong>Adjusted rate: 0.135%</strong></li>
+          <li>Base premium: 0.135% × $420m = $567,000</li>
+          <li>War &amp; Strikes extension: $420m × 0.025% = $105,000</li>
+          <li><strong>Total indicative annual premium: ~$672,000</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cs-grid">
+      <div class="cs-box">
+        <h4>Lloyd's Co-Insurance Structure</h4>
+        <ul>
+          <li>Lloyd's Lead Syndicate (35%): $235,200 premium</li>
+          <li>Follower 1 (20%): $134,400</li>
+          <li>Follower 2 (15%): $100,800</li>
+          <li>Follower 3 (15%): $100,800</li>
+          <li>Follower 4 (10%): $67,200</li>
+          <li>Follower 5 (5%): $33,600</li>
+          <li>Total: 100% = $672,000</li>
+          <li>All follow leader's claims decisions under standard Lloyd's cargo Claims Agreement Practices</li>
+        </ul>
+      </div>
+      <div class="cs-box">
+        <h4>Additional Programme Elements</h4>
+        <ul>
+          <li><strong>Certificates of insurance:</strong> Issued by broker for each L/C shipment; Lloyd's standard form; banks in 15+ countries</li>
+          <li><strong>Claims handling:</strong> Lloyd's cargo claims agent network (Crawford, Charles Taylor) pre-appointed in key territories; survey instructions issued within 24hrs of major loss notification</li>
+          <li><strong>Annual review:</strong> Turnover adjustment at year-end; top 10 vessel voyages declared quarterly for accumulation monitoring</li>
+          <li><strong>General Average:</strong> GA Bond/Guarantee facility pre-agreed with lead syndicate — critical for rapid cargo release in GA events without cash deposit</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cs-total">
+      <p><strong>Indicative Annual Programme Premium: ~$672,000</strong> (basis $420m annual turnover; ICC A + War &amp; Strikes; Lloyd's lead + 5 followers; 90-day storage extension; $5,000 deductible) <span class="badge b-i">ILLUS</span></p>
+    </div>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Marine Cargo (V/Q/VL/VX) · Lloyd's Market Intelligence · v3.3 April 2026
+</footer>
+</body>
+</html>

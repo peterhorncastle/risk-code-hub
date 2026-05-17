@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Underwriting — Event Cancellation &amp; Contingency — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b005a;
+      --hub-dark:      #450030;
+      --hub-light:     #fce4f4;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#450030 0%,#7b005a 55%,#a0007a 100%);
+      --header-sub:    #f48fb1;
+      --bc:            #7b005a;
+      --bc-dark:       #450030;
+      --bc-light:      #fce4f4;
+      --bc-accent:     #c8a84b;
+      --bc-mid:        #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0020;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#f48fb1;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#450030;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#f48fb1;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--bc-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .factors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .factor{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--bc);}
+    .factor.high{border-left-color:#c62828;}
+    .factor.med{border-left-color:#e65100;}
+    .factor.low{border-left-color:#1a5c2a;}
+    .factor .impact{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .factor h4{font-size:0.9rem;font-weight:700;color:var(--bc-dark);margin-bottom:6px;}
+    .factor p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .factor .rate{font-size:0.78rem;font-weight:700;color:#c62828;margin-top:6px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--bc-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #fce4f4;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fdf0f8;}
+    .formula-box{background:#450030;color:#f48fb1;border-radius:8px;padding:20px 24px;font-family:monospace;font-size:0.88rem;line-height:1.8;margin-bottom:24px;}
+    .formula-box .comment{color:#c8a84b;}
+    .worked{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px;border-top:4px solid var(--bc);}
+    .worked.alt{border-top-color:var(--hub-accent);}
+    .worked h3{font-size:1rem;font-weight:700;color:var(--bc-dark);margin-bottom:12px;}
+    .worked table{box-shadow:none;margin-bottom:0;}
+    .worked th{background:#7b005a;}
+    .info-box{background:#fce4f4;border-left:4px solid var(--bc);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3b0028;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .danger-box{background:#ffebee;border-left:4px solid #c62828;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3b0000;line-height:1.6;}
+    .danger-box strong{color:#c62828;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    footer{background:#450030;color:#f48fb1;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Event Cancellation (PC/PA/PN/PU/PZ)</a> › Underwriting</div>
+    <div class="tag">Module 04</div>
+    <h1>Underwriting Methodology</h1>
+    <div class="sub">Rating factors, rate-on-revenue tables, worked examples &amp; key exclusions</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Pandemic exclusion critical alert -->
+  <div class="danger-box">
+    <strong>CRITICAL — Pandemic / Communicable Disease Exclusion:</strong> Since 2021, ALL Lloyd's event cancellation policies include a pandemic and communicable disease exclusion as standard non-negotiable wording. This MUST be disclosed clearly to every insured at placement and renewal. The COVID-19 loss experience proved that pandemic risk is a systemic, non-diversifiable catastrophe peril that the EC market cannot carry. There is no available market for pandemic EC cover as of 2026. Brokers must ensure insureds understand that a recurrence of COVID-style restrictions would produce a completely uninsured loss. <sup>[I3]</sup>
+  </div>
+
+  <!-- Rating factors — high -->
+  <div class="section-title">Rating Factors — High Impact</div>
+  <div class="factors-grid">
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Revenue at Risk</h4>
+      <p>The primary rating base for PC event cancellation is gross revenue at risk — total projected event income including ticket sales, sponsorship, concessions, merchandise and broadcast rights. The sum insured is typically the net revenue loss exposure (gross revenue less savings if event does not proceed). Insureds must disclose all revenue streams accurately. <sup>[1]</sup></p>
+      <div class="rate">Base rate applies to: Total Revenue Insured (TRI)</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Event Type — Outdoor vs Indoor</h4>
+      <p>The single most impactful structural factor. Outdoor events carry weather risk that can increase base rates by 50–200% over comparable indoor events. Multi-day outdoor festivals face cumulative weather exposure — the probability that at least one day exceeds weather thresholds increases significantly with event duration. <sup>[5]</sup></p>
+      <div class="rate">Loading: Outdoor festival vs indoor conference: 2.0–3.0× base rate</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Event Date and Location</h4>
+      <p>Weather seasonality and geography are critically important: UK summer festival season carries different weather risk to Middle Eastern indoor winter events. Hurricane zones (Florida, Gulf Coast) attract surcharges for Q3 events. Political stability of the event location affects terrorism and political cancellation pricing. <sup>[5]</sup></p>
+      <div class="rate">Hurricane zone loading: +25–50% for Q3 Florida outdoor events</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Cancellation Perils Selected</h4>
+      <p>All-risks EC policies (covering any unforeseeable circumstance causing cancellation) are priced materially higher than named-perils policies (weather, terrorism, government order only). All-risks wordings carry adverse selection and moral hazard risk. Most Lloyd's EC policies post-2020 are named-perils with a defined list of covered causes of loss. <sup>[1]</sup></p>
+      <div class="rate">All-risks vs named perils: +30–60% premium loading for all-risks</div>
+    </div>
+  </div>
+
+  <div class="section-title">Rating Factors — Medium Impact</div>
+  <div class="factors-grid">
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Terrorism Extension</h4>
+      <p>Separately rated since 9/11 as a named-peril extension rather than a base inclusion. Premium loading reflects event profile (high-profile events in major cities carry higher terrorism risk than regional events), jurisdiction (Pool Re covers UK property terrorism — EC terrorism is separate), and capacity availability. <sup>[L3]</sup></p>
+      <div class="rate">Terrorism extension: +0.05–0.15% of TRI depending on event profile</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Non-Appearance of Named Individual</h4>
+      <p>PN cover is priced on the health, age and medical history of the named individual. Underwriters require a medical questionnaire (and sometimes a medical examination) for high-value covers. Pre-existing conditions, age over 50, extreme sports participation, and known health issues all attract significant loadings or sub-limits. <sup>[3]</sup></p>
+      <div class="rate">Age 60+ loading: +50–150%; pre-existing condition: potential exclusion</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Broadcast / Media Rights Exposure</h4>
+      <p>Where broadcasting rights are included in the sum insured, the multiplier effect can be very significant — major sporting events often have broadcast rights packages worth 3–10× gate revenue. Broadcast rights carry their own claim adjustment complexity (partial rescheduling, edited highlight packages) and attract careful underwriting. <sup>[2]</sup></p>
+      <div class="rate">Broadcast rights endorsement: additional 0.1–0.3% of broadcast rights value</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Waiting Period / Franchise</h4>
+      <p>Many EC policies include a waiting period (excess time before cover attaches) — e.g. rain must exceed threshold for 2+ hours before pluvius triggers, or event must be cancelled rather than merely delayed. The length of the waiting period/franchise significantly affects loss frequency and premium. <sup>[5]</sup></p>
+      <div class="rate">24-hour delay excess: −10 to −20% vs immediate trigger</div>
+    </div>
+  </div>
+
+  <div class="section-title">Rating Factors — Lower Impact</div>
+  <div class="factors-grid">
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Rescheduling Ability</h4>
+      <p>Events that can feasibly be rescheduled (corporate conferences, recurring club events) carry lower net loss exposure than truly unique, once-only events (World Cup final, Wimbledon fortnight) where postponement generates significant additional rather than recovered revenue.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Contractual Sponsor Obligations</h4>
+      <p>Where cancellation triggers sponsor refund or remediation obligations under sponsorship contracts, this increases the total financial exposure beyond gate revenue. Sponsor remediation costs are material for marquee events and must be declared at placement.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Advance Payment Recovery</h4>
+      <p>The proportion of artist/performer fees paid in advance that would be irrecoverable on cancellation affects net loss exposure. Where contracts allow for fee recovery on cancellation, this reduces the insurance exposure. Underwriters review artist and venue contracts at placement.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Prior Claims Experience</h4>
+      <p>Promoters and organisers with a history of EC claims — whether due to weather, artist cancellations or other perils — carry higher expected loss frequency. Adverse claims experience at the same venue or event series is a significant negative underwriting indicator.</p>
+    </div>
+  </div>
+
+  <!-- Rate on revenue table -->
+  <div class="section-title">Indicative Rate on Revenue by Event Type<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Event Type</th><th>Perils Covered</th><th>Rate on Revenue</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Indoor corporate conference</td><td>Named perils (government order, terrorism, key speaker)</td><td>0.10–0.30%</td><td>Low weather risk; predictable venue; controlled environment</td></tr>
+      <tr><td>Indoor arena concert (single night)</td><td>Named perils + non-appearance</td><td>0.25–0.50%</td><td>Non-appearance adds material loading for headline artists</td></tr>
+      <tr><td>Multi-night arena residency</td><td>Named perils + non-appearance + terrorism</td><td>0.35–0.65%</td><td>Cumulative non-appearance and multi-date terrorism exposure</td></tr>
+      <tr><td>Outdoor music festival (1 day)</td><td>Named perils + weather/pluvius</td><td>0.40–0.80%</td><td>Weather dominant peril; parametric pluvius or indemnity basis</td></tr>
+      <tr><td>Outdoor music festival (3–5 days)</td><td>Named perils + weather + non-appearance + terrorism</td><td>0.55–1.10%</td><td>Multi-day weather accumulation; headline artist PN; terrorism</td></tr>
+      <tr><td>Major domestic sporting event</td><td>Named perils + weather + terrorism</td><td>0.20–0.45%</td><td>Lower non-appearance risk; team sport distributes individual risk</td></tr>
+      <tr><td>Major international sporting event (with broadcast rights)</td><td>Named perils + weather + terrorism + broadcast</td><td>0.30–0.60%</td><td>Broadcast rights significantly increases TRI and complexity</td></tr>
+      <tr><td>Corporate product launch / award ceremony</td><td>Named perils (government order, key speaker, venue failure)</td><td>0.15–0.40%</td><td>Sponsorship obligations and brand value at risk</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Premium formula -->
+  <div class="section-title">Premium Rating Formula</div>
+  <div class="formula-box">
+    <span class="comment">// Event Cancellation PC — indicative rating formula</span><br>
+    Base Premium = Total Revenue Insured (£) × Base Rate (% of TRI)<br><br>
+    Adjusted Premium = Base Premium<br>
+    &nbsp;&nbsp;× Outdoor/Indoor Factor    <span class="comment">// 1.0× (indoor) → 3.0× (multi-day outdoor festival)</span><br>
+    &nbsp;&nbsp;× Season/Location Factor   <span class="comment">// 1.0× (low-risk) → 1.5× (hurricane zone summer)</span><br>
+    &nbsp;&nbsp;× Named vs All-Risks       <span class="comment">// Named = 1.0×; All-Risks = 1.30–1.60×</span><br>
+    &nbsp;&nbsp;+ Terrorism Extension      <span class="comment">// +0.05–0.15% of TRI if selected</span><br>
+    &nbsp;&nbsp;+ Non-Appearance (PN)      <span class="comment">// +0.10–0.50% of PN sum insured depending on health/age</span><br>
+    &nbsp;&nbsp;+ Broadcast Rights Ext.    <span class="comment">// +0.10–0.30% of broadcast rights value</span><br>
+    &nbsp;&nbsp;× Waiting Period Credit    <span class="comment">// −10–20% for 24hr weather delay franchise</span><br>
+    &nbsp;&nbsp;× Claims Loading           <span class="comment">// −10% (5yr clean) → +100% (frequent adverse)</span>
+  </div>
+
+  <!-- Worked Example A -->
+  <div class="worked">
+    <h3>Worked Example A — UK Outdoor Music Festival, 50,000 Attendees, 3-Day Event</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Total Revenue Insured (TRI)</td><td>£6m projected revenue (tickets £4.5m, sponsorship £1m, concessions/merch £0.5m)</td><td>£6,000,000</td></tr>
+        <tr><td>Base Rate</td><td>Outdoor festival, 3-day, named perils (weather + government order) — 0.65% of TRI</td><td>£39,000</td></tr>
+        <tr><td>Non-Appearance Loading</td><td>Three headline artists; leading artist aged 48, one medical questionnaire required; 0.20% of £2m headline PN sum</td><td>+£4,000</td></tr>
+        <tr><td>Terrorism Extension</td><td>Major UK outdoor event, 50,000 attendees; 0.08% of TRI</td><td>+£4,800</td></tr>
+        <tr><td>Outdoor/Season Factor</td><td>UK summer, July date; standard weather season — no additional loading</td><td>×1.0</td></tr>
+        <tr><td>Waiting Period Credit</td><td>2-hour rainfall franchise before pluvius triggers</td><td>−15% = −£7,170</td></tr>
+        <tr><td>Claims Loading</td><td>One weather claim 4 years ago at same site — moderate adverse</td><td>+20% = +£8,126</td></tr>
+        <tr><td><strong>Indicative GWP</strong></td><td>—</td><td><strong>~£48,756</strong></td></tr>
+        <tr><td>Rate on Revenue</td><td>£48,756 / £6m</td><td>0.81% of TRI</td></tr>
+        <tr><td>Assumed Gross LR</td><td>Outdoor festival benchmark (weather dominant)</td><td>60%</td></tr>
+        <tr><td>Claims Estimate</td><td>£48,756 × 60%</td><td>£29,254</td></tr>
+        <tr><td>Commission (25%)</td><td>—</td><td>£12,189</td></tr>
+        <tr><td>Expenses (12%)</td><td>—</td><td>£5,851</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>£1,462 (3.0% margin — thin; weather peril dominates)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Worked Example B -->
+  <div class="worked alt">
+    <h3>Worked Example B — World Heavyweight Boxing Match, USA, $40m Gate + $200m Broadcast Rights</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Total Revenue Insured (TRI)</td><td>$40m gate/sponsorship + $200m broadcast rights = $240m TRI</td><td>$240,000,000</td></tr>
+        <tr><td>Base Rate — Event EC</td><td>Indoor arena, named perils (government order, venue failure, terrorism); 0.20% of gate/sponsor TRI $40m</td><td>$80,000</td></tr>
+        <tr><td>Broadcast Rights Extension</td><td>$200m broadcast rights at 0.15%</td><td>$300,000</td></tr>
+        <tr><td>Non-Appearance — Fighter 1</td><td>Champion, age 32, clean bill of health; PN sum $120m (proportion of TRI); 0.25% of PN sum</td><td>$300,000</td></tr>
+        <tr><td>Non-Appearance — Fighter 2</td><td>Challenger, age 35, minor prior shoulder surgery disclosed; 0.35% loading; PN sum $120m</td><td>$420,000</td></tr>
+        <tr><td>Terrorism Extension</td><td>High-profile US indoor event; 0.06% of $40m gate TRI</td><td>$24,000</td></tr>
+        <tr><td>Location Factor</td><td>Las Vegas indoor arena; no weather or hurricane loading</td><td>×1.0</td></tr>
+        <tr><td>Claims Loading</td><td>5-year clean across this promoter's book</td><td>−10% = −£112,400</td></tr>
+        <tr><td><strong>Indicative GWP</strong></td><td>—</td><td><strong>~$1,011,600</strong></td></tr>
+        <tr><td>Rate on TRI</td><td>$1.01m / $240m TRI</td><td>0.42%</td></tr>
+        <tr><td>Assumed Gross LR</td><td>Major boxing event — PN dominant risk</td><td>45%</td></tr>
+        <tr><td>Claims Estimate</td><td>$1.01m × 45%</td><td>$455,220</td></tr>
+        <tr><td>Commission (20% — large risk)</td><td>—</td><td>$202,320</td></tr>
+        <tr><td>Expenses (8%)</td><td>—</td><td>$80,928</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>$273,132 (27.0% margin)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Key exclusions -->
+  <div class="section-title">Key Exclusions — Standard Post-COVID EC Policy</div>
+  <table>
+    <thead>
+      <tr><th>Exclusion</th><th>Rationale</th><th>Position</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Pandemic / Communicable Disease</strong></td><td>COVID proved this is a systemic catastrophe peril — non-diversifiable, correlated across the entire portfolio simultaneously</td><td>Non-negotiable standard since 2021. No market cover available.</td></tr>
+      <tr><td>War, invasion, civil war</td><td>Political violence at state level — uninsurable in standard EC</td><td>Standard exclusion; some political risk extensions possible via specialist markets</td></tr>
+      <tr><td>Financial failure of the insured</td><td>Commercial / credit risk — not an insurance peril</td><td>Standard; promoter insolvency is not an EC trigger</td></tr>
+      <tr><td>Voluntary cancellation (commercial decision)</td><td>Moral hazard — insured cannot trigger policy by choosing not to proceed</td><td>Standard; poor ticket sales is a commercial risk, not insured</td></tr>
+      <tr><td>Poor ticket sales / under-attendance</td><td>Demand risk is a commercial risk — EC covers supply-side disruption, not demand failure</td><td>Standard exclusion in all EC policies</td></tr>
+      <tr><td>Known circumstances at inception</td><td>Adverse selection — prior knowledge of likely cancellation uninsurable</td><td>Standard; Insurance Act 2015 fair presentation applies in full</td></tr>
+      <tr><td>Pre-existing health conditions (PN)</td><td>Known health risks increase non-appearance probability — excludable or sublimited</td><td>Disclosed conditions excluded or sublimited; undisclosed conditions may void cover</td></tr>
+      <tr><td>Contractual penalties not related to revenue loss</td><td>Consequential losses beyond revenue replacement — scope limitation</td><td>Typically excluded unless specifically endorsed</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Pandemic exclusion info -->
+  <div class="warn-box">
+    <strong>⚠ Pandemic Exclusion — Broker Disclosure Obligation:</strong> The pandemic / communicable disease exclusion is now a material term of every EC policy. Brokers have an obligation under the <strong>Insurance Act 2015</strong> fair presentation rules to draw this exclusion to the client's attention clearly and explicitly. A client who suffers a COVID-style cancellation loss and was not made aware of the exclusion may have grounds for a complaint. The exclusion should be highlighted in the placement information, the policy schedule, and the renewal renewal advice letter. <sup>[L1]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Event Cancellation &amp; Contingency (PC/PA/PN/PU/PZ) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="rates-analysis.html">Next: Rates &amp; ROE →</a></p>
+</footer>
+
+</body>
+</html>

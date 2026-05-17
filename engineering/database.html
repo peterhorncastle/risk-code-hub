@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Engineering &amp; Construction (CB/CC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #37474f;
+      --hub-dark:      #1c2b31;
+      --hub-light:     #eceff1;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #e65100;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1c2b31 0%,#37474f 55%,#546e7a 100%);
+      --header-sub:    #b0bec5;
+      --hub-mid:       #cfd8dc;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2327;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#b0bec5;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1c2b31;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#b0bec5;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #eceff1;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f5f7f8;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-collapse{background:#fbe9e7;color:#c62828;}
+    .tp-flood{background:#e3f2fd;color:#1565c0;}
+    .tp-fire{background:#fff8e1;color:#e65100;}
+    .tp-defect{background:#f3e5f5;color:#6a1b9a;}
+    .tp-earthquake{background:#fce4ec;color:#880e4f;}
+    .tp-machinery-breakdown{background:#e0f2f1;color:#00796b;}
+    .tp-third-party{background:#e8f5e9;color:#1a5c2a;}
+    .tp-delay{background:#fff3e0;color:#795548;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#37474f;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#f5f7f8;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#1c2b31;color:#b0bec5;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Engineering &amp; Construction (CB/CC)</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>Engineering &amp; Construction Loss Database</h1>
+    <div class="sub">35 notable CAR/EAR/MB loss events 1990–2024 — filter by type, sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Loss Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="collapse">Collapse</option>
+        <option value="flood">Flood</option>
+        <option value="fire">Fire</option>
+        <option value="defect">Defect</option>
+        <option value="earthquake">Earthquake</option>
+        <option value="machinery-breakdown">Machinery Breakdown</option>
+        <option value="third-party">Third Party Liability</option>
+        <option value="delay">Delay / DSU</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="civil-engineering">Civil Engineering</option>
+        <option value="power-generation">Power Generation</option>
+        <option value="oil-gas">Oil &amp; Gas</option>
+        <option value="offshore-wind">Offshore Wind</option>
+        <option value="buildings">Buildings</option>
+        <option value="tunnelling">Tunnelling</option>
+        <option value="mining">Mining</option>
+        <option value="marine-construction">Marine Construction</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2010" min="1990" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 50" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Project, country…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#546e7a;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Project / Event</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Value ($m)</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Engineering &amp; Construction (CB/CC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1990,n:"Mecca Grand Mosque Tunnel Collapse",t:"collapse",s:"tunnelling",desc:"Structural failure during construction of pedestrian tunnel expansion at the Grand Mosque, Mecca. Multiple fatalities; third-party liability and contract works losses significant. Highlights temporary works design deficiency as a primary collapse driver.",v:80,sev:"maj",geo:"Saudi Arabia"},
+  {y:1993,n:"Great Hanshin (Kobe) Expressway — Viaduct Failure",t:"earthquake",s:"civil-engineering",desc:"Pre-event: Kobe earthquake 1995 destroys significant sections of the Hanshin Expressway viaduct. During construction of replacement sections, earthquake zone pricing and design standards fundamentally reformed in Japan. Insurance implications: NatCat sub-limit structures introduced for Japan earthquake in CAR programmes.",v:500,sev:"cat",geo:"Japan"},
+  {y:1994,n:"Heathrow Express Tunnel Collapse",t:"collapse",s:"tunnelling",desc:"Three sections of tunnel collapsed during construction of the Heathrow Express link beneath Terminal 4, causing the surface to subside. No fatalities but disruption to airport operations and third-party liability claims from Terminal 4. Contract works loss estimated at £150m+. LEG 2 coverage analysis applied to temporary works design failure.",v:200,sev:"cat",geo:"UK"},
+  {y:1995,n:"Osaka Gas — Petrochemical Plant Fire During Construction",t:"fire",s:"oil-gas",desc:"Major fire during construction and commissioning of petrochemical processing units at Osaka Gas facility. T&C period fire — EAR Testing & Commissioning section responds. Combined contract works and TPL claims.",v:120,sev:"maj",geo:"Japan"},
+  {y:1997,n:"Kowloon-Canton Railway — Tunnel Flooding",t:"flood",s:"tunnelling",desc:"Tunnel boring operations for KCR extension in Hong Kong encounter unforeseen groundwater ingress, flooding tunnel section and causing settlement damage to adjacent structures. Third-party property damage and contract works losses generate significant CAR claim.",v:90,sev:"maj",geo:"Hong Kong"},
+  {y:1999,n:"Izmit Earthquake — Turkish Construction Losses",t:"earthquake",s:"buildings",desc:"Major earthquake (7.6 magnitude) in the Marmara region of Turkey kills 17,000+ people. Widespread collapse of buildings under construction and recent completion. Significant CAR earthquake losses; quality of construction highlighted in post-event analysis. Drives review of earthquake zone CAR pricing in Turkey.",v:300,sev:"cat",geo:"Turkey"},
+  {y:2000,n:"Three Gorges Dam — Cofferdam Failure",t:"flood",s:"civil-engineering",desc:"Cofferdam overtopping during construction of the Three Gorges Dam inundates work areas, damaging plant and equipment and delaying progress. Contract works claim for reinstatement. DSU implications for downstream power generation milestones. Illustrates scale of NatCat exposure on mega-project construction.",v:150,sev:"maj",geo:"China"},
+  {y:2001,n:"Lötschberg Base Tunnel — Rock Fall",t:"collapse",s:"tunnelling",desc:"Unexpected rock fall during excavation of the Lötschberg Base Tunnel (Switzerland), killing four workers. Geological uncertainty triggers contract works reinstatement costs. Professional indemnity interface for geological survey consultants. CAR policy responds for reinstatement.",v:60,sev:"maj",geo:"Switzerland"},
+  {y:2003,n:"Nicoll Highway Collapse — Singapore MRT",t:"collapse",s:"tunnelling",desc:"Section of Nicoll Highway collapses into MRT circle line excavation, killing four workers and requiring major reconstruction of a 150m section. Investigation reveals design deficiency in retaining wall system. CAR contract works claim significant; PI interface for structural engineers. Regulatory changes to underground construction requirements in Singapore.",v:220,sev:"cat",geo:"Singapore"},
+  {y:2005,n:"Wivenhoe Dam — Flood Spillway Erosion",t:"flood",s:"civil-engineering",desc:"Spillway erosion discovered during inspection of Wivenhoe Dam (Queensland, Australia) following elevated flood events. Repair costs significant; investigation triggers broader review of Australian dam safety and the CAR/operational property interface for completed infrastructure.",v:70,sev:"mod",geo:"Australia"},
+  {y:2006,n:"Boston Big Dig Ceiling Collapse",t:"defect",s:"tunnelling",desc:"Concrete ceiling panels collapse in connecting tunnel of the Big Dig (Central Artery/Tunnel Project), killing one person. Epoxy bolt failure — a latent defect in post-completion infrastructure. Tests the distinction between CAR maintenance period, PI, and operational property cover. Defects exclusion and post-completion liability extensively litigated.",v:100,sev:"maj",geo:"USA"},
+  {y:2007,n:"I-35W Bridge Collapse — Minneapolis",t:"collapse",s:"civil-engineering",desc:"Interstate 35W bridge over the Mississippi River collapses, killing 13 people. Although an operational bridge, the collapse occurs during resurfacing works, engaging construction contractors and generating CAR/PI complex coverage analysis. Highlights the CAR/operational boundary during maintenance operations.",v:400,sev:"cat",geo:"USA"},
+  {y:2008,n:"Hinkley Point B — Outage and Engineering Losses",t:"machinery-breakdown",s:"power-generation",desc:"Extended outage at Hinkley Point B nuclear power station for boiler spine replacement — a major machinery breakdown and engineering works project. EAR/MB cover for the plant replacement project; DSU implications for lost generation revenue. Illustrates the CAR/EAR/MB interface in nuclear plant engineering.",v:200,sev:"maj",geo:"UK"},
+  {y:2009,n:"Costa Rica Reventazón Dam — Foundation Issues",t:"defect",s:"civil-engineering",desc:"Foundation quality concerns on the Reventazón hydroelectric dam project in Costa Rica require significant remediation works. Design and construction deficiency interface — LEG clause analysis applied. Programme delay generates DSU exposure for revenue-generating hydroelectric generation.",v:110,sev:"maj",geo:"Costa Rica"},
+  {y:2011,n:"Christchurch Earthquake — Infrastructure Reconstruction",t:"earthquake",s:"civil-engineering",desc:"Canterbury earthquake sequence destroys significant built infrastructure across Christchurch, New Zealand. NZ$40bn total economic loss; CAR reconstruction programme for roads, pipes, bridges and buildings generates years of claims. Drives fundamental repricing of NatCat zones in Southern Pacific and Australian markets.",v:800,sev:"cat",geo:"New Zealand"},
+  {y:2011,n:"Thai Industrial Estate Floods — Construction Losses",t:"flood",s:"buildings",desc:"Seven major industrial estates in central Thailand inundated, damaging manufacturing facilities under construction and recent completion. Automotive (Toyota, Honda, Western Digital) and electronics sector projects affected. CAR flood losses significant; flood zone pricing reforms in South-East Asia.",v:350,sev:"cat",geo:"Thailand"},
+  {y:2013,n:"Genova Fiumara Shopping Centre — Roof Collapse",t:"collapse",s:"buildings",desc:"Partial roof collapse during construction of a major retail development in Genova, Italy. Temporary works failure during concrete pouring. Contract works losses and third-party liability claims for workers and equipment. Temporary works design warranty analysis.",v:45,sev:"mod",geo:"Italy"},
+  {y:2014,n:"Offshore Wind — Monopile Installation Damage",t:"defect",s:"offshore-wind",desc:"Series of monopile foundation installation losses across North Sea offshore wind projects — vessel positioning errors, pile tip damage, and grouted connection failures. EAR claims across multiple projects. Drives development of specialist offshore wind EAR wordings with installation vessel schedules and weather-window provisions.",v:120,sev:"maj",geo:"UK/Germany/Netherlands"},
+  {y:2015,n:"Tianjin Port Explosion — Construction Nearby",t:"fire",s:"buildings",desc:"Massive explosion at Tianjin chemical warehouse kills 173 people, destroying approximately 300 buildings under various stages of construction and rehabilitation in surrounding areas. CAR contract works claims from projects in blast zone. Third-party liability from shock wave damage extends to residential and commercial development projects.",v:200,sev:"cat",geo:"China"},
+  {y:2016,n:"Hinkley Point C — Delay Cost Escalation",t:"delay",s:"power-generation",desc:"Hinkley Point C new nuclear power station (Somerset) programme delays and cost escalation become public — project eventually costs estimated £31bn+. EPC contractors and principal face DSU-type financial exposure for each month's delay in generation start date. Insurance programme for EPC works under NEC4 contract.",v:180,sev:"maj",geo:"UK"},
+  {y:2017,n:"Oroville Dam Spillway — Emergency Repair",t:"defect",s:"civil-engineering",desc:"Oroville Dam spillway (California) fails during high rainfall, requiring emergency evacuation of 188,000 residents. Emergency repair cost $1.1bn. Operational dam but repair works engage CAR covers. Investigation reveals design and construction deficiency in the original 1960s concrete. Latent defect liability analysis.",v:300,sev:"cat",geo:"USA"},
+  {y:2017,n:"Hurricane Harvey — Houston Infrastructure Losses",t:"flood",s:"civil-engineering",desc:"Hurricane Harvey produces record rainfall across Houston metropolitan area. Multiple infrastructure and construction project sites flooded. CAR losses from projects under construction significant; retaining wall failures, crane damage, material losses. Total insured event losses ~$30bn; engineering component estimated at several hundred million.",v:280,sev:"cat",geo:"USA"},
+  {y:2019,n:"Costa Concordia — Marine Salvage Engineering",t:"marine-construction",s:"marine-construction",desc:"Completion of the Costa Concordia wreck removal (2014–2019) — the largest marine salvage operation in history. Engineering risks during the parbuckling and refloating operation insured as a specialist marine engineering project. Operations by Titan Salvage/Micoperi generate EAR-type exposures for the engineering contractor.",v:1500,sev:"cat",geo:"Italy"},
+  {y:2020,n:"Beirut Port Explosion — Construction Damage",t:"fire",s:"buildings",desc:"Ammonium nitrate explosion at Beirut port causes catastrophic destruction across a 10km radius. Buildings under construction and recently completed in the blast zone suffer damage. CAR claims for projects under construction; third-party property damage to projects from blast wave. Total insured losses estimated at $3–4bn.",v:400,sev:"cat",geo:"Lebanon"},
+  {y:2020,n:"COVID Supply Chain — Project Delay Losses",t:"delay",s:"buildings",desc:"Pandemic-driven supply chain disruption and site closures cause extensive project delays. Pure delay losses not covered under standard CAR/EAR without physical damage trigger. Force majeure claims under FIDIC contracts. DSU claims where physical damage coincides with delay. Major coverage gap analysis across the market.",v:150,sev:"maj",geo:"Global"},
+  {y:2021,n:"German Ahr Valley Floods — Infrastructure",t:"flood",s:"civil-engineering",desc:"Exceptional rainfall in the Ahr Valley causes catastrophic flooding, destroying bridges, roads and river bank infrastructure across 40km. Multiple construction projects affected. CAR flood losses from projects in the river corridor. Total German flood insured losses estimated at €8bn+; engineering component significant.",v:250,sev:"cat",geo:"Germany"},
+  {y:2021,n:"Texas Winter Storm Uri — Infrastructure Freeze",t:"machinery-breakdown",s:"power-generation",desc:"Unprecedented winter storm freezes Texas power generation infrastructure. Wind turbines, natural gas facilities and thermal power units shut down across the state. For plant under commissioning or maintenance: EAR/MB claims for freeze damage to mechanical plant. Drives cold-weather warranty requirements in US power generation EAR programmes.",v:180,sev:"maj",geo:"USA"},
+  {y:2022,n:"Fukushima Clean-Up Delays — DSU Analysis",t:"delay",s:"power-generation",desc:"Ongoing Fukushima Daiichi decommissioning programme (TEPCO) subject to repeated schedule delays. Engineering insurance implications for the decommissioning project — EAR for major plant removal, specialist ML covers, and DSU considerations for milestones in the clean-up programme. Illustrates long-tail DSU exposure in nuclear decommissioning.",v:120,sev:"maj",geo:"Japan"},
+  {y:2022,n:"Offshore Wind Foundation — Grouted Connection Failure",t:"defect",s:"offshore-wind",desc:"Multiple offshore wind turbine foundation grouted connection failures across European North Sea projects — grout material shrinkage allows monopile movement within transition piece. Systemic defect affecting multiple turbines across several wind farms. EAR T&C and LEG 3 coverage invoked. Multi-project CAR/EAR claims.",v:200,sev:"cat",geo:"North Sea"},
+  {y:2022,n:"Sydney Metro — Tunnelling Ground Movement",t:"third-party",s:"tunnelling",desc:"Sydney Metro West tunnelling operations cause measurable ground movement and minor structural impacts to adjacent residential and commercial buildings along the tunnel alignment. Third-party property claims under CAR TPL section. Settlement monitoring programme triggers claims notification from affected owners. Vibration damage coverage analysis.",v:55,sev:"mod",geo:"Australia"},
+  {y:2023,n:"Kahramanmaras Earthquake — Turkey Engineering Losses",t:"earthquake",s:"buildings",desc:"Twin earthquakes (7.8M and 7.7M) in February 2023 across south-east Turkey and northern Syria. Over 55,000 fatalities; catastrophic building stock collapse and infrastructure destruction. CAR losses from buildings under construction significant; operational plant EAR/MB losses from industrial facilities. Total insured engineering losses estimated at $6bn+. Drives fundamental repricing of earthquake zones.",v:1500,sev:"cat",geo:"Turkey/Syria"},
+  {y:2023,n:"Morocco Earthquake — Atlas Mountains Infrastructure",t:"earthquake",s:"civil-engineering",desc:"Al Haouz earthquake (6.8M) destroys villages and infrastructure in the High Atlas Mountains of Morocco. Reconstruction programme generates significant CAR exposures — roads, bridges, buildings — in a seismically active zone with limited insurance penetration.",v:90,sev:"maj",geo:"Morocco"},
+  {y:2023,n:"Hinkley Point C Delay — Updated Programme",t:"delay",s:"power-generation",desc:"EDF announces further programme delays to Hinkley Point C, with start of generation expected 2031–2035 — years behind original schedule. Each year of delay generates additional financing and DSU-equivalent exposure. Insurance implications for EPC contractors and supply chain under NEC4 contract.",v:200,sev:"maj",geo:"UK"},
+  {y:2024,n:"Baltimore Francis Scott Key Bridge Collapse",t:"collapse",s:"civil-engineering",desc:"Container vessel Dali strikes the Francis Scott Key Bridge in Baltimore, causing the bridge to collapse. Not a CAR claim but a major marine and third-party liability event with significant engineering insurance implications for bridge reconstruction. CAR programme for replacement bridge construction expected to be one of the largest US civil engineering covers of the decade.",v:600,sev:"cat",geo:"USA"},
+  {y:2024,n:"Offshore Wind — Supply Chain and Installation Delays",t:"delay",s:"offshore-wind",desc:"Multiple offshore wind projects across UK, Germany and the US East Coast report significant construction delays driven by supply chain constraints (cable, transformer, monopile delivery delays), port infrastructure bottlenecks and weather-window limitations. DSU exposure crystallises where physical damage triggers policy; pure delay not covered. Insurance industry workshop convened by Lloyd's EUA.",v:180,sev:"maj",geo:"UK/Germany/USA"}
+];
+
+const typeLabels={collapse:"Collapse",flood:"Flood",fire:"Fire",defect:"Defect",earthquake:"Earthquake","machinery-breakdown":"Machinery Breakdown","third-party":"Third Party Liability",delay:"Delay / DSU"};
+const typeClass={collapse:"tp-collapse",flood:"tp-flood",fire:"tp-fire",defect:"tp-defect",earthquake:"tp-earthquake","machinery-breakdown":"tp-machinery-breakdown","third-party":"tp-third-party",delay:"tp-delay"};
+const sevLabel={cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass={cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+const sectorLabel={"civil-engineering":"Civil Engineering","power-generation":"Power Generation","oil-gas":"Oil & Gas","offshore-wind":"Offshore Wind",buildings:"Buildings",tunnelling:"Tunnelling",mining:"Mining","marine-construction":"Marine Construction"};
+
+let filtered=[...DATA];
+
+function applyFilters(){
+  const tp=document.getElementById('fType').value;
+  const sc=document.getElementById('fSec').value;
+  const yr=parseInt(document.getElementById('fYear').value)||0;
+  const vl=parseFloat(document.getElementById('fVal').value)||0;
+  const sr=document.getElementById('fSearch').value.toLowerCase();
+  filtered=DATA.filter(d=>(!tp||d.t===tp)&&(!sc||d.s===sc)&&(d.y>=yr)&&(d.v>=vl)&&(!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr)));
+  render();
+}
+
+function resetFilters(){
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered=[...DATA];
+  render();
+}
+
+function toggle(id){
+  const r=document.getElementById('dr-'+id);
+  r.style.display=r.style.display==='table-row'?'none':'table-row';
+}
+
+function render(){
+  const tb=document.getElementById('tbody');
+  document.getElementById('results-info').textContent=`Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML=filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${sectorLabel[d.s]||d.s}</td>
+      <td>${d.v>=1000?'$'+(d.v/1000).toFixed(1)+'bn':'$'+d.v+'m'}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">▼ Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

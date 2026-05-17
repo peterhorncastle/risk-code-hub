@@ -1,0 +1,136 @@
+{
+  "riskCode": "NC",
+  "label": "GL Non-US — Casualty",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "policyLimit",
+    "label": "Policy Limit (£)",
+    "defaultValue": 5000000,
+    "hint": "GL limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.003
+  },
+  "ratingFactors": [
+    {
+      "key": "sector",
+      "label": "Industry Sector",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "general",
+      "options": {
+        "manufacturing": {
+          "label": "Manufacturing",
+          "factor": 1.1
+        },
+        "construction": {
+          "label": "Construction",
+          "factor": 1.25
+        },
+        "general": {
+          "label": "General Commercial",
+          "factor": 1
+        },
+        "professional": {
+          "label": "Professional Services",
+          "factor": 0.85
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "territory",
+      "label": "Territory",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "uk": {
+          "label": "UK",
+          "factor": 1
+        },
+        "eu": {
+          "label": "EU/EEA",
+          "factor": 1.05
+        },
+        "international": {
+          "label": "International/Multi",
+          "factor": 1.15
+        },
+        "developing": {
+          "label": "Developing Markets",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "revenue",
+      "label": "Annual Revenue (£m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 20,
+      "bands": [
+        {
+          "min": 0,
+          "max": 5,
+          "factor": 0.8
+        },
+        {
+          "min": 5,
+          "max": 20,
+          "factor": 1
+        },
+        {
+          "min": 20,
+          "max": 100,
+          "factor": 1.1
+        },
+        {
+          "min": 100,
+          "max": 99999,
+          "factor": 1.2
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "attritional": {
+          "label": "Attritional",
+          "factor": 1
+        },
+        "material": {
+          "label": "Material",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 2000,
+    "claimsHandlingPerClaim": 15000,
+    "systemOverheadPerYear": 1000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

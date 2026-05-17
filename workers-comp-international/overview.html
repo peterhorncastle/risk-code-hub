@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Workers Compensation – International (W4) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #00575c;
+      --hub-dark:      #002c30;
+      --hub-light:     #e0f4f5;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#7b5e00;
+      --header-gradient:linear-gradient(135deg,#002c30 0%,#00575c 55%,#00838f 100%);
+      --header-sub:    #80deea;
+      --hub-mid:       #b2ebf2;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2e30;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(26,35,126,0.15) 0%,transparent 50%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#80deea;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:2rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;margin-bottom:16px;}
+    .code-pill{display:inline-block;background:rgba(200,168,75,0.25);border:1px solid var(--hub-accent);
+      color:var(--hub-accent);padding:3px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;margin-right:6px;}
+    nav.hub-nav{background:#002c30;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#80deea;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+    .stat-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-top:4px solid var(--hub-primary);}
+    .stat-card .val{font-size:1.6rem;font-weight:700;color:var(--hub-primary);margin-bottom:4px;}
+    .stat-card .lbl{font-size:0.78rem;color:#555;line-height:1.3;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#00575c;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .code-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px;}
+    .code-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .code-card h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .code-card p{font-size:0.85rem;color:#444;line-height:1.5;}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:28px;}
+    .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid var(--hub-primary);}
+    .card.accent{border-top-color:var(--hub-accent);}
+    .card.blue{border-top-color:#1a237e;}
+    .card.purple{border-top-color:#6a1b9a;}
+    .card.red{border-top-color:#c62828;}
+    .card.orange{border-top-color:#e65100;}
+    .card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .info-box{background:#e0f4f5;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#002c30;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px;}
+    .nav-card{display:block;background:#fff;border-radius:10px;padding:16px 18px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);transition:all 0.2s;}
+    .nav-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12);border-left-color:var(--hub-accent);}
+    .nav-card .num{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .nav-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);}
+    .nav-card p{font-size:0.78rem;color:#555;margin-top:4px;}
+    footer{background:#002c30;color:#80deea;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Casualty › Workers Compensation International</div>
+    <div class="tag">Workers Compensation &amp; Employers Liability</div>
+    <h1>Workers Compensation – International</h1>
+    <div class="sub">WC/EL for multinational employers, expatriate workers, Defence Base Act (DBA) and multi-jurisdiction programme structuring</div>
+    <div>
+      <span class="code-pill">W4</span>
+      <span class="code-pill" style="border-color:#80deea;color:#80deea;">International / Multinational</span>
+      <span class="code-pill" style="border-color:#80deea;color:#80deea;">DBA Specialist</span>
+    </div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~220m<span class="badge b-e">EST</span></div>
+      <div class="lbl">Workers employed internationally by multinationals (est.)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">$400–600m<span class="badge b-e">EST</span></div>
+      <div class="lbl">DBA segment GWP (Lloyd's; US govt contractor concentration)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">50+<span class="badge b-e">EST</span></div>
+      <div class="lbl">Jurisdiction compliance requirements — most complex WC/EL product</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">$85k+<span class="badge b-e">EST</span></div>
+      <div class="lbl">Avg expat medical repatriation cost per incident</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">War zones<span class="badge b-e">EST</span></div>
+      <div class="lbl">Iraq, Afghanistan, Ukraine — primary DBA/war risk demand drivers</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">Enormous<span class="badge b-e">EST</span></div>
+      <div class="lbl">Statutory benefit differences: UK vs UAE vs Brazil vs USA</div>
+    </div>
+  </div>
+
+  <!-- Code card -->
+  <div class="section-title">Lloyd's Risk Code — W4</div>
+  <div class="code-grid">
+    <div class="code-card">
+      <h3>W4 — Workers Compensation / EL International</h3>
+      <p>W4 covers workers compensation and employers liability for multinational companies' employees working outside their home country. The class encompasses statutory WC requirements in host countries, common-law employers liability suits, expatriate personal accident and medical cover, and the Defence Base Act (DBA) — the US statutory WC scheme for American government contractors working overseas. Programme structuring across 50+ jurisdictions is the defining complexity. <sup>[L1]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#1a237e;">
+      <h3>W4 vs W3 vs W5/W6 — Key Distinctions</h3>
+      <p><strong>W3</strong> (UK EL) covers employers liability for employees based in the UK under the Employers Liability (Compulsory Insurance) Act 1969. <strong>W5/W6</strong> covers US workers compensation for domestic US employees under individual state schemes. <strong>W4</strong> is the international and multinational class — it responds where employees are deployed outside their home jurisdiction and statutory WC requirements must be addressed across multiple countries simultaneously. DBA (US overseas contractor) is a W4 speciality. <sup>[L4]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#7b5e00;">
+      <h3>Employee Classification — Critical for W4</h3>
+      <p>Three key employee categories each carry different W4 exposures: <strong>Expatriates (Expats)</strong> — home-country nationals deployed overseas, typically highest-cost per head; <strong>Third-Country Nationals (TCNs)</strong> — workers from a third country deployed in a host country (e.g. Filipino workers in Iraq on a US contractor project); <strong>Local Nationals (LNs)</strong> — host-country citizens employed locally, often covered by mandatory local WC schemes. DBA applies regardless of nationality when working on a US government contract. <sup>[L1]</sup></p>
+    </div>
+  </div>
+
+  <!-- Coverage taxonomy -->
+  <div class="section-title">Coverage Taxonomy — 6 Key Covers</div>
+  <div class="cards-grid">
+    <div class="card">
+      <h4>Statutory Workers Compensation</h4>
+      <p>Coverage for host-country statutory WC obligations — benefit schedules, medical treatment and wage replacement as required by the law of the jurisdiction of employment. Complexity arises because benefit structures differ enormously by country and may require locally-admitted policies in some territories. <sup>[L5]</sup></p>
+    </div>
+    <div class="card accent">
+      <h4>Employers Liability — Common Law</h4>
+      <p>Coverage for civil suits brought by employees alleging negligence by the employer. Particularly important in jurisdictions that maintain common-law EL alongside statutory WC (UK, Australia, Ireland). Limits typically USD 5m–25m any one occurrence for international programmes. <sup>[L4]</sup></p>
+    </div>
+    <div class="card blue">
+      <h4>Expatriate Personal Accident &amp; Medical</h4>
+      <p>PA and medical evacuation cover for expat employees — typically layered over statutory benefits. Covers emergency medical treatment, medical repatriation (average cost $85,000+ est.), accidental death and disability, and crisis response. Often structured through Healix, ISOS or similar specialist medevac providers. <sup>[I3]</sup></p>
+    </div>
+    <div class="card purple">
+      <h4>Defence Base Act (DBA)</h4>
+      <p>US statutory WC for US government contractors and subcontractors working overseas on US military bases, embassy projects, and USAID/USACE contracts. Mandatory under 42 U.S.C. § 1651; incorporates LHWCA benefit schedule. Must be placed with a DBA-authorised carrier. DOL/OWCP administers. <sup>[L1]</sup></p>
+    </div>
+    <div class="card red">
+      <h4>USL&amp;H Extension — Maritime</h4>
+      <p>US Longshore and Harbor Workers Compensation Act extension for maritime workers — stevedores, harbour workers, vessel repair personnel and offshore platform workers operating on navigable waters. Interfaces with DBA for overseas maritime operations (e.g. contract vessel crew on US Navy resupply). <sup>[L2]</sup></p>
+    </div>
+    <div class="card orange">
+      <h4>War Risk / Hostile Environment Extension</h4>
+      <p>Extension covering injury, disability and death arising in war zones and hostile environments — Iraq, Afghanistan, Libya, Ukraine, and other conflict-affected territories. War risk is a standard exclusion in most WC policies; the endorsement or War Hazards Compensation Act (WHCA) backstop restores cover for DBA-insured USG contractors. <sup>[L3]</sup></p>
+    </div>
+  </div>
+
+  <!-- International compliance callout -->
+  <div class="warn-box">
+    <strong>International Compliance Challenge — Admitted Insurance Requirements:</strong> The admitted insurance requirement is the central compliance challenge in W4 programme structuring. Some countries (e.g. UAE, Saudi Arabia, Brazil) require WC/EL cover to be placed with a locally licensed and admitted insurer — Lloyd's direct paper is not accepted. In these jurisdictions, a <strong>fronting arrangement</strong> is required: a locally-admitted insurer issues the statutory policy and reinsures the risk (often 100%) to Lloyd's. Other countries accept a Lloyd's overseas policy. Conflict zones frequently have no viable local admitted market, making Lloyd's direct W4 paper the only practical option. Failure to maintain the required admitted cover is a criminal or civil offence in several jurisdictions. <sup>[I5]</sup>
+  </div>
+
+  <!-- Module nav -->
+  <div class="section-title">Hub Modules</div>
+  <div class="nav-grid">
+    <a href="history.html" class="nav-card">
+      <div class="num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From colonial worker protection to DBA 1941 and modern international WC market</p>
+    </a>
+    <a href="timeline.html" class="nav-card">
+      <div class="num">Module 02</div>
+      <h4>Events Timeline</h4>
+      <p>20 key W4 / DBA events 1941–2024</p>
+    </a>
+    <a href="database.html" class="nav-card">
+      <div class="num">Module 03</div>
+      <h4>Loss Database</h4>
+      <p>35 international WC/DBA losses — filterable by type, sector &amp; geography</p>
+    </a>
+    <a href="underwriting.html" class="nav-card">
+      <div class="num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>Territory zones, rating factors, worked examples &amp; DBA specifics</p>
+    </a>
+    <a href="rates-analysis.html" class="nav-card">
+      <div class="num">Module 05</div>
+      <h4>Rates &amp; ROE</h4>
+      <p>W4 rate index 2001–2026, DBA vs expat cycle, ROE scenarios</p>
+    </a>
+    <a href="risk-mitigation.html" class="nav-card">
+      <div class="num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Pre-deployment controls, HEAT training, war zone obligations, medevac</p>
+    </a>
+    <a href="global-program.html" class="nav-card">
+      <div class="num">Module 07</div>
+      <h4>Global Programme</h4>
+      <p>Multinational WC tower, fronting requirements, jurisdiction profiles</p>
+    </a>
+    <a href="references.html" class="nav-card">
+      <div class="num">Sources</div>
+      <h4>References</h4>
+      <p>Legal, regulatory &amp; industry citations</p>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation International (W4) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Sources &amp; Citations</a></p>
+</footer>
+
+</body>
+</html>

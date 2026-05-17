@@ -1,0 +1,174 @@
+{
+  "riskCode": "TB",
+  "label": "Tax Litigation",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "policyLimit",
+    "label": "Policy Limit ($)",
+    "defaultValue": 50000000,
+    "hint": "Limit of indemnity"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.01
+  },
+  "ratingFactors": [
+    {
+      "key": "dealType",
+      "label": "Transaction Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "private_ma",
+      "options": {
+        "private_ma": {
+          "label": "Private M&A",
+          "factor": 1
+        },
+        "public_ma": {
+          "label": "Public M&A",
+          "factor": 1.3
+        },
+        "cross_border": {
+          "label": "Cross-Border",
+          "factor": 1.15
+        },
+        "carve_out": {
+          "label": "Carve-Out/Spin-Off",
+          "factor": 1.25
+        },
+        "real_estate": {
+          "label": "Real Estate",
+          "factor": 0.85
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "dealValue",
+      "label": "Deal Value ($m)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 200,
+      "bands": [
+        {
+          "min": 0,
+          "max": 50,
+          "factor": 0.85
+        },
+        {
+          "min": 50,
+          "max": 200,
+          "factor": 1
+        },
+        {
+          "min": 200,
+          "max": 1000,
+          "factor": 1.1
+        },
+        {
+          "min": 1000,
+          "max": 99999,
+          "factor": 1.25
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Target Jurisdiction",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "uk",
+      "options": {
+        "us": {
+          "label": "United States",
+          "factor": 1.25
+        },
+        "uk": {
+          "label": "United Kingdom",
+          "factor": 1
+        },
+        "eu": {
+          "label": "EU/EEA",
+          "factor": 1.05
+        },
+        "asia": {
+          "label": "Asia",
+          "factor": 1.1
+        },
+        "emerging": {
+          "label": "Emerging Markets",
+          "factor": 1.3
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "sector",
+      "label": "Target Sector",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "general",
+      "options": {
+        "financial": {
+          "label": "Financial/Regulated",
+          "factor": 1.2
+        },
+        "tech": {
+          "label": "Technology/IP-heavy",
+          "factor": 1.15
+        },
+        "healthcare": {
+          "label": "Healthcare",
+          "factor": 1.2
+        },
+        "general": {
+          "label": "General Commercial",
+          "factor": 1
+        },
+        "manufacturing": {
+          "label": "Manufacturing",
+          "factor": 0.9
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "diligence",
+      "label": "Due Diligence Quality",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "comprehensive",
+      "options": {
+        "comprehensive": {
+          "label": "Comprehensive (Big 4)",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "limited": {
+          "label": "Limited/Expedited",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 5000,
+    "claimsHandlingPerClaim": 30000,
+    "systemOverheadPerYear": 2000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.01,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.2,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

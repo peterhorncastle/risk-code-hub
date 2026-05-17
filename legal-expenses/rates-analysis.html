@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Legal Expenses (LE) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #455a64;
+      --hub-dark:      #1c313a;
+      --hub-light:     #eceff1;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1c313a 0%,#455a64 55%,#607d8b 100%);
+      --header-sub:    #b0bec5;
+      --le-mid:        #cfd8dc;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2a31;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1c313a;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--le-mid);}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    canvas{max-width:100%;height:280px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #eceff1;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f5f7f8;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #1a5c2a;}
+    .roe-card.base{border-top:4px solid var(--hub-accent);}
+    .roe-card.bear{border-top:4px solid #c62828;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#1a5c2a;}
+    .roe-card.base .val{color:var(--hub-accent);}
+    .roe-card.bear .val{color:#c62828;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:240px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:#455a64;}
+    .bar-out{background:#c62828;}
+    .bar-profit{background:var(--hub-accent);color:#000;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    footer{background:#1c313a;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Legal Expenses (LE)</a> › Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">Market cycle, LEI rate index, claims frequency by dispute type, ROE scenarios &amp; P&amp;L waterfall</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">LEI Rate Index &amp; Trends<span class="badge b-e">EST</span></div>
+  <div class="chart-wrap">
+    <h3>Chart 1 — LEI Rate Index 2000–2026 (2000 = 100) — BTE Motor, BTE Commercial, ATE PI, ATE Commercial</h3>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Claims Frequency by Dispute Type (Illustrative — BTE Commercial Portfolio)</h3>
+    <canvas id="chartFreq"></canvas>
+  </div>
+
+  <!-- Market cycle table -->
+  <div class="section-title">Market Cycle History<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Key Driver</th><th>Rate Movement</th><th>Lloyd's / Market Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Pre-2000</td><td>Pre-CFA Era</td><td>BTE motor add-on growth; legal aid erosion drives BTE demand; ATE market not yet established</td><td>BTE: steady; ATE: pre-market</td><td>Continental model (DAS, ARAG) dominates; London market limited</td></tr>
+      <tr><td>2000–2012</td><td>ATE Boom (Recoverable Premiums)</td><td>ATE premiums recoverable from losing parties; massive expansion of PI, clinical negligence, commercial ATE; volume growth across all LEI segments</td><td>ATE: premium inflation driven by recoverability; BTE: steady growth</td><td>Lloyd's syndicates enter ATE market; clinical negligence ATE capacity grows</td></tr>
+      <tr><td>2012–2014</td><td>LASPO Restructuring</td><td>LASPO 2012: ATE premiums non-recoverable; PI ATE market collapses in volume; market restructures around retained premiums</td><td>ATE PI: −60 to −80% volume; BTE: +5 to +10% as individuals need alternatives</td><td>ATE providers exit PI market or restructure; commercial ATE pricing increases</td></tr>
+      <tr><td>2013–2014</td><td>QOCS Introduction</td><td>QOCS for PI reduces adverse costs risk for PI claimants; ATE less critical for PI; commercial ATE market grows to fill volume gap</td><td>PI ATE: further volume reduction; commercial ATE: +15 to +25% rate growth</td><td>Market pivots to commercial, clinical negligence and group action ATE</td></tr>
+      <tr><td>2015–2017</td><td>GDPR Anticipation; BTE Growth</td><td>Legal aid continued erosion; rising litigation costs; GDPR approaching — commercial BTE demand grows; employment tribunal fees suppress employment BTE frequency (masked risk)</td><td>BTE commercial: +5 to +8% p.a.; ATE commercial: +8 to +12%</td><td>GDPR endorsements added to commercial BTE products; employment BTE panels restructured</td></tr>
+      <tr><td>2018–2020</td><td>GDPR Activation; Unison Recovery</td><td>GDPR in force 2018 — data breach and regulatory investigation LEI trigger activated; Unison 2017 restores employment tribunal volumes; BTE claims frequency normalises and grows</td><td>BTE: +8 to +15%; ATE commercial: +5 to +10%</td><td>GDPR endorsement repricing; employment claims frequency reassessed upward</td></tr>
+      <tr><td>2020–2022</td><td>COVID Employment Surge</td><td>Mass redundancies; furlough disputes; flexible working refusals; employment tribunal backlog; BTE employment claims spike; litigation funding growth drives ATE commercial demand</td><td>BTE employment: +15 to +25%; ATE commercial: +10 to +20%; panel capacity strained</td><td>Panel solicitor capacity expanded; BTE employment excess structures reviewed</td></tr>
+      <tr><td>2023–2026</td><td>FRC Impact; Market Repricing</td><td>FRC extension (October 2023) changes adverse costs economics for sub-£100k cases; PACCAR disrupts litigation funding / ATE structures; employment law reforms continue; AI disputes emerging</td><td>BTE: flat to +5%; ATE: selective +5 to +12% for complex/high-value</td><td>Wording updates for FRC; PACCAR restructuring; AI employment dispute pricing under development</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE Scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative £20m LE Book<span class="badge b-e">EST</span></div>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+15.0%</div>
+      <div class="detail">Combined Ratio 80%<br>Low employment frequency; strong panel management; rate adequacy; FRC benefit on BTE cost</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+8.2%</div>
+      <div class="detail">Combined Ratio 90%<br>Moderate employment claims; GDPR regulatory triggers; balanced BTE/ATE mix</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−6.0%</div>
+      <div class="detail">Combined Ratio 114%<br>Employment tribunal surge; large commercial ATE adverse development; panel solicitor cost inflation</div>
+    </div>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (£20m GWP, illustrative LE book)</h3>
+    <div class="wf-row"><div class="wf-label">Gross Written Premium</div><div class="wf-bar bar-in" style="width:100%;">£20m</div><div class="wf-val">£20.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Broker / Intermediary Commission (28%)</div><div class="wf-bar bar-out" style="width:56%;">−£5.6m</div><div class="wf-val">−£5.6m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance (quota share / XL)</div><div class="wf-bar bar-out" style="width:20%;">−£2.0m</div><div class="wf-val">−£2.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Earned Premium</div><div class="wf-bar bar-in" style="width:62%;background:#37474f;">£12.4m</div><div class="wf-val">£12.4m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Employment Disputes</div><div class="wf-bar bar-out" style="width:28%;">−£3.1m</div><div class="wf-val">−£3.1m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Commercial Contract / Property</div><div class="wf-bar bar-out" style="width:14%;">−£1.4m</div><div class="wf-val">−£1.4m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Tax Investigation / GDPR</div><div class="wf-bar bar-out" style="width:10%;">−£1.0m</div><div class="wf-val">−£1.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — ATE Adverse Costs / Commercial</div><div class="wf-bar bar-out" style="width:8%;">−£0.8m</div><div class="wf-val">−£0.8m</div></div>
+    <div class="wf-row"><div class="wf-label">Panel Solicitor Fee Overruns (IBNR)</div><div class="wf-bar bar-out" style="width:5%;">−£0.5m</div><div class="wf-val">−£0.5m</div></div>
+    <div class="wf-row"><div class="wf-label">Expenses / Overhead (14%)</div><div class="wf-bar bar-out" style="width:14%;">−£2.8m</div><div class="wf-val">−£2.8m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (est.)</div><div class="wf-bar bar-in" style="width:4%;background:var(--hub-accent);color:#000;">+£0.4m</div><div class="wf-val">+£0.4m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Profit</strong></div><div class="wf-bar bar-profit" style="width:22%;"><strong>£3.2m</strong></div><div class="wf-val"><strong>£3.2m (8.2% ROE est.)</strong></div></div>
+  </div>
+
+  <!-- IBNR table -->
+  <div class="section-title">IBNR &amp; Reserving Considerations</div>
+  <table>
+    <thead><tr><th>Factor</th><th>Impact on Reserves</th></tr></thead>
+    <tbody>
+      <tr><td>Employment tribunal backlog</td><td>Post-COVID tribunal waiting times of 18–24 months mean employment LEI claims may be notified 1–2 years before the tribunal hearing — claims lifecycle extends reserving period significantly</td></tr>
+      <tr><td>Employment law reform lag</td><td>New legislation (Employment Rights Act amendments, flexible working rights) creates uncertain frequency impact — prudent to hold additional IBNR pending 12–24 months of claims development data</td></tr>
+      <tr><td>GDPR investigation duration</td><td>ICO regulatory investigations can run 12–36 months — BTE policies covering investigation costs face extended claims lifecycles; IBNR loading for open regulatory investigation costs</td></tr>
+      <tr><td>ATE adverse development</td><td>Commercial ATE claims develop over litigation lifecycle (2–5 years for large commercial disputes). IBNR calculation must reflect full adverse costs exposure until final judgment/settlement, not just current incurred costs</td></tr>
+      <tr><td>Fixed Recoverable Costs — BTE impact</td><td>FRC extension (2023) reduces average BTE claim cost for sub-£100k disputes; IBNR models should be updated to reflect lower average settlement costs in FRC-capped proceedings</td></tr>
+      <tr><td>Panel solicitor fee arbitration</td><td>Disputes between BTE insurers and panel solicitors over fee rates can generate unexpected cost overruns. Reserve for panel fee disputes at 5–10% of panel claims costs</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Legal Expenses (LE) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation →</a></p>
+</footer>
+
+<script>
+// Chart 1 — LEI Rate Index 2000–2026
+const years = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type:'line',
+  data:{
+    labels: years,
+    datasets:[
+      {
+        label:'BTE Motor (add-on)',
+        data:[100,102,104,106,108,110,112,115,118,120,122,124,125,126,127,128,130,132,136,140,145,150,155,157,159,161,163],
+        borderColor:'#455a64',backgroundColor:'rgba(69,90,100,0.08)',tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'BTE Commercial',
+        data:[100,103,106,109,112,115,118,121,125,128,130,133,136,140,143,148,154,162,172,182,198,216,228,234,238,242,246],
+        borderColor:'#c8a84b',backgroundColor:'rgba(200,168,75,0.08)',tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'ATE Personal Injury',
+        data:[100,115,132,148,165,180,195,210,225,238,248,255,260,140,80,55,45,42,40,40,38,37,36,35,35,35,34],
+        borderColor:'#c62828',backgroundColor:'rgba(198,40,40,0.06)',tension:0.3,pointRadius:3
+      },
+      {
+        label:'ATE Commercial',
+        data:[100,112,125,138,152,166,180,192,205,218,228,238,248,268,295,318,338,350,368,382,408,428,445,452,458,462,465],
+        borderColor:'#1565c0',backgroundColor:'rgba(21,101,192,0.05)',tension:0.3,pointRadius:3
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'bottom'},
+      tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.y} (2000=100)`}}
+    },
+    scales:{
+      y:{title:{display:true,text:'Rate Index (2000=100)'},beginAtZero:false},
+      x:{title:{display:true,text:'Year'}}
+    }
+  }
+});
+
+// Chart 2 — Claims Frequency by Dispute Type
+new Chart(document.getElementById('chartFreq'), {
+  type:'bar',
+  data:{
+    labels:['Employment\nDispute','Contract\nDispute','Tax\nInvestigation','GDPR /\nData Protection','Property\nDispute','Motor\nLegal','Clinical\nNegligence','Regulatory\nInvestigation'],
+    datasets:[
+      {
+        label:'Claims Frequency Index (per 1,000 policies)',
+        data:[38,22,18,14,9,25,6,8],
+        backgroundColor:['#c62828','#1565c0','#6a1b9a','#00695c','#795548','#455a64','#e65100','#37474f'],
+        borderRadius:4
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y} claims per 1,000 policies p.a. (est.)`}}
+    },
+    scales:{
+      y:{title:{display:true,text:'Claims per 1,000 Policies (est.)'},beginAtZero:true},
+      x:{ticks:{maxRotation:0}}
+    }
+  }
+});
+</script>
+</body>
+</html>

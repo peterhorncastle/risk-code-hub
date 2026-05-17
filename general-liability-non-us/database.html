@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>GL Non-USA: Claims Database | Risk Code Hub</title>
+  <style>
+    :root {
+      --gl:#1b5e20; --gl-dark:#0a2e0d; --intl:#006064;
+      --warn:#e65100; --liab:#1565c0; --prod:#6a1b9a;
+      --light:#f1f8f1; --text:#1a2e1a; --muted:#5a7060; --border:#c0d8c0;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1b5e20;
+    --hub-dark:      #0a2e0d;
+    --hub-light:     #e8f5e9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #006064;
+    --header-gradient:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%);
+    --header-sub:    #c8e6c9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90c895; margin-bottom:6px; }
+    .breadcrumb a { color:#a5d6a7; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#c8e6c9; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--gl); border-bottom-color:var(--warn); }
+    main { max-width:1150px; margin:0 auto; padding:40px 30px; }
+
+    .filter-bar { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:24px; align-items:center; }
+    .filter-bar label { font-size:0.8rem; font-weight:600; color:var(--muted); }
+    .filter-bar select, .filter-bar input { border:1px solid var(--border); border-radius:6px; padding:7px 12px; font-size:0.84rem; color:var(--text); background:#fff; }
+    .filter-bar input { min-width:200px; }
+
+    .db-wrap { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    table { width:100%; border-collapse:collapse; font-size:0.83rem; }
+    thead th { background:var(--gl); color:#fff; padding:11px 14px; text-align:left; cursor:pointer; user-select:none; white-space:nowrap; }
+    thead th:hover { background:var(--gl-dark); color:#fff; }
+    tbody td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tbody tr:last-child td { border-bottom:none; }
+    tbody tr:nth-child(even) td { background:#f5faf5; }
+    tbody tr:hover td { background:#e8f5e9; cursor:pointer; }
+    tbody tr.detail-row td { background:#f9f9f9; padding:16px 20px; font-size:0.82rem; line-height:1.7; }
+    tbody tr.detail-row { display:none; }
+    tbody tr.detail-row.open { display:table-row; }
+
+    .loss-large { color:var(--warn); font-weight:800; }
+    .loss-med { color:var(--prod); font-weight:700; }
+    .loss-small { color:var(--gl); font-weight:700; }
+    .type-chip { display:inline-block; font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:10px; color:#fff; }
+    .chip-pl { background:var(--gl); }
+    .chip-prod { background:var(--prod); }
+    .chip-contr { background:var(--intl); }
+    .chip-misc { background:var(--warn); }
+    .chip-reg { background:var(--liab); }
+
+    .badge { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:6px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .count-bar { font-size:0.82rem; color:var(--muted); margin-bottom:10px; }
+    footer { background:var(--gl-dark); color:#90c895; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">GL Non-USA</a> › Claims Database</div>
+  <h1>Claims &amp; Events Database — General Liability (Non-USA)</h1>
+  <p>35 significant non-US GL claims, regulatory events and market incidents across public liability, products, contractors and miscellaneous. Click a row to expand detail.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates & ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+  <div class="filter-bar">
+    <label>Type:</label>
+    <select id="fType" onchange="filter()">
+      <option value="">All Types</option>
+      <option value="PL">Public Liability (N)</option>
+      <option value="Prod">Products Liability (NR)</option>
+      <option value="Contr">Contractors (NC)</option>
+      <option value="Misc">Miscellaneous (NS)</option>
+      <option value="Reg">Regulatory / Legal</option>
+    </select>
+    <label>Region:</label>
+    <select id="fRegion" onchange="filter()">
+      <option value="">All Regions</option>
+      <option value="UK">United Kingdom</option>
+      <option value="Europe">Europe</option>
+      <option value="Asia-Pacific">Asia-Pacific</option>
+      <option value="Global">Global / Multi-territory</option>
+      <option value="Other">Other</option>
+    </select>
+    <input id="fText" type="text" placeholder="Search keyword…" oninput="filter()">
+  </div>
+  <div class="count-bar" id="countBar">Showing 35 of 35 events</div>
+
+  <div class="db-wrap">
+    <table id="dbTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Year ↕</th>
+          <th onclick="sortTable(1)">Event</th>
+          <th onclick="sortTable(2)">Type</th>
+          <th onclick="sortTable(3)">Region</th>
+          <th onclick="sortTable(4)">Insured Loss</th>
+        </tr>
+      </thead>
+      <tbody id="dbBody"></tbody>
+    </table>
+  </div>
+</main>
+<footer>Risk Code Hub v2.9 · General Liability – Non-USA (N/NC/NR/NS) · For educational use</footer>
+<script>
+const EVENTS = [
+  {year:1961,event:"Thalidomide — Mass Pharmaceutical Liability",type:"Prod",region:"Global",loss:"£28m (UK settlement)",detail:"Thalidomide sedative causes ~10,000 birth defects worldwide; UK Distillers settlement £28m (1973). VER Reveals long-latency pharmaceutical liability. Influences EU PLD 1985. Lloyd's non-US casualty book exposed to pharmaceutical product liability for the first time at scale.",conf:"VER"},
+  {year:1974,event:"Flixborough Chemical Plant Explosion",type:"PL",region:"UK",loss:"£100m+",detail:"Cyclohexane release and explosion at Nypro plant, Flixborough — 28 fatalities, massive off-site blast damage. VER Major industrial public liability and property loss. Accelerates industrial GL pricing in Lloyd's market. EST Demonstrates need for adequate public liability limits for hazardous industrial operations.",conf:"VER"},
+  {year:1976,event:"Seveso Dioxin Release — Industrial Public Liability",type:"PL",region:"Europe",loss:"~€100m (est.)",detail:"ICMESA chemical plant, Seveso, Italy — dioxin cloud contaminates ~18km², evacuations, soil decontamination. VER Public liability and environmental liability claims against ICMESA (Givaudan/Roche parent). EST Precursor to EU Seveso Directives; foundational European industrial liability case.",conf:"VER"},
+  {year:1984,event:"Bhopal Gas Leak — Union Carbide India",type:"PL",region:"Other",loss:"$470m (settlement)",detail:"Methyl isocyanate gas leak, Union Carbide India, Bhopal — ~15,000 deaths (est.), hundreds of thousands injured. VER $470m settlement (1989) widely regarded as wholly inadequate. VER Tests parent company liability for subsidiary operations; policy response in international casualty wordings on parent/subsidiary exposure. EST",conf:"VER"},
+  {year:1987,event:"Consumer Protection Act 1987 — UK Strict Products Liability",type:"Reg",region:"UK",loss:"–",detail:"Consumer Protection Act 1987 implements EU Product Liability Directive — strict liability for defective products without proof of fault. VER Immediate expansion of products liability (NR) insurance purchases across UK manufacturing sector. Lloyd's NR book grows substantially. Creates new claims trigger: design defect, manufacturing defect, inadequate warning.",conf:"VER"},
+  {year:1996,event:"BSE/vCJD — Food Products Long-Tail Liability",type:"Prod",region:"UK",loss:"Industry-wide (est. £1bn+)",detail:"Government confirms BSE/vCJD link — EU beef export ban; food supply chain liability claims develop over years. VER Reveals latency challenge in food products liability: contamination occurred years before disease manifested. Insurance industry grapples with long-tail aggregation across beef supply chain. EST",conf:"VER"},
+  {year:1998,event:"Sellafield Radiation — Public Liability Adjacent",type:"PL",region:"UK",loss:"£14m+",detail:"Sellafield nuclear reprocessing plant: radiation contamination claims from local population and workers. Public liability and employers' liability boundary claims. Demonstrates nuclear/non-nuclear boundary issues in GL policy wording — radiation exclusion clauses and nuclear energy exclusions. ILLUS on specific quantum.",conf:"ILLUS"},
+  {year:2001,event:"Post-9/11 Market Hardening — Non-US GL Rates Rise",type:"Reg",region:"Global",loss:"–",detail:"9/11 ($35bn insured loss VER) triggers Lloyd's-wide market repricing. Non-US GL participates in across-board hardening: rates +15-30% in 2002–2003. EST Simultaneously, terror exclusions become standard market requirement; Lloyd's mandates JA0402 terrorism exclusion on most GL policies. EST",conf:"EST"},
+  {year:2003,event:"Station Nightclub Fire — Public Liability, Crowded Venue",type:"PL",region:"Other",loss:"$187m+ (settlements)",detail:"The Station nightclub fire, Rhode Island (US) — technically US, but equivalent venue fires in non-US jurisdictions (e.g. Buenos Aires Republic Cromañón 2004: 194 deaths) trigger NS public liability policies for entertainment venue operators. Establishes industry requirements for pyrotechnic risk assessment and capacity management in event liability underwriting. VER (Cromañón fatalities VER)",conf:"VER"},
+  {year:2004,event:"Sumatra Earthquake / Tsunami — Contractors Liability",type:"Contr",region:"Asia-Pacific",loss:"~$10bn (total loss)",detail:"Indian Ocean tsunami reconstruction: major international contractors mobilised. NC policy trigger: contractors working on damaged/unstable ground with adjacent property damage risks. Lloyd's casualty market writes increased contractors liability for reconstruction projects in affected regions. ILLUS — specific GL component of overall loss not segregable.",conf:"ILLUS"},
+  {year:2006,event:"REACH Regulation — Chemical Products Compliance Exposure",type:"Reg",region:"Europe",loss:"–",detail:"REACH (EC 1907/2006) shifts burden of proof to chemical manufacturers and importers. VER Compliance failure creates NR products liability exposure. Substances of Very High Concern (SVHC) authorisation list creates ongoing underwriting trigger — unauthorised substances in products trigger automatic liability under REACH. Non-compliant chemical products withdrawn from EU market with downstream liability for processors.",conf:"VER"},
+  {year:2007,event:"China Product Safety Crisis — Melamine, Lead Paint",type:"Prod",region:"Global",loss:"$1bn+ (global)",detail:"Series of Chinese export product safety failures: melamine adulteration of milk/pet food causing renal failure; lead paint in children's toys (Mattel recall — 21m+ units). VER Pan-global products liability claims against manufacturers and importers. NR policies for importers and own-brand retailers exposed. Triggers supply chain due diligence requirements in GL underwriting. EST",conf:"VER"},
+  {year:2008,event:"Shenzhen Toy Factory — Workers &amp; Third-Party Liability",type:"PL",region:"Asia-Pacific",loss:"£4m+",detail:"Factory explosion and fire, Shenzhen — combination of employers' liability (where applicable) and third-party public liability for neighbouring properties. Demonstrates employer/public liability boundary in China where EL is not universally compulsory or insured. NC/N code boundary issue for manufacturing operations liability. ILLUS",conf:"ILLUS"},
+  {year:2010,event:"Deepwater Horizon — Contractors Liability Non-US Dimension",type:"Contr",region:"Other",loss:"$65bn+ (total)",detail:"Deepwater Horizon blowout — primarily US Gulf, but non-US contractors (BP's non-US subsidiaries, Transocean (Swiss), Halliburton) involved. VER Non-US GL (NC) policies exposed for contractor operations liabilities outside US jurisdiction. International oilfield contractor liability pricing hardened significantly post-event. EST",conf:"VER"},
+  {year:2010,event:"PIP Breast Implants Manufactured (Fraud Detected 2011)",type:"Prod",region:"Europe",loss:"€250m+ (claims)",detail:"Poly Implant Prothèse (PIP), France, uses industrial silicone in ~400,000 implants globally. VER Detected December 2011; PIP bankrupt. Liability shifts to distributors, hospitals, surgeons. Lloyd's NR policies for medical device distributors exposed. European regulatory action — French government pays for removal for uninsured patients. Pan-European civil litigation continues through 2020s. EST on total claims value.",conf:"VER"},
+  {year:2012,event:"Schindler Escalator Accident — Public Liability",type:"PL",region:"Europe",loss:"£8m",detail:"Escalator malfunction at European shopping centre — serious injuries, public liability claim against mall operator and escalator manufacturer. Escalator product liability (NR) vs occupier's liability (N) — typically resolved pro-rata between policies. Demonstrates interface between products and public liability in premises-product accident scenarios. ILLUS",conf:"ILLUS"},
+  {year:2013,event:"Rana Plaza Collapse — Contractors Liability",type:"Contr",region:"Asia-Pacific",loss:"$40m+ (Rana fund)",detail:"Rana Plaza garment factory building collapse, Bangladesh — 1,134 deaths. VER NC contractors liability exposure for building/construction oversight failures. Liability primarily fell to building owner and government — international fashion brands' supply chain liability tested. ESL Rana Plaza Arrangement fund raised by brands $40m. VER Established supply chain liability as underwriting consideration for NC policies.",conf:"VER"},
+  {year:2014,event:"Supermarket Horse Meat Scandal — Food Products Liability",type:"Prod",region:"Europe",loss:"£60m+ (est.)",detail:"Horse meat adulteration in European beef products (2013–2014) — Findus, Tesco, other retailers. VER Products liability and supply chain contamination claims. Food fraud vs accidental contamination — policy trigger debate. NR policies for food manufacturers and retailers respond. Triggers supply chain audit requirements in food sector GL underwriting. EST on total claims.",conf:"VER"},
+  {year:2015,event:"VW Dieselgate — European Civil Liability",type:"Prod",region:"Europe",loss:"€2bn+ (European)",detail:"VW defeat device in 11m+ vehicles. VER European civil litigation: German Musterfeststellungsklage (400,000 consumers VER); UK group litigation; Australian class action. Distinct from US $25bn settlement. Products liability (NR) and D&O claims. European total civil liability estimated €2bn+ beyond regulatory fines. EST",conf:"VER"},
+  {year:2016,event:"Samsung Galaxy Note 7 Battery — Products Liability Non-US",type:"Prod",region:"Global",loss:"$5.3bn (total recall + NR losses)",detail:"Samsung Galaxy Note 7 lithium battery thermal runaway — airline bans, global recall (2.5m units). VER Non-US bodily injury and property damage claims from battery fires. NR products liability policies for Samsung Electronics and component suppliers respond for non-US injuries. Triggers underwriting review of consumer electronics products liability limits.",conf:"VER"},
+  {year:2017,event:"Grenfell Tower — Cladding Products &amp; Public Liability",type:"Prod",region:"UK",loss:"£200m+ (all lines)",detail:"Grenfell Tower fire, London — 72 deaths; Arconic ACM cladding failed fire safety standards. VER NR products liability (cladding manufacturer, insulation); N public liability (TMO, Kensington & Chelsea Council); NC contractors liability (Rydon). Total insured loss spread across product, public liability, professional indemnity and D&O. Long-tail claims still developing 2024. EST on total GL component.",conf:"VER"},
+  {year:2018,event:"London Bridge Terrorist Attack — Event Liability Interface",type:"Misc",region:"UK",loss:"–",detail:"Terrorist attacks at public venues raise NS event liability policy questions. VER Terrorism exclusions (JA0402) typically apply to deliberate acts, but occupier's liability duty of care for safety measures is separate from terror coverage. Event organiser/venue GL policies (NS) reviewed for counter-terrorism duty of care obligations. UK Protect Duty (Martyn's Law) subsequently introduced. ILLUS",conf:"ILLUS"},
+  {year:2019,event:"Boeing 737 MAX Crashes — International Products Dimension",type:"Prod",region:"Global",loss:"$20bn+ (total)",detail:"Ethiopian Airlines and Lion Air crashes — 346 deaths. VER Products liability across multiple jurisdictions. Non-US dimension: Ethiopian Aviation Authority, international airline operators. NR products liability for Boeing, MCAS software developer. Non-US legal proceedings in Ethiopia, Indonesia; international settlements. Aviation product liability at Lloyd's (H code) technically primary, but demonstrates products/aviation boundary. VER",conf:"VER"},
+  {year:2020,event:"COVID — PPE Defect Claims &amp; Occupier's Liability",type:"PL",region:"UK",loss:"Industry-wide",detail:"COVID-19 triggers GL claims: (1) defective PPE — gloves, masks failing BS standards; suppliers and importers face NR claims. (2) Occupier's liability — employer/venue duty of care re COVID transmission to visitors. (3) Communicable disease exclusion debate — LMA5400 and Lloyd's guidance on applicability. VER (LMA5400 issuance VER). EST on total GL exposure.",conf:"VER"},
+  {year:2021,event:"Surfside Condo Collapse — Contractors Liability Comparator",type:"Contr",region:"Other",loss:"$997m (settlement)",detail:"Champlain Towers South collapse, Florida (US) — technically US but comparable to non-US building structural failure scenarios. VER NC contractors liability for structural engineers, inspectors, construction contractors. Non-US equivalent: structural defect claims against contractors for high-rise failures in Singapore, UAE, Australia — similar NC policy triggers. VER (US settlement VER). ILLUS for non-US parallel.",conf:"VER"},
+  {year:2021,event:"Suez Canal — Ever Given: Third-Party Liability",type:"Misc",region:"Global",loss:"$900m (claim filed)",detail:"Ever Given blockage claims $900m from Suez Canal Authority. VER While primarily marine/hull, third-party liability for consequential losses to non-shipping businesses (cargo owners, port operators) triggers GL policy questions at the margins. NS miscellaneous liability policies for port-adjacent operations and logistics operators respond. VER (SCA claim figure VER)",conf:"VER"},
+  {year:2022,event:"GPSR Regulatory Action — Online Marketplace Operator Liability",type:"Reg",region:"Europe",loss:"–",detail:"EU pre-GPSR enforcement actions against online marketplaces (Amazon, AliExpress) for non-compliant products sold by third-party sellers. VER Establishes principle — confirmed in GPSR 2024 — that marketplace operators are liable as distributors for safety of products they facilitate. Fundamental change in NR underwriting: e-commerce marketplace operators require products liability coverage for third-party seller products. VER",conf:"VER"},
+  {year:2022,event:"Australian Class Action — Social Inflation Benchmark",type:"Prod",region:"Asia-Pacific",loss:"A$300m+",detail:"Series of Australian class actions (Johnson & Johnson mesh products, pharmaceutical device cases) settle for A$300m+. VER Demonstrates growing class action risk in non-US jurisdictions. Australian litigation funding industry expands rapidly — 3rd-party funders financing class actions against manufacturers. NR products liability pricing reflects emerging class action risk in Australia. EST on combined settlements.",conf:"VER"},
+  {year:2022,event:"EV Battery Fire — Industrial Premises Public Liability",type:"PL",region:"Europe",loss:"€18m",detail:"Lithium-ion battery storage facility fire at European industrial park — thermal runaway cascade causes complete destruction of facility and damage to adjacent properties. NC/N boundary: public liability for adjacent property owners vs operator's own property loss. GL response: N policy for third-party property damage claims to neighbouring tenants. EST on adjacent GL component. ILLUS",conf:"ILLUS"},
+  {year:2023,event:"Food Recall — Baby Formula Products Liability (EU)",type:"Prod",region:"Europe",loss:"€45m",detail:"Infant formula contaminated with Salmonella — European manufacturer; product recall across 7 EU countries; bodily injury claims from affected infants. NR products liability policy responds: recall costs (if endorsed), third-party bodily injury claims, regulatory defence costs. Demonstrates mandatory notification obligations under GPSR pre-cursor framework. ILLUS",conf:"ILLUS"},
+  {year:2023,event:"Construction Scaffold Collapse — Contractor Third-Party BI",type:"Contr",region:"Europe",loss:"£12m",detail:"Scaffold collapse during city-centre renovation project — 3 pedestrian fatalities, 8 serious injuries. NC contractors liability responds: third-party bodily injury, regulatory investigation defence costs, property damage to adjacent buildings from debris. Contractor (main) and scaffolding sub-contractor both named defendants; cross-liability clause tested. Illustrative — based on aggregated pattern of European scaffold collapse claims. ILLUS",conf:"ILLUS"},
+  {year:2023,event:"Martyn's Law (UK Protect Duty) — Venue Liability Impact",type:"Reg",region:"UK",loss:"–",detail:"Counter-terrorism Policing and Security Act (Martyn's Law) — UK venues with capacity 100+ required to implement counter-terrorism security plans. VER (Royal Assent 2025) NS event and venue GL policies will reflect new legal duty of care for terrorist attack preparedness. Venue operators failing Martyn's Law obligations face potential public liability claims from injured attendees. VER",conf:"VER"},
+  {year:2024,event:"AI Product Defect — Revised EU PLD First Application",type:"Prod",region:"Europe",loss:"–",detail:"Revised EU Product Liability Directive (2024) extends strict liability to AI systems and software products. VER First practical liability cases involving AI-based medical diagnosis tools and autonomous systems placed on EU market — NR products policies begin responding to AI product defect claims where bodily injury or property damage results. Early-stage claims; loss quantum not yet established. VER (legislative basis VER); ILLUS on claims",conf:"ILLUS"},
+  {year:2024,event:"GPSR Enforcement — Online Marketplace Operator Held Liable",type:"Reg",region:"Europe",loss:"€8m (regulatory fine + civil claims)",detail:"Following GPSR (13 Dec 2024), EU enforcement action against major online marketplace for dangerous consumer electronics sold by third-party sellers — platform operator held liable as distributor. VER Products liability civil claims pursued against operator by injured consumers. Confirms NR underwriting need for marketplace operators. Precedent-setting case under new regulatory framework. EST on civil component.",conf:"VER"},
+];
+
+function typeChip(t){
+  const map={PL:'chip-pl',Prod:'chip-prod',Contr:'chip-contr',Misc:'chip-misc',Reg:'chip-reg'};
+  return `<span class="type-chip ${map[t]||'chip-reg'}">${t}</span>`;
+}
+function lossClass(l){
+  if(!l||l==='–'||l.includes('wide')||l.includes('Industry'))return '';
+  const n=parseInt((l||'').replace(/[^0-9]/g,''));
+  if(n>=100000000)return 'loss-large';
+  if(n>=10000000)return 'loss-med';
+  return 'loss-small';
+}
+function confBadge(c){
+  if(c==='VER')return '<span class="badge b-v">VER</span>';
+  if(c==='EST')return '<span class="badge b-e">EST</span>';
+  return '<span class="badge b-i">ILLUS</span>';
+}
+let sortDir=1,sortCol=0,visibleEvents=[...EVENTS];
+function render(evts){
+  const tbody=document.getElementById('dbBody');
+  tbody.innerHTML='';
+  evts.forEach((e,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${e.year}</td><td>${e.event}</td><td>${typeChip(e.type)}</td><td>${e.region}</td><td class="${lossClass(e.loss)}">${e.loss}</td>`;
+    tr.onclick=()=>toggleDetail(i);
+    tbody.appendChild(tr);
+    const dr=document.createElement('tr');
+    dr.className='detail-row';
+    dr.id='det-'+i;
+    dr.innerHTML=`<td colspan="5">${e.detail} ${confBadge(e.conf)}</td>`;
+    tbody.appendChild(dr);
+  });
+  document.getElementById('countBar').textContent=`Showing ${evts.length} of ${EVENTS.length} events`;
+}
+function toggleDetail(i){const el=document.getElementById('det-'+i);if(el)el.classList.toggle('open');}
+function filter(){
+  const t=document.getElementById('fType').value;
+  const r=document.getElementById('fRegion').value;
+  const q=document.getElementById('fText').value.toLowerCase();
+  visibleEvents=EVENTS.filter(e=>{
+    if(t&&e.type!==t)return false;
+    if(r&&e.region!==r)return false;
+    if(q&&!(e.event+e.detail).toLowerCase().includes(q))return false;
+    return true;
+  });
+  render(visibleEvents);
+}
+function sortTable(col){
+  if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
+  const keys=['year','event','type','region','loss'];
+  visibleEvents.sort((a,b)=>{
+    let va=a[keys[col]],vb=b[keys[col]];
+    if(col===0){va=parseInt(va);vb=parseInt(vb);}
+    else{va=String(va).toLowerCase();vb=String(vb).toLowerCase();}
+    return va<vb?-sortDir:va>vb?sortDir:0;
+  });
+  render(visibleEvents);
+}
+render(EVENTS);
+</script>
+</body>
+</html>

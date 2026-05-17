@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Crime / Fidelity FI — Global Programme | Risk Code Hub</title>
+  <style>
+    :root {
+      --crime:#7b1e1e; --crime-dark:#3d0000; --fi:#0d3b6b;
+      --fid:#1b5e20; --fraud:#c62828; --cyber:#6a1b9a;
+      --social:#e65100; --gold:#b8860b;
+      --light:#faf5f5; --text:#1e1e2e; --muted:#6b7c93; --border:#d4c8c8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #7b1e1e;
+    --hub-dark:      #3d0000;
+    --hub-light:     #faf5f5;
+    --hub-accent:    #b8860b;
+    --hub-secondary: #0d3b6b;
+    --hub-secondary2:#1b5e20;
+    --header-gradient:linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%);
+    --header-sub:    #e8c8c8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#cc9988; margin-bottom:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    header h1 { font-size:1.8rem; font-weight:700; }
+    header p { margin-top:8px; color:#e8c8c8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--crime); border-bottom-color:var(--gold); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.25rem; color:var(--crime); margin:40px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--gold); }
+    h3 { font-size:1.05rem; color:var(--crime-dark); margin:20px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.93rem; }
+    ul { padding-left:20px; margin-bottom:14px; }
+    li { font-size:0.9rem; line-height:1.75; margin-bottom:6px; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; vertical-align:middle; margin-left:3px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#e8eaf6; color:#1a237e; }
+    .b-g { background:#fce4ec; color:#880e4f; }
+
+    .tower { display:flex; flex-direction:column; gap:6px; margin:24px 0; }
+    .tower-layer { border-radius:8px; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+    .tower-layer h4 { font-size:0.9rem; font-weight:700; color:#fff; }
+    .tower-layer p { font-size:0.82rem; color:rgba(255,255,255,0.88); margin:0; }
+    .tower-layer .amt { font-size:1rem; font-weight:700; color:#fff; white-space:nowrap; }
+    .tl-1 { background:#3d0000; }
+    .tl-2 { background:#7b1e1e; }
+    .tl-3 { background:#a83232; }
+    .tl-4 { background:#0d3b6b; }
+    .tl-5 { background:#1b5e20; }
+    .tl-6 { background:#4a148c; }
+
+    .tbl-wrap { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:20px 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.87rem; }
+    th { background:var(--crime); color:#fff; padding:10px 14px; text-align:left; }
+    td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:nth-child(even) td { background:#fdf8f8; }
+
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; margin:20px 0; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-left:4px solid var(--crime); }
+    .card.fi { border-left-color:var(--fi); }
+    .card.cyber { border-left-color:var(--cyber); }
+    .card.fid { border-left-color:var(--fid); }
+    .card.gold { border-left-color:var(--gold); }
+    .card h4 { font-size:0.9rem; font-weight:700; margin-bottom:8px; color:var(--crime-dark); }
+    .card.fi h4 { color:var(--fi); }
+    .card.cyber h4 { color:var(--cyber); }
+    .card.fid h4 { color:var(--fid); }
+    .card.gold h4 { color:var(--gold); }
+    .card ul { padding-left:16px; margin:0; }
+    .card li { font-size:0.83rem; margin-bottom:5px; }
+
+    .info-box { border-radius:10px; padding:18px 22px; margin:18px 0; font-size:0.89rem; line-height:1.7; }
+    .info-box.red { background:#fdecea; border-left:4px solid var(--fraud); }
+    .info-box.blue { background:#e3f2fd; border-left:4px solid var(--fi); }
+    .info-box.green { background:#e8f5e9; border-left:4px solid var(--fid); }
+    .info-box.amber { background:#fff8e1; border-left:4px solid var(--gold); }
+    .info-box.purple { background:#f3e5f5; border-left:4px solid var(--cyber); }
+    .info-box strong { display:block; font-size:0.93rem; margin-bottom:6px; }
+
+    .case-study { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px 28px; margin:24px 0; border-top:4px solid var(--crime); }
+    .case-study h3 { margin-top:0; color:var(--crime); }
+    .cs-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:16px; }
+    @media(max-width:650px){ .cs-grid { grid-template-columns:1fr; } }
+    .cs-box { background:var(--light); border-radius:8px; padding:14px 16px; }
+    .cs-box h5 { font-size:0.82rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-bottom:8px; }
+    .cs-box p { margin:0; font-size:0.87rem; }
+
+    .workflow { display:flex; flex-direction:column; gap:0; margin:20px 0; }
+    .wf-step { display:flex; gap:16px; align-items:flex-start; }
+    .wf-num { width:32px; height:32px; border-radius:50%; background:var(--crime); color:#fff; font-size:0.85rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+    .wf-body { padding-bottom:20px; border-left:2px dashed var(--border); padding-left:16px; flex:1; }
+    .wf-step:last-child .wf-body { border-left:none; }
+    .wf-body h4 { font-size:0.88rem; font-weight:700; color:var(--crime-dark); margin-bottom:4px; }
+    .wf-body p { font-size:0.84rem; margin:0; }
+
+    footer { background:var(--crime-dark); color:#aa8888; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer a { color:var(--gold); text-decoration:none; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Crime / Fidelity FI (BB)</a> › Global Programme</div>
+  <h1>Module 08 — Global Programme Structure</h1>
+  <p>Multinational FI crime programme design, US regulatory bonds, coverage towers, admitted requirements and cross-border coordination</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>A multinational financial institution requires a layered BB crime programme that navigates admitted requirements in regulated jurisdictions, coordinates with D&amp;O and cyber towers, and meets statutory bond obligations across multiple regulatory regimes. Lloyd's leads substantial shares of London-market global programmes, typically on the master policy layer with local admitted policies fronted by network carriers in jurisdictions requiring local licencing. <span class="badge b-v">VER</span></p>
+
+  <!-- COVERAGE TOWER -->
+  <h2>Coverage Tower — Typical Multinational FI Programme</h2>
+  <p>Large financial institutions structure crime cover in layers. The tower below illustrates a representative $100m programme for a mid-to-large global bank. <span class="badge b-e">EST</span></p>
+
+  <div class="tower">
+    <div class="tower-layer tl-6">
+      <div>
+        <h4>Top &amp; Drop / Facultative RI</h4>
+        <p>Optional excess layers placed on individual risks; used for catastrophic exposures (e.g. rogue trader on large trading books)</p>
+      </div>
+      <span class="amt">$50m–$100m xs $50m</span>
+    </div>
+    <div class="tower-layer tl-4">
+      <div>
+        <h4>Excess Crime / Umbrella Layer</h4>
+        <p>Following form to primary; typically placed with London market excess & surplus lines carriers; aggregate reinstatements negotiated</p>
+      </div>
+      <span class="amt">$25m xs $25m</span>
+    </div>
+    <div class="tower-layer tl-3">
+      <div>
+        <h4>Buffer Layer — Social Engineering &amp; Computer Crime</h4>
+        <p>Specific sublimit layer for BEC/social engineering and computer crime; often placed separately given distinct loss profile</p>
+      </div>
+      <span class="amt">$10m xs $15m</span>
+    </div>
+    <div class="tower-layer tl-2">
+      <div>
+        <h4>Primary Composite BB Policy — London Market Lead</h4>
+        <p>All-risk BB policy; employee dishonesty, forgery, on-premises/in-transit, computer crime, social engineering endorsements; discovery basis; Lloyd's slip lead</p>
+      </div>
+      <span class="amt">$15m limit</span>
+    </div>
+    <div class="tower-layer tl-5">
+      <div>
+        <h4>Local Admitted Policies (Network Fronts)</h4>
+        <p>Admitted policies in US, India, Brazil, EU regulated entities; fronted by licensed carriers; reinsured 100% back to London master; ensures local regulatory compliance</p>
+      </div>
+      <span class="amt">Per regulatory minimum</span>
+    </div>
+    <div class="tower-layer tl-1">
+      <div>
+        <h4>Self-Insured Retention / Captive</h4>
+        <p>First loss retained internally or via captive; large FIs typically $1m–$5m SIR; captive participation signals risk management confidence</p>
+      </div>
+      <span class="amt">$1m–$5m SIR</span>
+    </div>
+  </div>
+
+  <!-- US REGULATORY BONDS -->
+  <h2>US Regulatory Bond Requirements</h2>
+  <p>US-regulated financial institutions face mandatory bond requirements from multiple federal and state regulators. These statutory bonds are typically endorsed onto or coordinated with the broader BB programme. <span class="badge b-v">VER</span></p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Regulator / Statute</th>
+          <th>Entity Type</th>
+          <th>Bond Requirement</th>
+          <th>Coordination with BB</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>FDIC</strong><br>Federal Deposit Insurance Act</td>
+          <td>FDIC-insured banks &amp; thrifts</td>
+          <td>Minimum per FDIC regulations; amount based on total assets; examiner discretion to require increase</td>
+          <td>BBB policy typically satisfies FDIC requirement if sufficient limit; FDIC form filed annually <span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>FINRA Rule 4360</strong><br>Fidelity Bond Standards</td>
+          <td>Broker-dealers registered with FINRA</td>
+          <td>Minimum bond = greater of (a) 120% of net capital or (b) $25,000; maximum $2.5m unless approved otherwise; covers employees &amp; principals</td>
+          <td>Separate SIPC bond often required; BB policy must comply with FINRA-approved form; lead insurer must be FINRA-approved <span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>Investment Company Act 1940 §17(g)</strong><br>ICA/SEC</td>
+          <td>Registered investment companies (mutual funds, ETFs, closed-end funds)</td>
+          <td>Minimum bond = 10% of fund value up to $25m; SEC rule 17g-1 governs; joint insured arrangements require SEC approval</td>
+          <td>Fund board must review bond annually; premium apportionment between fund and adviser regulated; Lloyd's and approved US carriers eligible <span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>NCUA</strong><br>National Credit Union Admin</td>
+          <td>Federally insured credit unions</td>
+          <td>Based on credit union asset size; minimum $250,000; NCUA-approved form required</td>
+          <td>Most credit unions place via CUNA Mutual or specialist credit union carrier; London market excess layers available <span class="badge b-e">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>State Insurance Departments</strong></td>
+          <td>Licensed insurance companies</td>
+          <td>Varies by state; NY DFS requires fidelity cover for licensed insurers meeting asset thresholds</td>
+          <td>Included as insured entity on parent FI's BB programme; separate excess available if state-mandated limits inadequate <span class="badge b-e">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>State Money Transmitter Laws</strong></td>
+          <td>Licensed money transmitters, payment processors</td>
+          <td>Surety bond or fidelity bond; amount varies by state ($50k–$500k typical); some states accept crime insurance in lieu</td>
+          <td>Crime policy endorsement may satisfy bond requirement; confirm with individual state regulator; Lloyd's non-admitted basis may not satisfy admitted requirement <span class="badge b-v">VER</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ADMITTED VS NON-ADMITTED -->
+  <h2>Admitted vs Non-Admitted Programme Design</h2>
+  <p>Lloyd's operates as a non-admitted insurer in most jurisdictions outside the UK. For multinational FI programmes this requires careful structuring to maintain regulatory compliance while achieving consolidated London market pricing. <span class="badge b-v">VER</span></p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Jurisdiction</th>
+          <th>Admitted Requirement</th>
+          <th>Lloyd's Position</th>
+          <th>Programme Solution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>United States</strong></td>
+          <td>Individual state regulation; surplus lines available in most states; some statutory bonds require admitted insurer</td>
+          <td>Lloyd's is surplus lines eligible in all US states via Coverholder / Lloyd's US Trust Fund; not admitted for statutory bonds</td>
+          <td>Admitted US carrier fronts local policy; 100% ceded to London master; statutory bonds placed with admitted US carrier <span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>European Union (post-Brexit)</strong></td>
+          <td>Solvency II regulated; must use licensed EU insurer for EEA entities; Lloyd's Brussels provides EU-admitted capacity</td>
+          <td>Lloyd's Brussels (established 2019) writes admitted EU business; can front for EEA subsidiaries of global FI programmes</td>
+          <td>Lloyd's Brussels fronts EU entities; reinsured to London syndicates; single master policy coordination <span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>India</strong></td>
+          <td>IRDAI requires admitted insurer; non-admitted cross-border cover prohibited; Lloyd's India operates under IRDAI licence</td>
+          <td>Lloyd's India (Mumbai) admitted since 2017; can write domestic risk; premium must be paid in INR</td>
+          <td>Lloyd's India entity admits local FI entities; reinsurance back to syndicates via treaty; separate IRDAI filings required <span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>Brazil</strong></td>
+          <td>SUSEP requires local admitted policy; foreign policies generally not recognised; SUSEP licence required</td>
+          <td>Lloyd's Brazil (São Paulo) admitted; can write FI crime cover for Brazilian subsidiaries</td>
+          <td>Local admitted policy via Lloyd's Brazil or network carrier; master programme coordinates excess globally <span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>China</strong></td>
+          <td>CBIRC requires licensed insurer; Lloyd's China (Shanghai) licensed since 2007; cross-border cover restricted</td>
+          <td>Lloyd's China entity licensed; limited syndicate participation; most large risks ceded to global programme</td>
+          <td>Lloyd's China or Ping An Re / PICC fronts; mainland entities covered locally; HK subsidiary under separate Lloyd's Asia policy <span class="badge b-e">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>Singapore / Hong Kong</strong></td>
+          <td>MAS (Singapore) and HKIA; Lloyd's Asia licensed in both; relatively open regimes for surplus lines</td>
+          <td>Lloyd's Asia Pacific hubs write admitted and excess cover; major regional booking centres for Asian programme legs</td>
+          <td>Lloyd's Asia fronts APAC entities (ex China, India); seamlessly reinsured to London; APAC premium booked Singapore or HK <span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>Australia</strong></td>
+          <td>APRA regulated; Lloyd's Australia licensed; local policy required for local entities</td>
+          <td>Lloyd's Australia admitted; major FI crime market in Australia; Resolute FM local leader</td>
+          <td>Lloyd's Australia writes local layer; excess ceded to London master programme <span class="badge b-v">VER</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- COORDINATION WITH OTHER LINES -->
+  <h2>Coordination with Other Insurance Lines</h2>
+  <p>FI crime programmes must be structured to avoid gaps and overlaps with related lines. The boundaries between BB, D&amp;O, Cyber, E&amp;O/PI, and Commercial Crime are complex and negotiated at programme design stage. <span class="badge b-v">VER</span></p>
+
+  <div class="card-grid">
+    <div class="card fi">
+      <h4>BB ↔ D&amp;O Boundary</h4>
+      <ul>
+        <li>D&amp;O covers directors/officers acting in their capacity as such — management decisions</li>
+        <li>BB covers employees (and sometimes directors) for dishonest, fraudulent or criminal acts</li>
+        <li>Key boundary: rogue executive who is also a director — which policy responds first?</li>
+        <li>Practitioners: place both; insist on coordination clause; confirm no Other Insurance provision creates gap</li>
+        <li>Priority of payment clause in D&amp;O should not prejudice BB recovery <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="card cyber">
+      <h4>BB ↔ Cyber Boundary</h4>
+      <ul>
+        <li>Computer crime cover (BB): first-party loss from unauthorised system access; traditionally covers direct financial loss</li>
+        <li>Cyber policy: broader — includes third-party liability, notification costs, business interruption, ransomware, crisis management</li>
+        <li>Key overlap: BEC loss may trigger both; avoid double-recovery via coordination clause</li>
+        <li>Medidata ruling (2nd Cir. 2018): BB computer crime clause interpreted broadly to include BEC; expanded coverage expectation</li>
+        <li>SWIFT heist scenario: typically BB computer crime primary; cyber excess for BI and third-party claims <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="card fid">
+      <h4>BB ↔ E&amp;O / PI Boundary</h4>
+      <ul>
+        <li>E&amp;O covers negligent errors in professional services; no dishonesty element required</li>
+        <li>BB covers intentional dishonest/fraudulent acts with manifest intent</li>
+        <li>Boundary: employee makes negligent trade error (E&amp;O) vs. employee deliberately mis-marks positions (BB)</li>
+        <li>Combined FI program bundles BB + E&amp;O + D&amp;O with single aggregate deductible; simpler claims handling</li>
+        <li>Avoid gap: employee negligence that enabled fraud — may fall between both policies without careful drafting <span class="badge b-e">EST</span></li>
+      </ul>
+    </div>
+    <div class="card gold">
+      <h4>BB ↔ Commercial Crime</h4>
+      <ul>
+        <li>Commercial Crime policy (non-FI): standard ISO form; typically narrower than BB; suited to corporates</li>
+        <li>FI programme (BB / Bankers Blanket Bond): broader; includes securities, counterfeiting, premises coverage</li>
+        <li>Holding companies: subsidiary FI entities may need BB; parent corporate entity may use Commercial Crime</li>
+        <li>Ensure parent-subsidiary aggregation clause avoids double-counting between policies</li>
+        <li>Some programme architects place single composite policy across corporate and FI with sublimits per entity type <span class="badge b-e">EST</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PLACEMENT WORKFLOW -->
+  <h2>Global Programme Placement Workflow</h2>
+
+  <div class="workflow">
+    <div class="wf-step">
+      <div class="wf-num">1</div>
+      <div class="wf-body">
+        <h4>Programme Audit &amp; Exposure Mapping</h4>
+        <p>Broker conducts enterprise-wide loss exposure map: headcount by entity, payment volumes, treasury positions, SWIFT transaction volumes, IT estate, regulatory bond obligations. ACFE Fraud Risk Assessment questionnaire completed by CFO/CAO. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">2</div>
+      <div class="wf-body">
+        <h4>Regulatory Bond Inventory</h4>
+        <p>Legal confirm all mandatory bond requirements by jurisdiction (FINRA, FDIC, IRDAI, SUSEP, MAS, APRA, etc.). Establish minimum limits matrix; identify admitted requirement jurisdictions requiring local fronts. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">3</div>
+      <div class="wf-body">
+        <h4>Programme Architecture Design</h4>
+        <p>Broker drafts tower structure: SIR/captive layer; primary limits; sublimits for SE/computer crime; excess layers. Agrees on discovery period, retroactive date, aggregate limits and reinstatements. Coordinates with D&amp;O, Cyber and E&amp;O programme design. <span class="badge b-e">EST</span></p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">4</div>
+      <div class="wf-body">
+        <h4>Lloyd's Slip Preparation &amp; Submission</h4>
+        <p>Market Reform Contract (MRC) slip prepared; schedules of insured entities; declarations on controls (SWIFT CSP, dual auth, mandatory holiday, DMARC); loss history 5 years; financial statements. Submitted to Lloyd's lead syndicate. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">5</div>
+      <div class="wf-body">
+        <h4>Lead Underwriter Negotiation</h4>
+        <p>Lead underwriter (often Beazley, Hiscox, Zurich) reviews, may require additional information (control attestation, CISO interview, penetration test summary). Rating finalised; coverage terms negotiated including social engineering sublimit, computer crime definition, subsidiary schedule. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">6</div>
+      <div class="wf-body">
+        <h4>Following Market Placement</h4>
+        <p>Lead sets the market; broker syndicates risk to following markets at lead terms or negotiated discount. Large programmes (>$50m TIV crime exposure) may require International Insurance Market participation for capacity. <span class="badge b-e">EST</span></p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">7</div>
+      <div class="wf-body">
+        <h4>Local Policy Issuance &amp; Fronting Arrangement</h4>
+        <p>Network carrier (e.g. AIG, Chubb, Zurich, Allianz, or Lloyd's local entity) issues admitted local policies in each required jurisdiction. Fronting fee typically 2–5% of local premium. 100% ceded to London programme reinsurers via pre-agreed treaty. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-num">8</div>
+      <div class="wf-body">
+        <h4>Annual Review &amp; Renewal</h4>
+        <p>Claims experience review; loss development reserving; control attestations renewed (SWIFT KYC-SA); new subsidiary schedule; updated regulatory bond limits. Market briefing at renewal; major losses trigger mid-term review. <span class="badge b-v">VER</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGGREGATE STOP-LOSS -->
+  <h2>Aggregate Stop-Loss &amp; Reinstatements</h2>
+  <p>Large FI crime programmes frequently negotiate aggregate protections to cap the insured's total annual loss recovery — important where frequency of smaller losses (BEC, card fraud) could erode limits faster than individual per-occurrence sublimits suggest. <span class="badge b-e">EST</span></p>
+
+  <div class="info-box amber">
+    <strong>⚠️ Annual Aggregate vs Per-Occurrence — Key Distinction</strong>
+    Discovery-basis BB policies typically have a single per-occurrence limit and an annual aggregate limit. Where social engineering or computer crime sublimits apply, each BEC incident may erode the sublimit rapidly. Negotiate: (1) separate sublimit aggregate for BEC distinct from main programme aggregate; (2) reinstatement provisions — typically 1 free reinstatement at 100% additional premium for occurrence layer; (3) aggregate stop-loss on excess layers triggered once primary aggregate is exhausted. <span class="badge b-e">EST</span>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Structure Feature</th>
+          <th>Small FI (&lt;$1bn assets)</th>
+          <th>Mid-Size FI ($1–50bn)</th>
+          <th>Large FI ($50bn+)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Typical Limit</strong></td>
+          <td>$1m–$10m per occurrence</td>
+          <td>$10m–$50m per occurrence</td>
+          <td>$50m–$250m per occurrence</td>
+        </tr>
+        <tr>
+          <td><strong>SIR / Deductible</strong></td>
+          <td>$25k–$250k</td>
+          <td>$500k–$2.5m</td>
+          <td>$2.5m–$10m (captive)</td>
+        </tr>
+        <tr>
+          <td><strong>Social Engineering Sublimit</strong></td>
+          <td>$250k–$1m (within limit)</td>
+          <td>$2.5m–$10m (separate layer)</td>
+          <td>$10m–$25m (separate sublayer)</td>
+        </tr>
+        <tr>
+          <td><strong>Computer Crime Sublimit</strong></td>
+          <td>$1m–$5m (within limit)</td>
+          <td>$5m–$25m (within or separate)</td>
+          <td>$25m+ (often separate buffer layer)</td>
+        </tr>
+        <tr>
+          <td><strong>Annual Aggregate</strong></td>
+          <td>Often same as per-occurrence limit</td>
+          <td>150%–200% of per-occurrence</td>
+          <td>Negotiated; unlimited in some bespoke programmes</td>
+        </tr>
+        <tr>
+          <td><strong>Reinstatements</strong></td>
+          <td>Nil or 1 at 100%</td>
+          <td>1 free + 1 at 100%</td>
+          <td>Negotiated; aggregate stop-loss excess</td>
+        </tr>
+        <tr>
+          <td><strong>Discovery Period</strong></td>
+          <td>12–24 months run-off</td>
+          <td>24–36 months run-off</td>
+          <td>36–60 months run-off negotiated</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CASE STUDY -->
+  <h2>Case Study — Global Investment Bank Programme Restructure 2023</h2>
+
+  <div class="case-study">
+    <h3>🏦 Pan-European Investment Bank — £18bn Assets Under Management</h3>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:14px;">Illustrative composite based on typical mid-large IB programme characteristics — ILLUS <span class="badge b-i">ILLUS</span></p>
+
+    <p><strong>Background:</strong> London-headquartered investment bank with operations in UK, Germany, France, Switzerland, US (SEC-registered broker-dealer), Singapore and Hong Kong. Following a near-miss BEC incident (attempted £3.2m transfer foiled by callback procedure), the CFO initiated a comprehensive crime programme review. Previous programme was legacy structure: single London primary policy, no social engineering cover, no excess layer, inadequate for FINRA minimum bond given expansion of US broker-dealer net capital.</p>
+
+    <div class="cs-grid">
+      <div class="cs-box">
+        <h5>Previous Programme (2022)</h5>
+        <p>Single Lloyd's BB policy, £10m limit, £250k deductible. No SE endorsement. No computer crime sublimit beyond policy limit. No US admitted layer (FINRA non-compliance risk identified by external counsel). Total premium: £185,000 p.a.</p>
+      </div>
+      <div class="cs-box">
+        <h5>New Programme (2023 Renewal)</h5>
+        <p>Restructured 3-layer programme: (1) £2m SIR + captive participation; (2) Primary £25m composite BB (Lloyd's lead: Beazley 30%); (3) £25m xs £25m excess (Hiscox / Zurich / AIG). US admitted layer ($15m, AIG fronting, ceded to London). Total premium: £610,000 p.a. (+230%)</p>
+      </div>
+      <div class="cs-box">
+        <h5>Coverage Enhancements</h5>
+        <p>Social engineering endorsement: £7.5m sublimit (separate annual aggregate). Computer crime: £20m sublimit, SWIFT CSP compliance warranty. Discovery period extended to 36 months. FINRA-compliant US admitted policy replacing non-compliant gap. Lloyd's Brussels fronts EU entities post-Brexit.</p>
+      </div>
+      <div class="cs-box">
+        <h5>Controls Required by Underwriters</h5>
+        <p>Dual authorisation on payments >£50k. Mandatory holiday policy (min. 10 consecutive days). DMARC / DKIM / SPF fully deployed. SWIFT KYC-SA attestation provided. MFA on all finance systems. Quarterly internal audit of payment processes. Annual penetration test (summary shared with lead underwriter).</p>
+      </div>
+    </div>
+
+    <div class="info-box green" style="margin-top:18px;">
+      <strong>✅ Programme Outcome</strong>
+      The restructured programme delivered: regulatory compliance in all 7 jurisdictions; £50m total crime limit vs. £10m previously; specific BEC and computer crime protection where none existed; captive participation reducing gross premium by ~£80,000. The 230% premium increase reflected both limit increase and the near-miss incident, not market hardening alone. Post-restructure, the bank passed a FINRA examination without deficiency on bond requirements. <span class="badge b-i">ILLUS</span>
+    </div>
+  </div>
+
+  <!-- FRONTING ARRANGEMENTS -->
+  <h2>Network Carrier Fronting — Key Considerations</h2>
+
+  <div class="info-box blue">
+    <strong>📋 Fronting Arrangement Mechanics</strong>
+    A fronting carrier issues an admitted local policy in a jurisdiction requiring local licencing. The fronting carrier bears no net risk — 100% of the premium and risk is ceded back to the reinsurers (usually the London programme) via a reinsurance agreement. The fronting fee (typically 2–5% of local premium) compensates the fronting carrier for balance sheet usage, regulatory filings, and claims handling. The insured retains all rights under the local policy; in the event of fronting carrier insolvency, London reinsurers are obligated to perform directly (cut-through clause). <span class="badge b-v">VER</span>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Consideration</th>
+          <th>Detail</th>
+          <th>Risk to Programme</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Fronting carrier credit quality</strong></td>
+          <td>Insured depends on fronting carrier to pay claims then recover from London reinsurers; fronting carrier credit risk is insured's risk until cut-through exercised</td>
+          <td>Medium — mitigated by cut-through clause and selecting A-rated fronts <span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>Claims handling authority</strong></td>
+          <td>Fronting carrier usually delegates claims handling to London lead; agreed claims handling protocol (CHP) defines authority limits and reporting obligations</td>
+          <td>Low if CHP well-drafted; risk of local carrier asserting independent adjustment rights <span class="badge b-e">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>Premium timing &amp; currency</strong></td>
+          <td>Local premium collected in local currency; exchange rate exposure between local collection and London reinsurance settlement; timing mismatches create short-term credit risk</td>
+          <td>Low-medium; major fronts hedge FX exposure; quarterly settlement typical <span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td><strong>Regulatory change</strong></td>
+          <td>Jurisdiction may change admitted requirements mid-programme (e.g. India IRDAI cession limits, Brazil SUSEP form changes)</td>
+          <td>Medium; brokers monitor regulatory changes; structure should include force majeure clause to allow restructure <span class="badge b-e">EST</span></td>
+        </tr>
+        <tr>
+          <td><strong>Confidentiality</strong></td>
+          <td>Local fronting carrier has access to insured's claims history and premium data for that jurisdiction; information barrier with local market peers</td>
+          <td>Low-medium; confidentiality agreement between insured and fronting carrier essential for large FIs <span class="badge b-e">EST</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-box red">
+    <strong>⛔ Data Gap</strong>
+    Reliable data on the total volume of Lloyd's-fronted global FI crime premiums by jurisdiction is not publicly available. The Lloyd's market does not publish a granular geographic split of BB GWP across admitted vs. non-admitted channels. The fronting fee market rates quoted (2–5%) are broker market estimates based on practitioner knowledge. <span class="badge b-g">GAP</span>
+  </div>
+
+</main>
+<footer>
+  <a href="../index.html">← Risk Code Hub</a> &nbsp;|&nbsp; Crime / Fidelity FI (BB) — Module 08 Global Programme &nbsp;|&nbsp; Version 3.6 · May 2026
+</footer>
+</body>
+</html>

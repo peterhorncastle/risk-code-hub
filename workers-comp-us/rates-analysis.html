@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Workers Compensation USA (W5/W6) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #1a237e;
+      --hub-dark:      #0d1257;
+      --hub-light:     #e8eaf6;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #b71c1c;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#0d1257 0%,#1a237e 55%,#283593 100%);
+      --header-sub:    #9fa8da;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#9fa8da;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#0d1257;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#9fa8da;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #c5cae9;}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    canvas{max-width:100%;height:280px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #e8eaf6;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f0f2ff;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #1a5c2a;}
+    .roe-card.base{border-top:4px solid #c8a84b;}
+    .roe-card.bear{border-top:4px solid #b71c1c;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#1a5c2a;}
+    .roe-card.base .val{color:#c8a84b;}
+    .roe-card.bear .val{color:#b71c1c;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:240px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:#1a237e;}
+    .bar-out{background:#b71c1c;}
+    .bar-profit{background:#c8a84b;color:#000;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    .b-v{background:#1a5c2a;color:#fff;}
+    footer{background:#0d1257;color:#9fa8da;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> &rsaquo; <a href="overview.html">Workers Comp USA (W5/W6)</a> &rsaquo; Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">Market cycle, rate index, combined ratios, ROE scenarios &amp; P&amp;L waterfall</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Charts -->
+  <div class="section-title">Rate Index &amp; Combined Ratio Trends<span class="badge b-e">EST</span></div>
+
+  <div class="chart-wrap">
+    <h3>Chart 1 — WC Rate Index by Major Class 2005–2026 (2005 = 100)</h3>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Combined Ratio by NCCI Industry Group (Illustrative 2023)<span class="badge b-e">EST</span></h3>
+    <canvas id="chartCR"></canvas>
+  </div>
+
+  <!-- Market cycle -->
+  <div class="section-title">Market Cycle History<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Key Driver</th><th>Rate Movement</th><th>Lloyd's / Market Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2000–2002</td><td>Post-9/11 Hardening</td><td>9/11 WTC WC mass casualty; WC cat modelling review; prior soft market reserve deficiency</td><td>+15 to +25%</td><td>Surplus lines WC tightens; Lloyd's USL&amp;H capacity constrained</td></tr>
+      <tr><td>2003–2010</td><td>Prolonged Soft Market</td><td>Strong investment income offsets WC underwriting losses; frequency declines; managed care matures</td><td>−3 to −7% p.a.</td><td>WC competitive; Lloyd's excess WC market develops; large account retros common</td></tr>
+      <tr><td>2011–2016</td><td>Opioid Cost Surge</td><td>Opioid prescribing adds 15–20% to medical severity; frequency continues declining but insufficient to offset medical inflation</td><td>Flat to +5%</td><td>NCCI rate filings increase in multiple states; reserve strengthening widespread</td></tr>
+      <tr><td>2017–2019</td><td>Reform-Driven Stabilisation</td><td>PDMPs, ODG guidelines moderate opioid costs; CA reform effects; frequency at historic lows</td><td>−2 to −5%</td><td>WC one of best-performing P&amp;C lines; record low combined ratios; competition for market share</td></tr>
+      <tr><td>2020</td><td>COVID Disruption</td><td>COVID presumption laws; payroll compression reduces premium volume; healthcare WC surge; claims volatility</td><td>Mixed: −5 to +10% (class-dependent)</td><td>Healthcare WC repriced; Lloyd's DBA book affected by conflict-zone COVID protocol costs</td></tr>
+      <tr><td>2021–2022</td><td>Medical Inflation Surge</td><td>Post-COVID medical cost inflation (staffing shortages, pharmaceutical, supply chain); long-COVID emerging</td><td>+3 to +8%</td><td>WCRI Medical Price Index highest in 15 years; NCCI rate filings upward in multiple states</td></tr>
+      <tr><td>2023–2026+</td><td>Selective Hardening</td><td>High-hazard classes (construction, healthcare, transport) repriced; gig economy classification unresolved; AI claims analytics emerging</td><td>+2 to +12% (class-dependent)</td><td>Lloyd's USL&amp;H selective — maritime inflation and Gulf activity drive W6 rate increases; DBA renewal tightens</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative $100m WC Portfolio<span class="badge b-e">EST</span></div>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+17%</div>
+      <div class="detail">Combined Ratio 76%<br>Frequency declines; opioid reforms hold; strong investment returns; best-hazard class selection</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+9%</div>
+      <div class="detail">Combined Ratio 89%<br>Moderate frequency; medical inflation offset by rate increases; adequate diversification</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−5%</div>
+      <div class="detail">Combined Ratio 110%<br>Medical cost surge; catastrophic injury cluster; COVID presumption reserve development; soft market</div>
+    </div>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (Illustrative $100m GWP, blended WC book)</h3>
+    <div class="wf-row"><div class="wf-label">Gross Written Premium</div><div class="wf-bar bar-in" style="width:100%;">$100m</div><div class="wf-val">$100.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Broker Commission (15%)</div><div class="wf-bar bar-out" style="width:30%;">−$15m</div><div class="wf-val">−$15.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance (XL/catastrophe)</div><div class="wf-bar bar-out" style="width:10%;">−$8m</div><div class="wf-val">−$8.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Earned Premium</div><div class="wf-bar bar-in" style="width:77%;background:#283593;">$77m</div><div class="wf-val">$77.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Medical (Part One)</div><div class="wf-bar bar-out" style="width:38%;">−$30m</div><div class="wf-val">−$30.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Indemnity / TTD / PTD</div><div class="wf-bar bar-out" style="width:26%;">−$22m</div><div class="wf-val">−$22.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — EL Part Two / Catastrophic</div><div class="wf-bar bar-out" style="width:8%;">−$5m</div><div class="wf-val">−$5.0m</div></div>
+    <div class="wf-row"><div class="wf-label">IBNR Reserve Development</div><div class="wf-bar bar-out" style="width:6%;">−$4m</div><div class="wf-val">−$4.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Expenses / Overhead (10%)</div><div class="wf-bar bar-out" style="width:10%;">−$10m</div><div class="wf-val">−$10.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (est. 4.5% float)</div><div class="wf-bar bar-in" style="width:12%;background:#c8a84b;color:#000;">+$8m</div><div class="wf-val">+$8.0m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Profit</strong></div><div class="wf-bar bar-profit" style="width:14%;"><strong>$14m</strong></div><div class="wf-val"><strong>$14.0m (9% ROE)</strong></div></div>
+  </div>
+
+  <!-- IBNR and development -->
+  <div class="section-title">IBNR &amp; Long-Tail Development Considerations</div>
+  <table>
+    <thead><tr><th>Development Factor</th><th>Impact on WC Reserving</th></tr></thead>
+    <tbody>
+      <tr><td>Long-tail indemnity benefits</td><td>Permanent total disability claims can extend 30–40 years; actuarial tail for PTD claims requires long discount rate assumptions and life expectancy modelling</td></tr>
+      <tr><td>Medical cost trend uncertainty</td><td>WC medical is open-ended (no dollar cap on Part One); medical inflation uncertainty is the primary WC reserving risk for accident years 2021+</td></tr>
+      <tr><td>Opioid reserve reopening</td><td>Pre-2018 accident years with opioid-dependent claimants may see claim reopening as tolerance, addiction management and overdose events generate ongoing medical costs</td></tr>
+      <tr><td>COVID long-tail</td><td>Long-COVID disability and respiratory impairment claims from 2020–2022 accident years developing slowly; NCCI guidance suggests 2–5 year development tail for COVID WC claims</td></tr>
+      <tr><td>Black lung latency</td><td>Coal mining WC black lung claims may not manifest for 20–30 years post-exposure; reserve adequacy for active and former coal mine operators requires specialist actuarial review</td></tr>
+      <tr><td>Catastrophic injury annuity</td><td>Catastrophic injury cases (TBI, spinal cord) are often settled via structured settlements or annuities; present-value calculations exposed to longevity and discount rate risk</td></tr>
+      <tr><td>Investment income on reserves</td><td>WC long-tail claims generate substantial investment float; rising interest rates in 2022–24 improve the economics of WC reserving and support combined ratio improvement</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation USA (W5 / W6) &nbsp;|&nbsp; <a href="../index.html">&#8592; Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation &#8594;</a></p>
+</footer>
+
+<script>
+// Chart 1 — WC Rate Index by major class 2005–2026
+const years = [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [
+      {
+        label: 'Construction',
+        data: [100,98,96,100,107,105,107,110,112,109,106,103,100,98,95,93,97,103,109,114,118,122],
+        borderColor: '#b71c1c',
+        backgroundColor: 'rgba(183,28,28,0.07)',
+        tension: 0.3, fill: true, pointRadius: 3
+      },
+      {
+        label: 'Clerical / Administrative',
+        data: [100,99,98,98,99,97,96,95,94,92,90,88,85,83,80,77,79,83,86,88,90,92],
+        borderColor: '#1a237e',
+        backgroundColor: 'rgba(26,35,126,0.07)',
+        tension: 0.3, fill: true, pointRadius: 3
+      },
+      {
+        label: 'Healthcare',
+        data: [100,101,102,104,108,107,109,112,115,118,117,116,114,112,110,113,117,123,128,132,135,138],
+        borderColor: '#1565c0',
+        backgroundColor: 'rgba(21,101,192,0.06)',
+        tension: 0.3, pointRadius: 3
+      },
+      {
+        label: 'Transportation / Trucking',
+        data: [100,99,97,99,103,101,103,106,108,107,105,102,100,98,96,92,96,103,109,113,117,120],
+        borderColor: '#c8a84b',
+        backgroundColor: 'rgba(200,168,75,0.07)',
+        tension: 0.3, pointRadius: 3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom' } },
+    scales: { y: { title: { display: true, text: 'Rate Index (2005 = 100)' }, beginAtZero: false } }
+  }
+});
+
+// Chart 2 — Combined ratio by NCCI industry group
+new Chart(document.getElementById('chartCR'), {
+  type: 'bar',
+  data: {
+    labels: ['Clerical', 'Retail / Wholesale', 'Healthcare', 'Light Mfg', 'Transport', 'Construction', 'Mining', 'Roofing / Iron'],
+    datasets: [{
+      label: 'Combined Ratio (%) — Illustrative 2023',
+      data: [72, 80, 83, 87, 91, 97, 102, 112],
+      backgroundColor: [
+        '#1a237e','#283593','#1565c0','#c8a84b',
+        '#e65100','#b71c1c','#880e4f','#4a148c'
+      ]
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        title: { display: true, text: 'Combined Ratio (%)' },
+        max: 130,
+        beginAtZero: true,
+        ticks: {
+          callback: v => v + '%'
+        }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <title>Cyber — Rater | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #1565c0;
+      --hub-dark:      #0a3d7a;
+      --hub-light:     #e8f0fe;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #6a1b9a;
+      --header-gradient: linear-gradient(135deg,#0d2240 0%,#1565c0 55%,#6a1b9a 100%);
+      --header-sub:    #b8d0f8;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> ›
+    <a href="overview.html">Cyber</a> ›
+    Rater
+  </div>
+  <div class="tag">Lloyd's Risk Codes CY · CZ · CG · CH</div>
+  <h1>Cyber — Rating Tool</h1>
+  <p>Factor-based rating engine for cyber insurance products. Base vs proposed comparison with P&amp;L waterfall analysis.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div id="rater-root"></div>
+
+<footer>
+  <p>Cyber Risk Code Hub — Rating Tool &copy; 2026</p>
+</footer>
+
+<script src="../shared/rater-engine.js"></script>
+<script src="../shared/rater-ui.js"></script>
+<script>
+(function () {
+  var schemaFiles = [
+    'rate-tables/CY.json',
+    'rate-tables/CZ.json',
+    'rate-tables/CG.json',
+    'rate-tables/CH.json'
+  ];
+  Promise.all(schemaFiles.map(function (f) {
+    return fetch(f).then(function (r) { return r.json(); });
+  })).then(function (schemas) {
+    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
+  });
+})();
+</script>
+</body>
+</html>

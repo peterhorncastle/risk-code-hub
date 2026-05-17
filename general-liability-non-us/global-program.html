@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>GL Non-USA: Global Programme | Risk Code Hub</title>
+  <style>
+    :root {
+      --gl:#1b5e20; --gl-dark:#0a2e0d; --intl:#006064;
+      --warn:#e65100; --liab:#1565c0; --prod:#6a1b9a;
+      --light:#f1f8f1; --text:#1a2e1a; --muted:#5a7060; --border:#c0d8c0;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1b5e20;
+    --hub-dark:      #0a2e0d;
+    --hub-light:     #e8f5e9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #006064;
+    --header-gradient:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%);
+    --header-sub:    #c8e6c9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90c895; margin-bottom:6px; }
+    .breadcrumb a { color:#a5d6a7; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#c8e6c9; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--gl); border-bottom-color:var(--warn); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--gl); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    h3 { font-size:1.05rem; color:var(--gl-dark); margin:20px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+
+    /* Programme tower */
+    .tower { display:flex; flex-direction:column; gap:0; max-width:700px; margin:28px auto; }
+    .layer { border-radius:0; padding:18px 24px; border-left:6px solid; position:relative; }
+    .layer:first-child { border-radius:12px 12px 0 0; }
+    .layer:last-child { border-radius:0 0 12px 12px; }
+    .layer.l5 { background:#e8f5e9; border-left-color:#1b5e20; }
+    .layer.l4 { background:#e3f2fd; border-left-color:#1565c0; }
+    .layer.l3 { background:#fff3e0; border-left-color:#e65100; }
+    .layer.l2 { background:#f3e5f5; border-left-color:#6a1b9a; }
+    .layer.l1 { background:#e0f7fa; border-left-color:#006064; }
+    .layer-label { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px; }
+    .l5 .layer-label { color:#1b5e20; }
+    .l4 .layer-label { color:#1565c0; }
+    .l3 .layer-label { color:#e65100; }
+    .l2 .layer-label { color:#6a1b9a; }
+    .l1 .layer-label { color:#006064; }
+    .layer h4 { font-size:1rem; font-weight:700; margin-bottom:4px; }
+    .layer p { font-size:0.85rem; margin-bottom:0; color:var(--text); }
+    .layer .limit-badge { float:right; background:rgba(0,0,0,0.08); border-radius:6px; padding:3px 10px; font-size:0.78rem; font-weight:700; }
+
+    /* Cards */
+    .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:20px; margin:24px 0; }
+    .card { background:#fff; border-radius:12px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,.06); border-top:4px solid var(--gl); }
+    .card.orange { border-top-color:var(--warn); }
+    .card.blue { border-top-color:var(--liab); }
+    .card.purple { border-top-color:var(--prod); }
+    .card.teal { border-top-color:var(--intl); }
+    .card h4 { font-size:0.95rem; font-weight:700; color:var(--gl-dark); margin-bottom:10px; }
+    .card.orange h4 { color:var(--warn); }
+    .card.blue h4 { color:var(--liab); }
+    .card.purple h4 { color:var(--prod); }
+    .card.teal h4 { color:var(--intl); }
+    .card p, .card li { font-size:0.86rem; line-height:1.6; color:var(--text); }
+    .card ul { padding-left:16px; margin-top:8px; }
+    .card li { margin-bottom:5px; }
+
+    /* Tables */
+    .tbl-wrap { overflow-x:auto; margin:24px 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    th { background:var(--gl); color:#fff; padding:11px 14px; text-align:left; font-weight:700; }
+    th:hover { background:var(--gl-dark); color:#fff; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:#f0f7f0; }
+    .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:2px 7px; border-radius:8px; margin:1px; }
+    .t-g { background:#e6f4ea; color:#1a5c28; }
+    .t-o { background:#fff3e0; color:#7a4500; }
+    .t-b { background:#e3f2fd; color:#0d47a1; }
+    .t-r { background:#fce4ec; color:#880e4f; }
+    .t-p { background:#f3e5f5; color:#4a148c; }
+
+    /* Dark box */
+    .dark-box { background:var(--gl-dark); color:#c8e0c8; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .dark-box h3 { color:#a5d6a7; margin-bottom:12px; font-size:1.05rem; }
+    .dark-box p, .dark-box li { font-size:0.9rem; line-height:1.7; color:#c8e0c8; }
+    .dark-box ul { padding-left:20px; margin:8px 0; }
+    .dark-box li { margin-bottom:6px; }
+    .dark-box .highlight { color:#fff; font-weight:700; }
+
+    /* Case study */
+    .case-study { background:#fff; border-radius:12px; padding:28px 32px; margin:28px 0; box-shadow:0 2px 8px rgba(0,0,0,.06); border:2px solid var(--gl); }
+    .case-study h3 { color:var(--gl); font-size:1.1rem; margin-bottom:14px; }
+    .cs-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:16px 0; }
+    @media(max-width:600px){ .cs-grid { grid-template-columns:1fr; } }
+    .cs-box { background:var(--light); border-radius:8px; padding:16px; }
+    .cs-box h4 { font-size:0.85rem; font-weight:700; color:var(--gl-dark); margin-bottom:8px; }
+    .cs-box p, .cs-box li { font-size:0.84rem; color:var(--text); line-height:1.6; }
+    .cs-box ul { padding-left:16px; margin-top:6px; }
+    .cs-box li { margin-bottom:4px; }
+    .cs-total { background:var(--gl-dark); color:#c8e0c8; border-radius:8px; padding:16px 20px; margin-top:16px; font-size:0.9rem; }
+    .cs-total strong { color:#fff; }
+
+    /* Badge */
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    footer { background:var(--gl-dark); color:#90c895; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">GL Non-USA</a> › Global Programme</div>
+  <h1>Global Programme — General Liability (Non-USA)</h1>
+  <p>Multinational GL programme structures, DIC/DIL coordination, fronting arrangements, captive integration and a worked case study for a global consumer goods manufacturer.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Why Multinational Programmes Exist</h2>
+  <p>Large industrial and consumer goods manufacturers operate across dozens of jurisdictions — each with its own insurance regulatory regime, compulsory liability requirements, local policy admission rules, and claims handling obligations. A UK-domiciled manufacturer selling products in Germany, Australia, Japan, and Brazil cannot rely on a single London market policy to satisfy all of these requirements simultaneously.</p>
+  <p>A multinational GL programme solves this problem by layering a locally-admitted policy in each operating jurisdiction (the "local policy") beneath a globally co-ordinated master policy issued at the group level (the "international master policy" or IMP). The IMP typically provides worldwide-except-US/Canada products liability cover on a DIC/DIL basis, sitting above (or alongside) the local policies and filling gaps or extending limits where local cover is insufficient.</p>
+
+  <h2>Programme Tower Structure</h2>
+  <p>The following representative tower illustrates a typical structure for a mid-large multinational consumer goods manufacturer (£500m annual turnover) with manufacturing operations in the UK, Germany, and Malaysia, selling into 40+ non-US countries. <span class="badge b-i">ILLUS</span></p>
+
+  <div class="tower">
+    <div class="layer l5">
+      <span class="limit-badge">£50m xs £30m</span>
+      <div class="layer-label">Layer 5 — Catastrophe Excess</div>
+      <h4>Lloyd's Cat XL</h4>
+      <p>Single occurrence catastrophe excess: mass-casualty product event, widespread food contamination, multi-country recall scenario. NR focus. Lloyd's syndicate line(s).</p>
+    </div>
+    <div class="layer l4">
+      <span class="limit-badge">£20m xs £10m</span>
+      <div class="layer-label">Layer 4 — Upper Excess</div>
+      <h4>Lloyd's / London Company XS2</h4>
+      <p>Products aggregate sub-limit applies at this layer for NR. Combined N+NR aggregate at £80m for policy year. Lloyd's co-subscription.</p>
+    </div>
+    <div class="layer l3">
+      <span class="limit-badge">£7m xs £3m</span>
+      <div class="layer-label">Layer 3 — Primary Excess</div>
+      <h4>Lloyd's XS1 (DIC/DIL)</h4>
+      <p>Difference in Conditions / Difference in Limits: broadens coverage and extends limits vs. local policies. Worldwide jurisdiction (excl. US/Canada). Occurrence basis for N/NC; claims-made for NR.</p>
+    </div>
+    <div class="layer l2">
+      <span class="limit-badge">Up to £3m</span>
+      <div class="layer-label">Layer 2 — International Master Policy</div>
+      <h4>IMP — Lloyd's Lead Syndicate</h4>
+      <p>International Master Policy issued at group level. Picks up exposures not covered locally (territories with no local policy; gaps between local policy territories). DIC/DIL vs. all local policies. Claims co-ordinated through single London broker.</p>
+    </div>
+    <div class="layer l1">
+      <span class="limit-badge">Variable (local)</span>
+      <div class="layer-label">Layer 1 — Local Policies (Admitted)</div>
+      <h4>Locally Admitted Policies — Fronting Insurer</h4>
+      <p>Locally admitted policies in each operating country, issued by fronting insurer (e.g., AXA, Zurich, Chubb global network). Premium and risk fronted back to Lloyd's IMP via reinsurance agreement. Satisfies local insurance regulation and compulsory liability requirements in each territory.</p>
+    </div>
+  </div>
+
+  <h2>DIC/DIL — How the International Master Policy Works</h2>
+  <p>The International Master Policy (IMP) operates on two co-ordinating principles: Difference in Conditions (DIC) and Difference in Limits (DIL). These are not separate covers — they describe two dimensions of how the IMP interacts with local policies.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Concept</th>
+          <th>Definition</th>
+          <th>When It Applies</th>
+          <th>Practical Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Difference in Conditions (DIC)</strong></td>
+          <td>The IMP pays for a loss that is covered under the IMP wording but NOT covered under the local policy — filling coverage gaps</td>
+          <td>Local policy has a narrower coverage grant, exclusion, or condition not present in the IMP</td>
+          <td>Local German policy excludes products liability for goods sold outside Germany. Malaysian subsidiary's products cause injury in Singapore. IMP DIC responds for the Singapore claim — no local policy covers it.</td>
+        </tr>
+        <tr>
+          <td><strong>Difference in Limits (DIL)</strong></td>
+          <td>The IMP tops up local policy limits where the local policy limit is insufficient for the actual loss</td>
+          <td>Local policy limit exhausted; IMP provides additional limit up to master policy limit</td>
+          <td>UK local policy limit £2m per occurrence; major product injury claim settles at £4.5m. IMP DIL responds for the excess £2.5m up to IMP limit of £3m per occurrence.</td>
+        </tr>
+        <tr>
+          <td><strong>Worldwide Jurisdiction Clause</strong></td>
+          <td>IMP covers claims brought in any non-US/Canada jurisdiction, regardless of where the insured entity is domiciled</td>
+          <td>Claims brought in courts outside the insured's home country, where no local policy exists</td>
+          <td>Japanese distributor brings products liability claim against UK manufacturer in Tokyo courts. IMP worldwide jurisdiction clause responds — no local Japanese admitted policy exists in this example.</td>
+        </tr>
+        <tr>
+          <td><strong>US/Canada Exclusion (IMP)</strong></td>
+          <td>Fundamental programme boundary: IMP does not respond to claims brought in US or Canadian courts or under US/Canadian law</td>
+          <td>Always — no exceptions in standard N/NC/NR/NS wording</td>
+          <td>US personal injury attorney attempts to bring cross-border class action in New York against UK manufacturer. IMP does not respond. UA/UR (separate US programme) required if US exposure exists.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Fronting Arrangements</h2>
+  <p>Where local insurance regulation requires that liability cover be provided by a locally licensed insurer (admitted policy), and the international underwriter (e.g., a Lloyd's syndicate) is not locally licensed, a fronting insurer is interposed. The fronting insurer issues the local policy, but reinsures 100% (or close to 100%) of the risk back to the Lloyd's market under a facultative reinsurance agreement.</p>
+
+  <div class="cards">
+    <div class="card">
+      <h4>Fronting Insurer Role</h4>
+      <ul>
+        <li>Issues locally admitted policy in the operating country</li>
+        <li>Satisfies local insurance regulatory requirement</li>
+        <li>Handles local claims under their licence (with Lloyd's oversight)</li>
+        <li>Retains a fronting fee (typically 3–7% of local premium) for licence and administrative risk</li>
+        <li>Cedes 90–100% of risk via quota share reinsurance to Lloyd's IMP carrier</li>
+        <li>Net risk retention by fronting insurer is typically minimal; credit risk to fronting = Lloyd's collectability risk</li>
+      </ul>
+    </div>
+    <div class="card orange">
+      <h4>Key Fronting Networks</h4>
+      <ul>
+        <li><strong>Zurich Global Corporate Network</strong> — global fronting capability; strong in Europe, Asia-Pacific, Latin America</li>
+        <li><strong>AXA XL Global Network</strong> — programme business specialist; 40+ country admitted paper</li>
+        <li><strong>Chubb Worldpass / Global Network</strong> — admitted paper in 54 countries; strong in emerging markets</li>
+        <li><strong>Allianz Global Corporate &amp; Specialty (AGCS)</strong> — major European corporate insurer with global fronting capability</li>
+        <li>Note: Lloyd's overseas service companies provide non-admitted cover in some territories — not a fronting arrangement</li>
+      </ul>
+    </div>
+    <div class="card blue">
+      <h4>Fronting Risk Considerations</h4>
+      <ul>
+        <li><strong>Credit risk:</strong> If fronting insurer becomes insolvent, Lloyd's reinsurance credit is impaired; fronting insurer creditworthiness must be monitored (minimum S&amp;P A- required for most programmes)</li>
+        <li><strong>Claims control:</strong> Fronting insurer controls local claims handling; ensure Lloyd's has claims co-operation and control clauses in reinsurance agreement</li>
+        <li><strong>Currency:</strong> Local policy denominated in local currency; reinsurance settlement in programme currency (GBP or USD); FX exposure must be managed</li>
+        <li><strong>Regulatory change:</strong> Local admitted requirements change — fronting arrangement may need restructuring; monitor annually</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h4>Non-Admitted Cover</h4>
+      <p>In territories where admitted insurance is not legally required, non-admitted cover may be placed directly on the Lloyd's policy without a fronting insurer. This is simpler and cheaper but carries regulatory risk.</p>
+      <ul>
+        <li>Non-admitted cover permitted in: UK (for Lloyd's), Switzerland, Singapore (MAS-licensed), Bermuda, Cayman Islands, most offshore territories</li>
+        <li>Non-admitted cover restricted or prohibited in: Brazil, China, India, Mexico, Saudi Arabia, Indonesia — fronting required</li>
+        <li>Penalty for non-admitted breach: policy void, fine on insured, insurer exclusion from market</li>
+        <li>Underwriter action: verify admitted/non-admitted status for every operating territory on programme submission</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Captive Integration</h2>
+  <div class="dark-box">
+    <h3>Captive Structures in Multinational GL Programmes</h3>
+    <p>Large corporates (typically GWP equivalent >£5m) may choose to retain a portion of GL risk within a wholly-owned captive insurance subsidiary (Cayman, Bermuda, Guernsey, Isle of Man common domiciles). Captive integration in GL programmes typically takes two forms:</p>
+    <ul>
+      <li><strong>Captive as primary layer:</strong> Captive retains the first £1–5m per occurrence (functioning as a large deductible or SIR at captive level). Lloyd's IMP sits excess of captive retention. This structure funds attritional GL losses within the group while transferring catastrophe risk to the market. Benefit: premium cost reduction, claims control, retained investment income on reserves.</li>
+      <li><strong>Captive as reinsurer:</strong> Fronting insurer issues local admitted policies; captive reinsures a quota share portion of the programme; Lloyd's carrier reinsures the captive on an excess of loss basis. This gives the group both local admitted paper and cost-effective risk retention.</li>
+      <li><strong>Captive cell:</strong> Protected Cell Companies (PCCs) in Guernsey/Isle of Man allow smaller groups to access captive structures without full standalone captive cost. Cell captive reinsures a portion of the GL programme.</li>
+      <li><strong>Underwriter consideration:</strong> Captive integration reduces premium to the open market but does not reduce the true risk exposure — it transfers retained risk from insurer balance sheet to corporate balance sheet. Assess captive financial strength, loss reserving adequacy, and parent financial strength before accepting captive integration in programme structure.</li>
+      <li><strong>SIR vs. deductible:</strong> Self-Insured Retention (SIR) means the insured defends and pays losses up to the SIR before the policy responds — the insurer has no duty to defend below SIR. Deductible: insurer defends from dollar one, recoups from insured. For large NR risks, SIR structures are common where insured has in-house claims capability.</li>
+    </ul>
+  </div>
+
+  <h2>Territory Coordination Table</h2>
+  <p>The following table illustrates how a typical multinational GL programme co-ordinates across key territories. <span class="badge b-i">ILLUS</span></p>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Territory</th>
+          <th>Admitted Required?</th>
+          <th>Compulsory GL?</th>
+          <th>Local Policy Basis</th>
+          <th>IMP Role</th>
+          <th>Key Local Regime</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>United Kingdom</strong></td>
+          <td>No (Lloyd's admitted)</td>
+          <td>EL compulsory; PL voluntary</td>
+          <td>Occurrence</td>
+          <td>DIL / worldwide jurisdiction</td>
+          <td>Consumer Protection Act 1987; GPSR 2024</td>
+        </tr>
+        <tr>
+          <td><strong>Germany</strong></td>
+          <td>Recommended (local market)</td>
+          <td>No statutory PL compulsion (some sectors)</td>
+          <td>Occurrence</td>
+          <td>DIC (broader IMP wording) + DIL</td>
+          <td>EU PLD; Product Liability Act 1989</td>
+        </tr>
+        <tr>
+          <td><strong>France</strong></td>
+          <td>Recommended</td>
+          <td>Professional liability compulsory in some sectors</td>
+          <td>Occurrence</td>
+          <td>DIC + DIL</td>
+          <td>EU PLD; Code Civil Articles 1240–1245</td>
+        </tr>
+        <tr>
+          <td><strong>Australia</strong></td>
+          <td>Yes (APRA-licensed insurer required)</td>
+          <td>Workers comp compulsory; PL voluntary</td>
+          <td>Occurrence</td>
+          <td>DIL; DIC for differences to Australian Consumer Law</td>
+          <td>Australian Consumer Law 2010; Competition and Consumer Act</td>
+        </tr>
+        <tr>
+          <td><strong>Japan</strong></td>
+          <td>Yes (FSA-licensed)</td>
+          <td>Workers comp compulsory; PL voluntary</td>
+          <td>Occurrence</td>
+          <td>DIC (wider wording); DIL</td>
+          <td>Product Liability Act 1994 (strict liability)</td>
+        </tr>
+        <tr>
+          <td><strong>Brazil</strong></td>
+          <td>Yes (SUSEP-licensed insurer)</td>
+          <td>No statutory PL compulsion for most sectors</td>
+          <td>Occurrence or annual aggregate</td>
+          <td>DIC + DIL; social inflation monitoring clause</td>
+          <td>Consumer Defence Code 1990; Civil Code 2002</td>
+        </tr>
+        <tr>
+          <td><strong>UAE / GCC</strong></td>
+          <td>Yes (local admitted)</td>
+          <td>Professional liability compulsory in free zones for some professions</td>
+          <td>Occurrence</td>
+          <td>DIC + DIL; Sharia law considerations in some jurisdictions</td>
+          <td>UAE Federal Law; DIFC Common Law framework (for DIFC-based entities)</td>
+        </tr>
+        <tr>
+          <td><strong>Singapore</strong></td>
+          <td>No (MAS-approved; non-admitted permitted)</td>
+          <td>Workers comp compulsory; PL voluntary</td>
+          <td>Occurrence</td>
+          <td>IMP direct cover or DIL/DIC</td>
+          <td>Consumer Protection (Fair Trading) Act; Products Liability Act</td>
+        </tr>
+        <tr>
+          <td><strong>China</strong></td>
+          <td>Yes (CBIRC-licensed insurer)</td>
+          <td>Mandatory product recall regime for certain sectors (automotive, food)</td>
+          <td>Annual aggregate common</td>
+          <td>DIC + DIL; restricted IMP access</td>
+          <td>Product Quality Law 2000; Food Safety Law 2015 (revised)</td>
+        </tr>
+        <tr>
+          <td><strong>USA / Canada</strong></td>
+          <td>N/A — EXCLUDED from IMP</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td><strong>EXCLUDED — separate UA/UR programme required</strong></td>
+          <td>N/A — entirely separate underwriting class</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Worked Case Study: Global Consumer Goods Manufacturer</h2>
+  <div class="case-study">
+    <h3>Case Study: Multinational FMCG Group — Global N/NR Programme <span class="badge b-i">ILLUS</span></h3>
+    <p style="margin-bottom:16px; font-size:0.88rem; color:var(--muted);">Illustrative example. All financial figures estimated for training purposes.</p>
+    <div class="cs-grid">
+      <div class="cs-box">
+        <h4>Risk Profile</h4>
+        <ul>
+          <li>UK-domiciled holding company; 4 manufacturing subsidiaries (UK, Germany, Malaysia, Australia)</li>
+          <li>Annual turnover: £480m (40% UK/EU, 25% Asia-Pacific, 20% Middle East/Africa, 15% other non-US)</li>
+          <li>Products: personal care, household cleaning products, food supplements</li>
+          <li>Operating territories: 42 countries (all non-US/Canada)</li>
+          <li>Existing captive: Guernsey cell captive, retaining first £2m of each GL occurrence</li>
+          <li>No US/Canada sales; IP geoblocking and sales terms confirmed</li>
+        </ul>
+      </div>
+      <div class="cs-box">
+        <h4>Programme Design</h4>
+        <ul>
+          <li>Layer 1: Local admitted policies (fronted by AXA XL network in 18 admitted territories); up to £2m local limit per occurrence</li>
+          <li>Layer 2 (captive): Cell captive retains £2m xs £0 per occurrence (replacing layers 1–2 in captive territories)</li>
+          <li>Layer 3 (IMP): Lloyd's IMP — £5m xs £2m per occurrence; DIC/DIL vs. all local policies; worldwide except US/Canada</li>
+          <li>Layer 4 (XS1): Lloyd's XS — £10m xs £5m per occurrence; NR products aggregate £40m</li>
+          <li>Layer 5 (Cat): Lloyd's Cat XL — £25m xs £15m; single occurrence catastrophe layer</li>
+        </ul>
+      </div>
+      <div class="cs-box">
+        <h4>Premium Allocation <span class="badge b-i">ILLUS</span></h4>
+        <ul>
+          <li>Local admitted policies (18 territories): ~£320,000 (gross; net to market after captive fronting reinsurance)</li>
+          <li>IMP (Lloyd's Layer 3): ~£410,000</li>
+          <li>XS1 (Lloyd's Layer 4): ~£280,000</li>
+          <li>Cat XL (Lloyd's Layer 5): ~£95,000</li>
+          <li>Captive funding (Layer 2): ~£1,100,000 internal captive premium (retained within group)</li>
+          <li>Total market premium (excluding captive): ~£1,105,000</li>
+          <li>Combined ratio target (market layers): 82% (history: 3 years loss-free NR; 1 minor N claim £85k)</li>
+        </ul>
+      </div>
+      <div class="cs-box">
+        <h4>Key Programme Features</h4>
+        <ul>
+          <li>Products aggregate: £80m for NR (across IMP + XS1 + Cat combined); reviewed annually against worst-case batch recall scenario</li>
+          <li>Occurrence basis for N; claims-made for NR pharmaceutical/supplement lines</li>
+          <li>GPSR 2024 compliance confirmed: EU Responsible Person designated; SAFETY Gate monitoring in place</li>
+          <li>Australian operations: APRA-admitted local policy via Chubb Australia; social inflation monitoring clause applied</li>
+          <li>China operations: local CBIRC-licensed policy (non-admitted IMP not available); Lloyd's IMP DIL applies only if local policy limit exhausted in Chinese courts</li>
+          <li>Annual programme review: broker (Marsh) co-ordinates 42-territory compliance review</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cs-total">
+      <strong>Programme Summary:</strong> Total insured limit: £40m per occurrence (Layer 3 + 4 + 5); £80m NR products aggregate for policy year. Total market premium (Lloyd's layers only): ~£785,000. Effective Lloyd's rate on line: ~1.96% of total programme limit. Captive integration reduces market premium by approximately 40% vs. a non-captive structure. Lloyd's lead underwriter: notional £5m line on IMP; co-subscribed with 3 other Lloyd's syndicates and 1 London company market insurer.
+    </div>
+  </div>
+
+  <h2>Key Programme Structural Risks</h2>
+  <div class="cards">
+    <div class="card orange">
+      <h4>Gap in Local Cover → IMP Over-Reliance</h4>
+      <p>If local policies contain exclusions or narrower conditions not captured in the DIC analysis, the IMP may be unexpectedly called upon as primary cover in territories where a local policy was assumed to respond. Risk: IMP limits may be inadequate as primary cover.</p>
+      <p><em>Mitigation:</em> Annual DIC analysis comparing local policy wordings against IMP master wording; broker responsibility to flag gaps at renewal.</p>
+    </div>
+    <div class="card orange">
+      <h4>Fronting Insurer Insolvency</h4>
+      <p>Local admitted cover depends on fronting insurer remaining solvent and licensed. If fronting insurer fails, local claims handling collapses and Lloyd's reinsurance recoverability is impaired.</p>
+      <p><em>Mitigation:</em> Minimum S&amp;P A- / AM Best A rating required for fronting insurer; annual solvency review; reinsurance credit clauses in fronting agreement.</p>
+    </div>
+    <div class="card blue">
+      <h4>Jurisdictional Regulatory Change</h4>
+      <p>Admitted insurance requirements change (Brazil SUSEP, China CBIRC policy changes are frequent) — non-admitted cover may become regulatory breach without warning.</p>
+      <p><em>Mitigation:</em> Annual territorial compliance survey by broker; immediate notification clause in IMP if local regulatory change affects admitted status.</p>
+    </div>
+    <div class="card purple">
+      <h4>Products Aggregate Exhaustion</h4>
+      <p>Mass-casualty product event (food contamination, pharmaceutical adverse event) can exhaust the programme products aggregate, leaving subsequent claims uninsured within the policy year.</p>
+      <p><em>Mitigation:</em> Products aggregate set conservatively (minimum 2× single-occurrence limit for food/pharma NR); reinstatement clause available at additional premium for some Cat layers.</p>
+    </div>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.9 · General Liability – Non-USA (N/NC/NR/NS) · For educational use</footer>
+</body>
+</html>

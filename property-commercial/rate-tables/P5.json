@@ -1,0 +1,205 @@
+{
+  "riskCode": "P5",
+  "label": "Property — Residential",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "tiv",
+    "label": "Total Insured Value (£)",
+    "defaultValue": 25000000,
+    "hint": "Total property value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.0008
+  },
+  "ratingFactors": [
+    {
+      "key": "construction",
+      "label": "Construction Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "masonry_nc",
+      "options": {
+        "fire_resistive": {
+          "label": "Fire Resistive (steel/concrete)",
+          "factor": 0.5
+        },
+        "modified_fr": {
+          "label": "Modified Fire Resistive",
+          "factor": 0.65
+        },
+        "masonry_nc": {
+          "label": "Masonry Non-Combustible",
+          "factor": 0.85
+        },
+        "joisted_masonry": {
+          "label": "Joisted Masonry",
+          "factor": 1.2
+        },
+        "frame": {
+          "label": "Frame (wood)",
+          "factor": 2
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "occupancy",
+      "label": "Occupancy Hazard",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "light",
+      "options": {
+        "office": {
+          "label": "Office/Retail (low)",
+          "factor": 0.8
+        },
+        "light": {
+          "label": "Light Commercial",
+          "factor": 1
+        },
+        "medium": {
+          "label": "Medium (light manufacturing)",
+          "factor": 1.3
+        },
+        "high": {
+          "label": "High (chemicals/plastics)",
+          "factor": 2
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "protection",
+      "label": "Fire Protection",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "sprinklered",
+      "options": {
+        "full_sprinkler": {
+          "label": "Full NFPA 13 Sprinklers",
+          "factor": 0.65
+        },
+        "sprinklered": {
+          "label": "Partial Sprinklers",
+          "factor": 0.85
+        },
+        "detection_only": {
+          "label": "Detection Only",
+          "factor": 1
+        },
+        "basic": {
+          "label": "Basic/Minimal",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "natCat",
+      "label": "Nat-Cat Zone",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "low",
+      "options": {
+        "very_low": {
+          "label": "Very Low",
+          "factor": 0.8
+        },
+        "low": {
+          "label": "Low",
+          "factor": 0.9
+        },
+        "moderate": {
+          "label": "Moderate",
+          "factor": 1
+        },
+        "high": {
+          "label": "High (flood/wind)",
+          "factor": 1.3
+        },
+        "severe": {
+          "label": "Severe (Zone AE/VE)",
+          "factor": 1.6
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "attritional": {
+          "label": "Attritional",
+          "factor": 1
+        },
+        "notable": {
+          "label": "Notable loss",
+          "factor": 1.25
+        },
+        "major": {
+          "label": "Major loss (>50% premium)",
+          "factor": 1.6
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "deductible",
+      "label": "Deductible (£k)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 25,
+      "bands": [
+        {
+          "min": 0,
+          "max": 10,
+          "factor": 1.1
+        },
+        {
+          "min": 10,
+          "max": 50,
+          "factor": 1
+        },
+        {
+          "min": 50,
+          "max": 250,
+          "factor": 0.9
+        },
+        {
+          "min": 250,
+          "max": 1000,
+          "factor": 0.8
+        },
+        {
+          "min": 1000,
+          "max": 99999,
+          "factor": 0.65
+        }
+      ],
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 3000,
+    "claimsHandlingPerClaim": 15000,
+    "systemOverheadPerYear": 1500,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.25,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

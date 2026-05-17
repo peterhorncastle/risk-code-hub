@@ -1,0 +1,175 @@
+{
+  "riskCode": "O",
+  "label": "Yacht Hull & Liability",
+  "modelType": "rate-on-value",
+  "currency": "GBP",
+  "exposureMeasure": {
+    "key": "hullValue",
+    "label": "Hull Value (£)",
+    "defaultValue": 250000,
+    "hint": "Agreed hull value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.01
+  },
+  "ratingFactors": [
+    {
+      "key": "yachtType",
+      "label": "Yacht Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "sailing",
+      "options": {
+        "sailing_cruiser": {
+          "label": "Sailing Cruiser",
+          "factor": 1
+        },
+        "motor_yacht": {
+          "label": "Motor Yacht",
+          "factor": 0.9
+        },
+        "superyacht": {
+          "label": "Superyacht (>24m)",
+          "factor": 0.8
+        },
+        "racing": {
+          "label": "Racing Yacht",
+          "factor": 1.4
+        },
+        "catamaran": {
+          "label": "Catamaran",
+          "factor": 1.05
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "length",
+      "label": "Length (metres)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 12,
+      "bands": [
+        {
+          "min": 0,
+          "max": 10,
+          "factor": 0.85
+        },
+        {
+          "min": 10,
+          "max": 15,
+          "factor": 1
+        },
+        {
+          "min": 15,
+          "max": 24,
+          "factor": 1.1
+        },
+        {
+          "min": 24,
+          "max": 50,
+          "factor": 1.2
+        },
+        {
+          "min": 50,
+          "max": 999,
+          "factor": 1.3
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "navigation",
+      "label": "Navigation Limits",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "coastal",
+      "options": {
+        "inland": {
+          "label": "Inland Waters",
+          "factor": 0.75
+        },
+        "coastal": {
+          "label": "Coastal (within 60nm)",
+          "factor": 1
+        },
+        "offshore": {
+          "label": "Offshore/Blue Water",
+          "factor": 1.2
+        },
+        "transatlantic": {
+          "label": "Transatlantic",
+          "factor": 1.35
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "experience",
+      "label": "Skipper Experience",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "experienced",
+      "options": {
+        "professional": {
+          "label": "Professional/RYA Yachtmaster",
+          "factor": 0.85
+        },
+        "experienced": {
+          "label": "Experienced (10+ years)",
+          "factor": 1
+        },
+        "moderate": {
+          "label": "Moderate",
+          "factor": 1.15
+        },
+        "novice": {
+          "label": "Novice/New",
+          "factor": 1.4
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "usage",
+      "label": "Usage",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "private",
+      "options": {
+        "private": {
+          "label": "Private/Pleasure",
+          "factor": 1
+        },
+        "charter": {
+          "label": "Charter",
+          "factor": 1.2
+        },
+        "racing": {
+          "label": "Racing",
+          "factor": 1.35
+        },
+        "commercial": {
+          "label": "Commercial/Training",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 500,
+    "claimsHandlingPerClaim": 3000,
+    "systemOverheadPerYear": 300,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.05,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.3,
+    "reinsuranceRate": 0.03
+  },
+  "targetProfitMargin": 0.05
+}

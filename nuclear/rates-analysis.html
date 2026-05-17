@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Nuclear (NP / NL / NV) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a4a00;
+      --hub-dark:      #252500;
+      --hub-light:     #f9f9e8;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#252500 0%,#4a4a00 55%,#6b6b00 100%);
+      --header-sub:    #e6e682;
+      --hub-mid:       #e8e8c0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1e1e0a;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#252500;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .data-disclaimer{background:#252500;color:var(--header-sub);border-radius:8px;padding:16px 20px;margin-bottom:24px;font-size:0.85rem;line-height:1.6;}
+    .data-disclaimer strong{color:var(--hub-accent);}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:4px;}
+    .chart-wrap .chart-note{font-size:0.78rem;color:#666;margin-bottom:16px;font-style:italic;}
+    canvas{max-width:100%;height:280px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #eeee99;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f5f5dc;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #4a4a00;}
+    .roe-card.base{border-top:4px solid #c8a84b;}
+    .roe-card.bear{border-top:4px solid #c62828;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#4a4a00;}
+    .roe-card.base .val{color:#c8a84b;}
+    .roe-card.bear .val{color:#c62828;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:4px;}
+    .waterfall .wf-note{font-size:0.78rem;color:#666;margin-bottom:16px;font-style:italic;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:230px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:#4a4a00;}
+    .bar-out{background:#c62828;}
+    .bar-profit{background:#c8a84b;color:#000;}
+    .bar-cat{background:#b71c1c;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:0.85rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    footer{background:#252500;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Nuclear (NP/NL/NV)</a> › Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">Illustrative market cycle, capacity/rate index, ROE scenarios &amp; P&amp;L waterfall</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="data-disclaimer">
+    <strong>Critical Data Note:</strong> Nuclear insurance is written through national pools with entirely non-public pricing. Unlike most commercial insurance classes, nuclear pool contribution rates are determined confidentially by pool technical committees and are not disclosed. All charts, indices, loss ratios and financial figures on this page are <strong>illustrative estimates for educational purposes only</strong> — they do not represent actual pool rates, actual loss experience, or actual pool financial performance. They are constructed to be directionally plausible based on publicly available information about nuclear market structure and major loss events. <sup>[I10]</sup>
+  </div>
+
+  <!-- Charts -->
+  <div class="section-title">Illustrative Capacity &amp; Rate Index<span class="badge b-e">ILLUSTRATIVE ONLY</span></div>
+  <div class="chart-wrap">
+    <h3>Chart 1 — Illustrative Nuclear Insurance Capacity/Rate Index 2000–2026 (2000 = 100)</h3>
+    <div class="chart-note">Constructed to reflect publicly known market events: Fukushima (2011) triggers significant hardening; stable pool era 2000–2010; post-Fukushima capacity review; new build opportunity emerging. Actual pool rates are not publicly disclosed.</div>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Illustrative Loss Ratio by Nuclear Insurance Sub-Class (Long-Run Average)</h3>
+    <div class="chart-note">Estimates of long-run loss ratios by sub-class — reflecting that nuclear property (NP) rarely has large losses in the commercial pool but when they occur they are very large; nuclear liability (NL) claims are infrequent but complex; NV transport has more frequent but lower severity losses.</div>
+    <canvas id="chartLR"></canvas>
+  </div>
+
+  <!-- Market cycle -->
+  <div class="section-title">Nuclear Insurance Market Cycle<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Key Driver</th><th>Rate Movement</th><th>Lloyd's / Pool Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Pre-1979</td><td>Pool Establishment</td><td>Pioneering phase; no major commercial losses; pool structures being developed globally</td><td>n/a — rates being established</td><td>NRI pool foundation; Lloyd's participation in international pool treaties</td></tr>
+      <tr><td>1979–1986</td><td>Post-TMI Caution</td><td>TMI $150m insured property loss; first major nuclear pool claim; US nuclear confidence collapses</td><td>Hardening post-TMI; capacity review</td><td>Pool capacity assessed; US ANI handles TMI claim; European pools review standards</td></tr>
+      <tr><td>1986–2000</td><td>Post-Chernobyl Restructure</td><td>Chernobyl demonstrates catastrophic potential; but uninsured event so no direct loss to pools</td><td>Structured pool contributions stable; new underwriting guidelines</td><td>Global moratorium on new builds reduces NP growth; decommissioning pool develops</td></tr>
+      <tr><td>2000–2010</td><td>Stable Pool Era</td><td>No major Western nuclear incident; pools profitable; new Chinese nuclear build creates new pool demand</td><td>Modest upward drift in pool contributions +2–5% p.a. (est.)</td><td>Pool-to-pool treaties deepened; Lloyd's NRI participation maintained</td></tr>
+      <tr><td>2011–2015</td><td>Post-Fukushima Hardening</td><td>Fukushima $40bn+ est. insured; seismic/flood hazard reassessment globally; Japan reactor shutdowns</td><td>Significant hardening +20–35% est. globally; capacity review at some sites</td><td>NRI/pool technical committees require updated seismic hazard data for all sites</td></tr>
+      <tr><td>2015–2022</td><td>Selective Stabilisation</td><td>Post-Fukushima lessons absorbed; capacity restored; Hinkley C construction programme begins</td><td>Modest movement; flat to +5% for compliant sites</td><td>SMR product development begins; new build insurance structures under discussion</td></tr>
+      <tr><td>2022–2026</td><td>New Build Opportunity / Geopolitical Risk</td><td>COP28 nuclear pledge; UK SMR competition; Zaporizhzhia war risk; energy security driving new nuclear</td><td>Positive momentum for nuclear; rates supported by new build pipeline</td><td>Lloyd's market actively engaged in SMR product development and Hinkley programme</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative Nuclear Pool Portfolio<span class="badge b-e">ILLUSTRATIVE ONLY</span></div>
+
+  <div class="warn-box">
+    <strong>Nuclear ROE Note:</strong> Nuclear pools operate on a collective co-insurance basis — individual insurer ROE from nuclear participation reflects their proportionate pool share and depends heavily on whether a major event occurs. In non-loss years, the nuclear pool is typically profitable (low frequency, adequate premiums). In a Chernobyl/Fukushima-scale event affecting a commercially insured Western plant, a single incident could overwhelm pool capacity and trigger the government backstop — representing effectively unlimited loss in the bear scenario.
+  </div>
+
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+12.0%</div>
+      <div class="detail">Combined Ratio ~84%<br>No major incident; growing new build premium; conservative pool management</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+7.0%</div>
+      <div class="detail">Combined Ratio ~92%<br>Minor incidents; pool expenses; normal IBNR development; steady contributions</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−30%+</div>
+      <div class="detail">Combined Ratio 145%+<br>Single major Western reactor accident overwhelms pool capacity; government backstop triggered</div>
+    </div>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (Illustrative Nuclear Pool Portfolio)</h3>
+    <div class="wf-note">Illustrative annual economics for a Lloyd's syndicate's NRI pool participation at proportionate share — non-catastrophe year. All figures estimated for educational purposes.</div>
+    <div class="wf-row"><div class="wf-label">Pool Contributions (GWP equivalent)</div><div class="wf-bar bar-in" style="width:100%;">£100m</div><div class="wf-val">£100.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance / Pool Treaty Costs</div><div class="wf-bar bar-out" style="width:18%;">−£10.0m</div><div class="wf-val">−£10.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Pool Administration &amp; Technical Expenses</div><div class="wf-bar bar-out" style="width:8%;">−£8.0m</div><div class="wf-val">−£8.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Pool Premium (retained)</div><div class="wf-bar bar-in" style="width:74%;background:#6b6b00;">£82.0m</div><div class="wf-val">£82.0m</div></div>
+    <div class="wf-row"><div class="wf-label">NP Property Claims (minor incidents)</div><div class="wf-bar bar-out" style="width:22%;">−£18.0m</div><div class="wf-val">−£18.0m</div></div>
+    <div class="wf-row"><div class="wf-label">NL Liability Claims (third-party, latent)</div><div class="wf-bar bar-out" style="width:12%;">−£8.0m</div><div class="wf-val">−£8.0m</div></div>
+    <div class="wf-row"><div class="wf-label">NV Transport &amp; Workers Claims</div><div class="wf-bar bar-out" style="width:5%;">−£4.0m</div><div class="wf-val">−£4.0m</div></div>
+    <div class="wf-row"><div class="wf-label">IBNR Reserve — Catastrophe Provision</div><div class="wf-bar bar-out" style="width:15%;">−£10.0m</div><div class="wf-val">−£10.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Pool Expenses / Overhead (12%)</div><div class="wf-bar bar-out" style="width:12%;">−£12.0m</div><div class="wf-val">−£12.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (long premium period)</div><div class="wf-bar bar-in" style="width:5%;background:#c8a84b;color:#000;">+£7.0m</div><div class="wf-val">+£7.0m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Result</strong></div><div class="wf-bar bar-profit" style="width:37%;"><strong>£37.0m</strong></div><div class="wf-val"><strong>£37.0m (est. 7.0% ROE)</strong></div></div>
+  </div>
+
+  <!-- IBNR and dev -->
+  <div class="section-title">IBNR &amp; Development Considerations</div>
+  <table>
+    <thead><tr><th>Factor</th><th>Impact on Nuclear Pool Reserves</th></tr></thead>
+    <tbody>
+      <tr><td>Long latency of radiation-induced disease</td><td>Radiation-induced cancers (leukemia, thyroid cancer) may not manifest for 10–40 years after exposure — one of the longest-tail liabilities in insurance. IBNR provisions for NL and NV workers' compensation must extend decades.</td></tr>
+      <tr><td>Catastrophe provision (CAT IBNR)</td><td>Pools maintain explicit catastrophe reserves to provide capital for a major event year. The probability of a Chernobyl/Fukushima-scale event at a commercially insured Western plant in any year is very low — but the potential severity is enormous. CAT IBNR is typically separately managed from attritional IBNR.</td></tr>
+      <tr><td>TMI decontamination precedent</td><td>TMI Unit 2 took 14 years to decontaminate and partially decommission — demonstrating that nuclear property claims develop very slowly. Long tail on NP property claims must be factored into reserves.</td></tr>
+      <tr><td>Regulatory-driven cost escalation</td><td>Post-accident regulatory requirements (new safety systems, upgraded seismic protection) often exceed initial repair cost estimates. Davis-Besse ($143m repair) and San Onofre ($4.7bn decommissioning) illustrate regulatory cost escalation risk in NP claims.</td></tr>
+      <tr><td>Convention liability limit changes</td><td>Upward revision of operator liability limits (Paris Protocol 2004, INES events triggering convention review) can alter the expected severity of NL pool claims for future events — IBNR must be reviewed when convention limits change.</td></tr>
+      <tr><td>Subrogation — limited in nuclear</td><td>Nuclear channelling doctrine means pools cannot subrogate against contractors or equipment suppliers for nuclear damage. Subrogation potential is more limited than in other classes.</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Nuclear (NP / NL / NV) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation →</a></p>
+</footer>
+
+<script>
+// Chart 1 — Nuclear capacity/rate index
+const years = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type:'line',
+  data:{
+    labels: years,
+    datasets:[
+      {
+        label:'NP — Nuclear Property (Illus. Rate Index)',
+        data:[100,101,102,104,106,108,110,112,114,116,118,150,158,162,165,168,170,172,174,176,178,180,184,188,192,196,200],
+        borderColor:'#4a4a00',backgroundColor:'rgba(74,74,0,0.08)',tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'NL — Nuclear Liability (Illus. Rate Index)',
+        data:[100,101,103,105,107,110,112,115,117,119,122,155,165,170,173,175,177,179,181,183,185,187,190,194,198,202,206],
+        borderColor:'#c8a84b',backgroundColor:'rgba(200,168,75,0.08)',tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'NV — Various/Transport (Illus. Rate Index)',
+        data:[100,100,101,102,103,104,106,108,110,112,114,130,136,138,140,141,143,145,147,149,151,153,156,159,162,165,168],
+        borderColor:'#37474f',backgroundColor:'rgba(55,71,79,0.06)',tension:0.3,pointRadius:3
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'bottom'},
+      annotation:{annotations:{}}
+    },
+    scales:{
+      y:{title:{display:true,text:'Illustrative Rate Index (2000=100)'},beginAtZero:false,min:80}
+    }
+  }
+});
+
+// Chart 2 — Loss ratio by sub-class
+new Chart(document.getElementById('chartLR'), {
+  type:'bar',
+  data:{
+    labels:['NP — Property\n(non-cat years)','NP — Property\n(cat year est.)','NL — Liability\n(third-party)','NV — Transport','NV — Workers\nComp / Radiation','NV — Decommissioning\nLiability'],
+    datasets:[
+      {
+        label:'Illustrative Loss Ratio (%)',
+        data:[28,320,45,55,60,40],
+        backgroundColor:['#4a4a00','#b71c1c','#c8a84b','#37474f','#00695c','#6b6b00'],
+        borderRadius:4
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        callbacks:{
+          label:function(ctx){
+            if(ctx.raw>100) return `${ctx.raw}% — CAT year: overwhelms pool capacity`;
+            return `${ctx.raw}% (illustrative long-run avg)`;
+          }
+        }
+      }
+    },
+    scales:{
+      y:{
+        title:{display:true,text:'Illustrative Loss Ratio (%)'},
+        beginAtZero:true,
+        max:350
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

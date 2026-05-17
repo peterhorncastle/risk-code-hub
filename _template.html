@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<!--
+  Risk Code Hub — Canonical Hub Page Template
+  Version 1.0 — May 2026
+
+  INSTRUCTIONS FOR EVERY NEW HUB:
+  ════════════════════════════════
+  1. Copy this file to: risk-code-hub/<hub-folder>/<page-name>.html
+  2. Fill in the 9 :root colour variables in the inline <style> block below.
+     (That is ALL the inline CSS you ever need.)
+  3. Fill in the <title>, breadcrumb text, .tag, h1, and <p> description.
+  4. Update the <nav> — set class="active" on the current page link.
+  5. Build <main> content. Reference hub-styles.css for available classes;
+     do NOT write structural CSS inline.
+  6. Update <footer> text.
+
+  COLOUR VARIABLE GUIDE:
+  ─────────────────────
+  --hub-primary    Main hub colour   → nav active, h2 text, table headers, card borders
+  --hub-dark       Darker shade      → h3, .formula-box bg, case-study border/heading
+  --hub-light      Light tint        → .info-box.hub bg, .example-box scenario bg, .cs-box bg
+  --hub-accent     Accent colour     → h2 underline, nav active underline, .tag, .badge accent
+                   (Usually #c8a84b gold — can change for very distinct hubs)
+  --hub-secondary  Optional 2nd col  → use sparingly for a key sub-theme (e.g. cyber-purple)
+  --hub-secondary2 Optional 3rd col  → rare; only when class genuinely has 3 distinct sub-areas
+  --header-gradient  Full CSS gradient string for <header> background
+  --header-sub     Subtitle text colour inside <header> (use rgba or a light tint of hub colour)
+
+  EXAMPLE (UK Household):
+  :root {
+    --hub-primary:   #2d6a2d;
+    --hub-dark:      #1a4a1a;
+    --hub-light:     #e8f5e3;
+    --hub-accent:    #c8a84b;
+    --header-gradient: linear-gradient(135deg,#0d2240 0%,#2d6a2d 55%,#1a4a1a 100%);
+    --header-sub:    #b8d4b8;
+  }
+
+  EXAMPLE (Crime / Fidelity FI):
+  :root {
+    --hub-primary:   #7b1e1e;
+    --hub-dark:      #3d0000;
+    --hub-light:     #faf5f5;
+    --hub-accent:    #b8860b;
+    --header-gradient: linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%);
+    --header-sub:    #e8c8c8;
+  }
+
+  AVAILABLE CSS CLASSES (from hub-styles.css):
+  ──────────────────────────────────────────────
+  Layout:     .stats-row .stat-box | .card-grid .card .card-left | .module-cards .mod-card
+  Tables:     .tbl-wrap table th td | td.green td.amber td.red
+  Badges:     .badge .b-v .b-e .b-i .b-g
+  Info boxes: .info-box .blue .green .amber .red .hub | .warn-box | .gap-box
+  Charts:     .chart-wrap h3 .sub canvas   (link Chart.js 4.4.1 from cdnjs in <head>)
+  Timeline:   .timeline .tl-item .tl-dot .tl-year .tl-title .tl-body .tl-loss .tl-tag
+              .legend .leg-item .dot
+  Market:     .cycle-block .hard .soft .reform | .roe-grid .roe-card .bull .base .bear
+  Programme:  .tower .tower-layer .amt | .workflow .wf-step .wf-num .wf-body
+  Content:    .formula-box | .case-study .cs-grid .cs-box | .example-box .scenario
+  References: .source-list | .tier-grid .tier-card | .conf-v .conf-e .conf-i .conf-g
+  Typography: h2 h3 h4 p ul li strong
+  Footer:     footer footer a
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[Hub Name] — [Module Name] | Risk Code Hub</title>
+  <!-- Shared stylesheet — ALL structural CSS lives here -->
+  <link rel="stylesheet" href="../hub-styles.css">
+  <!-- Chart.js — include ONLY on pages that have charts (rates-analysis, overview with charts) -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script> -->
+  <style>
+    /*
+     * Hub-specific colours ONLY — nothing else goes here.
+     * Replace the placeholder values below for each hub.
+     */
+    :root {
+      --hub-primary:    #000000;   /* Main hub colour                              */
+      --hub-dark:       #000000;   /* Darker shade (for headings, formula bg)      */
+      --hub-light:      #f4f4f4;   /* Light tint (scenario boxes, secondary bgs)   */
+      --hub-accent:     #c8a84b;   /* Accent/underline (gold is the hub standard)  */
+      --hub-secondary:  #1565c0;   /* Optional 2nd colour — delete if not needed   */
+      --hub-secondary2: #2e7d32;   /* Optional 3rd colour — delete if not needed   */
+      --header-gradient: linear-gradient(135deg, #000000 0%, #222222 55%, #111111 100%);
+      --header-sub:     #cccccc;   /* Subtitle text colour inside <header>         */
+    }
+    /*
+     * If you need a hub-specific style that isn't in hub-styles.css,
+     * add it here ONLY after confirming it doesn't belong in hub-styles.css.
+     * Common legitimate additions: custom tower-layer colours, database filter
+     * button styles, expandable-row JS interactions.
+     */
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     HEADER
+     ─────
+     .tag   = "Lloyd's Risk Code XX" or "Module NN — Module Name"
+     h1     = Hub Name — Module Title
+     p      = One sentence describing what this module covers
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<header>
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> ›
+    <a href="overview.html">[Hub Name] ([Risk Code])</a> ›
+    [Module Name]
+  </div>
+  <div class="tag">Module NN — [Module Name]</div>
+  <h1>[Hub Name] — [Module Title]</h1>
+  <p>[One-sentence description of what this module covers and its relevance to Lloyd's underwriters.]</p>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     NAV TABS
+     ────────
+     9 standard tabs. Set class="active" on the current page only.
+     Tab labels are standard across all hubs — do NOT rename them.
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MAIN CONTENT
+     ─────────────
+     Opening paragraph: context, scope, why this matters to Lloyd's underwriters.
+     Then content sections using h2 / hub-styles.css component classes.
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<main>
+
+  <p>Opening paragraph establishing the scope of this module and its relevance to Lloyd's [Hub Name] underwriting practice. Include a confidence badge on the first key claim. <span class="badge b-v">VER</span></p>
+
+  <!-- ── EXAMPLE: STATS ROW ──────────────────────────────────────────────── -->
+  <h2>Market Overview</h2>
+  <div class="stats-row">
+    <div class="stat-box"><div class="num">£Xbn</div><div class="label">Stat label <span class="badge b-e">EST</span></div></div>
+    <div class="stat-box"><div class="num">00%</div><div class="label">Stat label <span class="badge b-v">VER</span></div></div>
+    <!-- Repeat stat-box as needed; 4–6 per row is typical -->
+  </div>
+
+  <!-- ── EXAMPLE: CARD GRID ──────────────────────────────────────────────── -->
+  <h2>Coverage Structure</h2>
+  <div class="card-grid">
+    <div class="card">
+      <h4>Card Title</h4>
+      <p>Card description using --hub-primary for heading, muted for body text.</p>
+    </div>
+    <div class="card">
+      <h4>Card Title</h4>
+      <p>Use <code>.card-left</code> variant for left-border style (risk mitigation controls).</p>
+    </div>
+  </div>
+
+  <!-- ── EXAMPLE: TABLE ──────────────────────────────────────────────────── -->
+  <h2>Data Table</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Column A</th><th>Column B</th><th>Column C</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Row label</strong></td>
+          <td>Data</td>
+          <td class="green">Good</td>
+        </tr>
+        <tr>
+          <td><strong>Row label</strong></td>
+          <td>Data</td>
+          <td class="amber">Medium</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── EXAMPLE: INFO BOXES ─────────────────────────────────────────────── -->
+  <div class="info-box amber">
+    <strong>⚠️ Key Consideration</strong>
+    Use .info-box with .blue .green .amber .red or .hub (matches hub primary colour).
+  </div>
+
+  <div class="info-box red">
+    <strong>⛔ Data Gap</strong>
+    Use this for GAP disclosures. <span class="badge b-g">GAP</span>
+  </div>
+
+  <!-- ── EXAMPLE: CHART (rates-analysis page) ────────────────────────────── -->
+  <!-- Add <script src="...Chart.js..."> to <head> on pages that need charts -->
+  <!--
+  <div class="chart-wrap">
+    <h3>Chart Title</h3>
+    <p class="sub">Subtitle / data source note</p>
+    <canvas id="chart1"></canvas>
+  </div>
+  <script>
+    new Chart(document.getElementById('chart1'), {
+      type: 'line',
+      data: { labels: [...], datasets: [{ label:'...', data:[...], borderColor:'...', ... }] },
+      options: { responsive:true, plugins:{ legend:{ position:'bottom' } } }
+    });
+  </script>
+  -->
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     FOOTER
+     ──────
+     Format: Risk Code Hub · [Hub Name] ([Risk Code]) · v[X.X] — [Month Year]
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<footer>
+  <a href="../index.html">← Risk Code Hub</a>
+  &nbsp;|&nbsp;
+  [Hub Name] ([Risk Code]) — Module NN [Module Name]
+  &nbsp;|&nbsp;
+  Version X.X · Month Year
+</footer>
+
+</body>
+</html>

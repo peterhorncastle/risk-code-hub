@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+<title>PA&H — Claims Database | Risk Code Hub</title>
+<style>
+:root{--pah:#00695c;--pah-dark:#003d33;--acc:#c62828;--med:#1565c0;--travel:#e65100;--sport:#6a1b9a;--warn:#f57f17;--bg:#f5f7fa;--card:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--radius:10px;    /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #00695c;
+    --hub-dark:      #003d33;
+    --hub-light:     #e8f5f2;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #1565c0;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#003d33 0%,#00695c 50%,#00796b 100%);
+    --header-sub:    #b8ddd8;
+  }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+header{background:linear-gradient(135deg,#003d33 0%,#00695c 50%,#00796b 100%);color:#fff;padding:2rem 1.5rem 1.5rem;}
+.hub-label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75;margin-bottom:.4rem;}
+header h1{font-size:1.8rem;font-weight:700;}
+header p{opacity:.85;font-size:.95rem;}
+nav.breadcrumb{background:#fff;border-bottom:1px solid var(--border);padding:.6rem 1.5rem;font-size:.82rem;color:var(--muted);}
+nav.breadcrumb a{color:var(--pah);text-decoration:none;}
+.container{max-width:1100px;margin:0 auto;padding:1.5rem;}
+.controls{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.controls select,.controls input{padding:.5rem .8rem;border:1px solid var(--border);border-radius:6px;font-size:.85rem;background:#fff;color:var(--text);}
+.controls input{min-width:220px;}
+#count{font-size:.83rem;color:var(--muted);align-self:center;}
+.badge{display:inline-block;padding:.13rem .48rem;border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.04em;white-space:nowrap;}
+.ver{background:#e6f4ea;color:#1b5e20;}.est{background:#fef3e2;color:#e65100;}.illus{background:#cce5ff;color:#1565c0;}.gap{background:#fdecea;color:#c62828;}
+table{width:100%;border-collapse:collapse;font-size:.84rem;background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+th{background:var(--pah-dark);color:#fff;padding:.55rem .7rem;text-align:left;font-weight:600;cursor:pointer;}
+th:hover{background:#00574a;}
+td{padding:.5rem .7rem;border-bottom:1px solid var(--border);vertical-align:top;}
+tr:nth-child(even) td{background:#f9fafb;}
+tr.detail-row td{background:#f0f9f7;border-bottom:2px solid var(--pah);}
+.sev{border-radius:4px;padding:.12rem .45rem;font-size:.7rem;font-weight:700;}
+.sev-major{background:#fdecea;color:#c62828;}
+.sev-sig{background:#fff3e0;color:#e65100;}
+.sev-mod{background:#e3f2fd;color:#1565c0;}
+.type-tag{border-radius:4px;padding:.12rem .45rem;font-size:.68rem;font-weight:700;}
+.T-PA{background:#e8f5e9;color:#1b5e20;}
+.T-TRAVEL{background:#fff3e0;color:#e65100;}
+.T-SPORT{background:#f8f0ff;color:#6a1b9a;}
+.T-GROUP{background:#e3f2fd;color:#1565c0;}
+.T-CRED{background:#fef3e2;color:#e65100;}
+.T-PAND{background:#f3e5f5;color:#6a1b9a;}
+.T-MAR{background:#e0f2f1;color:#00695c;}
+.T-REG{background:#fff9c4;color:#f57f17;}
+.expander{cursor:pointer;color:var(--pah);font-size:.8rem;font-weight:600;background:none;border:none;padding:0;}
+.detail-content{font-size:.82rem;color:var(--muted);padding:.3rem 0;}
+.hidden{display:none;}
+.nav-strip{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem;}
+.nav-btn{display:inline-block;background:var(--pah-dark);color:#fff;text-decoration:none;border-radius:6px;padding:.5rem 1rem;font-size:.82rem;font-weight:600;}
+footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem;}
+</style>
+</head>
+<body>
+<header>
+  <div class="hub-label">Lloyd's Risk Code Hub · Accident &amp; Health</div>
+  <h1>Personal Accident &amp; Health — Claims Database</h1>
+  <p>35 significant PA&amp;H market events and claims (1990–2024). All Lloyd's loss figures are estimates unless noted. Click any row for detail.</p>
+</header>
+<nav class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Personal Accident &amp; Health</a> › Claims Database  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+  <div class="controls">
+    <select id="typeFilter">
+      <option value="">All types</option>
+      <option value="PA">Personal Accident (PA)</option>
+      <option value="TRAVEL">Travel (KT)</option>
+      <option value="SPORT">Sports Disability (KS)</option>
+      <option value="GROUP">Group A&amp;H (KG)</option>
+      <option value="CRED">Creditor Protection (KP)</option>
+      <option value="PAND">Pandemic/Epidemic</option>
+      <option value="MAR">Maritime PA (KM)</option>
+      <option value="REG">Regulatory Event</option>
+    </select>
+    <select id="sevFilter">
+      <option value="">All severities</option>
+      <option value="Major">Major</option>
+      <option value="Significant">Significant</option>
+      <option value="Moderate">Moderate</option>
+    </select>
+    <input type="text" id="search" placeholder="Search event, loss, country…">
+    <span id="count"></span>
+  </div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th><th>Event</th><th>Type</th><th>Severity</th><th>Estimated Loss</th><th>Detail</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <div class="nav-strip">
+    <a class="nav-btn" href="timeline.html">← Timeline</a>
+    <a class="nav-btn" href="underwriting.html">Underwriting →</a>
+  </div>
+</div>
+
+<script>
+const events=[
+  {year:1990,event:"UK Income Protection — Long-Term Claims Rise",type:"GROUP",sev:"Significant",loss:"Industry-wide <span class='badge est'>EST</span>",detail:"Permanent health insurance (PHI) / income protection claims duration extended substantially in the early 1990s recession. Musculoskeletal and mental health claims drove duration beyond actuarial expectations for many carriers. Led to definition of disability reviews across the market."},
+  {year:1993,event:"Hurricane Andrew — Travel & PA Disruption (Florida)",type:"TRAVEL",sev:"Moderate",loss:"Minimal direct PA",detail:"Hurricane Andrew (1992) demonstrated nat cat impact on travel insurance cancellation. By 1993 the travel market had begun to systematically exclude weather event cancellations unless FCDO/government advisory issued."},
+  {year:2001,event:"9/11 Attacks — Aviation PA and Life Claims",type:"PA",sev:"Major",loss:"Hundreds of millions (Lloyd's market share) <span class='badge est'>EST</span>",detail:"September 11 2001 killed 2,996 people and generated substantial PA and life insurance claims across the Lloyd's market. Aviation PA, business travel PA and group PA programmes all responded. War/terrorism exclusions were subsequently embedded in standard PA wordings. Standalone terrorism PA demand increased significantly."},
+  {year:2003,event:"SARS Epidemic — Travel Cancellation Claims (Asia)",type:"PAND",sev:"Significant",loss:"Hundreds of millions globally <span class='badge est'>EST</span>",detail:"SARS caused widespread travel cancellation across Asia, particularly affecting Hong Kong, Singapore, China and Canada. Travel insurance (KT) cancellation claims were elevated; epidemic exclusion clauses were tightened across Lloyd's travel binders post-SARS. The event established the precedent for epidemic-driven travel claims that would be repeated on a massive scale in 2020."},
+  {year:2005,event:"7/7 London Bombings — Group PA Terrorism Claims",type:"PA",sev:"Significant",loss:"Market-wide; individual company losses not disclosed",detail:"The 7 July 2005 London bombings killed 52 civilians and injured over 700. Group PA programmes for City employers and public sector employees responded. The event highlighted the importance of terrorism PA extensions within group A&H policies for urban employers."},
+  {year:2006,event:"Sports Disability — Professional Rugby Career-Ending Claims",type:"SPORT",sev:"Significant",loss:"Individual policies: £500k–£5m+ per athlete <span class='badge est'>EST</span>",detail:"Post-professionalisation of rugby union (1995), career-ending spinal injury claims from professional players increased significantly. Several high-profile spinal injury cases in English Premiership rugby tested the Lloyd's sports disability (KS) market. Underwriting became more granular by playing position (props and hookers carry higher risk than backs)."},
+  {year:2007,event:"Daniel James — Rugby Spinal Injury (Leeds Rhinos)",type:"SPORT",sev:"Major",loss:"~£4m+ personal injury award (court-related) <span class='badge ver'>VER</span>",detail:"Daniel James, a Leeds Rhinos rugby league player, was paralysed during a tackle in 2007. His subsequent legal case and the broader trajectory of his life became a landmark in public debate on disability and quality of life. For sports underwriters (KS), the case underscored the catastrophic injury exposure in contact sports and influenced both underwriting and policy sum insured levels."},
+  {year:2008,event:"Global Financial Crisis — PPI Mis-Selling Investigation Intensifies",type:"CRED",sev:"Major",loss:"£38bn+ total PPI redress (UK market) <span class='badge ver'>VER</span>",detail:"The FSA (and later FCA) PPI redress programme became the largest consumer financial compensation exercise in UK history. Banks and insurers paid over £38 billion to customers who had been mis-sold payment protection insurance between the 1990s and 2010. The scandal permanently damaged the creditor protection (KP) distribution model and triggered comprehensive product governance regulation."},
+  {year:2009,event:"H1N1 Swine Flu Pandemic — Travel Claims (Moderate)",type:"PAND",sev:"Moderate",loss:"Manageable vs. COVID but elevated <span class='badge est'>EST</span>",detail:"H1N1 influenza A (swine flu) was declared a WHO pandemic in June 2009. Travel cancellation claims from travellers to affected regions were elevated. Unlike SARS, H1N1 was geographically widespread but had lower mortality than feared. The pandemic reinforced epidemic exclusion language in travel wordings but did not generate the catastrophic claims seen in 2020."},
+  {year:2010,event:"ACA Enacted (USA) — US Health Market Transformed",type:"REG",sev:"Major",loss:"Structural market change; not a direct claims event",detail:"The Affordable Care Act signed March 2010 extended coverage to ~30 million uninsured Americans, prohibited PEC exclusions for children and adults, and mandated essential health benefits. Lloyd's excess of loss and stop-loss writers on US employer health schemes faced recalibrated attachment points and changed loss patterns as the insured population expanded."},
+  {year:2011,event:"Fukushima / Japan Earthquake — Travel & PA Claims (Asia)",type:"TRAVEL",sev:"Significant",loss:"Japan travel market: hundreds of millions <span class='badge est'>EST</span>",detail:"The 11 March 2011 Tōhoku earthquake and Fukushima nuclear disaster caused massive travel cancellation to Japan. KT travel policies responded to cancellation and curtailment claims; nuclear exclusions were tested in some PA wordings. The disaster confirmed the need for clear FCDO trigger language in UK travel policies."},
+  {year:2012,event:"PPI Supreme Court — Plevin v Paragon [2014] Shapes Redress Scope",type:"CRED",sev:"Significant",loss:"Contributed to £38bn+ total PPI redress <span class='badge ver'>VER</span>",detail:"The UK Supreme Court's Plevin v Paragon Personal Finance Ltd [2014] UKSC 61 ruling held that the undisclosed commission structure in PPI sales created an unfair relationship under the Consumer Credit Act 1974. This expanded the scope of PPI redress beyond mis-selling to include commission non-disclosure — adding billions to total compensation."},
+  {year:2013,event:"Rana Plaza Collapse — Group PA / Workers' Compensation (Bangladesh)",type:"PA",sev:"Major",loss:"~$40m compensation fund established <span class='badge ver'>VER</span>",detail:"The collapse of the Rana Plaza garment factory in Dhaka on 24 April 2013 killed 1,134 workers and injured over 2,500. The subsequent Rana Plaza Arrangement — a compensation fund for victims — paid approximately $30–40m. The disaster exposed inadequate workers' compensation in global supply chains and accelerated demand for supply chain group PA coverage among multinational retailers."},
+  {year:2014,event:"Ebola Outbreak — West Africa Travel Claims",type:"PAND",sev:"Moderate",loss:"Contained to affected regions <span class='badge est'>EST</span>",detail:"The 2014–16 Ebola epidemic in West Africa infected 28,600 people. Travel cancellation to Guinea, Liberia and Sierra Leone generated KT claims. The outbreak demonstrated how rapidly a public health emergency could suppress regional travel and triggered clearer epidemic exclusion drafting in Lloyd's travel binders."},
+  {year:2015,event:"Germanwings 9525 — Aviation PA / Group Claims",type:"PA",sev:"Major",loss:"~€130m+ compensation (Lufthansa Group) <span class='badge ver'>VER</span>",detail:"Germanwings Flight 9525 was deliberately crashed by its co-pilot on 24 March 2015, killing all 150 aboard. Aviation PA claims, group life and travel insurance claims were triggered. Lufthansa Group ultimately paid approximately €100,000+ per victim in compensation. The event highlighted aviation PA capacity and the mental health screening question for professional pilots."},
+  {year:2016,event:"Zika Virus — Latin America Travel Cancellation",type:"PAND",sev:"Moderate",loss:"Elevated KT claims — Americas <span class='badge est'>EST</span>",detail:"WHO declared Zika a public health emergency of international concern in February 2016. Travel to affected Latin American and Caribbean destinations dropped sharply, particularly among pregnant women and couples planning pregnancy. FCDO travel advisories triggered some policy responses; the event prompted clearer epidemic language in travel wordings."},
+  {year:2016,event:"PPI Complaint Deadline Announced — Market Prepares Final Wave",type:"CRED",sev:"Significant",loss:"Added billions to total £38bn+ redress <span class='badge ver'>VER</span>",detail:"The FCA announced August 2019 as the PPI complaint deadline, triggering a final wave of claims encouraged by aggressive claims management companies (CMCs). The deadline drove the last significant tranche of PPI compensation payments. After 2019, the creditor protection (KP) market refocused on transparent, genuinely useful protection products under strengthened FCA product governance rules."},
+  {year:2017,event:"Las Vegas Shooting — Mass Casualty PA / Event Cancellation",type:"PA",sev:"Major",loss:"~$800m+ total insurance (various lines) <span class='badge est'>EST</span>",detail:"The Route 91 Harvest music festival shooting in Las Vegas (1 October 2017) killed 60 and injured 867. PA, cancellation, public liability and venue insurance claims were triggered. The event prompted review of active assailant/mass casualty coverage in both event cancellation (KC) and group PA (KG) frameworks across the Lloyd's market."},
+  {year:2018,event:"Mental Health Parity — Group IP Disability Definition Under Review",type:"GROUP",sev:"Significant",loss:"Reserve impact: carrier-specific <span class='badge est'>EST</span>",detail:"From 2018, group income protection (GIP) insurers began addressing the systematic underrepresentation of mental health as a covered disability cause. Many historical GIP wordings contained explicit mental health carve-outs or limitations. Market pressure, FCA scrutiny and employer duty-of-care obligations drove broadening of mental health coverage — increasing claims frequency but reducing discrimination in product design."},
+  {year:2019,event:"FCA PPI Deadline — £38bn Redress Programme Concludes",type:"CRED",sev:"Major",loss:"£38.3bn total PPI compensation (FCA reported) <span class='badge ver'>VER</span>",detail:"The FCA's August 2019 PPI complaints deadline marked the formal end of the PPI redress programme. Total compensation paid by banks and insurers reached £38.3 billion — the largest consumer financial redress exercise in UK history. Post-deadline, the creditor protection market rebuilt on foundation of Consumer Credit Act compliance, transparent pricing and genuine value products."},
+  {year:2020,event:"COVID-19 Pandemic — Travel Market Collapses",type:"PAND",sev:"Major",loss:"Lloyd's: billions across travel and A&H <span class='badge est'>EST</span>",detail:"COVID-19 was declared a WHO pandemic on 11 March 2020. Global aviation halted; travel insurance (KT) cancellation and curtailment claims reached unprecedented levels. Lloyd's overall COVID claims across all lines were £6.2 billion (net, 2020). A&H and travel represented a significant component. Pandemic exclusions were rapidly deployed across renewals. Group life programmes paid elevated death claims in heavily affected regions."},
+  {year:2020,event:"COVID-19 — Group PA: Lockdown-Related Disability Claims",type:"GROUP",sev:"Significant",loss:"Elevated short-term disability claims <span class='badge est'>EST</span>",detail:"During COVID-19 lockdowns (2020), group PA and income protection programmes saw reduced musculoskeletal injury claims (fewer commutes, sports injuries) but elevated anxiety, depression and COVID-itself disability claims. Net loss impact varied by carrier depending on policy wording and exclusion language. Long-COVID as a separate disabling condition had not yet been formally classified in 2020."},
+  {year:2021,event:"Long-COVID Recognised — Group IP Reserves Under Pressure",type:"GROUP",sev:"Major",loss:"Reserve strengthening: carrier-specific <span class='badge est'>EST</span>",detail:"NICE and NHS England formally recognised long-COVID as a clinical syndrome in 2021, with ~2 million estimated sufferers in the UK at peak. Symptoms — fatigue, cognitive impairment ('brain fog'), breathlessness — frequently met disability definitions in group income protection policies. Average disability claim duration extended. Multiple carriers revised group IP reserves upward. The CMIB (Continuous Mortality Investigation) began tracking long-COVID's actuarial impact formally."},
+  {year:2021,event:"Afghanistan Evacuation — Expat / Business Travel PA Claims",type:"PA",sev:"Moderate",loss:"Bespoke individual recoveries <span class='badge est'>EST</span>",detail:"The Taliban takeover of Afghanistan in August 2021 triggered emergency evacuation of foreign nationals and locally engaged staff. Business travel PA policies, expat medical evacuation covers and KM (maritime PA / crew) policies covering overland aid workers were activated. The event demonstrated the value of kidnap, detention and evacuation extensions in PA products for high-risk zone operations."},
+  {year:2022,event:"Russia–Ukraine War — War PA / Maritime Crew Exclusions",type:"MAR",sev:"Significant",loss:"Individual KM and KX claims <span class='badge est'>EST</span>",detail:"Russia's full-scale invasion of Ukraine in February 2022 affected maritime crew PA (KM) as seafarers were trapped in Ukrainian Black Sea ports. War exclusions across PA wordings were invoked. Separately, expat A&H policies for Ukraine-based personnel were cancelled or voided. The conflict reinforced the importance of separate war PA covers for high-risk zone operators."},
+  {year:2022,event:"Mental Health Travel Exclusions — FCA Consumer Focus",type:"REG",sev:"Significant",loss:"Regulatory review; no direct claims figure",detail:"The FCA expressed concern in 2022 that standard travel insurance products excluded mental health conditions from cancellation and medical cover in ways that were potentially discriminatory and inconsistent with Consumer Duty good outcomes. Several major travel insurers reviewed their mental health exclusions ahead of the Consumer Duty deadline. The issue of travel insurance accessibility for those with mental health conditions became a policy priority."},
+  {year:2023,event:"FCA Consumer Duty Effective — A&H Product Review",type:"REG",sev:"Significant",loss:"Compliance costs: significant across market",detail:"FCA Consumer Duty (31 July 2023) required retail A&H insurers to demonstrate four good consumer outcomes. Travel insurers reviewed FCDO trigger wording, mental health exclusion language, claims journey communications and renewal pricing. Group scheme governance requirements were clarified. The Duty applied to all new products from July 2023 and to legacy products from July 2024."},
+  {year:2023,event:"NHS Waiting Lists — Record UK PMI Demand",type:"GROUP",sev:"Significant",loss:"Positive market development (premium growth)",detail:"England's NHS elective waiting list exceeded 7 million patients in 2023. Private medical insurance (PMI) demand reached levels not seen since the 1990s as employers and individuals sought to bypass NHS delays. BUPA, AXA Health and Vitality all reported double-digit growth. Lloyd's reinsurers writing UK medical excess-of-loss treaties faced higher cession volumes and increased underlying medical cost inflation."},
+  {year:2023,event:"Medical Inflation 8–10% p.a. — Group PMI Pricing Crisis",type:"GROUP",sev:"Major",loss:"Market-wide margin compression <span class='badge est'>EST</span>",detail:"UK private medical inflation — driven by consultant fee increases, hospital day-case costs and diagnostic test pricing — ran at 8–10% per annum in 2023, well above general CPI inflation. Group PMI schemes renewing at standard frequency faced major premium increases. Underwriters applied experience-rated adjustments and reduced guarantees on multi-year schemes. The combination of frequency (mental health) and severity (medical inflation) created the most challenging group PMI conditions in a decade."},
+  {year:2023,event:"Maui Wildfires — Travel Insurance Losses (Hawaii)",type:"TRAVEL",sev:"Moderate",loss:"Hawaii travel market: tens of millions <span class='badge est'>EST</span>",detail:"The August 2023 Lahaina wildfire in Maui killed 100+ people and devastated Hawaii's tourism infrastructure. Travel insurance cancellation and curtailment claims were triggered for those with imminent bookings. The event demonstrated the expanding role of climate-related nat cat events in travel insurance claims patterns — beyond the traditional hurricane/earthquake triggers."},
+  {year:2024,event:"Conflict Zone PA — Gaza, Sudan, Yemen Expat Claims",type:"PA",sev:"Moderate",loss:"Individual bespoke PA policies <span class='badge est'>EST</span>",detail:"Ongoing conflicts in Gaza, Sudan and Yemen generated claims under business travel PA, expat medical evacuation and war PA (KX) policies during 2024. Aid organisations, diplomatic missions and international businesses with staff in conflict zones activated kidnap, detention and emergency evacuation extensions. The market saw renewed interest in standalone war/political violence PA for high-risk zone operators."},
+  {year:2024,event:"Long-COVID Disability Duration — Actuarial Reserve Reviews",type:"GROUP",sev:"Significant",loss:"Reserve adjustments: carrier-specific <span class='badge est'>EST</span>",detail:"By 2024, the actuarial profession was revising long-COVID disability duration assumptions. Initial optimistic expectations of 6–12 month disability periods proved incorrect for a subset of severely affected claimants. CMIB published analysis on long-COVID mortality and morbidity impacts. Group income protection carriers with significant 2020–21 long-COVID claims conducted second reserve reviews, with some strengthening reserves for extended disability durations."},
+  {year:2024,event:"AI Health Data & Underwriting — Regulatory Scrutiny",type:"REG",sev:"Moderate",loss:"Regulatory risk; no direct claims",detail:"The use of AI and algorithmic underwriting in A&H — including wearable device data, pharmacy data and genetic information — attracted FCA and ICO scrutiny in 2024. Questions of fairness, discrimination and data adequacy were raised. The FCA's Consumer Duty framework placed obligations on insurers to demonstrate that AI-assisted pricing decisions produced fair customer outcomes. Lloyd's syndicates using predictive analytics for PA underwriting reviewed their model governance frameworks."},
+  {year:2024,event:"A&H Market Hard Pricing — Group IP &amp; Travel Re-Rate",type:"MKT",sev:"Significant",loss:"Premium rate increases 10–25% some segments <span class='badge est'>EST</span>",detail:"By 2024, the PA&H market across Lloyd's and company market had entered a sustained hard cycle. Group income protection saw re-rates of 10–25% in the worst-affected mental health and long-COVID affected books. Travel insurance saw structural re-pricing as pandemic-era losses were absorbed. Group PMI medical inflation loading produced double-digit renewal increases. Reinsurers pulled back capacity from certain group IP treaties, tightening the supply side further."},
+];
+
+const types={PA:"T-PA",TRAVEL:"T-TRAVEL",SPORT:"T-SPORT",GROUP:"T-GROUP",CRED:"T-CRED",PAND:"T-PAND",MAR:"T-MAR",REG:"T-REG",MKT:"T-GROUP"};
+const typeLabels={PA:"Personal Accident",TRAVEL:"Travel (KT)",SPORT:"Sports (KS)",GROUP:"Group A&H",CRED:"Creditor (KP)",PAND:"Pandemic",MAR:"Maritime PA",REG:"Regulatory",MKT:"Market"};
+let open={};
+
+function render(){
+  const tv=document.getElementById('typeFilter').value;
+  const sv=document.getElementById('sevFilter').value;
+  const kw=document.getElementById('search').value.toLowerCase();
+  const filtered=events.filter(e=>{
+    if(tv&&e.type!==tv)return false;
+    if(sv&&e.sev!==sv)return false;
+    if(kw&&!(e.event.toLowerCase().includes(kw)||e.detail.toLowerCase().includes(kw)||String(e.year).includes(kw)||e.loss.toLowerCase().includes(kw)))return false;
+    return true;
+  });
+  document.getElementById('count').textContent=filtered.length+' of '+events.length+' events';
+  const tb=document.getElementById('tbody');
+  tb.innerHTML='';
+  filtered.forEach((e,i)=>{
+    const tc=types[e.type]||'T-GROUP';
+    const tl=typeLabels[e.type]||e.type;
+    const sc=e.sev==='Major'?'sev-major':e.sev==='Significant'?'sev-sig':'sev-mod';
+    const id='r'+i;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${e.year}</td><td><strong>${e.event}</strong></td><td><span class="type-tag ${tc}">${tl}</span></td><td><span class="sev ${sc}">${e.sev}</span></td><td>${e.loss}</td><td><button class="expander" onclick="toggle('${id}')">▶ Detail</button></td>`;
+    tb.appendChild(tr);
+    const dr=document.createElement('tr');
+    dr.id=id;dr.className='detail-row hidden';
+    dr.innerHTML=`<td colspan="6"><div class="detail-content">${e.detail}</div></td>`;
+    tb.appendChild(dr);
+  });
+}
+
+function toggle(id){
+  const r=document.getElementById(id);
+  const btn=r.previousElementSibling.querySelector('.expander');
+  if(r.classList.toggle('hidden')){btn.textContent='▶ Detail';}else{btn.textContent='▼ Hide';}
+}
+
+['typeFilter','sevFilter','search'].forEach(id=>document.getElementById(id).addEventListener('input',render));
+render();
+</script>
+<footer>Risk Code Hub · Personal Accident &amp; Health · Claims Database · All loss figures are estimates unless marked VER · Not for regulatory use</footer>
+</body>
+</html>

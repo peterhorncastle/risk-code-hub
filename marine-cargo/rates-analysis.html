@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Rates &amp; ROE — Marine Cargo — Risk Code Hub</title>
+  <style>
+    :root {
+      --mc:#1565c0; --mc-dark:#0d2137; --icc:#00695c;
+      --fire:#c62828; --ga:#6a1b9a; --warn:#e65100;
+      --light:#e3f2fd; --border:#bbdefb; --text:#0d1b2e; --muted:#546e7a;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1565c0;
+    --hub-dark:      #0d2137;
+    --hub-light:     #e8f0fa;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #00695c;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%);
+    --header-sub:    #bbdefb;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90caf9; margin-bottom:6px; }
+    .breadcrumb a { color:#bbdefb; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#90caf9; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#bbdefb; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--mc); border-bottom-color:var(--fire); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--mc); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .chart-wrap { background:#fff; border-radius:12px; padding:24px; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:24px 0; }
+    .chart-wrap h3 { font-size:1rem; color:var(--mc); margin-bottom:16px; }
+    canvas { max-height:320px; }
+
+    .era-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin:24px 0; }
+    .era-card { background:#fff; border-radius:10px; padding:20px; border-top:4px solid var(--mc); box-shadow:0 1px 3px rgba(0,0,0,0.07); }
+    .era-card.soft { border-top-color:var(--icc); }
+    .era-card.hard { border-top-color:var(--fire); }
+    .era-card.turn { border-top-color:var(--warn); }
+    .era-card h4 { font-size:0.92rem; margin-bottom:8px; }
+    .era-card p { font-size:0.83rem; margin:0; line-height:1.6; color:var(--muted); }
+    .era-label2 { font-size:0.68rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--mc); margin-bottom:6px; }
+    .era-card.soft .era-label2 { color:var(--icc); }
+    .era-card.hard .era-label2 { color:var(--fire); }
+    .era-card.turn .era-label2 { color:var(--warn); }
+
+    .rate-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:20px 0; }
+    .rate-table th { background:var(--mc); color:#fff; padding:11px 14px; font-size:0.8rem; text-align:left; }
+    .rate-table td { padding:10px 14px; font-size:0.83rem; border-bottom:1px solid var(--border); vertical-align:top; }
+    .rate-table tr:last-child td { border-bottom:none; }
+    .rate-table tr:hover td { background:#e8f4fd; }
+    .up { color:var(--fire); font-weight:700; }
+    .flat { color:var(--warn); font-weight:700; }
+    .down { color:var(--icc); font-weight:700; }
+
+    .roe-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:24px 0; }
+    @media(max-width:600px){ .roe-grid { grid-template-columns:1fr; } }
+    .roe-card { background:#fff; border-radius:12px; padding:22px; text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+    .roe-card.bull { border-top:5px solid var(--icc); }
+    .roe-card.base { border-top:5px solid var(--mc); }
+    .roe-card.bear { border-top:5px solid var(--fire); }
+    .roe-label { font-size:0.7rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+    .roe-num { font-size:1.8rem; font-weight:700; }
+    .roe-card.bull .roe-label { color:var(--icc); }
+    .roe-card.bull .roe-num { color:var(--icc); }
+    .roe-card.base .roe-label { color:var(--mc); }
+    .roe-card.base .roe-num { color:var(--mc); }
+    .roe-card.bear .roe-label { color:var(--fire); }
+    .roe-card.bear .roe-num { color:var(--fire); }
+    .roe-card p { font-size:0.8rem; color:var(--muted); margin-top:8px; line-height:1.5; }
+
+    footer { background:var(--mc-dark); color:#90caf9; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Cargo</a> › Rates &amp; ROE</div>
+  <div class="tag">Lloyd's Codes · V · Q · VL · VX</div>
+  <h1>Rates &amp; ROE Analysis</h1>
+  <p>Marine cargo rate cycle analysis, war risk premium movements, commodity segment benchmarks, and return-on-equity scenarios for the Lloyd's market class.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>Marine cargo rates are driven by a combination of attritional loss experience, large single events, reinsurance cost, and competitive pressure from both Lloyd's and non-Lloyd's markets. The class entered a prolonged soft cycle post-2000, bottomed out around 2017–2019 (when many London market syndicates were writing at loss ratios of 80%+), and has since undergone a measured hardening driven by large events (Tianjin, Hanjin, vessel fires, COVID accumulation). War risk — historically priced separately and cyclically — has spiked sharply since 2023 due to the Red Sea crisis.</p>
+
+  <div class="chart-wrap">
+    <h3>Marine Cargo Rate Index — London Market (2010 = 100) <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="rateChart"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Marine Cargo Loss Ratio — Lloyd's Market Estimate (%) <span class="badge b-i">ILLUS</span></h3>
+    <canvas id="lrChart"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>War Risk Rate — Red Sea Transit (% of cargo value) <span class="badge b-e">EST</span></h3>
+    <canvas id="warChart"></canvas>
+  </div>
+
+  <h2>Market Cycle Narrative</h2>
+  <div class="era-cards">
+    <div class="era-card soft">
+      <div class="era-label2">2010–2015 · Soft Market</div>
+      <h4>Post-Financial Crisis Softening</h4>
+      <p>Abundant capacity, growing trade volumes, low large-loss experience drove rates down 20–35% from 2010 peaks. Competition from emerging Asian and European markets intensified. Lloyd's Performance Management began flagging marine cargo as a loss-making line by 2013–14.</p>
+    </div>
+    <div class="era-card hard">
+      <div class="era-label2">2015–2016 · Shock Events</div>
+      <h4>Tianjin &amp; Hanjin Corrections</h4>
+      <p>Tianjin port explosions ($3.3bn, Aug 2015) and Hanjin bankruptcy ($500m+ cargo claims, Sep 2016) exposed systemic underpricing. Brief rate hardening: +10–20% on commodity and containerised accounts. Reinsurers adjusted terms. Insufficient sustained correction — competition returned within 12 months.</p>
+    </div>
+    <div class="era-card turn">
+      <div class="era-label2">2017–2019 · Trough</div>
+      <h4>Loss Ratio Crisis</h4>
+      <p>NotPetya (2017, $300m Maersk) and Maersk Honam fire (2018, $600m+) hit a market already running 75–85% loss ratios. Lloyd's Performance Management's Decile 10 review (2018–19) forced several marine cargo syndicates to exit or dramatically reduce capacity. Catalyst for genuine market discipline.</p>
+    </div>
+    <div class="era-card">
+      <div class="era-label2">2020–2022 · Hardening</div>
+      <h4>COVID Accumulation &amp; Rate Recovery</h4>
+      <p>COVID port congestion (2020–21), Felicity Ace ($500m, 2022), Ever Given GA ($900m fund, 2021) drove sustained hardening. Containerised cargo rates up 20–40%; vehicle carrier rates up 30–60%. Automatic limits reduced; deductibles increased across many renewal accounts.</p>
+    </div>
+    <div class="era-card hard">
+      <div class="era-label2">2023–2024 · War Risk Spike</div>
+      <h4>Red Sea Crisis &amp; Route Disruption</h4>
+      <p>Houthi attacks from Oct 2023 triggered the sharpest war risk rate movement since the 1991 Gulf War. Red Sea transit war risk: 0.07% → 0.5–1.0%. Most cargo now routing Cape of Good Hope — longer transit, higher freight costs, but no war risk surcharge. Total premium effect on annual accounts: +5–15% on affected trades.</p>
+    </div>
+  </div>
+
+  <h2>Current Rate Benchmark Table (2024)</h2>
+  <table class="rate-table">
+    <thead>
+      <tr>
+        <th>Segment / Commodity</th>
+        <th>Current Rate Range</th>
+        <th>Rate Movement (12 months)</th>
+        <th>Loss Ratio Estimate</th>
+        <th>Market Outlook</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Electronics (containerised, ICC A, sea)</strong></td>
+        <td>0.20–0.45%</td>
+        <td class="flat">▶ Flat to +5%</td>
+        <td>55–65%</td>
+        <td>Stable; li-ion sub-limit pressure increasing</td>
+      </tr>
+      <tr>
+        <td><strong>Vehicles / Automotive (ICC A)</strong></td>
+        <td>0.35–0.80%</td>
+        <td class="up">▲ +10–20%</td>
+        <td>60–75%</td>
+        <td>Hardening due to EV fire risk; Felicity Ace fallout; vessel fire frequency</td>
+      </tr>
+      <tr>
+        <td><strong>Food &amp; Agri (dry, ICC B/C)</strong></td>
+        <td>0.07–0.22%</td>
+        <td class="flat">▶ Flat</td>
+        <td>50–60%</td>
+        <td>Stable; Ukraine grain disruption resolved partially; Black Sea HRA surcharge for those trades</td>
+      </tr>
+      <tr>
+        <td><strong>Pharmaceuticals / Cold Chain</strong></td>
+        <td>0.25–0.65%</td>
+        <td class="up">▲ +5–15%</td>
+        <td>55–70%</td>
+        <td>Hardening; COVID highlighted cold chain dependency; temperature excursion claims frequency up</td>
+      </tr>
+      <tr>
+        <td><strong>Steel / Metals (bulk, ICC C)</strong></td>
+        <td>0.06–0.18%</td>
+        <td class="down">▼ Flat to −5%</td>
+        <td>45–55%</td>
+        <td>Stable/softening; limited loss activity; strong competition from European markets</td>
+      </tr>
+      <tr>
+        <td><strong>Project Cargo / Heavy Lift (VX)</strong></td>
+        <td>0.10–0.50%</td>
+        <td class="flat">▶ Flat</td>
+        <td>60–75%</td>
+        <td>Specialist class; limited capacity; MWS requirement controls quality</td>
+      </tr>
+      <tr>
+        <td><strong>War Risk — Red Sea Transit</strong></td>
+        <td>0.40–0.80%</td>
+        <td class="up">▲ +500–1000% from pre-crisis</td>
+        <td>N/A — loss-free so far</td>
+        <td>Volatile; direct function of Houthi attack frequency and political resolution prospects</td>
+      </tr>
+      <tr>
+        <td><strong>War Risk — Black Sea / Ukraine</strong></td>
+        <td>1.5–3.0% (if written)</td>
+        <td class="up">▲ Near-uninsurable since Feb 2022</td>
+        <td>Multiple total losses</td>
+        <td>Most Lloyd's syndicates withdrawn; very limited specialist appetite at extreme rates</td>
+      </tr>
+      <tr>
+        <td><strong>Inland Transit / Q code (UK domestic)</strong></td>
+        <td>0.05–0.18%</td>
+        <td class="flat">▶ Flat</td>
+        <td>55–65%</td>
+        <td>Competitive; high-value goods transit loading; van crime/theft influencing rates in major cities</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>ROE Scenarios <span class="badge b-i">ILLUS</span></h2>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="roe-label">Bull Scenario</div>
+      <div class="roe-num">+14–22%</div>
+      <p>Benign large-loss year; no vessel fire event; Red Sea war risk written profitably; loss ratio 50–55%; investment return tailwind. Rate discipline maintained across market.</p>
+    </div>
+    <div class="roe-card base">
+      <div class="roe-label">Base Scenario</div>
+      <div class="roe-num">+6–12%</div>
+      <p>Moderate attritional frequency; one or two mid-size events (GA or vessel damage); loss ratio 62–68%; stable rates; adequate technical margin on most segments.</p>
+    </div>
+    <div class="roe-card bear">
+      <div class="roe-label">Bear Scenario</div>
+      <div class="roe-num">−15–35%</div>
+      <p>ULCV fire/sinking event ($500m–$1bn insured cargo); major port accumulation loss; Houthi attacks produce war risk claims; Red Sea cargo losses spike; combined loss ratio 100–130%.</p>
+    </div>
+  </div>
+
+  <p>Bear scenario trigger events in the current market (2024) are dominated by: (1) a container fire/sinking on a 20,000+ TEU vessel traversing a major ocean route; (2) a port/terminal explosion on the scale of Tianjin or larger (Jebel Ali, Rotterdam, Singapore are the key accumulation sites); (3) sustained Houthi attacks producing direct war risk cargo losses rather than just route diversion costs. Any of these events, individually, has the potential to produce the worst marine cargo loss year in modern Lloyd's history given current accumulation levels. <span class="badge b-e">EST</span></p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const yr = [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+
+// Rate index (2010=100)
+new Chart(document.getElementById('rateChart'),{
+  type:'line',
+  data:{
+    labels:yr,
+    datasets:[
+      {label:'Electronics (ICC A)',data:[100,98,92,85,78,76,80,78,85,90,100,112,120,122,122],borderColor:'#1565c0',backgroundColor:'rgba(21,101,192,0.07)',tension:0.3,fill:true},
+      {label:'Vehicles / Automotive',data:[100,99,95,88,80,77,82,78,84,88,100,118,135,145,148],borderColor:'#c62828',backgroundColor:'rgba(198,40,40,0.06)',tension:0.3,fill:false},
+      {label:'Food & Agri (ICC B/C)',data:[100,99,96,90,86,84,85,83,86,88,92,96,98,99,99],borderColor:'#00695c',backgroundColor:'rgba(0,105,92,0.06)',tension:0.3,fill:false},
+      {label:'Steel / Metals (ICC C)',data:[100,100,98,92,86,83,84,82,85,86,88,90,91,90,89],borderColor:'#6a1b9a',backgroundColor:'rgba(106,27,154,0.06)',tension:0.3,fill:false}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'Rate Index (2010=100)'},min:60}}}
+});
+
+// Loss ratio
+new Chart(document.getElementById('lrChart'),{
+  type:'bar',
+  data:{
+    labels:yr,
+    datasets:[{
+      label:'Loss Ratio (%)',
+      data:[62,71,65,68,70,74,77,82,85,80,72,70,68,65,63],
+      backgroundColor:yr.map(y=>y>=2017&&y<=2019?'rgba(198,40,40,0.75)':y===2011||y===2018?'rgba(230,81,0,0.75)':'rgba(21,101,192,0.6)'),
+      borderRadius:4
+    },{
+      label:'Target (65%)',
+      type:'line',
+      data:yr.map(()=>65),
+      borderColor:'#00695c',
+      borderDash:[6,4],
+      borderWidth:2,
+      pointRadius:0
+    }]
+  },
+  options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{min:40,max:100,title:{display:true,text:'Loss Ratio (%)'}},x:{stacked:false}}}
+});
+
+// War risk chart
+const warYr=['Jan 23','Apr 23','Jul 23','Oct 23','Dec 23','Jan 24','Mar 24','Jun 24','Sep 24','Dec 24'];
+new Chart(document.getElementById('warChart'),{
+  type:'line',
+  data:{
+    labels:warYr,
+    datasets:[{
+      label:'Red Sea War Risk Rate (% of cargo value)',
+      data:[0.07,0.07,0.07,0.12,0.65,0.80,0.75,0.70,0.60,0.55],
+      borderColor:'#c62828',
+      backgroundColor:'rgba(198,40,40,0.1)',
+      tension:0.2,
+      fill:true,
+      pointBackgroundColor:'#c62828'
+    }]
+  },
+  options:{responsive:true,plugins:{legend:{position:'bottom'},annotation:{annotations:{}}},scales:{y:{title:{display:true,text:'War Risk Rate (% of cargo value)'},min:0,max:1.0}}}
+});
+</script>
+<footer>
+  Risk Code Hub — Marine Cargo (V/Q/VL/VX) · Lloyd's Market Intelligence · v3.3 April 2026
+</footer>
+</body>
+</html>

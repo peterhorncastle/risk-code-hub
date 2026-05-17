@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Underwriting — Nuclear (NP / NL / NV) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a4a00;
+      --hub-dark:      #252500;
+      --hub-light:     #f9f9e8;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#252500 0%,#4a4a00 55%,#6b6b00 100%);
+      --header-sub:    #e6e682;
+      --hub-mid:       #e8e8c0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1e1e0a;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#252500;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .factors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .factor{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);}
+    .factor.high{border-left-color:#c62828;}
+    .factor.med{border-left-color:#e65100;}
+    .factor.low{border-left-color:#4a4a00;}
+    .factor .impact{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .factor h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .factor p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .factor .rate{font-size:0.78rem;font-weight:700;color:#c62828;margin-top:6px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #eeee99;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f5f5dc;}
+    .pool-explainer{background:#252500;color:var(--header-sub);border-radius:10px;padding:24px;margin-bottom:24px;}
+    .pool-explainer h3{font-size:1rem;font-weight:700;color:var(--hub-accent);margin-bottom:12px;}
+    .pool-explainer p{font-size:0.85rem;line-height:1.6;margin-bottom:8px;}
+    .pool-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 12px;border-radius:6px;}
+    .pool-row.direct{background:rgba(200,168,75,0.15);}
+    .pool-row.national{background:rgba(107,107,0,0.2);}
+    .pool-row.excess{background:rgba(55,71,79,0.3);}
+    .pool-row.govt{background:rgba(198,40,40,0.15);}
+    .pool-row .pl{font-size:0.8rem;font-weight:700;color:var(--hub-accent);width:180px;flex-shrink:0;}
+    .pool-row .pd{font-size:0.8rem;color:var(--header-sub);line-height:1.4;}
+    .worked{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px;border-top:4px solid var(--hub-primary);}
+    .worked.alt{border-top-color:var(--hub-accent);}
+    .worked h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .worked table{box-shadow:none;margin-bottom:0;}
+    .worked th{background:#4a4a00;}
+    .info-box{background:#f5f5dc;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#2a2a00;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#4a4a00;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    footer{background:#252500;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Nuclear (NP/NL/NV)</a> › Underwriting</div>
+    <div class="tag">Module 04</div>
+    <h1>Underwriting Methodology</h1>
+    <div class="sub">Rating factors, pool structure, illustrative rate benchmarks, worked examples &amp; key exclusions</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="info-box">
+    <strong>Important Note on Nuclear Underwriting Data:</strong> Nuclear insurance is written almost exclusively through national pools with non-publicly disclosed pricing. Rate-on-line figures, loss ratios and premium data in this hub are illustrative and estimated for educational purposes only. They do not represent actual pool contribution rates, which are determined confidentially by pool technical committees. <sup>[I10]</sup>
+  </div>
+
+  <!-- Pool structure explainer -->
+  <div class="section-title">Pool vs Direct Market Structure</div>
+  <div class="pool-explainer">
+    <h3>Why Nuclear Installations Cannot Be Insured Directly</h3>
+    <p>Licensed nuclear installations in all convention signatory states are required by law to maintain insurance or equivalent financial security through an <em>approved</em> insurer. In practice, this means the national nuclear insurance pool is mandatory for primary coverage. Individual Lloyd's syndicates or company market insurers cannot write nuclear installation risks direct — they participate through the pool mechanism.</p>
+    <p>The pool aggregates capacity across all participating insurers, enabling a single nuclear power station (with a potential PML of $1–5bn+) to be covered by a group of 30–50 insurers co-insuring proportionate shares of the risk.</p>
+    <div class="pool-row direct">
+      <div class="pl">Operator Direct Insurance</div>
+      <div class="pd">Licensed nuclear operator must hold insurance meeting convention requirements. All primary cover placed through national pool (e.g. NRI in UK).</div>
+    </div>
+    <div class="pool-row national">
+      <div class="pl">National Pool (NRI / ANP / ANI)</div>
+      <div class="pd">Pool distributes risk proportionately to member syndicates/companies. Pool capacity: ~$1.0–1.5bn per site in major markets (est.). <sup>[I3]</sup></div>
+    </div>
+    <div class="pool-row excess">
+      <div class="pl">International Excess Layer</div>
+      <div class="pd">Pool-to-pool treaties and international reinsurance cover above national pool retention. Lloyd's participates in multiple pools internationally.</div>
+    </div>
+    <div class="pool-row govt">
+      <div class="pl">Government Indemnity / Convention Backstop</div>
+      <div class="pd">Above commercial market capacity, the state provides indemnity under the nuclear liability conventions (Brussels Supplementary). Unlimited for truly catastrophic events.</div>
+    </div>
+  </div>
+
+  <!-- High impact rating factors -->
+  <div class="section-title">Rating Factors — High Impact</div>
+  <div class="factors-grid">
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Reactor Type &amp; Design Generation</h4>
+      <p>The reactor type fundamentally determines the safety characteristics and PML. Pressurised Water Reactors (PWR) and Boiling Water Reactors (BWR) are most common globally. Advanced Gas-cooled Reactors (AGR, UK-specific), VVER (Russian design), EPR (modern French/UK design), and RBMK (legacy Soviet — now largely decommissioned) all have distinct safety profiles. Generation III+ reactors (EPR, AP1000) have passive safety features that reduce active operator intervention risk. <sup>[I2]</sup></p>
+      <div class="rate">Rating impact: significant — older RBMK design uninsurable; modern EPR/AP1000 attractively rated</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Reactor Age &amp; Modification History</h4>
+      <p>Older reactors operating beyond original design life face higher probability of stress corrosion cracking, material degradation, and systems failure. The Davis-Besse (2002) and EDF fleet corrosion issues (2022) illustrate aging-related property risks. Periodic Safety Reviews (PSR every 10 years) and major life-extension modifications are key underwriting data points. Lifetime extensions require re-evaluation. <sup>[I8]</sup></p>
+      <div class="rate">Rating impact: progressive loading for age beyond 30yr; additional review at 40yr+</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Site Seismic &amp; Flood Hazard</h4>
+      <p>The Fukushima accident demonstrated that external hazard (seismic + tsunami) can be the dominant loss driver. All nuclear sites must be assessed against the <strong>Design Basis Threat</strong> — the maximum credible external hazard for which the site is designed. Post-Fukushima, flood defence height, seismic isolation systems, and cliff-edge effect analysis are mandatory underwriting data for coastal and riverine sites. <sup>[I7]</sup></p>
+      <div class="rate">Rating impact: high — coastal low-lying sites in seismic zones attract significant additional loading</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Operator Regulatory Compliance Record</h4>
+      <p>The licensed operator's regulatory history — inspection findings, corrective action programme (CAP) open items, WANO peer review outcomes, IAEA OSART mission results — provides the primary indicator of operational safety culture. Regulators (ONR in UK, ASN in France, NRC in USA) publish inspection reports. Systemic non-compliances or repeatedly open corrective actions are significant underwriting negatives. <sup>[I4]</sup></p>
+      <div class="rate">Rating impact: significant — adverse regulatory record can be grounds for pool cover reduction or pool refusal</div>
+    </div>
+  </div>
+
+  <!-- Medium impact -->
+  <div class="section-title">Rating Factors — Medium Impact</div>
+  <div class="factors-grid">
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Pool Participation &amp; Coverage Layer</h4>
+      <p>In pool-based markets, the individual insurer's role is defined by its proportionate share of pool capacity and its position in the layer structure (primary pool layer vs excess-of-pool). Pool participation is mandatory for all licensed nuclear sites; the underwriting variable is the layer attachment point and the proportion of pool capacity committed. <sup>[I3]</sup></p>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Decommissioning Liability Tail</h4>
+      <p>Decommissioning nuclear facilities creates long-tail radioactive waste management liability — 50 to 100+ years. Decommissioning liability must be separately assessed from operational liability. The UK Nuclear Decommissioning Authority (NDA) holds primary responsibility for UK civil decommissioning, but commercial operators of newer stations must demonstrate adequate financial security for decommissioning costs. <sup>[L9]</sup></p>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Nuclear Material Transport Risk</h4>
+      <p>Transport of nuclear materials — fresh fuel, spent fuel flasks, radioactive waste, isotopes — carries distinct NV insurance exposures. Route risk, packaging integrity (compliance with IAEA Transport Regulations ST-R-1), frequency of movements, and mode of transport (road, rail, sea) all affect rating. Transport incidents are relatively frequent at low severity; large-scale transport accidents are rare. <sup>[L3]</sup></p>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Emergency Planning Zone &amp; Population Density</h4>
+      <p>The population density within the Emergency Planning Zone (EPZ) directly affects third-party liability severity. A plant sited near a large urban area has higher potential liability exposure than a remote site, even at equal probability of accident. Paris/Brussels convention liability caps apply, but above-cap compensation is a reputational and political risk. <sup>[L1]</sup></p>
+    </div>
+  </div>
+
+  <!-- Lower impact -->
+  <div class="section-title">Rating Factors — Lower Impact</div>
+  <div class="factors-grid">
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Workforce Radiation Monitoring</h4>
+      <p>Mandatory dose monitoring of nuclear workers under ICRP dose limits. Regular dose records, annual dose summaries, ALARA (As Low As Reasonably Achievable) programme quality, and contractor radiation worker management are reviewed by underwriters and inform workers' compensation/radiation exposure rating under NV. <sup>[L7]</sup></p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Cyber Security for Nuclear SCADA/OT Systems</h4>
+      <p>Nuclear control room and reactor instrumentation increasingly have digital interfaces that create cyber attack surfaces (though air-gapped from internet in modern plants). IAEA Nuclear Security Series (NSS) guidance and NRC/ONR cyber security regulations define minimum requirements. Cyber attacks on nuclear SCADA are a new and growing underwriting concern — most policies carry emerging cyber-nuclear exclusions. <sup>[I8]</sup></p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>SMR vs Conventional Design</h4>
+      <p>Small Modular Reactors (50–300MW) have smaller PML per unit than conventional 1,000MW+ plants. Their passive safety features (relying on gravity and natural circulation rather than pumps) may reduce probability of severe accident. However, regulatory frameworks for SMRs are still being developed, and first-of-kind risks apply. Factory construction reduces construction risk vs site-built plants. <sup>[I9]</sup></p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Physical Security &amp; Insider Threat</h4>
+      <p>Nuclear plants are subject to Design Basis Threat analysis for physical security — armed attack, insider threat, aircraft impact. The Doel 4 sabotage (2016) demonstrated insider threat as a real nuclear insurance risk. Physical security upgrades (anti-missile barriers, enhanced access control) are reviewed. Sabotage is typically excluded from nuclear policies but can be endorsed. <sup>[I8]</sup></p>
+    </div>
+  </div>
+
+  <!-- Illustrative rate table -->
+  <div class="section-title">Illustrative Rate-on-PML by Plant Type<span class="badge b-e">EST — All figures illustrative only; not actual pool rates</span></div>
+  <table>
+    <thead>
+      <tr><th>Plant Type</th><th>Typical PML (USD)</th><th>Illus. Rate on PML (NP)</th><th>Illus. Rate on Limit (NL)</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Modern PWR (Gen III+, e.g. EPR, AP1000)</td><td>$2–4bn</td><td>0.08–0.12%</td><td>0.15–0.25%</td><td>Best-rated new builds; passive safety features; full pool capacity</td></tr>
+      <tr><td>Established PWR (Gen II, 25–40yr)</td><td>$1.5–3bn</td><td>0.10–0.16%</td><td>0.18–0.30%</td><td>Aging loading; PSR data required; US AP1000 fleet standard</td></tr>
+      <tr><td>BWR (Boiling Water Reactor)</td><td>$1.5–3bn</td><td>0.10–0.18%</td><td>0.18–0.30%</td><td>Fukushima was BWR; mark-1 containment sites attract additional loading</td></tr>
+      <tr><td>AGR (Advanced Gas-cooled Reactor, UK)</td><td>$1–2bn</td><td>0.12–0.20%</td><td>0.20–0.35%</td><td>UK-specific design; aging fleet; decommissioning approaching for several</td></tr>
+      <tr><td>VVER (Russian design, non-sanctioned)</td><td>$1–3bn</td><td>0.12–0.20%</td><td>0.22–0.40%</td><td>Significant market accessibility issues; varies greatly by operator</td></tr>
+      <tr><td>CANDU (Heavy Water, Canada/South Korea)</td><td>$1–2.5bn</td><td>0.09–0.15%</td><td>0.16–0.28%</td><td>Unique design; strong safety record; smaller market share globally</td></tr>
+      <tr><td>SMR (Small Modular Reactor — pre-commercial)</td><td>$100–500m</td><td>0.15–0.30%</td><td>0.25–0.45%</td><td>First-of-kind loading; regulatory uncertainty; new insurance products required</td></tr>
+      <tr><td>Research Reactor (&lt;50MW)</td><td>$50–200m</td><td>0.20–0.40%</td><td>0.30–0.60%</td><td>Varied designs; university-operated reactors can have weaker safety culture</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Worked Example A -->
+  <div class="worked">
+    <h3>Worked Example A — Existing UK AGR Station (NRI Pool Structure)</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Illustrative Figure</th></tr></thead>
+      <tbody>
+        <tr><td>Plant Description</td><td>2-reactor AGR station, UK; 35 years old; next PSR due in 2 years; NII/ONR licensed; NRI pool cover required</td><td>—</td></tr>
+        <tr><td>Property Value (IRI)</td><td>Insured Replacement Insured at £1.8bn (two reactors + turbines + infrastructure)</td><td>£1,800m</td></tr>
+        <tr><td>Probable Maximum Loss</td><td>PML assessed at 65% of IRI (one-reactor loss scenario; containment intact)</td><td>£1,170m</td></tr>
+        <tr><td>Pool NP Contribution</td><td>Illus. rate 0.14% on PML via NRI pool</td><td>~£1,638k p.a.</td></tr>
+        <tr><td>NL Liability Limit</td><td>£140m (current UK operator liability ceiling; SDR-based)</td><td>£140m</td></tr>
+        <tr><td>Pool NL Contribution</td><td>Illus. rate 0.25% on liability limit</td><td>~£350k p.a.</td></tr>
+        <tr><td>NV — Transport &amp; Workers</td><td>Annual fuel movements (12 per year); 400 radiation workers; dose records reviewed</td><td>~£120k p.a.</td></tr>
+        <tr><td><strong>Total Illustrative Pool Contribution</strong></td><td>NP + NL + NV combined</td><td><strong>~£2.1m p.a.</strong></td></tr>
+        <tr><td>Aging Loading (AGR 35yr)</td><td>PSR result pending; +15% illustrative loading applied</td><td>+£315k</td></tr>
+        <tr><td><strong>Adjusted Total (illustrative)</strong></td><td>—</td><td><strong>~£2.4m p.a.</strong></td></tr>
+        <tr><td>Assumed GLR (pool portfolio)</td><td>Nuclear NP — long-run estimate</td><td>45% (illus.)</td></tr>
+        <tr><td>Claims Estimate</td><td>£2.4m × 45%</td><td>~£1.1m</td></tr>
+        <tr><td><strong>Illus. Pool UW Profit (per risk)</strong></td><td>After overhead — pool economics apply, not direct UW margin</td><td>Pool retained for collective benefit</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Worked Example B -->
+  <div class="worked alt">
+    <h3>Worked Example B — New SMR (300MW, Greenfield UK Site, Initial Regulatory Period)</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Illustrative Figure</th></tr></thead>
+      <tbody>
+        <tr><td>Plant Description</td><td>Rolls-Royce SMR, 470MW design; greenfield UK site; Generic Design Assessment (GDA) in progress; ONR licensing underway; construction commencing</td><td>—</td></tr>
+        <tr><td>Construction Phase</td><td>EAR/CAR policy for construction (interface with nuclear property pool TBD for operational phase); nuclear material present from fuel load — potential NL trigger point</td><td>—</td></tr>
+        <tr><td>SMR Property PML</td><td>Single module PML assessed at £180m (vs £1bn+ for conventional reactor)</td><td>£180m</td></tr>
+        <tr><td>Pool NP Contribution (illus.)</td><td>First-of-kind loading; 0.25% on PML; new product development surcharge</td><td>~£450k p.a.</td></tr>
+        <tr><td>NL Liability (initial)</td><td>UK operator liability ceiling applies from first criticality; insurance required from that date</td><td>£140m</td></tr>
+        <tr><td>Pool NL Contribution</td><td>0.35% on limit (FOK loading applied)</td><td>~£490k p.a.</td></tr>
+        <tr><td>NV — Construction Phase</td><td>Nuclear material transport during construction; decommissioning fund contributions begin from commissioning</td><td>~£80k p.a.</td></tr>
+        <tr><td><strong>Total SMR Annual Contribution (operational phase)</strong></td><td>—</td><td><strong>~£1.0m p.a.</strong></td></tr>
+        <tr><td>First-of-Kind (FOK) Risk Note</td><td>SMR has no actuarial loss history — prudent IBNR, pool technical committee scrutiny, and government backstop engagement are essential</td><td>Enhanced reserves</td></tr>
+        <tr><td>New Products Opportunity</td><td>If 16 SMR modules deployed at 4 sites (UK government ambition), total pool contribution could reach ~£16m p.a. — significant new market</td><td>Potential scale</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Key exclusions -->
+  <div class="section-title">Key Exclusions in Nuclear Insurance Policies</div>
+  <table>
+    <thead>
+      <tr><th>Exclusion</th><th>Rationale</th><th>Potential Endorsement / Exception</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Nuclear weapons / military use</td><td>Military nuclear programmes are government-owned and separately managed; not part of civilian convention framework</td><td>Not available — absolute exclusion</td></tr>
+      <tr><td>War / armed conflict</td><td>Standard exclusion — Zaporizhzhia 2022 demonstrates gap</td><td>Not available for active war zones</td></tr>
+      <tr><td>Wilful misconduct / deliberate act by operator</td><td>Moral hazard; operators cannot insure against their own intentional wrongdoing</td><td>Not available — absolute exclusion</td></tr>
+      <tr><td>Gradual contamination (without sudden accidental release)</td><td>Slow seepage or planned discharges are regulated operations, not insurance events</td><td>Sudden and accidental release can be endorsed back for NL policies</td></tr>
+      <tr><td>Cyber attack on nuclear SCADA/OT systems</td><td>Emerging exclusion — cyber risk interface with nuclear damage is new and unpriced</td><td>Cyber-nuclear coverage under active market discussion; limited endorsements available</td></tr>
+      <tr><td>Costs of nuclear waste disposal (routine)</td><td>Routine decommissioning and waste management are funded regulatory obligations, not insurance events</td><td>Sudden and accidental releases from waste storage can trigger NL cover</td></tr>
+      <tr><td>Property damage from ionising radiation (non-sudden)</td><td>Radiation damage developing over time is a regulatory compliance issue, not a sudden accidental event</td><td>Explosion-triggered radiation release covered under NP</td></tr>
+      <tr><td>Physical damage during decommissioning (later phases)</td><td>Advanced decommissioning stages with minimal remaining radioactive inventory may fall outside nuclear pool requirements</td><td>Conventional property market may cover final decommissioning phases</td></tr>
+      <tr><td>Sabotage / terrorism (unlicensed)</td><td>Physical security exclusion; Doel 4 sabotage (2016) triggered coverage review</td><td>Terrorism endorsement available in some pools; insider sabotage harder to cover</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Channelling doctrine callout -->
+  <div class="warn-box">
+    <strong>The Channelling Doctrine — Critical for Nuclear Contractors:</strong> Under all major nuclear liability conventions (Paris, Vienna, Price-Anderson), liability for nuclear damage is <em>exclusively channelled to the licensed nuclear operator</em>. This means that contractors, sub-contractors, equipment suppliers, and engineering consultants working at nuclear sites <strong>cannot be held liable to third parties for nuclear damage</strong> — even if they caused it. The operator is the sole liable party. This profoundly affects PI/E&amp;O coverage for nuclear contractors: their nuclear liability to third parties is excluded or irrelevant under standard PI wordings. Nuclear contractors need specialist cover for their <em>conventional</em> (non-nuclear) liabilities, plus contractual indemnity provisions agreed with the operator. <sup>[L1]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Nuclear (NP / NL / NV) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="rates-analysis.html">Next: Rates &amp; ROE →</a></p>
+</footer>
+
+</body>
+</html>

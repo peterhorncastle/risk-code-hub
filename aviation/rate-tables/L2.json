@@ -1,0 +1,107 @@
+{
+  "riskCode": "L2",
+  "label": "Airline Liability — CSL",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "seatDepartures",
+    "label": "Annual Seat Departures",
+    "defaultValue": 15000000,
+    "hint": "Fleet seats × annual departures per aircraft"
+  },
+  "baseRate": {
+    "key": "baseRatePerSeat",
+    "label": "Base Rate per Seat Departure ($)",
+    "value": 0.035
+  },
+  "ratingFactors": [
+    {
+      "key": "cslLimit",
+      "label": "CSL Limit Purchased",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "1_5bn",
+      "hint": "Combined Single Limit for all third-party claims",
+      "options": {
+        "500m":  { "label": "$500m CSL",  "factor": 0.65 },
+        "750m":  { "label": "$750m CSL",  "factor": 0.80 },
+        "1bn":   { "label": "$1bn CSL",   "factor": 1.00 },
+        "1_5bn": { "label": "$1.5bn CSL", "factor": 1.25 },
+        "2bn":   { "label": "$2bn CSL",   "factor": 1.50 },
+        "2_5bn": { "label": "$2.5bn CSL", "factor": 1.75 }
+      }
+    },
+    {
+      "key": "routeType",
+      "label": "Route Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "international",
+      "hint": "Jurisdiction exposure from route network",
+      "options": {
+        "domestic_non_us": { "label": "Domestic (non-US)",      "factor": 0.80 },
+        "intra_eu":        { "label": "Intra-EU",               "factor": 0.90 },
+        "international":   { "label": "International standard", "factor": 1.00 },
+        "us_domestic":     { "label": "US Domestic",            "factor": 1.30 },
+        "us_international":{ "label": "US International",       "factor": 1.20 }
+      }
+    },
+    {
+      "key": "seatConfig",
+      "label": "Average Seats per Aircraft",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 180,
+      "hint": "Average seat count across fleet",
+      "bands": [
+        { "min": 0,   "max": 50,  "label": "Small (<50 seats)",     "factor": 0.70 },
+        { "min": 50,  "max": 100, "label": "Regional (50-100)",     "factor": 0.85 },
+        { "min": 100, "max": 180, "label": "Standard NB (100-180)", "factor": 1.00 },
+        { "min": 180, "max": 250, "label": "Large NB (180-250)",    "factor": 1.10 },
+        { "min": 250, "max": 400, "label": "Wide Body (250-400)",   "factor": 1.25 },
+        { "min": 400, "max": 999, "label": "Super Heavy (400+)",    "factor": 1.40 }
+      ]
+    },
+    {
+      "key": "safetyRecord",
+      "label": "Operator Safety Record",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "good",
+      "options": {
+        "excellent": { "label": "Excellent (zero incidents 10yr)", "factor": 0.80 },
+        "good":      { "label": "Good (IOSA, minor only)",         "factor": 0.90 },
+        "standard":  { "label": "Standard",                        "factor": 1.00 },
+        "concerns":  { "label": "Concerns (incidents noted)",      "factor": 1.25 },
+        "poor":      { "label": "Poor (fatal accidents in window)", "factor": 1.60 }
+      }
+    },
+    {
+      "key": "cargoExposure",
+      "label": "Cargo Operations",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "belly_only",
+      "hint": "Extent of cargo operations",
+      "options": {
+        "passenger_only": { "label": "Passenger only (no cargo)", "factor": 0.90 },
+        "belly_only":     { "label": "Belly cargo only",          "factor": 1.00 },
+        "combi_freighter":{ "label": "Combi / dedicated freighter","factor": 1.15 },
+        "dg_specialist":  { "label": "DG / hazmat specialist",    "factor": 1.30 }
+      }
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 12000,
+    "claimsHandlingPerClaim": 100000,
+    "systemOverheadPerYear": 5000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.01,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.20,
+    "reinsuranceRate": 0.08
+  },
+  "targetProfitMargin": 0.05
+}

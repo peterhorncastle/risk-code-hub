@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Medical Malpractice &amp; Healthcare Liability — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #005a8c;
+      --hub-dark:      #002d50;
+      --hub-light:     #e3f2fd;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #00695c;
+      --hub-secondary2:#b71c1c;
+      --header-gradient:linear-gradient(135deg,#002d50 0%,#005a8c 55%,#0277bd 100%);
+      --header-sub:    #90caf9;
+      --bc-mid:        #bbdefb;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#0d1f2d;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#002d50;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1000px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+    .filters button{padding:6px 14px;border-radius:20px;border:2px solid var(--hub-primary);background:#fff;color:var(--hub-primary);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filters button.active,.filters button:hover{background:var(--hub-primary);color:#fff;}
+    .filters button[data-t="case-law"]{border-color:#1565c0;}
+    .filters button[data-t="case-law"].active,.filters button[data-t="case-law"]:hover{background:#1565c0;border-color:#1565c0;color:#fff;}
+    .filters button[data-t="regulatory"]{border-color:#b71c1c;}
+    .filters button[data-t="regulatory"].active,.filters button[data-t="regulatory"]:hover{background:#b71c1c;border-color:#b71c1c;color:#fff;}
+    .filters button[data-t="market"]{border-color:#6a1b9a;}
+    .filters button[data-t="market"].active,.filters button[data-t="market"]:hover{background:#6a1b9a;border-color:#6a1b9a;color:#fff;}
+    .filters button[data-t="nhs"]{border-color:#00695c;}
+    .filters button[data-t="nhs"].active,.filters button[data-t="nhs"]:hover{background:#00695c;border-color:#00695c;color:#fff;}
+    .filters button[data-t="international"]{border-color:#e65100;}
+    .filters button[data-t="international"].active,.filters button[data-t="international"]:hover{background:#e65100;border-color:#e65100;color:#fff;}
+    .filters button[data-t="technology"]{border-color:#00838f;}
+    .filters button[data-t="technology"].active,.filters button[data-t="technology"]:hover{background:#00838f;border-color:#00838f;color:#fff;}
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--bc-mid);}
+    .tl-item{position:relative;margin-bottom:24px;display:none;}
+    .tl-item.show{display:block;}
+    .dot{position:absolute;left:-28px;top:4px;width:16px;height:16px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--hub-primary);}
+    .dot.case-law{background:#1565c0;box-shadow:0 0 0 2px #1565c0;}
+    .dot.regulatory{background:#b71c1c;box-shadow:0 0 0 2px #b71c1c;}
+    .dot.market{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .dot.nhs{background:#00695c;box-shadow:0 0 0 2px #00695c;}
+    .dot.international{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .dot.technology{background:#00838f;box-shadow:0 0 0 2px #00838f;}
+    .tl-card{background:#fff;border-radius:8px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card .yr{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .tl-card h4{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.84rem;color:#444;line-height:1.5;}
+    .type-tag{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;}
+    .tag-case-law{background:#e3f2fd;color:#1565c0;}
+    .tag-regulatory{background:#ffebee;color:#b71c1c;}
+    .tag-market{background:#f3e5f5;color:#6a1b9a;}
+    .tag-nhs{background:#e0f2f1;color:#00695c;}
+    .tag-international{background:#fbe9e7;color:#e65100;}
+    .tag-technology{background:#e0f7fa;color:#00838f;}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#555;}
+    .legend-dot{width:12px;height:12px;border-radius:50%;}
+    footer{background:#002d50;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Medical Malpractice (GH/GM/GN/GO/GQ/GT)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key Medical Malpractice events 1957–2024 — case law, regulation, systemic failures &amp; technology</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#1565c0;"></div> Case Law</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b71c1c;"></div> Regulatory</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6a1b9a;"></div> Market Structural</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00695c;"></div> NHS / Systemic</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100;"></div> International</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00838f;"></div> Technology</div>
+  </div>
+
+  <div class="filters">
+    <button class="active" onclick="filterTL('all',this)">All Events</button>
+    <button data-t="case-law" onclick="filterTL('case-law',this)">Case Law</button>
+    <button data-t="regulatory" onclick="filterTL('regulatory',this)">Regulatory</button>
+    <button data-t="market" onclick="filterTL('market',this)">Market Structural</button>
+    <button data-t="nhs" onclick="filterTL('nhs',this)">NHS / Systemic</button>
+    <button data-t="international" onclick="filterTL('international',this)">International</button>
+    <button data-t="technology" onclick="filterTL('technology',this)">Technology</button>
+  </div>
+
+  <div class="timeline" id="tl"></div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Medical Malpractice &amp; Healthcare Liability &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+const EVENTS = [
+  {y:1957,t:"case-law",title:"Bolam v Friern HMC — Standard of Care",desc:"[1957] 1 WLR 582. McNair J defines the standard of care in medical negligence: a doctor is not negligent if they act in accordance with a practice accepted by a responsible body of medical opinion. The Bolam test dominates clinical negligence for 58 years. <sup>[L1]</sup>"},
+  {y:1961,t:"international",title:"Thalidomide Disaster",desc:"Thalidomide, prescribed for morning sickness, causes severe limb deformities in approximately 10,000 babies worldwide. Withdrawn 1961. UK Thalidomide Settlement 1973. Drives international pharmaceutical liability reform. Establishes that prescribing decisions carry profound product liability implications."},
+  {y:1985,t:"nhs",title:"Bristol Royal Infirmary — Early Warning Signs",desc:"Paediatric cardiac surgery mortality at Bristol begins diverging from national averages. Poor governance allows the situation to continue undetected for a decade. Internal whistleblowing is suppressed. The Bristol case later becomes the defining inquiry into NHS systemic failure. <sup>[I4]</sup>"},
+  {y:1990,t:"market",title:"Crown Indemnity — NHS Trusts Assume Liability",desc:"NHS Circular HC(89)34 implements Crown Indemnity: NHS employing bodies indemnify employed practitioners for NHS clinical negligence. Fundamental restructuring of MedMal risk from individual MDU/MPS membership to institutional NHS liability. Lloyd's private sector MedMal market unaffected. <sup>[I1]</sup>"},
+  {y:1992,t:"regulatory",title:"Medical Act 1983 Consolidation and Reforms",desc:"Major reforms to GMC functions consolidate medical registration, fitness-to-practise procedures and professional standards in a single statutory framework. Basis for subsequent CQC, revalidation and modern regulatory architecture."},
+  {y:1995,t:"market",title:"NHSLA / CNST Established",desc:"NHS Litigation Authority established; Clinical Negligence Scheme for Trusts (CNST) begins pooling NHS clinical negligence liabilities across participating trusts. First systematic NHS-wide approach to clinical negligence risk management. MDU/MPS continue for private practice. <sup>[I1]</sup>"},
+  {y:1997,t:"case-law",title:"Bolitho v City &amp; Hackney HA — Bolam Refined",desc:"[1997] UKHL 46. House of Lords holds that a court may reject a body of professional medical opinion that does not withstand logical analysis. Bolitho refines — but does not replace — Bolam: a defensible clinical decision must be capable of withstanding reasoned scrutiny. <sup>[L3]</sup>"},
+  {y:2001,t:"nhs",title:"Bristol Royal Infirmary Inquiry — Kennedy Report",desc:"Kennedy Inquiry publishes: 30–35 children died or suffered serious harm from avoidable failures in paediatric cardiac surgery 1984–1995. Culture of professional tribalism, absent audit and suppressed whistleblowing identified. Triggers systematic reform of clinical audit and patient safety culture across NHS. <sup>[I4]</sup>"},
+  {y:2004,t:"nhs",title:"Shipman Inquiry — 250+ Patient Murders",desc:"Shipman Inquiry (Dame Janet Smith) finds Harold Shipman, GP, killed at least 250 of his patients over 23 years with opiate overdoses. Inquiry drives compulsory GP revalidation, reform of death certification and major overhaul of controlled drug monitoring in primary care. <sup>[I1]</sup>"},
+  {y:2008,t:"regulatory",title:"Health and Social Care Act 2008 — CQC Created",desc:"Care Quality Commission established as single regulator for health and adult social care in England, replacing Healthcare Commission and Commission for Social Care Inspection. CQC inspection regime becomes a key risk driver for GH/GN risks — failed inspections are material underwriting information. <sup>[L5]</sup>"},
+  {y:2010,t:"international",title:"PIP Breast Implant Scandal",desc:"French manufacturer Poly Implant Prothèse (PIP) found to have used industrial-grade silicone in breast implants sold to thousands of women in Europe. UK, France and Australia recall campaigns. Claims against surgeons and hospitals who implanted PIP products generate significant MedMal and products liability exposure globally."},
+  {y:2012,t:"market",title:"State-Backed Indemnity for NHS GPs",desc:"NHS England pilots state-backed indemnity schemes for GPs, culminating in full GP indemnity scheme (GPIT) from 2019. Transfers substantial NHS GP clinical negligence exposure from MDU/MPS to NHS Resolution. Commercial market retains private GP, locum and out-of-hours exposure. <sup>[I3]</sup>"},
+  {y:2013,t:"nhs",title:"Mid Staffs Francis Report — 1,200 Excess Deaths Estimated",desc:"Francis Report into Mid Staffordshire NHS Foundation Trust estimates 400–1,200 excess deaths 2005–2009. Culture of cost-cutting, targets-driven management and suppressed complaints identified. 290 recommendations change NHS governance, duty of candour and regulatory oversight landscape. <sup>[I8]</sup>"},
+  {y:2015,t:"case-law",title:"Montgomery v Lanarkshire — Informed Consent Revolution",desc:"[2015] UKSC 11. Supreme Court replaces Bolam-based consent standard with patient-centred test: must disclose material risks (what a reasonable patient in this position would want to know) and reasonable alternatives. Significant increase in consent-based claims post-2015 and major change to consent documentation practice. <sup>[L2]</sup>"},
+  {y:2018,t:"international",title:"Surgical Mesh Claims — UK and Australia",desc:"High-profile vaginal mesh class actions in UK and Australia. UK MHRA suspends use of surgical mesh for stress urinary incontinence (2018) and pelvic organ prolapse (2019) pending safety review. Thousands of claimants against manufacturers and implanting surgeons; significant MedMal and products liability exposure. <sup>[I8]</sup>"},
+  {y:2019,t:"regulatory",title:"Gosport War Memorial Hospital — Opiate Deaths",desc:"Gosport Independent Panel finds 456 patients given inappropriate opiate prescriptions and likely had their lives shortened at Gosport War Memorial Hospital 1987–2000. Highlights long-tail clinical negligence exposure: claims arising from historic events decades after the events."},
+  {y:2022,t:"nhs",title:"Ockenden Report — Maternity Safety Crisis",desc:"Ockenden Final Report: avoidable harm to 1,300+ babies and 9 mothers at Shrewsbury and Telford NHS Trust over 20 years. Obstetrics identified as highest-cost NHS clinical negligence class. Maternity safety becomes a national priority with mandatory CNST maternity improvements. <sup>[I4]</sup>"},
+  {y:2023,t:"market",title:"NHS Provision Reaches £83.4bn",desc:"NHS Resolution annual report discloses total clinical negligence provision of £83.4bn — the present value of all estimated future claims costs. Concern at highest levels of government about long-term NHS indemnity sustainability. Proposed NHS Fixed Recoverable Costs for clinical negligence reform under consultation. <sup>[I2]</sup>"},
+  {y:2023,t:"technology",title:"AI Diagnostics — Liability Framework Emerging",desc:"MHRA classifies AI-powered diagnostic software as software as a medical device (SaMD), requiring UKCA marking. NHS AI Lab deployments expand. First reported cases of AI diagnostic algorithm error contributing to delayed diagnosis in radiology and pathology. Underwriters begin adding AI diagnostics exclusions or sub-limits pending framework clarity. <sup>[I6]</sup>"},
+  {y:2024,t:"technology",title:"AI in Clinical Decision-Making — Regulatory Guidance Published",desc:"MHRA, NHSX and NHS England publish joint guidance on responsible use of AI in clinical settings. Liability framework for AI-assisted diagnosis remains contested: is the algorithm the medical device, is the clinician who relies on it liable, or does the hospital system bear liability? Commercial MedMal market watches regulatory development closely. <sup>[I6]</sup>"}
+];
+
+const tagLabels = {"case-law":"Case Law","regulatory":"Regulatory","market":"Market Structural","nhs":"NHS / Systemic","international":"International","technology":"Technology"};
+let currentFilter = 'all';
+
+function filterTL(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render() {
+  const tl = document.getElementById('tl');
+  const items = currentFilter === 'all' ? EVENTS : EVENTS.filter(e => e.t === currentFilter);
+  tl.innerHTML = items.map(e => `
+    <div class="tl-item show">
+      <div class="dot ${e.t}"></div>
+      <div class="tl-card">
+        <div class="yr">${e.y}</div>
+        <span class="type-tag tag-${e.t}">${tagLabels[e.t]}</span>
+        <h4>${e.title}</h4>
+        <p>${e.desc}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+render();
+</script>
+
+</body>
+</html>

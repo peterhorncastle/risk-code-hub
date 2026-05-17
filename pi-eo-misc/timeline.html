@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PI E&O Miscellaneous — Timeline | Risk Code Hub</title>
+<link rel="stylesheet" href="../hub-styles.css">
+<style>
+  :root {
+    --hub-primary:    #5d4a7a;
+    --hub-dark:       #3a2d50;
+    --hub-light:      #f0ecf8;
+    --hub-accent:     #c8a84b;
+    --hub-secondary:  #c0392b;
+    --hub-secondary2: #2e7d32;
+    --header-gradient: linear-gradient(135deg,#3a2d50 0%,#5d4a7a 50%,#4a3860 100%);
+    --header-sub:     #c0b0d8;
+  }
+  header { background: var(--header-gradient); color:#fff; padding:2rem 1.5rem 1.5rem; }
+  header h1 { margin:0 0 0.3rem; font-size:2rem; color:#fff; }
+  header p  { margin:0; color:var(--header-sub); font-size:1rem; }
+  nav { background:var(--hub-dark); padding:0.5rem 1rem; display:flex; flex-wrap:wrap; gap:0.3rem; }
+  nav a { color:#c8bce0; text-decoration:none; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.85rem; }
+  nav a:hover, nav a.active { background:var(--hub-primary); color:#fff; }
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+
+  /* Filter bar */
+  .filter-bar { display:flex; flex-wrap:wrap; gap:0.5rem; margin:1rem 0 1.5rem; }
+  .filter-btn { border:2px solid #ddd; background:#fff; padding:0.35rem 0.9rem; border-radius:20px; cursor:pointer; font-size:0.83rem; font-weight:600; transition:all .2s; }
+  .filter-btn:hover { border-color:var(--hub-primary); color:var(--hub-primary); }
+  .filter-btn.active { color:#fff; border-color:transparent; }
+  .filter-btn[data-type="ALL"].active   { background:#555; }
+  .filter-btn[data-type="MGMT"].active  { background:#5d4a7a; }
+  .filter-btn[data-type="INSBRK"].active{ background:#8b6db0; }
+  .filter-btn[data-type="DESIGN"].active{ background:#c8a84b; }
+  .filter-btn[data-type="RECRUIT"].active{ background:#2e7d32; }
+  .filter-btn[data-type="MEDIA"].active { background:#1565c0; }
+  .filter-btn[data-type="TRAVEL"].active{ background:#c0392b; }
+  .filter-btn[data-type="REG"].active   { background:#37474f; }
+
+  /* Timeline */
+  .timeline { position:relative; padding-left:3rem; }
+  .timeline::before { content:''; position:absolute; left:1.1rem; top:0; bottom:0; width:3px; background:linear-gradient(180deg,#5d4a7a,#c0b0d8); border-radius:2px; }
+  .tl-item { position:relative; margin-bottom:1.4rem; }
+  .tl-dot  { position:absolute; left:-2.2rem; top:0.15rem; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.68rem; font-weight:700; color:#fff; flex-direction:column; line-height:1.1; text-align:center; }
+  .tl-dot span { color:#fff; }
+  .tl-body  { background:#fff; border-radius:8px; padding:0.9rem 1.1rem; box-shadow:0 2px 6px rgba(0,0,0,.07); border-left:4px solid; }
+  .tl-body h4 { margin:0 0 0.3rem; font-size:0.95rem; }
+  .tl-body p  { margin:0; font-size:0.86rem; color:#444; }
+  .tl-type  { display:inline-block; font-size:0.73rem; font-weight:700; color:#fff; padding:0.15rem 0.5rem; border-radius:12px; margin-bottom:0.4rem; }
+
+  .dot-mgmt    { background:#5d4a7a; } .border-mgmt    { border-color:#5d4a7a; }
+  .dot-insbrk  { background:#8b6db0; } .border-insbrk  { border-color:#8b6db0; }
+  .dot-design  { background:#c8a84b; } .border-design  { border-color:#c8a84b; }
+  .dot-recruit { background:#2e7d32; } .border-recruit { border-color:#2e7d32; }
+  .dot-media   { background:#1565c0; } .border-media   { border-color:#1565c0; }
+  .dot-travel  { background:#c0392b; } .border-travel  { border-color:#c0392b; }
+  .dot-reg     { background:#37474f; } .border-reg     { border-color:#37474f; }
+
+  .bg-mgmt    { background:#5d4a7a; }
+  .bg-insbrk  { background:#8b6db0; }
+  .bg-design  { background:#c8a84b; }
+  .bg-recruit { background:#2e7d32; }
+  .bg-media   { background:#1565c0; }
+  .bg-travel  { background:#c0392b; }
+  .bg-reg     { background:#37474f; }
+
+  /* Legend */
+  .legend { display:flex; flex-wrap:wrap; gap:0.6rem; margin:0.5rem 0 1.5rem; }
+  .leg-item { display:flex; align-items:center; gap:0.3rem; font-size:0.82rem; }
+  .leg-dot  { width:14px; height:14px; border-radius:50%; }
+
+  footer { background:var(--hub-dark); color:#c0b0d8; text-align:center; padding:1rem; font-size:0.82rem; margin-top:2rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>PI E&O Miscellaneous — Major Events Timeline</h1>
+  <p>Lloyd's Risk Codes E8 · E9 · ED · EE &nbsp;|&nbsp; 20 key claims and market events 1990–2024</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<div class="container">
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#5d4a7a;"></div> Management Consulting</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#8b6db0;"></div> Insurance Broker PI</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#c8a84b;"></div> Design Professionals (ED)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#2e7d32;"></div> Recruitment / HR</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1565c0;"></div> Media / PR / Advertising</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#c0392b;"></div> Travel / Events (EE)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#37474f;"></div> Regulatory / Market</div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-type="ALL">All Events</button>
+    <button class="filter-btn" data-type="MGMT">Management Consulting</button>
+    <button class="filter-btn" data-type="INSBRK">Insurance Broker PI</button>
+    <button class="filter-btn" data-type="DESIGN">Design (ED)</button>
+    <button class="filter-btn" data-type="RECRUIT">Recruitment / HR</button>
+    <button class="filter-btn" data-type="MEDIA">Media / PR</button>
+    <button class="filter-btn" data-type="TRAVEL">Travel / Events</button>
+    <button class="filter-btn" data-type="REG">Regulatory</button>
+  </div>
+
+  <div class="timeline" id="tlContainer">
+
+    <div class="tl-item" data-type="REG">
+      <div class="tl-dot dot-reg"><span>1990</span></div>
+      <div class="tl-body border-reg">
+        <span class="tl-type bg-reg">Regulatory</span>
+        <h4>Murphy v Brentwood — Pure Economic Loss Rule Restated</h4>
+        <p>House of Lords reverses <em>Anns v Merton</em>, significantly narrowing recovery for pure economic loss in building defect cases. Design professionals' exposure clarified: structural design errors causing economic loss (not just physical damage) remain recoverable, reinforcing demand for architects' PI. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="INSBRK">
+      <div class="tl-dot dot-insbrk"><span>1993</span></div>
+      <div class="tl-body border-insbrk">
+        <span class="tl-type bg-insbrk">Insurance Broker PI</span>
+        <h4>UK Pensions Mis-Selling Review Commences</h4>
+        <p>FSA/SRO investigation into personal pension transfers advised by insurance brokers and IFAs 1988–1994. £11.8bn in compensation ultimately paid by providers and advisers. Insurance broker PI carriers face significant claims from advisers unable to fund redress personally. Market-defining event for E8 insurance intermediary sub-class. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="MGMT">
+      <div class="tl-dot dot-mgmt"><span>1996</span></div>
+      <div class="tl-body border-mgmt">
+        <span class="tl-type bg-mgmt">Management Consulting</span>
+        <h4>Foxboro/ERP Implementation Claims Wave Begins</h4>
+        <p>Early large-scale ERP implementation failures (SAP, Baan, Oracle installations) generate management consulting PI claims. Clients allege consultants failed to advise on implementation complexity, inadequate project management, and cost overrun. The "IT advice" exposure within the E8 miscellaneous class begins to be separately priced. <span class="badge badge-est">EST</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="DESIGN">
+      <div class="tl-dot dot-design"><span>1999</span></div>
+      <div class="tl-body border-design">
+        <span class="tl-type bg-design">Design (ED)</span>
+        <h4>Interior Designer IP / Copyright Claim — High-Value Residential Project</h4>
+        <p>Landmark (illustrative) interior design PI claim involving intellectual property infringement: designer's original drawings used by a subsequent contractor without permission, and client alleged the designer's specification was not fit for purpose. PI policies tested on the IP infringement extension and fitness-for-purpose exclusion boundary. <span class="badge badge-illus">ILLUS</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="MGMT">
+      <div class="tl-dot dot-mgmt"><span>2001</span></div>
+      <div class="tl-body border-mgmt">
+        <span class="tl-type bg-mgmt">Management Consulting</span>
+        <h4>Arthur Andersen / Enron Collapse — Consultant PI Contagion</h4>
+        <p>Andersen's collapse after Enron triggers PI liability scrutiny across management consulting and advisory professions. Strategy consultants who advised on Enron-related structures, or who provided governance opinions, face notification waves. E8 management consultant underwriters tighten underwriting for advisory firms providing M&amp;A, restructuring, or governance opinions. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="TRAVEL">
+      <div class="tl-dot dot-travel"><span>2001</span></div>
+      <div class="tl-body border-travel">
+        <span class="tl-type bg-travel">Travel / Events (EE)</span>
+        <h4>ILM / Oneill Travel Agent Insolvency Wave Post-9/11</h4>
+        <p>9/11 travel disruption generates travel agent E&amp;O claims: clients allege travel agents failed to advise on change-of-mind cancellation options, inadequate travel insurance recommendations, and non-refundable booking failures. EE travel agent carriers reassess terrorism and force-majeure event exclusions. <span class="badge badge-est">EST</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="RECRUIT">
+      <div class="tl-dot dot-recruit"><span>2003</span></div>
+      <div class="tl-body border-recruit">
+        <span class="tl-type bg-recruit">Recruitment / HR</span>
+        <h4>Major Wrongful Placement Claim — Executive Recruitment</h4>
+        <p>An executive search firm (illustrative, typical of class) faces a £2.5m PI claim after a CEO candidate it placed was found to have misrepresented qualifications; the firm failed to conduct adequate reference and credential checks. The claim tested the "negligent reference" and "failure to verify" coverage triggers in recruitment agency PI. <span class="badge badge-illus">ILLUS</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="REG">
+      <div class="tl-dot dot-reg"><span>2006</span></div>
+      <div class="tl-body border-reg">
+        <span class="tl-type bg-reg">Regulatory</span>
+        <h4>Insurance Mediation Directive — UK ICOB Rules</h4>
+        <p>EU Insurance Mediation Directive implemented in UK via FSA ICOB rules. All FCA-authorised insurance intermediaries required to hold PI at regulatory minimum levels. Significantly expands mandatory demand for E8 insurance broker PI. Lloyd's and specialist market underwriters compete aggressively for broker PI volume. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="INSBRK">
+      <div class="tl-dot dot-insbrk"><span>2008</span></div>
+      <div class="tl-body border-insbrk">
+        <span class="tl-type bg-insbrk">Insurance Broker PI</span>
+        <h4>GFC — Insurance Broker PI Spike from Underinsurance Allegations</h4>
+        <p>Global Financial Crisis triggers wave of broker PI claims: insureds allege brokers failed to advise on adequate D&amp;O limits, credit risk insurance gaps, or business interruption coverage following market-wide losses. Some of the largest E8 insurance broker PI claims since pensions mis-selling emerge in 2009–2011. <span class="badge badge-est">EST</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="MEDIA">
+      <div class="tl-dot dot-media"><span>2011</span></div>
+      <div class="tl-body border-media">
+        <span class="tl-type bg-media">Media / PR</span>
+        <h4>News of the World / PR Crisis Management Fallout</h4>
+        <p>Phone-hacking scandal generates PR agency and crisis communications PI exposure: firms that advised media companies during the scandal face allegations their crisis management advice exacerbated reputational damage. Raises question of whether PI covers "failed crisis management" advice — typically yes, if advice was negligent. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="REG">
+      <div class="tl-dot dot-reg"><span>2015</span></div>
+      <div class="tl-body border-reg">
+        <span class="tl-type bg-reg">Regulatory</span>
+        <h4>Insurance Act 2015 — Fair Presentation Replaces Uberrima Fides</h4>
+        <p>Insurance Act 2015 comes into force (August 2016). "Fair presentation of risk" duty replaces full uberrima fides; proportionate remedies replace avoidance. Significant across all E8/E9/ED/EE classes: underwriters can no longer avoid for innocent non-disclosure; proportionate remedy framework introduces premium adjustments and partial coverage for misrepresentation. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="RECRUIT">
+      <div class="tl-dot dot-recruit"><span>2017</span></div>
+      <div class="tl-body border-recruit">
+        <span class="tl-type bg-recruit">Recruitment / HR</span>
+        <h4>IR35 Off-Payroll Extension — HR Consultant PI Notifications</h4>
+        <p>HMRC extends IR35 to public sector contractors (2017), then private sector (2020). HR consultants and employment law advisers who provided IR35 status advice face claims from clients caught by unexpected tax liabilities. Claims range £50k–£2m depending on size of contractor workforce affected. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="MGMT">
+      <div class="tl-dot dot-mgmt"><span>2018</span></div>
+      <div class="tl-body border-mgmt">
+        <span class="tl-type bg-mgmt">Management Consulting</span>
+        <h4>NHS IT Transformation — Management Consultant PI Claim</h4>
+        <p>Large-scale NHS digital transformation programme (illustrative, reflecting class-wide experience) generates PI claim against a management consultancy for advice on programme design that allegedly led to a failed £400m NHS IT system deployment. Highlights the "failed outcome" vs "negligent advice" boundary debate central to miscellaneous PI. <span class="badge badge-illus">ILLUS</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="MEDIA">
+      <div class="tl-dot dot-media"><span>2018</span></div>
+      <div class="tl-body border-media">
+        <span class="tl-type bg-media">Media / PR (EE)</span>
+        <h4>GDPR Launch — Data Consultant and Marketing Agency PI Exposure</h4>
+        <p>GDPR implementation (May 2018) creates immediate PI exposure for: data protection consultants who gave incorrect GDPR compliance advice; marketing agencies that advised on data collection strategies; HR systems consultants who implemented non-compliant employee data processes. EE and E8 underwriters update wording language around data protection liability. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="TRAVEL">
+      <div class="tl-dot dot-travel"><span>2020</span></div>
+      <div class="tl-body border-travel">
+        <span class="tl-type bg-travel">Travel / Events (EE)</span>
+        <h4>COVID-19 — Travel Agent and Event Manager PI/E&O Claims Wave</h4>
+        <p>COVID-19 generates the largest single-event claims experience in EE travel/events codes: travel agents face claims for failure to advise on FCDO travel warnings, inadequate booking refund processes, and negligent travel insurance recommendations. Event managers face claims for events booked without adequate cancellation provisions. Estimated industry-wide losses substantial; market introduces pandemic exclusions on new business. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="INSBRK">
+      <div class="tl-dot dot-insbrk"><span>2021</span></div>
+      <div class="tl-body border-insbrk">
+        <span class="tl-type bg-insbrk">Insurance Broker PI</span>
+        <h4>FCA BI Test Case Fallout — Broker PI Notifications</h4>
+        <p>Following the FCA business interruption test case (2020–2021), insurance brokers face PI notifications from clients who had BI policies that did not respond as the insured expected. Broker PI claims allege: failure to advise on policy coverage gaps, inadequate explanation of "disease clauses" vs "prevention of access" coverage, and failure to place sufficient limits. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="DESIGN">
+      <div class="tl-dot dot-design"><span>2022</span></div>
+      <div class="tl-body border-design">
+        <span class="tl-type bg-design">Design (ED)</span>
+        <h4>Product Designer IP / Specification Claim — Consumer Electronics</h4>
+        <p>Industrial product designer faces dual PI/IP claim (illustrative): client alleges design specification failures led to a product recall and £8m loss, and a third party alleges the design infringed an existing registered design right. Tests the interaction between PI (negligent specification), IP infringement defence extension, and product recall — highlighting coverage coordination challenges in ED. <span class="badge badge-illus">ILLUS</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="MGMT">
+      <div class="tl-dot dot-mgmt"><span>2022</span></div>
+      <div class="tl-body border-mgmt">
+        <span class="tl-type bg-mgmt">Management Consulting</span>
+        <h4>ESG Advisory PI — First Wave of Greenwashing-Related Notifications</h4>
+        <p>ESG and sustainability consultants face first wave of notifications from clients alleging ESG advice did not deliver promised outcomes: fund managers allege sustainability ratings advice was negligent; corporates allege sustainability reporting frameworks led to regulatory scrutiny. Market debates whether standard PI wordings cover "ESG advisory errors" — currently a coverage grey area. <span class="badge badge-est">EST</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="REG">
+      <div class="tl-dot dot-reg"><span>2023</span></div>
+      <div class="tl-body border-reg">
+        <span class="tl-type bg-reg">Regulatory</span>
+        <h4>FCA Consumer Duty — Insurance Broker PI Recalibration</h4>
+        <p>FCA Consumer Duty (July 2023) raises standard of care for retail-facing insurance brokers to "good outcomes" level. PI underwriters recalibrate E8 insurance broker PI exposure: higher standard of advice required means broader claims trigger; underwriters adjust rates and sub-limits for retail distribution businesses. <span class="badge badge-ver">VER</span></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="REG">
+      <div class="tl-dot dot-reg"><span>2024</span></div>
+      <div class="tl-body border-reg">
+        <span class="tl-type bg-reg">Regulatory / AI</span>
+        <h4>AI-Assisted Professional Advice — PI Wording Debate</h4>
+        <p>Management consultants, HR advisers, and marketing agencies increasingly use AI tools (ChatGPT, Copilot, Perplexity) to generate client advice. PI market debates: is advice generated by an AI tool covered under standard PI wordings? Draft AI endorsements begin to circulate. Lloyd's market working group reviews E8/E9/ED/EE wordings to address AI-assisted professional services liability. <span class="badge badge-est">EST</span></p>
+      </div>
+    </div>
+
+  </div><!-- end timeline -->
+
+</div>
+
+<script>
+function filterTL(type) {
+  document.querySelectorAll('.tl-item').forEach(item => {
+    item.style.display = (type === 'ALL' || item.dataset.type === type) ? '' : 'none';
+  });
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.type === type);
+  });
+}
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => filterTL(btn.dataset.type));
+});
+</script>
+
+<footer>PI E&O Miscellaneous (E8 · E9 · ED · EE) &nbsp;|&nbsp; Risk Code Hub &nbsp;|&nbsp; Version 4.0 · May 2026</footer>
+</body>
+</html>

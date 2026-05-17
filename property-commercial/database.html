@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Claims Database — Commercial Property — Risk Code Hub</title>
+  <style>
+    :root {
+      --prop:#5d4037; --prop-dark:#3e2723; --fire:#c62828;
+      --flood:#0277bd; --bi:#2e7d32; --cat:#6a1b9a;
+      --warn:#e65100; --light:#fdf6f0; --border:#d7ccc8;
+      --text:#2c1810; --muted:#7a5c52;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #5d4037;
+    --hub-dark:      #3e2723;
+    --hub-light:     #efebe9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#0277bd;
+    --header-gradient:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%);
+    --header-sub:    #d7ccc8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#bcaaa4; margin-bottom:6px; }
+    .breadcrumb a { color:#d7ccc8; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#bcaaa4; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#d7ccc8; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--prop); border-bottom-color:var(--fire); }
+    main { max-width:1200px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--prop); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .controls { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+    .controls input, .controls select { padding:8px 12px; border:1px solid var(--border); border-radius:8px; font-size:0.85rem; background:#fff; }
+    .controls input { min-width:240px; }
+
+    table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 6px rgba(93,64,55,0.08); font-size:0.85rem; }
+    thead th { background:var(--prop); color:#fff; padding:10px 14px; text-align:left; cursor:pointer; white-space:nowrap; }
+    thead th:hover { background:var(--prop-dark); }
+    tbody td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tbody tr:last-child td { border-bottom:none; }
+    tbody tr:nth-child(even) td { background:#fdf0eb; }
+    tbody tr:hover td { background:#f5e6dd; }
+    .expand-row { display:none; background:#fef9f6 !important; }
+    .expand-row td { padding:14px 20px; }
+    .expand-row.open { display:table-row; }
+    .expand-detail { font-size:0.84rem; line-height:1.7; color:#444; }
+
+    .tag-pill { display:inline-block; font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:8px; color:#fff; margin-right:3px; }
+    .tp-fire { background:var(--fire); }
+    .tp-flood { background:var(--flood); }
+    .tp-bi { background:var(--bi); }
+    .tp-cat { background:var(--cat); }
+    .tp-wind { background:#0277bd; }
+    .tp-quake { background:#6a1b9a; }
+    .tp-wild { background:#e65100; }
+    .tp-terror { background:#b71c1c; }
+    .tp-cyber { background:#263238; }
+    .tp-supply { background:#00695c; }
+    .tp-other { background:#546e7a; }
+
+    .badge { display:inline-block; font-size:0.62rem; font-weight:700; padding:1px 5px; border-radius:6px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .stat-bar { display:flex; gap:16px; flex-wrap:wrap; margin:20px 0 30px; }
+    .stat-pill { background:#fff; border:1px solid var(--border); border-radius:8px; padding:8px 16px; font-size:0.8rem; }
+    .stat-pill strong { color:var(--prop); }
+
+    footer { background:var(--prop-dark); color:#bcaaa4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Commercial Property</a> › Claims Database</div>
+  <div class="tag">Lloyd's Codes · P2 · P3 · P4 · P5 · P6 · P7 · B2 · B3 · B4 · B5</div>
+  <h1>Claims Database</h1>
+  <p>35 significant commercial property losses — searchable and filterable by peril type, Lloyd's code and geography. Click any row for full detail.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="stat-bar">
+    <div class="stat-pill">Total events: <strong id="total-count">35</strong></div>
+    <div class="stat-pill">Showing: <strong id="show-count">35</strong></div>
+    <div class="stat-pill">Largest loss: <strong>$60bn (Ian 2022)</strong></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="🔍 Search event, location, insurer…">
+    <select id="filter-peril">
+      <option value="">All Perils</option>
+      <option value="WIND">Windstorm / Hurricane</option>
+      <option value="QUAKE">Earthquake</option>
+      <option value="FLOOD">Flood</option>
+      <option value="FIRE">Fire</option>
+      <option value="WILD">Wildfire</option>
+      <option value="BI">Business Interruption</option>
+      <option value="TERROR">Terrorism</option>
+      <option value="CYBER">Cyber / Tech</option>
+      <option value="SUPPLY">Supply Chain</option>
+      <option value="OTHER">Other</option>
+    </select>
+    <select id="filter-geo">
+      <option value="">All Regions</option>
+      <option value="USA">USA</option>
+      <option value="UK">UK / Europe</option>
+      <option value="ASIA">Asia-Pacific</option>
+      <option value="LATAM">Latin America / Caribbean</option>
+      <option value="GLOBAL">Global / Multi-region</option>
+    </select>
+  </div>
+
+  <table id="db-table">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Year ↕</th>
+        <th onclick="sortTable(1)">Event</th>
+        <th onclick="sortTable(2)">Peril</th>
+        <th onclick="sortTable(3)">Insured Loss</th>
+        <th onclick="sortTable(4)">Region</th>
+        <th onclick="sortTable(5)">Lloyd's Code</th>
+        <th>Confidence</th>
+      </tr>
+    </thead>
+    <tbody id="db-body"></tbody>
+  </table>
+
+</main>
+<footer>
+  Risk Code Hub — Commercial Property (P2–P7 · B2–B5) · Lloyd's Market Intelligence · v3.1 April 2026
+</footer>
+
+<script>
+const events = [
+  { year:2001, event:"World Trade Center / 9/11", peril:"TERROR", loss:"~$47bn", geo:"USA", code:"P5", conf:"VER", detail:"Combined property and liability insured loss ~$47bn — largest man-made insured loss at the time. Property ~$11bn. Triggered TRIA (2002) and terrorism exclusions across all property lines." },
+  { year:2001, event:"Toulouse AZF Chemical Plant Explosion", peril:"FIRE", loss:"~€3bn", geo:"UK / Europe", code:"P3", conf:"VER", detail:"Ammonium nitrate explosion; 31 deaths; ~€3bn insured. France; lessons for industrial hazard underwriting and proximity clauses." },
+  { year:2003, event:"European Heatwave — Property & BI", peril:"OTHER", loss:"~€3.5bn insured", geo:"UK / Europe", code:"P3", conf:"EST", detail:"Extreme heat caused widespread roof damage, food storage spoilage and BI losses. 70,000 excess deaths. First major European heatwave property loss event." },
+  { year:2004, event:"Florida Hurricane Season (Charley/Frances/Ivan/Jeanne)", peril:"WIND", loss:"$22bn", geo:"USA", code:"P5/B4", conf:"VER", detail:"Four major hurricanes in one season. $22bn insured aggregate. Drove significant Florida market restructuring; early surplus lines withdrawal from coastal risks." },
+  { year:2005, event:"Hurricane Katrina", peril:"WIND", loss:"$36bn", geo:"USA", code:"P5/B4", conf:"VER", detail:"New Orleans levee failures; 1,800 deaths; $85bn total loss. Largest US insured cat at the time. NFIP strained. RMS/AIR model recalibration. Cat market hardened 40%+." },
+  { year:2007, event:"European Windstorm Kyrill", peril:"WIND", loss:"€5bn", geo:"UK / Europe", code:"P2/P3", conf:"VER", detail:"Affected UK, Germany, Netherlands, Belgium; 47 deaths. €5bn insured. Storm modelling validated for northern European wind exposure." },
+  { year:2008, event:"Hurricane Ike — Houston / Galveston", peril:"WIND", loss:"$20bn", geo:"USA", code:"P5/B4", conf:"VER", detail:"$20bn insured; major Houston commercial losses; storm surge exceeded Cat 4 predictions for a Cat 2 storm. Demonstrated risk of storm surge separate from wind damage." },
+  { year:2010, event:"Haiti Earthquake — Protection Gap", peril:"QUAKE", loss:"<$300m insured / $7bn total", geo:"Latin America / Caribbean", code:"P6", conf:"VER", detail:"220,000 deaths; $7bn+ total; <5% insured. Triggered development of sovereign parametric covers (CCRIF). Exposed extreme insurance gap in low-income nations." },
+  { year:2010, event:"Deepwater Horizon — Offshore Platform Fire/Explosion", peril:"FIRE", loss:"$3.5bn property", geo:"USA", code:"P5/P3", conf:"EST", detail:"Platform destroyed; $3.5bn property/equipment insured loss plus $20bn+ liability. Lloyd's major loss event; off-platform property and BI tested." },
+  { year:2011, event:"Christchurch Earthquake, New Zealand", peril:"QUAKE", loss:"$16bn", geo:"Asia-Pacific", code:"P6", conf:"VER", detail:"185 deaths; $16bn insured; NZ EQC (Earthquake Commission) reformed post-event. Liquefaction losses in residential and commercial sectors far exceeded model estimates." },
+  { year:2011, event:"Thailand Floods — Supply Chain BI", peril:"FLOOD", loss:"$12bn insured / $43bn total", geo:"Asia-Pacific", code:"P6/P3", conf:"VER", detail:"Chao Phraya industrial zones submerged 3 months. Toyota, Honda, Western Digital. BI losses from supply chain disruption dwarfed direct property. Contingent BI and MIP reunderwriting followed." },
+  { year:2011, event:"Tōhoku Earthquake &amp; Tsunami — Japan", peril:"QUAKE", loss:"$35bn insured", geo:"Asia-Pacific", code:"P6", conf:"VER", detail:"9.0 magnitude; Fukushima nuclear disaster; $235bn total. Largest earthquake loss in history. Fire following earthquake; tsunami exclusion applicability tested." },
+  { year:2012, event:"Hurricane Sandy", peril:"WIND", loss:"$20bn", geo:"USA", code:"P5/B4", conf:"VER", detail:"$65bn total; New Jersey/NYC storm surge; non-damage BI disputes; NFIP flood gap again exposed. Business interruption for power outages without physical damage contentious." },
+  { year:2013, event:"European Floods (June 2013)", peril:"FLOOD", loss:"€12bn", geo:"UK / Europe", code:"P2/P3", conf:"VER", detail:"Central European floods (Danube, Elbe, Rhine). €12bn insured across Germany, Austria, Czech Republic. German Flutkatastrophe; Flood directives updated." },
+  { year:2014, event:"Alberta Flooding — Calgary", peril:"FLOOD", loss:"CAD$2.8bn", geo:"USA", code:"P6", conf:"VER", detail:"Largest insured natural disaster in Canadian history at time. Urban surface water flooding in Calgary; insurance gap in residential flood coverage highlighted." },
+  { year:2016, event:"Fort McMurray Wildfire — Alberta", peril:"WILD", loss:"CAD$3.7bn", geo:"USA", code:"P6", conf:"VER", detail:"Largest insured loss in Canadian history; 90,000 evacuated; nearly entire city burned. WUI (wildland-urban interface) risk management transformed in Canada." },
+  { year:2017, event:"Hurricane Harvey — Houston", peril:"WIND", loss:"$30bn", geo:"USA", code:"P5/B4", conf:"VER", detail:"Record-breaking rainfall event; $90bn total; massive NFIP shortfall. BI from Houston chemical plant shutdowns; supply chain losses. Contingent BI re-examination." },
+  { year:2017, event:"Hurricane Irma — Florida / Caribbean", peril:"WIND", loss:"$30bn", geo:"USA", code:"P5/B4", conf:"VER", detail:"$30bn insured; St Martin, BVI, Florida Keys devastated. Caribbean islands (P6) suffered 95%+ destruction in some areas. USVI and Puerto Rico property market stress." },
+  { year:2017, event:"Hurricane Maria — Puerto Rico", peril:"WIND", loss:"$30bn", geo:"USA", code:"P5/B4", conf:"VER", detail:"Catastrophic infrastructure failure; $30bn insured vs $90bn total. Puerto Rico Electric Power Authority collapse. Long-tail BI claims from power grid outage (11+ months for some)." },
+  { year:2017, event:"California Wine Country Fires (Tubbs, Atlas, Nuns)", peril:"WILD", loss:"$12bn", geo:"USA", code:"P5", conf:"VER", detail:"Napa and Sonoma counties; $12bn insured; first major urban WUI wildfire series in California wine country. Began California market withdrawal trend." },
+  { year:2018, event:"Camp Fire — Paradise, CA", peril:"WILD", loss:"$12.5bn", geo:"USA", code:"P5", conf:"VER", detail:"85 deaths; destroyed town of Paradise; $12.5bn insured. PG&E liability ~$13.5bn settlement. State Farm, Allstate began non-renewal of California homeowner policies. E&S market hardened sharply." },
+  { year:2019, event:"Typhoon Hagibis — Japan", peril:"WIND", loss:"$10bn", geo:"Asia-Pacific", code:"P6", conf:"VER", detail:"$10bn insured; widespread flooding in Japan; high level of Japanese domestic cat insurance uptake. Rugby World Cup venue flooding — event cancellation BI." },
+  { year:2019, event:"Grenfell Tower (Legacy Loss — BI &amp; Remediation)", peril:"FIRE", loss:"£500m+", geo:"UK / Europe", code:"P2/P3", conf:"EST", detail:"72 deaths; ACM cladding; £500m+ in rehousing, demolition, investigation costs and remediation. Building owners and local authorities incurring ongoing BI from cladding remediation programmes nationally (£15bn+ total remediation estimate)." },
+  { year:2020, event:"COVID-19 BI Test Case (FCA v Arch UKSC 2021)", peril:"BI", loss:"~£1.2bn UK / ~$40bn global", geo:"Global / Multi-region", code:"P3/B3", conf:"VER", detail:"UK Supreme Court (Jan 2021): disease clause, denial of access and hybrid wordings triggered BI cover. ~£1.2bn UK payout. Global COVID BI estimated $40–50bn total insured. All BI wordings rewritten; communicable disease exclusions now standard." },
+  { year:2020, event:"Beirut Port Explosion", peril:"FIRE", loss:"$2–3bn insured", geo:"UK / Europe", code:"P6", conf:"EST", detail:"Ammonium nitrate explosion; 218 deaths; $15bn total economic loss; $2–3bn insured. Lebanese property market effectively destroyed. Lloyd's P6 writers with Lebanese commercial risks incurred losses." },
+  { year:2021, event:"European Floods — July 2021 (Ahr Valley)", peril:"FLOOD", loss:"€13bn", geo:"UK / Europe", code:"P2/P3", conf:"VER", detail:"Unprecedented flooding in Germany (Ahr valley), Belgium, Netherlands. 220 deaths. €13bn insured but massive protection gap in residential/SME. Climate attribution science confirmed link to warming." },
+  { year:2022, event:"Hurricane Ian — Florida", peril:"WIND", loss:"$60bn", geo:"USA", code:"P5/B4", conf:"VER", detail:"Second-largest US insured cat ever. Fort Myers Cat 4. $60bn insured; 6 Florida domestic insurers insolvent; Citizens exposure $1.3tn. AOB (assignment of benefits) reform. Lloyd's capacity severely reduced for Florida." },
+  { year:2022, event:"Ukraine War — Property Loss &amp; Market Exit", peril:"OTHER", loss:"$12bn+ insured (est.)", geo:"UK / Europe", code:"P6", conf:"EST", detail:"Russia's invasion of Ukraine; war/political violence exclusions invoked on all property policies. LLOYDS Hull/property war clause operation. Aviation and property writers exited from Russia, Ukraine. CPRI market secondary." },
+  { year:2023, event:"Turkey–Syria Earthquake", peril:"QUAKE", loss:"$7bn insured / $90bn total", geo:"UK / Europe", code:"P6", conf:"VER", detail:"50,000+ deaths; 7.8 magnitude. 8% penetration ratio. DASK (Turkish Cat Pool) paid TRY 35bn. Exposed protection gap in middle-income countries. Lloyd's P6 attritional losses on Turkish commercial risks." },
+  { year:2023, event:"Maui (Lahaina) Wildfire", peril:"WILD", loss:"$5.5bn", geo:"USA", code:"P5", conf:"VER", detail:"99 deaths; historic town of Lahaina destroyed; $5.5bn insured. Hawaiian Electric utility liability claim; unique island property market dynamics. WUI risk in unexpected locations highlighted." },
+  { year:2023, event:"Severe Convective Storms — US Record SCS Year", peril:"OTHER", loss:"$64bn", geo:"USA", code:"P5/B4", conf:"VER", detail:"$64bn US SCS insured losses (hail, tornado, derecho) — largest SCS year ever. <span class='badge b-v'>VER</span> Multiple $3–5bn+ individual hailstorm events. SCS elevated to primary peril by all major reinsurers; attritional loss frequency surge drives combined ratio deterioration." },
+  { year:2023, event:"Cyclone Gabrielle — New Zealand", peril:"WIND", loss:"NZD$3bn", geo:"Asia-Pacific", code:"P6", conf:"VER", detail:"Category 3; Hawke's Bay region devastated; NZD$3bn insured. NZ EQC (now Toka Tū Ake) response; EQCover residential scheme extension discussed. Exposed NZ property insurance affordability crisis." },
+  { year:2023, event:"European Floods — Slovenia, Croatia, Austria", peril:"FLOOD", loss:"€4bn+", geo:"UK / Europe", code:"P2/P6", conf:"EST", detail:"Record rainfall; Slovenia declared state of emergency; €4bn insured. Third consecutive year of large European flood losses. Reinsurers began attaching higher retention requirements for European flood." },
+  { year:2024, event:"Hurricane Helene / Milton — Dual US Cat Season", peril:"WIND", loss:"$50bn+ combined est.", geo:"USA", code:"P5/B4", conf:"EST", detail:"Helene ($30bn+ est.): inland flooding in North Carolina — uninsured losses massive. Milton ($20bn+ est.): Florida Gulf Coast Cat 3. Combined 2024 US cat losses tracking toward another $100bn+ year." },
+  { year:2024, event:"PFAS Exclusions — Market-Wide Property Adoption", peril:"OTHER", loss:"Latent / emerging", geo:"Global / Multi-region", code:"P3/P6", conf:"EST", detail:"Following 3M ($10.3bn) and DuPont/Chemours ($1.19bn) PFAS settlements, Lloyd's LMA began developing standard PFAS property exclusion clauses. Contaminated land and buildings constitute potentially large latent property exposure portfolio-wide." }
+];
+
+function renderTable(data) {
+  const tbody = document.getElementById('db-body');
+  tbody.innerHTML = '';
+  document.getElementById('show-count').textContent = data.length;
+  data.forEach((e, i) => {
+    const pillClass = {WIND:'tp-wind', QUAKE:'tp-quake', FLOOD:'tp-flood', FIRE:'tp-fire', WILD:'tp-wild', BI:'tp-bi', TERROR:'tp-terror', CYBER:'tp-cyber', SUPPLY:'tp-supply', OTHER:'tp-other'}[e.peril] || 'tp-other';
+    const confBadge = e.conf === 'VER' ? '<span class="badge b-v">VER</span>' : e.conf === 'EST' ? '<span class="badge b-e">EST</span>' : '<span class="badge b-i">ILLUS</span>';
+    const perilLabel = {WIND:'Windstorm',QUAKE:'Earthquake',FLOOD:'Flood',FIRE:'Fire',WILD:'Wildfire',BI:'Business Int.',TERROR:'Terrorism',CYBER:'Cyber',SUPPLY:'Supply Chain',OTHER:'Other'}[e.peril]||e.peril;
+    const row = document.createElement('tr');
+    row.style.cursor='pointer';
+    row.innerHTML = `<td>${e.year}</td><td>${e.event}</td><td><span class="tag-pill ${pillClass}">${perilLabel}</span></td><td>${e.loss}</td><td>${e.geo}</td><td>${e.code}</td><td>${confBadge}</td>`;
+    row.onclick = () => {
+      const next = tbody.rows[Array.from(tbody.rows).indexOf(row)+1];
+      if (next && next.classList.contains('expand-row')) { next.classList.toggle('open'); return; }
+      const exp = document.createElement('tr');
+      exp.className = 'expand-row open';
+      exp.innerHTML = `<td colspan="7"><div class="expand-detail">${e.detail}</div></td>`;
+      row.after(exp);
+    };
+    tbody.appendChild(row);
+  });
+}
+
+function filterData() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const peril = document.getElementById('filter-peril').value;
+  const geo = document.getElementById('filter-geo').value;
+  return events.filter(e => {
+    const matchQ = !q || e.event.toLowerCase().includes(q) || e.detail.toLowerCase().includes(q) || e.geo.toLowerCase().includes(q);
+    const matchP = !peril || e.peril === peril;
+    const matchG = !geo || e.geo.includes(geo.replace('USA','USA').replace('UK','UK').replace('ASIA','Asia').replace('LATAM','Latin').replace('GLOBAL','Global'));
+    return matchQ && matchP && matchG;
+  });
+}
+
+document.getElementById('search').addEventListener('input', () => renderTable(filterData()));
+document.getElementById('filter-peril').addEventListener('change', () => renderTable(filterData()));
+document.getElementById('filter-geo').addEventListener('change', () => renderTable(filterData()));
+
+let sortDir = {};
+function sortTable(col) {
+  const keys = ['year','event','peril','loss','geo','code'];
+  const k = keys[col];
+  sortDir[col] = !sortDir[col];
+  const sorted = [...filterData()].sort((a,b) => {
+    const av = String(a[k]||'').toLowerCase();
+    const bv = String(b[k]||'').toLowerCase();
+    return sortDir[col] ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  renderTable(sorted);
+}
+
+renderTable(events);
+</script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Nuclear (NP / NL / NV) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a4a00;
+      --hub-dark:      #252500;
+      --hub-light:     #f9f9e8;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#252500 0%,#4a4a00 55%,#6b6b00 100%);
+      --header-sub:    #e6e682;
+      --hub-mid:       #e8e8c0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1e1e0a;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#252500;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #eeee99;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f5f5dc;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-reactor-accident{background:#fde8e8;color:#c62828;}
+    .tp-transport-incident{background:#e3f2fd;color:#1565c0;}
+    .tp-contamination{background:#fce4ec;color:#880e4f;}
+    .tp-fire{background:#fff3e0;color:#e65100;}
+    .tp-regulatory-shutdown{background:#f3e5f5;color:#6a1b9a;}
+    .tp-workers-exposure{background:#e0f2f1;color:#00695c;}
+    .tp-cyber-physical{background:#e8eaf6;color:#3949ab;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#4a4a00;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#f5f5dc;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    .info-box{background:#f5f5dc;border-left:4px solid var(--hub-primary);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:0.85rem;color:#2a2a00;line-height:1.6;}
+    footer{background:#252500;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Nuclear (NP/NL/NV)</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>Nuclear Incident &amp; Loss Database</h1>
+    <div class="sub">35 nuclear incidents and loss events 1957–2024 — filter by type, sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="info-box">
+    <strong>Data Note:</strong> Nuclear insurance loss data is largely non-public. Insured loss figures for most incidents are estimates based on publicly available government reports, academic studies and insurance industry publications. Economic cost figures (total cost including uninsured losses) are included where available. Many nuclear events involve uninsured losses significantly larger than insured losses — particularly in state-owned nuclear programmes and convention-governed incidents. All figures marked <strong>EST</strong> are illustrative estimates for educational purposes.
+  </div>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Incident Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="reactor-accident">Reactor Accident</option>
+        <option value="transport-incident">Transport Incident</option>
+        <option value="contamination">Contamination</option>
+        <option value="fire">Fire / Explosion</option>
+        <option value="regulatory-shutdown">Regulatory Shutdown</option>
+        <option value="workers-exposure">Workers Exposure</option>
+        <option value="cyber-physical">Cyber / Physical Security</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="nuclear-power-plant">Nuclear Power Plant</option>
+        <option value="research-reactor">Research Reactor</option>
+        <option value="nuclear-transport">Nuclear Transport</option>
+        <option value="uranium-processing">Uranium Processing</option>
+        <option value="medical-radiological">Medical / Radiological</option>
+        <option value="military-nuclear">Military Nuclear</option>
+        <option value="decommissioning">Decommissioning</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 1990" min="1957" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Min Value ($m)</label>
+      <input type="number" id="fVal" placeholder="e.g. 100" min="0" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Location, plant name…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#555;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event / Plant</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Est. Total Cost</th>
+        <th>Severity</th>
+        <th>Geography</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Nuclear (NP / NL / NV) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1957,n:"Windscale Pile Fire",t:"fire",s:"military-nuclear",desc:"Fire in Windscale Pile 1 (UK military plutonium reactor) releases radioactive iodine and other isotopes across UK and parts of Europe. Milk production banned in areas downwind. INES Level 5. Entirely uninsured — military/government installation. Declassified report 1988.",v:500,sev:"cat",geo:"UK"},
+  {y:1957,n:"Kyshtym Disaster — Mayak, USSR",t:"contamination",s:"military-nuclear",desc:"Chemical explosion in a nuclear waste storage tank at Mayak Production Association (Soviet Union) releases radioactive contamination over 20,000 sq km. 270,000 people affected. Soviet government suppresses information; the disaster is not publicly acknowledged until 1989. INES Level 6. No commercial insurance.",v:0,sev:"cat",geo:"USSR"},
+  {y:1961,n:"SL-1 Experimental Reactor — Idaho, USA",t:"reactor-accident",s:"research-reactor",desc:"Steam explosion caused by manual control rod withdrawal kills 3 operators — first fatal reactor accident in the USA. SL-1 was an experimental boiling water reactor at Idaho National Laboratory. Entirely a government/military installation loss; no commercial insurance claim. Triggered fundamental improvements in safety procedures.",v:10,sev:"maj",geo:"USA"},
+  {y:1969,n:"Lucens Reactor Accident — Switzerland",t:"reactor-accident",s:"research-reactor",desc:"Experimental underground reactor in Lucens, Switzerland, suffers partial meltdown due to coolant failure. Significant radioactive contamination of the underground cavern — but the underground location prevented any external release. Cavern sealed. No casualties. INES Level 4.",v:20,sev:"mod",geo:"Switzerland"},
+  {y:1973,n:"Sellafield — Plutonium Contamination Incident",t:"contamination",s:"nuclear-power-plant",desc:"Release of radioactive liquor at Sellafield's B204 building contaminates 35 workers — one of several significant Sellafield contamination incidents. Compensation claims from affected workers through the UK court system. Highlights radiation worker exposure liability as a long-tail insurance concern.",v:30,sev:"mod",geo:"UK"},
+  {y:1975,n:"Browns Ferry Fire — Alabama, USA",t:"fire",s:"nuclear-power-plant",desc:"Fire at Browns Ferry Nuclear Plant (Unit 1 and 2) started by a candle used to check air leaks in cable trays. Fire destroys safety system cables; reactors shut down safely but cable damage costs $240m to repair. INES Level 3. The worst US nuclear plant fire before TMI — significant insurance property loss.",v:240,sev:"maj",geo:"USA"},
+  {y:1979,n:"Three Mile Island — Unit 2, Pennsylvania, USA",t:"reactor-accident",s:"nuclear-power-plant",desc:"Partial meltdown at TMI-2 caused by cooling failure and operator error. No off-site fatalities; limited radioactive release. $150m insured property loss (reactor decontamination and partial decommissioning via ANI pool). Largest nuclear insurance property claim to that date. INES Level 5. Ended new US nuclear orders for 30+ years.",v:150,sev:"cat",geo:"USA"},
+  {y:1980,n:"Saint-Laurent Nuclear Plant — France",t:"reactor-accident",s:"nuclear-power-plant",desc:"Fuel channel meltdown at Saint-Laurent-des-Eaux nuclear plant, France (INES Level 4). Reactor fuel melts partially; contamination contained. No off-site consequences. Reactor repaired and returned to service. Handled through French nuclear pool (ANP). Demonstrates fuel melt is survivable with proper containment.",v:50,sev:"mod",geo:"France"},
+  {y:1986,n:"Chernobyl Nuclear Power Plant — Ukraine, USSR",t:"reactor-accident",s:"nuclear-power-plant",desc:"RBMK-1000 reactor explosion and fire during a safety test — INES Level 7. 31 immediate deaths; 350,000+ evacuated; exclusion zone still in force. Total economic cost estimated at $700bn+ over decades. Entirely uninsured under commercial market — USSR outside convention system. Defines the maximum nuclear catastrophe scenario. Carbon-14 contamination detected across Europe.",v:700000,sev:"cat",geo:"USSR/Ukraine"},
+  {y:1987,n:"Goiânia Radiological Incident — Brazil",t:"contamination",s:"medical-radiological",desc:"Abandoned medical radiotherapy machine (caesium-137 source) is broken open by scrap metal collectors in Goiânia, Brazil. Radioactive material spreads through community — 4 deaths, 249 people contaminated, 112,000 screened. INES Level 5. Classic orphan source scenario — no insurance. Raises nuclear transport and disposal liability issues for NV class.",v:25,sev:"maj",geo:"Brazil"},
+  {y:1989,n:"Vandellos Nuclear Power Plant Fire — Spain",t:"fire",s:"nuclear-power-plant",desc:"Turbine hall fire at Vandellos I (gas-cooled reactor, Tarragona, Spain) causes significant damage. INES Level 3. The reactor was subsequently shut down and decommissioned rather than repaired — a decommissioning trigger event. Highlights fire risk in nuclear turbine halls as a key NP underwriting concern.",v:80,sev:"mod",geo:"Spain"},
+  {y:1992,n:"Sosnovy Bor Incident — Russia",t:"reactor-accident",s:"nuclear-power-plant",desc:"RBMK reactor at Sosnovy Bor (Leningrad Nuclear Power Plant, Russia) releases radioactive xenon and iodine gases from a damaged fuel channel. INES Level 3. Limited off-site impact. Post-Soviet Russia's nuclear insurance framework is immature; commercial insurance involvement minimal. Highlights legacy RBMK design risks.",v:15,sev:"mod",geo:"Russia"},
+  {y:1993,n:"Tomsk-7 Reprocessing Plant Explosion — Russia",t:"fire",s:"uranium-processing",desc:"Chemical explosion at Siberian Chemical Combine reprocessing plant releases uranium and radioactive solution over contaminated land area. No fatalities; local area decontaminated. INES Level 4. Another uninsured Soviet-era facility incident illustrating the scale of legacy nuclear liability in Russia.",v:200,sev:"maj",geo:"Russia"},
+  {y:1995,n:"Monju Fast Breeder Reactor Sodium Fire — Japan",t:"fire",s:"nuclear-power-plant",desc:"Sodium coolant leak and fire at Monju prototype fast breeder reactor (Fukui Prefecture, Japan). INES Level 1 in terms of radiological impact but highly significant politically. Reactor shut down for 15 years amid controversy over a cover-up. Ultimately decommissioned in 2018. Sodium fire risk is a key factor for fast reactor underwriting.",v:90,sev:"mod",geo:"Japan"},
+  {y:1999,n:"Tokaimura Criticality Accident — Japan",t:"reactor-accident",s:"uranium-processing",desc:"Criticality accident at JCO uranium processing plant — workers adding uranium to a tank using buckets, bypassing criticality controls. 2 workers die from acute radiation syndrome; 667 receive radiation doses; 310,000 sheltered. INES Level 4. Third-party liability claims under Japan's nuclear compensation law. Japan's most serious nuclear accident before Fukushima.",v:60,sev:"maj",geo:"Japan"},
+  {y:2000,n:"La Hague Reprocessing Plant — Minor Liquid Release (France)",t:"contamination",s:"uranium-processing",desc:"Minor release of radioactive liquid at La Hague reprocessing plant (AREVA/Orano, Normandy, France) triggers Greenpeace campaign and media coverage. INES Level 2. No significant health impact but reputational and regulatory consequences. Handled through French ANP pool. Illustrates regulatory and reputational sensitivity of reprocessing operations.",v:10,sev:"min",geo:"France"},
+  {y:2002,n:"Davis-Besse Reactor Vessel Head Degradation — Ohio, USA",t:"regulatory-shutdown",s:"nuclear-power-plant",desc:"Boric acid corrosion found to have eaten through 6.6 inches of the Davis-Besse reactor vessel head — a near-miss for loss of coolant accident. NRC orders extended shutdown for inspection and repair. $143m repair costs. INES Level 3. Significant NP insurance property loss; highlights importance of periodic safety reviews.",v:143,sev:"maj",geo:"USA"},
+  {y:2003,n:"Multiple Nuclear Plant Regulatory Shutdowns — Japan",t:"regulatory-shutdown",s:"nuclear-power-plant",desc:"TEPCO forced to shut down all 17 of its nuclear reactors after falsification of inspection data is revealed — a major corporate scandal. Reactors remain shut for extended periods for re-inspection. Business interruption and reputational impact enormous. No direct nuclear incident, but demonstrates scale of regulatory shutdown risk in NP/NL portfolio.",v:500,sev:"maj",geo:"Japan"},
+  {y:2006,n:"Forsmark Nuclear Power Plant — Close Call, Sweden",t:"reactor-accident",s:"nuclear-power-plant",desc:"Electrical fault causes two of four emergency backup power systems to fail at Forsmark 1 (Sweden). Reactor shut down safely but the event — which could have caused a meltdown — was described by nuclear safety experts as 'close to a serious accident.' INES Level 2. Highlights electrical/backup power as a key safety concern addressed post-Fukushima.",v:20,sev:"mod",geo:"Sweden"},
+  {y:2006,n:"Nuclear Material Transport Incident — Belgium",t:"transport-incident",s:"nuclear-transport",desc:"Road transport accident involving a vehicle carrying low-level radioactive waste materials in Belgium. No significant contamination but emergency response activated, road closed, and regulatory investigation. Illustrative of the transport risks covered under NV policies. No major insurance claim but highlights transport regulation compliance requirements.",v:5,sev:"min",geo:"Belgium"},
+  {y:2008,n:"Tricastin Nuclear Site — Coolant Leak, France",t:"contamination",s:"nuclear-power-plant",desc:"30,000 litres of uranium-contaminated water leaks from a facility at the Tricastin nuclear site (Areva/EDF), contaminating local rivers. 100 people temporarily banned from local water sources. INES Level 1. Local fishing and water use restricted. Environmental remediation costs through ANP pool. High media and regulatory attention.",v:15,sev:"mod",geo:"France"},
+  {y:2011,n:"Fukushima Daiichi — Units 1, 2, 3, Japan",t:"reactor-accident",s:"nuclear-power-plant",desc:"Tsunami (following Tohoku earthquake M9.0) overwhelms seawall, causes station blackout and meltdown at three TEPCO reactors. 154,000 evacuated; exclusion zone in operation; $200bn+ total cost; ~$40bn insured est. (mostly through Japanese government compensation mechanism). INES Level 7. Triggers global nuclear site seismic and flood reassessment.",v:40000,sev:"cat",geo:"Japan"},
+  {y:2011,n:"Fukushima Daini — Controlled Shutdown",t:"regulatory-shutdown",s:"nuclear-power-plant",desc:"Fukushima Daini (TEPCO, 4 reactors, 12km south of Daiichi) also loses power following the tsunami but is successfully brought to cold shutdown by operators working around the clock. A near-miss that demonstrated the importance of operator training and available backup power. No major insurance claim but significant business interruption.",v:50,sev:"mod",geo:"Japan"},
+  {y:2012,n:"Onagawa Nuclear Plant — Survived Fukushima Tsunami Intact",t:"regulatory-shutdown",s:"nuclear-power-plant",desc:"Onagawa Nuclear Plant (Tohoku Electric) was closest plant to the 2011 earthquake epicentre but its higher seawall (14.8m vs Daiichi's 5.7m) meant it survived the tsunami intact and was used as an evacuation shelter. No insurance claim. Important underwriting lesson: seawall height and site elevation directly determine tsunami loss outcome.",v:0,sev:"min",geo:"Japan"},
+  {y:2013,n:"San Onofre Nuclear Generating Station — Steam Generator Failure (USA)",t:"regulatory-shutdown",s:"nuclear-power-plant",desc:"Premature wear in steam generator tubes (installed by Mitsubishi, 2010) leads to a small radiation leak and extended shutdown of San Onofre Units 2 and 3 (California, USA). Reactors permanently shut down in 2013 due to repair cost and regulatory uncertainty. $4.7bn in equipment and decommissioning costs — NP property and liability claims.",v:4700,sev:"cat",geo:"USA"},
+  {y:2014,n:"WIPP Radiological Release — New Mexico, USA",t:"contamination",s:"decommissioning",desc:"Accidental release of radioactive plutonium and americium from a waste drum at the Waste Isolation Pilot Plant (WIPP), New Mexico. WIPP shut down for 3 years for cleanup. 22 workers received low-level radiation exposure. $2bn+ cleanup cost. INES Level 2. First radiological release at a US deep geological repository — significant for decommissioning liability underwriting.",v:2000,sev:"maj",geo:"USA"},
+  {y:2016,n:"Doel 4 Nuclear Reactor — Sabotage Shutdown, Belgium",t:"regulatory-shutdown",s:"nuclear-power-plant",desc:"Deliberate sabotage of the turbine oil system at Doel 4 (Electrabel, Belgium) causes extensive damage and forced shutdown. A Doel employee is charged. The reactor returns to service after €25m+ repair. First confirmed major nuclear plant sabotage event. Raises nuclear insider threat and physical security as underwriting concerns.",v:30,sev:"mod",geo:"Belgium"},
+  {y:2017,n:"Flamanville EPR Construction — Defective Steel in Reactor Vessel",t:"regulatory-shutdown",s:"nuclear-power-plant",desc:"French nuclear regulator ASN discovers high carbon concentrations in the steel of the Flamanville EPR reactor vessel head — a manufacturing defect. EDF allows operation subject to conditions but faces enormous additional cost and schedule delay. The reactor finally starts in late 2024 after years of delay. Construction EAR/NP interface coverage complexity highlighted.",v:200,sev:"mod",geo:"France"},
+  {y:2018,n:"Uranium Hexafluoride (UF6) Release — Honeywell, Oklahoma, USA",t:"contamination",s:"uranium-processing",desc:"Accidental release of uranium hexafluoride gas at Honeywell's uranium conversion facility in Metropolis, Illinois. Several workers receive low-level radiation exposure; facility briefly evacuated. No off-site contamination. INES Level 2. Demonstrates uranium processing/conversion as an NV insurance exposure distinct from reactor operations.",v:8,sev:"min",geo:"USA"},
+  {y:2019,n:"Hanford Site Nuclear Waste Tunnel Collapse — Washington, USA",t:"contamination",s:"decommissioning",desc:"Tunnel containing contaminated old rail cars collapses at the Hanford Site (Washington State, USA) — the most contaminated nuclear site in the US, a legacy Manhattan Project/Cold War production facility. No radiation release but emergency declared. Hanford cleanup is a $350bn+ multi-decade government programme. Decommissioning liability tail risk illustrated.",v:10,sev:"mod",geo:"USA"},
+  {y:2019,n:"Nyonoksa Radiation Accident — Russia",t:"reactor-accident",s:"military-nuclear",desc:"Explosion during testing of a nuclear-powered cruise missile (Burevestnik/Skyfall) at a Russian Navy test range kills 5 scientists and causes a brief radiation spike detected across Norway and Finland. Russian authorities initially deny the explosion. Entirely military/government — no commercial insurance. Illustrates emerging nuclear-propulsion military technology risks.",v:0,sev:"maj",geo:"Russia"},
+  {y:2020,n:"Nuclear Material Transport — Radioactive Source Theft, Multiple Jurisdictions",t:"transport-incident",s:"nuclear-transport",desc:"Multiple incidents globally of theft or loss of orphan radioactive sources from medical, industrial and legacy applications — a persistent global problem. IAEA ITDB (Incident and Trafficking Database) records 200+ incidents annually. Commercial NV transport insurance responds only where insured sources are involved; many orphan sources are uninsured.",v:5,sev:"mod",geo:"Global"},
+  {y:2022,n:"Zaporizhzhia Nuclear Power Plant — Ukraine Conflict Zone",t:"cyber-physical",s:"nuclear-power-plant",desc:"Russian military forces capture, occupy and fire upon the Zaporizhzhia NPP (6 VVER-1000 reactors, Europe's largest nuclear plant). IAEA monitoring teams deployed. Repeated loss of external power; diesel generators sustaining cooling. War exclusions apply to all commercial nuclear policies. Unprecedented — first major operating nuclear plant in an active war zone. IAEA INES: Not rated (conflict scenario).",v:0,sev:"cat",geo:"Ukraine"},
+  {y:2023,n:"Hinkley Point C Construction — Cost Escalation and Schedule Delay",t:"regulatory-shutdown",s:"nuclear-power-plant",desc:"EDF and UK government announce further cost escalation and schedule delay for Hinkley Point C (Somerset, UK) — now estimated at £25–33bn+ vs original ~£18bn estimate; completion delayed to mid-2030s. Construction phase insurance (EAR/CAR, marine cargo of reactor components) is one of the largest nuclear insurance programmes currently active. <sup>[I9]</sup>",v:8000,sev:"maj",geo:"UK"},
+  {y:2024,n:"Paluel Nuclear Plant — Extended Maintenance Shutdown (France)",t:"regulatory-shutdown",s:"nuclear-power-plant",desc:"Multiple French EDF reactors (including Paluel) face extended unplanned maintenance outages related to stress corrosion cracking in primary cooling circuits — a systemic issue across EDF's fleet. Business interruption costs enormous (estimated billions in replacement power). NP property and NL liability remain stable but the BI exposure from regulatory shutdown is a growing concern for nuclear operators.",v:300,sev:"mod",geo:"France"}
+];
+
+const typeLabels = {
+  "reactor-accident":"Reactor Accident",
+  "transport-incident":"Transport Incident",
+  "contamination":"Contamination",
+  "fire":"Fire / Explosion",
+  "regulatory-shutdown":"Regulatory Shutdown",
+  "workers-exposure":"Workers Exposure",
+  "cyber-physical":"Cyber / Physical Security"
+};
+const typeClass = {
+  "reactor-accident":"tp-reactor-accident",
+  "transport-incident":"tp-transport-incident",
+  "contamination":"tp-contamination",
+  "fire":"tp-fire",
+  "regulatory-shutdown":"tp-regulatory-shutdown",
+  "workers-exposure":"tp-workers-exposure",
+  "cyber-physical":"tp-cyber-physical"
+};
+const sevLabel = {cat:"CATASTROPHIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const vl = parseFloat(document.getElementById('fVal').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (d.v>=vl) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fVal','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function fmtVal(v) {
+  if(v===0) return 'Uninsured / N/A';
+  if(v>=1000) return '$'+(v/1000).toFixed(1)+'bn est.';
+  return '$'+v+'m est.';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td style="font-size:0.78rem;">${d.s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</td>
+      <td>${fmtVal(d.v)}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">▼ Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="8">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

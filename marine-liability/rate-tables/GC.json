@@ -1,0 +1,136 @@
+{
+  "riskCode": "GC",
+  "label": "Marine Liability — Charterers",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "limit",
+    "label": "Limit of Liability ($)",
+    "defaultValue": 50000000,
+    "hint": "P&I / liability limit"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.002
+  },
+  "ratingFactors": [
+    {
+      "key": "vesselType",
+      "label": "Vessel Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "cargo",
+      "options": {
+        "cargo": {
+          "label": "Cargo Vessel",
+          "factor": 1
+        },
+        "tanker": {
+          "label": "Tanker",
+          "factor": 1.15
+        },
+        "passenger": {
+          "label": "Passenger/Ferry",
+          "factor": 1.25
+        },
+        "offshore": {
+          "label": "Offshore Vessel",
+          "factor": 1.1
+        },
+        "tug": {
+          "label": "Tug/Workboat",
+          "factor": 1.05
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "grt",
+      "label": "Gross Tonnage (GT)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 30000,
+      "bands": [
+        {
+          "min": 0,
+          "max": 5000,
+          "factor": 0.7
+        },
+        {
+          "min": 5000,
+          "max": 30000,
+          "factor": 1
+        },
+        {
+          "min": 30000,
+          "max": 80000,
+          "factor": 1.15
+        },
+        {
+          "min": 80000,
+          "max": 999999,
+          "factor": 1.3
+        }
+      ],
+      "hint": ""
+    },
+    {
+      "key": "trade",
+      "label": "Trading Pattern",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "international",
+      "options": {
+        "coastal": {
+          "label": "Coastal",
+          "factor": 0.85
+        },
+        "international": {
+          "label": "International",
+          "factor": 1
+        },
+        "tanker_trade": {
+          "label": "Tanker Trade (OPA 90)",
+          "factor": 1.2
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "claimsHistory",
+      "label": "Claims History",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "clean",
+      "options": {
+        "clean": {
+          "label": "Clean",
+          "factor": 0.85
+        },
+        "attritional": {
+          "label": "Attritional",
+          "factor": 1
+        },
+        "notable": {
+          "label": "Notable",
+          "factor": 1.2
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 3000,
+    "claimsHandlingPerClaim": 20000,
+    "systemOverheadPerYear": 1500,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

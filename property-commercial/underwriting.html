@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Underwriting — Commercial Property — Risk Code Hub</title>
+  <style>
+    :root {
+      --prop:#5d4037; --prop-dark:#3e2723; --fire:#c62828;
+      --flood:#0277bd; --bi:#2e7d32; --cat:#6a1b9a;
+      --warn:#e65100; --light:#fdf6f0; --border:#d7ccc8;
+      --text:#2c1810; --muted:#7a5c52;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #5d4037;
+    --hub-dark:      #3e2723;
+    --hub-light:     #efebe9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#0277bd;
+    --header-gradient:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%);
+    --header-sub:    #d7ccc8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#bcaaa4; margin-bottom:6px; }
+    .breadcrumb a { color:#d7ccc8; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#bcaaa4; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#d7ccc8; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--prop); border-bottom-color:var(--fire); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--prop); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    h3 { font-size:1.05rem; color:var(--prop); margin:24px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .formula-box { background:#fff; border:2px solid var(--prop); border-radius:12px; padding:22px 26px; margin:20px 0; font-family:monospace; font-size:0.9rem; color:var(--prop-dark); line-height:2; }
+    .formula-box .op { color:var(--fire); font-weight:700; }
+
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin:24px 0; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-top:4px solid var(--prop); }
+    .factor-card.fire-top { border-top-color:var(--fire); }
+    .factor-card.flood-top { border-top-color:var(--flood); }
+    .factor-card.bi-top { border-top-color:var(--bi); }
+    .factor-card.cat-top { border-top-color:var(--cat); }
+    .factor-card.warn-top { border-top-color:var(--warn); }
+    .factor-card h4 { font-size:0.88rem; font-weight:700; color:var(--prop); margin-bottom:8px; }
+    .factor-card.fire-top h4 { color:var(--fire); }
+    .factor-card.flood-top h4 { color:var(--flood); }
+    .factor-card.bi-top h4 { color:var(--bi); }
+    .factor-card.cat-top h4 { color:var(--cat); }
+    .factor-card.warn-top h4 { color:var(--warn); }
+    .factor-card p { font-size:0.82rem; color:#555; margin:0; line-height:1.55; }
+
+    .score-table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; margin:20px 0; font-size:0.86rem; }
+    .score-table th { background:var(--prop); color:#fff; padding:10px 14px; text-align:left; }
+    .score-table td { padding:9px 14px; border-bottom:1px solid var(--border); }
+    .score-table tr:last-child td { border-bottom:none; }
+    .score-table tr:nth-child(even) td { background:#fdf0eb; }
+    .green { color:#1a7431; font-weight:700; }
+    .amber { color:#7a4500; font-weight:700; }
+    .red { color:#c62828; font-weight:700; }
+
+    .info-box { background:var(--prop-dark); color:#d7c4bb; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#efebe9; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#d7c4bb; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .example-box { background:#fff8f5; border:1px solid var(--prop); border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .example-box h3 { color:var(--prop); margin-bottom:12px; }
+    .example-box table { width:100%; border-collapse:collapse; font-size:0.87rem; }
+    .example-box td { padding:7px 10px; border-bottom:1px solid var(--border); }
+    .example-box tr:last-child td { border-bottom:none; font-weight:700; color:var(--fire); }
+    .example-box .lbl { color:var(--muted); }
+
+    footer { background:var(--prop-dark); color:#bcaaa4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Commercial Property</a> › Underwriting</div>
+  <div class="tag">Lloyd's Codes · P2 · P3 · P4 · P5 · P6 · P7 · B2 · B3 · B4 · B5</div>
+  <h1>Underwriting Methodology</h1>
+  <p>Rating factors, COPE analysis, PML/EML assessment, BI indemnity period pricing and worked examples for Lloyd's commercial property underwriting across P2–P7 and B2–B5 codes.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Rating Formula — Commercial Property</h2>
+  <p>Commercial property premiums are built from a base rate applied to the total insured value (TIV), then adjusted for risk-specific factors. Cat-exposed risks require a separate catastrophe loading derived from probabilistic modelling (PML/EML), not just a flat factor.</p>
+
+  <div class="formula-box">
+    <strong>Premium</strong> <span class="op">=</span> TIV <span class="op">×</span> Base Rate<br>
+    <span class="op">×</span> Construction Factor<br>
+    <span class="op">×</span> Occupancy Factor<br>
+    <span class="op">×</span> Protection Factor<br>
+    <span class="op">×</span> Cat Loading (PML/EML-driven)<br>
+    <span class="op">×</span> Claims Experience Loading<br>
+    <span class="op">×</span> Deductible Credit<br>
+    <span class="op">+</span> BI Premium (separate rated on MIP and gross profit)
+  </div>
+
+  <h2>COPE — Detailed Rating Factors</h2>
+
+  <div class="factor-grid">
+    <div class="factor-card fire-top">
+      <h4>🏗️ Construction — Base Rate Multiplier</h4>
+      <p><strong>Frame (wood):</strong> 1.5–2.5× base — highest fire/wind susceptibility<br>
+      <strong>Joisted Masonry:</strong> 1.0–1.5× base<br>
+      <strong>Masonry Non-Combustible:</strong> 0.7–1.0× base<br>
+      <strong>Modified Fire Resistive:</strong> 0.5–0.75× base<br>
+      <strong>Fire Resistive:</strong> 0.3–0.6× base — RC/steel frame with sprinklers<br>
+      Roof age &gt;20 years: +10–25% loading; ACM cladding post-Grenfell: +15–40%</p>
+    </div>
+    <div class="factor-card warn-top">
+      <h4>🏭 Occupancy — Hazard Class Loading</h4>
+      <p><strong>Low hazard</strong> (offices, retail): base rate<br>
+      <strong>Medium</strong> (light manufacturing, warehousing): +20–60%<br>
+      <strong>High</strong> (chemicals, plastics, food processing): +80–200%<br>
+      <strong>Special hazard</strong> (pyrotechnics, explosives): declination or specialist placement<br>
+      Hot work operations: +15–30%; Unoccupancy: +20–50% or warranty required</p>
+    </div>
+    <div class="factor-card bi-top">
+      <h4>🔒 Protection — Discount/Loading</h4>
+      <p><strong>NFPA 13 sprinklers throughout:</strong> -20 to -40%<br>
+      <strong>Sprinklers partial / none:</strong> flat or loading<br>
+      <strong>24-hr watchman:</strong> -5 to -10%<br>
+      <strong>Intruder alarm (Grade 2+):</strong> -3 to -8%<br>
+      <strong>BAFE-contracted maintenance:</strong> -5%<br>
+      <strong>Remote fire station (&gt;10 miles):</strong> +15–30% on all-perils</p>
+    </div>
+    <div class="factor-card flood-top">
+      <h4>🌊 Exposure — Cat Loading</h4>
+      <p><strong>CRESTA zone assignment:</strong> drives PML percentage applied to TIV<br>
+      <strong>Flood zone:</strong> FEMA Zone AE (1-in-100 year): +30–80% or sublimit<br>
+      <strong>Environment Agency Zone 3:</strong> UK flood high risk: +25–60%<br>
+      <strong>WUI wildfire score:</strong> Verisk FireLine &gt;20: significant loading or exclusion<br>
+      <strong>Earthquake MMI zone:</strong> MMI VII+ triggers cat model PML calculation</p>
+    </div>
+    <div class="factor-card cat-top">
+      <h4>📊 PML / EML Assessment</h4>
+      <p><strong>PML (Probable Maximum Loss):</strong> Maximum loss from single foreseeable event; typically 50-year or 100-year return period from RMS/AIR model<br>
+      <strong>EML (Estimated Maximum Loss):</strong> Loss assuming most of the risk is damaged; less probabilistic, more physical — used on industrial risks lacking model data<br>
+      <strong>ILF (Increased Limit Factor):</strong> Applied to uplift base rate for higher policy limits beyond the attachment</p>
+    </div>
+    <div class="factor-card>
+      <h4>📋 Claims History Loading</h4>
+      <p><strong>Nil claims (5 years):</strong> -5 to -15% experience credit<br>
+      <strong>1–2 attritional claims:</strong> flat or +5–15%<br>
+      <strong>Large loss (&gt;50% of premium income):</strong> +25–75% or reconsider<br>
+      <strong>Frequency (&gt;3 claims/year):</strong> +40–100% or risk improvement warranty<br>
+      Burning cost analysis used for larger accounts (&gt;£500k premium)</p>
+    </div>
+  </div>
+
+  <h2>Business Interruption — Pricing Framework</h2>
+  <p>BI is rated separately from material damage and typically comprises 30–60% of the total property premium on commercial risks. The two critical rating choices are the <strong>indemnity period</strong> (how long BI covers — 12, 24 or 36 months) and the <strong>BI basis</strong> (gross profit vs gross revenue).</p>
+
+  <div class="score-table">
+    <table>
+      <thead><tr><th>BI Indemnity Period</th><th>Typical Use</th><th>Rate Multiplier (vs 12m)</th><th>UW Consideration</th></tr></thead>
+      <tbody>
+        <tr><td>12 months</td><td>Small SME, simple occupancy</td><td>1.00×</td><td>Often inadequate for complex risks; underinsurance risk</td></tr>
+        <tr><td>18 months</td><td>Medium commercial</td><td>1.25–1.35×</td><td>Better fit for most commercial risks post-COVID</td></tr>
+        <tr><td>24 months</td><td>Large commercial / manufacturing</td><td>1.50–1.65×</td><td>Market standard for most P3 risks; supply chain recovery time</td></tr>
+        <tr><td>36 months</td><td>Complex industrial / infrastructure</td><td>1.80–2.00×</td><td>Required where reinstatement or regulatory approval takes 2+ years</td></tr>
+        <tr><td>48 months</td><td>Major infrastructure / specialist</td><td>2.20–2.50×</td><td>Rare; pharmaceutical, nuclear, COMAH sites; bespoke pricing</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Risk Appetite Scorecard — P3 All-Risks Large Commercial</h2>
+
+  <table class="score-table">
+    <thead><tr><th>Risk Factor</th><th>Green ✅</th><th>Amber ⚠️</th><th>Red ❌</th></tr></thead>
+    <tbody>
+      <tr><td>Construction class</td><td class="green">Fire resistive or MNC</td><td class="amber">Joisted masonry, &lt;20yr roof</td><td class="red">Frame, roof &gt;25yr, ACM cladding</td></tr>
+      <tr><td>Sprinkler coverage</td><td class="green">NFPA 13 throughout, tested annually</td><td class="amber">Partial coverage / older system</td><td class="red">None; warranty required at minimum</td></tr>
+      <tr><td>Occupancy hazard</td><td class="green">Low – offices, retail, warehousing (non-haz)</td><td class="amber">Medium – light mfg, food processing</td><td class="red">High – chemicals, plastics, explosives</td></tr>
+      <tr><td>Flood exposure</td><td class="green">Flood zone C / EA Zone 1</td><td class="amber">Zone AE / EA Zone 2</td><td class="red">Zone AE base / EA Zone 3; ground floor plant</td></tr>
+      <tr><td>Cat exposure (CRESTA)</td><td class="green">CRESTA zone PML &lt;10% TIV</td><td class="amber">PML 10–25% TIV</td><td class="red">PML &gt;25% TIV — requires separate cat budget</td></tr>
+      <tr><td>Claims record (5yr)</td><td class="green">Nil or 1 small attritional</td><td class="amber">2–3 attritional; 1 large (&lt;50% premium)</td><td class="red">Large loss &gt;50% premium income; frequency issue</td></tr>
+      <tr><td>BI indemnity period vs rebuild time</td><td class="green">MIP ≥ realistic rebuild + supply time</td><td class="amber">MIP marginally short — underinsurance risk</td><td class="red">MIP &lt;12m on complex risk; clear underinsurance</td></tr>
+      <tr><td>Values declared</td><td class="green">Professionally valued ≤3 years ago</td><td class="amber">Self-declared, reasonable basis</td><td class="red">No valuation; evident underinsurance; day-one not elected</td></tr>
+      <tr><td>Risk management programme</td><td class="green">ISO 45001 / OSHA; formal loss prevention</td><td class="amber">Basic H&amp;S; partial housekeeping</td><td class="red">No programme; repeated enforcement notices</td></tr>
+      <tr><td>Survey/inspection</td><td class="green">Independent RISQSurvey or equivalent ≤2yr</td><td class="amber">Last surveyed 3–5 years ago</td><td class="red">No survey; fire survey findings outstanding</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Worked Example A — Large Industrial Warehouse (P3)</h2>
+
+  <div class="example-box">
+    <h3>Risk Profile: Multi-tenanted industrial estate, West Midlands, UK</h3>
+    <table>
+      <tr><td class="lbl">Total Insured Value (TIV)</td><td>£25,000,000</td></tr>
+      <tr><td class="lbl">Construction</td><td>Masonry Non-Combustible, steel portal frame, EPDM roof (12yr)</td></tr>
+      <tr><td class="lbl">Occupancy</td><td>Mixed light manufacturing and warehousing — medium hazard</td></tr>
+      <tr><td class="lbl">Protection</td><td>Sprinklers partial (warehouse only); monitored alarm; 10-min fire response</td></tr>
+      <tr><td class="lbl">Flood zone</td><td>EA Zone 2 — medium probability; no previous flood losses</td></tr>
+      <tr><td class="lbl">Claims history (5yr)</td><td>1 sprinkler leak (£42k) — 2022</td></tr>
+      <tr><td class="lbl">BI gross profit</td><td>£4,500,000; MIP 24 months elected</td></tr>
+      <tr><td class="lbl">Base MD rate</td><td>0.12% of TIV <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">Base MD premium</td><td>£30,000</td></tr>
+      <tr><td class="lbl">Construction factor (MNC)</td><td>0.80×</td></tr>
+      <tr><td class="lbl">Occupancy factor (medium)</td><td>1.25×</td></tr>
+      <tr><td class="lbl">Protection factor (partial sprinklers)</td><td>1.10×</td></tr>
+      <tr><td class="lbl">Flood loading (Zone 2)</td><td>1.15×</td></tr>
+      <tr><td class="lbl">Claims loading (1 attritional)</td><td>1.05×</td></tr>
+      <tr><td class="lbl">MD premium adjusted</td><td>£30,000 × 0.80 × 1.25 × 1.10 × 1.15 × 1.05 = <strong>~£40,000</strong></td></tr>
+      <tr><td class="lbl">BI rate (24m MIP)</td><td>0.55% of gross profit <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">BI premium</td><td>£4,500,000 × 0.55% = <strong>~£24,750</strong></td></tr>
+      <tr><td class="lbl"><strong>Total Indicative Premium</strong></td><td><strong>~£64,750</strong> <span class="badge b-i">ILLUS</span></td></tr>
+    </table>
+  </div>
+
+  <h2>Worked Example B — US Cat-Exposed Office Complex (P5)</h2>
+
+  <div class="example-box">
+    <h3>Risk Profile: Class A office complex, Tampa, Florida</h3>
+    <table>
+      <tr><td class="lbl">Total Insured Value (TIV)</td><td>$45,000,000</td></tr>
+      <tr><td class="lbl">Construction</td><td>Fire resistive RC frame, 2009 built; hurricane-rated glazing</td></tr>
+      <tr><td class="lbl">Occupancy</td><td>Class A offices — low hazard</td></tr>
+      <tr><td class="lbl">Protection</td><td>NFPA 13 sprinklers throughout; 24hr security; central station monitoring</td></tr>
+      <tr><td class="lbl">Cat exposure</td><td>CRESTA FL-05; PML 15% TIV = $6.75m (RMS 100yr) <span class="badge b-e">EST</span></td></tr>
+      <tr><td class="lbl">Wind exposure</td><td>Zone X (500yr flood); hurricane deductible 5% TIV = $2.25m</td></tr>
+      <tr><td class="lbl">Claims history (5yr)</td><td>Nil</td></tr>
+      <tr><td class="lbl">BI annual rental income</td><td>$8,500,000; MIP 18 months</td></tr>
+      <tr><td class="lbl">Base MD rate</td><td>0.08% TIV (fire resistive) <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">Cat loading (CRESTA FL-05, PML 15%)</td><td>+0.10% TIV <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">Protection credit</td><td>0.85×</td></tr>
+      <tr><td class="lbl">Claims credit (nil)</td><td>0.92×</td></tr>
+      <tr><td class="lbl">Total MD rate</td><td>(0.08% + 0.10%) × 0.85 × 0.92 = 0.141%</td></tr>
+      <tr><td class="lbl">MD premium</td><td>$45,000,000 × 0.141% = <strong>~$63,450</strong></td></tr>
+      <tr><td class="lbl">BI rate (18m MIP, offices)</td><td>0.40% of rental income <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">BI premium</td><td>$8,500,000 × 0.40% = <strong>~$34,000</strong></td></tr>
+      <tr><td class="lbl"><strong>Total Indicative Premium</strong></td><td><strong>~$97,450</strong> <span class="badge b-i">ILLUS</span></td></tr>
+    </table>
+  </div>
+
+  <div class="info-box">
+    <h3>Critical Underwriting Checks — Before Binding</h3>
+    <ul>
+      <li><strong>Underinsurance audit:</strong> Verify TIV against independent rebuild cost valuations — construction cost inflation 2020–2024 ran at 8–12% p.a. in UK. Day-One reinstatement election required for all UK risks over £1m TIV.</li>
+      <li><strong>Cyber physical damage exclusion:</strong> Mandatory for all Lloyd's property risks from 1 January 2023. Confirm LMA5564 or equivalent endorsement is attached.</li>
+      <li><strong>Communicable disease exclusion:</strong> Post-COVID, all BI covers must have explicit communicable disease exclusion. Verify wording.</li>
+      <li><strong>PFAS exclusion:</strong> For risks with chemical/manufacturing occupancy; LMA standard PFAS exclusion being adopted across market.</li>
+      <li><strong>Terrorism:</strong> Pool Re/TRIA participation confirmed for UK/US risks. Standalone terrorism cover structured separately.</li>
+      <li><strong>Average / co-insurance:</strong> If sum insured is below actual rebuild cost, average clause operates — insured bears pro-rata shortfall at every claim. Day-One reinstatement clause preferred.</li>
+    </ul>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Commercial Property (P2–P7 · B2–B5) · Lloyd's Market Intelligence · v3.1 April 2026
+</footer>
+</body>
+</html>

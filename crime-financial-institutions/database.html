@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Crime / Fidelity FI — Loss Database | Risk Code Hub</title>
+  <style>
+    :root {
+      --crime:#7b1e1e; --crime-dark:#3d0000; --fi:#0d3b6b;
+      --fid:#1b5e20; --fraud:#c62828; --cyber:#6a1b9a;
+      --social:#e65100; --gold:#b8860b;
+      --light:#faf5f5; --text:#1e1e2e; --muted:#6b7c93; --border:#d4c8c8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #7b1e1e;
+    --hub-dark:      #3d0000;
+    --hub-light:     #faf5f5;
+    --hub-accent:    #b8860b;
+    --hub-secondary: #0d3b6b;
+    --hub-secondary2:#1b5e20;
+    --header-gradient:linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%);
+    --header-sub:    #e8c8c8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#cc9988; margin-bottom:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    header h1 { font-size:1.8rem; font-weight:700; }
+    header p { margin-top:8px; color:#e8c8c8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--crime); border-bottom-color:var(--gold); }
+    main { max-width:1100px; margin:0 auto; padding:40px 30px; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; vertical-align:middle; margin-left:3px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; align-items:center; }
+    .controls select, .controls input { padding:8px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.85rem; background:#fff; color:var(--text); }
+    .controls input { min-width:240px; }
+    #count { font-size:0.83rem; color:var(--muted); }
+
+    table { width:100%; border-collapse:collapse; font-size:0.84rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 6px rgba(0,0,0,0.06); }
+    th { background:var(--crime-dark); color:#fff; padding:10px 12px; text-align:left; font-weight:600; cursor:pointer; white-space:nowrap; }
+    th:hover { background:var(--crime); }
+    td { padding:9px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:nth-child(even) td { background:#fdf8f8; }
+    tr.detail-row td { background:#f5eaea; border-bottom:2px solid var(--crime); }
+    .sev { border-radius:4px; padding:2px 7px; font-size:0.7rem; font-weight:700; white-space:nowrap; }
+    .sev-cat { background:#fdecea; color:#c62828; }
+    .sev-maj { background:#fce8d8; color:#b84c00; }
+    .sev-sig { background:#fff3e0; color:#e65100; }
+    .sev-mod { background:#e3f2fd; color:#1565c0; }
+    .type-tag { border-radius:4px; padding:2px 7px; font-size:0.68rem; font-weight:700; white-space:nowrap; }
+    .T-ROGUE { background:#fdecea; color:#c62828; }
+    .T-EMPL { background:#e8f5e9; color:#1b5e20; }
+    .T-CYBER { background:#ede7f6; color:#6a1b9a; }
+    .T-BEC { background:#fff3e0; color:#e65100; }
+    .T-PONZI { background:#e3f2fd; color:#0d3b6b; }
+    .T-FORG { background:#f9fbe7; color:#827717; }
+    .T-REG { background:#e8eaf6; color:#1a237e; }
+    .expander { cursor:pointer; color:var(--crime); font-size:0.8rem; font-weight:600; background:none; border:none; padding:0; }
+    .detail-content { font-size:0.82rem; color:var(--muted); padding:4px 0; line-height:1.6; }
+    .hidden { display:none; }
+    footer { background:var(--crime-dark); color:#aa8888; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer a { color:var(--gold); text-decoration:none; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Crime / Fidelity FI (BB)</a> › Loss Database</div>
+  <h1>Module 03 — FI Crime Loss Database</h1>
+  <p>35 searchable events 1985–2024 — rogue traders, employee fraud, SWIFT heists, BEC and Ponzi schemes</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+  <div class="controls">
+    <select id="typeFilter">
+      <option value="">All Types</option>
+      <option value="ROGUE">Rogue Trader</option>
+      <option value="EMPL">Employee Dishonesty</option>
+      <option value="CYBER">Cyber-Enabled</option>
+      <option value="BEC">BEC / Social Engineering</option>
+      <option value="PONZI">Ponzi / Fraud Scheme</option>
+      <option value="FORG">Forgery / Alteration</option>
+      <option value="REG">Regulatory / Market</option>
+    </select>
+    <select id="sevFilter">
+      <option value="">All Severities</option>
+      <option value="Catastrophic">Catastrophic</option>
+      <option value="Major">Major</option>
+      <option value="Significant">Significant</option>
+      <option value="Moderate">Moderate</option>
+    </select>
+    <input id="search" type="text" placeholder="Search institution, country, keyword…">
+    <span id="count"></span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Year</th><th>Event / Institution</th><th>Type</th><th>Severity</th><th>Loss (Est.)</th><th>Detail</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</main>
+<footer>
+  <a href="../index.html">Risk Code Hub</a> &nbsp;·&nbsp; Crime / Fidelity FI (BB) · Loss Database &nbsp;·&nbsp; All loss figures are estimates unless marked VER &nbsp;·&nbsp; For training purposes only
+</footer>
+<script>
+const events = [
+  { year:1985, event:"First National Bank of Oklahoma — embezzlement", type:"EMPL", sev:"Significant", loss:"$73m", detail:"Bank officer concealed $73m in fraudulent loans and embezzlement over several years. Early example of lending officer fraud that became common in the S&L era." },
+  { year:1987, event:"BCCI — global banking fraud begins", type:"PONZI", sev:"Catastrophic", loss:"$13bn", detail:"Bank of Credit and Commerce International ran a complex fraud across 70+ countries. Collapse in 1991 with $13bn in losses. Multi-jurisdictional fidelity and crime coverage disputes lasted years." },
+  { year:1994, event:"Daiwa Bank / Toshihide Iguchi — bond trading fraud", type:"ROGUE", sev:"Major", loss:"$1.1bn", detail:"Iguchi concealed $1.1bn in bond trading losses over 11 years at Daiwa Bank's New York branch. Used a single account to both trade and settle, bypassing dual-control requirements." },
+  { year:1995, event:"Barings Bank / Nick Leeson — rogue trader", type:"ROGUE", sev:"Catastrophic", loss:"£827m", detail:"Leeson concealed losses in account 88888 through fictitious trades. The loss exceeded Barings' entire equity capital, causing the bank's collapse. Landmark event that permanently altered BB underwriting." },
+  { year:1995, event:"Sumitomo Corporation / Yasuo Hamanaka — copper futures", type:"ROGUE", sev:"Catastrophic", loss:"$2.6bn", detail:"Hamanaka manipulated global copper prices for a decade through unauthorised futures positions. Nicknamed 'Mr. Copper', he concealed losses via fictitious contracts. Convicted and sentenced to 8 years imprisonment." },
+  { year:1996, event:"Allied Irish Banks / John Rusnak — forex fraud begins", type:"ROGUE", sev:"Major", loss:"$691m", detail:"Rusnak began concealing forex losses at AIB's Allfirst subsidiary from 1997; not discovered until 2002. Used fictitious Asian option positions to hide losses. Exposed failures in back-office reconciliation." },
+  { year:1999, event:"First Alliance Bancshares — loan fraud scheme", type:"EMPL", sev:"Significant", loss:"$120m", detail:"Multiple employees at First Alliance participated in a coordinated loan fraud scheme involving inflated appraisals and undisclosed fees. Fidelity bond claims followed extensive regulatory action." },
+  { year:2001, event:"National Irish Bank — tax evasion / employee dishonesty", type:"EMPL", sev:"Significant", loss:"~€50m", detail:"Employees at National Irish Bank systematically helped customers evade tax through offshore accounts and falsified statements. Led to landmark Irish High Court investigation and multiple criminal convictions." },
+  { year:2002, event:"AIB/Allfirst / Rusnak — discovered (5-year fraud)", type:"ROGUE", sev:"Major", loss:"$691m", detail:"The Rusnak forex fraud discovered in 2002. Total loss $691m after 5 years. AIB was required to sell Allfirst to M&T Bank as a result. Demonstrated the critical importance of independent back-office and dual-control reconciliation." },
+  { year:2003, event:"Parmalat — Italian dairy conglomerate fraud", type:"PONZI", sev:"Catastrophic", loss:"€14bn", detail:"Parmalat's CFO and founder fabricated €14bn in bank accounts and assets. The fraud involved forged Bank of America documents. European financial institutions (creditors and arrangers) faced complex FI crime and D&O coverage questions." },
+  { year:2004, event:"National Australia Bank — FX options traders", type:"ROGUE", sev:"Major", loss:"A$360m", detail:"Four currency options traders at NAB Melbourne concealed $360m in losses through manipulated volatility inputs and fictitious hedges. Led to APRA operational risk reforms across all Australian ADIs." },
+  { year:2006, event:"Banco del Buen Ayre (Argentina) — embezzlement", type:"EMPL", sev:"Significant", loss:"$40m", detail:"Bank officers diverted $40m through fictitious loan accounts over multiple years. Illustrative of insider fraud risk in emerging market banking where oversight structures are weaker." },
+  { year:2008, event:"Société Générale / Jérôme Kerviel", type:"ROGUE", sev:"Catastrophic", loss:"€7.1bn", detail:"Largest rogue trading loss in history. Kerviel accumulated €49.9bn in unauthorised equity index futures; 74 internal control alerts were not escalated. SocGen unwound positions during January 2008 market decline, crystallising €7.1bn total loss." },
+  { year:2008, event:"Bernard Madoff Ponzi scheme — collapse", type:"PONZI", sev:"Catastrophic", loss:"$65bn", detail:"Largest Ponzi scheme in history. $17.3bn actual cash losses, $65bn in paper losses. SEC failed to act on multiple tips. Triggered global reform of investment manager oversight and fidelity bond adequacy requirements." },
+  { year:2009, event:"Stanford Financial Group — $7bn Ponzi scheme", type:"PONZI", sev:"Catastrophic", loss:"$7bn", detail:"Allen Stanford ran a $7bn Ponzi scheme through Stanford International Bank (Antigua), selling fraudulent certificates of deposit. Convicted 2012; sentenced to 110 years. Complex multi-jurisdictional insurance claims followed." },
+  { year:2011, event:"UBS / Kweku Adoboli — Delta One desk", type:"ROGUE", sev:"Catastrophic", loss:"$2.3bn", detail:"Adoboli concealed $2.3bn in losses through fictitious ETF trades booked against an internal umbrella account. Arrested in September 2011; convicted of fraud. Highlighted persistent rogue trading risk post-SocGen reforms." },
+  { year:2012, event:"JPMorgan 'London Whale' — Bruno Iksil", type:"ROGUE", sev:"Catastrophic", loss:"$6.2bn", detail:"Chief Investment Office CDS positions accumulated by Iksil generated $6.2bn in losses when unwound. $920m in regulatory fines. Coverage under fidelity questioned as losses arose from risk management failures, not manifest dishonest intent." },
+  { year:2013, event:"LIBOR rigging — global bank fines", type:"REG", sev:"Catastrophic", loss:"$9bn+", detail:"Barclays, UBS, RBS, Deutsche Bank and others fined over $9bn for LIBOR rate manipulation. Criminal charges against multiple traders. FI crime coverage disputed; most losses fell under regulatory fines exclusions." },
+  { year:2014, event:"BEC formally identified by FBI IC3", type:"BEC", sev:"Significant", loss:"$215m+", detail:"FBI formally names Business Email Compromise. $215m in US losses reported in 2014 alone. Financial institution treasury departments emerge as primary targets. Social engineering endorsements begin appearing in BB policies." },
+  { year:2015, event:"Cayman National Bank employee — $50m embezzlement", type:"EMPL", sev:"Major", loss:"$50m", detail:"Bank officer diverted client funds through fictitious investment accounts over multiple years. Offshore banking jurisdiction created additional recovery complexity. Fidelity bond response contested on jurisdictional grounds." },
+  { year:2016, event:"Bangladesh Bank SWIFT heist", type:"CYBER", sev:"Catastrophic", loss:"$81m", detail:"Lazarus Group (North Korea) compromised Bangladesh Bank SWIFT credentials; $81m transferred to Philippines accounts. $951m total attempted. SWIFT CSP launched in response. Lloyd's computer crime wordings rewritten to address SWIFT-enabled fraud." },
+  { year:2016, event:"Medidata v Federal Insurance — BEC court ruling", type:"REG", sev:"Significant", loss:"$4.8m", detail:"Landmark US ruling on BEC and computer crime insuring agreement. Second Circuit found BEC loss covered under computer crime as fraudster 'used' insured's computer system. Conflicting rulings in other courts followed." },
+  { year:2016, event:"Bangladesh Bank follow-on SWIFT heists (Asia/Africa)", type:"CYBER", sev:"Major", loss:"~$200m+", detail:"Multiple SWIFT-enabled heists followed Bangladesh Bank: Banco del Austro (Ecuador, $9m), Far Eastern International Bank (Taiwan, $60m), Cosmos Bank (India, $13.5m) among others. Aggregate losses estimated >$200m." },
+  { year:2017, event:"WannaCry/NotPetya — FI operational disruption", type:"CYBER", sev:"Major", loss:">$10bn globally", detail:"WannaCry and NotPetya ransomware disrupted FI operations globally. Coverage debates on crime vs. cyber policy; war exclusion invoked for NotPetya (Russian GRU attribution). FI crime and cyber policy coordination became critical." },
+  { year:2018, event:"BEC losses reach $1.2bn (FBI IC3 annual)", type:"BEC", sev:"Catastrophic", loss:"$1.2bn US", detail:"FBI IC3 reported $1.2bn in US BEC losses in 2018. FI treasury, real estate settlement, and law firm trust accounts most affected. Lloyd's BB market responds with tightened social engineering sublimits and enhanced controls requirements." },
+  { year:2019, event:"First deepfake audio BEC fraud — UK energy company", type:"BEC", sev:"Moderate", loss:"€220,000", detail:"Finance director tricked by AI-generated CEO voice into wiring €220,000 to fraudster account in Hungary. First documented use of synthetic voice in BEC. Prompted FBI and Lloyd's market warnings on AI-enabled fraud." },
+  { year:2020, event:"COVID-19 — remote working surge; BEC increase ~30%", type:"BEC", sev:"Major", loss:"Industry-wide", detail:"Mass remote working removed physical dual controls and desk supervision. FBI reported 69% increase in BEC complaints in 2020. FI crime underwriters introduced remote working controls as standard BB submission requirement." },
+  { year:2021, event:"NAB Australia — $160m employee fraud (internal)", type:"EMPL", sev:"Major", loss:"$160m", detail:"Aggregated internal employee fraud losses discovered at NAB including mortgage broker fraud and false documentation schemes. Highlighted the challenge of aggregation of smaller employee dishonesty losses into material portfolio losses." },
+  { year:2021, event:"Ransomware acceleration — Colonial Pipeline, JBS Foods", type:"CYBER", sev:"Major", loss:">$50m ransom", detail:"Major ransomware attacks on critical infrastructure. FI sector on high alert; underwriters debate crime vs. cyber coverage overlap. Ransomware losses to FIs in 2021 estimated at hundreds of millions in aggregate." },
+  { year:2022, event:"FTX collapse — $8bn customer funds misappropriated", type:"PONZI", sev:"Catastrophic", loss:"$8bn", detail:"Sam Bankman-Fried misappropriated FTX customer funds through Alameda Research. Convicted on all seven counts in November 2023. Fundamental questions about crypto exchange BB coverage: who is the 'employee'? What is the 'financial institution'?" },
+  { year:2022, event:"Thodex crypto exchange founder — $2bn exit fraud", type:"PONZI", sev:"Major", loss:"$2bn", detail:"Turkish crypto exchange Thodex shut down abruptly; founder fled with approximately $2bn in customer funds. Illustrated the FI crime risk in lightly regulated crypto market; no meaningful FI crime insurance was in place." },
+  { year:2023, event:"UK PSR APP fraud reimbursement — consultation", type:"REG", sev:"Significant", loss:"Regulatory", detail:"PSR mandates mandatory APP fraud reimbursement from October 2024 for all PSPs. Maximum £85,000 per case. Creates insurable liability for payment firms that overlaps BB, PI E&O, and general liability. New underwriting class developing." },
+  { year:2023, event:"MGM/Caesars — vishing social engineering attacks", type:"BEC", sev:"Major", loss:"$100m+", detail:"MGM Resorts and Caesars Entertainment both suffered major social engineering attacks via vishing (voice phishing) of IT help desks. MGM loss estimated >$100m. FI sector on alert for same techniques targeting treasury authorisation processes." },
+  { year:2024, event:"Deepfake video BEC — $25m Hong Kong transfer", type:"BEC", sev:"Major", loss:"$25.6m", detail:"Finance worker transferred HK$200m ($25.6m) after deepfake video conference appearing to show CFO and colleagues. All participants were AI-generated. Marked qualitative escalation in BEC sophistication. Lloyd's underwriters debating deepfake as a specific coverage category." },
+  { year:2024, event:"UK FCA — APP fraud reimbursement live", type:"REG", sev:"Significant", loss:"Regulatory", detail:"UK PSR APP fraud mandatory reimbursement regime live from October 2024. Early estimates suggest UK PSPs face £340m+ annual reimbursement obligation. First FI crime/PI hybrid products being developed in Lloyd's market to cover PSP exposure." },
+];
+
+const typeLabels = { ROGUE:"Rogue Trader", EMPL:"Employee Dishonesty", CYBER:"Cyber-Enabled", BEC:"BEC/Social Eng.", PONZI:"Ponzi/Fraud", FORG:"Forgery", REG:"Regulatory/Market" };
+
+function render() {
+  const ty = document.getElementById('typeFilter').value;
+  const sv = document.getElementById('sevFilter').value;
+  const kw = document.getElementById('search').value.toLowerCase();
+  const filtered = events.filter(e =>
+    (!ty || e.type === ty) &&
+    (!sv || e.sev === sv) &&
+    (!kw || (e.event+e.detail+e.type+e.loss).toLowerCase().includes(kw))
+  );
+  document.getElementById('count').textContent = `${filtered.length} of ${events.length} events`;
+  const tb = document.getElementById('tbody');
+  tb.innerHTML = '';
+  filtered.forEach((e,i) => {
+    const sc = e.sev==='Catastrophic'?'sev-cat':e.sev==='Major'?'sev-maj':e.sev==='Significant'?'sev-sig':'sev-mod';
+    const id = 'r'+i;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${e.year}</td><td><strong>${e.event}</strong></td><td><span class="type-tag T-${e.type}">${typeLabels[e.type]||e.type}</span></td><td><span class="sev ${sc}">${e.sev}</span></td><td>${e.loss}</td><td><button class="expander" onclick="toggle('${id}')">▶ Detail</button></td>`;
+    tb.appendChild(tr);
+    const dr = document.createElement('tr');
+    dr.id = id; dr.className = 'detail-row hidden';
+    dr.innerHTML = `<td colspan="6"><div class="detail-content">${e.detail}</div></td>`;
+    tb.appendChild(dr);
+  });
+}
+function toggle(id) {
+  const r = document.getElementById(id);
+  const btn = r.previousElementSibling.querySelector('.expander');
+  if (r.classList.toggle('hidden')) btn.textContent='▶ Detail'; else btn.textContent='▼ Hide';
+}
+['typeFilter','sevFilter','search'].forEach(id => document.getElementById(id).addEventListener('input', render));
+render();
+</script>
+</body>
+</html>

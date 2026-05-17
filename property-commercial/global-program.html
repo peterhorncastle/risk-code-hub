@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Global Programme — Commercial Property — Risk Code Hub</title>
+  <style>
+    :root {
+      --prop:#5d4037; --prop-dark:#3e2723; --fire:#c62828;
+      --flood:#0277bd; --bi:#2e7d32; --cat:#6a1b9a;
+      --warn:#e65100; --light:#fdf6f0; --border:#d7ccc8;
+      --text:#2c1810; --muted:#7a5c52;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #5d4037;
+    --hub-dark:      #3e2723;
+    --hub-light:     #efebe9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#0277bd;
+    --header-gradient:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%);
+    --header-sub:    #d7ccc8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#bcaaa4; margin-bottom:6px; }
+    .breadcrumb a { color:#d7ccc8; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#bcaaa4; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#d7ccc8; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--prop); border-bottom-color:var(--fire); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--prop); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    /* Programme tower */
+    .tower { max-width:640px; margin:24px auto; }
+    .tower-layer { padding:16px 22px; margin-bottom:6px; border-radius:8px; color:#fff; }
+    .tower-layer .ly-label { font-size:0.72rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; opacity:0.85; margin-bottom:4px; }
+    .tower-layer h4 { font-size:0.95rem; font-weight:700; margin-bottom:4px; }
+    .tower-layer p { font-size:0.82rem; opacity:0.92; margin:0; line-height:1.5; color:#fff; }
+    .tl-sir { background:#795548; }
+    .tl-primary { background:var(--prop); }
+    .tl-xs1 { background:var(--fire); }
+    .tl-xs2 { background:var(--cat); }
+    .tl-cat { background:var(--prop-dark); }
+
+    .jur-table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; margin:20px 0; font-size:0.86rem; }
+    .jur-table th { background:var(--prop); color:#fff; padding:10px 14px; text-align:left; }
+    .jur-table td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .jur-table tr:last-child td { border-bottom:none; }
+    .jur-table tr:nth-child(even) td { background:#fdf0eb; }
+
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:16px; margin:24px 0; }
+    .prog-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-left:4px solid var(--prop); }
+    .prog-card.fire { border-left-color:var(--fire); }
+    .prog-card.flood { border-left-color:var(--flood); }
+    .prog-card.bi { border-left-color:var(--bi); }
+    .prog-card.cat { border-left-color:var(--cat); }
+    .prog-card h4 { font-size:0.88rem; font-weight:700; color:var(--prop); margin-bottom:8px; }
+    .prog-card.fire h4 { color:var(--fire); }
+    .prog-card.flood h4 { color:var(--flood); }
+    .prog-card.bi h4 { color:var(--bi); }
+    .prog-card.cat h4 { color:var(--cat); }
+    .prog-card p { font-size:0.82rem; color:#555; margin:0; line-height:1.55; }
+    .prog-card ul { padding-left:16px; }
+    .prog-card li { font-size:0.82rem; margin-bottom:4px; line-height:1.5; }
+
+    .info-box { background:var(--prop-dark); color:#d7c4bb; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#efebe9; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#d7c4bb; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .example-box { background:#fff8f5; border:1px solid var(--prop); border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .example-box h3 { color:var(--prop); margin-bottom:12px; }
+    .example-box table { width:100%; border-collapse:collapse; font-size:0.87rem; }
+    .example-box td { padding:7px 10px; border-bottom:1px solid var(--border); }
+    .example-box tr:last-child td { border-bottom:none; font-weight:700; color:var(--fire); }
+    .example-box .lbl { color:var(--muted); }
+
+    footer { background:var(--prop-dark); color:#bcaaa4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Commercial Property</a> › Global Programme</div>
+  <div class="tag">Lloyd's Codes · P2 · P3 · P4 · P5 · P6 · P7 · B2 · B3 · B4 · B5</div>
+  <h1>Global Programme Structuring</h1>
+  <p>Programme towers, multinational property coordination, reinsurance structures, cat aggregate management and a worked case study for a global corporate property programme.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html" class="active">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Programme Tower Structure — Large Corporate Property</h2>
+  <p>A large multinational corporate will typically structure its property programme as a layered tower with a self-insured retention (SIR) at the base, primary layer lead by a Lloyd's or composite insurer, successive excess layers, and a catastrophe XL at the top. The SIR and primary layer handle attritional losses; the cat XL is sized to protect the balance sheet against single major nat cat events.</p>
+
+  <div class="tower">
+    <div class="tower-layer tl-cat">
+      <div class="ly-label">Layer 5 — Catastrophe XL</div>
+      <h4>£200m xs £50m</h4>
+      <p>Cat XL — windstorm, earthquake, flood per-occurrence; Lloyd's cat syndicates + reinsurers; RDS-sized; annual aggregate stop-loss optional</p>
+    </div>
+    <div class="tower-layer tl-xs2">
+      <div class="ly-label">Layer 4 — Upper Excess</div>
+      <h4>£30m xs £20m</h4>
+      <p>All-risks excess; follow market; P4 code; London and Bermuda capacity; ILF pricing</p>
+    </div>
+    <div class="tower-layer tl-xs1">
+      <div class="ly-label">Layer 3 — First Excess</div>
+      <h4>£15m xs £5m</h4>
+      <p>All-risks excess; Lloyd's lead or composite; P4 code; deductible 24hr–48hr BI waiting period</p>
+    </div>
+    <div class="tower-layer tl-primary">
+      <div class="ly-label">Layer 2 — Primary All-Risks</div>
+      <h4>£5,000,000 any one loss</h4>
+      <p>P3 all-risks MD + BI; Lloyd's lead; COPE data; terrorism extension (Pool Re / TRIA); cyber PD excluded</p>
+    </div>
+    <div class="tower-layer tl-sir">
+      <div class="ly-label">Layer 1 — Self-Insured Retention (SIR)</div>
+      <h4>£250,000 each and every loss</h4>
+      <p>Risk-managed by insured; captive often funds SIR; loss prevention investment at this layer delivers maximum ROI</p>
+    </div>
+  </div>
+
+  <h2>Multinational Programme Coordination</h2>
+
+  <div class="card-grid">
+    <div class="prog-card fire">
+      <h4>🌐 Master Policy (International Programme)</h4>
+      <ul>
+        <li>Master policy placed in London (Lloyd's) covering worldwide risks</li>
+        <li>Covers gaps not picked up by admitted local policies (DIC/DIL)</li>
+        <li>IMP (International Master Policy) — Lloyd's standard form</li>
+        <li>Governing law: UK or agreed jurisdiction; English language</li>
+        <li>Aggregate TIV declared on schedule; cat PML managed at master level</li>
+      </ul>
+    </div>
+    <div class="prog-card flood">
+      <h4>🏛️ Local Admitted Policies</h4>
+      <ul>
+        <li>Required in countries where non-admitted insurance is illegal or heavily regulated</li>
+        <li>Network insurer (AIG, Zurich, AXA XL, Chubb) fronts local admitted paper</li>
+        <li>99%+ reinsured back to Lloyd's master; fronting fee typically 5–10% of premium</li>
+        <li>Key admitted markets: Brazil, China, India, Mexico, Saudi Arabia, South Korea</li>
+        <li>Admitted policy must comply with local tariffs and mandatory covers (e.g., Brazil SUSEP)</li>
+      </ul>
+    </div>
+    <div class="prog-card bi">
+      <h4>⚖️ DIC / DIL Structure</h4>
+      <ul>
+        <li><strong>DIC (Difference in Conditions):</strong> Fills coverage gaps between local and master policy (local may only cover named perils; master fills to all-risks)</li>
+        <li><strong>DIL (Difference in Limits):</strong> Tops up limit where local policy limit is below master programme limit</li>
+        <li>DIC/DIL endorsement on master policy — must be carefully drafted to avoid overlapping claims</li>
+        <li>Claims handling: local insurer handles below SIR; London market handles DIC/DIL excess</li>
+      </ul>
+    </div>
+    <div class="prog-card cat">
+      <h4>🏢 Captive Integration</h4>
+      <ul>
+        <li>Large multinationals may fund the SIR and some primary layer through a captive insurer (Bermuda, Guernsey, Cayman)</li>
+        <li>Captive issues local policies; reinsures to Lloyd's IMP above captive retention</li>
+        <li>Advantage: premium cash flow retained; loss experience visible; customised covers</li>
+        <li>Solvency II / IAIS equivalent compliance required for EU-based captives</li>
+        <li>Cell companies (PCCs): smaller multinationals can rent a captive cell vs forming standalone</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Multinational Property — Key Territory Matrix</h2>
+  <table class="jur-table">
+    <thead><tr><th>Territory</th><th>Lloyd's Code</th><th>Admitted Req.</th><th>Key Local Perils</th><th>Key Local Regulations</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>United Kingdom</strong></td><td>P2/P3</td><td>No (non-admitted permitted)</td><td>Flood, fire, subsidence</td><td>FCA-authorised insurer or Lloyd's; Building Regs; Pool Re terrorism</td><td>Lead market; ISR / all-risks wordings dominate; Day-One reinstatement standard</td></tr>
+      <tr><td><strong>USA</strong></td><td>P5/B4</td><td>Yes (surplus lines exception)</td><td>Hurricane, earthquake, wildfire, SCS</td><td>NFIP (flood); TRIA (terrorism); state surplus lines rules; admitted vs E&amp;S</td><td>Lloyd's accesses via surplus lines; stamping offices required; Florida market crisis</td></tr>
+      <tr><td><strong>Germany</strong></td><td>P3/P6</td><td>No (EEA passporting)</td><td>Flood, European windstorm, hail</td><td>BaFin authorisation; GDPR; local VAT on insurance premium</td><td>Strong domestic market (Allianz, Zurich, Talanx); Lloyd's supplements on large risks</td></tr>
+      <tr><td><strong>France</strong></td><td>P3/P6</td><td>No (EEA passporting)</td><td>Flood (Nat Cat scheme — CCR), storm</td><td>ACPR authorisation; CCR Caisse Centrale de Réassurance (state-backed nat cat)</td><td>French Nat Cat system (CatNat) — mandatory extension; premiums set by tariff; London market in excess layers</td></tr>
+      <tr><td><strong>Australia</strong></td><td>P6</td><td>Yes (APRA authorisation)</td><td>Cyclone, flood, bushfire, hail</td><td>ICA code; APRA prudential standards; AFCA (disputes)</td><td>High domestic cat penetration; Lloyd's accesses via Coverholders; 2022 floods major loss</td></tr>
+      <tr><td><strong>Japan</strong></td><td>P6</td><td>Yes (FSA)</td><td>Earthquake, typhoon, tsunami, flood</td><td>FSA (Financial Services Agency); JNDA (Japan Non-life Insurance Rating Organisation) tariffs</td><td>Domestic market dominant; Lloyd's supplements on large industrial risks; quake pool (JER)</td></tr>
+      <tr><td><strong>Brazil</strong></td><td>P6</td><td>Yes (SUSEP)</td><td>Flood, fire, wind</td><td>SUSEP (Superintendência de Seguros Privados); IRB Brasil Re (compulsory cession abolished 2020)</td><td>Complex local regulations; fronting mandatory; IRB cession legacy; strong London placement for large industrial</td></tr>
+      <tr><td><strong>UAE / Middle East</strong></td><td>P6</td><td>Varies by emirate</td><td>Fire (petrochemical proximity), flash flood</td><td>UAE IA (Insurance Authority); DIFC / ADGM regulated markets; local fronting in KSA</td><td>Lloyd's has DIFC and ADGM presence; large industrial risks commonly placed to Lloyd's direct</td></tr>
+      <tr><td><strong>China</strong></td><td>P6</td><td>Yes (NAFR)</td><td>Flood, typhoon, earthquake</td><td>NAFR (National Financial Regulatory Administration); admitted only; PICC dominant</td><td>Lloyd's via Lloyd's China (Shanghai) licence; admitted basis only; capacity limited for large risks</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <h3>Reinsurance Architecture — Lloyd's Property Syndicate</h3>
+    <ul>
+      <li><strong>Cat XL reinsurance:</strong> Syndicates purchase their own cat XL from the reinsurance market (Munich Re, Swiss Re, Hannover Re, RenRe, Everest) to protect against aggregated cat losses within their portfolio. Cat budget (annual expected loss) × 3–5× = typical cat XL attachment point.</li>
+      <li><strong>Risk XL:</strong> Protects against large single-risk losses (e.g., £50m warehouse fire); typically attaches at 2–5× average sum insured.</li>
+      <li><strong>Aggregate stop-loss:</strong> Caps the aggregate of all losses in a year below a combined ratio threshold; more expensive; provides more predictable combined ratio outcome.</li>
+      <li><strong>Facultative reinsurance:</strong> Single-risk placement for very large or unusual risks that exceed a syndicate's treaty capacity; placed risk-by-risk with specialist fac re underwriters.</li>
+      <li><strong>Lloyd's Central Fund:</strong> Provides additional security above syndicate capital; Lloyd's "chain of security" rated A (Standard &amp; Poor's) gives Lloyd's paper investment-grade status globally.</li>
+    </ul>
+  </div>
+
+  <h2>Worked Case Study — Global Retail Group Property Programme</h2>
+
+  <div class="example-box">
+    <h3>Risk Profile: Global retail group — 320 locations across 18 countries</h3>
+    <table>
+      <tr><td class="lbl">Total Insured Value (TIV)</td><td>£1,200,000,000 (£1.2bn)</td></tr>
+      <tr><td class="lbl">Locations</td><td>320 retail stores; UK 140, Europe 80, USA 60, APAC 40</td></tr>
+      <tr><td class="lbl">Construction profile</td><td>Predominantly fire resistive / MNC retail; no sprinklers in 40% UK estate</td></tr>
+      <tr><td class="lbl">Key perils</td><td>UK flood (15 locations Zone 3), US hurricane exposure (FL/TX stores), Japan earthquake</td></tr>
+      <tr><td class="lbl">Annual BI gross profit</td><td>£280,000,000; MIP 18 months</td></tr>
+      <tr><td class="lbl">SIR</td><td>£500,000 any one occurrence</td></tr>
+      <tr><td class="lbl">Programme structure</td><td>Master IMP (London Lloyd's) + local admitted policies in USA, Japan, Brazil, China via AXA XL network</td></tr>
+      <tr><td class="lbl">Cat exposures</td><td>UK flood PML 1-in-100yr = £18m; US cat PML 1-in-250yr = £65m; Japan quake PML 1-in-100yr = £22m <span class="badge b-e">EST</span></td></tr>
+      <tr><td class="lbl">MD base rate (fire resistive, partial sprinklers)</td><td>0.07% of TIV <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">Cat loading</td><td>+0.04% TIV blended (US cat 0.08%, UK flood 0.03%, Japan quake 0.04%) <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td class="lbl">MD total rate</td><td>0.11% TIV</td></tr>
+      <tr><td class="lbl">MD premium</td><td>£1,200,000,000 × 0.11% = <strong>£1,320,000</strong></td></tr>
+      <tr><td class="lbl">BI premium (18m MIP)</td><td>£280,000,000 × 0.38% = <strong>£1,064,000</strong></td></tr>
+      <tr><td class="lbl">Fronting fees (admitted territories)</td><td>~£120,000 (est. 5% of admitted territory premiums)</td></tr>
+      <tr><td class="lbl"><strong>Total Programme Premium</strong></td><td><strong>~£2,504,000</strong> <span class="badge b-i">ILLUS</span></td></tr>
+    </table>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Commercial Property (P2–P7 · B2–B5) · Lloyd's Market Intelligence · v3.1 April 2026
+</footer>
+</body>
+</html>

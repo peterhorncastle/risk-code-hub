@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Risk Mitigation — Event Cancellation &amp; Contingency — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #7b005a;
+      --hub-dark:      #450030;
+      --hub-light:     #fce4f4;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#450030 0%,#7b005a 55%,#a0007a 100%);
+      --header-sub:    #f48fb1;
+      --bc:            #7b005a;
+      --bc-dark:       #450030;
+      --bc-light:      #fce4f4;
+      --bc-accent:     #c8a84b;
+      --bc-mid:        #f8bbd0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#2e0020;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#f48fb1;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#450030;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#f48fb1;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--bc-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--bc-mid);}
+    .controls-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-bottom:24px;}
+    .ctrl{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--bc);}
+    .ctrl.detect{border-left-color:#1a237e;}
+    .ctrl.respond{border-left-color:#e65100;}
+    .ctrl.recover{border-left-color:#6a1b9a;}
+    .ctrl .phase{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .ctrl h4{font-size:0.9rem;font-weight:700;color:var(--bc-dark);margin-bottom:6px;}
+    .ctrl p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .ctrl .credit{font-size:0.78rem;font-weight:700;color:#1a5c2a;margin-top:6px;}
+    .info-box{background:#fce4f4;border-left:4px solid var(--bc);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3b0028;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .danger-box{background:#ffebee;border-left:4px solid #c62828;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3b0000;line-height:1.6;}
+    .danger-box strong{color:#c62828;}
+    .pluvius-box{background:#e8eaf6;border-left:4px solid #1a237e;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a237e;line-height:1.6;}
+    .pluvius-box strong{color:#0d1257;}
+    .checklist{background:#fff;border-radius:10px;padding:20px 24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .checklist h3{font-size:0.95rem;font-weight:700;color:var(--bc-dark);margin-bottom:12px;}
+    .checklist ul{list-style:none;padding:0;}
+    .checklist li{padding:7px 0;border-bottom:1px solid #fce4f4;font-size:0.85rem;color:#333;display:flex;align-items:flex-start;gap:10px;}
+    .checklist li:last-child{border-bottom:none;}
+    .checklist li::before{content:'&#10003;';color:#7b005a;font-weight:700;flex-shrink:0;margin-top:1px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--bc-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #fce4f4;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#fdf0f8;}
+    .rag-g{color:#1a5c2a;font-weight:700;} .rag-a{color:#e65100;font-weight:700;} .rag-r{color:#c62828;font-weight:700;}
+    footer{background:#450030;color:#f48fb1;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Event Cancellation (PC/PA/PN/PU/PZ)</a> › Risk Mitigation</div>
+    <div class="tag">Module 06</div>
+    <h1>Risk Mitigation</h1>
+    <div class="sub">Event risk controls, pluvius insurance explained, pandemic exclusion implications &amp; organiser checklist</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Prevention Controls (PREVENT)</div>
+  <div class="controls-grid">
+    <div class="ctrl">
+      <div class="phase">Prevent</div>
+      <h4>Indoor / Outdoor Contingency Planning</h4>
+      <p>Every outdoor event should have a credible, documented bad-weather contingency plan — an indoor backup venue, a postponement window, or a defined curtailment protocol. The existence of a viable contingency plan may reduce EC premium and demonstrates professional event management to underwriters. <sup>[I9]</sup></p>
+      <div class="credit">Underwriting credit: −5 to −10% on weather peril premium for documented indoor backup</div>
+    </div>
+    <div class="ctrl">
+      <div class="phase">Prevent</div>
+      <h4>Terrorism Threat Monitoring — Police Liaison</h4>
+      <p>Large events should establish a pre-event security liaison with local police and, for major events, with counter-terrorism units. Police-assessed security plans, search protocols and crowd management procedures are underwriting pre-conditions for terrorism extension cover above certain attendance thresholds. <sup>[L3]</sup></p>
+      <div class="credit">Required for: terrorism extension, events 5,000+ attendees</div>
+    </div>
+    <div class="ctrl">
+      <div class="phase">Prevent</div>
+      <h4>Key Person Health Monitoring</h4>
+      <p>For non-appearance (PN) covers, underwriters require pre-tour medical examinations for named individuals. Organisers should arrange medical clearance before finalising tour schedules and ensure artist contracts include health disclosure obligations. Any health change during the lead-up period must be notified to the insurer immediately. <sup>[3]</sup></p>
+      <div class="credit">Required: medical questionnaire for PN sums insured above £500k; exam above £5m</div>
+    </div>
+    <div class="ctrl">
+      <div class="phase">Prevent</div>
+      <h4>Broadcast Contingency Planning</h4>
+      <p>Events with broadcast rights exposure should maintain documented backup production plans — redundant camera systems, remote transmission capability, backup commentary positions. Demonstrating broadcast continuity planning may reduce the loading on broadcast rights extensions. <sup>[2]</sup></p>
+      <div class="credit">Reduces broadcast rights extension loading for well-managed productions</div>
+    </div>
+    <div class="ctrl">
+      <div class="phase">Prevent</div>
+      <h4>Supplier and Vendor Financial Health Checks</h4>
+      <p>Venue insolvency and supplier failure are insurable perils in EC (under venue failure or force majeure clauses in some policies). Pre-event due diligence on venue financial stability, caterers, production companies and infrastructure suppliers reduces the risk of mid-event failure. <sup>[I9]</sup></p>
+      <div class="credit">Reduces venue-failure claim risk; may be required for high-value venue deposits</div>
+    </div>
+    <div class="ctrl">
+      <div class="phase">Prevent</div>
+      <h4>Force Majeure Clause Review</h4>
+      <p>All artist contracts, venue agreements and sponsor contracts should be reviewed by legal counsel for force majeure and cancellation provisions. Robust force majeure clauses that align with the insured perils in the EC policy reduce disputes about whether cancelled obligations generate recoverable costs. <sup>[L2]</sup></p>
+      <div class="credit">Reduces quantum dispute risk; improves recovery of advance costs</div>
+    </div>
+  </div>
+
+  <div class="section-title">Detection &amp; Early Warning Controls (DETECT)</div>
+  <div class="controls-grid">
+    <div class="ctrl detect">
+      <div class="phase">Detect</div>
+      <h4>Weather Monitoring Service — On-Site Meteorologist</h4>
+      <p>For major outdoor events, on-site meteorologists provide real-time weather monitoring and 72-hour forecasting. Early identification of approaching weather events enables orderly contingency activation — postponement decisions made with adequate notice are less costly than last-minute cancellations. Pluvius triggers (official weather station rainfall measurement) should be confirmed pre-event. <sup>[5]</sup></p>
+    </div>
+    <div class="ctrl detect">
+      <div class="phase">Detect</div>
+      <h4>Real-Time Crowd Management</h4>
+      <p>Automated crowd density monitoring, entry flow management and real-time attendance data reduce the risk of crowd-related curtailment events. Monitoring systems can trigger early intervention before dangerous situations develop — relevant to EC terrorism and venue safety clauses. <sup>[L9]</sup></p>
+    </div>
+    <div class="ctrl detect">
+      <div class="phase">Detect</div>
+      <h4>Communicable Disease Surveillance (Post-Pandemic)</h4>
+      <p>While pandemic EC cover is no longer available, event organisers should maintain awareness of public health developments. A new communicable disease outbreak — though not insured — requires advance contingency planning. Early detection allows maximum lead time for postponement decisions that minimise unrecoverable costs. <sup>[I2]</sup></p>
+    </div>
+    <div class="ctrl detect">
+      <div class="phase">Detect</div>
+      <h4>Early Notification to Insurer</h4>
+      <p>Most EC policies contain a 72-hour pre-event notification obligation: if circumstances exist that may lead to cancellation, the insurer must be notified immediately. Late notification can prejudice coverage. Event organisers should brief their risk manager and broker on the notification procedure and ensure it is triggered promptly whenever a potential cancellation circumstance arises. <sup>[L1]</sup></p>
+    </div>
+  </div>
+
+  <!-- Organiser checklist -->
+  <div class="section-title">Event Organiser Pre-Event Checklist</div>
+  <div class="checklist">
+    <h3>8-Point EC Policy Activation and Loss Mitigation Checklist</h3>
+    <ul>
+      <li>All event contracts (venue, artists, production, catering) have been reviewed by legal counsel for cancellation, force majeure and refund provisions — and the policy perils align with contract terms.</li>
+      <li>Audience ticket refund obligations have been quantified: how much would a full cancellation cost in ticket refunds? This is a key component of the sum insured. <sup>[L2]</sup></li>
+      <li>Sponsorship activation triggers have been reviewed: does cancellation trigger sponsor refund obligations or loss of future sponsorship? These costs should be declared to underwriters.</li>
+      <li>The insurance certificate has been provided to the venue and reviewed against venue access requirements — many venues now require evidence of event cancellation cover before granting access.</li>
+      <li>The notification procedure is documented and distributed to the key event team: who to call (broker, insurer), within what timeframe (typically 72 hours of any incident), and what information to gather immediately.</li>
+      <li>The key contact tree is confirmed: broker emergency contact, insurer claims handler, loss adjuster pre-appointment for major events, legal counsel. Do not wait for an incident to identify these contacts.</li>
+      <li>A media and PR crisis plan is in place for managed communication if the event is cancelled — minimising audience confusion, refund delay disputes and social media escalation.</li>
+      <li>Post-cancellation revenue recovery plan has been considered: rescheduled date options, partial refund vs credit mechanisms, sponsor communication protocol. EC cover provides financial indemnity but prompt recovery planning also reduces the ultimate loss. <sup>[I9]</sup></li>
+    </ul>
+  </div>
+
+  <!-- Pandemic exclusion explainer -->
+  <div class="danger-box">
+    <strong>Post-COVID Pandemic Exclusion — What Is and Is NOT Covered:</strong>
+    Since 2021, the following is the universal market position:<br><br>
+    <strong>EXCLUDED:</strong> Any loss arising from (i) any communicable disease, pandemic, epidemic or public health emergency of international concern; (ii) any government or public authority prohibition, restriction or advice arising from a communicable disease; (iii) fear of attendance at an event due to communicable disease.<br><br>
+    <strong>STILL COVERED</strong> (subject to other policy terms): Weather / pluvius triggers; Terrorism (where terrorism extension is purchased); Government order for non-communicable disease reasons (e.g., security threat, natural disaster); Non-appearance of named individual (illness not related to communicable disease); Venue failure / insolvency; Political cancellation (where included).<br><br>
+    <strong>What should event organisers do?</strong> (1) Accept the pandemic exclusion as a fact of the current market — no alternative is available. (2) Build pandemic contingency reserves from own resources. (3) Review whether government schemes exist (the UK DCMS Culture Recovery Fund operated 2020–21 but has ceased). (4) Explore contractual force majeure protections in artist and venue agreements. <sup>[I10]</sup>
+  </div>
+
+  <!-- Pluvius explainer -->
+  <div class="pluvius-box">
+    <strong>Weather / Pluvius Insurance Explained:</strong><br><br>
+    Pluvius (PZ code) is a parametric weather insurance that triggers automatically when a defined weather metric exceeds a threshold. The key components are:<br><br>
+    <strong>1. Trigger metric:</strong> Usually millimetres of rainfall in a defined period (e.g., more than 5mm in any 2-hour period during event hours). Can also be wind speed, temperature, lightning probability, or composite weather indices.<br>
+    <strong>2. Measurement station:</strong> An official meteorological station agreed at placement (usually within 5–15km of the event venue). The measurement from that station is the objective, indisputable trigger — removing subjectivity from claims.<br>
+    <strong>3. Indemnity:</strong> On trigger, the policy pays the agreed sum insured or a proportion thereof — no requirement to prove actual financial loss. This parametric structure makes pluvius claims simple, fast and certain.<br>
+    <strong>4. Basis of cover:</strong> Pluvius can be structured as (a) per-day coverage — pays if trigger exceeded on any individual day; (b) aggregate — pays if trigger exceeded over the total event period; or (c) tiered — multiple payouts at different rainfall thresholds.<br><br>
+    <em>Key underwriting consideration:</em> Historical rainfall data for the specific location and event dates is the primary rating input. The closer the measurement station to the venue, the more accurate the trigger. Organisers should agree the measurement station at placement. <sup>[5]</sup>
+  </div>
+
+  <!-- Programme quality matrix -->
+  <div class="section-title">Event Risk Quality Scoring Matrix</div>
+  <table>
+    <thead>
+      <tr><th>Control Area</th><th>Green &#10003;</th><th>Amber &#9651;</th><th>Red &#10007;</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Weather contingency</strong></td>
+        <td class="rag-g">Documented indoor backup venue; on-site meteorologist; 72hr forecast monitoring; pluvius measurement station agreed</td>
+        <td class="rag-a">Informal contingency plan; basic weather forecasting; pluvius station not pre-agreed</td>
+        <td class="rag-r">No weather contingency plan; no pluvius cover; no weather monitoring</td>
+      </tr>
+      <tr>
+        <td><strong>Artist/performer health (PN)</strong></td>
+        <td class="rag-g">Medical examination pre-tour; contract health disclosure clause; immediate notification procedure; no undisclosed conditions</td>
+        <td class="rag-a">Medical questionnaire completed; some health history not fully explored; notification procedure informal</td>
+        <td class="rag-r">No medical assessment; pre-existing conditions undisclosed; no notification procedure</td>
+      </tr>
+      <tr>
+        <td><strong>Terrorism security</strong></td>
+        <td class="rag-g">Police liaison established; documented security plan; counter-terrorism briefing completed; terrorism extension purchased</td>
+        <td class="rag-a">Standard venue security; police liaison informal; terrorism extension purchased but limits untested</td>
+        <td class="rag-r">No terrorism planning; no police liaison; terrorism extension not purchased for 5,000+ event</td>
+      </tr>
+      <tr>
+        <td><strong>Contract management</strong></td>
+        <td class="rag-g">All contracts reviewed for FM and cancellation provisions; sponsor obligations quantified; refund obligations mapped</td>
+        <td class="rag-a">Venue contract reviewed; artist contracts informal; sponsor obligations not fully mapped</td>
+        <td class="rag-r">Contracts not reviewed; FM provisions absent; refund obligations unknown</td>
+      </tr>
+      <tr>
+        <td><strong>Insurance notification</strong></td>
+        <td class="rag-g">72hr notification procedure documented; broker emergency contact confirmed; loss adjuster pre-appointed</td>
+        <td class="rag-a">Broker contact known; notification procedure informal; no pre-appointed adjuster</td>
+        <td class="rag-r">No notification procedure; broker contact not confirmed; no claims plan</td>
+      </tr>
+      <tr>
+        <td><strong>Pandemic contingency</strong></td>
+        <td class="rag-g">Pandemic exclusion accepted and documented; contingency reserve maintained; contractual FM review completed for pandemic scenario</td>
+        <td class="rag-a">Pandemic exclusion noted but no specific contingency planning; FM clauses not reviewed for disease scenarios</td>
+        <td class="rag-r">Organiser believes pandemic is covered — NOT CORRECT since 2021. Immediate broker clarification required.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Top actions -->
+  <div class="info-box">
+    <strong>Top 7 Actions for Event Organisers:</strong><br>
+    1. <strong>Understand the pandemic exclusion</strong> — your EC policy does NOT cover COVID-type cancellations. Confirm this with your broker in writing.<br>
+    2. Agree the pluvius measurement weather station at placement — do not leave this to claims time.<br>
+    3. Obtain pre-tour medical clearance for all named individuals covered under PN — disclose all known health conditions.<br>
+    4. Establish police liaison for all events over 5,000 attendees where terrorism extension is purchased.<br>
+    5. Document your weather contingency plan — an indoor backup venue is the most effective premium reduction available for outdoor events.<br>
+    6. Review all artist and venue contracts for force majeure and cancellation provisions before signing — misalignment with EC policy perils creates gaps.<br>
+    7. Know your 72-hour notification procedure — brief your event team before the event, not after a cancellation incident.
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Event Cancellation &amp; Contingency (PC/PA/PN/PU/PZ) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="global-program.html">Next: Global Programme →</a></p>
+</footer>
+
+</body>
+</html>

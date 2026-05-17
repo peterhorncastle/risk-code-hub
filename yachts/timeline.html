@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Yachts (O) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #00427b;
+      --hub-dark:      #002050;
+      --hub-light:     #e3f0fb;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #00796b;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#002050 0%,#00427b 55%,#0057a8 100%);
+      --header-sub:    #90caf9;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#0d1b2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#90caf9;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#002050;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#90caf9;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1000px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #bbdefb;}
+    .filter-bar{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;}
+    .filter-btn{padding:6px 14px;border:2px solid #ddd;background:#fff;border-radius:20px;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filter-btn.active,.filter-btn:hover{border-color:var(--hub-primary);color:#fff;background:var(--hub-primary);}
+    .filter-btn[data-type="casualty"].active{background:#c62828;border-color:#c62828;}
+    .filter-btn[data-type="regulation"].active{background:#0057a8;border-color:#0057a8;}
+    .filter-btn[data-type="market"].active{background:#6a1b9a;border-color:#6a1b9a;}
+    .filter-btn[data-type="technology"].active{background:#00796b;border-color:#00796b;}
+    .filter-btn[data-type="racing"].active{background:#2e7d32;border-color:#2e7d32;}
+    .filter-btn[data-type="sanctions"].active{background:#e65100;border-color:#e65100;}
+    #tl-count{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    .timeline{position:relative;padding-left:36px;}
+    .timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:#bbdefb;border-radius:2px;}
+    .tl-item{position:relative;margin-bottom:22px;}
+    .tl-item::before{content:'';position:absolute;left:-30px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--hub-primary);border:3px solid #fff;box-shadow:0 0 0 2px var(--hub-primary);}
+    .tl-item[data-type="casualty"]::before{background:#c62828;box-shadow:0 0 0 2px #c62828;}
+    .tl-item[data-type="regulation"]::before{background:#0057a8;box-shadow:0 0 0 2px #0057a8;}
+    .tl-item[data-type="market"]::before{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .tl-item[data-type="technology"]::before{background:#00796b;box-shadow:0 0 0 2px #00796b;}
+    .tl-item[data-type="racing"]::before{background:#2e7d32;box-shadow:0 0 0 2px #2e7d32;}
+    .tl-item[data-type="sanctions"]::before{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .tl-card{background:#fff;border-radius:8px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-card .tl-year{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+    .tl-item[data-type="casualty"] .tl-year{color:#c62828;}
+    .tl-item[data-type="regulation"] .tl-year{color:#0057a8;}
+    .tl-item[data-type="market"] .tl-year{color:#6a1b9a;}
+    .tl-item[data-type="technology"] .tl-year{color:#00796b;}
+    .tl-item[data-type="racing"] .tl-year{color:#2e7d32;}
+    .tl-item[data-type="sanctions"] .tl-year{color:#e65100;}
+    .tl-card h3{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .type-tag{display:inline-block;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-bottom:6px;}
+    .tt-casualty{background:#fde8e8;color:#c62828;}
+    .tt-regulation{background:#e3f0fb;color:#0057a8;}
+    .tt-market{background:#f3e5f5;color:#6a1b9a;}
+    .tt-technology{background:#e0f2f1;color:#00796b;}
+    .tt-racing{background:#e8f5e9;color:#2e7d32;}
+    .tt-sanctions{background:#fff3e0;color:#e65100;}
+    footer{background:#002050;color:#90caf9;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Yachts (O)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key events shaping the Lloyd's yacht market 1979–2024</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+  <div class="filter-bar">
+    <label>Filter:</label>
+    <button class="filter-btn active" data-type="all" onclick="filterTL('all')">All Events</button>
+    <button class="filter-btn" data-type="casualty" onclick="filterTL('casualty')">Casualty / Loss</button>
+    <button class="filter-btn" data-type="regulation" onclick="filterTL('regulation')">Regulation / Safety</button>
+    <button class="filter-btn" data-type="market" onclick="filterTL('market')">Market Structural</button>
+    <button class="filter-btn" data-type="technology" onclick="filterTL('technology')">Technology</button>
+    <button class="filter-btn" data-type="racing" onclick="filterTL('racing')">Racing / Event</button>
+    <button class="filter-btn" data-type="sanctions" onclick="filterTL('sanctions')">Sanctions / Legal</button>
+  </div>
+
+  <div id="tl-count"></div>
+
+  <div class="timeline" id="timeline">
+
+    <div class="tl-item" data-type="casualty">
+      <div class="tl-card">
+        <div class="tl-year">1979</div>
+        <span class="type-tag tt-casualty">Casualty / Loss</span>
+        <h3>Fastnet Race Disaster — 19 Deaths, 24 Yachts Lost</h3>
+        <p>Force 11 storm strikes 303-yacht Fastnet Race fleet on 13–14 August 1979. 19 crew killed, 24 yachts sunk or abandoned, 194 rescued. Largest peacetime SAR operation in UK history. Transforms offshore racing safety standards globally and reshapes Lloyd's racing endorsement underwriting. <sup>[I8]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="regulation">
+      <div class="tl-card">
+        <div class="tl-year">1980</div>
+        <span class="type-tag tt-regulation">Regulation / Safety</span>
+        <h3>RORC Offshore Special Regulations (OSR) — Post-Fastnet Reform</h3>
+        <p>Royal Ocean Racing Club publishes significantly strengthened Offshore Special Regulations following the RORC Fastnet inquiry. New mandatory requirements for life-rafts, EPIRBs, harnesses and jacklines, storm sails, and stability criteria. Lloyd's underwriters adopt OSR compliance as standard condition for offshore racing endorsements. <sup>[L9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="regulation">
+      <div class="tl-card">
+        <div class="tl-year">1984</div>
+        <span class="type-tag tt-regulation">Regulation / Safety</span>
+        <h3>RYA Yachtmaster Offshore — Formal Qualification Framework</h3>
+        <p>RYA Yachtmaster Offshore and Ocean certificates formalised as recognised competency benchmarks for offshore sailing. Lloyd's underwriters begin incorporating Yachtmaster qualification status into owner experience rating — recognised skippers attract reduced premiums for offshore navigation limits. <sup>[I5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="casualty">
+      <div class="tl-card">
+        <div class="tl-year">1988</div>
+        <span class="type-tag tt-casualty">Casualty / Loss</span>
+        <h3>Hurricane Gilbert — Caribbean Charter Yacht Fleet Losses</h3>
+        <p>Hurricane Gilbert (Cat 5, maximum winds 185mph) devastates the Caribbean in September 1988, causing significant losses to the charter yacht fleet in Jamaica, Cayman, and the Yucatan coast. Demonstrates the aggregation risk of charter fleet programmes concentrated in the Caribbean during hurricane season. <sup>[I6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="market">
+      <div class="tl-card">
+        <div class="tl-year">1990s</div>
+        <span class="type-tag tt-market">Market Structural</span>
+        <h3>MCA Large Yacht Code (LY1) — Superyacht Regulatory Framework</h3>
+        <p>UK Maritime and Coastguard Agency introduces the Large Yacht Code for commercially operated yachts 24m+ on international voyages. Establishes minimum standards for construction, stability, fire suppression, life-saving appliances, and crew certification. Lloyd's syndicates adopt LY compliance as a standard superyacht underwriting condition. <sup>[L2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="casualty">
+      <div class="tl-card">
+        <div class="tl-year">1998</div>
+        <span class="type-tag tt-casualty">Casualty / Loss</span>
+        <h3>Sydney-Hobart Race Storm — 6 Deaths, 5 Yachts Lost</h3>
+        <p>Severe storm (55-knot winds, 20m waves) in Bass Strait during Sydney-Hobart race: 6 crew killed, 5 yachts sunk, 66 yachts retired, 55 sailors winched to safety in largest peacetime SAR in Australian history. Second major offshore racing loss event; reinforces racing endorsement adequacy concerns and leads to further OSR tightening. <sup>[I8]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="regulation">
+      <div class="tl-card">
+        <div class="tl-year">2002</div>
+        <span class="type-tag tt-regulation">Regulation / Safety</span>
+        <h3>SOLAS Amendments — AIS Requirement Extends to Yachts</h3>
+        <p>SOLAS 1974 amendments progressively extend Automatic Identification System (AIS) requirements. While SOLAS primarily covers commercial vessels, the AIS standard influences Lloyd's underwriting — AIS transponders become a recommended safety feature for ocean-going yachts, and some syndicates offer premium credits for AIS-equipped vessels. <sup>[L5]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="market">
+      <div class="tl-card">
+        <div class="tl-year">2004</div>
+        <span class="type-tag tt-market">Market Structural</span>
+        <h3>Cayman and Malta Flag Registries — Superyacht Flagging Surge</h3>
+        <p>Cayman Islands Shipping Registry and Malta Flag Administration emerge as leading superyacht registries, competing with traditional Lloyd's Register / UK flag. Red Ensign Group flag states offer commercial operators a familiar regulatory framework with greater flexibility. Flag state diversification creates complexity in underwriting jurisdiction, applicable law, and survey requirements. <sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="regulation">
+      <div class="tl-card">
+        <div class="tl-year">2006</div>
+        <span class="type-tag tt-regulation">Regulation / Safety</span>
+        <h3>Maritime Labour Convention (MLC) 2006</h3>
+        <p>ILO Maritime Labour Convention adopted 2006, entering into force August 2013. Extends crew welfare standards (rest hours, pay, medical care, repatriation, social security) to commercial vessels including commercially operated yachts 500GT+. MLC compliance certificates become a Lloyd's requirement for crewed superyacht placements; crew liability coverage expanded accordingly. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="technology">
+      <div class="tl-card">
+        <div class="tl-year">2010</div>
+        <span class="type-tag tt-technology">Technology</span>
+        <h3>Carbon Fibre Construction — New Hull Material Risk</h3>
+        <p>Carbon fibre reinforced polymer (CFRP) composite hulls become standard for performance racing yachts and premium superyachts. CFRP offers superior strength-to-weight but presents different damage characteristics — catastrophic structural failure modes, galvanic corrosion at metal fittings, and difficulty of damage assessment. Lloyd's survey requirements adapt to address CFRP-specific inspection and repair complexity. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="regulation">
+      <div class="tl-card">
+        <div class="tl-year">2012</div>
+        <span class="type-tag tt-regulation">Regulation / Safety</span>
+        <h3>MCA LY3 — Large Yacht Code Third Edition</h3>
+        <p>MCA publishes Large Yacht Code LY3, the most comprehensive update to the superyacht commercial framework. Addresses crew certification, stability standards (including dynamic stability for superyacht design), fire detection and suppression (including engine room CO2 systems), and operational documentation requirements. LY3 supersedes LY2 as the definitive Lloyd's underwriting compliance standard for commercially operated yachts 24m+. <sup>[L2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="technology">
+      <div class="tl-card">
+        <div class="tl-year">2013</div>
+        <span class="type-tag tt-technology">Technology</span>
+        <h3>AC72 Foiling Catamarans — America's Cup Technology Leap</h3>
+        <p>34th America's Cup in San Francisco introduces AC72 foiling catamarans — reaching speeds of 47+ knots. Tragic capsize of Artemis Racing AC72 kills crew member Andrew "Bart" Simpson during training. Foiling technology introduces new casualty risk profiles: high-speed structural failure, capsize from foiling errors, crew safety in high-performance offshore conditions. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="market">
+      <div class="tl-card">
+        <div class="tl-year">2015</div>
+        <span class="type-tag tt-market">Market Structural</span>
+        <h3>Superyacht Values Peak — Agreed Value Review Practices Tighten</h3>
+        <p>Superyacht construction costs and secondhand market values reach record levels. Lloyd's underwriters tighten agreed value review practices — annual revaluation requirements introduced for vessels over £10m agreed value. Underinsurance risk on superyachts identified as a systemic market issue as replacement costs diverge from original agreed values in the soft market. <sup>[I1]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="casualty">
+      <div class="tl-card">
+        <div class="tl-year">2017</div>
+        <span class="type-tag tt-casualty">Casualty / Loss</span>
+        <h3>Hurricane Irma — 300+ Yachts Destroyed in Caribbean</h3>
+        <p>Category 5 Hurricane Irma (maximum sustained winds 185mph) devastates the British Virgin Islands, St Martin/Sint Maarten, and other Caribbean islands in September 2017. Over 300 yachts are destroyed or seriously damaged, with total insured marine losses estimated at $1bn+ across the yacht market. Triggers review of hurricane haul-out warranty requirements and Caribbean aggregation exposure. <sup>[I6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="casualty">
+      <div class="tl-card">
+        <div class="tl-year">2019</div>
+        <span class="type-tag tt-casualty">Casualty / Loss</span>
+        <h3>Superyacht Fires — Lady M &amp; Yogi (Mediterranean)</h3>
+        <p>Two high-profile superyacht fires in the Mediterranean in 2019: <em>Lady M</em> (47m) and <em>Yogi</em> (54m) both sustain major fire damage. Engine room fires in motor yachts — frequently originating from fuel system failures or generator faults — are the dominant fire cause. Both losses highlight the importance of engine room fixed CO2 suppression systems and infrared engine room monitoring. <sup>[I9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="casualty">
+      <div class="tl-card">
+        <div class="tl-year">2019</div>
+        <span class="type-tag tt-casualty">Casualty / Loss</span>
+        <h3>Hurricane Dorian — Bahamas Marina Destruction</h3>
+        <p>Category 5 Hurricane Dorian (185mph sustained winds) stalls over Grand Bahama and Abaco for over 24 hours in September 2019. Marsh Harbour marina and associated boatyard suffer catastrophic damage — hundreds of vessels on the hard and afloat destroyed. Reinforces requirements for storm haul-out warranties and adequate tie-down standards for vessels in hurricane-zone yards. <sup>[I6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="sanctions">
+      <div class="tl-card">
+        <div class="tl-year">2022</div>
+        <span class="type-tag tt-sanctions">Sanctions / Legal</span>
+        <h3>Russia-Ukraine War — Superyacht Sanctions Wave</h3>
+        <p>Following Russia's invasion of Ukraine (February 2022), OFAC, UK OFSI, and EU authorities rapidly sanction Russian UHNW individuals with superyacht assets. <em>Amadea</em> ($325m est.), <em>Tango</em>, <em>Ragnar</em>, <em>Sailing Yacht A</em>, and dozens of others are seized or detained. Estimated $22bn+ of superyacht assets affected. Insurance implications: war exclusion applicability, sanctions clause compliance, beneficial owner disclosure requirements, and abandonment/wreck liability. <sup>[L7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="technology">
+      <div class="tl-card">
+        <div class="tl-year">2021</div>
+        <span class="type-tag tt-technology">Technology</span>
+        <h3>AC75 Foiling Monohulls — America's Cup Auckland</h3>
+        <p>36th America's Cup introduces AC75 hydrofoiling monohulls reaching 50+ knots. The AC75 class represents the frontier of performance sailing technology — wing masts, flying appendages, crew trapeze systems. Structural failure risks and crew safety at extreme speeds require bespoke racing endorsements well beyond standard offshore cover. <sup>[I3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="technology">
+      <div class="tl-card">
+        <div class="tl-year">2023</div>
+        <span class="type-tag tt-technology">Technology</span>
+        <h3>Lithium Battery Fire Risk — Motor Yachts &amp; Electric Propulsion</h3>
+        <p>High-profile lithium-ion battery fires on electric-assist motor yachts and hybrid superyachts raise new underwriting concerns. Lithium battery fires burn at extreme temperatures, resist conventional extinguishants, and can reignite after apparent suppression. Lloyd's underwriters add lithium battery risk questions to superyacht proposal forms and review fire suppression system adequacy for hybrid/electric vessels. <sup>[I9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item" data-type="sanctions">
+      <div class="tl-card">
+        <div class="tl-year">2024</div>
+        <span class="type-tag tt-sanctions">Sanctions / Legal</span>
+        <h3>Beneficial Ownership Transparency — FCA &amp; Lloyd's Guidance</h3>
+        <p>Lloyd's and the FCA issue enhanced guidance on beneficial ownership checks for yacht policies following the Russian sanctions experience. Standard yacht proposal forms updated to require disclosure of all UBOs with 25%+ interest. Insurance Act 2015 fair presentation obligations reinforced — non-disclosure of sanctioned beneficial owners can void policies and expose brokers to regulatory liability. <sup>[L7]</sup></p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Yachts (O) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filterTL(type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-type="${type}"]`).classList.add('active');
+  const items = document.querySelectorAll('.tl-item');
+  let shown = 0;
+  items.forEach(item => {
+    if (type === 'all' || item.dataset.type === type) {
+      item.style.display = '';
+      shown++;
+    } else {
+      item.style.display = 'none';
+    }
+  });
+  document.getElementById('tl-count').textContent = `Showing ${shown} of 20 events`;
+}
+filterTL('all');
+</script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Underwriting — Marine Cargo — Risk Code Hub</title>
+  <style>
+    :root {
+      --mc:#1565c0; --mc-dark:#0d2137; --icc:#00695c;
+      --fire:#c62828; --ga:#6a1b9a; --warn:#e65100;
+      --light:#e3f2fd; --border:#bbdefb; --text:#0d1b2e; --muted:#546e7a;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1565c0;
+    --hub-dark:      #0d2137;
+    --hub-light:     #e8f0fa;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #00695c;
+    --hub-secondary2:#6a1b9a;
+    --header-gradient:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%);
+    --header-sub:    #bbdefb;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0d2137 0%,#1565c0 50%,#0277bd 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90caf9; margin-bottom:6px; }
+    .breadcrumb a { color:#bbdefb; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#90caf9; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#bbdefb; font-size:0.95rem; max-width:740px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--mc); border-bottom-color:var(--fire); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--mc); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin:0 2px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .formula-box { background:var(--mc-dark); color:#bbdefb; border-radius:12px; padding:26px 30px; margin:24px 0; }
+    .formula-box h3 { color:#e3f2fd; margin-bottom:14px; font-size:1.05rem; }
+    .formula { font-family:monospace; font-size:1rem; background:rgba(255,255,255,0.08); padding:14px 20px; border-radius:8px; color:#e3f2fd; line-height:2; margin:10px 0; }
+    .formula-box p { font-size:0.88rem; margin:8px 0 0; }
+
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; margin:24px 0; }
+    .factor-card { background:#fff; border-radius:10px; padding:20px; border-top:4px solid var(--mc); box-shadow:0 1px 3px rgba(0,0,0,0.07); }
+    .factor-card.icc { border-top-color:var(--icc); }
+    .factor-card.fire { border-top-color:var(--fire); }
+    .factor-card.ga { border-top-color:var(--ga); }
+    .factor-card.warn { border-top-color:var(--warn); }
+    .factor-label { font-size:0.68rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--mc); margin-bottom:6px; }
+    .factor-card.icc .factor-label { color:var(--icc); }
+    .factor-card.fire .factor-label { color:var(--fire); }
+    .factor-card.ga .factor-label { color:var(--ga); }
+    .factor-card.warn .factor-label { color:var(--warn); }
+    .factor-card h3 { font-size:0.96rem; margin-bottom:8px; }
+    .factor-card ul { padding-left:16px; }
+    .factor-card li { font-size:0.83rem; margin-bottom:5px; line-height:1.55; }
+
+    .commodity-table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08); margin:20px 0; }
+    .commodity-table th { background:var(--mc); color:#fff; padding:11px 14px; font-size:0.8rem; text-align:left; }
+    .commodity-table td { padding:10px 14px; font-size:0.83rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    .commodity-table tr:last-child td { border-bottom:none; }
+    .commodity-table tr:hover td { background:#e8f4fd; }
+    .rate-low { color:var(--icc); font-weight:700; }
+    .rate-mid { color:var(--warn); font-weight:700; }
+    .rate-high { color:var(--fire); font-weight:700; }
+
+    .scorecard { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; margin:24px 0; }
+    .scorecard h3 { color:var(--mc); font-size:1rem; margin-bottom:16px; }
+    .sc-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+    .sc-row:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+    .sc-num { font-size:1.1rem; font-weight:700; color:var(--mc); min-width:24px; }
+    .sc-text { flex:1; font-size:0.86rem; line-height:1.5; }
+    .sc-flag { font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:8px; }
+    .flag-r { background:#fdecea; color:#b71c1c; }
+    .flag-a { background:#fff3e0; color:#e65100; }
+    .flag-g { background:#e6f4ea; color:#1a5c28; }
+
+    .case-study { background:#fff; border:1px solid var(--border); border-radius:14px; padding:28px 32px; margin:28px 0; border-left:6px solid var(--icc); }
+    .cs-label { font-size:0.7rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--icc); margin-bottom:8px; }
+    .case-study h3 { font-size:1.1rem; margin-bottom:14px; }
+    .cs-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:16px 0; }
+    @media(max-width:600px){.cs-grid{grid-template-columns:1fr;}}
+    .cs-box { background:var(--light); border-radius:8px; padding:14px 16px; }
+    .cs-box h4 { font-size:0.85rem; color:var(--mc); margin-bottom:7px; }
+    .cs-box p, .cs-box li { font-size:0.83rem; line-height:1.6; }
+    .cs-box ul { padding-left:14px; }
+    .cs-box li { margin-bottom:4px; }
+    .cs-total { background:var(--mc-dark); color:#bbdefb; border-radius:8px; padding:14px 18px; margin-top:14px; }
+    .cs-total p { font-size:0.9rem; color:#e3f2fd; margin:0; }
+
+    footer { background:var(--mc-dark); color:#90caf9; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Marine Cargo</a> › Underwriting</div>
+  <div class="tag">Lloyd's Codes · V · Q · VL · VX</div>
+  <h1>Underwriting Methodology</h1>
+  <p>Rating factors, commodity risk benchmarks, open cover structure, accumulation management, and worked pricing examples for a containerised electronics trade and a bulk commodity voyage.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>Marine cargo underwriting is primarily a frequency class — most cargo claims are relatively modest (transit damage, pilferage, short-landing). The severity tail comes from fire-at-sea, vessel sinking (especially on ultra-large container vessels), General Average events, and natural catastrophe at port. The underwriter's core job is to price the expected frequency of small claims against the capital cost of the low-probability, high-severity events that define the class's risk capital requirement.</p>
+
+  <h2>1. Rating Formula — Open Cover Structure</h2>
+
+  <div class="formula-box">
+    <h3>Marine Cargo Premium Calculation (Open Cover Basis)</h3>
+    <div class="formula">
+Annual Premium = (Estimated Annual Cargo Value) × Rate on Value (ROV)
+
+ROV = Base Commodity Rate
+    × ICC Clause Multiplier
+    × Trade Lane / War Risk Loading
+    × Packing / Container Quality Factor
+    × Insured Experience Factor (Loss Ratio Adjustment)
+    × Accumulation / Limit Loading
+    </div>
+    <p><strong>All rates below are market estimates (ILLUS) — actual rates are commercially sensitive and vary by syndicate, account quality, and market cycle.</strong></p>
+  </div>
+
+  <h2>2. Commodity Risk Benchmarks</h2>
+  <table class="commodity-table">
+    <thead>
+      <tr>
+        <th>Commodity / Cargo Type</th>
+        <th>ICC Clause</th>
+        <th>Typical Rate Range (% of value p.a.)</th>
+        <th>Primary Perils</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Electronics / Technology</strong></td>
+        <td>ICC (A)</td>
+        <td class="rate-mid">0.20–0.50%</td>
+        <td>Theft, water damage, breakage, fire</td>
+        <td>High theft attraction; sea/air transit; targeted pilferage at some ports (Lagos, Santos, Johannesburg). Li-ion battery loading if device cargo. <span class="badge b-i">ILLUS</span></td>
+      </tr>
+      <tr>
+        <td><strong>Vehicles / Automotive</strong></td>
+        <td>ICC (A)</td>
+        <td class="rate-high">0.35–0.80%</td>
+        <td>Theft, physical damage, sea water, fire (EVs)</td>
+        <td>EV loading: +25–50% for pure electric vehicles; fire-fighting difficulty. Port accumulation risk (Tianjin 2015). Trade lane surcharge for Red Sea. <span class="badge b-i">ILLUS</span></td>
+      </tr>
+      <tr>
+        <td><strong>Foodstuffs — Dry (grain, coffee, cocoa)</strong></td>
+        <td>ICC (B) or (C)</td>
+        <td class="rate-low">0.10–0.25%</td>
+        <td>Water damage, contamination, shortage, rodent</td>
+        <td>Contamination exclusion standard; contamination cover (e.g., Institute Commodity Trades Clauses) available at additional rate. Bulk trades attract ICC C. <span class="badge b-i">ILLUS</span></td>
+      </tr>
+      <tr>
+        <td><strong>Foodstuffs — Refrigerated / Perishable</strong></td>
+        <td>ICC (A) + Reefer Extension</td>
+        <td class="rate-mid">0.20–0.45%</td>
+        <td>Reefer breakdown, temperature deviation, delay</td>
+        <td>Reefer machinery warranty; continuous monitoring requirement; delay exclusion (ICC standard) — consider adding. Pharmaceutical cold chain: rate 0.30–0.60%+. <span class="badge b-i">ILLUS</span></td>
+      </tr>
+      <tr>
+        <td><strong>Steel / Metals (coil, plate)</strong></td>
+        <td>ICC (B) or (C)</td>
+        <td class="rate-low">0.07–0.18%</td>
+        <td>Sea water, mechanical damage, rust</td>
+        <td>Rust exclusion standard for ICC C; ICC B covers sea water rust. Weight shortage common on bulk. Mill Certificate required. <span class="badge b-i">ILLUS</span></td>
+      </tr>
+      <tr>
+        <td><strong>Bulk Commodities (coal, iron ore, grain)</strong></td>
+        <td>ICC (C)</td>
+        <td class="rate-low">0.04–0.12%</td>
+        <td>Shortage (weight loss in transit), fire (coal), contamination</td>
+        <td>Weight survey on loading and discharge essential. Coal: spontaneous combustion risk — temperature monitoring clause. Grain: fumigation warranty. <span class="badge b-i">ILLUS</span></td>
+      </tr>
+      <tr>
+        <td><strong>Pharmaceuticals / Biologics</strong></td>
+        <td>ICC (A) + Temp Control</td>
+        <td class="rate-high">0.30–0.70%</td>
+        <td>Temperature excursion, theft, breakage, delay</td>
+        <td>Cold chain integrity warranty; GDP (Good Distribution Practice) compliance; continuous data logger required; high theft attraction (controlled substances). <span class="badge b-i">ILLUS</span></td>
+      </tr>
+      <tr>
+        <td><strong>Chemicals / Dangerous Goods</strong></td>
+        <td>ICC (A) — DG endorsed</td>
+        <td class="rate-high">0.25–0.80%</td>
+        <td>Fire/explosion, contamination, reaction, leakage</td>
+        <td>IMDG compliance certificate required; misdeclaration exclusion. Higher rate for Class 1 (explosives), 2 (gases), 3 (flammables), 5.1 (oxidisers). <span class="badge b-i">ILLUS</span></td>
+      </tr>
+      <tr>
+        <td><strong>Fine Art / Antiques (VX)</strong></td>
+        <td>All Risks (bespoke)</td>
+        <td class="rate-high">0.15–0.40% per transit</td>
+        <td>Breakage, theft, water damage, climatic damage</td>
+        <td>Specialist wording (not standard ICC); professional packing warranty; exhibition clause; title warranty; valuation agreed pre-shipment. <span class="badge b-i">ILLUS</span></td>
+      </tr>
+      <tr>
+        <td><strong>Project Cargo / Heavy Lift (VX)</strong></td>
+        <td>All Risks (bespoke)</td>
+        <td class="rate-mid">0.10–0.50% per voyage</td>
+        <td>Physical damage, overturning, sea fastening failure, delay (consequential)</td>
+        <td>Marine warranty surveyor (MWS) required for heavy lift / out-of-gauge cargo. Vessel approval clause; sea fastening inspection; specific voyage policy typical. <span class="badge b-i">ILLUS</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3. Key Rating Factors</h2>
+  <div class="factor-grid">
+    <div class="factor-card">
+      <div class="factor-label">Coverage</div>
+      <h3>ICC Clause Selection</h3>
+      <ul>
+        <li><strong>ICC (A):</strong> Base rate — benchmark for all risks. Theft, pilferage, non-delivery included. Most common for containerised, electronics, food, pharma</li>
+        <li><strong>ICC (B):</strong> Rate reduction c.15–25% vs ICC A; no theft cover — used where theft risk is low or cargo is inherently theft-resistant (machinery, steel)</li>
+        <li><strong>ICC (C):</strong> Rate reduction c.30–45% vs ICC A; basic perils only; used for bulk commodities (coal, steel, grain, timber) where all-risks premium would be uneconomic</li>
+      </ul>
+    </div>
+    <div class="factor-card icc">
+      <div class="factor-label">Trade Route</div>
+      <h3>Trade Lane &amp; War Risk Loading</h3>
+      <ul>
+        <li><strong>Standard transoceanic routes:</strong> No loading (Europe–Asia via Cape; Trans-Pacific; Trans-Atlantic)</li>
+        <li><strong>Red Sea / Gulf of Aden (2024):</strong> +0.3–0.7% war risk surcharge for transit; most major carriers rerouting via Cape — no loading but +10–14 day delay</li>
+        <li><strong>Gulf of Guinea / West Africa:</strong> +0.10–0.25% piracy/theft loading</li>
+        <li><strong>Ukraine / Black Sea:</strong> JWC High Risk Area — additional war risk premium required; most cargo insurers withdrawn from new business</li>
+        <li><strong>Air freight:</strong> Typically rated lower than sea on per-voyage basis (shorter transit) but per-unit values higher</li>
+      </ul>
+    </div>
+    <div class="factor-card fire">
+      <div class="factor-label">Cargo Quality</div>
+      <h3>Packing &amp; Container Condition</h3>
+      <ul>
+        <li><strong>Professional packing:</strong> Rate credit vs. self-packed; factory-packed preferred</li>
+        <li><strong>Container condition:</strong> Survey required for one-trip or aged containers; rain or water damage risk from compromised door seals</li>
+        <li><strong>CTU Code compliance:</strong> IMO/ILO/UNECE Container/Cargo Transport Unit Code — proper weight distribution, securing, ventilation</li>
+        <li><strong>ISPM 15:</strong> Timber packing materials — phytosanitary treatment required for international trade; non-compliance creates cargo rejection risk</li>
+        <li><strong>Dangerous goods declaration:</strong> IMDG compliance; misdeclaration is a leading cause of container fires — underwriter checks for DG screening procedures</li>
+      </ul>
+    </div>
+    <div class="factor-card ga">
+      <div class="factor-label">Accumulation</div>
+      <h3>Per-Vessel / Per-Location PML</h3>
+      <ul>
+        <li><strong>Automatic limit (open cover):</strong> Maximum insured value per vessel or per sending — typically $5m–$50m depending on account size. Accumulation above automatic limit requires specific declaration</li>
+        <li><strong>Vessel class check:</strong> ULCV (18,000+ TEU) commands higher per-vessel accumulation scrutiny; maximum value per vessel may reach $500m–$1bn+</li>
+        <li><strong>Port accumulation:</strong> Tianjin 2015 exposed port accumulation risk. Cargo insurers now model maximum value in key ports (Rotterdam, Singapore, LA/LB, Tianjin, Dubai) and apply port PML stress tests</li>
+        <li><strong>Warehouse accumulation:</strong> Stock throughput policies — warehouse section rated separately; limit per location required</li>
+      </ul>
+    </div>
+    <div class="factor-card warn">
+      <div class="factor-label">Experience</div>
+      <h3>Loss Record &amp; Account Quality</h3>
+      <ul>
+        <li>5-year loss history required for open cover renewals; loss ratio benchmarked against class average (typically 50–65% target)</li>
+        <li>Frequency claims (pilferage, short-landing, minor damage) indicate risk quality problems — poor handling, inadequate packing, high-theft trade lanes</li>
+        <li>Claims cooperation: prompt reporting, survey appointment, mitigation action all affect claims settlement quality and influence renewal pricing</li>
+        <li>Insured's risk management: cargo tracking systems, GPS monitoring, carrier vetting procedures — evidence of good management earns rate credit</li>
+      </ul>
+    </div>
+    <div class="factor-card">
+      <div class="factor-label">Carrier</div>
+      <h3>Vessel &amp; Carrier Quality</h3>
+      <ul>
+        <li><strong>Classification society:</strong> Lloyd's Register, DNV, Bureau Veritas — class certificate current; ISM Code compliance</li>
+        <li><strong>Flag state:</strong> Open registries (Panama, Liberia, Marshall Islands) — check flag state port state control (PSC) detention record; substandard vessels</li>
+        <li><strong>Age warranty:</strong> Many Lloyd's cargo policies include an Institute Classification Clause — vessels over 25 years old or below class may require specific agreement or attract premium loading</li>
+        <li><strong>Freight forwarder quality:</strong> FIATA/BIFA member forwarders operating to recognised standard trading conditions; NVOCC credentials</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>4. Pre-Binding Risk Scorecard</h2>
+  <div class="scorecard">
+    <h3>10-Point Open Cover Risk Assessment</h3>
+    <div class="sc-row"><span class="sc-num">1</span><div class="sc-text"><strong>Commodity profile:</strong> What is being shipped? DG? Li-ion batteries? High-theft attraction? Temperature sensitive?</div><span class="sc-flag flag-r">Critical</span></div>
+    <div class="sc-row"><span class="sc-num">2</span><div class="sc-text"><strong>Trade lanes:</strong> Primary origin/destination pairs. Does the business traverse JWC High Risk Areas (Red Sea, Gulf of Guinea, Black Sea)?</div><span class="sc-flag flag-r">Critical</span></div>
+    <div class="sc-row"><span class="sc-num">3</span><div class="sc-text"><strong>Annual cargo value:</strong> Estimated total annual throughput. Basis for premium. Cross-check against insured's accounts/turnover for plausibility.</div><span class="sc-flag flag-r">Critical</span></div>
+    <div class="sc-row"><span class="sc-num">4</span><div class="sc-text"><strong>Automatic limit / per-sending limit:</strong> Maximum value per vessel / per conveyance — does it match the insured's typical shipment profile? ULCV accumulation?</div><span class="sc-flag flag-r">Critical</span></div>
+    <div class="sc-row"><span class="sc-num">5</span><div class="sc-text"><strong>5-year loss history:</strong> Frequency and severity of prior claims. Loss ratio calculation. Any large single losses? Claims trend (improving/deteriorating)?</div><span class="sc-flag flag-a">Important</span></div>
+    <div class="sc-row"><span class="sc-num">6</span><div class="sc-text"><strong>Packing standards:</strong> Factory-packed or self-packed? Use of professional packers / freight forwarders? CTU Code awareness?</div><span class="sc-flag flag-a">Important</span></div>
+    <div class="sc-row"><span class="sc-num">7</span><div class="sc-text"><strong>Carriers used:</strong> Named shipping lines or open? Institute Classification Clause compliance? Vessel age limits? Any use of non-classed vessels?</div><span class="sc-flag flag-a">Important</span></div>
+    <div class="sc-row"><span class="sc-num">8</span><div class="sc-text"><strong>Warehouse / storage exposure:</strong> Does the open cover include storage? Where? Duration? Is the storage section adequately sublimited?</div><span class="sc-flag flag-a">Important</span></div>
+    <div class="sc-row"><span class="sc-num">9</span><div class="sc-text"><strong>Bank / trade finance interest:</strong> Is a bank named as loss payee? Does the insured have cargo financing facilities that require cargo insurance as collateral?</div><span class="sc-flag flag-g">Useful</span></div>
+    <div class="sc-row"><span class="sc-num">10</span><div class="sc-text"><strong>Risk management programmes:</strong> GPS tracking? CCTV at warehouses? Carrier vetting procedures? Dangerous goods screening procedures?</div><span class="sc-flag flag-g">Useful</span></div>
+  </div>
+
+  <h2>5. Worked Examples</h2>
+
+  <div class="case-study">
+    <div class="cs-label">Worked Example A · ILLUS</div>
+    <h3>Electronics Open Cover — Singapore to Rotterdam (Sea/Air)</h3>
+    <div class="cs-grid">
+      <div class="cs-box">
+        <h4>Risk Profile</h4>
+        <ul>
+          <li>Insured: UK electronics distributor</li>
+          <li>Commodity: Consumer electronics, laptops, mobile devices (c.15% contain li-ion batteries)</li>
+          <li>Trade: Singapore/Hong Kong → Rotterdam (sea) + occasional air freight (high-value items)</li>
+          <li>Annual cargo value: $45m</li>
+          <li>Per-vessel automatic limit: $3m</li>
+          <li>Policy: Open cover, ICC (A), warehouse-to-warehouse</li>
+          <li>Loss record (5yr): Loss ratio 48%; three frequency claims (pilferage/short); no large losses</li>
+        </ul>
+      </div>
+      <div class="cs-box">
+        <h4>Rating Calculation</h4>
+        <ul>
+          <li>Base commodity rate (electronics, ICC A): 0.30%</li>
+          <li>Li-ion battery loading (15% of shipments, +30%): +0.04%</li>
+          <li>Trade lane: Standard Asia–Europe; no JWC HRA loading (Cape reroute active 2024)</li>
+          <li>Packing: Factory-packed, professional FF used: −5%</li>
+          <li>Carrier quality: Named top-tier carriers only: −3%</li>
+          <li>Loss experience: 48% LR (below 60% target): −5% credit</li>
+          <li><strong>Adjusted ROV: 0.34% × $45m = $153,000 p.a.</strong></li>
+          <li>War risk (Institute War Clauses — Cargo): additional 0.025% = $11,250 p.a.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cs-total">
+      <p><strong>Indicative Annual Premium: ~$164,250</strong> (basis $45m turnover; ICC A + Institute War Clauses) <span class="badge b-i">ILLUS</span></p>
+    </div>
+  </div>
+
+  <div class="case-study" style="border-left-color:var(--warn)">
+    <div class="cs-label" style="color:var(--warn)">Worked Example B · ILLUS</div>
+    <h3>Steel Coil Shipment — China to UK (Specific Voyage Policy)</h3>
+    <div class="cs-grid">
+      <div class="cs-box">
+        <h4>Risk Profile</h4>
+        <ul>
+          <li>Insured: UK steel stockholder</li>
+          <li>Commodity: Cold-rolled steel coils (1,500 tonnes)</li>
+          <li>Trade: Shanghai → Teesport, UK (sea, 25 days)</li>
+          <li>Shipment value: $1.2m CIF (10% uplift = $1.32m insured value)</li>
+          <li>Policy: Specific voyage, ICC (B), vessel to be declared</li>
+          <li>Vessel: MV Pacific Star, 12yr old, Liberian flag, BV class, ISM compliant</li>
+          <li>Stowed below deck; properly secured per CTU Code</li>
+        </ul>
+      </div>
+      <div class="cs-box">
+        <h4>Rating Calculation</h4>
+        <ul>
+          <li>Base commodity rate (steel coil, ICC B): 0.12%</li>
+          <li>Vessel age (12yr — within Class Clause limits): no loading</li>
+          <li>Flag state (Liberia — clean PSC record): no loading</li>
+          <li>Stowage: below deck, well secured: −5%</li>
+          <li>Trade lane: East Asia to UK; no HRA loading</li>
+          <li>Voyage basis (specific, not annual): apply single-voyage factor ×1.0</li>
+          <li><strong>Rate: 0.114% × $1.32m = $1,505 voyage premium</strong></li>
+          <li>War risk (voyage endorsement): +$66</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cs-total">
+      <p><strong>Indicative Voyage Premium: ~$1,571</strong> (ICC B + War Clauses Cargo, basis $1.32m) <span class="badge b-i">ILLUS</span></p>
+    </div>
+  </div>
+
+  <h2>6. Cargo Liability Underwriting (VL Code)</h2>
+  <p>VL covers the <em>legal liability</em> of freight forwarders, logistics operators, and carriers to cargo owners — distinct from cargo insurers covering the cargo owner's own interest. Key considerations differ significantly from V code underwriting.</p>
+
+  <div class="factor-grid">
+    <div class="factor-card icc">
+      <div class="factor-label">Coverage Basis</div>
+      <h3>Liability Limit vs. Standard Terms</h3>
+      <ul>
+        <li><strong>BIFA Standard Trading Conditions:</strong> Freight forwarder liability limited to £2 per kilo (UK) or SDR equivalent — vastly below actual cargo value for most goods</li>
+        <li><strong>CMR Convention:</strong> Road carrier liability limited to 8.33 SDR per kilo</li>
+        <li><strong>Hague-Visby Rules:</strong> Carrier liability: 2 SDR per kilo or 666.67 SDR per package (whichever greater)</li>
+        <li>VL covers the difference between the carrier's legal liability exposure and the cargo owner's actual loss — plus defence costs</li>
+        <li>Key question: Does the insured issue its own bills of lading (NVOCC)? If so, it may have assumed full carrier liability — significantly increases exposure</li>
+      </ul>
+    </div>
+    <div class="factor-card fire">
+      <div class="factor-label">Key Rating Factors</div>
+      <h3>VL Rating Considerations</h3>
+      <ul>
+        <li>Annual throughput value of goods handled</li>
+        <li>Type of operations: freight forwarder only (lower) vs. NVOCC (higher) vs. warehouse operator (higher)</li>
+        <li>Commodity types handled: high-value electronics, pharmaceuticals — higher liability; steel, bulk — lower</li>
+        <li>Own vehicles operated? Road haulier CMR exposure in addition to FF liability</li>
+        <li>Jurisdictions of operation: USA/Canada exposure substantially increases liability limits required (US courts award much higher damages)</li>
+        <li>Sub-contractors: Does the insured control sub-contractor quality? Sub-contractor insolvency (Hanjin 2016) creates stranded goods liability</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Marine Cargo (V/Q/VL/VX) · Lloyd's Market Intelligence · v3.3 April 2026
+</footer>
+</body>
+</html>

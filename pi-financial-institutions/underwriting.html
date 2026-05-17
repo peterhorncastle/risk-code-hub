@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>PI E&O Financial Institutions — Underwriting | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:    #2c5282;
+      --hub-dark:       #1a3050;
+      --hub-light:      #ebf4ff;
+      --hub-accent:     #c8a84b;
+      --hub-secondary:  #c0392b;
+      --hub-secondary2: #2e7d32;
+      --header-gradient: linear-gradient(135deg,#1a3050 0%,#2c5282 50%,#3a6298 100%);
+      --header-sub:     #b8ccdf;
+    }
+
+    /* Factor cards */
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; margin:20px 0; }
+    .factor-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-top:4px solid var(--hub-primary); }
+    .factor-card.amber { border-top-color:#e65100; }
+    .factor-card.red   { border-top-color:var(--hub-secondary); }
+    .factor-card.green { border-top-color:var(--hub-secondary2); }
+    .factor-card h4 { margin:0 0 8px; font-size:0.92rem; color:var(--hub-dark); }
+    .factor-card p  { margin:0; font-size:0.83rem; color:#4a5a6a; line-height:1.5; }
+    .factor-adj { display:inline-block; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:12px; margin-top:8px; }
+    .adj-up   { background:#fdecea; color:#c0392b; }
+    .adj-down { background:#e8f5e9; color:#2e7d32; }
+    .adj-neut { background:#fef3e2; color:#7a5700; }
+
+    /* Worked examples */
+    .example { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px 28px; margin:20px 0; }
+    .example h3 { color:var(--hub-dark); margin-top:0; font-size:1.02rem; }
+    .example-tag { display:inline-block; font-size:0.72rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; padding:3px 10px; border-radius:20px; background:var(--hub-light); color:var(--hub-primary); margin-bottom:12px; }
+    .calc-row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px dashed var(--border); font-size:0.88rem; }
+    .calc-row:last-child { border-bottom:none; font-weight:700; font-size:0.95rem; color:var(--hub-dark); }
+    .calc-label { color:#4a5a6a; }
+    .calc-val { font-weight:600; color:var(--hub-primary); }
+    .calc-row.total .calc-val { color:var(--hub-dark); font-size:1.05rem; }
+
+    /* Checklist */
+    .checklist { list-style:none; padding:0; margin:16px 0; }
+    .checklist li { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.88rem; }
+    .checklist li:last-child { border-bottom:none; }
+    .check-icon { flex-shrink:0; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:900; margin-top:1px; }
+    .ci-req  { background:#fdecea; color:#c0392b; }
+    .ci-pref { background:#fef3e2; color:#7a5700; }
+    .ci-info { background:#ebf4ff; color:#2c5282; }
+    .check-text strong { display:block; margin-bottom:2px; }
+
+    /* Sub-limit table */
+    .sublimit-table { width:100%; border-collapse:collapse; font-size:0.85rem; margin:16px 0; }
+    .sublimit-table th { background:var(--hub-dark); color:#fff; padding:9px 12px; text-align:left; font-size:0.78rem; }
+    .sublimit-table td { padding:9px 12px; border-bottom:1px solid var(--border); }
+    .sublimit-table tr:hover td { background:#f7f9fc; }
+    .sub-red  { color:var(--hub-secondary); font-weight:700; }
+    .sub-amb  { color:#e65100; font-weight:700; }
+    .sub-grn  { color:var(--hub-secondary2); font-weight:700; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">PI E&O Financial Institutions (F2/F3)</a> › Underwriting</div>
+  <div class="tag">Module 04 — Underwriting</div>
+  <h1>PI E&amp;O Financial Institutions — Underwriting</h1>
+  <p>Rating methodology, risk factor cards, two worked pricing examples, standard sub-limits framework, and pre-bind underwriting checklist for IFA and institutional FI PI risks.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>FI PI is rated on a technical premium basis derived from the insured's revenue, advice product mix, regulatory history, limit of indemnity, and policy structure. All rating factors are applied as multipliers to a base exposure premium derived from client assets under advice (AUA) or gross revenue. <span class="badge b-e">EST</span></p>
+
+  <!-- Rating formula -->
+  <div class="formula-box">
+    <div class="formula-title">FI PI Technical Premium Formula</div>
+    <div class="formula">
+      Technical Premium = (Base Rate × Revenue / AUA) × Product Risk Factor × Regulatory Factor × Limit Factor × Retroactive Date Factor × Deductible Credit
+    </div>
+    <p style="margin:10px 0 0;font-size:0.85rem;color:#4a5a6a;">
+      <strong>Base rate:</strong> 0.20%–0.60% of annual gross revenue for retail IFAs; 0.05%–0.20% for institutional advisers (AUA basis). <span class="badge b-e">EST</span><br>
+      <strong>Product risk factor:</strong> 1.0 (vanilla funds/ISAs) → 3.5× (DB transfers, structured products, alternative investments).<br>
+      <strong>Regulatory factor:</strong> 1.0 (clean history) → 2.5× (prior FCA investigation, FOS awards, regulatory censure).<br>
+      <strong>Limit factor:</strong> Stepped — higher limits attract marginal rate reduction reflecting reduced severity probability at upper layers.<br>
+      <strong>Retroactive date factor:</strong> Full retro = 1.0; restricted retro (date within last 3 yrs) = 0.75–0.85.
+    </p>
+  </div>
+
+  <!-- Rating factor cards -->
+  <h2>Primary Rating Factors</h2>
+
+  <div class="factor-grid">
+
+    <div class="factor-card">
+      <h4>Revenue / AUA</h4>
+      <p>Primary exposure base. Retail IFAs rated on gross income (fee + trail); DFMs and institutional managers rated on AUA. Revenue growth &gt;20% year-on-year raises proportional exposure flag.</p>
+      <span class="factor-adj adj-neut">Neutral baseline — sets exposure unit</span>
+    </div>
+
+    <div class="factor-card amber">
+      <h4>Defined Benefit Transfer Volume</h4>
+      <p>DB transfer advice is the single highest-frequency source of FI PI claims in the IFA market. Any firm with &gt;15% of advice revenue from DB transfers requires a dedicated sub-limit and surcharge.</p>
+      <span class="factor-adj adj-up">+30%–100% loading</span>
+    </div>
+
+    <div class="factor-card amber">
+      <h4>Structured Product / Alternative Investment</h4>
+      <p>CPDO, structured notes, mini-bonds, P2P, UCIS, EIS/SEIS in retail context. Complexity and illiquidity of these products correlates with higher claim frequency and severity.</p>
+      <span class="factor-adj adj-up">+25%–75% loading</span>
+    </div>
+
+    <div class="factor-card red">
+      <h4>Regulatory History</h4>
+      <p>Prior FCA enforcement action, FOS awards &gt;£10k, regulatory capital concerns, or withdrawal of regulated permissions in prior 5 years. Even settled matters indicate elevated process risk.</p>
+      <span class="factor-adj adj-up">+50%–150% loading or decline</span>
+    </div>
+
+    <div class="factor-card red">
+      <h4>Appointed Representative Network</h4>
+      <p>Principal firms responsible for AR conduct. AR network size, onboarding rigour, and monitoring procedures are critical. Large AR networks with limited oversight are a major accumulation risk.</p>
+      <span class="factor-adj adj-up">+25%–75% loading; cap on AR count</span>
+    </div>
+
+    <div class="factor-card green">
+      <h4>Claims-Free History</h4>
+      <p>Verified 5-year claims-free record (FOS + civil) is the most powerful positive rating indicator. Independent firm that has grown steadily with clean claims history represents the target risk profile.</p>
+      <span class="factor-adj adj-down">−10%–20% credit</span>
+    </div>
+
+    <div class="factor-card green">
+      <h4>MiFID II / Consumer Duty Compliance Evidence</h4>
+      <p>Documented suitability framework, client profiling records, product governance procedures, Consumer Duty outcome monitoring — all reduce the probability of a successful negligence claim.</p>
+      <span class="factor-adj adj-down">−5%–15% credit</span>
+    </div>
+
+    <div class="factor-card">
+      <h4>Retroactive Date</h4>
+      <p>Claims-made policies — retroactive date controls the tail. Full retroactive date increases exposure significantly for firms with legacy books. Common approach: inception date retro for new insureds; maintained retro for renewals.</p>
+      <span class="factor-adj adj-neut">+15%–25% for full retro vs inception date</span>
+    </div>
+
+    <div class="factor-card amber">
+      <h4>ESG / Sustainable Finance</h4>
+      <p>Firms marketing ESG or sustainable mandates face greenwashing claims exposure. Require documentation of ESG methodology, SDR/SFDR compliance procedures, and fund labelling review process.</p>
+      <span class="factor-adj adj-up">+10%–30% loading (ESG AUM &gt;20%)</span>
+    </div>
+
+    <div class="factor-card amber">
+      <h4>Cryptocurrency / Digital Assets</h4>
+      <p>Any firm advising on or facilitating digital asset investments. FCA registration as crypto asset business required. Absent registration, exposure to unregulated activity exclusion disputes.</p>
+      <span class="factor-adj adj-up">Sub-limit or exclusion standard</span>
+    </div>
+
+    <div class="factor-card green">
+      <h4>PI Cover Continuity</h4>
+      <p>Unbroken prior cover without gaps is a key positive indicator. Gaps in cover create retroactive date risk and suggest periods of potential uninsured claims. Require prior insurer loss history for 5 years.</p>
+      <span class="factor-adj adj-down">−5% credit (continuous 5+ years)</span>
+    </div>
+
+    <div class="factor-card">
+      <h4>Limit of Indemnity Adequacy</h4>
+      <p>FCA minimum PI requirements (£1m any-one-claim) are often inadequate for larger IFAs. Underwriters should assess whether limit is proportionate to AUA and DB transfer advice volumes. Insufficient limits may indicate adverse selection (firm not disclosing full exposure).</p>
+      <span class="factor-adj adj-neut">Referral if limit appears low relative to exposure</span>
+    </div>
+
+  </div>
+
+  <!-- Sub-limits table -->
+  <h2>Standard Sub-Limits Framework</h2>
+  <p>FI PI policies commonly apply sub-limits to high-risk advice categories. The following represents market convention for retail IFA risks: <span class="badge b-e">EST</span></p>
+
+  <table class="sublimit-table">
+    <thead>
+      <tr><th>Advice Category</th><th>Sub-Limit (typical)</th><th>Aggregate Sub-Limit</th><th>Basis</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Defined Benefit Pension Transfer</td><td class="sub-red">£500k–£1m any-one-claim</td><td class="sub-red">£2m–£5m in aggregate</td><td>Declared DB transfer volume &gt;£5m pa</td></tr>
+      <tr><td>Structured Products / Alternatives</td><td class="sub-amb">£500k any-one-claim</td><td class="sub-amb">£2m in aggregate</td><td>Any UCIS, EIS, structured note advice</td></tr>
+      <tr><td>Cryptocurrency / Digital Assets</td><td class="sub-red">£250k–£500k any-one-claim</td><td class="sub-red">£1m in aggregate</td><td>FCA crypto registration required</td></tr>
+      <tr><td>ESG / Sustainable Mandates</td><td class="sub-amb">£500k any-one-claim</td><td class="sub-amb">£2m in aggregate</td><td>ESG AUM &gt;20% of total book</td></tr>
+      <tr><td>Consumer Credit / Mortgage</td><td class="sub-amb">£250k any-one-claim</td><td class="sub-amb">£1m in aggregate</td><td>Where credit broking included in scope</td></tr>
+      <tr><td>Regulatory Defence Costs</td><td class="sub-grn">Full policy limit</td><td class="sub-grn">Shared with main limit</td><td>Standard — first-dollar, no deductible</td></tr>
+      <tr><td>Run-Off (post-cessation)</td><td class="sub-grn">Full policy limit maintained</td><td>—</td><td>6-year run-off standard (FCA requirement)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Worked Example 1 -->
+  <h2>Worked Pricing Examples</h2>
+
+  <div class="example">
+    <div class="example-tag">Example A — Mid-Size Retail IFA Practice</div>
+    <h3>Pemberton Financial Advisers Ltd — 12 advisers, £85m AUA, mixed advice book</h3>
+    <p><strong>Profile:</strong> 12 employed advisers, £85m client AUA, £1.2m gross revenue. Advice mix: 60% vanilla funds/ISAs, 25% DB transfer advice (£18m pa volume), 10% structured products, 5% protection. 5-year claims-free record. No FCA regulatory actions. Consumer Duty procedures documented. Seeking £2m any-one-claim / £4m aggregate. Full retroactive date from inception (2016). <span class="badge b-i">ILLUS</span></p>
+    <div class="calc-row"><span class="calc-label">Base premium (0.30% × £1.2m revenue)</span><span class="calc-val">£3,600</span></div>
+    <div class="calc-row"><span class="calc-label">DB transfer loading (+50% for 25% DB mix, £18m volume)</span><span class="calc-val">+£1,800</span></div>
+    <div class="calc-row"><span class="calc-label">Structured product loading (+25%)</span><span class="calc-val">+£900</span></div>
+    <div class="calc-row"><span class="calc-label">Limit factor (£2m/£4m — standard multiplier 2.8×)</span><span class="calc-val">×2.8 applied to base</span></div>
+    <div class="calc-row"><span class="calc-label">Sub-total before adjustments</span><span class="calc-val">£17,640</span></div>
+    <div class="calc-row"><span class="calc-label">Claims-free credit (−15%)</span><span class="calc-val">−£2,646</span></div>
+    <div class="calc-row"><span class="calc-label">Consumer Duty compliance credit (−10%)</span><span class="calc-val">−£1,764</span></div>
+    <div class="calc-row"><span class="calc-label">Retroactive date — full from 2016 (+20%)</span><span class="calc-val">+£2,646</span></div>
+    <div class="calc-row total"><span class="calc-label">Indicated Technical Premium</span><span class="calc-val">≈ £15,876</span></div>
+    <p style="margin-top:14px;font-size:0.83rem;color:#4a5a6a;"><strong>Conditions:</strong> DB transfer advice sub-limit £1m any-one-claim / £3m aggregate. Structured product sub-limit £500k. £5,000 deductible per claim. MiFID II suitability records subject to inspection. <span class="badge b-i">ILLUS</span></p>
+  </div>
+
+  <div class="example">
+    <div class="example-tag">Example B — Boutique DFM / Asset Manager</div>
+    <h3>Alderton Capital Management LLP — £320m AUM, institutional and HNW clients</h3>
+    <p><strong>Profile:</strong> Discretionary fund manager, £320m AUM (80% HNW/family office, 20% institutional). Regulated under MiFID II Article 24 fiduciary standard. Product mix: global equities (45%), fixed income (30%), alternatives (15%), ESG-mandated portfolios (10% of AUM). One FOS complaint in prior 3 years (settled £35k, no admission). Seeking £5m any-one-claim / £10m aggregate. <span class="badge b-i">ILLUS</span></p>
+    <div class="calc-row"><span class="calc-label">Base premium (0.12% × £320m AUM exposure)</span><span class="calc-val">£38,400</span></div>
+    <div class="calc-row"><span class="calc-label">Alternatives loading (+20% for 15% alternatives AUM)</span><span class="calc-val">+£7,680</span></div>
+    <div class="calc-row"><span class="calc-label">ESG loading (+15% for 10% ESG mandates)</span><span class="calc-val">+£5,760</span></div>
+    <div class="calc-row"><span class="calc-label">Prior FOS complaint (+20% regulatory loading)</span><span class="calc-val">+£10,368</span></div>
+    <div class="calc-row"><span class="calc-label">Limit factor (£5m/£10m — 4.5× multiplier)</span><span class="calc-val">×4.5 applied to base</span></div>
+    <div class="calc-row"><span class="calc-label">Sub-total before adjustments</span><span class="calc-val">£278,496</span></div>
+    <div class="calc-row"><span class="calc-label">MiFID II / CIP compliance documentation credit (−8%)</span><span class="calc-val">−£22,280</span></div>
+    <div class="calc-row"><span class="calc-label">Institutional client profile credit (−5%)</span><span class="calc-val">−£13,925</span></div>
+    <div class="calc-row total"><span class="calc-label">Indicated Technical Premium</span><span class="calc-val">≈ £242,291</span></div>
+    <p style="margin-top:14px;font-size:0.83rem;color:#4a5a6a;"><strong>Conditions:</strong> ESG mandate sub-limit £1m. Alternatives sub-limit £1m. £25,000 deductible (own risk first). Prior FOS complaint declared as material circumstance — coverage excludes further claims arising from same root cause as settled complaint. Regulatory investigation coverage included at full policy limit. <span class="badge b-i">ILLUS</span></p>
+  </div>
+
+  <!-- Pre-bind checklist -->
+  <h2>Pre-Bind Underwriting Checklist</h2>
+  <p>Minimum information required before binding FI PI coverage. <span class="badge b-e">EST</span> — additional questions required for higher-risk profiles.</p>
+
+  <ul class="checklist">
+    <li>
+      <div class="check-icon ci-req">R</div>
+      <div class="check-text"><strong>FCA Registration &amp; Regulatory Status</strong> Confirm FRN, regulated activities, any current regulatory investigations, past enforcement actions, FCA capital adequacy requirements met.</div>
+    </li>
+    <li>
+      <div class="check-icon ci-req">R</div>
+      <div class="check-text"><strong>5-Year Claims History (FOS + civil)</strong> Full claims schedule including FOS decisions, settled civil claims, open circumstances, circumstances notified but not yet claims. Require prior insurer confirmation.</div>
+    </li>
+    <li>
+      <div class="check-icon ci-req">R</div>
+      <div class="check-text"><strong>Revenue Breakdown by Advice Category</strong> Percentage of gross revenue / AUM by product type: vanilla funds, DB transfers, structured products, alternatives, protection, mortgages, ESG, crypto. Minimum 3-year trend.</div>
+    </li>
+    <li>
+      <div class="check-icon ci-req">R</div>
+      <div class="check-text"><strong>DB Transfer Volume &amp; Documented Process</strong> Where DB transfer volume &gt;£5m pa, require copy of TVAS process documentation, FCA's DB transfer advice review findings if available, and specialist qualifications confirmation (AF7 or equivalent).</div>
+    </li>
+    <li>
+      <div class="check-icon ci-req">R</div>
+      <div class="check-text"><strong>Client Profile — Retail vs Professional vs Eligible Counterparty</strong> Proportion of retail, professional, and institutional clients. Elderly / vulnerable client policy. Any 'mass market' distribution of higher-risk products.</div>
+    </li>
+    <li>
+      <div class="check-icon ci-req">R</div>
+      <div class="check-text"><strong>Appointed Representative Network</strong> For principal firms: number of ARs, onboarding procedure, compliance monitoring framework, prior AR-related claims or regulatory actions. Maximum AR count thresholds apply.</div>
+    </li>
+    <li>
+      <div class="check-icon ci-pref">P</div>
+      <div class="check-text"><strong>Consumer Duty Compliance Assessment</strong> Evidence of Consumer Duty implementation: outcome monitoring framework, product review cadence, vulnerable client identification procedures, complaints handling procedures.</div>
+    </li>
+    <li>
+      <div class="check-icon ci-pref">P</div>
+      <div class="check-text"><strong>MiFID II Suitability Documentation Sample</strong> Sample anonymised suitability report to evidence advice documentation standard. Quality of documentation is the primary defence in PI claims.</div>
+    </li>
+    <li>
+      <div class="check-icon ci-pref">P</div>
+      <div class="check-text"><strong>ESG Methodology Documentation</strong> Where insured manages ESG mandates or markets ESG products: copy of ESG screening methodology, SDR/SFDR categorisation procedures, fund labelling review process.</div>
+    </li>
+    <li>
+      <div class="check-icon ci-pref">P</div>
+      <div class="check-text"><strong>Professional Indemnity Cover Continuity</strong> Prior cover schedule for 5 years. Any gaps in coverage, retroactive date changes, or change of insurer. Require explanation for any gaps.</div>
+    </li>
+    <li>
+      <div class="check-icon ci-info">I</div>
+      <div class="check-text"><strong>Technology / AI Tool Usage</strong> Whether AI tools used in advice preparation, research generation, or suitability assessments. Evidence of human review and accountability framework if AI tools used.</div>
+    </li>
+    <li>
+      <div class="check-icon ci-info">I</div>
+      <div class="check-text"><strong>Key Person Dependencies</strong> For smaller firms: dependency on founding adviser, succession planning, professional qualifications of all regulated individuals. Key person departure = material change requiring notification.</div>
+    </li>
+  </ul>
+
+  <div class="info-box">
+    <strong>Referral Triggers — Automatic Referral to Senior Underwriter</strong><br>
+    Any of the following require senior referral before binding: (1) DB transfer volume &gt;£25m pa, (2) active FCA investigation, (3) &gt;3 FOS awards in prior 3 years, (4) AR network &gt;50 representatives, (5) crypto advice without FCA crypto registration, (6) structured product distribution to retail clients &gt;30% of revenue, (7) gaps in prior PI cover &gt;30 days, (8) limit of indemnity &gt;£10m any-one-claim. <span class="badge b-e">EST</span>
+  </div>
+
+</main>
+<footer>
+  <a href="../index.html">← Risk Code Hub</a> &nbsp;|&nbsp; PI E&amp;O Financial Institutions (F2/F3) — Module 04 Underwriting &nbsp;|&nbsp; Version 3.7 · May 2026
+</footer>
+</body>
+</html>

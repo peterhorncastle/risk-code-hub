@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Crime / Fidelity FI — Risk Mitigation | Risk Code Hub</title>
+  <style>
+    :root {
+      --crime:#7b1e1e; --crime-dark:#3d0000; --fi:#0d3b6b;
+      --fid:#1b5e20; --fraud:#c62828; --cyber:#6a1b9a;
+      --social:#e65100; --gold:#b8860b;
+      --light:#faf5f5; --text:#1e1e2e; --muted:#6b7c93; --border:#d4c8c8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #7b1e1e;
+    --hub-dark:      #3d0000;
+    --hub-light:     #faf5f5;
+    --hub-accent:    #b8860b;
+    --hub-secondary: #0d3b6b;
+    --hub-secondary2:#1b5e20;
+    --header-gradient:linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%);
+    --header-sub:    #e8c8c8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#cc9988; margin-bottom:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    header h1 { font-size:1.8rem; font-weight:700; }
+    header p { margin-top:8px; color:#e8c8c8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--crime); border-bottom-color:var(--gold); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.25rem; color:var(--crime); margin:40px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--gold); }
+    h3 { font-size:1.05rem; color:var(--crime-dark); margin:20px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.93rem; }
+    ul { padding-left:20px; margin-bottom:14px; }
+    li { font-size:0.9rem; line-height:1.75; margin-bottom:6px; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; vertical-align:middle; margin-left:3px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+
+    .control-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; margin:20px 0; }
+    .ctrl-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; border-left:4px solid var(--crime); }
+    .ctrl-card.fi { border-left-color:var(--fi); }
+    .ctrl-card.cyber { border-left-color:var(--cyber); }
+    .ctrl-card.fid { border-left-color:var(--fid); }
+    .ctrl-card.social { border-left-color:var(--social); }
+    .ctrl-card.gold { border-left-color:var(--gold); }
+    .ctrl-card h4 { font-size:0.9rem; font-weight:700; margin-bottom:8px; }
+    .ctrl-card { color:var(--crime-dark); }
+    .ctrl-card.fi h4 { color:var(--fi); }
+    .ctrl-card.cyber h4 { color:var(--cyber); }
+    .ctrl-card.fid h4 { color:var(--fid); }
+    .ctrl-card.social h4 { color:var(--social); }
+    .ctrl-card ul { padding-left:16px; margin:0; }
+    .ctrl-card li { font-size:0.83rem; margin-bottom:5px; }
+
+    .tbl-wrap { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:20px 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.87rem; }
+    th { background:var(--crime); color:#fff; padding:10px 14px; text-align:left; }
+    td { padding:9px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:nth-child(even) td { background:#fdf8f8; }
+
+    .info-box { border-radius:10px; padding:18px 22px; margin:18px 0; font-size:0.89rem; line-height:1.7; }
+    .info-box.red { background:#fdecea; border-left:4px solid var(--fraud); }
+    .info-box.blue { background:#e3f2fd; border-left:4px solid var(--fi); }
+    .info-box.green { background:#e8f5e9; border-left:4px solid var(--fid); }
+    .info-box.amber { background:#fff8e1; border-left:4px solid var(--gold); }
+    .info-box strong { display:block; font-size:0.93rem; margin-bottom:6px; }
+
+    footer { background:var(--crime-dark); color:#aa8888; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer a { color:var(--gold); text-decoration:none; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Crime / Fidelity FI (BB)</a> › Risk Mitigation</div>
+  <h1>Module 06 — Risk Mitigation</h1>
+  <p>Internal controls, employee screening, cyber security, regulatory standards and insured guidance for FI crime prevention</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <p>Effective FI crime risk mitigation operates across three lines of defence: (1) front-line controls embedded in business processes; (2) independent risk management and compliance oversight; (3) internal audit. Underwriters assess all three lines when pricing BB risks. Strong mitigation frameworks directly reduce premium, improve limit availability, and support faster claims recovery. <span class="badge b-v">VER</span></p>
+
+  <!-- INTERNAL CONTROLS -->
+  <h2>Internal Controls Framework — Three Lines of Defence</h2>
+  <div class="control-grid">
+    <div class="ctrl-card">
+      <h4>🔀 Segregation of Duties</h4>
+      <ul>
+        <li>No single employee can initiate AND authorise a payment or trade</li>
+        <li>Front office (trading/origination) separate from middle office (risk) and back office (settlements)</li>
+        <li>IT administration separate from business operations (prevents insider system access)</li>
+        <li>Rogue trader prevention: independent position confirmation vs. counterparties</li>
+        <li>Post-Barings and post-SocGen: absolute requirement for Lloyd's BB underwriters <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="ctrl-card fi">
+      <h4>✅ Dual Authorisation / Dual Control</h4>
+      <ul>
+        <li>Two independent approvers required for payments above defined threshold</li>
+        <li>Threshold typically: £/$10,000 for FI treasury payments (varies by size)</li>
+        <li>No authorisation by the initiating employee — independent approval path</li>
+        <li>Physical dual control: vault access, cash counting, securities handling</li>
+        <li>Both authorisers must not be from same team or reporting line</li>
+      </ul>
+    </div>
+    <div class="ctrl-card cyber">
+      <h4>📊 Reconciliation &amp; Exception Reporting</h4>
+      <ul>
+        <li>Daily reconciliation of positions vs. prime broker/custodian records</li>
+        <li>Exception reports reviewed by compliance independent of trading desk</li>
+        <li>Hard position limits with automatic stop triggers in trading systems</li>
+        <li>SWIFT payment reconciliation: confirmations matched to instructions within T+1</li>
+        <li>Unexplained cash movements flagged to senior management same day</li>
+      </ul>
+    </div>
+    <div class="ctrl-card fid">
+      <h4>📅 Mandatory Holiday &amp; Job Rotation</h4>
+      <ul>
+        <li>Mandatory minimum 2 consecutive weeks' holiday per year for all financial roles</li>
+        <li>Classic fidelity control: ongoing fraud requires daily management; absence exposes it</li>
+        <li>Mandatory holiday absent: loading factor in Lloyd's BB pricing</li>
+        <li>Job rotation for high-risk roles (trading, settlements, treasury) every 2–3 years</li>
+        <li>Temporary replacement during holiday must be from a different team</li>
+      </ul>
+    </div>
+    <div class="ctrl-card social">
+      <h4>🔔 Internal Audit &amp; Whistleblowing</h4>
+      <ul>
+        <li>Independent internal audit — minimum annual review of high-risk processes</li>
+        <li>Anonymous whistleblower hotline (legally required in many jurisdictions post-Dodd-Frank) <span class="badge b-v">VER</span></li>
+        <li>Audit findings reported directly to audit committee; not filtered by management</li>
+        <li>Significant audit exceptions disclosed to BB underwriters (as may be a material change)</li>
+        <li>External audit: Big 4 engagement is a positive underwriting indicator</li>
+      </ul>
+    </div>
+    <div class="ctrl-card gold">
+      <h4>💰 Compensation &amp; Clawback</h4>
+      <ul>
+        <li>Bonus clawback provisions for employees involved in fraud or material misstatement</li>
+        <li>Deferred compensation structures reduce incentive for short-term fraud</li>
+        <li>Financial stress monitoring: employee assistance programme; discretionary advances</li>
+        <li>Background checks on promotions to senior roles with elevated access</li>
+        <li>Exit interviews and access revocation checklist on termination (same-day system lockout)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CYBER SECURITY CONTROLS -->
+  <h2>Technology &amp; Cyber Security Controls</h2>
+
+  <div class="info-box blue">
+    <strong>SWIFT Customer Security Programme (CSP) — Mandatory <span class="badge b-v">VER</span></strong>
+    All SWIFT member institutions must comply with the CSP mandatory controls (16 controls across 3 security objectives: Know Your Environment, Protect Your Environment, Detect and Respond). CSP attestation is submitted annually via the KYC Security Attestation (KYC-SA). Lloyd's BB underwriters now require CSP compliance as a condition of computer crime coverage for SWIFT members. Non-attestation or failed CSP = uninsured SWIFT exposure.
+  </div>
+
+  <div class="control-grid">
+    <div class="ctrl-card cyber">
+      <h4>🔐 Multi-Factor Authentication (MFA)</h4>
+      <ul>
+        <li>MFA mandatory for: all SWIFT payment initiation; wire transfer authorisation; remote access; admin accounts</li>
+        <li>Phishing-resistant MFA preferred (FIDO2/hardware token vs. SMS OTP)</li>
+        <li>MFA bypass procedures must require senior management approval and audit trail</li>
+        <li>CSP Mandatory Control 4: MFA specifically required for SWIFT operator access <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="ctrl-card fi">
+      <h4>🛡️ Privileged Access Management (PAM)</h4>
+      <ul>
+        <li>Privileged accounts (admin, root, service accounts) managed through PAM solution</li>
+        <li>Just-in-time access: privileged access granted only when needed, auto-revoked</li>
+        <li>Session recording for all privileged access — audit trail for forensic investigation</li>
+        <li>Credential vaulting: privileged passwords rotated automatically; not known to users</li>
+        <li>Separation of IT admin from business system access — no "all-powerful" accounts</li>
+      </ul>
+    </div>
+    <div class="ctrl-card">
+      <h4>📡 SIEM &amp; Threat Detection</h4>
+      <ul>
+        <li>Security Information and Event Management (SIEM): centralised log collection and alert correlation</li>
+        <li>Anomaly detection: unusual payment times, volumes, or destinations flagged automatically</li>
+        <li>SWIFT messaging pattern monitoring: deviations from normal correspondent relationships</li>
+        <li>Insider threat detection: data exfiltration alerts, unusual access patterns</li>
+        <li>24/7 Security Operations Centre (SOC) for large FIs; outsourced SOC acceptable for smaller</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BEC CONTROLS -->
+  <h2>BEC &amp; Social Engineering Controls</h2>
+
+  <div class="info-box amber">
+    <strong>The Callback Protocol — Most Effective Single BEC Control <span class="badge b-e">EST</span></strong>
+    The single most effective control against BEC fraud is mandatory out-of-band verification via a pre-established callback to a known, independently verified phone number for any payment instruction that involves: (1) changing payee bank details; (2) instructions from a senior executive received only by email; (3) unusual urgency or secrecy. Lloyd's BB underwriters increasingly ask whether a callback protocol exists and is applied consistently for all payment amendments.
+  </div>
+
+  <div class="control-grid">
+    <div class="ctrl-card social">
+      <h4>📧 Email Authentication (DMARC/DKIM/SPF)</h4>
+      <ul>
+        <li>DMARC (Domain-based Message Authentication) prevents external parties from spoofing the insured's email domain</li>
+        <li>SPF (Sender Policy Framework): specifies which mail servers may send on behalf of the domain</li>
+        <li>DKIM (DomainKeys Identified Mail): cryptographic signature on outbound emails</li>
+        <li>DMARC policy should be set to "reject" (not just "quarantine") for maximum protection</li>
+        <li>Key underwriting question: "Is DMARC deployed and set to reject?" <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+    <div class="ctrl-card fid">
+      <h4>🎓 Staff Training &amp; Simulation</h4>
+      <ul>
+        <li>Annual BEC/phishing awareness training — mandatory for all finance and payment staff</li>
+        <li>Quarterly phishing simulations: click rate below 5% is positive underwriting indicator</li>
+        <li>Deepfake awareness training: how to verify video/audio communications for payment instructions</li>
+        <li>CEO/CFO impersonation scenarios: "what would you do if…" tabletop exercises</li>
+        <li>Post-incident near-miss reporting: learning from BEC attempts before loss</li>
+      </ul>
+    </div>
+    <div class="ctrl-card gold">
+      <h4>📋 Payment Change Verification</h4>
+      <ul>
+        <li>Supplier/vendor bank detail changes: mandatory callback to registered contact (not the number provided in the change request)</li>
+        <li>New payee authorisation: senior approval for any new beneficiary account</li>
+        <li>Payment amount thresholds: automatic escalation for single large or unusual payments</li>
+        <li>Real-time fraud screening: sanctions, PEP, and fraud database checks on all new payees</li>
+        <li>Confirmation of payee (CoP) service — UK Faster Payments scheme <span class="badge b-v">VER</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- REGULATORY STANDARDS -->
+  <h2>Regulatory Standards &amp; Compliance Requirements</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Standard / Regulation</th><th>Jurisdiction / Body</th><th>FI Crime Relevance</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>SWIFT Customer Security Programme (CSP)</td>
+          <td>SWIFT (global)</td>
+          <td>Mandatory controls for all SWIFT members; 16 mandatory + 11 advisory controls. Underpins computer crime coverage in BB policies for SWIFT-connected FIs.</td>
+          <td><span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td>FINRA Rule 4360 — Fidelity Bonds</td>
+          <td>FINRA (USA)</td>
+          <td>Broker-dealers must maintain a blanket fidelity bond with minimum coverage equal to net capital requirement. Coverage must include employee dishonesty, forgery, theft, and computer fraud.</td>
+          <td><span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td>Investment Company Act 1940 s.17(g)</td>
+          <td>SEC (USA)</td>
+          <td>Registered investment companies must maintain a fidelity bond of 10% of fund value (min $2,500, max $500,000 for the bond requirement). Bonded officers/employees covered.</td>
+          <td><span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td>FCA / PRA — Operational Resilience &amp; ICAAP</td>
+          <td>FCA / PRA (UK)</td>
+          <td>FCA/PRA require FIs to identify and mitigate operational risks including fraud and crime. ICAAP must include crime scenario stress testing. Conduct risk framework includes employee misconduct.</td>
+          <td><span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td>Dodd-Frank Act — Whistleblower Programme</td>
+          <td>SEC / CFTC (USA)</td>
+          <td>Requires robust internal whistleblower programmes at US FIs; external SEC/CFTC reporting pathway with 10–30% of sanctions as reward for valid tips. Significantly improved early fraud detection.</td>
+          <td><span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td>UK PSR APP Fraud Reimbursement</td>
+          <td>PSR (UK)</td>
+          <td>From October 2024: PSPs must reimburse APP fraud victims up to £85,000. Creates insurable crime-adjacent liability for UK payment firms. Covered under BB / PI hybrid products being developed.</td>
+          <td><span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td>MAS TRM Guidelines (Singapore)</td>
+          <td>MAS (Singapore)</td>
+          <td>Monetary Authority of Singapore Technology Risk Management Guidelines require robust controls over IT systems, cyber security, and fraud prevention for MAS-regulated FIs. Increasingly referenced in Asia-Pacific BB underwriting.</td>
+          <td><span class="badge b-v">VER</span></td>
+        </tr>
+        <tr>
+          <td>DORA — Digital Operational Resilience Act</td>
+          <td>EU</td>
+          <td>Effective January 2025: EU FIs must meet enhanced ICT risk management requirements including threat-led penetration testing (TLPT) and ICT incident reporting. Relevant to computer crime coverage triggers.</td>
+          <td><span class="badge b-v">VER</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- INSURED GUIDANCE -->
+  <h2>Guidance for Insureds</h2>
+  <h3>Before a Claim — Prevention Best Practice</h3>
+  <ul>
+    <li><strong>Conduct an annual fidelity risk assessment:</strong> map all processes where a single employee could cause loss; implement dual controls or compensating controls for each</li>
+    <li><strong>Test your callback protocol:</strong> run a BEC simulation — have a member of staff attempt a social engineering attack on your own finance team to test whether the protocol is actually followed</li>
+    <li><strong>Verify SWIFT CSP compliance annually:</strong> even if you completed last year's attestation, confirm mandatory controls are still in place after system changes or staff changes</li>
+    <li><strong>Review policy coverage for new risks:</strong> if your firm has moved into crypto, launched a new payment product, or adopted AI tools, check whether your BB policy wording covers the new risk profile</li>
+    <li><strong>Maintain an accurate loss log:</strong> record all attempted and successful fraud events, including near-misses. This log will be requested at renewal and demonstrates risk management maturity</li>
+  </ul>
+  <h3>When a Fraud is Discovered</h3>
+  <ul>
+    <li><strong>Notify underwriters immediately:</strong> BB policies are discovery-basis. Prompt notification is a condition of cover. Delay in notification can prejudice recovery. Notify your broker the same day the fraud is discovered</li>
+    <li><strong>Preserve evidence:</strong> do not alter, delete, or reset any system involved in the fraud before forensic imaging. Email servers, SWIFT logs, trading system records — all must be preserved</li>
+    <li><strong>Engage specialist forensic investigators:</strong> BB policies typically cover the cost of forensic investigation as a claim expense. Use an approved panel investigator if your policy requires it</li>
+    <li><strong>Report to regulators if required:</strong> most FIs are required to report material fraud to their regulator (FCA, OCC, FDIC, MAS) within specified timeframes. Failure to report can trigger enforcement action independent of the insurance claim</li>
+    <li><strong>Initiate recovery action:</strong> insurers will assist with subrogation — legal action against the dishonest employee or third-party fraudsters. Cooperate fully and do not independently settle without insurer consent</li>
+    <li><strong>Sue &amp; Labour:</strong> take reasonable steps to minimise the loss once discovered — reverse payments where possible, freeze accounts, alert correspondent banks. These costs are claimable as Sue &amp; Labour expenses</li>
+  </ul>
+
+</main>
+<footer>
+  <a href="../index.html">Risk Code Hub</a> &nbsp;·&nbsp; Crime / Fidelity FI (BB) · Risk Mitigation &nbsp;·&nbsp; <span class="badge b-v">VER</span> verified &nbsp; <span class="badge b-e">EST</span> estimated &nbsp;·&nbsp; For training purposes only
+</footer>
+</body>
+</html>

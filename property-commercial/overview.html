@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Commercial Property (P2–P7 · B2–B5) — Risk Code Hub</title>
+  <style>
+    :root {
+      --prop:#5d4037; --prop-dark:#3e2723; --fire:#c62828;
+      --flood:#0277bd; --bi:#2e7d32; --cat:#6a1b9a;
+      --warn:#e65100; --warn-light:#fff3e0;
+      --light:#fdf6f0; --mid:#d7ccc8; --text:#2c1810; --muted:#7a5c52; --border:#d7ccc8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #5d4037;
+    --hub-dark:      #3e2723;
+    --hub-light:     #efebe9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #c62828;
+    --hub-secondary2:#0277bd;
+    --header-gradient:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%);
+    --header-sub:    #d7ccc8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header {
+      background:linear-gradient(135deg,#3e2723 0%,#5d4037 50%,#4e342e 100%);
+      color:#fff; padding:40px; position:relative; overflow:hidden;
+    }
+    header::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(198,40,40,0.18) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(2,119,189,0.12) 0%,transparent 50%);
+    }
+    header .inner { position:relative; z-index:1; }
+    .breadcrumb { font-size:0.8rem; color:#bcaaa4; margin-bottom:6px; }
+    .breadcrumb a { color:#d7ccc8; text-decoration:none; }
+    .tag { font-size:0.74rem; letter-spacing:3px; text-transform:uppercase; color:#bcaaa4; margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:#d7ccc8; font-size:0.95rem; max-width:740px; line-height:1.7; }
+
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--prop); border-bottom-color:var(--fire); }
+
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--prop); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--fire); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.95rem; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; margin:28px 0; }
+    .stat-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; text-align:center; }
+    .stat-card .val { font-size:1.55rem; font-weight:800; color:var(--prop); line-height:1.1; }
+    .stat-card .val.fire { color:var(--fire); }
+    .stat-card .val.flood { color:var(--flood); }
+    .stat-card .val.bi { color:var(--bi); }
+    .stat-card .val.cat { color:var(--cat); }
+    .stat-card .val.warn { color:var(--warn); }
+    .stat-card .lbl { font-size:0.74rem; color:var(--muted); margin-top:5px; line-height:1.4; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin-top:4px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+    .b-g { background:#f8d7da; color:#721c24; }
+
+    .code-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:24px 0; }
+    .code-table table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .code-table th { background:var(--prop); color:#fff; padding:10px 16px; text-align:left; }
+    .code-table th:hover { background:var(--prop-dark); color:#fff; }
+    .code-table td { padding:10px 16px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .code-table tr:last-child td { border-bottom:none; }
+    .code-table tr:nth-child(even) td { background:#fdf0eb; }
+    .code-chip { display:inline-block; font-weight:800; font-size:0.8rem; padding:2px 10px; border-radius:12px; letter-spacing:1px; margin-right:4px; color:#fff; }
+    .chip-p { background:var(--prop); }
+    .chip-b { background:var(--flood); }
+    .chip-fire { background:var(--fire); }
+    .chip-bi { background:var(--bi); }
+
+    .cov-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr)); gap:16px; margin:24px 0; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--prop); }
+    .cov-card.fire-top { border-top-color:var(--fire); }
+    .cov-card.flood-top { border-top-color:var(--flood); }
+    .cov-card.bi-top { border-top-color:var(--bi); }
+    .cov-card.cat-top { border-top-color:var(--cat); }
+    .cov-card.warn-top { border-top-color:var(--warn); }
+    .cov-card h4 { font-size:0.9rem; font-weight:700; color:var(--prop); margin-bottom:8px; }
+    .cov-card.fire-top h4 { color:var(--fire); }
+    .cov-card.flood-top h4 { color:var(--flood); }
+    .cov-card.bi-top h4 { color:var(--bi); }
+    .cov-card.cat-top h4 { color:var(--cat); }
+    .cov-card.warn-top h4 { color:var(--warn); }
+    .cov-card ul { padding-left:16px; }
+    .cov-card li { font-size:0.84rem; margin-bottom:5px; line-height:1.5; }
+
+    .info-box { background:var(--prop-dark); color:#d7c4bb; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:#efebe9; margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:0.9rem; line-height:1.7; color:#d7c4bb; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .jur-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin:24px 0; }
+    .jur-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:16px 18px; border-left:4px solid var(--prop); }
+    .jur-card.fire { border-left-color:var(--fire); }
+    .jur-card.flood { border-left-color:var(--flood); }
+    .jur-card.bi { border-left-color:var(--bi); }
+    .jur-card.cat { border-left-color:var(--cat); }
+    .jur-card h4 { font-size:0.86rem; font-weight:700; color:var(--prop); margin-bottom:6px; }
+    .jur-card.fire h4 { color:var(--fire); }
+    .jur-card.flood h4 { color:var(--flood); }
+    .jur-card.bi h4 { color:var(--bi); }
+    .jur-card.cat h4 { color:var(--cat); }
+    .jur-card p { font-size:0.8rem; color:#555; margin:0; line-height:1.55; }
+
+    .mod-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:24px 0; }
+    .mod-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; text-decoration:none; color:var(--text); transition:box-shadow .2s; }
+    .mod-card:hover { box-shadow:0 4px 16px rgba(93,64,55,0.18); border-color:var(--prop); }
+    .mod-card .mod-num { font-size:0.72rem; font-weight:700; color:var(--prop); letter-spacing:2px; margin-bottom:4px; }
+    .mod-card h4 { font-size:0.9rem; font-weight:700; color:var(--text); }
+    .mod-card p { font-size:0.8rem; color:var(--muted); margin:4px 0 0; }
+
+    footer { background:var(--prop-dark); color:#bcaaa4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Commercial Property</div>
+    <div class="tag">Lloyd's Codes · P2 · P3 · P4 · P5 · P6 · P7 · B2 · B3 · B4 · B5</div>
+    <h1>Commercial Property</h1>
+    <p>Non-marine commercial property insurance covering physical damage to buildings, contents and stock plus business interruption — across primary, full-value, excess and binder platforms. Encompasses fire and allied perils, all-risks, catastrophe nat cat and specialist property for US, international and global risks.</p>
+  </div>
+</header>
+<nav>
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~$420bn</div>
+      <div class="lbl">Global commercial property GWP (2024 est.) <span class="badge b-e">EST</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val fire">~£9bn</div>
+      <div class="lbl">Lloyd's property GWP (P/B codes, 2024 est.) <span class="badge b-e">EST</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val flood">$118bn</div>
+      <div class="lbl">Insured nat cat losses 2023 — record year <span class="badge b-v">VER</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val bi">~$40bn</div>
+      <div class="lbl">BI losses — COVID FCA test case UK + global (est.) <span class="badge b-e">EST</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val cat">$36bn</div>
+      <div class="lbl">Hurricane Katrina insured loss 2005 (2024 $) <span class="badge b-v">VER</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="val warn">$43bn</div>
+      <div class="lbl">2017 Harvey/Irma/Maria combined insured loss <span class="badge b-v">VER</span></div>
+    </div>
+  </div>
+
+  <h2>Lloyd's Risk Codes — P2 to P7 and B2 to B5</h2>
+  <p>Commercial property sits at the heart of the Lloyd's market. The P codes cover direct and facultative non-marine property, segmented by coverage basis and geography; the B codes cover binding authority (binder) business written through coverholders on the same risk base. Together these ten codes represent the largest single class group at Lloyd's by premium volume.</p>
+
+  <div class="code-table">
+    <table>
+      <thead><tr><th>Code</th><th>Class</th><th>Coverage Basis</th><th>Primary Market</th><th>Key Features</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="code-chip chip-p">P2</span></td>
+          <td>Non-Marine Property – Fire &amp; Allied Perils</td>
+          <td>Named perils: FLEXA + allied</td>
+          <td>International / UK</td>
+          <td>Fire, lightning, explosion, aircraft impact; windstorm, flood, earthquake as extensions; BI covers; ISR wordings</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-p">P3</span></td>
+          <td>Non-Marine Property – Full Value / All Risks</td>
+          <td>All risks (subject to exclusions)</td>
+          <td>Global, especially large commercial</td>
+          <td>COPE-based underwriting; EML/PML assessment; accidental damage, malicious damage; £100m+ risks; IBNER-heavy class</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-p">P4</span></td>
+          <td>Non-Marine Property – Excess Layers</td>
+          <td>All risks or named perils excess</td>
+          <td>Global large-risk programmes</td>
+          <td>XS of primary or MFL; tower-building; COPE aggregation; reinsurance interaction; follow markets</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-p">P5</span></td>
+          <td>Non-Marine Property – USA Risks</td>
+          <td>All risks / named perils (E&amp;S)</td>
+          <td>United States (E&amp;S market)</td>
+          <td>Lloyd's US E&amp;S; cat-exposed risks (FL, TX, CA); NFIP interaction; TRIA; admitted market avoidance; surplus lines</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-p">P6</span></td>
+          <td>Non-Marine Property – International</td>
+          <td>All risks / named perils</td>
+          <td>Middle East, Asia-Pacific, LatAm</td>
+          <td>Multinational programme coordination; facultative reinsurance; local admitted requirements; war exclusion management</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-p">P7</span></td>
+          <td>Non-Marine Property – Special Risks</td>
+          <td>Specialist / bespoke</td>
+          <td>Global</td>
+          <td>Fine art, jewellery, specie, exhibitions, collections; parametric triggers; high-value residential; agricultural; specialty classes</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-b">B2</span></td>
+          <td>Property Binder – Fire &amp; Allied Perils</td>
+          <td>Named perils via binding authority</td>
+          <td>UK / international SME</td>
+          <td>Coverholder delegated authority; SME commercial; shopkeepers, offices, light industrial; aggregation monitoring; XoL protections</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-b">B3</span></td>
+          <td>Property Binder – Full Value / All Risks</td>
+          <td>All risks via binding authority</td>
+          <td>UK / international commercial</td>
+          <td>Larger commercial properties via MGAs; property tech platforms; real-time pricing; digital bind; delegated UW</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-b">B4</span></td>
+          <td>Property Binder – Excess Layers</td>
+          <td>Excess via binding authority</td>
+          <td>US / international</td>
+          <td>US E&amp;S binders; excess layers via MGA platform; US surplus lines; cat-aggregation control critical</td>
+        </tr>
+        <tr>
+          <td><span class="code-chip chip-b">B5</span></td>
+          <td>Property Binder – Special Risks</td>
+          <td>Specialist via binding authority</td>
+          <td>Global</td>
+          <td>Specialty binders: hospitality, leisure, landlords, unoccupied; niche coverholders; Lloyd's DCA framework</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Coverage Architecture — What Commercial Property Insures</h2>
+  <p>Commercial property policies operate on two key coverage bases: <strong>named perils</strong> (covering only losses caused by explicitly listed events — FLEXA: Fire, Lightning, Explosion, Aircraft impact — plus extensions) and <strong>all risks</strong> (covering all fortuitous physical damage unless expressly excluded). All-risks wordings dominate large commercial accounts; named perils remain common in developing markets and for commodity risks written on ISR (Industrial Special Risks) wordings.</p>
+
+  <div class="cov-grid">
+    <div class="cov-card fire-top">
+      <h4>🔥 Material Damage — Buildings &amp; Contents</h4>
+      <ul>
+        <li>Buildings: fabric, foundations, fixtures, plant machinery</li>
+        <li>Contents: stock, raw materials, finished goods, equipment</li>
+        <li>Reinstatement or indemnity (actual cash value) basis</li>
+        <li>Average / co-insurance clause if underinsured</li>
+        <li>Demolition and debris removal costs</li>
+        <li>Architects' fees and local authority requirements</li>
+      </ul>
+    </div>
+    <div class="cov-card bi-top">
+      <h4>📊 Business Interruption (BI)</h4>
+      <ul>
+        <li>Loss of gross profit / gross revenue during indemnity period</li>
+        <li>Standard indemnity period: 12, 24 or 36 months</li>
+        <li>Maximum indemnity period (MIP) — critical choice</li>
+        <li>Waiting period / time excess (typically 72 hrs for storm/flood)</li>
+        <li>Increased cost of working (ICOW)</li>
+        <li>Contingent BI: supplier/customer interruption</li>
+      </ul>
+    </div>
+    <div class="cov-card flood-top">
+      <h4>🌊 Catastrophe Natural Perils</h4>
+      <ul>
+        <li>Windstorm / hurricane / typhoon</li>
+        <li>Flood (surface water, river, storm surge)</li>
+        <li>Earthquake and fire following earthquake</li>
+        <li>Hailstorm, tornado, ice storm</li>
+        <li>Subsidence and landslip</li>
+        <li>Volcanic eruption; tsunami</li>
+      </ul>
+    </div>
+    <div class="cov-card cat-top">
+      <h4>🔷 Specialty Covers</h4>
+      <ul>
+        <li>Terrorism (POOL RE / TRIA / standalone)</li>
+        <li>Malicious damage and riot</li>
+        <li>Computer breakdown / electronic equipment</li>
+        <li>Machinery breakdown (engineering interface)</li>
+        <li>Accidental damage (AD) extension</li>
+        <li>Goods in transit; money</li>
+      </ul>
+    </div>
+    <div class="cov-card warn-top">
+      <h4>🏗️ Additional Expense &amp; Extensions</h4>
+      <ul>
+        <li>Professional fees (architects, surveyors)</li>
+        <li>Local authority / building regulations compliance</li>
+        <li>Expediting expenses for emergency repairs</li>
+        <li>Property in the open; external storage</li>
+        <li>Deterioration of stock (cold storage)</li>
+        <li>Glass breakage; signs; neon</li>
+      </ul>
+    </div>
+    <div class="cov-card">
+      <h4>🚫 Standard Exclusions</h4>
+      <ul>
+        <li>War, invasion, nuclear / radiological perils</li>
+        <li>Gradual deterioration, wear &amp; tear, inherent defect</li>
+        <li>Cyber physical damage (post-2020 market exclusion)</li>
+        <li>Communicable disease / pandemic (post-COVID)</li>
+        <li>PFAS / forever chemical contamination (emerging)</li>
+        <li>Wilful acts of the insured</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>COPE Underwriting Framework</h2>
+  <p>Commercial property underwriting revolves around the COPE framework — the four pillars that determine both the probability and severity of loss. Every risk submission should be assessed against all four dimensions before rating, and deficiencies in any pillar drive loading or declination.</p>
+
+  <div class="info-box">
+    <h3>COPE — The Four Pillars of Property Underwriting</h3>
+    <ul>
+      <li><strong>Construction:</strong> Frame type (frame, joisted masonry, masonry non-combustible, modified fire resistive, fire resistive); roof type and age; cladding materials; glazing; basement vulnerability; Building Regs compliance and fire stops</li>
+      <li><strong>Occupancy:</strong> SIC / occupancy class; fire load; hazardous processes or storage; cooking or hot work; 24-hour attendance vs. unoccupied periods; storage height and density; ignition sources</li>
+      <li><strong>Protection:</strong> Automatic fire suppression (sprinklers — NFPA 13 or LPC standard); fire detection and alarm systems; fire doors and compartmentation; security; risk management programme; BAFE-registered contractors; fire authority response time</li>
+      <li><strong>Exposure:</strong> Distance to flood zone (FEMA / Environment Agency maps); CRESTA zone for cat; proximity to industrial hazards; conflagration potential; wildland-urban interface (WUI) for wildfire; subsidence risk (clay soils)</li>
+    </ul>
+  </div>
+
+  <h2>Property Valuation Methods</h2>
+
+  <div class="jur-grid">
+    <div class="jur-card fire">
+      <h4>Reinstatement Value (RV)</h4>
+      <p>Cost of rebuilding to the same specification using current materials and labour rates. Excludes land value. Preferred basis for most commercial risks. Subject to underinsurance (average) if below actual rebuild cost.</p>
+    </div>
+    <div class="jur-card flood">
+      <h4>Indemnity Value (ACV)</h4>
+      <p>Market value or RV less depreciation. Common for plant/machinery and older stock. Can result in significant under-recovery at claim — insured may prefer RV basis even at higher premium.</p>
+    </div>
+    <div class="jur-card bi">
+      <h4>Day-One Reinstatement</h4>
+      <p>UK standard: sum insured = current RV, with automatic index-linked uplift of 15–50% to cover construction cost inflation during repair period. Avoids average clause gap on large losses.</p>
+    </div>
+    <div class="jur-card cat">
+      <h4>Agreed Value / Blanket</h4>
+      <p>Blanket limits across multiple locations without itemised values. Common for multi-site retail/industrial. Requires total declared value (TDV) schedule. Simplifies administration but demands accurate aggregate assessment.</p>
+    </div>
+  </div>
+
+  <h2>Key Market Participants — Lloyd's</h2>
+
+  <div class="code-table">
+    <table>
+      <thead><tr><th>Segment</th><th>Role</th><th>Lloyd's Participants (illustrative)</th></tr></thead>
+      <tbody>
+        <tr><td>Lead Underwriters</td><td>Set terms, rate and conditions; sign the slip first</td><td>Beazley, Chaucer, Brit, Lancashire, Markel, Canopius, Argenta</td></tr>
+        <tr><td>Following Markets</td><td>Subscribe to leader's terms at agreed % share</td><td>Multiple syndicates via electronic placing (PPL)</td></tr>
+        <tr><td>Brokers</td><td>Assemble risk presentation, build towers, place slip</td><td>Marsh, Aon, Willis, Gallagher, BMS, Lockton</td></tr>
+        <tr><td>Property Reinsurers</td><td>Provide cat XL, risk XL, fac re to syndicates</td><td>Munich Re, Swiss Re, Hannover Re, Gen Re, RenaissanceRe</td></tr>
+        <tr><td>Cat Modellers</td><td>Assess PML/EML using probabilistic models</td><td>RMS (Moody's), AIR (Verisk), CoreLogic, ELEMENTS (NASDAQ)</td></tr>
+        <tr><td>Coverholders / MGAs</td><td>Write B-code binder business under DCA</td><td>Numerous UK and US MGAs; Lloyd's DCA framework; annual audit</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Major Perils — Loss Drivers</h2>
+
+  <div class="jur-grid">
+    <div class="jur-card fire">
+      <h4>🔥 Fire &amp; Explosion</h4>
+      <p>Historically dominant peril. Large single-risk fires (warehouses, heritage buildings, HazMat sites) still drive attritional and large-loss results. Arson is a significant contributor in commercial lines.</p>
+    </div>
+    <div class="jur-card flood">
+      <h4>🌊 Flood</h4>
+      <p>Fastest-growing nat cat peril globally. 2011 Thailand floods ($43bn) showed supply chain BI aggregation. UK Surface Water Flooding gap. NFIP limitations in US drive Lloyd's E&amp;S demand.</p>
+    </div>
+    <div class="jur-card cat">
+      <h4>🌀 Windstorm &amp; Hurricane</h4>
+      <p>Largest single-year loss driver. Atlantic hurricane season (Katrina 2005, Harvey/Irma/Maria 2017, Ian 2022). European windstorm (Lothar/Martin 1999, Kyrill 2007, Ciaran 2023). Cat model dependency.</p>
+    </div>
+    <div class="jur-card bi">
+      <h4>🌏 Earthquake</h4>
+      <p>San Francisco 1906 — birth of cat reinsurance. Northridge 1994 ($44bn total). Japan Tōhoku 2011 ($35bn insured). Turkey-Syria 2023 ($7bn insured; $90bn total). CRESTA zone rating critical.</p>
+    </div>
+    <div class="jur-card">
+      <h4>🔥 Wildfire</h4>
+      <p>Fastest-emerging peril in US/Australia/southern Europe. California wildfires 2017–2021 drove market withdrawal. Paradise CA (Camp Fire 2018, $12bn insured). Maui Lahaina 2023. WUI expansion a systemic risk.</p>
+    </div>
+    <div class="jur-card fire">
+      <h4>⚙️ Business Interruption</h4>
+      <p>Frequently exceeds material damage in large losses. COVID BI test case (FCA v Arch, UKSC 2021): ~£1.2bn industry payout UK. Supply chain BI (contingent) — post-COVID reunderwriting of triggers and extensions.</p>
+    </div>
+  </div>
+
+  <h2>Module Navigation</h2>
+  <div class="mod-grid">
+    <a href="history.html" class="mod-card">
+      <div class="mod-num">MODULE 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From the Great Fire of London 1666 to the modern cat market</p>
+    </a>
+    <a href="timeline.html" class="mod-card">
+      <div class="mod-num">MODULE 02</div>
+      <h4>Major Events Timeline</h4>
+      <p>20 defining losses and regulatory events 2000–2024</p>
+    </a>
+    <a href="database.html" class="mod-card">
+      <div class="mod-num">MODULE 03</div>
+      <h4>Claims Database</h4>
+      <p>35 significant property losses — searchable &amp; filterable</p>
+    </a>
+    <a href="underwriting.html" class="mod-card">
+      <div class="mod-num">MODULE 04</div>
+      <h4>Underwriting Methodology</h4>
+      <p>Rating factors, COPE analysis, PML/EML, BI indemnity periods</p>
+    </a>
+    <a href="rates-analysis.html" class="mod-card">
+      <div class="mod-num">MODULE 05</div>
+      <h4>Rates &amp; ROE Analysis</h4>
+      <p>Market cycle 2000–2024, combined ratios, ROE scenarios</p>
+    </a>
+    <a href="risk-mitigation.html" class="mod-card">
+      <div class="mod-num">MODULE 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Fire suppression, flood defences, COPE improvements, nat cat resilience</p>
+    </a>
+    <a href="global-program.html" class="mod-card">
+      <div class="mod-num">MODULE 07</div>
+      <h4>Global Programme</h4>
+      <p>Tower structures, multinational coordination, BI limits, reinsurance</p>
+    </a>
+    <a href="references.html" class="mod-card">
+      <div class="mod-num">MODULE 08</div>
+      <h4>References &amp; Sources</h4>
+      <p>Legislation, Lloyd's bulletins, cat model guidance, confidence audit</p>
+    </a>
+  </div>
+
+</main>
+<footer>
+  Risk Code Hub — Commercial Property (P2/P3/P4/P5/P6/P7/B2/B3/B4/B5) · Lloyd's Market Intelligence · v3.1 April 2026
+</footer>
+</body>
+</html>

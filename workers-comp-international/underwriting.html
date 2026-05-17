@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Underwriting — Workers Compensation International (W4) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #00575c;
+      --hub-dark:      #002c30;
+      --hub-light:     #e0f4f5;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a237e;
+      --hub-secondary2:#7b5e00;
+      --header-gradient:linear-gradient(135deg,#002c30 0%,#00575c 55%,#00838f 100%);
+      --header-sub:    #80deea;
+      --hub-mid:       #b2ebf2;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2e30;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#80deea;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#002c30;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#80deea;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .factors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .factor{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);}
+    .factor.high{border-left-color:#c62828;}
+    .factor.med{border-left-color:#e65100;}
+    .factor.low{border-left-color:#00575c;}
+    .factor .impact{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .factor h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .factor p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .factor .rate{font-size:0.78rem;font-weight:700;color:#c62828;margin-top:6px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #e0f4f5;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f0fbfc;}
+    .formula-box{background:#002c30;color:#80deea;border-radius:8px;padding:20px 24px;font-family:monospace;font-size:0.88rem;line-height:1.8;margin-bottom:24px;}
+    .formula-box .comment{color:#4dd0e1;}
+    .worked{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px;border-top:4px solid var(--hub-primary);}
+    .worked.alt{border-top-color:var(--hub-accent);}
+    .worked h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:12px;}
+    .worked table{box-shadow:none;margin-bottom:0;}
+    .worked th{background:#00575c;}
+    .info-box{background:#e0f4f5;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#002c30;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .danger-box{background:#ffebee;border-left:4px solid #c62828;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#3b0000;line-height:1.6;}
+    .danger-box strong{color:#c62828;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#00575c;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    footer{background:#002c30;color:#80deea;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Workers Comp International (W4)</a> › Underwriting</div>
+    <div class="tag">Module 04</div>
+    <h1>Underwriting Methodology</h1>
+    <div class="sub">Territory zones, rating factors, DBA specifics, worked examples &amp; key exclusions</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Territory zone table -->
+  <div class="section-title">Territory Risk Zone Classification<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Zone</th><th>Description</th><th>Example Countries</th><th>Rate Multiplier vs Base</th><th>War Risk Extension Required</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>A — Low Risk</strong></td><td>Stable developed market, rule of law, quality local healthcare</td><td>UK, Germany, Singapore, Australia, UAE (non-conflict)</td><td>1.0× (base)</td><td>No — standard WC policy</td></tr>
+      <tr><td><strong>B — Moderate Risk</strong></td><td>Emerging market, some political instability, adequate healthcare in major centres</td><td>Brazil, India, China, Mexico, South Africa, Nigeria (ex-Delta)</td><td>1.3–1.8×</td><td>Optional — consider for some locations</td></tr>
+      <tr><td><strong>C — Elevated Risk</strong></td><td>Significant political instability, limited healthcare, active militant/criminal threat</td><td>Nigeria (Delta), Papua New Guinea, Colombia, Pakistan, Bangladesh</td><td>2.0–3.0×</td><td>Recommended — civil disturbance common</td></tr>
+      <tr><td><strong>D — High Risk</strong></td><td>Active armed conflict adjacent, serious security environment, evacuation plans essential</td><td>Libya, Mali, Yemen (non-front), Sudan, Myanmar, Mozambique (Cabo Delgado)</td><td>3.5–6.0×</td><td>Required — armed conflict risk significant</td></tr>
+      <tr><td><strong>E — War Zone</strong></td><td>Active war, front-line operations, maximum hostile environment rating</td><td>Iraq (hostile areas), Afghanistan, Syria, eastern Ukraine</td><td>6.0–12.0× or more</td><td>Mandatory — DBA/WHCA backstop required for USG contracts</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Rating factors — high -->
+  <div class="section-title">Rating Factors — High Impact</div>
+  <div class="factors-grid">
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Territory of Operations</h4>
+      <p>The single most important W4 rating factor. Zone A to Zone E classification drives rate multipliers of 1× to 12×+. Underwriters review Control Risks and Healix country risk ratings alongside Lloyd's own territory rating guidance. Mixed-territory programmes require payroll allocation by territory. <sup>[I2]</sup></p>
+      <div class="rate">Rate multiplier: 1.0× (Zone A) → 12.0×+ (Zone E war zone)</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Employee Type — Expat / TCN / LN</h4>
+      <p>Expatriates carry the highest per-head benefit costs (salary continuation, medical evacuation, home-country statutory obligations). Third-Country Nationals (TCNs) present complex multi-jurisdiction benefit calculations. Local nationals typically covered by host-country statutory WC. Employee mix fundamentally affects expected average cost per head. <sup>[L5]</sup></p>
+      <div class="rate">Expat: 2–4× rate vs LN; TCN: 1.5–2.5× rate vs LN (wage differential + benefit complexity)</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>Industry / Activity Class</h4>
+      <p>Oil &amp; gas and construction in high-risk territories carry the highest accident frequency and severity. NGO/humanitarian workers in conflict zones face kidnap and hostile-act risk. Military support contractors (DBA) face combat-adjacent casualties. Clerical/office expats in Zone A countries present minimal hazard. Activity matters as much as geography. <sup>[I5]</sup></p>
+      <div class="rate">Office/clerical Zone A: 30–50% LR expected. Oil &amp; gas Zone D/E: 80–150%+ LR expected.</div>
+    </div>
+    <div class="factor high">
+      <div class="impact">High Impact</div>
+      <h4>DBA Applicability</h4>
+      <p>If the US government contract requires DBA coverage (confirmed by contract review), the DBA insuring agreement must be included and the carrier must be DOL-authorised for DBA. DBA benefit schedule (LHWCA-based, uncapped medical) is significantly more generous than most private WC schedules. Average DBA serious injury claim significantly exceeds equivalent non-DBA claim. <sup>[L1]</sup></p>
+      <div class="rate">DBA loading: +40–100% vs equivalent non-DBA international WC programme</div>
+    </div>
+  </div>
+
+  <!-- Rating factors — medium -->
+  <div class="section-title">Rating Factors — Medium Impact</div>
+  <div class="factors-grid">
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Headcount and Payroll by Territory</h4>
+      <p>Premium base: number of employees × territory rate × average wage (for wage replacement benefit calculation). Payroll declaration accuracy is critical — underestimation is the most common W4 presentation error. End-of-year payroll adjustment clauses are standard for fluctuating workforce sizes. <sup>[I6]</sup></p>
+      <div class="rate">Premium = Headcount × Rate per head per territory (adjusted to payroll basis)</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>War / Hostile Environment Sublimit</h4>
+      <p>War risk extension limit setting is a key coverage negotiation. Full limits apply for DBA (backed by WHCA for war hazard deaths); for non-DBA W4 covers, war risk sublimits of $1m–$5m any one person are common, with aggregate event limits of $10m–$50m+ depending on programme size and zone E exposure. <sup>[L3]</sup></p>
+      <div class="rate">War risk extension: +15–40% of base W4 premium depending on zone E/D exposure</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Repatriation Benefit Structuring</h4>
+      <p>Medical repatriation benefit (average $85,000+ per event est.) — cost of air ambulance or scheduled medical evacuation, escort medical personnel, receiving hospital costs, and family travel. Benefit limit and provider quality (ISOS, Healix, Europ Assistance) significantly affects both cost and recovery outcomes. <sup>[I3]</sup></p>
+      <div class="rate">Medevac per event limit: typically $250k–$1m for W4 programmes</div>
+    </div>
+    <div class="factor med">
+      <div class="impact">Medium Impact</div>
+      <h4>Fronting Jurisdiction Requirements</h4>
+      <p>Where admitted insurance is required (UAE, Saudi, Brazil, France), fronting arrangements add cost (fronting fee 2–8% of local ceded premium) and complexity. Underwriters assess fronting availability and letter of credit requirements by territory. Fronting failure in a required-admission jurisdiction is an uninsured loss. <sup>[I5]</sup></p>
+      <div class="rate">Fronting cost: 2–8% of locally ceded premium; LOC cost: 0.5–1.5% of limit</div>
+    </div>
+  </div>
+
+  <!-- Rating factors — lower -->
+  <div class="section-title">Rating Factors — Lower Impact</div>
+  <div class="factors-grid">
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Security Protocols and Site Hardening</h4>
+      <p>Documented site security standards — blast walls, T-barriers, convoy procedures, armed escort, buddy system check-ins — provide rate credit for Zone D/E exposures. Absence of documented security protocols is a moderate negative factor. Underwriters review employer's HEAT training programme and security risk assessment.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Medical Evacuation Provider Quality</h4>
+      <p>SLA in place with ISOS, Healix, Europ Assistance or comparable provider — response time commitments, aircraft availability, network quality — positively influences W4 risk quality assessment. Evacuation capability materially affects outcome severity. Remote operations without evacuation plan are a loading factor.</p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Claims Notification Procedures</h4>
+      <p>DBA: DOL Form LS-202 must be filed within 10 days of employer knowledge of injury ($37,000+ penalty for late filing). Clear internal claims reporting procedures, designated DBA claims contact and 24/7 OWCP notification capability are underwriting quality indicators for DBA accounts. <sup>[L9]</sup></p>
+    </div>
+    <div class="factor low">
+      <div class="impact">Lower Impact</div>
+      <h4>Host Country WC Statutory Benefit Level</h4>
+      <p>Host country statutory WC benefit generosity (high in UK/Germany/Australia, very low in some African and Asian jurisdictions) determines how much the W4 policy needs to add above statutory minimums. Low-benefit jurisdictions increase the W4 policy's net exposure; this is factored into expected cost modelling by territory.</p>
+    </div>
+  </div>
+
+  <!-- Premium formula -->
+  <div class="section-title">Premium Rating Structure</div>
+  <div class="formula-box">
+    <span class="comment">// W4 International WC — indicative rating approach</span><br>
+    Base Premium per Territory = Headcount × Rate per Head (by Zone A–E)<br><br>
+    Programme GWP = Sum across all territories of:<br>
+    &nbsp;&nbsp;(Headcount × Rate per Head)<br>
+    &nbsp;&nbsp;× Employee Type Factor    <span class="comment">// 1.0 LN → 2.0–4.0 Expat</span><br>
+    &nbsp;&nbsp;× Activity Class Factor   <span class="comment">// 0.5 office → 3.0 combat support</span><br>
+    &nbsp;&nbsp;× DBA Loading (if req'd)  <span class="comment">// +40–100% for USG DBA contracts</span><br>
+    &nbsp;&nbsp;× War Risk Extension      <span class="comment">// +15–40% for Zone D/E locations</span><br>
+    &nbsp;&nbsp;× Fronting Cost           <span class="comment">// 2–8% of locally ceded premium</span><br>
+    &nbsp;&nbsp;× Claims History Factor   <span class="comment">// −10% clean → +50% adverse</span><br>
+    + Medevac / Assistance Premium      <span class="comment">// per head charge for ISOS/Healix SLA</span>
+  </div>
+
+  <!-- Loss ratio benchmarks -->
+  <div class="section-title">Benchmark Loss Ratios by Segment<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Segment</th><th>Territory Zone</th><th>Gross Loss Ratio</th><th>Primary Peril</th><th>Avg Claim Cost</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Expat — Office / Clerical</td><td>Zone A–B</td><td>30–50%</td><td>Accident / Medical</td><td>$25,000–$80,000</td></tr>
+      <tr><td>Expat — Oil &amp; Gas Offshore</td><td>Zone B–C</td><td>45–65%</td><td>Accident / Medevac</td><td>$85,000–$250,000</td></tr>
+      <tr><td>Expat — Construction</td><td>Zone C</td><td>55–75%</td><td>Accident / Occupational</td><td>$60,000–$180,000</td></tr>
+      <tr><td>TCN — Construction Middle East</td><td>Zone B–C</td><td>40–60%</td><td>Accident / Death</td><td>$20,000–$90,000</td></tr>
+      <tr><td>DBA — Standard LOGCAP</td><td>Zone C–D</td><td>55–80%</td><td>Accident / Injury</td><td>$180,000–$500,000</td></tr>
+      <tr><td>DBA — Hostile Zone (Zone E)</td><td>Zone E</td><td>80–150%+</td><td>Combat / Hostile Act / Disease</td><td>$300,000–$1,000,000+</td></tr>
+      <tr><td>NGO / Humanitarian</td><td>Zone D–E</td><td>60–90%</td><td>Kidnap / Hostile / Disease</td><td>$100,000–$400,000</td></tr>
+      <tr><td>Security / PMC</td><td>Zone D–E</td><td>70–120%</td><td>Combat / Hostile Act</td><td>$200,000–$800,000+</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Worked Example A -->
+  <div class="worked">
+    <h3>Worked Example A — Oil Major, 450 Expat Workers in Saudi Arabia and UAE</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Saudi Arabia workforce</td><td>250 expat engineers/technicians (Zone B–C, oil &amp; gas)</td><td>250 heads</td></tr>
+        <tr><td>UAE workforce</td><td>200 expat management/admin (Zone A–B)</td><td>200 heads</td></tr>
+        <tr><td>Saudi EL + Expat PA</td><td>250 × £850/head (Zone C oil &amp; gas, expat factor 2.2×)</td><td>£212,500</td></tr>
+        <tr><td>UAE EL + Expat PA</td><td>200 × £420/head (Zone A–B, expat factor 1.6×)</td><td>£84,000</td></tr>
+        <tr><td>War Risk Extension</td><td>Saudi only — +20% of Saudi premium (Zone C credit for low open-conflict risk)</td><td>+£42,500</td></tr>
+        <tr><td>UAE Fronting Cost</td><td>DIEDC fronting required, 4% of UAE ceded premium</td><td>+£3,360</td></tr>
+        <tr><td>Medevac SLA (ISOS)</td><td>450 heads × £65/head annual SLA charge</td><td>+£29,250</td></tr>
+        <tr><td>Claims History Loading</td><td>One medevac claim in 3 years — moderate loading</td><td>+8% = £29,709</td></tr>
+        <tr><td><strong>Indicative GWP</strong></td><td>—</td><td><strong>~£401,000</strong></td></tr>
+        <tr><td>Assumed Gross LR</td><td>Oil &amp; gas expat Zone B–C benchmark</td><td>58%</td></tr>
+        <tr><td>Claims Estimate</td><td>£401k × 58%</td><td>£232,580</td></tr>
+        <tr><td>Commission (20%)</td><td>—</td><td>£80,200</td></tr>
+        <tr><td>Expenses (12%)</td><td>—</td><td>£48,120</td></tr>
+        <tr><td><strong>Underwriting Profit</strong></td><td>—</td><td><strong>£40,100 (10.0% margin)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Worked Example B -->
+  <div class="worked alt">
+    <h3>Worked Example B — US Defence Contractor in Iraq: DBA Required, 200 TCNs + 50 US Expats</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>US Expats (Zone E DBA)</td><td>50 US expats, avg salary $95,000; DBA required</td><td>50 heads</td></tr>
+        <tr><td>TCNs (Zone E DBA)</td><td>200 TCNs from Philippines/India, avg salary $18,000; DBA required for USG contract</td><td>200 heads</td></tr>
+        <tr><td>DBA Premium — US Expats</td><td>50 × $3,800/head (Zone E, DBA rate, combat support activity)</td><td>$190,000</td></tr>
+        <tr><td>DBA Premium — TCNs</td><td>200 × $1,200/head (Zone E, DBA rate, adjusted for lower wage base)</td><td>$240,000</td></tr>
+        <tr><td>War Risk Extension</td><td>Zone E mandatory; WHCA backstop reduces commercial risk but not eliminates it</td><td>+$85,000</td></tr>
+        <tr><td>EL Civil Suits Limit</td><td>$10m any one occurrence, $25m aggregate EL layer</td><td>+$28,000</td></tr>
+        <tr><td>Medevac / Assistance</td><td>250 heads × $180/head (Zone E premium provider)</td><td>+$45,000</td></tr>
+        <tr><td>DOL/OWCP Admin Fee</td><td>DBA compliance monitoring and LS-202 filing support</td><td>+$12,000</td></tr>
+        <tr><td><strong>Indicative GWP</strong></td><td>—</td><td><strong>~$600,000</strong></td></tr>
+        <tr><td>Assumed Gross LR</td><td>DBA Zone E hostile environment benchmark</td><td>95%</td></tr>
+        <tr><td>WHCA Reimbursement Credit</td><td>Estimated 35% of war-hazard losses recoverable from WHCA</td><td>Net LR ~62%</td></tr>
+        <tr><td>Commission (18%)</td><td>—</td><td>$108,000</td></tr>
+        <tr><td>Expenses (10%)</td><td>—</td><td>$60,000</td></tr>
+        <tr><td><strong>Underwriting Profit (net of WHCA)</strong></td><td>—</td><td><strong>$60,000 (10.0% margin)</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Key exclusions -->
+  <div class="section-title">Key Exclusions</div>
+  <table>
+    <thead>
+      <tr><th>Exclusion</th><th>Rationale</th><th>Endorsement / Workaround</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>War / Hostile Act (standard)</td><td>Standard WC policy exclusion — war risk is not covered unless specifically endorsed</td><td>War risk extension required for Zone D/E; DBA WHCA backstop for USG contracts</td></tr>
+      <tr><td>Pre-existing conditions (PA element)</td><td>PA cover excludes pre-existing medical conditions from accidental death / disability benefits</td><td>Pre-deployment medical clearance mitigates; some policies have buy-back options</td></tr>
+      <tr><td>Suicide / self-inflicted injury</td><td>Standard WC exclusion; some jurisdictions require cover for mental health / PTSD-related events</td><td>Territory-specific PTSD and mental health benefit extensions available</td></tr>
+      <tr><td>Contractual liability assumed</td><td>Liability assumed under contract beyond what tort law would impose is not standard EL cover</td><td>Express contractual liability extension required where employer has assumed enhanced liability</td></tr>
+      <tr><td>Nuclear / radiological</td><td>Standard exclusion across all WC/EL products</td><td>Special nuclear facility rider required for Fukushima-type environments (specialist market)</td></tr>
+      <tr><td>Chemical / biological (non-war)</td><td>Occupational chemical exposure typically addressed via EL; weaponised CBRN excluded in war risk</td><td>Occupational disease extension covers industrial chemical exposure; CBRN remains war risk</td></tr>
+      <tr><td>Independent contractors</td><td>WC/EL covers employees only — independent contractors are not employees at law</td><td>Labour-only subcontractor endorsement; principal employer extension where required by statute</td></tr>
+      <tr><td>Wilful misconduct</td><td>Employer intentional exposure of employees to known risk without mitigation</td><td>Not available — underwriters review safety management systems to assess moral hazard</td></tr>
+    </tbody>
+  </table>
+
+  <div class="danger-box">
+    <strong>DBA Compliance Warning — DOL Filing Deadlines:</strong> Under the Defence Base Act, the employer (insured) is required to file Form LS-202 (Employer's First Report of Injury) with the US Department of Labor / Office of Workers' Compensation Programs (OWCP) within <strong>10 days of knowledge of a reportable injury</strong>. Failure to file results in a penalty of up to <strong>$37,000 per violation</strong>. Late filing also prejudices the WHCA reimbursement claim for war hazard injuries. DBA underwriters must confirm that the insured has a robust claims reporting procedure and designated DBA claims contact. <sup>[L9]</sup>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Workers Compensation International (W4) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="rates-analysis.html">Next: Rates &amp; ROE →</a></p>
+</footer>
+
+</body>
+</html>

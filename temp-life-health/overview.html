@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Temporary Life &amp; Permanent Health (TL) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a1a7b;
+      --hub-dark:      #250a45;
+      --hub-light:     #f3e5ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #00796b;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#250a45 0%,#4a1a7b 55%,#6a1b9a 100%);
+      --header-sub:    #ce93d8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a0a2e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(0,121,107,0.15) 0%,transparent 50%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ce93d8;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:2rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;margin-bottom:16px;}
+    .code-pill{display:inline-block;background:rgba(200,168,75,0.25);border:1px solid var(--hub-accent);
+      color:var(--hub-accent);padding:3px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;margin-right:6px;}
+    nav.hub-nav{background:#250a45;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ce93d8;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+    .stat-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-top:4px solid var(--hub-primary);}
+    .stat-card .val{font-size:1.6rem;font-weight:700;color:var(--hub-primary);margin-bottom:4px;}
+    .stat-card .lbl{font-size:0.78rem;color:#555;line-height:1.3;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#4a1a7b;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e1bee7;}
+    .code-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px;}
+    .code-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .code-card h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .code-card p{font-size:0.85rem;color:#444;line-height:1.5;}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:28px;}
+    .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid var(--hub-primary);}
+    .card.accent{border-top-color:var(--hub-accent);}
+    .card.teal{border-top-color:var(--hub-secondary);}
+    .card.red{border-top-color:var(--hub-secondary2);}
+    .card.blue{border-top-color:#1565c0;}
+    .card.orange{border-top-color:#e65100;}
+    .card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    .info-box{background:#f3e5ff;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a0a2e;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px;}
+    .nav-card{display:block;background:#fff;border-radius:10px;padding:16px 18px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);transition:all 0.2s;}
+    .nav-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12);border-left-color:var(--hub-accent);}
+    .nav-card .num{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .nav-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);}
+    .nav-card p{font-size:0.78rem;color:#555;margin-top:4px;}
+    footer{background:#250a45;color:#ce93d8;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Life &amp; Health › Temporary Life &amp; Permanent Health</div>
+    <div class="tag">Life &amp; Health Insurance</div>
+    <h1>Temporary Life &amp; Permanent Health</h1>
+    <div class="sub">Term assurance, income protection, critical illness &amp; group life/health schemes at Lloyd's — specialist, substandard &amp; international risks</div>
+    <div>
+      <span class="code-pill">TL</span>
+      <span class="code-pill" style="border-color:#ce93d8;color:#ce93d8;">Substandard &amp; Non-Standard Lives</span>
+      <span class="code-pill" style="border-color:#ce93d8;color:#ce93d8;">International &amp; Expatriate</span>
+    </div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">£3.5bn<span class="badge b-e">EST</span></div>
+      <div class="lbl">UK individual protection GWP 2023</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">£2.2bn<span class="badge b-e">EST</span></div>
+      <div class="lbl">UK group life GWP 2023 est.</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">10%<span class="badge b-e">EST</span></div>
+      <div class="lbl">UK workforce with income protection coverage est.</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">£1.4bn<span class="badge b-e">EST</span></div>
+      <div class="lbl">UK critical illness market GWP est.</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">£2.6tn<span class="badge b-v">VER</span></div>
+      <div class="lbl">UK protection gap — lump-sum shortfall est. (Swiss Re 2023)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">£400m<span class="badge b-e">EST</span></div>
+      <div class="lbl">Lloyd's TL market GWP est. — specialist &amp; international</div>
+    </div>
+  </div>
+
+  <!-- Code card -->
+  <div class="section-title">Lloyd's Risk Code Coverage</div>
+  <div class="code-grid">
+    <div class="code-card">
+      <h3>TL — Temporary Life &amp; Permanent Health</h3>
+      <p>The Lloyd's TL code encompasses temporary life assurance (term life), permanent health insurance (PHI / income protection), critical illness insurance, group life, and group income protection schemes. At Lloyd's, TL business is primarily <strong>specialist, substandard or non-standard risk</strong> — impaired lives, high-value lives, international and expatriate schemes, and complex group programmes that fall outside standard life insurer appetite.<sup>[1]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#00796b;">
+      <h3>Why Lloyd's for Life &amp; Health?</h3>
+      <p>Lloyd's provides capacity for risks the standard life market declines or rates heavily: lives with significant medical impairments (diabetes, cancer history, cardiac conditions), very high sum assured (£5m+), unusual occupations (military, offshore energy, expeditions), international/expatriate group schemes crossing multiple jurisdictions, and large group concentrations requiring catastrophe XL protection.<sup>[2]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#c8a84b;">
+      <h3>"Permanent" Health — What It Means</h3>
+      <p><strong>Permanent health insurance</strong> (PHI) does not mean the cover lasts for life. "Permanent" means the insurer <strong>cannot cancel or decline to renew</strong> the policy once issued, regardless of subsequent deterioration in the insured's health. The benefit pays monthly income if the policyholder cannot work due to illness or injury, typically until recovery or normal retirement age. This distinguishes PHI from accident &amp; sickness (A&amp;S) policies, which can be cancelled.<sup>[3]</sup></p>
+    </div>
+  </div>
+
+  <!-- Coverage taxonomy -->
+  <div class="section-title">Coverage Taxonomy</div>
+  <div class="cards-grid">
+    <div class="card">
+      <h4>Term Life Assurance</h4>
+      <p>Pays a lump sum death benefit if the insured dies within a fixed term (e.g., 10, 20, or 25 years). Level term (fixed sum assured) or decreasing term (mortgage protection). At Lloyd's — typically impaired lives, very high value, or international. No investment element; pure protection.<sup>[4]</sup></p>
+    </div>
+    <div class="card teal">
+      <h4>Permanent Health / Income Protection</h4>
+      <p>Monthly benefit paid if the insured is unable to work due to illness or injury, after an agreed deferred (waiting) period. Benefit continues until the insured recovers, reaches retirement age, or dies. "Own occupation" vs "any occupation" definition determines claim threshold. Key Lloyd's focus: large individual IP, long deferred periods, international schemes.<sup>[5]</sup></p>
+    </div>
+    <div class="card accent">
+      <h4>Critical Illness Insurance</h4>
+      <p>Pays a lump sum on diagnosis of a specified serious illness — typically cancer, heart attack, stroke, with additional conditions listed in the policy schedule. Invented by cardiac surgeon Dr Marius Barnard (South Africa) in 1983; launched in UK in 1986. Often combined with term life assurance.<sup>[6]</sup></p>
+    </div>
+    <div class="card blue">
+      <h4>Group Life (Death-in-Service)</h4>
+      <p>Employer-sponsored lump sum benefit paid to dependants of an employee who dies while employed. Typically a multiple of salary (2×–6× salary). Employers use group life as a tax-efficient employee benefit (premiums deductible; benefit paid free of inheritance tax via discretionary trust). Lloyd's underwrites large, international and complex group life schemes.<sup>[7]</sup></p>
+    </div>
+    <div class="card red">
+      <h4>Group Income Protection</h4>
+      <p>Employer-sponsored income protection scheme providing monthly benefit to employees unable to work through illness or injury. Benefit is paid to the employer (who continues to pay the absent employee) or directly to the employee. Lloyd's focus: large multi-country schemes, high-concentration occupational groups, mental health loading.<sup>[8]</sup></p>
+    </div>
+    <div class="card orange">
+      <h4>Substandard / Impaired Lives</h4>
+      <p>Lives with elevated mortality or morbidity risk due to medical history — diabetes, previous cancer, cardiac conditions, HIV, obesity, mental health history. Standard insurers decline or rate prohibitively. Lloyd's specialist underwriters apply extra mortality per mille (EPM) or percentage rating to price the additional risk. A core Lloyd's TL competency.<sup>[9]</sup></p>
+    </div>
+  </div>
+
+  <!-- Protection gap callout -->
+  <div class="warn-box">
+    <strong>UK Protection Gap — £2.6 Trillion:</strong> Swiss Re estimates the UK protection gap — the difference between the financial support families would need if the main earner died or became permanently disabled, and the cover they actually hold — at <strong>£2.6 trillion</strong> as of 2023.<sup>[I1]</sup> Only 10% of the working-age population holds income protection insurance. COVID-19's excess mortality shock (689,000 excess UK deaths 2020–21 est.) accelerated awareness of underinsurance. This represents both a systemic risk for the life/health market and a significant long-term market opportunity.
+  </div>
+
+  <!-- Regulatory info -->
+  <div class="info-box">
+    <strong>Regulatory Classification (UK):</strong> Life assurance (including term life and group life) is regulated under the Financial Services and Markets Act 2000 as <strong>long-term insurance business</strong> (Schedule 1, Part II). PHI/income protection is regulated as Class I long-term business. Lloyd's TL syndicates must comply with Solvency II reserving requirements for life business.<sup>[L9]</sup> FCA Consumer Duty (2023) applies to protection products sold to retail consumers; group life and IP sold to employers as employee benefits is subject to Insurance Act 2015 fair presentation duties.<sup>[L7]</sup>
+  </div>
+
+  <!-- Module nav -->
+  <div class="section-title">Hub Modules</div>
+  <div class="nav-grid">
+    <a href="history.html" class="nav-card">
+      <div class="num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From Equitable Life 1762 to COVID mortality shock and long-COVID disability</p>
+    </a>
+    <a href="timeline.html" class="nav-card">
+      <div class="num">Module 02</div>
+      <h4>Events Timeline</h4>
+      <p>20 key life &amp; health insurance events 1900–2024</p>
+    </a>
+    <a href="database.html" class="nav-card">
+      <div class="num">Module 03</div>
+      <h4>Loss Database</h4>
+      <p>35 systemic events and mortality shocks 1985–2024 — filterable</p>
+    </a>
+    <a href="underwriting.html" class="nav-card">
+      <div class="num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>Rating factors, EPM methodology, worked examples &amp; exclusions</p>
+    </a>
+    <a href="rates-analysis.html" class="nav-card">
+      <div class="num">Module 05</div>
+      <h4>Rates &amp; ROE</h4>
+      <p>Market cycle, rate index charts, ROE scenarios &amp; P&amp;L waterfall</p>
+    </a>
+    <a href="risk-mitigation.html" class="nav-card">
+      <div class="num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Underwriting controls, claims management, rehabilitation &amp; genetic testing</p>
+    </a>
+    <a href="global-program.html" class="nav-card">
+      <div class="num">Module 07</div>
+      <h4>Global Programme</h4>
+      <p>International group life/IP structure, jurisdiction profiles &amp; case study</p>
+    </a>
+    <a href="references.html" class="nav-card">
+      <div class="num">Sources</div>
+      <h4>References</h4>
+      <p>Legal, regulatory &amp; industry citations</p>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Temporary Life &amp; Permanent Health (TL) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Sources &amp; Citations</a></p>
+</footer>
+
+</body>
+</html>

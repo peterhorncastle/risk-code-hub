@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Motor – UK: Underwriting | Risk Code Hub</title>
+  <style>
+    :root {
+      --motor:#c0392b; --motor-dark:#7b1010; --road:#263238;
+      --signal:#e67e22; --speed:#1565c0; --go:#2e7d32;
+      --light:#fdf5f5; --text:#1e2a2e; --muted:#6b7280; --border:#e0cece;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #c0392b;
+    --hub-dark:      #7b1010;
+    --hub-light:     #fdecea;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #e67e22;
+    --hub-secondary2:#1565c0;
+    --header-gradient:linear-gradient(135deg,#1a0808 0%,#c0392b 50%,#7b1010 100%);
+    --header-sub:    #f0c8c8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#1a0808 0%,#c0392b 50%,#7b1010 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#c8a090; margin-bottom:6px; }
+    .breadcrumb a { color:var(--signal); text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#f0c8c8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--motor); border-bottom-color:var(--signal); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--motor); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--signal); }
+    h3 { font-size:1.05rem; color:var(--road); margin:24px 0 12px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .formula-box { background:var(--road); color:#c8d8e0; border-radius:12px; padding:24px 28px; margin:24px 0; font-family:monospace; }
+    .formula-box h3 { color:var(--signal); margin-bottom:10px; font-family:'Segoe UI',Arial,sans-serif; }
+    .formula-box .formula { font-size:1.0rem; color:#fff; line-height:1.9; }
+    .formula-box .formula-note { font-size:0.8rem; color:#a8c0cc; margin-top:12px; font-family:'Segoe UI',Arial,sans-serif; }
+    .formula-box p, .formula-box li { font-size:0.9rem; line-height:1.7; color:#c8d8e0; }
+
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin:24px 0; }
+    .factor-card { background:#fff; border-radius:10px; padding:20px 22px; border-top:4px solid var(--motor); box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .factor-card.amber { border-top-color:var(--signal); }
+    .factor-card.blue { border-top-color:var(--speed); }
+    .factor-card.green { border-top-color:var(--go); }
+    .factor-card.road { border-top-color:var(--road); }
+    .factor-card h4 { font-size:0.9rem; font-weight:700; color:var(--motor); margin-bottom:12px; }
+    .factor-card.amber h4 { color:var(--signal); }
+    .factor-card.blue h4 { color:var(--speed); }
+    .factor-card.green h4 { color:var(--go); }
+    .factor-card.road h4 { color:var(--road); }
+    .factor-card table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+    .factor-card th { background:#f0f0f0; padding:5px 8px; text-align:left; font-weight:600; }
+    .factor-card td { padding:5px 8px; border-bottom:1px solid var(--border); }
+    .factor-card tr:last-child td { border-bottom:none; }
+
+    .tbl { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.05); margin:24px 0; }
+    .tbl table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+    .tbl th { background:var(--motor); color:#fff; padding:10px 14px; text-align:left; }
+    .tbl th:hover { background:var(--motor-dark); color:#fff; }
+    .tbl td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .tbl tr:last-child td { border-bottom:none; }
+    .tbl tr:nth-child(even) td { background:#fdf8f8; }
+    .g { color:var(--go); font-weight:700; }
+    .a { color:var(--signal); font-weight:700; }
+    .r { color:var(--motor); font-weight:700; }
+
+    .example-box { background:#fff; border-radius:12px; padding:28px; box-shadow:0 3px 12px rgba(0,0,0,.08); margin:24px 0; border-left:6px solid var(--motor); }
+    .example-box.blue { border-left-color:var(--speed); }
+    .example-box h3 { font-size:1.05rem; color:var(--motor); margin-bottom:16px; }
+    .example-box.blue h3 { color:var(--speed); }
+    .example-box table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .example-box td { padding:8px 12px; border-bottom:1px solid var(--border); }
+    .example-box tr:last-child td { border-bottom:none; }
+    .example-box .result { background:var(--motor); color:#fff; font-weight:800; font-size:1.1rem; padding:14px 20px; border-radius:8px; text-align:center; margin-top:16px; }
+    .example-box.blue .result { background:var(--speed); }
+
+    .dark-box { background:var(--road); color:#c8d8e0; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .dark-box h3 { color:var(--signal); margin-bottom:12px; font-size:1.05rem; }
+    .dark-box p, .dark-box li { font-size:0.9rem; line-height:1.7; color:#c8d8e0; }
+    .dark-box ul { padding-left:20px; margin:8px 0; }
+    .dark-box li { margin-bottom:6px; }
+
+    footer { background:var(--road); color:#aabbc4; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Motor – UK</a> › Underwriting</div>
+  <h1>Underwriting Methodology — UK Motor (M2–M6)</h1>
+  <p>Rating factors, technical approach, fleet vs specialist private car underwriting, and worked examples.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates & ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Rating Framework — Motor Insurance Pricing</h2>
+  <p>UK motor rating is among the most statistically sophisticated in general insurance. The personal lines market (M2) uses generalised linear models (GLMs) and increasingly machine learning on millions of data points — policyholder characteristics, claims history, vehicle data, postcode and telematics behaviour. Lloyd's specialist motor operates on manual underwriting for non-standard risks, agreed value, fleet and motor trade, with actuarial support for portfolio management.</p>
+
+  <div class="formula-box">
+    <h3>Indicative Motor Premium Formula</h3>
+    <div class="formula">
+      Annual Premium = Base Rate × Vehicle Factor × Driver Factor × Territory Factor × Use Factor × Claims Factor × Cover Factor × EV/AV Loading
+    </div>
+    <div class="formula-note">Note: Each factor is a multiplier applied to the base rate. In personal lines, factors are derived from GLM statistical models on portfolio experience. In Lloyd's specialist motor, factors are applied judgmentally by underwriters using market benchmarks and loss history. ILLUS</div>
+  </div>
+
+  <div class="factor-grid">
+    <div class="factor-card">
+      <h4>Vehicle Factor</h4>
+      <table>
+        <tr><th>Factor</th><th>Multiplier Range <span class="badge b-i">ILLUS</span></th></tr>
+        <tr><td>Group 1–10 (small/economy)</td><td>0.5 – 0.8×</td></tr>
+        <tr><td>Group 11–25 (mainstream)</td><td>0.8 – 1.2×</td></tr>
+        <tr><td>Group 26–40 (performance)</td><td>1.2 – 2.5×</td></tr>
+        <tr><td>Group 41–50 (supercar)</td><td>2.5 – 6.0×</td></tr>
+        <tr><td>EV (battery concern loading)</td><td>+10–25%</td></tr>
+        <tr><td>Classic / agreed value</td><td>Individual</td></tr>
+      </table>
+    </div>
+    <div class="factor-card amber">
+      <h4>Driver Factor</h4>
+      <table>
+        <tr><th>Factor</th><th>Multiplier Range <span class="badge b-i">ILLUS</span></th></tr>
+        <tr><td>Age 17–19</td><td>3.0 – 5.0×</td></tr>
+        <tr><td>Age 20–25</td><td>1.5 – 2.5×</td></tr>
+        <tr><td>Age 26–69 (standard)</td><td>0.7 – 1.2×</td></tr>
+        <tr><td>Age 70+</td><td>1.0 – 1.8×</td></tr>
+        <tr><td>Licence &lt;1 year</td><td>1.5 – 2.0×</td></tr>
+        <tr><td>Non-standard licence</td><td>Individual</td></tr>
+      </table>
+    </div>
+    <div class="factor-card blue">
+      <h4>Territory Factor</h4>
+      <table>
+        <tr><th>Region</th><th>Multiplier Range <span class="badge b-i">ILLUS</span></th></tr>
+        <tr><td>Rural Scotland/Wales</td><td>0.7 – 0.85×</td></tr>
+        <tr><td>Provincial towns</td><td>0.85 – 1.0×</td></tr>
+        <tr><td>Major cities (Midlands, NE)</td><td>1.0 – 1.3×</td></tr>
+        <tr><td>Inner London</td><td>1.3 – 1.8×</td></tr>
+        <tr><td>High crime urban postcodes</td><td>1.5 – 2.5×</td></tr>
+        <tr><td>Flood zone additional</td><td>+5–15%</td></tr>
+      </table>
+    </div>
+    <div class="factor-card green">
+      <h4>Use Factor</h4>
+      <table>
+        <tr><th>Use Class</th><th>Multiplier <span class="badge b-i">ILLUS</span></th></tr>
+        <tr><td>SDP (social, domestic, pleasure)</td><td>1.0×</td></tr>
+        <tr><td>SDP + commuting</td><td>1.05 – 1.15×</td></tr>
+        <tr><td>Business use (Class 1)</td><td>1.1 – 1.3×</td></tr>
+        <tr><td>Business use (Class 2+)</td><td>1.3 – 1.8×</td></tr>
+        <tr><td>Hire or reward / PHV</td><td>1.8 – 3.0×</td></tr>
+        <tr><td>Courier/delivery</td><td>2.0 – 4.0×</td></tr>
+      </table>
+    </div>
+    <div class="factor-card road">
+      <h4>Claims History Factor</h4>
+      <table>
+        <tr><th>History</th><th>Multiplier <span class="badge b-i">ILLUS</span></th></tr>
+        <tr><td>Max NCD (5+ years protected)</td><td>0.3 – 0.5×</td></tr>
+        <tr><td>3–4 years NCD</td><td>0.55 – 0.75×</td></tr>
+        <tr><td>1–2 years NCD</td><td>0.8 – 0.95×</td></tr>
+        <tr><td>No NCD (0 years)</td><td>1.0×</td></tr>
+        <tr><td>1 at-fault claim (&lt;3 yrs)</td><td>1.2 – 1.6×</td></tr>
+        <tr><td>2+ at-fault claims</td><td>1.8 – 3.0× or declined</td></tr>
+      </table>
+    </div>
+    <div class="factor-card amber">
+      <h4>Convictions Factor</h4>
+      <table>
+        <tr><th>Conviction</th><th>Multiplier <span class="badge b-i">ILLUS</span></th></tr>
+        <tr><td>SP10–50 (speeding)</td><td>1.05 – 1.2×</td></tr>
+        <tr><td>CU codes (careless driving)</td><td>1.2 – 1.5×</td></tr>
+        <tr><td>IN10 (uninsured)</td><td>1.5 – 3.0×</td></tr>
+        <tr><td>DR10 (drink drive)</td><td>2.0 – 4.0×</td></tr>
+        <tr><td>TS10 (traffic signal)</td><td>1.1 – 1.3×</td></tr>
+        <tr><td>MS90 (failure to stop)</td><td>1.5 – 2.5×</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2>Fleet Underwriting (M5) — Key Rating Variables</h2>
+  <p>Fleet motor underwriting differs fundamentally from personal lines. Rating is based on fleet loss experience (own claims data), fleet composition, driver management, mileage exposure and industry sector — not individual driver characteristics. A minimum of 3 years fleet loss history is typically required; larger fleets provide greater statistical credibility.</p>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Variable</th><th>Green (Favourable)</th><th>Amber (Watchlist)</th><th>Red (Decline/Load)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Fleet loss ratio (3yr avg)</strong></td><td class="g">&lt;50%</td><td class="a">50–75%</td><td class="r">&gt;75%</td></tr>
+        <tr><td><strong>Fleet size</strong></td><td class="g">100+ vehicles (credible)</td><td class="a">20–100</td><td class="r">&lt;20 (limited data)</td></tr>
+        <tr><td><strong>Driver training programme</strong></td><td class="g">Formal ROSPA/IAM programme</td><td class="a">Informal/occasional</td><td class="r">None</td></tr>
+        <tr><td><strong>Fleet age (avg vehicle age)</strong></td><td class="g">&lt;3 years</td><td class="a">3–7 years</td><td class="r">&gt;7 years</td></tr>
+        <tr><td><strong>Telematics deployment</strong></td><td class="g">100% fitted, active monitoring</td><td class="a">Partial deployment</td><td class="r">None</td></tr>
+        <tr><td><strong>EV proportion</strong></td><td class="g">&lt;20% EV</td><td class="a">20–50% EV</td><td class="r">&gt;50% EV (emerging risk)</td></tr>
+        <tr><td><strong>Industry sector</strong></td><td class="g">Professional services, utilities</td><td class="a">Construction, logistics</td><td class="r">Courier, taxi, waste</td></tr>
+        <tr><td><strong>Excess adequacy</strong></td><td class="g">&gt;£1,000 (absorbs frequency)</td><td class="a">£500–£1,000</td><td class="r">&lt;£500 (low retention)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Motor Trade Underwriting (M6)</h2>
+  <p>Motor trade combined policies are among the most complex in Lloyd's motor book, combining road risks (vehicles in custody/control), premises, liability and stock/equipment in a single wording. Underwriting requires detailed assessment of the nature of trade, premises quality, stock values, employee risk and territorial exposure.</p>
+  <div class="dark-box">
+    <h3>M6 Key Underwriting Considerations</h3>
+    <ul>
+      <li><strong>Road risks:</strong> Who drives vehicles in trade? Any-driver broad cover increases risk vs named-driver or aged-limited covers. Key question: are customers' vehicles driven, or only dealer stock?</li>
+      <li><strong>Stock valuation:</strong> Declared stock value accuracy is critical — dealers may understate for premium saving, creating underinsurance. Maximum single vehicle value and total maximum simultaneous exposure.</li>
+      <li><strong>Premises security:</strong> Yard security (CCTV, perimeter, overnight lighting), key management (electronic key safes vs board key), arson exposure for bodyshop premises.</li>
+      <li><strong>Business type:</strong> New car dealer (lower risk — franchise oversight) vs used car dealer (higher risk — unpredictable stock profile) vs repairers (body-in-white / paint shop fire exposure) vs recovery operators (HGV exposure).</li>
+      <li><strong>Employee checks:</strong> Driving licence validation for all test drive and delivery drivers. Points and conviction checking on hire. Particularly important for high-value marques.</li>
+      <li><strong>EV-specific:</strong> Battery charging protocols, lithium-ion battery storage areas (sprinkler requirements), electric vehicle specialist repair capabilities.</li>
+    </ul>
+  </div>
+
+  <h2>Specialist Private Motor — Agreed Value &amp; Classic Car (M2)</h2>
+  <p>Lloyd's specialist M2 underwriting centres on high-value vehicles, historic/classic cars, supercars and non-standard risks that standard market cannot accommodate. The key differentiator is agreed value settlement — the sum insured is agreed at inception and paid in full on total loss, without depreciation deduction or market value argument.</p>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Factor</th><th>Standard Market (direct insurer)</th><th>Lloyd's Specialist (M2)</th></tr></thead>
+      <tbody>
+        <tr><td>Value basis</td><td>Market value at time of loss</td><td>Agreed value — pre-agreed at inception <span class="badge b-i">ILLUS</span></td></tr>
+        <tr><td>Maximum vehicle value</td><td>Typically £150–200k</td><td>No practical limit (£500k+ routinely)</td></tr>
+        <tr><td>Specialist repair</td><td>Approved repairer network</td><td>Marque-specialist / concours restorer approval</td></tr>
+        <tr><td>Annual mileage</td><td>Standard mileage declared</td><td>Low-mileage restricted (1,000–5,000 miles) with premium credit</td></tr>
+        <tr><td>Laid-up cover</td><td>Rarely offered</td><td>Laid-up (fire and theft only) at reduced premium</td></tr>
+        <tr><td>Track day endorsement</td><td>Excluded</td><td>Track day cover available — circuit, speed events</td></tr>
+        <tr><td>Collection cover</td><td>Single vehicle only</td><td>Blanket collection policy for 2–50+ vehicles</td></tr>
+        <tr><td>Valuation support</td><td>None</td><td>Regular valuation review (every 2–3 years)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Worked Example A: Large Corporate Fleet (M5)</h2>
+  <div class="example-box">
+    <h3>Example A: 500-Vehicle Mixed Fleet — Professional Services Firm</h3>
+    <table>
+      <tr><td>Fleet size</td><td>500 vehicles (350 company cars, 150 vans)</td></tr>
+      <tr><td>Insured values</td><td>Total fleet: £12m; max single vehicle: £65,000</td></tr>
+      <tr><td>Annual mileage (total fleet)</td><td>~6 million miles per year <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>3-year claims history</td><td>Loss ratio 52% average; 3.8 claims per 100 vehicles per year</td></tr>
+      <tr><td>Telematics</td><td>100% deployed; active coaching programme</td></tr>
+      <tr><td>EV proportion</td><td>18% BEV/PHEV</td></tr>
+      <tr><td>Sector</td><td>Professional services (consulting)</td></tr>
+      <tr><td>Base fleet rate</td><td>1.8% of insured value p.a. <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>Telematics discount</td><td>–12%</td></tr>
+      <tr><td>Good loss history credit</td><td>–8%</td></tr>
+      <tr><td>Driver training credit</td><td>–5%</td></tr>
+      <tr><td>EV loading</td><td>+3%</td></tr>
+      <tr><td><strong>Composite rate</strong></td><td><strong>1.8% × 0.78 = 1.40%</strong> <span class="badge b-i">ILLUS</span></td></tr>
+    </table>
+    <div class="result">Indicative Annual Fleet Premium: £168,000 <span class="badge b-i">ILLUS</span></div>
+  </div>
+
+  <h2>Worked Example B: Classic Car Collection (M2 Specialist)</h2>
+  <div class="example-box blue">
+    <h3>Example B: 8-Vehicle Classic Car Collection — HNW Private Client</h3>
+    <table>
+      <tr><td>Collection</td><td>8 vehicles: 1967 Ferrari 275 GTB, 1963 Aston Martin DB5, 3× post-war British classics, 2× pre-war veterans, 1 high-performance modern (Porsche 911 GT3 RS)</td></tr>
+      <tr><td>Agreed value (total)</td><td>£4.2m across collection</td></tr>
+      <tr><td>Annual mileage (combined)</td><td>&lt;3,000 miles (low-mileage endorsement)</td></tr>
+      <tr><td>Storage</td><td>Climate-controlled garage, 24hr CCTV, Thatcham Category 1 alarm on each vehicle</td></tr>
+      <tr><td>Track day endorsement</td><td>Porsche GT3 RS — 4 circuit days per year max</td></tr>
+      <tr><td>Base collection rate</td><td>0.55% of agreed value p.a. <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>Low mileage credit</td><td>–20%</td></tr>
+      <tr><td>Secure storage credit</td><td>–10%</td></tr>
+      <tr><td>Track day endorsement loading</td><td>+8% (on GT3 RS agreed value only)</td></tr>
+      <tr><td><strong>Composite rate</strong></td><td><strong>~0.50% of total agreed value</strong> <span class="badge b-i">ILLUS</span></td></tr>
+    </table>
+    <div class="result">Indicative Annual Collection Premium: ~£21,000 <span class="badge b-i">ILLUS</span></div>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.8 · Motor – UK (M2/M3/M4/M5/M6) · For educational use</footer>
+</body>
+</html>

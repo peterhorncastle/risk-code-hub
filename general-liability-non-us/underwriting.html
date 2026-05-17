@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>GL Non-USA: Underwriting | Risk Code Hub</title>
+  <style>
+    :root {
+      --gl:#1b5e20; --gl-dark:#0a2e0d; --intl:#006064;
+      --warn:#e65100; --liab:#1565c0; --prod:#6a1b9a;
+      --light:#f1f8f1; --text:#1a2e1a; --muted:#5a7060; --border:#c0d8c0;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1b5e20;
+    --hub-dark:      #0a2e0d;
+    --hub-light:     #e8f5e9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #006064;
+    --header-gradient:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%);
+    --header-sub:    #c8e6c9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90c895; margin-bottom:6px; }
+    .breadcrumb a { color:#a5d6a7; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#c8e6c9; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--gl); border-bottom-color:var(--warn); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--gl); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    h3 { font-size:1.05rem; color:var(--gl-dark); margin:24px 0 12px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    .formula-box { background:var(--gl-dark); color:#c8e0c8; border-radius:12px; padding:24px 28px; margin:24px 0; font-family:monospace; }
+    .formula-box h3 { color:#a5d6a7; margin-bottom:10px; font-family:'Segoe UI',Arial,sans-serif; }
+    .formula-box .formula { font-size:1.0rem; color:#fff; line-height:1.9; }
+    .formula-box .formula-note { font-size:0.8rem; color:#90c8a0; margin-top:12px; font-family:'Segoe UI',Arial,sans-serif; }
+    .formula-box p, .formula-box li { font-size:0.9rem; line-height:1.7; color:#c8e0c8; }
+
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin:24px 0; }
+    .factor-card { background:#fff; border-radius:10px; padding:20px 22px; border-top:4px solid var(--gl); box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .factor-card.intl { border-top-color:var(--intl); }
+    .factor-card.warn { border-top-color:var(--warn); }
+    .factor-card.blue { border-top-color:var(--liab); }
+    .factor-card.purple { border-top-color:var(--prod); }
+    .factor-card h4 { font-size:0.9rem; font-weight:700; color:var(--gl); margin-bottom:12px; }
+    .factor-card.intl h4 { color:var(--intl); }
+    .factor-card.warn h4 { color:var(--warn); }
+    .factor-card.blue h4 { color:var(--liab); }
+    .factor-card.purple h4 { color:var(--prod); }
+    .factor-card table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+    .factor-card th { background:#f0f5f0; padding:5px 8px; text-align:left; font-weight:600; }
+    .factor-card td { padding:5px 8px; border-bottom:1px solid var(--border); }
+    .factor-card tr:last-child td { border-bottom:none; }
+
+    .tbl { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.05); margin:24px 0; }
+    .tbl table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+    .tbl th { background:var(--gl); color:#fff; padding:10px 14px; text-align:left; }
+    .tbl th:hover { background:var(--gl-dark); color:#fff; }
+    .tbl td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .tbl tr:last-child td { border-bottom:none; }
+    .tbl tr:nth-child(even) td { background:#f5faf5; }
+    .g { color:var(--gl); font-weight:700; }
+    .a { color:var(--warn); font-weight:700; }
+    .r { color:#c62828; font-weight:700; }
+
+    .example-box { background:#fff; border-radius:12px; padding:28px; box-shadow:0 3px 12px rgba(0,0,0,.08); margin:24px 0; border-left:6px solid var(--gl); }
+    .example-box.purple { border-left-color:var(--prod); }
+    .example-box h3 { font-size:1.05rem; color:var(--gl); margin-bottom:16px; }
+    .example-box.purple h3 { color:var(--prod); }
+    .example-box table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .example-box td { padding:8px 12px; border-bottom:1px solid var(--border); }
+    .example-box tr:last-child td { border-bottom:none; }
+    .example-box .result { background:var(--gl); color:#fff; font-weight:800; font-size:1.1rem; padding:14px 20px; border-radius:8px; text-align:center; margin-top:16px; }
+    .example-box.purple .result { background:var(--prod); }
+
+    .dark-box { background:var(--gl-dark); color:#c8e0c8; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .dark-box h3 { color:#a5d6a7; margin-bottom:12px; font-size:1.05rem; }
+    .dark-box p, .dark-box li { font-size:0.9rem; line-height:1.7; color:#c8e0c8; }
+    .dark-box ul { padding-left:20px; margin:8px 0; }
+    .dark-box li { margin-bottom:6px; }
+
+    footer { background:var(--gl-dark); color:#90c895; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">GL Non-USA</a> › Underwriting</div>
+  <h1>Underwriting Methodology — General Liability (Non-USA)</h1>
+  <p>Rating factors, occurrence vs claims-made basis, sector loadings, jurisdictional adjustments and worked examples for public liability and products liability.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html" class="active">Underwriting</a>
+  <a href="rates-analysis.html">Rates & ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Occurrence vs Claims-Made — The Core Policy Basis Decision</h2>
+  <p>The single most important underwriting decision for non-US GL is whether to write the risk on an <strong>occurrence</strong> or <strong>claims-made</strong> basis. This choice determines when coverage is triggered — at the time of the injury/damage event (occurrence) or when the claim is first made against the insured (claims-made). The distinction is critical for long-tail risks such as products and contractors, where claims can emerge years or decades after the policy period.</p>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Feature</th><th>Occurrence Basis</th><th>Claims-Made Basis</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Trigger</strong></td><td>Injury/damage occurs during policy period</td><td>Claim first made against insured during policy period</td></tr>
+        <tr><td><strong>Long-tail exposure</strong></td><td>Policy remains exposed for life of claim development — potentially 20–30 years post-expiry</td><td>Exposure limited to claims made while policy in force; prior-acts date limits backdated exposure</td></tr>
+        <tr><td><strong>Reserve uncertainty</strong></td><td>High — IBNR can be substantial and long-developing</td><td>Lower — claims notified during policy period are identifiable</td></tr>
+        <tr><td><strong>Retroactive date</strong></td><td>Not applicable — cover from first day of policy</td><td>Critical — defines earliest occurrence date for which claims are covered</td></tr>
+        <tr><td><strong>Extended Reporting Period (ERP)</strong></td><td>Not applicable</td><td>Often purchased at policy expiry to capture late-notified claims from occurrence period</td></tr>
+        <tr><td><strong>Typical use in N/NC/NR/NS</strong></td><td>N (public liability), NC (contractors), many European primary programmes</td><td>NR (products — growing), pharmaceutical, medical device, excess/umbrella</td></tr>
+        <tr><td><strong>Pricing implication</strong></td><td>Includes "tail loading" for long-tail IBNR development; higher risk-adjusted premium</td><td>Cleaner pricing; retroactive date restriction compensates for lower rate</td></tr>
+        <tr><td><strong>Underwriter preference (Lloyd's)</strong></td><td>Historically occurrence; shift to claims-made for high-value products since 2018</td><td>Preferred for pharmaceutical, medical device, long-tail products risks</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Rating Framework — Public Liability (N)</h2>
+
+  <div class="formula-box">
+    <h3>Public Liability Premium Formula</h3>
+    <div class="formula">
+      Annual Premium = Base Rate per £1m limit × Turnover/Exposure Measure × Sector Factor × Territory Factor × Limit Factor × Claims Experience Factor
+    </div>
+    <div class="formula-note">Base rate per £1m limit varies by sector: retail ~£150–300 / £1m; manufacturing ~£200–400 / £1m; construction ~£400–800 / £1m; entertainment/events ~£600–1,500 / £1m. All ILLUS.</div>
+  </div>
+
+  <div class="factor-grid">
+    <div class="factor-card">
+      <h4>Sector / Hazard Factor (N — Public Liability)</h4>
+      <table>
+        <tr><th>Sector</th><th>Multiplier <span class="badge b-i">ILLUS</span></th></tr>
+        <tr><td>Retail / shop / office</td><td>0.8 – 1.0×</td></tr>
+        <tr><td>Hotel / hospitality</td><td>1.0 – 1.3×</td></tr>
+        <tr><td>Manufacturing (non-hazardous)</td><td>1.0 – 1.2×</td></tr>
+        <tr><td>Food processing</td><td>1.2 – 1.6×</td></tr>
+        <tr><td>Construction / civil engineering</td><td>1.5 – 2.5×</td></tr>
+        <tr><td>Amusement / fairground</td><td>2.0 – 4.0×</td></tr>
+        <tr><td>Chemical / hazardous industrial</td><td>2.5 – 5.0×</td></tr>
+      </table>
+    </div>
+    <div class="factor-card intl">
+      <h4>Territory Factor</h4>
+      <table>
+        <tr><th>Territory</th><th>Multiplier <span class="badge b-i">ILLUS</span></th></tr>
+        <tr><td>UK / Northern Europe</td><td>1.0×</td></tr>
+        <tr><td>Southern Europe / Australia</td><td>1.1 – 1.3×</td></tr>
+        <tr><td>Middle East / GCC</td><td>0.8 – 1.1×</td></tr>
+        <tr><td>Asia-Pacific (ex-Australia)</td><td>0.7 – 1.0×</td></tr>
+        <tr><td>Latin America</td><td>0.9 – 1.3×</td></tr>
+        <tr><td>Worldwide excl. US/Canada</td><td>+15 – 30%</td></tr>
+      </table>
+    </div>
+    <div class="factor-card warn">
+      <h4>Limit Factor (Increased Limits)</h4>
+      <table>
+        <tr><th>Limit of Indemnity</th><th>ILF <span class="badge b-i">ILLUS</span></th></tr>
+        <tr><td>£1m any one occurrence</td><td>1.00×</td></tr>
+        <tr><td>£2m any one occurrence</td><td>1.45×</td></tr>
+        <tr><td>£5m any one occurrence</td><td>2.10×</td></tr>
+        <tr><td>£10m any one occurrence</td><td>2.90×</td></tr>
+        <tr><td>£25m any one occurrence</td><td>3.80×</td></tr>
+        <tr><td>£50m any one occurrence</td><td>4.60×</td></tr>
+      </table>
+    </div>
+    <div class="factor-card purple">
+      <h4>Products Liability Rating Variables (NR)</h4>
+      <table>
+        <tr><th>Variable</th><th>Impact</th></tr>
+        <tr><td>Annual turnover / sales</td><td>Primary exposure base</td></tr>
+        <tr><td>Export destinations (incl. non-US)</td><td>+10–30% per high-risk territory</td></tr>
+        <tr><td>Product type (food, pharma, medical device)</td><td>1.5 – 5× sector load</td></tr>
+        <tr><td>Products aggregate limit</td><td>Separate from AOO limit</td></tr>
+        <tr><td>Claims experience (5-year)</td><td>±30% vs base</td></tr>
+        <tr><td>Quality management (ISO 9001 / HACCP)</td><td>–5 to –15% credit</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2>Sector Risk Assessment — Green / Amber / Red Matrix</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Risk Factor</th><th>Green (Standard Terms)</th><th>Amber (Review / Load)</th><th>Red (Specialist / Decline)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Products jurisdiction</strong></td><td class="g">UK/EU only; well-regulated</td><td class="a">Non-EU export; Australia</td><td class="r">Any US/Canada export</td></tr>
+        <tr><td><strong>Product type (NR)</strong></td><td class="g">Industrial equipment; non-consumables</td><td class="a">Food, consumer electronics</td><td class="r">Pharmaceutical, medical device, pyrotechnics</td></tr>
+        <tr><td><strong>Quality management</strong></td><td class="g">ISO 9001 certified; HACCP for food</td><td class="a">Internal QMS, not certified</td><td class="r">No formal QMS; prior recall history</td></tr>
+        <tr><td><strong>Claims history (5yr)</strong></td><td class="g">Loss ratio &lt;50%; no large single loss</td><td class="a">LR 50–80%; one large loss</td><td class="r">LR &gt;80%; mass-tort exposure</td></tr>
+        <tr><td><strong>Contractors — project type (NC)</strong></td><td class="g">Refurbishment; low-rise commercial</td><td class="a">High-rise residential; bridge/tunnel</td><td class="r">Nuclear; demolition; subsurface works in urban</td></tr>
+        <tr><td><strong>VWS exposure (NC)</strong></td><td class="g">No vibration works; rural site</td><td class="a">Piling near structures; urban excavation</td><td class="r">Deep excavation adjacent to railways, heritage buildings</td></tr>
+        <tr><td><strong>Financial stability</strong></td><td class="g">Established multinational; rated entity</td><td class="a">SME; private company</td><td class="r">Start-up; prior insolvency; adverse court judgments</td></tr>
+        <tr><td><strong>Social inflation exposure</strong></td><td class="g">Claims made basis; retroactive date &gt;2yr</td><td class="a">Occurrence basis; &lt;5yr history</td><td class="r">Occurrence; pharmaceutical; Australia/Brazil presence</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="dark-box">
+    <h3>The Aggregate Limit — Critical Underwriting Control for Products (NR)</h3>
+    <p>For products liability (NR), the <strong>products/completed operations aggregate</strong> is the maximum the policy will pay for all products claims in the policy year combined — regardless of how many individual occurrences. This is a fundamental underwriting control because a mass-product defect (e.g. a contaminated batch) can generate thousands of individual claims simultaneously, each separately triggering the any-one-occurrence limit.</p>
+    <ul>
+      <li><strong>Standard structure:</strong> Limit of Indemnity £Xm any one occurrence AND £Ym in the aggregate (products). The aggregate is typically set at 2–3× the AOO limit for most sectors.</li>
+      <li><strong>Pharmaceutical / food:</strong> Aggregate limits are particularly critical — a single contaminated batch can affect millions of consumers. Aggregates for high-volume food or pharma products may be set at 5–10× AOO, or the risk declined if adequate aggregate cannot be agreed.</li>
+      <li><strong>Reinstatement:</strong> Some policies offer aggregate reinstatement (one or more) — the aggregate is refilled to full limit after exhaustion. This is expensive and requires careful aggregate loss modelling.</li>
+      <li><strong>Defence costs:</strong> Non-US GL policies commonly write defence costs inside the limit of indemnity (DCIL) — costs erode the aggregate. This significantly reduces effective coverage for claims-heavy mass-tort scenarios. Outside-the-limit (DCOL) is available but at additional premium.</li>
+    </ul>
+  </div>
+
+  <h2>Worked Example A: European Food Manufacturer — Products Liability (NR)</h2>
+  <div class="example-box">
+    <h3>Example A: UK Dairy Products Manufacturer — EU and Worldwide Ex-US Export</h3>
+    <table>
+      <tr><td>Business</td><td>Dairy products (yoghurt, cheese); annual turnover £85m; exports to EU (60%), Middle East (15%), Asia (10%), UK (15%)</td></tr>
+      <tr><td>Policy basis</td><td>Occurrence; products aggregate included</td></tr>
+      <tr><td>Limit of indemnity</td><td>£5m any one occurrence; £10m in the aggregate (products)</td></tr>
+      <tr><td>Base rate per £1m AOO limit</td><td>£320 per £1m (food sector, occurrence basis) <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>ILF to £5m</td><td>2.10×</td></tr>
+      <tr><td>Food sector hazard factor</td><td>1.4×</td></tr>
+      <tr><td>Territory factor (EU + worldwide ex-US)</td><td>1.2× (non-UK export loading)</td></tr>
+      <tr><td>Products aggregate factor (2× AOO)</td><td>+30% to base</td></tr>
+      <tr><td>ISO 22000 / HACCP credit</td><td>–10%</td></tr>
+      <tr><td>Claims experience (5yr, favourable)</td><td>–8%</td></tr>
+      <tr><td><strong>Calculation</strong></td><td>£320 × 2.10 × 1.4 × 1.2 × 1.30 × 0.90 × 0.92 = £1,317 per £1m AOO equivalent</td></tr>
+    </table>
+    <div class="result">Indicative Annual Premium: ~£6,600 <span class="badge b-i">ILLUS</span></div>
+  </div>
+
+  <h2>Worked Example B: Infrastructure Contractor — Contractors Liability (NC)</h2>
+  <div class="example-box purple">
+    <h3>Example B: Major Civil Engineering Contractor — Urban Metro Station Project</h3>
+    <table>
+      <tr><td>Project</td><td>Underground metro station construction in European capital city; contract value €220m; 36-month build; deep excavation in urban environment adjacent to existing heritage buildings</td></tr>
+      <tr><td>Policy basis</td><td>Project-specific occurrence; policy period 36 months + 12-month completed operations extension</td></tr>
+      <tr><td>Limit of indemnity</td><td>€25m any one occurrence / in the aggregate</td></tr>
+      <tr><td>Base rate on contract value</td><td>0.04% of €220m contract value p.a. <span class="badge b-i">ILLUS</span></td></tr>
+      <tr><td>Hazard uplift — deep urban excavation (VWS)</td><td>+80% (subsidence, vibration to adjacent heritage structures)</td></tr>
+      <tr><td>Completed operations extension (12m)</td><td>+25%</td></tr>
+      <tr><td>Subcontractor extension included</td><td>+10%</td></tr>
+      <tr><td>Cross-liability clause</td><td>Included — no additional premium</td></tr>
+      <tr><td>ILF to €25m</td><td>3.80×</td></tr>
+      <tr><td>Contractor experience credit (10yr no major loss)</td><td>–12%</td></tr>
+      <tr><td><strong>Calculation</strong></td><td>€220m × 0.04% × 1.80 × 1.25 × 1.10 × 3.80 × 0.88 = ~€261,000 total project premium</td></tr>
+    </table>
+    <div class="result">Indicative Project Premium (3-year): ~€261,000 total / ~€87,000 p.a. <span class="badge b-i">ILLUS</span></div>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.9 · General Liability – Non-USA (N/NC/NR/NS) · For educational use</footer>
+</body>
+</html>

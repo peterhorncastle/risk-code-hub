@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Risk Mitigation — Nuclear (NP / NL / NV) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4a4a00;
+      --hub-dark:      #252500;
+      --hub-light:     #f9f9e8;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#c62828;
+      --header-gradient:linear-gradient(135deg,#252500 0%,#4a4a00 55%,#6b6b00 100%);
+      --header-sub:    #e6e682;
+      --hub-mid:       #e8e8c0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1e1e0a;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#252500;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .controls-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .control-card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .control-card.prevent{border-left:5px solid #4a4a00;}
+    .control-card.detect{border-left:5px solid #1565c0;}
+    .control-card .ctrl-type{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+    .ctrl-prevent{color:#4a4a00;}
+    .ctrl-detect{color:#1565c0;}
+    .control-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .control-card p{font-size:0.81rem;color:#444;line-height:1.45;}
+    .ines-box{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .ines-box h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:14px;}
+    .ines-table{width:100%;border-collapse:collapse;}
+    .ines-table th{padding:8px 10px;font-size:0.78rem;font-weight:700;text-align:left;background:var(--hub-dark);color:#fff;}
+    .ines-table td{padding:8px 10px;font-size:0.8rem;border-bottom:1px solid #eeee99;}
+    .ines-table tr:last-child td{border-bottom:none;}
+    .ines-7{background:#b71c1c;color:#fff;font-weight:700;text-align:center;}
+    .ines-6{background:#e53935;color:#fff;font-weight:700;text-align:center;}
+    .ines-5{background:#e65100;color:#fff;font-weight:700;text-align:center;}
+    .ines-4{background:#f57c00;color:#fff;font-weight:700;text-align:center;}
+    .ines-3{background:#f9a825;color:#000;font-weight:700;text-align:center;}
+    .ines-2{background:#fdd835;color:#000;font-weight:700;text-align:center;}
+    .ines-1{background:#c8a84b;color:#000;font-weight:700;text-align:center;}
+    .checklist{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .checklist h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:14px;}
+    .chk-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #eeee99;}
+    .chk-item:last-child{border-bottom:none;}
+    .chk-box{width:20px;height:20px;border-radius:4px;border:2px solid var(--hub-primary);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+    .chk-box.done{background:var(--hub-primary);}
+    .chk-box.done::after{content:'✓';color:#fff;font-size:0.75rem;font-weight:700;}
+    .chk-text{font-size:0.85rem;color:#333;line-height:1.4;}
+    .chk-text strong{color:var(--hub-dark);}
+    .warn-box{background:#fff3e0;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .info-box{background:#f5f5dc;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#2a2a00;line-height:1.6;}
+    .actions-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:24px;}
+    .action-item{background:#fff;border-radius:8px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border-left:4px solid var(--hub-accent);}
+    .action-item .act-num{font-size:0.68rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .action-item p{font-size:0.82rem;color:#444;line-height:1.4;}
+    footer{background:#252500;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Nuclear (NP/NL/NV)</a> › Risk Mitigation</div>
+    <div class="tag">Module 06</div>
+    <h1>Risk Mitigation</h1>
+    <div class="sub">Defence in depth, INES scale, emergency preparedness checklist, WANO peer review &amp; Zaporizhzhia warning</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- PREVENT controls -->
+  <div class="section-title">Prevention Controls (6)</div>
+  <div class="controls-grid">
+    <div class="control-card prevent">
+      <div class="ctrl-type ctrl-prevent">PREVENT</div>
+      <h4>Defence in Depth — Multiple Redundant Safety Systems</h4>
+      <p>The foundational nuclear safety concept: multiple independent barriers and safety systems, each capable of preventing accident escalation independently. Physical barriers: fuel cladding → reactor pressure vessel → primary containment → secondary containment → site boundary. Regulatory basis: IAEA Safety Fundamentals SF-1 and INSAG-10. <sup>[L8]</sup></p>
+    </div>
+    <div class="control-card prevent">
+      <div class="ctrl-type ctrl-prevent">PREVENT</div>
+      <h4>Periodic Safety Review (PSR) — Every 10 Years</h4>
+      <p>Comprehensive review of ageing management, design basis compliance, and safety improvements every 10 years — mandatory in IAEA member states. PSR identifies aging effects (stress corrosion cracking, embrittlement, material degradation) and requires plant modification to maintain safety case. Post-Fukushima: PSR now includes stress test against extreme external hazards. <sup>[I8]</sup></p>
+    </div>
+    <div class="control-card prevent">
+      <div class="ctrl-type ctrl-prevent">PREVENT</div>
+      <h4>Seismic &amp; Tsunami Hazard Reassessment — Post-Fukushima</h4>
+      <p>Following Fukushima, all nuclear sites worldwide were required to perform stress tests against extreme external hazards (flooding, seismic, loss of power). Cliff-edge effect analysis (what happens if the design basis is exceeded by 10%, 50%, etc.). New seawall heights, passive cooling systems, and beyond-design-basis emergency procedures implemented across the global fleet. <sup>[I7]</sup></p>
+    </div>
+    <div class="control-card prevent">
+      <div class="ctrl-type ctrl-prevent">PREVENT</div>
+      <h4>Cyber Security for Nuclear SCADA/OT — IAEA NSS Series</h4>
+      <p>Nuclear Instrumentation and Control (I&amp;C) systems and SCADA are increasingly digital, creating potential cyber attack surfaces. IAEA Nuclear Security Series (NSS) publications, and national regulations (US NRC 10 CFR 73.54; UK ONR cyber security guidance) mandate air-gapping, access controls, change management processes, and nuclear-specific cyber security assessments for all digital I&amp;C systems. <sup>[I8]</sup></p>
+    </div>
+    <div class="control-card prevent">
+      <div class="ctrl-type ctrl-prevent">PREVENT</div>
+      <h4>Emergency Operating Procedures (EOPs) — TMI/Fukushima Lessons</h4>
+      <p>EOPs are symptom-based operating procedures written to guide operators through accident scenarios regardless of cause. Developed after TMI (where operator actions worsened the accident by following incorrect alarm-based procedures). Post-Fukushima EOPs include hydrogen management (to prevent explosion), passive cooling initiation, station blackout recovery, and emergency feed-and-bleed procedures. <sup>[I7]</sup></p>
+    </div>
+    <div class="control-card prevent">
+      <div class="ctrl-type ctrl-prevent">PREVENT</div>
+      <h4>Operator Qualification &amp; WANO Peer Review</h4>
+      <p>WANO (World Association of Nuclear Operators) conducts peer reviews of all member nuclear plants on a 4-year cycle — an operator from one plant reviews another. WANO findings (Areas for Improvement, AFIs) drive improvement actions. Strong WANO performance is a key underwriting positive indicator. Post-Chernobyl: WANO was specifically created to share safety culture and operational experience globally. <sup>[I4]</sup></p>
+    </div>
+  </div>
+
+  <!-- DETECT controls -->
+  <div class="section-title">Detection Controls (4)</div>
+  <div class="controls-grid">
+    <div class="control-card detect">
+      <div class="ctrl-type ctrl-detect">DETECT</div>
+      <h4>Radiation Monitoring — On-Site &amp; Off-Site Boundary</h4>
+      <p>Continuous radiation monitoring at multiple locations: reactor building, turbine hall, stack monitoring, boundary (fence) monitors, and off-site environmental monitors. Required by national regulation (UK: Ionising Radiations Regulations 2017). Results reported to regulator. Any boundary exceedance triggers incident reporting. Key data for NL claim triggering. <sup>[L7]</sup></p>
+    </div>
+    <div class="control-card detect">
+      <div class="ctrl-type ctrl-detect">DETECT</div>
+      <h4>Containment Integrity Monitoring</h4>
+      <p>Continuous monitoring of reactor coolant system pressure, level, and temperature provides early warning of primary system breach. Containment hydrogen monitoring (post-Fukushima lesson) detects zirconium-water reaction indicating fuel damage. Integrated Plant Computer System (IPCS) collects thousands of plant parameters and alerts operators to anomalies before they escalate.</p>
+    </div>
+    <div class="control-card detect">
+      <div class="ctrl-type ctrl-detect">DETECT</div>
+      <h4>Early Warning Seismic Alarm</h4>
+      <p>Seismic instrumentation on nuclear plant structures and foundations provides automatic shutdown signal (SCRAM) if peak ground acceleration exceeds the plant's design basis level. Post-Fukushima: enhanced seismic instrumentation and automatic safety function initiation on earthquake detection. Key post-Fukushima improvement at all seismically active sites globally.</p>
+    </div>
+    <div class="control-card detect">
+      <div class="ctrl-type ctrl-detect">DETECT</div>
+      <h4>Regulator Incident Reporting — OPEX Programme</h4>
+      <p>Operational Experience (OPEX) programmes require mandatory reporting of all events meeting INES Level 1+ criteria to the national regulator (ONR, ASN, NRC) within defined timeframes. IAEA's International Reporting System for Operating Experience (IRS) shares significant events globally. WANO OPEX database — shared among all members. NL insurers should receive notification of INES Level 2+ events within 24 hours. <sup>[I4]</sup></p>
+    </div>
+  </div>
+
+  <!-- INES Scale -->
+  <div class="section-title">INES Scale — International Nuclear and Radiological Event Scale</div>
+  <div class="ines-box">
+    <h3>INES: The 7-Level Classification of Nuclear Events (IAEA)</h3>
+    <table class="ines-table">
+      <thead>
+        <tr><th>Level</th><th>Category</th><th>Description</th><th>Examples</th><th>Insurance Significance</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="ines-7">7</td>
+          <td>Major Accident</td>
+          <td>Major release of radioactive material; widespread health and environmental effects</td>
+          <td>Chernobyl 1986, Fukushima 2011</td>
+          <td>Pool and government backstop activation; potentially uninsurable at full scale</td>
+        </tr>
+        <tr>
+          <td class="ines-6">6</td>
+          <td>Serious Accident</td>
+          <td>Significant release of radioactive material; off-site protective action required</td>
+          <td>Kyshtym 1957 (military)</td>
+          <td>Full NP and NL pool claims; government top-up likely required</td>
+        </tr>
+        <tr>
+          <td class="ines-5">5</td>
+          <td>Accident with Wider Consequences</td>
+          <td>Limited off-site release; several deaths possible from radiation on-site</td>
+          <td>TMI 1979, Windscale 1957</td>
+          <td>Major NP property claim; NL third-party claims potentially limited (TMI: minimal off-site release)</td>
+        </tr>
+        <tr>
+          <td class="ines-4">4</td>
+          <td>Accident with Local Consequences</td>
+          <td>Minor off-site release; significant on-site damage or worker exposure</td>
+          <td>Tokaimura 1999, Saint-Laurent 1980</td>
+          <td>NP property claim likely; NL third-party claims possible but limited in geographic scope</td>
+        </tr>
+        <tr>
+          <td class="ines-3">3</td>
+          <td>Serious Incident</td>
+          <td>Exposure above limits; major internal contamination; near miss in safety provisions</td>
+          <td>Davis-Besse 2002, Browns Ferry 1975</td>
+          <td>NP property claim probable (repair/replacement); NL less likely unless off-site release</td>
+        </tr>
+        <tr>
+          <td class="ines-2">2</td>
+          <td>Incident</td>
+          <td>Events with significant failure in safety provisions but no off-site impact</td>
+          <td>Tricastin 2008, WIPP 2014</td>
+          <td>Possible NP property claim; NL unlikely; regulatory shutdown cost</td>
+        </tr>
+        <tr>
+          <td class="ines-1">1</td>
+          <td>Anomaly</td>
+          <td>Anomaly beyond authorised operating regime; minimal safety significance</td>
+          <td>Routine minor events at most plants</td>
+          <td>Notification event for insurers; potential premium review; rarely triggers claim</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Emergency Preparedness Checklist -->
+  <div class="section-title">Emergency Preparedness Checklist (8 Items)</div>
+  <div class="checklist">
+    <h3>Nuclear Operator Emergency Preparedness — Key Requirements for Insured Status</h3>
+    <div class="chk-item">
+      <div class="chk-box done"></div>
+      <div class="chk-text"><strong>Emergency Response Organisation (ERO) on-call 24/7:</strong> Trained emergency director, technical support centre, operational support centre, and emergency operations facility all staffed within 30–60 minutes. Regular exercises (minimum 2 per year including a full-scale exercise). WANO peer review of emergency preparedness. <sup>[I4]</sup></div>
+    </div>
+    <div class="chk-item">
+      <div class="chk-box done"></div>
+      <div class="chk-text"><strong>Off-site Emergency Plan with Local Authority:</strong> ONR/ASN/NRC requirement. Plans cover public warning, evacuation, sheltering, iodine tablet distribution, and public communications. Updated and tested regularly. Local authorities (police, fire, NHS) trained in nuclear emergency response. Mandatory public emergency planning zone (EPZ) of typically 3–5km radius for PWR/BWR.</div>
+    </div>
+    <div class="chk-item">
+      <div class="chk-box done"></div>
+      <div class="chk-text"><strong>Communication Protocols — Press, Public and Regulator:</strong> Pre-agreed press lines, designated spokespersons, regulator notification hierarchy. INES event classification communicated to regulator within 24 hours (INES 2+) or 1 hour (INES 4+). Public information releases via agreed channels. Avoid information vacuums — post-Fukushima lesson: communication failures amplified public panic.</div>
+    </div>
+    <div class="chk-item">
+      <div class="chk-box done"></div>
+      <div class="chk-text"><strong>Potassium Iodide (iodine tablets) pre-positioned for population:</strong> KI tablets must be pre-distributed to households within the EPZ and available at distribution points. KI saturates the thyroid gland, preventing absorption of radioactive iodine — the key preventable cause of Chernobyl's thyroid cancers. Post-Fukushima: many countries expanded EPZ for KI pre-distribution.</div>
+    </div>
+    <div class="chk-item">
+      <div class="chk-box done"></div>
+      <div class="chk-text"><strong>Decontamination Facilities and Monitoring Posts:</strong> On-site and off-site decontamination stations, whole-body monitors, medical facilities for radiation injury. Post-accident monitoring and decontamination of evacuees and emergency workers. Pre-agreements with regional hospitals for radiation injury treatment. Phantom dosimetry records for all emergency workers.</div>
+    </div>
+    <div class="chk-item">
+      <div class="chk-box done"></div>
+      <div class="chk-text"><strong>TMI/Fukushima Lessons Incorporated — Hydrogen Management and Passive Cooling:</strong> Passive autocatalytic recombiners (PARs) installed to prevent hydrogen accumulation (Fukushima Units 1 and 3 exploded due to hydrogen). Passive heat removal systems (no pump required) to maintain cooling during station blackout. FLEX diverse and flexible strategies per NRC Order EA-12-049 (US) and equivalent European post-Fukushima requirements. <sup>[I7]</sup></div>
+    </div>
+    <div class="chk-item">
+      <div class="chk-box done"></div>
+      <div class="chk-text"><strong>WANO Action Plan Open Items — Status Review:</strong> WANO peer review generates Areas for Improvement (AFIs) and Good Practices. All open AFIs must have scheduled completion dates and be tracked in the Corrective Action Programme (CAP). Insurers should request WANO peer review summary and status of open items as standard part of NP/NL underwriting submission. <sup>[I4]</sup></div>
+    </div>
+    <div class="chk-item">
+      <div class="chk-box done"></div>
+      <div class="chk-text"><strong>Insurance Notification — within 24 hours of any INES Level 2+ Event:</strong> Pool notification protocols require operators to inform NRI (or relevant national pool) of any event rated INES 2 or above within 24 hours of the event. Failure to notify promptly can affect cover. Pool technical assessors may visit site within 48 hours for Level 3+ events. Keep pool informed of ongoing regulatory and media developments. <sup>[I3]</sup></div>
+    </div>
+  </div>
+
+  <!-- Zaporizhzhia warning -->
+  <div class="warn-box">
+    <strong>Warning — Zaporizhzhia Nuclear Power Plant (Ukraine) 2022–Present:</strong> The Zaporizhzhia NPP situation is an unprecedented challenge for the nuclear safety and insurance communities. A 6-reactor VVER plant under military occupation, with repeated loss of external power (forcing reliance on diesel generators for cooling), artillery fire in proximity to the plant, and an IAEA monitoring mission operating in an active conflict zone. The consequences of a loss of cooling accident at Zaporizhzhia under these conditions could be Fukushima-scale or worse — with no clear emergency response, evacuation, or international convention liability framework applicable in a conflict zone. Standard nuclear insurance war exclusions apply. This event has triggered re-examination of the boundaries of nuclear insurance coverage in conflict scenarios. <sup>[I5]</sup>
+  </div>
+
+  <!-- Top 7 actions -->
+  <div class="section-title">Top 7 Risk Management Actions for Nuclear Operators / Insureds</div>
+  <div class="actions-grid">
+    <div class="action-item">
+      <div class="act-num">Action 01</div>
+      <p>Complete and submit Periodic Safety Review (PSR) on schedule. Never allow PSR to be deferred — regulator will require it and pool will require the results for coverage renewal.</p>
+    </div>
+    <div class="action-item">
+      <div class="act-num">Action 02</div>
+      <p>Implement all post-Fukushima FLEX/beyond-design-basis improvements (passive cooling, hydrogen management, backup power diversity). Demonstrate closure to regulator and pool.</p>
+    </div>
+    <div class="action-item">
+      <div class="act-num">Action 03</div>
+      <p>Commission independent seismic/tsunami probabilistic hazard analysis (PSHA/PHSA) for site. Ensure seawall height and passive cooling can handle the site's credible maximum external hazard. <sup>[I7]</sup></p>
+    </div>
+    <div class="action-item">
+      <div class="act-num">Action 04</div>
+      <p>Maintain WANO peer review programme participation. Ensure all open AFIs have completion dates and are tracked. Submit WANO summary to pool as part of renewal underwriting information package. <sup>[I4]</sup></p>
+    </div>
+    <div class="action-item">
+      <div class="act-num">Action 05</div>
+      <p>Implement IAEA NSS nuclear cyber security guidance for all digital I&amp;C systems. Conduct regular cybersecurity assessments and report outcomes to regulator and pool. <sup>[I8]</sup></p>
+    </div>
+    <div class="action-item">
+      <div class="act-num">Action 06</div>
+      <p>Test emergency response organisation (ERO) annually with full-scale exercise. Include regulatory and local authority participation. Address all exercise findings promptly. Review post-Fukushima communication lessons.</p>
+    </div>
+    <div class="action-item">
+      <div class="act-num">Action 07</div>
+      <p>Notify pool of any INES Level 2+ event within 24 hours. Maintain open communication with NRI/pool during any abnormal plant condition. Do not wait for media reporting to trigger insurer notification.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Nuclear (NP / NL / NV) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="global-program.html">Next: Global Programme →</a></p>
+</footer>
+
+</body>
+</html>

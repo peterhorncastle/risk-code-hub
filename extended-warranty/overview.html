@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Extended Warranty Insurance | Risk Code Hub</title>
+  <style>
+    :root {
+      --wa:#8c4a15; --wa-dark:#5c2f0c; --wa-light:#fdf0e6; --accent:#c8a84b;
+      --copper:#b06020; --copper-light:#fff3e0; --teal:#0d7377; --teal-light:#e0f5f5;
+      /* ── Canonical hub-styles.css variables ── do not remove ── */
+      --hub-primary:   #8c4a15;
+      --hub-dark:      #5c2f0c;
+      --hub-light:     #fdf0e6;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #b06020;
+      --header-gradient:linear-gradient(135deg,#3d1c05 0%,#8c4a15 55%,#b06020 100%);
+      --header-sub:    #e8c9a0;
+    }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:var(--header-gradient); color:#fff; padding:40px; position:relative; overflow:hidden; }
+    header::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 80% 30%,rgba(176,96,32,0.2) 0%,transparent 60%); }
+    header .inner { position:relative; z-index:1; }
+    .breadcrumb { font-size:.8rem; color:rgba(255,255,255,.6); margin-bottom:6px; }
+    .breadcrumb a { color:var(--accent); text-decoration:none; }
+    .tag { font-size:.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    header h1 { font-size:2rem; font-weight:700; }
+    header p { margin-top:10px; color:var(--header-sub); font-size:.95rem; max-width:720px; line-height:1.7; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; transition:.2s; }
+    nav a:hover, nav a.active { color:var(--wa); border-bottom-color:var(--accent); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.35rem; color:var(--wa-dark); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--accent); }
+    h3 { font-size:1.05rem; color:var(--wa); margin:20px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:.95rem; }
+    sup { font-size:.7rem; color:var(--wa); font-weight:700; }
+
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; margin:28px 0; }
+    .stat-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 16px; text-align:center; }
+    .stat-card .val { font-size:1.6rem; font-weight:800; color:var(--wa); line-height:1.1; }
+    .stat-card .val.cop { color:var(--copper); }
+    .stat-card .val.teal { color:var(--teal); }
+    .stat-card .lbl { font-size:.74rem; color:var(--muted); margin-top:5px; line-height:1.4; }
+    .badge { display:inline-block; font-size:.65rem; font-weight:700; padding:1px 6px; border-radius:8px; margin-top:4px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+
+    .cov-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin:24px 0; }
+    .cov-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px 22px; border-top:4px solid var(--wa); }
+    .cov-card.alt { border-top-color:var(--copper); }
+    .cov-card.teal { border-top-color:var(--teal); }
+    .cov-card h4 { font-size:.9rem; font-weight:700; color:var(--wa-dark); margin-bottom:8px; }
+    .cov-card ul { padding-left:16px; }
+    .cov-card li { font-size:.84rem; margin-bottom:5px; line-height:1.5; }
+
+    .code-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:24px 0; }
+    .code-table table { width:100%; border-collapse:collapse; font-size:.88rem; }
+    .code-table th { background:var(--wa-dark); color:#fff; padding:10px 16px; text-align:left; }
+    .code-table td { padding:10px 16px; border-bottom:1px solid var(--border); vertical-align:top; }
+    .code-table tr:last-child td { border-bottom:none; }
+    .code-table tr:nth-child(even) td { background:#faf5ef; }
+    .code-chip { display:inline-block; background:var(--wa); color:#fff; font-weight:800; font-size:.8rem; padding:2px 10px; border-radius:12px; letter-spacing:1px; }
+
+    .info-box { background:var(--wa-dark); color:#e8d0b8; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .info-box h3 { color:var(--accent); margin-bottom:12px; font-size:1.05rem; }
+    .info-box p, .info-box li { font-size:.9rem; line-height:1.7; }
+    .info-box ul { padding-left:20px; margin:8px 0; }
+    .info-box li { margin-bottom:6px; }
+
+    .model-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px; margin:24px 0; }
+    .model-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:20px; border-left:5px solid var(--wa); }
+    .model-card.alt { border-left-color:var(--copper); }
+    .model-card.teal { border-left-color:var(--teal); }
+    .model-card h4 { font-size:.9rem; font-weight:700; color:var(--wa-dark); margin-bottom:8px; }
+    .model-card p { font-size:.84rem; color:#4b5563; margin:0; }
+
+    .module-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:24px 0; }
+    .mod-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px; text-decoration:none; color:var(--text); transition:box-shadow .2s,border-color .2s; display:block; }
+    .mod-card:hover { box-shadow:0 4px 16px rgba(140,74,21,.12); border-color:var(--wa); }
+    .mod-card .mod-num { font-size:.7rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--wa); margin-bottom:4px; }
+    .mod-card h4 { font-size:.9rem; font-weight:700; color:var(--wa-dark); margin-bottom:4px; }
+    .mod-card p { font-size:.8rem; color:var(--muted); margin:0; line-height:1.4; }
+
+    footer { background:var(--wa-dark); color:rgba(255,255,255,.5); text-align:center; padding:24px; font-size:.82rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Extended Warranty</div>
+    <div class="tag">Lloyd's Risk Code WA</div>
+    <h1>Extended Warranty Insurance</h1>
+    <p>Insurance backing consumer and commercial extended warranty programmes across electronics, white goods, motor vehicles, and home systems. Covers mechanical and electrical breakdown beyond the manufacturer's guarantee period.</p>
+  </div>
+</header>
+<nav>
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~$130bn</div>
+      <div class="lbl">Global extended warranty market GWP (2024, all channels)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val cop">~$15bn</div>
+      <div class="lbl">Pure insurance-backed extended warranty GWP (2024)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val">6–8%</div>
+      <div class="lbl">Projected CAGR 2024–2030 (insurance-backed segment)</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val teal">55%</div>
+      <div class="lbl">North American share of global extended warranty market</div>
+      <span class="badge b-e">EST</span>
+    </div>
+    <div class="stat-card">
+      <div class="val">3–5 yrs</div>
+      <div class="lbl">Typical warranty extension period (consumer electronics)</div>
+      <span class="badge b-v">VER</span>
+    </div>
+    <div class="stat-card">
+      <div class="val cop">40–60%</div>
+      <div class="lbl">Typical gross margin on consumer extended warranty programmes</div>
+      <span class="badge b-e">EST</span>
+    </div>
+  </div>
+
+  <h2>Lloyd's Risk Code</h2>
+  <div class="code-table">
+    <table>
+      <thead><tr><th>Code</th><th>Class</th><th>Scope</th><th>Policy Basis</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="code-chip">WA</span></td>
+          <td><strong>Extended Warranty</strong></td>
+          <td>Insurance backing extended warranty and service contract programmes for consumer electronics, white goods, motor vehicles, HVAC, and home systems. Includes both the underlying insurance risk and the fronting/obligor layer</td>
+          <td>Occurrence or claims-made; typically annual or multi-year programme basis</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>What Is Extended Warranty Insurance?</h2>
+  <p>An extended warranty (EW) is a service contract or insurance policy that provides repair or replacement cover for consumer goods beyond the expiry of the manufacturer's standard guarantee. In many markets the word "warranty" is a commercial misnomer — the product is legally an insurance contract and must be underwritten accordingly.<sup>[1]</sup></p>
+  <p>The insurance market (Lloyd's WA code) sits behind the retail face of extended warranty programmes. Retailers, manufacturers, and third-party administrators (TPAs) sell warranties directly to consumers; the risk is then ceded — in whole or in part — to an insurer. Lloyd's syndicates provide capacity particularly for larger programmes, fronting arrangements, and cross-border business where admitted local paper is required.<sup>[2]</sup></p>
+
+  <h2>Business Models</h2>
+  <div class="model-grid">
+    <div class="model-card">
+      <h4>Obligor / Retailer-Backed Model</h4>
+      <p>The retailer or manufacturer is the legal obligor under the service contract. An insurer backs them with a "contractual liability insurance policy" (CLIP). The consumer's contract is with the retailer, not the insurer. Common in the US and Germany.<sup>[3]</sup></p>
+    </div>
+    <div class="model-card alt">
+      <h4>Insurance Model (Direct)</h4>
+      <p>The policy is issued directly to the consumer by an insurer or MGA. Regulated as insurance in all jurisdictions. Common in the UK (FCA-regulated) and increasingly in the EU following Insurance Distribution Directive (IDD).<sup>[4]</sup></p>
+    </div>
+    <div class="model-card teal">
+      <h4>Manufacturer-Backed Warranty (MBW)</h4>
+      <p>OEM sells extended warranty as part of the product purchase. Apple Care, Samsung Care+, and automotive OEM programmes. High margin for manufacturers; insurer provides stop-loss or quota share reinsurance above a retention.<sup>[5]</sup></p>
+    </div>
+    <div class="model-card">
+      <h4>Third-Party Warranty (TPW)</h4>
+      <p>Independent warranty provider (Asurion, Domestic &amp; General, SquareTrade) sells cover separately from the product sale. Often at retail checkout or via direct mail. Competes on price and claims service reputation. Fully insurance-backed or self-insured with stop-loss.<sup>[6]</sup></p>
+    </div>
+    <div class="model-card alt">
+      <h4>Dealer / F&amp;I Model (Motor)</h4>
+      <p>Finance and Insurance (F&amp;I) products sold at point of vehicle sale. Mechanical Breakdown Insurance (MBI) or Vehicle Service Contract (VSC). Key profit centre for automotive dealers; insurer provides the risk transfer. Regulated differently from consumer electronics EW in most markets.<sup>[7]</sup></p>
+    </div>
+    <div class="model-card teal">
+      <h4>Home Warranty / Systems</h4>
+      <p>Covers HVAC, plumbing, electrical systems, and built-in appliances. US home warranty market ~$3bn GWP (2024). American Home Shield, Choice Home Warranty. Shorter tenure per claim than consumer electronics; high frequency of HVAC service calls.<sup>[8]</sup></p>
+    </div>
+  </div>
+
+  <h2>Coverage Structure</h2>
+  <div class="cov-grid">
+    <div class="cov-card">
+      <h4>🔧 Mechanical &amp; Electrical Breakdown</h4>
+      <ul>
+        <li>Failure of components due to manufacturing defect or wear beyond standard guarantee period</li>
+        <li>Labour and parts costs for repair</li>
+        <li>Replacement where repair uneconomical ("beyond economic repair")</li>
+        <li>Excludes accidental damage, cosmetic damage, consumables (batteries, screens unless covered by upgrade)</li>
+      </ul>
+    </div>
+    <div class="cov-card alt">
+      <h4>📱 Accidental Damage (optional uplift)</h4>
+      <ul>
+        <li>Screen cracks, liquid ingress, drop damage — sold as an upgrade to basic M&amp;EB cover</li>
+        <li>Higher frequency, higher fraud rate — priced separately</li>
+        <li>Often paired with theft cover for smartphones (creates mobile device protection product)</li>
+        <li>Exclusions: intentional damage, cosmetic damage only, data recovery</li>
+      </ul>
+    </div>
+    <div class="cov-card teal">
+      <h4>🚗 Motor / MBI</h4>
+      <ul>
+        <li>Mechanical breakdown of vehicle powertrain, transmission, suspension, electrical systems</li>
+        <li>Parts and labour, towing, courtesy vehicle</li>
+        <li>Excludes: wear &amp; tear wear items (tyres, brakes, clutch), rust, bodywork, GPS/infotainment</li>
+        <li>Term: 1–5 years; often mileage-limited</li>
+      </ul>
+    </div>
+    <div class="cov-card">
+      <h4>🏠 Home Systems &amp; Appliances</h4>
+      <ul>
+        <li>HVAC breakdown — highest severity claim type</li>
+        <li>Plumbing, electrical, hot water heater</li>
+        <li>Built-in appliances (dishwasher, oven, washer/dryer)</li>
+        <li>US home warranty: typically $100–$125 service call fee per visit (excess/deductible)</li>
+      </ul>
+    </div>
+    <div class="cov-card alt">
+      <h4>🏢 Commercial / B2B</h4>
+      <ul>
+        <li>IT equipment maintenance contracts for SME/enterprise</li>
+        <li>Managed print service agreements</li>
+        <li>Industrial equipment service contracts</li>
+        <li>Typically structured as stop-loss above a retention held by the OEM/dealer</li>
+      </ul>
+    </div>
+    <div class="cov-card teal">
+      <h4>⚡ Wearables, EV &amp; Emerging</h4>
+      <ul>
+        <li>EV battery warranty: high severity ($10,000–$20,000+ battery pack replacement)</li>
+        <li>Wearables/IoT devices: smart watches, earbuds — high replacement rate</li>
+        <li>Solar panel inverter warranty: 10–25 year terms create long-tail exposure</li>
+        <li>EV charging infrastructure warranty — emerging product line</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3>⚖️ Regulatory Classification: Insurance or Service Contract?</h3>
+    <p>The legal classification of extended warranty products varies significantly by jurisdiction — a critical underwriting and compliance consideration:</p>
+    <ul>
+      <li><strong>UK:</strong> All extended warranties are regulated as insurance products under the Financial Services and Markets Act 2000 (FSMA). FCA authorisation required for sellers. Supply of Extended Warranties on Domestic Electrical Appliances Order 2005 mandates cooling-off periods and price transparency.<sup>[9]</sup></li>
+      <li><strong>US:</strong> Service contracts are generally not insurance (regulated under service contract statutes, not insurance codes) unless the seller is not the manufacturer/retailer. Varies state-by-state — 43 states regulate service contracts, 7 treat them as insurance.<sup>[10]</sup></li>
+      <li><strong>EU:</strong> EU Sale of Goods Directive (2019) requires 2-year statutory guarantee; extended warranty on top is typically regulated as insurance under IDD.<sup>[11]</sup></li>
+      <li><strong>Australia:</strong> Australian Consumer Law (ACL) mandates automatic statutory guarantees; extended warranty as add-on insurance has been heavily scrutinised by ASIC as a poor-value product.<sup>[12]</sup></li>
+    </ul>
+  </div>
+
+  <h2>Hub Modules</h2>
+  <div class="module-grid">
+    <a class="mod-card" href="history.html">
+      <div class="mod-num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From Underwriters Laboratories and the Magnuson–Moss Act to FCA regulation and the digital warranty era</p>
+    </a>
+    <a class="mod-card" href="timeline.html">
+      <div class="mod-num">Module 02</div>
+      <h4>Major Events Timeline</h4>
+      <p>20 events 1975–2024 — regulatory shifts, mass claim events, market structural changes</p>
+    </a>
+    <a class="mod-card" href="database.html">
+      <div class="mod-num">Module 03</div>
+      <h4>Claims Database</h4>
+      <p>35 notable claim events — product failures, regulatory actions, fraud rings, class actions</p>
+    </a>
+    <a class="mod-card" href="underwriting.html">
+      <div class="mod-num">Module 04</div>
+      <h4>Underwriting Methodology</h4>
+      <p>Frequency–severity model, loss ratio by product category, worked examples (electronics &amp; MBI)</p>
+    </a>
+    <a class="mod-card" href="rates-analysis.html">
+      <div class="mod-num">Module 05</div>
+      <h4>Rates &amp; ROE Analysis</h4>
+      <p>Market cycle, attachment point sensitivity, ROE scenarios (Bull +16.4% / Base +8.2% / Bear −12.8%)</p>
+    </a>
+    <a class="mod-card" href="risk-mitigation.html">
+      <div class="mod-num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Fraud controls, product quality audit, TPA oversight, obsolescence management, EV battery protocols</p>
+    </a>
+    <a class="mod-card" href="global-program.html">
+      <div class="mod-num">Module 07</div>
+      <h4>Global Programme Structuring</h4>
+      <p>Multi-territory programme design, fronting, quota share vs stop-loss, regulatory jurisdiction map</p>
+    </a>
+    <a class="mod-card" href="references.html">
+      <div class="mod-num">Module 08</div>
+      <h4>References</h4>
+      <p>Source citations, data quality badges, regulatory document links</p>
+    </a>
+  </div>
+
+</main>
+<footer>Risk Code Hub — Extended Warranty Insurance | Lloyd's Code WA | Version 4.3</footer>
+</body>
+</html>

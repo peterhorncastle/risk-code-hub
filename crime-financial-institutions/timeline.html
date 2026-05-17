@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>Crime / Fidelity FI — Timeline | Risk Code Hub</title>
+  <style>
+    :root {
+      --crime:#7b1e1e; --crime-dark:#3d0000; --fi:#0d3b6b;
+      --fid:#1b5e20; --fraud:#c62828; --cyber:#6a1b9a;
+      --social:#e65100; --gold:#b8860b;
+      --light:#faf5f5; --text:#1e1e2e; --muted:#6b7c93; --border:#d4c8c8;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #7b1e1e;
+    --hub-dark:      #3d0000;
+    --hub-light:     #faf5f5;
+    --hub-accent:    #b8860b;
+    --hub-secondary: #0d3b6b;
+    --hub-secondary2:#1b5e20;
+    --header-gradient:linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%);
+    --header-sub:    #e8c8c8;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#3d0000 0%,#7b1e1e 50%,#5a1414 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#cc9988; margin-bottom:6px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    header h1 { font-size:1.8rem; font-weight:700; }
+    header p { margin-top:8px; color:#e8c8c8; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--crime); border-bottom-color:var(--gold); }
+    main { max-width:1000px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.25rem; color:var(--crime); margin:40px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--gold); }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.93rem; }
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; vertical-align:middle; margin-left:3px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    /* Legend */
+    .legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:30px; }
+    .leg { display:flex; align-items:center; gap:6px; font-size:0.82rem; font-weight:600; }
+    .leg-dot { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
+
+    /* Timeline */
+    .timeline { position:relative; padding-left:36px; }
+    .timeline::before { content:''; position:absolute; left:10px; top:0; bottom:0; width:3px; background:linear-gradient(to bottom,var(--crime-dark),var(--cyber)); border-radius:2px; }
+    .t-item { position:relative; margin-bottom:28px; }
+    .t-dot { position:absolute; left:-30px; top:6px; width:16px; height:16px; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px var(--crime); background:var(--crime); }
+    .t-dot.ROGUE { background:var(--fraud); box-shadow:0 0 0 2px var(--fraud); }
+    .t-dot.CYBER { background:var(--cyber); box-shadow:0 0 0 2px var(--cyber); }
+    .t-dot.BEC { background:var(--social); box-shadow:0 0 0 2px var(--social); }
+    .t-dot.PONZI { background:var(--fi); box-shadow:0 0 0 2px var(--fi); }
+    .t-dot.REG { background:var(--gold); box-shadow:0 0 0 2px var(--gold); }
+    .t-dot.EMPL { background:var(--fid); box-shadow:0 0 0 2px var(--fid); }
+    .t-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:16px 20px; }
+    .t-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+    .t-year { font-weight:800; font-size:0.95rem; color:var(--crime-dark); }
+    .tag { font-size:0.7rem; font-weight:700; padding:2px 8px; border-radius:10px; color:#fff; }
+    .tag.ROGUE { background:var(--fraud); }
+    .tag.CYBER { background:var(--cyber); }
+    .tag.BEC { background:var(--social); }
+    .tag.PONZI { background:var(--fi); }
+    .tag.REG { background:var(--gold); color:#2d1a00; }
+    .tag.EMPL { background:var(--fid); }
+    .t-title { font-weight:700; font-size:0.9rem; }
+    .t-body { font-size:0.85rem; line-height:1.65; color:var(--muted); }
+
+    footer { background:var(--crime-dark); color:#aa8888; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
+    footer a { color:var(--gold); text-decoration:none; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Crime / Fidelity FI (BB)</a> › Timeline</div>
+  <h1>Module 02 — Major Events Timeline</h1>
+  <p>20 landmark FI crime and fidelity events, 2001–2024</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:var(--fraud)"></div>Rogue Trader</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--cyber)"></div>Cyber-Enabled</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--social)"></div>BEC / Social Eng.</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--fi)"></div>Ponzi / Fraud Scheme</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--fid)"></div>Employee Dishonesty</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--gold)"></div>Regulatory / Market</div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="t-item">
+      <div class="t-dot EMPL"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2002</span><span class="tag EMPL">EMPL</span><span class="t-title">Allied Irish Banks / John Rusnak — $691m Forex Fraud Discovered</span></div>
+        <div class="t-body">AIB's US subsidiary (Allfirst) discovered that currency trader John Rusnak had concealed $691m in forex losses over 5 years using fictitious options positions. The fraud had begun in 1997 but was not discovered until 2002. A landmark case demonstrating how inadequate back-office controls allow long-running employee fraud to accumulate. Lloyd's BB underwriters reviewed reconciliation warranty requirements across the market. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot ROGUE"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2004</span><span class="tag ROGUE">ROGUE</span><span class="t-title">National Australia Bank — $360m Currency Options Fraud</span></div>
+        <div class="t-body">Four currency options traders at NAB's Melbourne headquarters concealed $360m in losses through fictitious trades and manipulated volatility inputs. The fraud ran from 2001–2004. Australian regulators (APRA) subsequently required enhanced operational risk controls at all ADIs. Highlighted the systemic nature of rogue trader risk across global banks. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot PONZI"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2008</span><span class="tag PONZI">PONZI</span><span class="t-title">Bernard Madoff — $65bn Ponzi Scheme Collapses</span></div>
+        <div class="t-body">The largest Ponzi scheme in history: Madoff Investment Securities had fabricated returns for decades, with investor losses of $17.3bn actual cash and paper losses of $65bn. The collapse triggered FI crime coverage questions: feeder fund managers faced claims from investors; questions arose over whether fund administrator failures were covered under fidelity or E&O policies. The SEC's failure to detect the fraud despite multiple tips led to significant regulatory reform. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot ROGUE"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2008</span><span class="tag ROGUE">ROGUE</span><span class="t-title">Société Générale / Jérôme Kerviel — €7.1bn Loss</span></div>
+        <div class="t-body">The largest rogue trading loss in history. Kerviel accumulated €49.9bn in unauthorised European equity index futures positions; when discovered and unwound in January 2008 during a falling market, the loss reached €4.9bn (€7.1bn including related hedging costs). SocGen's internal controls had generated 74 alerts that were not escalated. The event transformed BB underwriting: underwriters now require explicit evidence of position limit monitoring, independent risk controls, and exception reporting processes. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot REG"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2010</span><span class="tag REG">REG</span><span class="t-title">Dodd-Frank Act — Enhanced FI Controls &amp; Whistleblower Provisions</span></div>
+        <div class="t-body">The Dodd-Frank Wall Street Reform and Consumer Protection Act introduced enhanced internal controls requirements for US financial institutions, expanded CFTC/SEC whistleblower programmes (awards of 10–30% of sanctions over $1m), and required clawback of executive compensation following material financial restatements. Whistleblower provisions significantly increased early detection of fraud, reducing loss severity. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot ROGUE"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2011</span><span class="tag ROGUE">ROGUE</span><span class="t-title">UBS / Kweku Adoboli — $2.3bn Unauthorised Trading</span></div>
+        <div class="t-body">Adoboli, a trader on UBS's Delta One desk in London, concealed $2.3bn in losses through fictitious ETF trades and real positions booked under a disguised internal account. Adoboli was convicted of fraud in 2012. The case reinforced the importance of independent back-office reconciliation and highlighted that rogue trading risk persisted despite post-SocGen reforms. UBS's BB underwriters faced claims that generated significant coverage discussion on the "financial benefit" element of the employee dishonesty insuring agreement. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot ROGUE"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2012</span><span class="tag ROGUE">ROGUE</span><span class="t-title">JPMorgan "London Whale" — $6.2bn Credit Derivatives Loss</span></div>
+        <div class="t-body">Bruno Iksil (the "London Whale") accumulated massive CDS positions in the CDX IG Series 9 index on behalf of JPMorgan's Chief Investment Office, generating $6.2bn in losses when the positions became public and were unwound. The loss was attributed to risk management failures rather than clear personal dishonesty — illustrating the boundary between fidelity (requires manifest dishonest intent) and operational risk/PI E&O. JPMorgan subsequently paid $920m in regulatory fines. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot REG"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2013</span><span class="tag REG">REG</span><span class="t-title">Global LIBOR Rigging Scandal — $9bn+ in Regulatory Fines</span></div>
+        <div class="t-body">Multiple global banks (Barclays, UBS, RBS, Deutsche Bank, Citigroup, JPMorgan, Rabobank) were fined over $9bn in aggregate for manipulation of LIBOR and related interest rate benchmarks. The manipulation was coordinated by traders across banks, involving both employee dishonesty and potentially forgery of submissions. Coverage under BB policies was contested; most losses fell under regulatory fine exclusions. The scandal drove major conduct risk reforms across FI underwriting. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot BEC"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2014</span><span class="tag BEC">BEC</span><span class="t-title">FBI Formally Identifies Business Email Compromise as Major Fraud Vector</span></div>
+        <div class="t-body">The FBI's Internet Crime Complaint Center (IC3) formally identified and named Business Email Compromise as a distinct fraud category. Initial cases involved CEO impersonation via email directing wire transfers. Financial institution treasury departments became primary targets. Early BEC coverage disputes arose immediately: were losses covered under computer crime (requiring unauthorised computer access) or social engineering (sub-limited)? Courts would take years to resolve the question. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot CYBER"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2016</span><span class="tag CYBER">CYBER</span><span class="t-title">Bangladesh Bank SWIFT Heist — $81m Stolen (of $951m Attempted)</span></div>
+        <div class="t-body">North Korea's Lazarus Group compromised Bangladesh Bank's SWIFT infrastructure and submitted 35 fraudulent payment orders to the Federal Reserve Bank of New York totalling $951m. $81m was successfully transferred to accounts in the Philippines before the fraud was detected. A $20m transfer to a Sri Lanka bank was flagged by a routing bank due to a spelling error ("fandation" vs "foundation"). The event forced SWIFT to launch the Customer Security Programme (CSP) and Lloyd's BB underwriters to rewrite computer crime insuring agreements to cover SWIFT-enabled fraud explicitly. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot REG"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2016</span><span class="tag REG">REG</span><span class="t-title">Medidata v Federal Insurance — BEC Coverage Ruling (2nd Circuit)</span></div>
+        <div class="t-body">A landmark US court case on BEC and computer crime cover. The Second Circuit Court found that Medidata's BEC loss (a fraudster impersonated the CEO via email, causing a $4.8m wire transfer) was covered under the computer crime insuring agreement because the fraudster had "used" Medidata's computer system by sending emails that appeared to originate internally. Other courts have ruled differently; the BEC coverage landscape remains unsettled across jurisdictions. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot CYBER"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2017</span><span class="tag CYBER">CYBER</span><span class="t-title">WannaCry / NotPetya — FI Operational Disruption; Crime vs. Cyber Boundary</span></div>
+        <div class="t-body">WannaCry (May 2017) and NotPetya (June 2017) ransomware attacks disrupted FI operations globally. Mondelez, Merck, and TNT/FedEx suffered billions in losses attributed to NotPetya. Lloyd's underwriters debated whether ransomware losses were covered under FI crime policies (computer crime insuring agreement) or cyber policies, and whether the "hostile/warlike act" exclusion applied (NotPetya was attributed to Russian GRU). The coverage dispute drove the development of dedicated Lloyd's cyber market language for crime/cyber boundary clauses. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot BEC"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2019</span><span class="tag BEC">BEC</span><span class="t-title">First Deepfake Audio BEC Fraud — UK Energy Company, €220,000</span></div>
+        <div class="t-body">A UK-based energy company's CEO was impersonated using AI-generated voice synthesis in a phone call. The company's finance director was instructed to transfer €220,000 to a "supplier" in Hungary. The fraud succeeded. While relatively small, the incident was the first documented use of deepfake audio in BEC fraud and prompted Lloyd's underwriters and FBI to issue warnings about synthetic media-enabled social engineering. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot BEC"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2020</span><span class="tag BEC">BEC</span><span class="t-title">COVID-19 — Remote Working Surge Drives FI Crime Loss Increase</span></div>
+        <div class="t-body">The rapid shift to mass remote working in Q1 2020 removed many physical controls (dual authorisation, desk supervision, in-person verification) that had deterred internal fraud and BEC. FBI IC3 reported a 69% increase in BEC complaints in 2020. FI crime insurers saw claims frequency rise approximately 25–40% across social engineering and employee dishonesty lines. Lloyd's underwriters introduced remote working controls questions as standard in BB submissions from 2020–21. <span class="badge b-e">EST</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot PONZI"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2022</span><span class="tag PONZI">PONZI</span><span class="t-title">FTX Collapse — $8bn Customer Funds Misappropriated</span></div>
+        <div class="t-body">FTX, the world's third-largest cryptocurrency exchange, collapsed in November 2022 after it emerged that founder Sam Bankman-Fried had misappropriated approximately $8bn of customer funds to prop up Alameda Research, a related trading firm. SBF was convicted in November 2023 on seven counts of fraud and conspiracy. The collapse raised fundamental questions about crypto exchange FI crime cover: were losses covered as employee dishonesty? How do BB policies apply to entities where the founder IS the ultimate control? <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot REG"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2023</span><span class="tag REG">REG</span><span class="t-title">UK PSR APP Fraud Reimbursement Regime — Mandatory from October 2024</span></div>
+        <div class="t-body">The UK Payment Systems Regulator (PSR) introduced mandatory reimbursement of Authorised Push Payment (APP) fraud losses — a requirement for payment service providers (PSPs) to reimburse victims up to £85,000 for APP fraud, effective October 2024. This creates a new crime-adjacent liability for UK payment firms: they must fund reimbursement of losses caused by BEC and social engineering fraud against their customers, creating an insurable liability that overlaps with fidelity/crime and PI E&O coverage. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot CYBER"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2024</span><span class="tag CYBER">CYBER</span><span class="t-title">Deepfake Video BEC — Hong Kong Finance Worker Transfers $25m</span></div>
+        <div class="t-body">A finance worker at a multinational company's Hong Kong office was deceived into transferring HK$200m ($25.6m) after attending a video conference call in which all other participants — including a person appearing to be the company's CFO — were deepfake AI-generated synthetic identities. The worker had initial doubts but was reassured by the realistic video call. Hong Kong police arrested six people in connection with the case. This event marked a qualitative escalation in BEC sophistication and triggered significant BB market discussion on coverage adequacy for deepfake-enabled fraud. <span class="badge b-v">VER</span></div>
+      </div>
+    </div>
+
+    <div class="t-item">
+      <div class="t-dot REG"></div>
+      <div class="t-card">
+        <div class="t-header"><span class="t-year">2024</span><span class="tag REG">REG</span><span class="t-title">Lloyd's BB Market — Hard/Softening Cycle; Social Engineering Sublimit Debate</span></div>
+        <div class="t-body">Following three years of significant rate hardening (2019–2022) driven by BEC losses and COVID-related claims, the Lloyd's BB FI crime market began showing selective softening in 2023–24 as new capacity entered and frequency moderated for some FI segments. However, the social engineering/BEC sublimit debate continued: insureds sought full-limit social engineering cover; underwriters maintained sublimits of $1–5m on most policies. Market discussions on deepfake, AI fraud, and crypto exchange BB coverage are shaping the next generation of Lloyd's BB wordings. <span class="badge b-e">EST</span></div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+<footer>
+  <a href="../index.html">Risk Code Hub</a> &nbsp;·&nbsp; Crime / Fidelity FI (BB) · Timeline &nbsp;·&nbsp; <span class="badge b-v">VER</span> verified &nbsp; <span class="badge b-e">EST</span> estimated &nbsp;·&nbsp; For training purposes only
+</footer>
+</body>
+</html>

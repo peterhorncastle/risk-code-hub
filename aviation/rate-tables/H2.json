@@ -1,0 +1,122 @@
+{
+  "riskCode": "H2",
+  "label": "Airline Hull — All Risks",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "fleetValue",
+    "label": "Total Fleet Agreed Value ($)",
+    "defaultValue": 3200000000,
+    "hint": "Aggregate agreed value of all insured aircraft"
+  },
+  "baseRate": {
+    "key": "baseROL",
+    "label": "Base Rate on Line (%)",
+    "value": 0.0030
+  },
+  "ratingFactors": [
+    {
+      "key": "fleetType",
+      "label": "Fleet Composition",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "narrow_body",
+      "hint": "Primary aircraft type in fleet",
+      "options": {
+        "wide_body":    { "label": "Wide Body (777/787/A350)", "factor": 0.85 },
+        "narrow_body":  { "label": "Narrow Body (737/A320)",   "factor": 1.00 },
+        "regional_jet": { "label": "Regional Jet (E-Jet/CRJ)", "factor": 1.15 },
+        "turboprop":    { "label": "Turboprop (ATR/Dash)",     "factor": 1.25 },
+        "helicopter":   { "label": "Helicopter",               "factor": 2.00 },
+        "piston_ga":    { "label": "Piston GA",                "factor": 2.50 }
+      }
+    },
+    {
+      "key": "fleetAge",
+      "label": "Average Fleet Age (years)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 8,
+      "hint": "Weighted average age of fleet",
+      "bands": [
+        { "min": 0,  "max": 5,  "label": "New (<5 yrs)",     "factor": 0.90 },
+        { "min": 5,  "max": 10, "label": "Mid (5-10 yrs)",   "factor": 1.00 },
+        { "min": 10, "max": 15, "label": "Mature (10-15 yrs)", "factor": 1.10 },
+        { "min": 15, "max": 20, "label": "Ageing (15-20 yrs)", "factor": 1.25 },
+        { "min": 20, "max": 50, "label": "Old (>20 yrs)",    "factor": 1.50 }
+      ]
+    },
+    {
+      "key": "safetyRating",
+      "label": "Safety / IOSA Status",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "iosa_certified",
+      "options": {
+        "iosa_certified":  { "label": "IOSA Certified (current)", "factor": 0.90 },
+        "bars_argus":      { "label": "BARS / ARGUS rated",       "factor": 0.95 },
+        "standard":        { "label": "Regulatory minimum only",  "factor": 1.00 },
+        "elevated_risk":   { "label": "Elevated Risk / findings", "factor": 1.30 },
+        "eu_banned":       { "label": "EU Air Safety List",       "factor": 2.00 }
+      }
+    },
+    {
+      "key": "lossHistory",
+      "label": "5-Year Loss Ratio (%)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 25,
+      "hint": "Average hull loss ratio over past 5 years",
+      "bands": [
+        { "min": 0,   "max": 20,  "label": "Excellent (<20%)",  "factor": 0.80 },
+        { "min": 20,  "max": 40,  "label": "Good (20-40%)",     "factor": 0.90 },
+        { "min": 40,  "max": 60,  "label": "Average (40-60%)",  "factor": 1.00 },
+        { "min": 60,  "max": 80,  "label": "Poor (60-80%)",     "factor": 1.20 },
+        { "min": 80,  "max": 120, "label": "Very Poor (80-120%)", "factor": 1.50 },
+        { "min": 120, "max": 999, "label": "Catastrophic (>120%)", "factor": 2.00 }
+      ]
+    },
+    {
+      "key": "routeRisk",
+      "label": "Route Network Risk",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "hint": "Primary operating environment",
+      "options": {
+        "low_risk":       { "label": "Developed markets only",     "factor": 0.90 },
+        "standard":       { "label": "Standard international",     "factor": 1.00 },
+        "challenging":    { "label": "Challenging terrain/airports", "factor": 1.15 },
+        "conflict_zone":  { "label": "Conflict zone transit",      "factor": 1.35 }
+      }
+    },
+    {
+      "key": "deductible",
+      "label": "Hull Deductible ($)",
+      "type": "band",
+      "appliesTo": "rate",
+      "defaultValue": 1000000,
+      "hint": "Per occurrence deductible",
+      "bands": [
+        { "min": 0,       "max": 500000,   "label": "<$500k",    "factor": 1.10 },
+        { "min": 500000,  "max": 2000000,  "label": "$500k-$2m", "factor": 1.00 },
+        { "min": 2000000, "max": 5000000,  "label": "$2m-$5m",   "factor": 0.90 },
+        { "min": 5000000, "max": 20000000, "label": "$5m-$20m",  "factor": 0.80 },
+        { "min": 20000000,"max": 999999999,"label": ">$20m",     "factor": 0.65 }
+      ]
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 15000,
+    "claimsHandlingPerClaim": 75000,
+    "systemOverheadPerYear": 8000,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.03,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.20,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}

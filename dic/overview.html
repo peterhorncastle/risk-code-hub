@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Difference in Conditions (DC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #2a1a5c;
+      --hub-dark:      #110a30;
+      --hub-light:     #ede8ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#37474f;
+      --header-gradient:linear-gradient(135deg,#110a30 0%,#2a1a5c 55%,#3d2880 100%);
+      --header-sub:    #b39ddb;
+      --mid:           #d1c4e9;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1430;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%),
+                 radial-gradient(ellipse at 15% 70%,rgba(26,92,42,0.12) 0%,transparent 50%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#b39ddb;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:2rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;margin-bottom:16px;}
+    .code-pill{display:inline-block;background:rgba(200,168,75,0.25);border:1px solid var(--hub-accent);
+      color:var(--hub-accent);padding:3px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;margin-right:6px;}
+    nav.hub-nav{background:#110a30;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#b39ddb;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+    .stat-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-top:4px solid var(--hub-primary);}
+    .stat-card .val{font-size:1.7rem;font-weight:700;color:var(--hub-primary);margin-bottom:4px;}
+    .stat-card .lbl{font-size:0.78rem;color:#555;line-height:1.3;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-v{background:#1a5c2a;color:#fff;} .b-e{background:#e65100;color:#fff;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--mid);}
+    .code-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px;}
+    .code-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:5px solid var(--hub-primary);}
+    .code-card h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .code-card p{font-size:0.85rem;color:#444;line-height:1.5;}
+    .trigger-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:28px;}
+    .trigger-card{background:#fff;border-radius:10px;padding:22px;box-shadow:0 2px 6px rgba(0,0,0,0.09);border-top:4px solid var(--hub-primary);}
+    .trigger-card.dil{border-top-color:var(--hub-accent);}
+    .trigger-card h3{font-size:1.05rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .trigger-card p{font-size:0.84rem;color:#333;line-height:1.55;}
+    .trigger-card .example{margin-top:10px;background:#f5f0ff;border-radius:6px;padding:10px 12px;font-size:0.8rem;color:#2a1a5c;border-left:3px solid var(--hub-primary);}
+    .trigger-card.dil .example{background:#fff8e1;border-left-color:var(--hub-accent);color:#4a3500;}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;}
+    .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-top:3px solid var(--hub-primary);}
+    .card.accent{border-top-color:var(--hub-accent);}
+    .card.blue{border-top-color:#1565c0;}
+    .card.purple{border-top-color:#6a1b9a;}
+    .card.red{border-top-color:#c62828;}
+    .card.teal{border-top-color:#00838f;}
+    .card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:8px;}
+    .card p{font-size:0.82rem;color:#444;line-height:1.5;}
+    /* DIC vs DIL explainer */
+    .explainer{background:#fff;border-radius:12px;padding:28px;box-shadow:0 2px 8px rgba(0,0,0,0.09);margin-bottom:28px;}
+    .explainer h3{font-size:1rem;font-weight:700;color:var(--hub-dark);margin-bottom:18px;}
+    .programme-tower{display:flex;flex-direction:column;gap:6px;max-width:560px;margin:0 auto;}
+    .pt-layer{border-radius:8px;padding:12px 18px;text-align:center;font-size:0.85rem;font-weight:600;color:#fff;}
+    .pt-master{background:var(--hub-primary);}
+    .pt-dil{background:var(--hub-accent);color:#1a1000;}
+    .pt-local{background:#37474f;}
+    .pt-sir{background:#78909c;color:#fff;}
+    .pt-label{font-size:0.72rem;font-weight:400;margin-top:2px;opacity:0.85;}
+    .info-box{background:#ede8ff;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a1430;line-height:1.6;}
+    .warn-box{background:#fff8e1;border-left:4px solid #e65100;border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:#e65100;}
+    .nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px;}
+    .nav-card{display:block;background:#fff;border-radius:10px;padding:16px 18px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);transition:all 0.2s;}
+    .nav-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12);border-left-color:var(--hub-accent);}
+    .nav-card .num{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:4px;}
+    .nav-card h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);}
+    .nav-card p{font-size:0.78rem;color:#555;margin-top:4px;}
+    footer{background:#110a30;color:#b39ddb;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › Specialty Lines › Difference in Conditions</div>
+    <div class="tag">Multinational Programme Structure</div>
+    <h1>Difference in Conditions / Difference in Limits</h1>
+    <div class="sub">The master policy layer that harmonises multinational insurance programmes above and around local admitted policies worldwide</div>
+    <div>
+      <span class="code-pill">DC</span>
+      <span class="code-pill" style="border-color:#b39ddb;color:#b39ddb;">DIC &amp; DIL</span>
+      <span class="code-pill" style="border-color:#b39ddb;color:#b39ddb;">Multinational</span>
+    </div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html" class="active">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="val">~70%<span class="badge b-e">EST</span></div>
+      <div class="lbl">Fortune 500 multinationals using DIC/DIL structure</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">20–50+<span class="badge b-e">EST</span></div>
+      <div class="lbl">Local admitted policies per typical DIC/DIL programme</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">$5–8bn<span class="badge b-e">EST</span></div>
+      <div class="lbl">Global multinational programme DIC/DIL GWP (est.)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">$20bn+<span class="badge b-v">VER</span></div>
+      <div class="lbl">Thailand floods 2011 insured losses — mass DIC/DIL trigger</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">190+<span class="badge b-e">EST</span></div>
+      <div class="lbl">Jurisdictions worldwide with admitted insurance rules</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">8<span class="badge b-v">VER</span></div>
+      <div class="lbl">Key markets with highly restrictive non-admitted rules (Brazil, China, India, Mexico, Argentina, Russia, South Africa, Saudi Arabia)</div>
+    </div>
+  </div>
+
+  <!-- Code card -->
+  <div class="section-title">Lloyd's Risk Code Coverage</div>
+  <div class="code-grid">
+    <div class="code-card">
+      <h3>DC — Difference in Conditions / Difference in Limits</h3>
+      <p>The DC risk code at Lloyd's covers Difference in Conditions (DIC) and Difference in Limits (DIL) policies — the master policy layer of multinational insurance programmes that sits above and harmonises local admitted policies worldwide. DC is a structural/portfolio product applied across Property, Casualty, Financial Lines, Marine and other classes, wherever a multinational company needs consistent global coverage above its patchwork of local admitted policies.<sup>[I4]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:var(--hub-accent);">
+      <h3>DIC — Difference in Conditions</h3>
+      <p><strong>Difference in Conditions</strong> responds when a local admitted policy does NOT cover a loss at all — i.e., there is a coverage gap. Classic examples: local admitted property policy excludes flood; local D&amp;O policy excludes securities claims. The DIC master policy provides the missing coverage on broader terms than the local policy. DIC is inherently riskier than DIL because it covers perils the local insurer declined to accept.<sup>[I2]</sup></p>
+    </div>
+    <div class="code-card" style="border-left-color:#1565c0;">
+      <h3>DIL — Difference in Limits</h3>
+      <p><strong>Difference in Limits</strong> responds when the local admitted policy covers a loss but its limit is insufficient. Example: local policy has a €5m earthquake sublimit; the agreed master programme standard is €20m. DIL provides the additional €15m. DIL is typically lower risk than DIC because the local insurer has already accepted the peril — the DIL simply tops up the layer. Both DIC and DIL typically sit above local admitted primary policies.<sup>[I2]</sup></p>
+    </div>
+  </div>
+
+  <!-- DIC vs DIL trigger explainer -->
+  <div class="section-title">How DIC and DIL Trigger — Illustrative Diagram</div>
+  <div class="explainer">
+    <h3>Programme Tower: How DIC/DIL Sits Above Local Admitted Policies</h3>
+    <div class="trigger-grid" style="margin-bottom:20px;">
+      <div class="trigger-card">
+        <h3>DIC Trigger — Coverage Gap</h3>
+        <p>The local admitted policy does NOT respond to the loss at all — there is a gap in coverage between local terms and master programme terms. The DIC master policy steps in to fill this gap.</p>
+        <div class="example">
+          <strong>Example:</strong> Factory flood in Thailand. Local admitted property policy excludes flood (common in Thai market). Master DIC at Lloyd's covers flood on broader terms. DIC pays flood loss after local policy declines.
+        </div>
+      </div>
+      <div class="trigger-card dil">
+        <h3>DIL Trigger — Limit Shortfall</h3>
+        <p>The local admitted policy responds to the loss but its limit is exhausted before the full loss is paid. The DIL master policy tops up to the master programme limit.</p>
+        <div class="example">
+          <strong>Example:</strong> Earthquake in New Zealand. Local policy has NZ$5m earthquake sublimit. Master programme limit is NZ$20m. After local pays NZ$5m, DIL pays the remaining NZ$15m to reach master limit.
+        </div>
+      </div>
+    </div>
+    <div class="programme-tower">
+      <div class="pt-layer pt-master">Lloyd's DC Master Policy (DIC/DIL)<div class="pt-label">Fills gaps (DIC) and tops up limits (DIL) to master programme standard</div></div>
+      <div class="pt-layer pt-local">Local Admitted Primary Policy (in each country)<div class="pt-label">Locally-licensed insurer — responds first on local terms/limits</div></div>
+      <div class="pt-layer pt-sir">Insured Self-Insured Retention (SIR / Deductible)<div class="pt-label">Insured retains first layer</div></div>
+    </div>
+  </div>
+
+  <!-- Coverage taxonomy -->
+  <div class="section-title">Coverage Taxonomy</div>
+  <div class="cards-grid">
+    <div class="card">
+      <h4>Property DIC/DIL</h4>
+      <p>Physical damage to buildings, plant and machinery, stock and contents. The most common DIC/DIL application — NatCat sublimits (flood, earthquake, windstorm) in local admitted policies are the most frequent DIC trigger. <sup>[I10]</sup></p>
+    </div>
+    <div class="card accent">
+      <h4>Casualty DIC/DIL</h4>
+      <p>General liability, employers liability and workers compensation DIC/DIL for international operations. Where local GL/EL limits are insufficient or terms narrower than master programme standard.<sup>[I2]</sup></p>
+    </div>
+    <div class="card blue">
+      <h4>Financial Lines DIC/DIL</h4>
+      <p>D&amp;O, Professional Indemnity and Cyber DIC/DIL — wherever a multinational wants consistent global coverage above patchwork local policies. Local D&amp;O policies may exclude securities class actions; DIC fills the gap.<sup>[I2]</sup></p>
+    </div>
+    <div class="card purple">
+      <h4>Business Interruption DIC/DIL</h4>
+      <p>BI coverage following a property loss DIC/DIL trigger. Local admitted BI sublimits are frequently inadequate for complex multinational supply chains — BI DIC/DIL extends indemnity period and limit to master standard.<sup>[I10]</sup></p>
+    </div>
+    <div class="card red">
+      <h4>Contingent Business Interruption DIC/DIL</h4>
+      <p>CBI losses from supplier/customer property damage. Thailand floods 2011 and Japan tsunami 2011 exposed massive CBI exposure — DIC/DIL master policies were triggered where local CBI sublimits were exhausted or the peril was excluded.<sup>[I10]</sup></p>
+    </div>
+    <div class="card teal">
+      <h4>NatCat Sublimit Top-Up</h4>
+      <p>Flood, earthquake, windstorm, storm surge — local admitted policies in many markets apply strict sublimits. DIC/DIL top-up is the most common application. NatCat hardening 2017–2022 significantly increased demand for sublimit top-up DIC.<sup>[I6]</sup></p>
+    </div>
+  </div>
+
+  <!-- Info box -->
+  <div class="info-box">
+    <strong>Admitted vs Non-Admitted:</strong> In most countries, insurance must be placed with a locally-licensed (admitted) insurer. DIC/DIL is typically written at Lloyd's as <strong>non-admitted</strong> — permitted in most markets where a local admitted policy already exists as primary. This creates the "master + local" structure that is the standard in multinational property and financial lines programmes. In highly restrictive markets (Brazil, China, India), local fronting arrangements or reinsurance structures are required. <sup>[I3]</sup>
+  </div>
+
+  <div class="warn-box">
+    <strong>BEPS Warning:</strong> OECD Base Erosion and Profit Shifting (BEPS) Action Plan 8–10 requires that intra-group insurance premium allocations between related parties be at arm's length. Multinationals must maintain transfer pricing documentation for DIC/DIL premium charged to local subsidiaries. Tax authority scrutiny of multinational programme premium flows has intensified since 2015. Non-compliant structures face premium disallowance and penalties. <sup>[L4]</sup>
+  </div>
+
+  <!-- Module nav -->
+  <div class="section-title">Hub Modules</div>
+  <div class="nav-grid">
+    <a href="history.html" class="nav-card">
+      <div class="num">Module 01</div>
+      <h4>History &amp; Origins</h4>
+      <p>From early multinational expansion to the DIC/DIL structure Lloyd's pioneered</p>
+    </a>
+    <a href="timeline.html" class="nav-card">
+      <div class="num">Module 02</div>
+      <h4>Events Timeline</h4>
+      <p>20 key DIC/DIL events 1970–2024 — NatCat, regulatory and structural</p>
+    </a>
+    <a href="database.html" class="nav-card">
+      <div class="num">Module 03</div>
+      <h4>Loss Database</h4>
+      <p>35 DIC/DIL programme case studies — filterable by trigger type &amp; sector</p>
+    </a>
+    <a href="underwriting.html" class="nav-card">
+      <div class="num">Module 04</div>
+      <h4>Underwriting</h4>
+      <p>Rating factors, loss benchmarks, worked examples &amp; exclusions</p>
+    </a>
+    <a href="rates-analysis.html" class="nav-card">
+      <div class="num">Module 05</div>
+      <h4>Rates &amp; ROE</h4>
+      <p>Rate index, NatCat cycle, ROE scenarios &amp; P&amp;L waterfall</p>
+    </a>
+    <a href="risk-mitigation.html" class="nav-card">
+      <div class="num">Module 06</div>
+      <h4>Risk Mitigation</h4>
+      <p>Programme controls, BEPS compliance, NatCat PML modelling</p>
+    </a>
+    <a href="global-program.html" class="nav-card">
+      <div class="num">Module 07</div>
+      <h4>Global Programme</h4>
+      <p>Country-by-country admitted rules, CMP vs fronting, programme tower</p>
+    </a>
+    <a href="references.html" class="nav-card">
+      <div class="num">Sources</div>
+      <h4>References</h4>
+      <p>Legal, regulatory &amp; industry citations</p>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Difference in Conditions (DC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="references.html">Sources &amp; Citations</a></p>
+</footer>
+
+</body>
+</html>

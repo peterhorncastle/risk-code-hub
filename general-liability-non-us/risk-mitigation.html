@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+
+  <title>GL Non-USA: Risk Mitigation | Risk Code Hub</title>
+  <style>
+    :root {
+      --gl:#1b5e20; --gl-dark:#0a2e0d; --intl:#006064;
+      --warn:#e65100; --liab:#1565c0; --prod:#6a1b9a;
+      --light:#f1f8f1; --text:#1a2e1a; --muted:#5a7060; --border:#c0d8c0;
+        /* ── Canonical hub-styles.css variables ── do not remove ── */
+    --hub-primary:   #1b5e20;
+    --hub-dark:      #0a2e0d;
+    --hub-light:     #e8f5e9;
+    --hub-accent:    #c8a84b;
+    --hub-secondary: #006064;
+    --header-gradient:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%);
+    --header-sub:    #c8e6c9;
+  }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--light); color:var(--text); }
+    header { background:linear-gradient(135deg,#0a1f0a 0%,#1b5e20 50%,#0d3b0d 100%); color:#fff; padding:40px; }
+    .breadcrumb { font-size:0.8rem; color:#90c895; margin-bottom:6px; }
+    .breadcrumb a { color:#a5d6a7; text-decoration:none; }
+    header h1 { font-size:1.9rem; font-weight:700; }
+    header p { margin-top:8px; color:#c8e6c9; font-size:0.92rem; }
+    nav { background:#fff; border-bottom:2px solid var(--border); padding:0 40px; display:flex; gap:4px; overflow-x:auto; }
+    nav a { display:block; padding:14px 16px; font-size:0.82rem; font-weight:600; text-decoration:none; color:var(--muted); border-bottom:3px solid transparent; white-space:nowrap; }
+    nav a:hover, nav a.active { color:var(--gl); border-bottom-color:var(--warn); }
+    main { max-width:1100px; margin:0 auto; padding:50px 30px; }
+    h2 { font-size:1.3rem; color:var(--gl); margin:44px 0 16px; padding-bottom:10px; border-bottom:2px solid var(--warn); }
+    h3 { font-size:1.05rem; color:var(--gl-dark); margin:20px 0 10px; }
+    p { line-height:1.8; color:var(--text); margin-bottom:14px; font-size:0.92rem; }
+
+    /* Card grids */
+    .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; margin:24px 0; }
+    .card { background:#fff; border-radius:12px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,.06); border-top:4px solid var(--gl); }
+    .card.orange { border-top-color:var(--warn); }
+    .card.blue { border-top-color:var(--liab); }
+    .card.purple { border-top-color:var(--prod); }
+    .card.teal { border-top-color:var(--intl); }
+    .card h4 { font-size:0.95rem; font-weight:700; color:var(--gl-dark); margin-bottom:10px; }
+    .card.orange h4 { color:var(--warn); }
+    .card.blue h4 { color:var(--liab); }
+    .card.purple h4 { color:var(--prod); }
+    .card.teal h4 { color:var(--intl); }
+    .card p, .card li { font-size:0.86rem; line-height:1.6; color:var(--text); }
+    .card ul { padding-left:16px; margin-top:8px; }
+    .card li { margin-bottom:5px; }
+
+    /* Tables */
+    .tbl-wrap { overflow-x:auto; margin:24px 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    th { background:var(--gl); color:#fff; padding:11px 14px; text-align:left; font-weight:700; }
+    th:hover { background:var(--gl-dark); color:#fff; }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:#f0f7f0; }
+    .tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:2px 7px; border-radius:8px; margin:1px; }
+    .t-g { background:#e6f4ea; color:#1a5c28; }
+    .t-o { background:#fff3e0; color:#7a4500; }
+    .t-b { background:#e3f2fd; color:#0d47a1; }
+    .t-r { background:#fce4ec; color:#880e4f; }
+    .t-p { background:#f3e5f5; color:#4a148c; }
+
+    /* Dark box */
+    .dark-box { background:var(--gl-dark); color:#c8e0c8; border-radius:12px; padding:24px 28px; margin:24px 0; }
+    .dark-box h3 { color:#a5d6a7; margin-bottom:12px; font-size:1.05rem; }
+    .dark-box p, .dark-box li { font-size:0.9rem; line-height:1.7; color:#c8e0c8; }
+    .dark-box ul { padding-left:20px; margin:8px 0; }
+    .dark-box li { margin-bottom:6px; }
+
+    /* Ordered action list */
+    .action-list { counter-reset:action; margin:24px 0; }
+    .action-item { counter-increment:action; display:flex; gap:16px; align-items:flex-start; background:#fff; border-radius:10px; padding:18px 20px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,.05); border-left:4px solid var(--gl); }
+    .action-item::before { content:counter(action); min-width:28px; height:28px; background:var(--gl); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; flex-shrink:0; }
+    .action-item div strong { display:block; font-size:0.92rem; color:var(--gl-dark); margin-bottom:4px; }
+    .action-item div span { font-size:0.84rem; color:var(--muted); line-height:1.5; }
+
+    /* Scorecard */
+    .scorecard { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:20px 0; }
+    .sc-item { border-radius:10px; padding:16px 18px; }
+    .sc-green { background:#e8f5e9; border-left:4px solid #2e7d32; }
+    .sc-amber { background:#fff8e1; border-left:4px solid #f57f17; }
+    .sc-red { background:#ffebee; border-left:4px solid #c62828; }
+    .sc-item strong { display:block; font-size:0.82rem; font-weight:700; margin-bottom:4px; }
+    .sc-green strong { color:#1b5e20; }
+    .sc-amber strong { color:#e65100; }
+    .sc-red strong { color:#c62828; }
+    .sc-item span { font-size:0.8rem; color:var(--muted); }
+
+    /* Badge */
+    .badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:1px 6px; border-radius:8px; }
+    .b-v { background:#e6f4ea; color:#1a5c28; }
+    .b-e { background:#fef3e2; color:#7a4500; }
+    .b-i { background:#cce5ff; color:#004085; }
+
+    footer { background:var(--gl-dark); color:#90c895; text-align:center; padding:20px; font-size:0.78rem; margin-top:60px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">GL Non-USA</a> › Risk Mitigation</div>
+  <h1>Risk Mitigation — General Liability (Non-USA)</h1>
+  <p>Product safety regulation, quality management systems, contractor risk controls and the top-10 underwriter risk mitigation actions for N/NC/NR/NS risks.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Claims Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+<main>
+
+  <h2>Product Safety Regulation — The Compliance Framework (NR)</h2>
+  <p>The 2024 EU General Product Safety Regulation (GPSR, effective 13 December 2024) substantially raises the compliance bar for products liability underwriting. <span class="badge b-v">VER</span> Alongside GPSR, the revised EU Product Liability Directive (2024) extends strict liability to software, AI components, and circular economy products. Underwriters should treat documented regulatory compliance as a primary risk mitigation signal — non-compliance with any of the following frameworks is a material rating uplift factor.</p>
+
+  <div class="cards">
+    <div class="card">
+      <h4>EU General Product Safety Regulation (GPSR 2024)</h4>
+      <p>Replaces GPSD 2001/95/EC from 13 December 2024. Key obligations: <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>Mandatory product risk assessment before market placement</li>
+        <li>Traceability: unique product identifiers, supply chain documentation</li>
+        <li>Digital product passports for certain product categories</li>
+        <li>Extended obligations for online marketplace operators (Amazon, eBay, etc.) — now treated as distributors</li>
+        <li>Mandatory accident reporting to RAPEX/SAFETY Gate portal within 3 business days</li>
+        <li>Withdrawal and recall procedures must be pre-established</li>
+      </ul>
+    </div>
+    <div class="card orange">
+      <h4>EU Product Liability Directive (Revised 2024)</h4>
+      <p>Final text 2024; member state implementation required within 2 years. Key changes: <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>Strict liability extended to software (including software updates), AI systems, and digital manufacturing files</li>
+        <li>Circular economy products (repaired, refurbished) — remanufacturer treated as original producer</li>
+        <li>Development risk defence substantially narrowed</li>
+        <li>Disclosure burden shifted: defendant must disclose evidence if plaintiff cannot reasonably access it</li>
+        <li>10-year liability cut-off extended to 25 years for latent personal injury (pharmaceutical, implants)</li>
+      </ul>
+    </div>
+    <div class="card blue">
+      <h4>UK Consumer Protection Act 1987</h4>
+      <p>Implements EU PLD 1985 into English law; strict liability for defective products remains post-Brexit on its own statutory footing. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>Producer strictly liable where product is defective and defect causes damage</li>
+        <li>Development risk defence retained in UK law post-Brexit</li>
+        <li>UK GPSR (retained from GPSD 2001) — Government consultation on post-Brexit product safety reform ongoing as of 2024</li>
+        <li>OPSS (Office for Product Safety &amp; Standards) enforcement authority</li>
+        <li>Recall guidance: OPSS Product Recall and Safety Alert System (PRESAS)</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h4>REACH Regulation (EC 1907/2006)</h4>
+      <p>Registration, Evaluation, Authorisation and Restriction of Chemicals — applies to manufacturers and importers placing ≥1 tonne/year of a substance on the EU market. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>Safety Data Sheet (SDS) required for hazardous substances</li>
+        <li>Substances of Very High Concern (SVHC) — authorisation required before use</li>
+        <li>Failure to register or provide SDS = compliance breach and potential product liability trigger</li>
+        <li>UK REACH (post-Brexit) maintains parallel regime via HSE; divergence creating dual compliance cost</li>
+        <li>NR underwriters: verify REACH registration certificates for chemical and industrial product risks</li>
+      </ul>
+    </div>
+    <div class="card teal">
+      <h4>EU Medical Device Regulation (EU MDR 2017/745)</h4>
+      <p>Fully applicable from May 2021 (with transitional provisions); replaces MDD 93/42/EEC. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>CE marking via Notified Body (NB) required for Class IIa, IIb, III devices</li>
+        <li>Post-Market Surveillance (PMS) obligations — continuous vigilance and periodic safety update reports</li>
+        <li>Unique Device Identification (UDI) mandatory</li>
+        <li>EUDAMED database — centralised EU medical device registry</li>
+        <li>Underwriter NR action: obtain NB certificate, PMS plan, and EUDAMED registration proof for medical device risks</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Food Safety — EU &amp; UK Regulation</h4>
+      <p>Food products NR risks face layered regulatory obligations across the supply chain. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>EU Food Law (Regulation 178/2002) — General Food Law; traceability "one step back, one step forward"</li>
+        <li>HACCP (Hazard Analysis and Critical Control Points) — mandatory for all food business operators under Hygiene Regulation 852/2004</li>
+        <li>RASFF (Rapid Alert System for Food and Feed) — mandatory notification of serious food safety risks</li>
+        <li>UK FSA recall guidance — 72-hour notification window for Category 1 recalls</li>
+        <li>Product withdrawal vs product recall distinction critical for NR policy trigger analysis</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Quality Management Systems — The Risk Mitigation Scorecard</h2>
+  <p>Quality Management Systems (QMS) reduce both the frequency and severity of products liability claims by building systematic controls into design, manufacture, and post-market surveillance. The following scorecard summarises how underwriters should weight QMS signals for NR risks.</p>
+
+  <div class="scorecard">
+    <div class="sc-green">
+      <strong>ISO 9001:2015 Certified</strong>
+      <span>Documented QMS; management system audit; corrective action procedures. Material risk reduction — rate credit applicable.</span>
+    </div>
+    <div class="sc-green">
+      <strong>ISO 13485:2016 (Medical Devices)</strong>
+      <span>Medical device QMS — includes design controls, risk management (ISO 14971), and post-market surveillance. Essential for NR medical device risks.</span>
+    </div>
+    <div class="sc-green">
+      <strong>HACCP (Food/Beverage)</strong>
+      <span>Systematic identification and control of food safety hazards. Mandatory in EU/UK; independently audited HACCP plan = strong risk signal.</span>
+    </div>
+    <div class="sc-green">
+      <strong>BRC / FSSC 22000 Certification</strong>
+      <span>GFSI-benchmarked food safety schemes. BRC (British Retail Consortium) Global Standard widely required by UK/EU retailers as supply condition.</span>
+    </div>
+    <div class="sc-amber">
+      <strong>QMS Self-Declared (No Cert)</strong>
+      <span>Management system claimed but no third-party certification. Assess quality manual, audit logs, corrective action records independently.</span>
+    </div>
+    <div class="sc-amber">
+      <strong>CE Mark Without Notified Body</strong>
+      <span>Self-declaration permitted for Class I devices/low-risk products only. Higher risk classes require NB involvement — flag any discrepancy.</span>
+    </div>
+    <div class="sc-amber">
+      <strong>Recall History (Minor)</strong>
+      <span>Previous voluntary recall with no regulatory enforcement, root cause identified, corrective action documented = manageable risk signal.</span>
+    </div>
+    <div class="sc-red">
+      <strong>No QMS / Undocumented Processes</strong>
+      <span>Absence of documented quality controls for a products-liability-exposed manufacturer = material rating uplift or declination.</span>
+    </div>
+    <div class="sc-red">
+      <strong>Regulatory Enforcement Action</strong>
+      <span>Active enforcement by OPSS, RAPEX/SAFETY Gate listing, FDA import alert, or equivalent = heightened risk; seek senior underwriter authority.</span>
+    </div>
+    <div class="sc-red">
+      <strong>Recall History (Serious / Undisclosed)</strong>
+      <span>Mandatory recall or enforcement-driven recall, especially if not disclosed at inception. Potential for policy avoidance; refer to compliance team.</span>
+    </div>
+  </div>
+
+  <h2>Contractors Risk Management (NC Code)</h2>
+  <p>Construction and civil engineering contractors (NC) present a distinct risk management profile from products risks. Underwriters should assess project-level controls, workforce management, contractual risk allocation, and statutory compliance — particularly the Construction (Design and Management) Regulations 2015 (CDM 2015) in the UK. <span class="badge b-v">VER</span></p>
+
+  <div class="cards">
+    <div class="card">
+      <h4>CDM 2015 — UK Statutory Duties</h4>
+      <p>Construction (Design and Management) Regulations 2015 apply to all UK construction work. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>Principal Designer: responsible for pre-construction health and safety coordination</li>
+        <li>Principal Contractor: responsible for on-site construction phase health and safety plan</li>
+        <li>F10 notification to HSE for projects lasting more than 30 working days with more than 20 workers simultaneously</li>
+        <li>Health and Safety File: permanent record handed to client at completion</li>
+        <li>Underwriter action: obtain F10 notifications, construction phase plan, and Principal Contractor SSIP accreditation for large NC risks</li>
+      </ul>
+    </div>
+    <div class="card orange">
+      <h4>SSIP / SafeContractor Accreditation</h4>
+      <p>Safety Schemes in Procurement (SSIP) is an umbrella framework for UK contractor health and safety prequalification. <span class="badge b-v">VER</span></p>
+      <ul>
+        <li>Members include: CHAS, SafeContractor, Constructionline, SMAS, Acclaim</li>
+        <li>Mutual recognition between SSIP members reduces duplication</li>
+        <li>Pre-qualification requirement imposed by most UK local authorities and major contractors</li>
+        <li>Rating signal: SSIP-accredited contractors = lower frequency for minor bodily injury and third-party property damage</li>
+        <li>Non-accredited contractors on large or complex projects = material risk indicator requiring explanation</li>
+      </ul>
+    </div>
+    <div class="card blue">
+      <h4>Contractual Risk Allocation</h4>
+      <p>Appropriate use of contract structures limits moral hazard and aligns risk with reward in the contracting chain.</p>
+      <ul>
+        <li>JCT / NEC4 — standard UK building contracts; insurance requirements at clause level</li>
+        <li>FIDIC (Red/Yellow Book) — standard international construction contracts; widely used for non-UK NC risks</li>
+        <li>Back-to-back subcontract insurance requirements: ensure subcontractors maintain minimum GL limits consistent with main contractor cover</li>
+        <li>Hold harmless and indemnity clauses — assess scope; overly broad indemnities may transfer unlimited liability to insured</li>
+        <li>Underwriter action: review key contract clauses on liability cap, indemnity, and insurance requirements for major NC projects</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h4>Geotechnical &amp; Ground Investigation</h4>
+      <p>Subsidence, vibration, and underground utilities are major sources of third-party property damage claims for contractors (NC).</p>
+      <ul>
+        <li>Ground investigation report (GIR) prior to commencement on high-risk sites (urban, near historic structures)</li>
+        <li>Utility strike prevention: PAS 128 underground utility survey; CAT &amp; Genny use protocols</li>
+        <li>Vibration monitoring for piling, demolition, or tunnelling near third-party structures</li>
+        <li>Party wall surveyor appointment where required under Party Wall etc. Act 1996 (UK)</li>
+        <li>Underwriter action: request ground investigation reports and utility survey protocols for urban groundworks and deep excavation risks</li>
+      </ul>
+    </div>
+    <div class="card teal">
+      <h4>Subcontractor Management</h4>
+      <p>Many NC claims arise from the negligence of subcontractors — principal contractor liability flows upward through the chain.</p>
+      <ul>
+        <li>Pre-qualification vetting: financial standing, H&amp;S record, insurance certificate verification</li>
+        <li>Minimum insurance requirements (typically £5m+ PL/GL for subcontractors on major projects)</li>
+        <li>Periodic on-site audit of subcontractor H&amp;S practices during project</li>
+        <li>Named subcontractor endorsement on main GL policy or separate named sub cover as alternative</li>
+        <li>Underwriter action: review subcontractor management procedures and prequalification records for complex NC risks</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Claims Management — NC FNOL</h4>
+      <p>Effective First Notification of Loss (FNOL) procedures are critical for NC risks where incident scenes are transient.</p>
+      <ul>
+        <li>Immediate site preservation after third-party incident — photographs, witness statements before site work resumes</li>
+        <li>Incident reporting register: all third-party incidents logged (near-miss and actual) with timeline</li>
+        <li>Early insurer notification: 24–48 hour NTI notification for any incident likely to exceed £10k</li>
+        <li>Appointed loss adjuster for complex incidents — avoid delay in engaging technical expertise</li>
+        <li>Avoid admission of liability — instruct site supervisors on what to say and not say at scene</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Public Liability Risk Controls (N Code)</h2>
+  <p>General public and premises liability (N) claims arise from occupiers' liability, slip-and-fall, property damage during service delivery, and event liability. Preventive controls focus on premises management, visitor risk assessment, and contractual risk transfer.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Risk Area</th>
+          <th>Primary Control</th>
+          <th>Secondary Control</th>
+          <th>Underwriter Verification</th>
+          <th>Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Slip/Trip/Fall (premises)</strong></td>
+          <td>Regular inspection records (flooring, lighting, entrances); documented defect repair log</td>
+          <td>Anti-slip surfacing; adequate signage; seasonal protocols (ice, wet floors)</td>
+          <td>Inspection frequency; corrective action timescales; accident book review</td>
+          <td><span class="tag t-g">N</span></td>
+        </tr>
+        <tr>
+          <td><strong>Occupiers' Liability (UK)</strong></td>
+          <td>Occupiers' Liability Act 1957 (visitors) / 1984 (trespassers) risk assessment; signage</td>
+          <td>Periodic structural survey; hazard identification programme</td>
+          <td>Evidence of risk assessment; recent structural survey report</td>
+          <td><span class="tag t-g">N</span></td>
+        </tr>
+        <tr>
+          <td><strong>Event Liability</strong></td>
+          <td>Event safety management plan; crowd risk assessment; stewarding ratios per Purple Guide</td>
+          <td>Venue structural check; temporary structure certificate; emergency evacuation drill</td>
+          <td>Purple Guide compliance; SAG (Safety Advisory Group) sign-off for major events</td>
+          <td><span class="tag t-g">N</span></td>
+        </tr>
+        <tr>
+          <td><strong>Food Hygiene (catering)</strong></td>
+          <td>Local authority Food Hygiene Rating Scheme (FHRS) rating ≥ 4; HACCP plan</td>
+          <td>Staff allergen training (Natasha's Law compliance); documented allergen management</td>
+          <td>FHRS certificate; latest environmental health inspection; allergen policy</td>
+          <td><span class="tag t-g">N</span></td>
+        </tr>
+        <tr>
+          <td><strong>Service Delivery (N)</strong></td>
+          <td>Documented service delivery procedures; trained operatives; job-specific risk assessment (RAMS)</td>
+          <td>Supervisor oversight; competency records; toolbox talks log</td>
+          <td>RAMS templates; competency matrix; training records</td>
+          <td><span class="tag t-g">N</span></td>
+        </tr>
+        <tr>
+          <td><strong>Pollution / Escape of Contaminants</strong></td>
+          <td>Spill response plan; secondary containment for liquids; drip trays for fuel/chemicals</td>
+          <td>Environment Agency / national authority permits in place; staff pollution response training</td>
+          <td>Pollution incident history; containment audit; environmental permit</td>
+          <td><span class="tag t-g">N</span> <span class="tag t-b">NC</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>GPSR 2024 — Online Marketplace &amp; E-Commerce Risk Mitigation</h2>
+  <p>The EU GPSR (effective 13 December 2024) creates new liability exposure for online marketplace operators — Amazon, eBay, Etsy, Zalando and similar platforms are now treated as distributors and bear direct obligations to EU consumers where no other responsible economic operator is established in the EU. This represents a significant new NR exposure for marketplace operators. <span class="badge b-v">VER</span></p>
+
+  <div class="dark-box">
+    <h3>GPSR 2024: Key Risk Mitigation Actions for Marketplace Operators (NR/NS)</h3>
+    <p>Online marketplace operators should implement the following controls to reduce GPSR liability exposure:</p>
+    <ul>
+      <li><strong>Seller verification:</strong> Require all third-party sellers to provide product safety documentation (test reports, CE/UKCA mark evidence, SDS where applicable) before product listing approval</li>
+      <li><strong>SAFETY Gate integration:</strong> Monitor RAPEX / SAFETY Gate portal for recalled or dangerous product alerts; implement automated product deactivation within 3 business days of alert receipt</li>
+      <li><strong>EU responsible person:</strong> Require non-EU sellers to designate an EU-established Responsible Person (RP) as defined under GPSR; maintain RP register</li>
+      <li><strong>Traceability:</strong> Ensure product listings display manufacturer name, address, and unique product identifier; retain records for 10 years post-sale</li>
+      <li><strong>Consumer recall communication:</strong> Maintain consumer contact data enabling direct recall notification to purchasers of recalled products</li>
+      <li><strong>Underwriter NR action:</strong> For marketplace operator risks, obtain copies of seller compliance policy, SAFETY Gate monitoring protocol, and EU RP register as standard part of NR submission</li>
+    </ul>
+  </div>
+
+  <h2>Top 10 Underwriter Risk Mitigation Actions — GL Non-USA</h2>
+  <p>The following actions represent the highest-value risk mitigation interventions available to underwriters across N, NC, NR, and NS classes.</p>
+
+  <div class="action-list">
+    <div class="action-item">
+      <div>
+        <strong>Obtain full product safety compliance documentation for all NR risks</strong>
+        <span>Require CE/UKCA mark documentation, test reports, Safety Data Sheets, and QMS certification (ISO 9001 or sector equivalent) as standard submission requirements. Undocumented compliance = material loading or referral. Applies to all NR submissions, not just high-hazard sectors.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Verify products aggregate limit vs. annual turnover and product units in circulation</strong>
+        <span>The products aggregate is the total pool available for all NR claims in the policy year. It must be calibrated against annual sales volume and maximum foreseeable batch-recall scenario. Aggregate set at 1× limit for low-hazard, 2–3× limit for pharmaceutical, food, medical device. Insufficient aggregate is the leading cause of under-insurance in NR.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Map the full supply chain for products risks — identify country of origin of all components</strong>
+        <span>In NR, the producer includes anyone who imports into the EU/UK. A UK-registered company importing Chinese-manufactured goods is the producer for PLD/CPA 1987 purposes. Map component sourcing; identify sub-suppliers with quality control records; assess any REACH/GPSR compliance at tier 2 and tier 3 suppliers.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Assess US/Canada trade exposure — confirm territorial exclusion is operationally enforceable</strong>
+        <span>The US/Canada exclusion is the fundamental boundary of N/NC/NR/NS cover. Verify that the insured's products are not sold into, distributed in, or capable of being re-exported to the US/Canada. Online sales via marketplace platforms require specific attention — geographic sales restrictions and IP geoblocking evidence should be requested for e-commerce NR risks.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Confirm occurrence vs. claims-made basis is correctly specified and consistent with policy intent</strong>
+        <span>Claims-made is increasingly the preferred basis for pharmaceutical, medical device, and chemical NR risks where latency periods can exceed 20 years. For occurrence basis, verify that historical reporting tail is adequately reserved (IBNR analysis required for long-tail NR portfolios). Basis mismatch between primary and excess layers creates coverage gap — check tower consistency.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Review recall history and non-disclosure risk for NR submissions</strong>
+        <span>Product recalls are frequently under-disclosed — either because the insured considers them minor, or because they involve voluntary market withdrawals not classified as "recalls" by the insured. Request the last 5 years of product incident reports, regulatory correspondence, and customer complaint logs as standard for pharmaceutical, food, medical device, and consumer electronics NR risks.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Assess CDM 2015 compliance and SSIP accreditation for all NC construction risks</strong>
+        <span>For UK NC risks: principal contractor and principal designer appointment, construction phase plan, F10 notification, and SSIP accreditation are minimum verification requirements for projects exceeding the CDM 2015 notification thresholds. Non-compliance with CDM is a leading indicator of broader safety management failures and correlates with higher frequency claims outcomes.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Quantify social inflation exposure by jurisdiction — apply jurisdiction factor to base rate</strong>
+        <span>Australia, Brazil, and UK are the leading non-US jurisdictions where social inflation is measurably affecting GL claims costs (see Rates &amp; ROE analysis). For multi-jurisdiction NR/N covers: decompose premium by territory and apply jurisdiction-specific social inflation loading (Australia +8–12% pa, Brazil +10–15% pa, UK +6–8% pa on BI claims). Document loading rationale in file.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Obtain subcontractor management procedures and minimum insurance requirements for NC risks</strong>
+        <span>Principal contractor GL liability flows through to the principal for subcontractor negligence in most jurisdictions. Review pre-qualification process for subcontractors; confirm minimum PL/GL limits required of each sub-tier; obtain evidence that sub insurance certificates are verified at contract stage. Uncontrolled subcontractor chains = unrated exposure sitting within the NC policy.</span>
+      </div>
+    </div>
+    <div class="action-item">
+      <div>
+        <strong>Implement 90-day post-inception review for new N/NC/NR/NS accounts</strong>
+        <span>GL non-USA risks — particularly new-to-Lloyd's accounts and risks transferred from non-specialist markets — frequently reveal undisclosed material changes within the first 90 days of cover. Structured post-inception review: request updated turnover split, any regulatory correspondence received, and new product/territory additions. Early risk management dialogue reduces adverse development and builds long-term underwriting relationships.</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Regulatory Compliance Summary Table</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Regulation / Standard</th>
+          <th>Jurisdiction</th>
+          <th>Applies To</th>
+          <th>Key Obligation</th>
+          <th>Underwriter Verification</th>
+          <th>Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>GPSR 2024 (EU 2023/988)</strong></td>
+          <td><span class="tag t-b">EU</span></td>
+          <td>All non-food consumer products placed on EU market</td>
+          <td>Pre-placement risk assessment; traceability; SAFETY Gate reporting</td>
+          <td>Product risk assessment file; SAFETY Gate registration</td>
+          <td><span class="tag t-g">NR</span></td>
+        </tr>
+        <tr>
+          <td><strong>Consumer Protection Act 1987</strong></td>
+          <td><span class="tag t-g">UK</span></td>
+          <td>Producers, importers placing products on UK market</td>
+          <td>Strict liability for defective products causing damage</td>
+          <td>OPSS compliance; recall procedure in place</td>
+          <td><span class="tag t-g">NR</span></td>
+        </tr>
+        <tr>
+          <td><strong>EU MDR 2017/745</strong></td>
+          <td><span class="tag t-b">EU</span></td>
+          <td>Medical device manufacturers and importers</td>
+          <td>CE marking via NB; UDI; PMS obligations; EUDAMED registration</td>
+          <td>NB certificate; EUDAMED registration; PMS plan</td>
+          <td><span class="tag t-g">NR</span></td>
+        </tr>
+        <tr>
+          <td><strong>REACH (EC 1907/2006)</strong></td>
+          <td><span class="tag t-b">EU</span> <span class="tag t-g">UK</span></td>
+          <td>Chemical manufacturers/importers ≥1 tonne/year</td>
+          <td>Registration; Safety Data Sheet; SVHC authorisation</td>
+          <td>REACH registration number; current SDS documentation</td>
+          <td><span class="tag t-g">NR</span></td>
+        </tr>
+        <tr>
+          <td><strong>Food Law Reg 178/2002</strong></td>
+          <td><span class="tag t-b">EU</span></td>
+          <td>All food business operators in supply chain</td>
+          <td>Traceability; RASFF notification; product withdrawal/recall</td>
+          <td>Traceability system audit; HACCP documentation</td>
+          <td><span class="tag t-g">NR</span></td>
+        </tr>
+        <tr>
+          <td><strong>CDM 2015</strong></td>
+          <td><span class="tag t-g">UK</span></td>
+          <td>All construction projects; notifiable projects ≥30 days / 20+ workers</td>
+          <td>Principal Designer &amp; Contractor appointed; F10 notification; construction phase plan</td>
+          <td>F10 notification; construction phase plan; SSIP accreditation</td>
+          <td><span class="tag t-b">NC</span></td>
+        </tr>
+        <tr>
+          <td><strong>Occupiers' Liability Acts 1957/1984</strong></td>
+          <td><span class="tag t-g">UK</span></td>
+          <td>Occupiers of premises</td>
+          <td>Common duty of care to visitors; reasonable precautions re trespassers</td>
+          <td>Inspection records; defect repair log; risk assessment</td>
+          <td><span class="tag t-g">N</span></td>
+        </tr>
+        <tr>
+          <td><strong>ISO 9001:2015</strong></td>
+          <td><span class="tag t-p">Global</span></td>
+          <td>Manufacturing and service organisations (voluntary but widely required)</td>
+          <td>Documented quality management system; management review; corrective action</td>
+          <td>Current ISO 9001 certificate from accredited certification body</td>
+          <td><span class="tag t-g">NR</span> <span class="tag t-b">NC</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+<footer>Risk Code Hub v2.9 · General Liability – Non-USA (N/NC/NR/NS) · For educational use</footer>
+</body>
+</html>

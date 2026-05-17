@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Loss Database — Legal Expenses (LE) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #455a64;
+      --hub-dark:      #1c313a;
+      --hub-light:     #eceff1;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #37474f;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1c313a 0%,#455a64 55%,#607d8b 100%);
+      --header-sub:    #b0bec5;
+      --le-mid:        #cfd8dc;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2a31;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:var(--header-sub);margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1c313a;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:var(--header-sub);text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--le-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;display:block;margin-bottom:4px;}
+    .filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fafafa;}
+    .filter-bar button{padding:8px 18px;background:var(--hub-primary);color:#fff;border:none;border-radius:6px;font-size:0.85rem;font-weight:600;cursor:pointer;}
+    .filter-bar button:hover{background:var(--hub-dark);}
+    #results-info{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    th{background:var(--hub-dark);color:#fff;padding:11px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:10px 12px;font-size:0.82rem;border-bottom:1px solid #eceff1;vertical-align:top;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f5f7f8;}
+    .type-pill{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+    .tp-employment{background:#fbe9e7;color:#c62828;}
+    .tp-commercial{background:#e3f2fd;color:#1565c0;}
+    .tp-regulatory{background:#fff3e0;color:#e65100;}
+    .tp-tax{background:#f3e5f5;color:#6a1b9a;}
+    .tp-databreach{background:#e0f2f1;color:#00695c;}
+    .tp-pi-funding{background:#e8f5e9;color:#1a5c2a;}
+    .tp-property{background:#fff8e1;color:#795548;}
+    .sev{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:4px;}
+    .sev-cat{background:#b71c1c;color:#fff;}
+    .sev-maj{background:#e65100;color:#fff;}
+    .sev-mod{background:#f9a825;color:#000;}
+    .sev-min{background:#455a64;color:#fff;}
+    .expand-btn{background:none;border:none;color:var(--hub-primary);font-size:0.78rem;cursor:pointer;padding:0;font-weight:600;}
+    .detail-row{display:none;}
+    .detail-row td{background:#f5f7f8;font-size:0.8rem;color:#333;line-height:1.5;padding:10px 16px;}
+    footer{background:#1c313a;color:var(--header-sub);text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Legal Expenses (LE)</a> › Loss Database</div>
+    <div class="tag">Module 03</div>
+    <h1>LEI Market Events &amp; Loss Database</h1>
+    <div class="sub">35 notable legal expenses market events, systemic disputes and class actions 1990–2024 — filter by type, sector &amp; severity</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html" class="active">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter &amp; Search</div>
+
+  <div class="filter-bar">
+    <div>
+      <label>Dispute Type</label>
+      <select id="fType">
+        <option value="">All Types</option>
+        <option value="employment">Employment Dispute</option>
+        <option value="commercial">Commercial Litigation</option>
+        <option value="regulatory">Regulatory Investigation</option>
+        <option value="tax">Tax Dispute</option>
+        <option value="databreach">Data Breach / GDPR</option>
+        <option value="pi-funding">Personal Injury Funding</option>
+        <option value="property">Property Dispute</option>
+      </select>
+    </div>
+    <div>
+      <label>Sector</label>
+      <select id="fSec">
+        <option value="">All Sectors</option>
+        <option value="individual">Individual / Consumer</option>
+        <option value="sme">SME Business</option>
+        <option value="corporate">Corporate</option>
+        <option value="employment">Employment</option>
+        <option value="property">Property</option>
+        <option value="motor">Motor Legal</option>
+        <option value="health">Health / Social Care</option>
+      </select>
+    </div>
+    <div>
+      <label>Min Year</label>
+      <input type="number" id="fYear" placeholder="e.g. 2010" min="1990" max="2024" style="width:110px;">
+    </div>
+    <div>
+      <label>Search</label>
+      <input type="text" id="fSearch" placeholder="Case, sector, issue…" style="width:160px;">
+    </div>
+    <div><button onclick="applyFilters()">Apply</button></div>
+    <div><button onclick="resetFilters()" style="background:#546e7a;">Reset</button></div>
+  </div>
+
+  <div id="results-info"></div>
+
+  <table id="db">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Event / Case</th>
+        <th>Type</th>
+        <th>Sector</th>
+        <th>Severity</th>
+        <th>Geo</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Legal Expenses (LE) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="underwriting.html">Next: Underwriting →</a></p>
+</footer>
+
+<script>
+const DATA = [
+  {y:1990,n:"PPI Mis-selling — Mass LEI-Funded Complaints",t:"commercial",s:"individual",desc:"Payment Protection Insurance mis-selling — hundreds of thousands of consumer complaints funded via BTE legal expenses insurance and CFA/ATE arrangements. LEI-funded complaint management firms drove significant claim volumes 1990s–2019. FCA's 2019 PPI deadline generated final surge. BTE insurers experienced significant claims frequency from household and motor LEI policyholders using LEI to pursue PPI complaints.",sev:"cat",geo:"UK"},
+  {y:1995,n:"Pre-CFA Personal Injury Market — ATE Emergence",t:"pi-funding",s:"individual",desc:"Introduction of conditional fee agreements for personal injury creates immediate demand for ATE insurance to cover adverse costs risk. Early ATE providers (Temple Legal Protection, Litigation Protection Ltd, Lloyd's syndicates) enter market. ATE premiums recoverable from defendants. Personal injury ATE becomes the largest sub-market of after-the-event insurance by volume and premium.",sev:"cat",geo:"UK"},
+  {y:1999,n:"Clinical Negligence ATE Market — NHS Resolution Impact",t:"pi-funding",s:"health",desc:"Post-Access to Justice Act 1999, clinical negligence ATE market develops rapidly. ATE premiums — sometimes £100,000+ in high-value cases — become recoverable from NHS Resolution (the government's clinical negligence indemnifier). NHS Resolution campaigns against disproportionate ATE premiums, leading to litigation over reasonableness of premium size. A key driver of the Jackson Review.",sev:"cat",geo:"UK"},
+  {y:2000,n:"Mass Employment Dispute — UK Manufacturing Redundancies 2000s",t:"employment",s:"employment",desc:"Wave of manufacturing sector redundancies 2000–2005 generates mass employment tribunal claims: unfair dismissal, redundancy payment disputes, TUPE failures. BTE employment LEI providers experience claims frequency spike. Employment law solicitor panels become critical to managing claim volumes. Panel solicitor management emerges as a key BTE cost control mechanism.",sev:"maj",geo:"UK"},
+  {y:2003,n:"Unison Union — Internal Employment Dispute Litigation",t:"employment",s:"employment",desc:"Major trade union employment dispute testing the boundaries of union member legal assistance versus BTE LEI. Highlights the historical role of unions as proto-LEI providers and the competitive dynamic between union legal assistance and commercial BTE. Relevant to the Unison v Lord Chancellor litigation that followed.",sev:"mod",geo:"UK"},
+  {y:2005,n:"Conditional Fee Agreement Abuse — Success Fee Disputes",t:"commercial",s:"individual",desc:"Growing disputes over the quantum of CFA success fees recoverable from defendants. Courts begin scrutinising whether ATE premiums and success fees are reasonable and proportionate. Lord Justice Jackson subsequently commissioned specifically to address the costs inflation driven by the recoverable CFA/ATE regime. Estimated costs inflation 2000–2010 adds £2–4bn to civil litigation costs annually.",sev:"maj",geo:"UK"},
+  {y:2008,n:"Financial Crisis — Commercial Litigation Surge",t:"commercial",s:"corporate",desc:"Global financial crisis 2008–09 generates a wave of commercial litigation: bank mis-selling claims (structured products, interest rate swaps), insolvency-related disputes, loan covenant disputes and director liability actions. ATE insurance for commercial litigation grows significantly. Lloyd's syndicates increase commercial ATE capacity. Litigation funding emerges as a distinct asset class.",sev:"cat",geo:"UK/Global"},
+  {y:2010,n:"Interest Rate Swap Mis-selling — LEI-Funded Claims",t:"commercial",s:"sme",desc:"Banks mis-sell interest rate hedging products (IRSHPs) to thousands of SMEs 2006–2012. The FCA's subsequent IRHP review (2012) generates a wave of SME commercial claims. BTE commercial LEI policyholders use their policies to fund legal advice on IRHP redress. Many SMEs discover their commercial BTE policy for the first time. Estimated total redress exceeds £2bn.",sev:"cat",geo:"UK"},
+  {y:2011,n:"RBS Global Restructuring Group (GRG) Scandal",t:"commercial",s:"sme",desc:"RBS GRG accused of systematically pushing viable SMEs into default to acquire their assets 2008–2013. Mass commercial litigation follows. Litigation funders (Bentham IMF, Therium) fund group actions on behalf of GRG victims. ATE insurance provides adverse costs protection. The GRG scandal highlights the role of LEI and litigation funding in enabling SME access to justice against large financial institutions.",sev:"cat",geo:"UK"},
+  {y:2012,n:"LASPO 2012 — ATE Market Restructuring",t:"regulatory",s:"individual",desc:"Legal Aid, Sentencing and Punishment of Offenders Act 2012 makes ATE premiums and CFA success fees non-recoverable from losing parties (from April 2013). Personal injury ATE market collapses in volume as the economics of the old model disappear. Major ATE providers restructure or exit. Volume shifts from PI to commercial, clinical negligence and group litigation. ATE premiums for retained risks increase substantially.",sev:"cat",geo:"UK"},
+  {y:2013,n:"Employment Tribunal Fees — Volume Collapse",t:"regulatory",s:"employment",desc:"Employment tribunal fees introduced July 2013 (issue fee £160–250; hearing fee £230–950). Tribunal claim volumes fall approximately 70% within 12 months. BTE employment LEI providers experience parallel reduction in claims frequency — masking underlying employment dispute risk. Fee regime persists until struck down by Supreme Court in 2017. LEI market uses this period to improve panel management and cost modelling.",sev:"maj",geo:"UK"},
+  {y:2014,n:"Qualified One-Way Cost Shifting (QOCS) — PI ATE Demand Change",t:"regulatory",s:"individual",desc:"QOCS (for personal injury, in force from April 2013) means that losing PI claimants are generally protected from adverse costs orders unless they behave unreasonably. QOCS replaces much of the risk that ATE previously covered in lower-value PI cases. ATE demand shifts to higher-value PI, clinical negligence and commercial cases where QOCS does not apply or where costs exposure exceeds QOCS protection.",sev:"mod",geo:"UK"},
+  {y:2015,n:"Post Office Horizon — Group Litigation Funded by Litigation Funders",t:"commercial",s:"individual",desc:"Alan Bates and 555 sub-postmasters bring group litigation against Post Office over Horizon computer system errors causing false accounting criminal prosecutions. Funded by litigation funder Freeths/Therium. ATE insurance provides adverse costs protection for the group. High Court judgment (2019) finds Post Office liable. Iconic access-to-justice case demonstrating LEI/litigation funding enabling individuals to challenge a large corporation.",sev:"cat",geo:"UK"},
+  {y:2016,n:"Volkswagen Emissions — Group ATE Litigation",t:"commercial",s:"individual",desc:"'Dieselgate' emissions scandal generates group litigation by affected vehicle owners in multiple jurisdictions. UK group litigation funded by ATE insurance and litigation funders. ATE providers assess merits and write aggregate policies for group claims. Illustrates the international dimension of commercial group litigation ATE and the role of panel firms in managing group action economics.",sev:"maj",geo:"UK/Germany/EU"},
+  {y:2017,n:"R (Unison) v Lord Chancellor [2017] UKSC 51",t:"employment",s:"employment",desc:"Supreme Court unanimously strikes down employment tribunal fees (26 July 2017). Employment tribunal claim volumes recover significantly following the ruling. BTE employment LEI providers see claims frequency normalise after 4 years of suppressed volumes. The Unison decision is the most significant employment access-to-justice ruling of the decade. Government refunds approximately £30m in previously collected fees.",sev:"cat",geo:"UK"},
+  {y:2018,n:"Morrisons Data Breach — Class Action ATE",t:"databreach",s:"corporate",desc:"Morrisons supermarket employees whose personal data was disclosed by a rogue employee bring group litigation for distress and loss. High Court holds Morrisons vicariously liable (later overturned by Supreme Court in 2020 on vicarious liability). Case illustrates the GDPR-era wave of data breach class actions and the role of ATE insurance and litigation funders in funding data breach group claims.",sev:"maj",geo:"UK"},
+  {y:2018,n:"GDPR Commencement — Commercial LEI Trigger Wave",t:"databreach",s:"corporate",desc:"GDPR in force from 25 May 2018. Within 12 months, the ICO receives a record number of data breach notifications. Commercial BTE policyholders with data protection coverage begin using LEI for ICO investigation legal costs, subject access request disputes, and data breach compensation claims. GDPR enforcement against British Airways (£20m fine) and Marriott (£18.4m fine) demonstrate the regulatory investigation trigger.",sev:"maj",geo:"UK/EU"},
+  {y:2019,n:"British Airways Data Breach — ICO Fine and Group Litigation",t:"databreach",s:"corporate",desc:"ICO fines British Airways £20m (reduced from initial £183m intention) for GDPR breach following 2018 cyberattack. Simultaneous group litigation brought by affected customers funded by ATE insurance and litigation funders. Illustrates dual LEI trigger: (1) corporate BTE policy for ICO investigation defence costs; (2) individual ATE or collective litigation funding for claimant group.",sev:"maj",geo:"UK"},
+  {y:2019,n:"IRHP / Bank Product Mis-selling — Continued Commercial LEI",t:"commercial",s:"sme",desc:"Ongoing commercial LEI claims from SMEs pursuing redress for interest rate hedging product mis-selling and other bank product complaints 2015–2020. BTE commercial policies with contract dispute coverage respond. Some SME claimants pursue formal litigation supported by litigation funders after FCA review processes leave them unsatisfied. Estimated LEI-supported claims in SME bank mis-selling total several hundred million pounds.",sev:"maj",geo:"UK"},
+  {y:2020,n:"COVID Redundancy Disputes — BTE Employment Claims Surge",t:"employment",s:"employment",desc:"COVID-19 pandemic triggers wave of employment disputes from mid-2020: mass redundancies, CJRS furlough disputes (employer eligibility, furlough pay calculation), unfair dismissal, health and safety dismissal (s.44 Employment Rights Act). ACAS early conciliation notifications rise sharply. BTE employment LEI panels overwhelmed. Average claims handling time increases. Estimated 250,000+ COVID-related employment disputes in 2020–21.",sev:"cat",geo:"UK"},
+  {y:2020,n:"FCA Business Interruption Test Case — ATE and Litigation Funding",t:"commercial",s:"sme",desc:"FCA v Arch Insurance and others [2020] EWHC 2448 (Comm); [2021] UKSC 1. FCA brings test case to resolve BI coverage disputes. ATE insurance and litigation funding support policyholder groups. Supreme Court confirms coverage for many policyholders. Estimated insurer exposure £1.2bn+. Illustrates LEI/litigation funding in public interest litigation against major insurer groups.",sev:"cat",geo:"UK"},
+  {y:2020,n:"Gig Economy Employment Status — Taylor Review Disputes",t:"employment",s:"employment",desc:"Following the Taylor Review of Modern Working Practices (2017), a wave of employment status test cases: Uber drivers (UK Supreme Court 2021), Pimlico Plumbers, Deliveroo riders, Amazon Flex drivers. Multiple tribunal and appellate proceedings. BTE employment LEI covers pursuit of employment status claims. Access to justice implications for gig economy workers — often unable to afford litigation without LEI.",sev:"maj",geo:"UK"},
+  {y:2021,n:"Uber BTE Employment — Supreme Court Decision",t:"employment",s:"individual",desc:"Uber BV v Aslam [2021] UKSC 5 — Supreme Court holds Uber drivers are 'workers' entitled to minimum wage and holiday pay. Case funded partly through union support and litigation funding. Illustrates how employment status disputes engage multiple funding mechanisms. Following the ruling, similar claims by gig economy workers generate BTE employment LEI claims across the motor, delivery and hospitality sectors.",sev:"maj",geo:"UK"},
+  {y:2021,n:"Employment Tribunal Backlog — Post-COVID Claims",t:"employment",s:"employment",desc:"Employment tribunal system faces significant backlog post-COVID: waiting times for employment tribunal hearings reach 18–24 months in some jurisdictions. BTE LEI policies face extended claims durations, increasing IBNR reserving requirements. LEI providers review panel solicitor fee arrangements in the context of extended proceedings. Backlog reduction requires additional tribunal resource through 2022–24.",sev:"mod",geo:"UK"},
+  {y:2022,n:"GDPR Class Actions — Lloyd's v Lloyd's Mailing Case",t:"databreach",s:"individual",desc:"Wave of GDPR class actions and representative actions under Data Protection Act 2018, s.167 (representative claims on behalf of affected individuals without individual opt-in). ATE and litigation funding active in data breach group litigation. Richard Lloyd v Google LLC [2021] UKSC 50 opens the door to representative actions. Subsequent data breach class actions against TikTok, Facebook, and others generate LEI market activity.",sev:"maj",geo:"UK/EU"},
+  {y:2022,n:"Tax Investigation Surge — HMRC Compliance Activity",t:"tax",s:"sme",desc:"HMRC significantly increases compliance and investigation activity post-COVID (recovering deferred tax and investigating COVID support scheme abuses). Surge in VAT investigations, IR35 status enquiries and corporation tax compliance checks drives strong growth in tax investigation LEI. Many SME policyholders discover their commercial BTE covers HMRC investigation legal costs for the first time. Specialist tax investigation insurers see premium growth.",sev:"maj",geo:"UK"},
+  {y:2022,n:"Solicitor PI and ATE — Law Firm Failures Impact",t:"commercial",s:"individual",desc:"High-profile law firm failures (eg. Axiom Ince collapse 2023) leave clients without representation mid-litigation. ATE policies written for ongoing cases are tested: does the ATE policy continue to respond when the insured solicitor firm fails? ATE insurers clarify policy triggers in firm-failure scenarios. Law Society intervention fund and successor firm arrangements create complex interactions with outstanding ATE coverage.",sev:"mod",geo:"UK"},
+  {y:2023,n:"Fixed Recoverable Costs Extension — Market Repricing",t:"regulatory",s:"individual",desc:"FRC regime extended October 2023 to civil cases up to £100,000. BTE providers begin repricing commercial and personal BTE products for FRC impact: many covered disputes will now have prescribed cost recovery levels significantly below traditional solicitor rates, reducing the effective indemnity cost for BTE insurers in FRC-capped cases. ATE providers reassess adverse costs risk for FRC-capped proceedings.",sev:"maj",geo:"UK"},
+  {y:2023,n:"Post Office Horizon — Criminal Conviction Quashing Group Claims",t:"commercial",s:"individual",desc:"Following ITV drama Mr Bates vs. The Post Office (January 2024), political pressure generates legislative action to quash wrongful convictions of Horizon sub-postmasters. Group litigation for compensation continues. Litigation funders and ATE providers with exposure review their portfolios. The case becomes the defining UK access-to-justice narrative of 2024.",sev:"cat",geo:"UK"},
+  {y:2023,n:"IR35 Off-Payroll Working Disputes — NHS and Public Sector",t:"tax",s:"employment",desc:"HMRC pursuit of IR35 off-payroll working non-compliance in public sector (NHS locums, IT contractors, media workers). Mass disputes over employment status for tax purposes. HMRC retrospective investigations generate significant legal costs for affected contractors. Tax investigation LEI responds where policyholders hold appropriate cover. Estimated HMRC IR35 yield target exceeds £1bn.",sev:"maj",geo:"UK"},
+  {y:2023,n:"Litigation Funding Regulation — PACCAR Decision",t:"commercial",s:"corporate",desc:"R (PACCAR Inc) v Competition Appeal Tribunal [2023] UKSC 28 — Supreme Court holds that litigation funding agreements (LFAs) where funders receive a share of damages are 'damages-based agreements' (DBAs) regulated under the Legal Aid, Sentencing and Punishment of Offenders Act 2012 — and therefore largely unenforceable as drafted. Market scrambles to restructure LFAs. ATE insurers review interaction with affected funding arrangements.",sev:"cat",geo:"UK"},
+  {y:2024,n:"GDPR Data Subject Access Request Disputes — SME Wave",t:"databreach",s:"sme",desc:"Growing volume of commercially-motivated subject access requests (SARs) used tactically in employment and commercial disputes — employees make SARs as part of constructive dismissal or discrimination claims strategies. ICO guidance and Employment Appeal Tribunal decisions address SAR abuse. Commercial BTE LEI policies with GDPR/data protection coverage regularly engaged to fund responses to and challenges against tactical SARs.",sev:"mod",geo:"UK"},
+  {y:2024,n:"AI Employment Decisions — First Tribunal Claims",t:"employment",s:"employment",desc:"First wave of employment tribunal claims involving algorithmic management and automated dismissal decisions. Claims engage GDPR Article 22 (automated decision-making), Employment Rights Act 1996 unfair dismissal provisions, and potential discrimination law arguments. BTE employment LEI policies engaged. Employment lawyers and LEI underwriters note this as an emerging claims frontier.",sev:"mod",geo:"UK"},
+  {y:2024,n:"Property Disputes — Leasehold Reform Litigation Wave",t:"property",s:"individual",desc:"Leasehold Reform (Ground Rent) Act 2022 and ongoing leasehold reform legislation generates property dispute litigation: service charge disputes, enfranchisement valuation disputes, forfeiture proceedings, and building safety remediation disputes (Building Safety Act 2022). BTE home legal expenses policies — and specialist property LEI — see elevated claims frequency from leaseholders pursuing rights against freeholders and managing agents.",sev:"maj",geo:"UK"},
+  {y:2024,n:"Motor Legal Expenses — Whiplash Reforms Impact Assessment",t:"pi-funding",s:"motor",desc:"Official Injury Claim portal (OIC) for low-value whiplash claims introduced 2021. Motor BTE legal expenses providers assess impact: low-value motor PI claims now handled through OIC without LEI involvement for straightforward cases. More complex motor injury claims, above OIC threshold, continue to use BTE LEI. Market assessing whether BTE motor frequency reduction from OIC is offset by increased complexity/severity of remaining claims.",sev:"mod",geo:"UK"}
+];
+
+const typeLabels = {
+  employment:"Employment Dispute",commercial:"Commercial Litigation",regulatory:"Regulatory Investigation",
+  tax:"Tax Dispute",databreach:"Data Breach / GDPR","pi-funding":"Personal Injury Funding",property:"Property Dispute"
+};
+const typeClass = {
+  employment:"tp-employment",commercial:"tp-commercial",regulatory:"tp-regulatory",
+  tax:"tp-tax",databreach:"tp-databreach","pi-funding":"tp-pi-funding",property:"tp-property"
+};
+const sevLabel = {cat:"SYSTEMIC",maj:"MAJOR",mod:"MODERATE",min:"MINOR"};
+const sevClass = {cat:"sev-cat",maj:"sev-maj",mod:"sev-mod",min:"sev-min"};
+
+let filtered = [...DATA];
+
+function applyFilters() {
+  const tp = document.getElementById('fType').value;
+  const sc = document.getElementById('fSec').value;
+  const yr = parseInt(document.getElementById('fYear').value)||0;
+  const sr = document.getElementById('fSearch').value.toLowerCase();
+  filtered = DATA.filter(d =>
+    (!tp||d.t===tp) &&
+    (!sc||d.s===sc) &&
+    (d.y>=yr) &&
+    (!sr||(d.n+d.desc+d.geo).toLowerCase().includes(sr))
+  );
+  render();
+}
+
+function resetFilters() {
+  ['fType','fSec'].forEach(id=>document.getElementById(id).value='');
+  ['fYear','fSearch'].forEach(id=>document.getElementById(id).value='');
+  filtered = [...DATA];
+  render();
+}
+
+function toggle(id) {
+  const r = document.getElementById('dr-'+id);
+  r.style.display = r.style.display==='table-row' ? 'none' : 'table-row';
+}
+
+function render() {
+  const tb = document.getElementById('tbody');
+  document.getElementById('results-info').textContent = `Showing ${filtered.length} of ${DATA.length} events`;
+  tb.innerHTML = filtered.map((d,i)=>`
+    <tr>
+      <td><strong>${d.y}</strong></td>
+      <td>${d.n}</td>
+      <td><span class="type-pill ${typeClass[d.t]}">${typeLabels[d.t]}</span></td>
+      <td>${d.s.charAt(0).toUpperCase()+d.s.slice(1).replace('-',' ')}</td>
+      <td><span class="sev ${sevClass[d.sev]}">${sevLabel[d.sev]}</span></td>
+      <td>${d.geo}</td>
+      <td><button class="expand-btn" onclick="toggle(${i})">▼ Detail</button></td>
+    </tr>
+    <tr class="detail-row" id="dr-${i}">
+      <td colspan="7">${d.desc}</td>
+    </tr>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>

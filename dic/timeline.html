@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Difference in Conditions (DC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #2a1a5c;
+      --hub-dark:      #110a30;
+      --hub-light:     #ede8ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#37474f;
+      --header-gradient:linear-gradient(135deg,#110a30 0%,#2a1a5c 55%,#3d2880 100%);
+      --header-sub:    #b39ddb;
+      --mid:           #d1c4e9;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1430;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#b39ddb;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#110a30;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#b39ddb;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--mid);}
+    /* Filter bar */
+    .filter-bar{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    .filter-bar label{font-size:0.78rem;font-weight:600;color:#444;margin-right:4px;}
+    .filter-btn{padding:6px 14px;border:2px solid #ccc;border-radius:20px;background:#fff;font-size:0.8rem;cursor:pointer;font-weight:600;transition:all 0.2s;}
+    .filter-btn.active,.filter-btn:hover{color:#fff;}
+    .filter-btn[data-t="all"]{border-color:var(--hub-primary);}
+    .filter-btn[data-t="all"].active,.filter-btn[data-t="all"]:hover{background:var(--hub-primary);border-color:var(--hub-primary);}
+    .filter-btn[data-t="natcat"]{border-color:#e65100;}
+    .filter-btn[data-t="natcat"].active,.filter-btn[data-t="natcat"]:hover{background:#e65100;border-color:#e65100;}
+    .filter-btn[data-t="regulatory"]{border-color:#c62828;}
+    .filter-btn[data-t="regulatory"].active,.filter-btn[data-t="regulatory"]:hover{background:#c62828;border-color:#c62828;}
+    .filter-btn[data-t="structural"]{border-color:#6a1b9a;}
+    .filter-btn[data-t="structural"].active,.filter-btn[data-t="structural"]:hover{background:#6a1b9a;border-color:#6a1b9a;}
+    .filter-btn[data-t="financial"]{border-color:#1565c0;}
+    .filter-btn[data-t="financial"].active,.filter-btn[data-t="financial"]:hover{background:#1565c0;border-color:#1565c0;}
+    .filter-btn[data-t="beps"]{border-color:#1a5c2a;}
+    .filter-btn[data-t="beps"].active,.filter-btn[data-t="beps"]:hover{background:#1a5c2a;border-color:#1a5c2a;}
+    .filter-btn[data-t="supplychain"]{border-color:#00838f;}
+    .filter-btn[data-t="supplychain"].active,.filter-btn[data-t="supplychain"]:hover{background:#00838f;border-color:#00838f;}
+    /* Timeline */
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--mid);}
+    .tl-item{position:relative;margin-bottom:20px;display:none;}
+    .tl-item.visible{display:block;}
+    .tl-item::before{content:'';position:absolute;left:-26px;top:14px;width:12px;height:12px;border-radius:50%;background:var(--hub-primary);border:2px solid #fff;box-shadow:0 0 0 2px var(--hub-primary);}
+    .tl-item.natcat::before{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .tl-item.regulatory::before{background:#c62828;box-shadow:0 0 0 2px #c62828;}
+    .tl-item.structural::before{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .tl-item.financial::before{background:#1565c0;box-shadow:0 0 0 2px #1565c0;}
+    .tl-item.beps::before{background:#1a5c2a;box-shadow:0 0 0 2px #1a5c2a;}
+    .tl-item.supplychain::before{background:#00838f;box-shadow:0 0 0 2px #00838f;}
+    .tl-card{background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);}
+    .tl-item.natcat .tl-card{border-left-color:#e65100;}
+    .tl-item.regulatory .tl-card{border-left-color:#c62828;}
+    .tl-item.structural .tl-card{border-left-color:#6a1b9a;}
+    .tl-item.financial .tl-card{border-left-color:#1565c0;}
+    .tl-item.beps .tl-card{border-left-color:#1a5c2a;}
+    .tl-item.supplychain .tl-card{border-left-color:#00838f;}
+    .tl-year{font-size:0.75rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .tl-type-tag{display:inline-block;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-bottom:6px;}
+    .tag-natcat{background:#fbe9e7;color:#e65100;}
+    .tag-regulatory{background:#ffebee;color:#c62828;}
+    .tag-structural{background:#f3e5f5;color:#6a1b9a;}
+    .tag-financial{background:#e3f2fd;color:#1565c0;}
+    .tag-beps{background:#e8f5e9;color:#1a5c2a;}
+    .tag-supplychain{background:#e0f2f1;color:#00838f;}
+    .tl-card h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-card p{font-size:0.83rem;color:#444;line-height:1.55;}
+    #tl-count{font-size:0.82rem;color:#555;margin-bottom:12px;}
+    footer{background:#110a30;color:#b39ddb;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Difference in Conditions (DC)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key DIC/DIL events 1970–2024 — NatCat triggers, regulatory milestones, market structural developments</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+  <div class="filter-bar">
+    <label>Filter:</label>
+    <button class="filter-btn active" data-t="all" onclick="filterTL('all',this)">All Events</button>
+    <button class="filter-btn" data-t="natcat" onclick="filterTL('natcat',this)">NatCat Trigger</button>
+    <button class="filter-btn" data-t="regulatory" onclick="filterTL('regulatory',this)">Regulatory / Admitted</button>
+    <button class="filter-btn" data-t="structural" onclick="filterTL('structural',this)">Market Structural</button>
+    <button class="filter-btn" data-t="financial" onclick="filterTL('financial',this)">Financial Lines DIC</button>
+    <button class="filter-btn" data-t="beps" onclick="filterTL('beps',this)">Tax / BEPS</button>
+    <button class="filter-btn" data-t="supplychain" onclick="filterTL('supplychain',this)">Supply Chain BI</button>
+  </div>
+  <div id="tl-count"></div>
+
+  <div class="timeline" id="timeline">
+
+    <div class="tl-item structural" data-t="structural">
+      <div class="tl-card">
+        <div class="tl-year">1970</div>
+        <span class="tl-type-tag tag-structural">Market Structural</span>
+        <h3>Lloyd's Enters Multinational Programme Market</h3>
+        <p>Lloyd's syndicates begin formally writing multinational programme DIC/DIL master policies, offering non-admitted excess cover above locally-admitted primaries. The flexibility and broad terms of Lloyd's market give it a competitive advantage over admitted market alternatives. Early volumes modest but growing with post-war multinational expansion. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item structural" data-t="structural">
+      <div class="tl-card">
+        <div class="tl-year">~1975</div>
+        <span class="tl-type-tag tag-structural">Market Structural</span>
+        <h3>Controlled Master Programme (CMP) Concept Developed</h3>
+        <p>Lloyd's and the London market develop the Controlled Master Programme (CMP) framework — formalising the structure of master policy above local admitted primaries, with explicit premium allocation methodologies, claims cooperation clauses, and follow-the-settlements provisions. CMP becomes the industry standard for multinational programme structure. <sup>[I4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory" data-t="regulatory">
+      <div class="tl-card">
+        <div class="tl-year">1980</div>
+        <span class="tl-type-tag tag-regulatory">Regulatory / Admitted</span>
+        <h3>Brazil SUSEP Tightens Non-Admitted Rules</h3>
+        <p>Brazil's insurance regulator SUSEP introduces strict rules prohibiting placement of Brazilian risks with non-admitted insurers. Multinationals with Brazilian operations forced to use locally-admitted fronting carriers (IRB/SUSEP-approved) to access Lloyd's reinsurance capacity. Creates the "fronting + reinsurance" model that persists in Brazil to this day. <sup>[L9]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory" data-t="regulatory">
+      <div class="tl-card">
+        <div class="tl-year">~1985</div>
+        <span class="tl-type-tag tag-regulatory">Regulatory / Admitted</span>
+        <h3>China Establishes PICC Admitted Insurance Monopoly</h3>
+        <p>People's Insurance Company of China (PICC) operates as the de facto monopoly admitted insurer for Chinese risks. Foreign multinationals with Chinese manufacturing operations must use PICC (later CPIC and Ping An as market opens gradually). Lloyd's can only participate as reinsurer or through the Shanghai FTZ special zone. Admitted rules among the strictest globally. <sup>[L8]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item beps" data-t="beps">
+      <div class="tl-card">
+        <div class="tl-year">1988</div>
+        <span class="tl-type-tag tag-beps">Tax / BEPS</span>
+        <h3>OECD Transfer Pricing Guidelines — First Edition</h3>
+        <p>OECD publishes its first comprehensive transfer pricing guidelines. Insurance transactions between related parties (intra-group reinsurance, captive insurance premiums, and multinational programme premium allocations) are recognised as subject to arm's-length pricing requirements. Multinationals begin documentation of premium allocation methodologies. <sup>[L4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natcat" data-t="natcat">
+      <div class="tl-card">
+        <div class="tl-year">1994</div>
+        <span class="tl-type-tag tag-natcat">NatCat Trigger</span>
+        <h3>Northridge Earthquake — California Earthquake DIC</h3>
+        <p>Northridge earthquake (M6.7) causes $20bn+ insured losses. Standard California admitted commercial property policies sublimit earthquake; DIC master policies trigger for many multinationals with California manufacturing and distribution. Highlights the persistent gap between standard admitted policy earthquake sublimits and actual NatCat exposure at urban concentrations. <sup>[I10]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory" data-t="regulatory">
+      <div class="tl-card">
+        <div class="tl-year">2000</div>
+        <span class="tl-type-tag tag-regulatory">Regulatory / Admitted</span>
+        <h3>EU Introduces Solvency I Harmonisation</h3>
+        <p>EU Solvency I framework harmonises insurance regulation across EU member states. Facilitates cross-border placement within the EU but complicates non-admitted placement from Lloyd's (UK) into EU markets — a friction point that was manageable pre-Brexit but became structurally significant post-Brexit. EU admitted market access from Lloyd's requires EEA-licensed vehicle. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item financial" data-t="financial">
+      <div class="tl-card">
+        <div class="tl-year">2002</div>
+        <span class="tl-type-tag tag-financial">Financial Lines DIC</span>
+        <h3>Sarbanes-Oxley Drives D&amp;O DIC Demand</h3>
+        <p>SOX 2002 increases D&amp;O exposure for US-listed multinational companies globally. Multinational D&amp;O programmes emerge as a major DIC/DIL application: local D&amp;O policies in each country are placed on local terms, while a Lloyd's master D&amp;O DIC/DIL policy provides broader terms (including securities claims coverage) and higher limits. Financial lines DIC becomes a significant and fast-growing segment of the DC book. <sup>[I2]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natcat" data-t="natcat">
+      <div class="tl-card">
+        <div class="tl-year">2005</div>
+        <span class="tl-type-tag tag-natcat">NatCat Trigger</span>
+        <h3>Hurricanes Katrina, Rita, Wilma — Gulf Coast NatCat DIC</h3>
+        <p>2005 Atlantic hurricane season ($80bn+ insured losses) triggers DIC for wind and storm surge perils in admitted policies with inadequate sublimits for Gulf Coast operations. Teaches market that NatCat sublimit DIC must be priced for accumulation in catastrophe-exposed zones. Lloyd's DIC/DIL losses significant. Rate hardening follows across NatCat DIC class. <sup>[I10]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item supplychain" data-t="supplychain">
+      <div class="tl-card">
+        <div class="tl-year">2010</div>
+        <span class="tl-type-tag tag-supplychain">Supply Chain BI</span>
+        <h3>Deepwater Horizon — Supply Chain BI DIC Interface</h3>
+        <p>BP Deepwater Horizon explosion triggers BI losses across the Gulf of Mexico supply chain — offshore services, onshore processing, coastal manufacturing. DIC/DIL BI policies triggered where local admitted BI sublimits were exhausted. Highlights energy sector supply chain BI DIC complexity and the interaction between offshore energy and onshore multinational programme coverage. <sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natcat" data-t="natcat">
+      <div class="tl-card">
+        <div class="tl-year">2010–11</div>
+        <span class="tl-type-tag tag-natcat">NatCat Trigger</span>
+        <h3>Christchurch Earthquakes — New Zealand DIC Triggers</h3>
+        <p>September 2010 (M7.1) and February 2011 (M6.3) earthquakes devastate Canterbury. Local NZ admitted policies have earthquake sublimits far below actual losses. DIC master policies trigger for excluded perils and DIL triggers where sublimits exhausted. First large-scale DIC/DIL triggers in a developed-market property programme. EQC government scheme provides some base cover but commercial gaps extensive. <sup>[I10]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natcat" data-t="natcat">
+      <div class="tl-card">
+        <div class="tl-year">2011</div>
+        <span class="tl-type-tag tag-natcat">NatCat Trigger</span>
+        <h3>Thailand Floods — The Defining DIC/DIL Loss Event</h3>
+        <p>Seven major industrial estates in Ayutthaya and Pathum Thani provinces inundated by unprecedented monsoon flooding July–November 2011. $20bn+ insured losses. Thai admitted property policies widely excluded flood or sublimited it. DIC master policies at Lloyd's and international markets triggered en masse. Japanese, US and European automotive and electronics manufacturers suffer crippling production losses. The DIC/DIL class's defining catastrophe loss. <sup>[I10]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item supplychain" data-t="supplychain">
+      <div class="tl-card">
+        <div class="tl-year">2011</div>
+        <span class="tl-type-tag tag-supplychain">Supply Chain BI</span>
+        <h3>Japan Earthquake/Tsunami — Global CBI DIC</h3>
+        <p>Tohoku earthquake (M9.0) and tsunami cause $35bn+ insured losses and massive supply chain disruption globally. Automotive (Toyota, Honda, Nissan) and electronics (Sony, Renesas) supply chains disrupted for 6–12 months. CBI DIC triggers globally where multinational BI policies cover Japanese supplier disruption and indemnity period sublimits exhausted. Accelerates global supply chain risk mapping. <sup>[I10]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natcat" data-t="natcat">
+      <div class="tl-card">
+        <div class="tl-year">2012</div>
+        <span class="tl-type-tag tag-natcat">NatCat Trigger</span>
+        <h3>Hurricane Sandy — US Flood DIC Triggers Widely</h3>
+        <p>Sandy makes landfall New Jersey, causing unprecedented urban flooding in New York. Standard US admitted commercial property policies exclude flood (insured separately by NFIP — capped at $500k commercial). Businesses with Lloyd's DIC master programmes recover flood losses; those without face uninsured gaps. Demonstrates value of DIC master in bridging NFIP/admitted programme gap. <sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item beps" data-t="beps">
+      <div class="tl-card">
+        <div class="tl-year">2015</div>
+        <span class="tl-type-tag tag-beps">Tax / BEPS</span>
+        <h3>OECD BEPS Action Plan 8–10 Finalised</h3>
+        <p>OECD finalises BEPS Actions 8–10 requiring arm's-length pricing for related party transactions including insurance. Multinational programme premium allocations between parent and subsidiaries must be documented as arm's-length transactions. Tax authorities in France, Germany, Australia and others begin challenging premium deductions. Insurance transfer pricing becomes a specialist professional discipline. <sup>[L4]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natcat" data-t="natcat">
+      <div class="tl-card">
+        <div class="tl-year">2015</div>
+        <span class="tl-type-tag tag-natcat">NatCat Trigger</span>
+        <h3>Tianjin Explosion — China Non-Admitted Programme Challenges</h3>
+        <p>Massive chemical warehouse explosion at Tianjin port causes $3.5bn insured loss. Foreign multinationals with Chinese manufacturing face severe admitted insurance access problems — local PICC/CPIC policies have sub-market sublimits; DIC master policies technically cannot respond directly for Chinese risks. Claims coordination between CBIRC-supervised local policies and London DIC master policies exceptionally complex. <sup>[L8]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natcat" data-t="natcat">
+      <div class="tl-card">
+        <div class="tl-year">2017</div>
+        <span class="tl-type-tag tag-natcat">NatCat Trigger</span>
+        <h3>Harvey, Irma, Maria — NatCat DIC Hardening Cycle Begins</h3>
+        <p>Three major Atlantic hurricanes in eight weeks cause $130bn+ total insured losses. NatCat DIC/DIL rates harden significantly as underwriters reassess flood and wind sublimit top-up exposures. The 2017 season marks the inflection point of the NatCat DIC hardening cycle that continued through 2022. Sublimit restrictions tightened; PML modelling requirements intensified. <sup>[I6]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item regulatory" data-t="regulatory">
+      <div class="tl-card">
+        <div class="tl-year">2020</div>
+        <span class="tl-type-tag tag-regulatory">Regulatory / Admitted</span>
+        <h3>Brexit — Lloyd's Non-Admitted Access to EU Complicated</h3>
+        <p>UK leaves EU single market. Lloyd's non-admitted status within EU27 (post-Brexit) complicates direct placement of DIC/DIL master policies for EU-based multinationals. Lloyd's Europe (Brussels) established to maintain admitted EU access. However, some DIC/DIL programme structures for EU operations required restructuring. Premium tax implications in EU member states change. <sup>[L3]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item supplychain" data-t="supplychain">
+      <div class="tl-card">
+        <div class="tl-year">2020–21</div>
+        <span class="tl-type-tag tag-supplychain">Supply Chain BI</span>
+        <h3>COVID-19 — BI DIC Interface Tested</h3>
+        <p>COVID-19 lockdowns cause unprecedented BI losses globally. Where local admitted policies exclude pandemic BI (government order), does DIC master policy respond? Answer: mostly no — DIC/DIL does not convert a BI policy into a pandemic policy. But interface disputes where DIC was written on "all risks" basis in some markets generate significant legal uncertainty and policy wording review across the DIC market. <sup>[I7]</sup></p>
+      </div>
+    </div>
+
+    <div class="tl-item natcat" data-t="natcat">
+      <div class="tl-card">
+        <div class="tl-year">2023</div>
+        <span class="tl-type-tag tag-natcat">NatCat Trigger</span>
+        <h3>Turkey Earthquake — Large DIC Loss in Difficult Admitted Market</h3>
+        <p>Kahramanmaras earthquakes (M7.8 and M7.7) February 2023 cause $6bn+ insured losses. Turkey's admitted insurance market has high uninsured rates and frequent sublimit issues. Multinationals with Turkish manufacturing (automotive components, textiles) trigger DIC master policies where local Turkish admitted policies have earthquake sublimits well below actual losses. Test of admitted rules compliance in post-disaster context. <sup>[I10]</sup></p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Difference in Conditions (DC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filterTL(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const items = document.querySelectorAll('.tl-item');
+  let count = 0;
+  items.forEach(item => {
+    if (type === 'all' || item.dataset.t === type) {
+      item.classList.add('visible');
+      count++;
+    } else {
+      item.classList.remove('visible');
+    }
+  });
+  document.getElementById('tl-count').textContent = `Showing ${count} of ${items.length} events`;
+}
+// Init
+filterTL('all', document.querySelector('.filter-btn[data-t="all"]'));
+</script>
+</body>
+</html>

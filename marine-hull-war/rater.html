@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <title>Marine Hull War — Rater | Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #0b3d6b;
+      --hub-dark:      #061e35;
+      --hub-light:     #e8f0fa;
+      --hub-accent:    #c8a84b;
+      --header-gradient: linear-gradient(135deg,#061e35 0%,#0b3d6b 55%,#1a2a3a 100%);
+      --header-sub:    #b8c8e8;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb">
+    <a href="../index.html">Risk Code Hub</a> ›
+    <a href="overview.html">Marine Hull War</a> ›
+    Rater
+  </div>
+  <div class="tag">Lloyd's Risk Codes W · WB · AW · WX</div>
+  <h1>Marine Hull War — Rating Tool</h1>
+  <p>Factor-based rating engine for marine hull war insurance products. Base vs proposed comparison with P&amp;L waterfall analysis.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programmes</a>
+  <a href="references.html">References</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div id="rater-root"></div>
+
+<footer>
+  <p>Marine Hull War Risk Code Hub — Rating Tool &copy; 2026</p>
+</footer>
+
+<script src="../shared/rater-engine.js"></script>
+<script src="../shared/rater-ui.js"></script>
+<script>
+(function () {
+  var schemaFiles = [
+    'rate-tables/W.json',
+    'rate-tables/WB.json',
+    'rate-tables/AW.json',
+    'rate-tables/WX.json'
+  ];
+  Promise.all(schemaFiles.map(function (f) {
+    return fetch(f).then(function (r) { return r.json(); });
+  })).then(function (schemas) {
+    RaterUI.init(document.getElementById('rater-root'), schemas, RaterEngine);
+  });
+})();
+</script>
+</body>
+</html>

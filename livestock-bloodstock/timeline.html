@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Timeline — Livestock &amp; Bloodstock (NB/NX) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #4e342e;
+      --hub-dark:      #260f0a;
+      --hub-light:     #fbe9e7;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #1a5c2a;
+      --hub-secondary2:#1a237e;
+      --header-gradient:linear-gradient(135deg,#260f0a 0%,#4e342e 55%,#6d4c41 100%);
+      --header-sub:    #ffccbc;
+      --hub-mid:       #d7ccc8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a1209;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#ffccbc;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#260f0a;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#ffccbc;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .filter-bar{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    .filter-bar span{font-size:0.8rem;font-weight:600;color:#555;margin-right:4px;}
+    .filter-btn{padding:6px 14px;border-radius:20px;border:2px solid #ddd;background:#fff;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filter-btn:hover{border-color:var(--hub-accent);}
+    .filter-btn.active{background:var(--hub-primary);color:#fff;border-color:var(--hub-primary);}
+    .filter-btn[data-type="disease"]{border-color:#c62828;}
+    .filter-btn[data-type="disease"].active{background:#c62828;}
+    .filter-btn[data-type="regulatory"]{border-color:#1a237e;}
+    .filter-btn[data-type="regulatory"].active{background:#1a237e;}
+    .filter-btn[data-type="market"]{border-color:#6a1b9a;}
+    .filter-btn[data-type="market"].active{background:#6a1b9a;}
+    .filter-btn[data-type="bloodstock"]{border-color:#1a5c2a;}
+    .filter-btn[data-type="bloodstock"].active{background:#1a5c2a;}
+    .filter-btn[data-type="aquaculture"]{border-color:#00695c;}
+    .filter-btn[data-type="aquaculture"].active{background:#00695c;}
+    .filter-btn[data-type="climate"]{border-color:#e65100;}
+    .filter-btn[data-type="climate"].active{background:#e65100;}
+    #tl-count{font-size:0.82rem;color:#555;margin-bottom:16px;}
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:3px;background:var(--hub-mid);}
+    .tl-item{position:relative;margin-bottom:20px;background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .tl-item::before{content:'';position:absolute;left:-28px;top:22px;width:14px;height:14px;border-radius:50%;background:var(--hub-primary);border:3px solid #fff;box-shadow:0 0 0 2px var(--hub-primary);}
+    .tl-item.disease::before{background:#c62828;box-shadow:0 0 0 2px #c62828;}
+    .tl-item.regulatory::before{background:#1a237e;box-shadow:0 0 0 2px #1a237e;}
+    .tl-item.market::before{background:#6a1b9a;box-shadow:0 0 0 2px #6a1b9a;}
+    .tl-item.bloodstock::before{background:#1a5c2a;box-shadow:0 0 0 2px #1a5c2a;}
+    .tl-item.aquaculture::before{background:#00695c;box-shadow:0 0 0 2px #00695c;}
+    .tl-item.climate::before{background:#e65100;box-shadow:0 0 0 2px #e65100;}
+    .tl-year{font-size:0.72rem;font-weight:700;letter-spacing:2px;color:var(--hub-accent);margin-bottom:4px;}
+    .tl-type{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 7px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+    .tt-disease{background:#fbe9e7;color:#c62828;}
+    .tt-regulatory{background:#e8eaf6;color:#1a237e;}
+    .tt-market{background:#f3e5f5;color:#6a1b9a;}
+    .tt-bloodstock{background:#e8f5e9;color:#1a5c2a;}
+    .tt-aquaculture{background:#e0f2f1;color:#00695c;}
+    .tt-climate{background:#fff3e0;color:#e65100;}
+    .tl-item h4{font-size:0.92rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .tl-item p{font-size:0.83rem;color:#444;line-height:1.55;}
+    .tl-item.hidden{display:none;}
+    footer{background:#260f0a;color:#ffccbc;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Livestock &amp; Bloodstock (NB/NX)</a> › Timeline</div>
+    <div class="tag">Module 02</div>
+    <h1>Events Timeline</h1>
+    <div class="sub">20 key events 1967–2024 — disease outbreaks, regulatory milestones, bloodstock records and market developments</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html" class="active">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <div class="section-title">Filter by Event Type</div>
+  <div class="filter-bar">
+    <span>Filter:</span>
+    <button class="filter-btn active" data-type="all" onclick="filterTL('all')">All Events</button>
+    <button class="filter-btn" data-type="disease" onclick="filterTL('disease')">Disease Outbreak</button>
+    <button class="filter-btn" data-type="regulatory" onclick="filterTL('regulatory')">Regulatory</button>
+    <button class="filter-btn" data-type="market" onclick="filterTL('market')">Market Structural</button>
+    <button class="filter-btn" data-type="bloodstock" onclick="filterTL('bloodstock')">Bloodstock / Racing</button>
+    <button class="filter-btn" data-type="aquaculture" onclick="filterTL('aquaculture')">Aquaculture</button>
+    <button class="filter-btn" data-type="climate" onclick="filterTL('climate')">Climate / Weather</button>
+  </div>
+  <div id="tl-count"></div>
+
+  <div class="timeline" id="timeline">
+
+    <div class="tl-item disease" data-type="disease">
+      <div class="tl-year">1967 <span class="tl-type tt-disease">Disease Outbreak</span></div>
+      <h4>UK Foot and Mouth Disease — Cheshire/Shropshire</h4>
+      <p>The largest UK FMD outbreak since 1923 — 442,000 animals slaughtered across 2,364 premises in Cheshire, Shropshire and neighbouring counties. The epidemic lasted seven months. Government compensation was paid but at valuations that underrepresented market value, highlighting the role of commercial top-up insurance. FMD 1967 directly shaped subsequent Lloyd's livestock policy development and government compensation protocols.<sup>[I1]</sup></p>
+    </div>
+
+    <div class="tl-item regulatory" data-type="regulatory">
+      <div class="tl-year">1981 <span class="tl-type tt-regulatory">Regulatory</span></div>
+      <h4>Animal Health Act 1981 — UK Notifiable Disease Framework</h4>
+      <p>The Animal Health Act 1981 consolidated UK animal disease legislation, establishing the definitive legal framework for notifiable diseases (including FMD, Avian Influenza and ASF), mandatory slaughter powers and government compensation provisions. This Act defines the boundary between government-compensated mortality (excluded from standard NB policies) and commercially insurable mortality risk. Every Lloyd's NB underwriter must understand the Act's slaughter and compensation provisions.<sup>[L1]</sup></p>
+    </div>
+
+    <div class="tl-item bloodstock" data-type="bloodstock">
+      <div class="tl-year">1970s–1984 <span class="tl-type tt-bloodstock">Bloodstock / Racing</span></div>
+      <h4>Northern Dancer Dominates Global Breeding</h4>
+      <p>Canadian-bred Northern Dancer became the most influential sire in thoroughbred history, with his covering fee reaching $1 million per mare by 1984. Sons including Nijinsky, The Minstrel, Nureyev and Sadler's Wells dominated international racing. The surge in stallion values — individual breeding stallions valued at £20–50m — transformed the NX insurance class and drove Lloyd's syndicate specialisation in bloodstock agreed-value cover.<sup>[I5]</sup></p>
+    </div>
+
+    <div class="tl-item market" data-type="market">
+      <div class="tl-year">1980s <span class="tl-type tt-market">Market Structural</span></div>
+      <h4>Lloyd's Bloodstock Syndicates Specialise</h4>
+      <p>Lloyd's market develops dedicated bloodstock specialist syndicates with deep veterinary assessment expertise, capacity for agreed values up to £50m+, and the ability to cover unique perils — permanent infertility cover for covering stallions and broodmares, prospective foal cover. London's dominance as the global bloodstock insurance centre becomes entrenched during this decade as international racing and breeding values surge.<sup>[I6]</sup></p>
+    </div>
+
+    <div class="tl-item aquaculture" data-type="aquaculture">
+      <div class="tl-year">1980s–1990s <span class="tl-type tt-aquaculture">Aquaculture</span></div>
+      <h4>Scottish and Norwegian Salmon Farming — Insurance Market Emergence</h4>
+      <p>Commercial Atlantic salmon aquaculture in Scottish sea lochs and Norwegian fjords expands rapidly. Novel mortality risks — sea lice infestations, Infectious Salmon Anaemia (ISA), jellyfish incursions and oxygen depletion events — can destroy entire sea cage stocks. Lloyd's NB syndicates develop aquaculture mortality products, adapting livestock insurance principles to the very different risk dynamics of marine fish farming.<sup>[I9]</sup></p>
+    </div>
+
+    <div class="tl-item regulatory" data-type="regulatory">
+      <div class="tl-year">1999 <span class="tl-type tt-regulatory">Regulatory</span></div>
+      <h4>Cattle Passports Introduced — BCMS Traceability System</h4>
+      <p>The Cattle Passports (England) Regulations 1999 introduced individual cattle passports under the British Cattle Movement Service (BCMS), creating a full lifetime movement record for every bovine animal in England. The BCMS database — now holding records of over 90 million cattle movements — provides the traceability infrastructure that underpins both disease control (rapid identification of contact premises during outbreaks) and livestock insurance (accurate head count and movement verification for claims). Scotland, Wales and Northern Ireland operate parallel systems.<sup>[L3]</sup></p>
+    </div>
+
+    <div class="tl-item disease" data-type="disease">
+      <div class="tl-year">2001 <span class="tl-type tt-disease">Disease Outbreak</span></div>
+      <h4>UK FMD 2001 — The Catastrophic Epidemic</h4>
+      <p>Foot and Mouth Disease 2001 remains the largest agricultural insurance loss in UK history. The epidemic, beginning at an abattoir in Essex in February 2001, spread to 57 of 60 UK counties. 6 million animals were slaughtered (2.5 million under the contested contiguous cull policy); total economic cost £8bn (Anderson Inquiry 2002); insured losses estimated at £1.2bn. The crisis exposed fundamental weaknesses in government compensation valuation methodology and triggered a decade of livestock insurance market reform.<sup>[I1]</sup></p>
+    </div>
+
+    <div class="tl-item disease" data-type="disease">
+      <div class="tl-year">2001 <span class="tl-type tt-disease">Disease Outbreak</span></div>
+      <h4>BSE / vCJD — UK Beef Industry Devastation</h4>
+      <p>The BSE (mad cow disease) crisis reached its peak public health impact in 1996 with the identification of variant Creutzfeldt-Jakob Disease in young adults. The UK-wide cattle slaughter programme and European export ban devastated the beef sector. For livestock insurers the key lesson was systemic value destruction across an entire production class — a risk type not addressed by per-head mortality policies but creating severe indirect losses for livestock market participants.<sup>[I1]</sup></p>
+    </div>
+
+    <div class="tl-item regulatory" data-type="regulatory">
+      <div class="tl-year">2002 <span class="tl-type tt-regulatory">Regulatory</span></div>
+      <h4>Anderson Inquiry — FMD 2001 Lessons Learned</h4>
+      <p>The independent Inquiry into FMD 2001, chaired by Dr Iain Anderson, published its final report in 2002. Key findings: government compensation valuation methodology was inadequate; biosecurity during the outbreak was deficient; the contiguous cull policy was scientifically contested. The report's recommendations directly influenced APHA contingency planning and shaped the biosecurity requirements now standard in Lloyd's NB livestock policy wordings.<sup>[I1]</sup></p>
+    </div>
+
+    <div class="tl-item disease" data-type="disease">
+      <div class="tl-year">2005–2007 <span class="tl-type tt-disease">Disease Outbreak</span></div>
+      <h4>Avian Influenza H5N1 — UK Poultry Sector</h4>
+      <p>H5N1 avian influenza reached UK poultry flocks. The Bernard Matthews outbreak at Holton, Suffolk (February 2007) — 160,000 turkeys culled — was the UK's largest single-site commercial poultry outbreak to that date. The intensification of poultry production (million-bird units) created extreme concentration exposures. Insurance market response included tighter biosecurity requirements, zoning exclusions for restricted areas and the first use of pandemic disease sublimits in UK poultry covers.<sup>[I2]</sup></p>
+    </div>
+
+    <div class="tl-item bloodstock" data-type="bloodstock">
+      <div class="tl-year">2010 <span class="tl-type tt-bloodstock">Bloodstock / Racing</span></div>
+      <h4>Coolmore / Aidan O'Brien Era — Record Stallion Values</h4>
+      <p>The Coolmore Stud operation in Ireland — with stallions including Galileo, Fastnet Rock and Deep Impact — reaches peak commercial dominance. Galileo's covering fee is reported at €600,000 per mare by 2018; his syndication value exceeds €200m. The concentration of elite breeding stallion value at Coolmore and Godolphin creates significant Lloyd's market accumulation exposures across interconnected equine corporate structures.<sup>[I5]</sup></p>
+    </div>
+
+    <div class="tl-item bloodstock" data-type="bloodstock">
+      <div class="tl-year">2012 <span class="tl-type tt-bloodstock">Bloodstock / Racing</span></div>
+      <h4>Frankel — Unbeaten Retirement and Record Insurance Value</h4>
+      <p>Frankel, trained by Sir Henry Cecil, retired unbeaten in 14 races including 10 Group 1 victories. At retirement he was syndicated to Banstead Manor Stud at a covering fee of £125,000 per mare — generating an estimated gross revenue of £15m+ per season. His insurance value was estimated in media reports at over £100m, representing one of the largest single equine agreed-value risks ever underwritten by the Lloyd's bloodstock market.<sup>[I5]</sup></p>
+    </div>
+
+    <div class="tl-item regulatory" data-type="regulatory">
+      <div class="tl-year">2016 <span class="tl-type tt-regulatory">Regulatory</span></div>
+      <h4>EU Animal Health Regulation 2016/429 — Single AHL Framework</h4>
+      <p>EU Regulation 2016/429 on transmissible animal diseases (Animal Health Law) consolidated 40+ existing EU animal health Directives into a single legal framework. While the UK has diverged from EU law post-Brexit, the AHL informed development of the UK's own animal health legislative framework and remains highly relevant for Lloyd's underwriters assessing risks across EU member states — including Ireland, a major centre of bloodstock breeding.<sup>[L6]</sup></p>
+    </div>
+
+    <div class="tl-item aquaculture" data-type="aquaculture">
+      <div class="tl-year">2016 <span class="tl-type tt-aquaculture">Aquaculture</span></div>
+      <h4>Chilean Salmon IHN Outbreak — Catastrophic Aquaculture Loss</h4>
+      <p>Infectious Haematopoietic Necrosis (IHN) devastated Chilean salmon farming in 2016 — the virus, introduced via Norwegian smolt imports, spread through sea cage operations, resulting in losses estimated at $800m. Chile is the world's second largest salmon producer. The catastrophic scale of the Chilean IHN event reshaped global aquaculture insurance underwriting, driving exclusions for specific viral pathogens and tighter biosecurity attestation requirements in farm policy wordings.<sup>[I9]</sup></p>
+    </div>
+
+    <div class="tl-item disease" data-type="disease">
+      <div class="tl-year">2018 <span class="tl-type tt-disease">Disease Outbreak</span></div>
+      <h4>African Swine Fever Reaches China</h4>
+      <p>ASF — a haemorrhagic disease lethal to pigs with no effective vaccine — reached China in August 2018. By 2020 China was estimated to have lost over 50% of its total pig population — approximately 200–300 million animals. The shock to global pork supply drove prices to unprecedented levels. ASF has since spread to Philippines, Vietnam, Germany and Eastern Europe, creating systemic pig sector risk for NB underwriters globally.<sup>[I3]</sup></p>
+    </div>
+
+    <div class="tl-item climate" data-type="climate">
+      <div class="tl-year">2019–2020 <span class="tl-type tt-climate">Climate / Weather</span></div>
+      <h4>Australia Drought and Bushfire — Cattle and Sheep Losses</h4>
+      <p>Severe multi-year drought across eastern Australia resulted in forced destocking of millions of cattle and sheep — herd liquidation at near-zero prices, pasture failure and severe welfare losses. The 2019–20 bushfire season (the "Black Summer") resulted in an estimated 1 billion+ animals killed. For NB livestock insurers, the Australian experience highlighted the emerging impact of climate-driven weather extremes on livestock mortality and indirect herd value losses.<sup>[I9]</sup></p>
+    </div>
+
+    <div class="tl-item bloodstock" data-type="bloodstock">
+      <div class="tl-year">2021 <span class="tl-type tt-bloodstock">Bloodstock / Racing</span></div>
+      <h4>Keeneland September Sale — Record $3.7m Yearling</h4>
+      <p>The Keeneland September Yearling Sale 2021 set new benchmarks: a son of Into Mischief sold for $3.7m top lot; gross turnover exceeded $350m across the sale. The sustained strength of the yearling market reflects continued demand for thoroughbred bloodstock as an investment asset and the resilience of US and global racing. Record yearling sales translate directly into demand for NX insurance cover at elevated agreed values.<sup>[I10]</sup></p>
+    </div>
+
+    <div class="tl-item disease" data-type="disease">
+      <div class="tl-year">2021–2024 <span class="tl-type tt-disease">Disease Outbreak</span></div>
+      <h4>UK Avian Influenza H5N1 — Unprecedented Scale</h4>
+      <p>The HPAI H5N1 strain drove an unprecedented sustained avian influenza crisis in the UK. Over 40 million birds culled by 2024 — far exceeding all previous UK outbreaks. The unique feature: wild bird-to-domestic flock transmission driven by infected migratory populations that made traditional biosecurity measures insufficient. APHA compensation systems were severely strained; commercial insurance demand for epidemic extension cover surged. The crisis fundamentally altered poultry insurance pricing and terms.<sup>[I2]</sup></p>
+    </div>
+
+    <div class="tl-item regulatory" data-type="regulatory">
+      <div class="tl-year">2022 <span class="tl-type tt-regulatory">Regulatory</span></div>
+      <h4>DEFRA — UK Avian Flu Housing Order and Compensation Review</h4>
+      <p>In response to the unprecedented 2021–22 avian flu season, DEFRA imposed a mandatory national housing order for all UK poultry flocks (November 2021 — first ever national winter housing requirement). DEFRA simultaneously announced a review of the compensation valuation methodology for culled poultry — market price vs depreciated book value — responding to farmers' complaints that government valuations were systematically below market rates during the epidemic. Directly relevant to NB commercial insurance top-up structuring.<sup>[I2]</sup></p>
+    </div>
+
+    <div class="tl-item market" data-type="market">
+      <div class="tl-year">2023–2024 <span class="tl-type tt-market">Market Structural</span></div>
+      <h4>Lloyd's Livestock/Bloodstock Market — Genomic Underwriting Innovation</h4>
+      <p>Specialist Lloyd's bloodstock syndicates begin integrating genomic data into NX underwriting assessment. DNA-based analysis of breeding potential, hereditary disease markers and fertility indicators enables more precise agreed-value assessments and more granular rating of permanent infertility risk for breeding stallions. In the NB class, precision livestock farming technology (automated health scoring, RFID ear-tag monitoring) begins informing herd biosecurity assessments at underwriting stage.<sup>[I6]</sup></p>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Livestock &amp; Bloodstock (NB / NX) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="database.html">Next: Loss Database →</a></p>
+</footer>
+
+<script>
+function filterTL(type) {
+  const items = document.querySelectorAll('.tl-item');
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-type="${type}"]`).classList.add('active');
+  let count = 0;
+  items.forEach(item => {
+    if (type === 'all' || item.dataset.type === type) {
+      item.classList.remove('hidden');
+      count++;
+    } else {
+      item.classList.add('hidden');
+    }
+  });
+  document.getElementById('tl-count').textContent = `Showing ${count} of 20 events`;
+}
+filterTL('all');
+</script>
+</body>
+</html>

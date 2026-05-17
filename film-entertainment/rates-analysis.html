@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Rates &amp; ROE — Film &amp; Entertainment (PF) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #37003a;
+      --hub-dark:      #1a001c;
+      --hub-light:     #f9e8ff;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #c62828;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1a001c 0%,#37003a 55%,#56005a 100%);
+      --header-sub:    #e040fb;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1e001e;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#e040fb;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1a001c;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#e040fb;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid #e8c8ff;}
+    .chart-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .chart-wrap h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    canvas{max-width:100%;height:280px!important;}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    th{background:var(--hub-dark);color:#fff;padding:10px 12px;font-size:0.8rem;text-align:left;font-weight:600;}
+    td{padding:9px 12px;font-size:0.82rem;border-bottom:1px solid #f0e0ff;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:#f9f0ff;}
+    .roe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+    .roe-card{background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+    .roe-card.bull{border-top:4px solid #1a5c2a;}
+    .roe-card.base{border-top:4px solid #c8a84b;}
+    .roe-card.bear{border-top:4px solid #c62828;}
+    .roe-card .label{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px;}
+    .roe-card .val{font-size:2rem;font-weight:700;margin-bottom:4px;}
+    .roe-card.bull .val{color:#1a5c2a;}
+    .roe-card.base .val{color:#c8a84b;}
+    .roe-card.bear .val{color:#c62828;}
+    .roe-card .detail{font-size:0.78rem;color:#555;}
+    .waterfall{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .waterfall h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:16px;}
+    .wf-row{display:flex;align-items:center;margin-bottom:8px;gap:12px;}
+    .wf-row .wf-label{width:240px;font-size:0.82rem;color:#444;flex-shrink:0;}
+    .wf-row .wf-bar{height:22px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.78rem;font-weight:700;color:#fff;min-width:40px;}
+    .wf-row .wf-val{font-size:0.82rem;font-weight:700;color:#333;margin-left:8px;}
+    .bar-in{background:#37003a;}
+    .bar-out{background:#c62828;}
+    .bar-profit{background:#c8a84b;color:#000;}
+    .badge{display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;vertical-align:middle;margin-left:4px;}
+    .b-e{background:#e65100;color:#fff;}
+    footer{background:#1a001c;color:#e040fb;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Film &amp; Entertainment (PF)</a> › Rates &amp; ROE</div>
+    <div class="tag">Module 05</div>
+    <h1>Rates &amp; ROE Analysis</h1>
+    <div class="sub">Market cycle, rate index, ROE scenarios &amp; P&amp;L waterfall — illustrative Lloyd's PF book</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html" class="active">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- Charts -->
+  <div class="section-title">Rate Index &amp; Loss Ratio Trends<span class="badge b-e">EST</span></div>
+  <div class="chart-wrap">
+    <h3>Chart 1 — Film Production Insurance Rate Index 2010–2026 (2010 = 100) — by Production Type</h3>
+    <canvas id="chartRate"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Chart 2 — Gross Loss Ratio by Production Type (Illustrative)</h3>
+    <canvas id="chartLR"></canvas>
+  </div>
+
+  <!-- Market cycle -->
+  <div class="section-title">Market Cycle History<span class="badge b-e">EST</span></div>
+  <table>
+    <thead>
+      <tr><th>Period</th><th>Phase</th><th>Driver</th><th>Rate Movement</th><th>Lloyd's PF Response</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2010–2015</td><td>Soft / Competitive</td><td>Streaming boom increases production volumes; plentiful capacity; low catastrophe losses; competitive cast market</td><td>−2 to −5% p.a.</td><td>Capacity growing; E&amp;O sublimits expanded; new streaming-focused wordings</td></tr>
+      <tr><td>2016–2019</td><td>Stable / Selective Hardening</td><td>Paul Walker claim; stunt incidents; rising E&amp;O frequency from streaming global releases; MeToo reputational claims emerge</td><td>Flat to +5%</td><td>Cast loading for age reviewed; stunt protocols tightened; E&amp;O rates firm</td></tr>
+      <tr><td>2020</td><td>COVID Catastrophe</td><td>Global production shutdown; $3–5bn industry losses; pandemic exclusions imposed universally; government PIF scheme essential to restart UK market</td><td>+25 to +60%</td><td>Pandemic exclusion standard; capacity withdraws from cast; PIF fills gap in UK</td></tr>
+      <tr><td>2021–2022</td><td>Hard Market / Pandemic Exclusion</td><td>Post-COVID restart; Rust on-set shooting; strict pandemic exclusions; capacity cautious; Rust drives liability rate increases</td><td>+15 to +30%</td><td>Weapons protocol requirements introduced; liability sub-limits tightened post-Rust</td></tr>
+      <tr><td>2023</td><td>SAG-AFTRA Strike Disruption</td><td>118-day Hollywood shutdown; production volume drop; most packages exclude strikes; premium income drops; E&amp;O rates flatten</td><td>Flat to +8%</td><td>Strike exclusion confirmed; business interruption from labour disputes excluded</td></tr>
+      <tr><td>2024–2026</td><td>Selective Stabilisation</td><td>Post-strike production resurgence; AI/likeness risks emerging; streaming platform consolidation; well-controlled risks see rate moderation</td><td>Flat to +5%</td><td>AI/likeness E&amp;O wording development; weapons protocol compliance standard condition</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ROE scenarios -->
+  <div class="section-title">ROE Scenarios — Illustrative £12m PF Book<span class="badge b-e">EST</span></div>
+  <div class="roe-grid">
+    <div class="roe-card bull">
+      <div class="label">Bull Scenario</div>
+      <div class="val">+18%</div>
+      <div class="detail">Combined Ratio 77%<br>Strong medical selection; no catastrophe cast loss; hard rates; post-strike production boom</div>
+    </div>
+    <div class="roe-card base">
+      <div class="label">Base Scenario</div>
+      <div class="val">+9%</div>
+      <div class="detail">Combined Ratio 89%<br>One mid-size cast claim; moderate E&amp;O frequency; stabilising rates post-strike</div>
+    </div>
+    <div class="roe-card bear">
+      <div class="label">Bear Scenario</div>
+      <div class="val">−10%</div>
+      <div class="detail">Combined Ratio 118%<br>Major cast abandonment claim; Rust-type liability event; post-SAG disruption premium shortfall</div>
+    </div>
+  </div>
+
+  <!-- P&L Waterfall -->
+  <div class="waterfall">
+    <h3>P&amp;L Waterfall — Base Scenario (£12m GWP, illustrative PF book)</h3>
+    <div class="wf-row"><div class="wf-label">Gross Written Premium</div><div class="wf-bar bar-in" style="width:100%;">£12m</div><div class="wf-val">£12.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Broker Commission (22%)</div><div class="wf-bar bar-out" style="width:44%;">−£2.64m</div><div class="wf-val">−£2.64m</div></div>
+    <div class="wf-row"><div class="wf-label">Reinsurance Premium (XL)</div><div class="wf-bar bar-out" style="width:17%;">−£1.2m</div><div class="wf-val">−£1.2m</div></div>
+    <div class="wf-row"><div class="wf-label">Net Earned Premium</div><div class="wf-bar bar-in" style="width:68%;background:#56005a;">£8.16m</div><div class="wf-val">£8.16m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Cast Illness / Abandonment</div><div class="wf-bar bar-out" style="width:30%;">−£2.0m</div><div class="wf-val">−£2.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Production Shutdown / Delay</div><div class="wf-bar bar-out" style="width:18%;">−£1.2m</div><div class="wf-val">−£1.2m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Liability / E&amp;O</div><div class="wf-bar bar-out" style="width:15%;">−£1.0m</div><div class="wf-val">−£1.0m</div></div>
+    <div class="wf-row"><div class="wf-label">Claims — Equipment / Negative</div><div class="wf-bar bar-out" style="width:9%;">−£0.6m</div><div class="wf-val">−£0.6m</div></div>
+    <div class="wf-row"><div class="wf-label">IBNR Reserve Strengthening</div><div class="wf-bar bar-out" style="width:6%;">−£0.3m</div><div class="wf-val">−£0.3m</div></div>
+    <div class="wf-row"><div class="wf-label">Expenses / Overhead (14%)</div><div class="wf-bar bar-out" style="width:14%;">−£1.68m</div><div class="wf-val">−£1.68m</div></div>
+    <div class="wf-row"><div class="wf-label">Investment Income (est.)</div><div class="wf-bar" style="width:4%;background:#c8a84b;color:#000;">+£0.3m</div><div class="wf-val">+£0.3m</div></div>
+    <div class="wf-row"><div class="wf-label"><strong>Underwriting Profit</strong></div><div class="wf-bar bar-profit" style="width:14%;"><strong>£1.68m</strong></div><div class="wf-val"><strong>£1.68m (9.0% ROE est.)</strong></div></div>
+  </div>
+
+  <!-- IBNR note -->
+  <div class="section-title">IBNR &amp; Development Considerations</div>
+  <table>
+    <thead><tr><th>Factor</th><th>Impact on Reserves</th></tr></thead>
+    <tbody>
+      <tr><td>Cast abandonment — long-tail litigation</td><td>Cast illness claims where production is abandoned may be disputed (did the production have to abandon, or could reshoots have continued?); claims lifecycle 1–3 years</td></tr>
+      <tr><td>E&amp;O — IP dispute duration</td><td>E&amp;O claims for copyright infringement and defamation typically take 2–5 years to resolve; IBNR loading essential; discovery period 1 year post-delivery standard</td></tr>
+      <tr><td>Rust-type liability — criminal proceedings</td><td>Production liability claims linked to criminal proceedings develop very slowly; criminal appeals, civil settlements and OSHA proceedings overlap; reserve to ultimate</td></tr>
+      <tr><td>Digital asset loss — recoverability uncertainty</td><td>Digital footage loss claims depend on recoverability assessment; if partially recoverable, reshoot costs reduced; IBNR must allow for best/worst case recovery scenarios</td></tr>
+      <tr><td>COVID exclusion confirmation</td><td>Pandemic exclusion wordings must be confirmed unambiguous; any residual coverage dispute (e.g., "was this COVID or a concurrent insured peril?") creates tail reserve uncertainty</td></tr>
+      <tr><td>AI/likeness emerging claims</td><td>No actuarial history for AI-related production E&amp;O claims; prudent underwriters apply additional IBNR for 2023+ policy years pending first claims data</td></tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Film &amp; Entertainment (PF) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="risk-mitigation.html">Next: Risk Mitigation →</a></p>
+</footer>
+
+<script>
+// Chart 1 — Rate Index 2010–2026
+const years = [2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+new Chart(document.getElementById('chartRate'), {
+  type:'line',
+  data:{
+    labels: years,
+    datasets:[
+      {
+        label:'Feature Film (Studio)',
+        data:[100,98,95,93,91,90,91,93,97,100,152,175,195,200,205,208,210],
+        borderColor:'#37003a',
+        backgroundColor:'rgba(55,0,58,0.08)',
+        tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'TV Series / Drama',
+        data:[100,97,94,91,89,87,86,88,92,96,145,165,182,188,192,196,198],
+        borderColor:'#c8a84b',
+        backgroundColor:'rgba(200,168,75,0.08)',
+        tension:0.3,fill:true,pointRadius:3
+      },
+      {
+        label:'Streaming Original',
+        data:[null,null,100,98,95,93,91,90,92,96,148,170,188,194,198,202,205],
+        borderColor:'#c62828',
+        backgroundColor:'rgba(198,40,40,0.06)',
+        tension:0.3,pointRadius:3
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom'}},
+    scales:{y:{title:{display:true,text:'Rate Index (base year = 100)'},beginAtZero:false,min:80}}
+  }
+});
+
+// Chart 2 — Gross LR by Production Type
+new Chart(document.getElementById('chartLR'), {
+  type:'bar',
+  data:{
+    labels:['Indie Film','Studio Film','TV Drama','Reality TV','Documentary','Commercial / Ad','Streaming Original','Theatre'],
+    datasets:[{
+      label:'Gross Loss Ratio % (mid estimate)',
+      data:[68,48,55,42,38,35,58,45],
+      backgroundColor:[
+        '#37003a','#56005a','#c8a84b','#1565c0','#1a5c2a','#00695c','#c62828','#6a1b9a'
+      ]
+    }]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{y:{title:{display:true,text:'Gross Loss Ratio (%)'},max:100,beginAtZero:true}}
+  }
+});
+</script>
+</body>
+</html>

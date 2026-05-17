@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../hub-styles.css">
+  <title>Risk Mitigation — Engineering &amp; Construction (CB/CC) — Risk Code Hub</title>
+  <style>
+    :root {
+      --hub-primary:   #37474f;
+      --hub-dark:      #1c2b31;
+      --hub-light:     #eceff1;
+      --hub-accent:    #c8a84b;
+      --hub-secondary: #e65100;
+      --hub-secondary2:#1a5c2a;
+      --header-gradient:linear-gradient(135deg,#1c2b31 0%,#37474f 55%,#546e7a 100%);
+      --header-sub:    #b0bec5;
+      --hub-mid:       #cfd8dc;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--hub-light);color:#1a2327;}
+    header{background:var(--header-gradient);color:#fff;padding:40px;position:relative;overflow:hidden;}
+    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(200,168,75,0.15) 0%,transparent 60%);}
+    header .inner{position:relative;z-index:1;}
+    .breadcrumb{font-size:0.8rem;color:#b0bec5;margin-bottom:6px;}
+    .breadcrumb a{color:var(--hub-accent);text-decoration:none;}
+    .tag{font-size:0.74rem;letter-spacing:3px;text-transform:uppercase;color:var(--hub-accent);margin-bottom:8px;}
+    h1{font-size:1.8rem;font-weight:700;margin-bottom:6px;}
+    .sub{font-size:1rem;opacity:0.85;}
+    nav.hub-nav{background:#1c2b31;padding:0 40px;display:flex;flex-wrap:wrap;gap:0;}
+    nav.hub-nav a{color:#b0bec5;text-decoration:none;padding:12px 16px;font-size:0.85rem;border-bottom:3px solid transparent;transition:all 0.2s;}
+    nav.hub-nav a:hover{color:#fff;border-bottom-color:var(--hub-accent);}
+    nav.hub-nav a.active{color:#fff;border-bottom-color:var(--hub-accent);font-weight:600;}
+    main{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .section-title{font-size:1.2rem;font-weight:700;color:var(--hub-dark);margin:28px 0 14px;padding-bottom:6px;border-bottom:2px solid var(--hub-mid);}
+    .controls-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+    .ctrl{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid var(--hub-primary);}
+    .ctrl.prevent{border-left-color:#1a5c2a;}
+    .ctrl.detect{border-left-color:#1565c0;}
+    .ctrl .cat{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+    .ctrl.prevent .cat{color:#1a5c2a;}
+    .ctrl.detect .cat{color:#1565c0;}
+    .ctrl h4{font-size:0.9rem;font-weight:700;color:var(--hub-dark);margin-bottom:6px;}
+    .ctrl p{font-size:0.82rem;color:#444;line-height:1.45;}
+    .checklist{background:#fff;border-radius:10px;padding:20px 24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:24px;}
+    .checklist h3{font-size:0.95rem;font-weight:700;color:var(--hub-dark);margin-bottom:14px;}
+    .checklist ol{padding-left:20px;}
+    .checklist li{font-size:0.85rem;color:#333;line-height:1.6;margin-bottom:6px;padding-left:4px;}
+    .checklist li strong{color:var(--hub-dark);}
+    .matrix{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.07);overflow:hidden;margin-bottom:24px;}
+    .matrix table{width:100%;border-collapse:collapse;margin:0;}
+    .matrix th{background:var(--hub-dark);color:#fff;padding:10px 14px;font-size:0.8rem;text-align:left;font-weight:600;}
+    .matrix td{padding:9px 14px;font-size:0.82rem;border-bottom:1px solid #eceff1;}
+    .matrix tr:last-child td{border-bottom:none;}
+    .score{display:inline-block;font-size:0.72rem;font-weight:700;padding:2px 8px;border-radius:4px;}
+    .sc-high{background:#1a5c2a;color:#fff;}
+    .sc-med{background:#c8a84b;color:#000;}
+    .sc-low{background:#e65100;color:#fff;}
+    .info-box{background:#eceff1;border-left:4px solid var(--hub-primary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#1a2327;line-height:1.6;}
+    .warn-box{background:#fff3e0;border-left:4px solid var(--hub-secondary);border-radius:6px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;color:#4a2800;line-height:1.6;}
+    .warn-box strong{color:var(--hub-secondary);}
+    .actions{background:#1c2b31;border-radius:10px;padding:24px;margin-bottom:24px;color:#b0bec5;}
+    .actions h3{font-size:0.95rem;font-weight:700;color:var(--hub-accent);margin-bottom:14px;}
+    .actions ol{padding-left:20px;}
+    .actions li{font-size:0.85rem;line-height:1.7;margin-bottom:4px;}
+    .actions li strong{color:#eceff1;}
+    footer{background:#1c2b31;color:#b0bec5;text-align:center;padding:24px;font-size:0.82rem;margin-top:48px;}
+    footer a{color:var(--hub-accent);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Engineering &amp; Construction (CB/CC)</a> › Risk Mitigation</div>
+    <div class="tag">Module 06</div>
+    <h1>Risk Mitigation</h1>
+    <div class="sub">Construction risk control framework, project monitoring, DSU obligations and top actions for insureds</div>
+  </div>
+</header>
+
+<nav class="hub-nav">
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html" class="active">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+</nav>
+
+<main>
+
+  <!-- PREVENT controls -->
+  <div class="section-title">PREVENT Controls (6)</div>
+  <div class="controls-grid">
+    <div class="ctrl prevent">
+      <div class="cat">Prevent</div>
+      <h4>Site-Specific Risk Assessment</h4>
+      <p>A pre-construction site-specific risk assessment (SSRA) covering ground conditions, NatCat exposure (flood zone, earthquake zone, wind), adjacent land use, utility interfaces, and access/traffic management. The SSRA should be shared with underwriters at submission and updated for material site changes. CDM Regulations 2015 require a Construction Phase Plan from the principal contractor. <sup>[L4]</sup></p>
+    </div>
+    <div class="ctrl prevent">
+      <div class="cat">Prevent</div>
+      <h4>NatCat Pre-Loss Planning</h4>
+      <p>For projects in NatCat-exposed zones: pre-construction flood barrier planning, temporary works design accounting for seasonal flood events, storm preparedness protocols (securing plant and materials before cyclone/hurricane season), and earthquake vulnerability assessment for structure at various stages of completion. Weather-window management plans for offshore operations.</p>
+    </div>
+    <div class="ctrl prevent">
+      <div class="cat">Prevent</div>
+      <h4>Hot Work Permit System</h4>
+      <p>A formal hot work permit system (welding, cutting, grinding, use of flame) is the primary fire prevention control on construction sites. Permits must identify the work scope, the fire watch duration post-completion, isolation of adjacent flammables, and sign-off by a responsible supervisor. Lack of a hot work permit system is a significant CAR underwriting negative indicator. <sup>[L4]</sup></p>
+    </div>
+    <div class="ctrl prevent">
+      <div class="cat">Prevent</div>
+      <h4>Contractor Prequalification Audit</h4>
+      <p>Main contractor's formal prequalification of subcontractors, covering financial health, technical competence, HSE record, quality management system (ISO 9001), and CAR/TPL insurance. Poor subcontractor selection is a primary driver of quality deficiencies and temporary works failures. Underwriters should request evidence of prequalification register at submission. <sup>[L4]</sup></p>
+    </div>
+    <div class="ctrl prevent">
+      <div class="cat">Prevent</div>
+      <h4>Temporary Works Design Review</h4>
+      <p>Formal independent design review of all temporary works (falsework, formwork, scaffolding, cofferdams, excavation support, shoring). The majority of major construction collapses are attributed to temporary works failure. BS 5975:2019 (Code of Practice for Temporary Works) provides the UK standard; FIDIC contracts require principal approval of contractor's temporary works design.</p>
+    </div>
+    <div class="ctrl prevent">
+      <div class="cat">Prevent</div>
+      <h4>Testing &amp; Commissioning (T&amp;C) Plan Review</h4>
+      <p>For EAR projects: review of the commissioning plan, staged energisation/pressurisation protocols, hold points requiring engineer approval before proceeding, and T&amp;C team qualifications. The T&amp;C period is when defect-related losses peak. Underwriters should request the T&amp;C programme at EAR submission. Standalone T&amp;C section rating requires this input. <sup>[I9]</sup></p>
+    </div>
+  </div>
+
+  <!-- DETECT controls -->
+  <div class="section-title">DETECT Controls (4)</div>
+  <div class="controls-grid">
+    <div class="ctrl detect">
+      <div class="cat">Detect</div>
+      <h4>Progress Monitoring &amp; Milestone Reporting to Underwriter</h4>
+      <p>Quarterly or milestone-based project progress reports to the underwriter, covering schedule vs baseline, cost performance index (CPI), earned value, and any emerging quality concerns. Material adverse developments (ground condition changes, programme delays exceeding 10%, contractor financial difficulties) should trigger mid-policy notification. <sup>[I6]</sup></p>
+    </div>
+    <div class="ctrl detect">
+      <div class="cat">Detect</div>
+      <h4>Independent Project Monitor (IPM)</h4>
+      <p>An independent lender's or insurer's project monitor reviews progress, quality and cost on high-value projects. Critical for DSU-backed programmes — the IPM certifies delay duration and cause for DSU claim purposes. Banks funding PFI/PPP projects typically require an IPM as a condition of drawdown. Underwriters may impose an IPM requirement as a risk management condition on major projects. <sup>[I6]</sup></p>
+    </div>
+    <div class="ctrl detect">
+      <div class="cat">Detect</div>
+      <h4>Geotechnical Monitoring Systems</h4>
+      <p>Real-time inclinometers, settlement monitoring points, piezometers and groundwater monitoring instruments for deep excavation, tunnelling and dam construction. Early detection of ground movement beyond design thresholds enables pre-loss intervention. Required by most major infrastructure contracts; data should be shared with underwriters for high-risk tunnelling or deep excavation projects.</p>
+    </div>
+    <div class="ctrl detect">
+      <div class="cat">Detect</div>
+      <h4>Structural Health Monitoring (SHM)</h4>
+      <p>For major structures (bridges, dams, offshore foundations): real-time strain gauging, accelerometry, and displacement monitoring during construction and commissioning. SHM provides objective evidence of structural performance and early warning of emerging defects. Post-Grenfell, increased scrutiny of fire detection and compartmentation monitoring in occupied buildings adjacent to construction. <sup>[L5]</sup></p>
+    </div>
+  </div>
+
+  <!-- Project monitoring checklist -->
+  <div class="section-title">Project Monitoring Checklist — 8 Key Items</div>
+  <div class="checklist">
+    <h3>Underwriter / Broker checklist for in-force project review</h3>
+    <ol>
+      <li><strong>Schedule vs Budget Variance:</strong> Is the project running to the approved baseline programme? Cost overruns exceeding 15% of contract sum should trigger underwriter notification and re-assessment of project value (sums insured adequacy).</li>
+      <li><strong>Subcontractor Financial Health:</strong> Review of any subcontractor in financial difficulty — insolvency of a specialist subcontractor mid-project is a primary delay and quality risk. Confirm performance bonds are in place for critical packages.</li>
+      <li><strong>Weather Window Management (Offshore):</strong> For offshore projects — confirm marine contractor's weather-window compliance record and any deviation from vessel operational limits. Unreported deviations may affect coverage under CAR/EAR marine warranties.</li>
+      <li><strong>Testing Protocol Review:</strong> For EAR/MB projects approaching commissioning — confirm T&C programme is on schedule; all hold points have been signed off; independent commissioning engineer is in attendance for critical tests.</li>
+      <li><strong>Change Order Management:</strong> Uncontrolled change orders (scope additions without corresponding programme extensions) are a primary driver of quality shortcuts and delay. Review change order register at each monitoring visit.</li>
+      <li><strong>Occupancy / Handover Milestone Notification:</strong> Partial practical completion and sectional handover changes the insurance risk profile — property all-risks replaces CAR; MEP commissioning risk peaks. Notify underwriters of phased handover to avoid coverage gaps.</li>
+      <li><strong>Claims-Made Notification under PI:</strong> If a design defect is suspected, notify the design team's PI insurer immediately — PI policies are claims-made, and a notification failure can bar recovery under subrogation. CAR and PI notification must be co-ordinated.</li>
+      <li><strong>Practical Completion Certificate:</strong> Issue of the PC Certificate is a key insurance trigger — the construction period ends, the maintenance period begins, and the contract works sum insured basis typically shifts to reinstatement or agreed value for the completed structure. Ensure underwriters are notified within 30 days of PC.</li>
+    </ol>
+  </div>
+
+  <!-- Programme quality scoring matrix -->
+  <div class="section-title">Programme Quality Scoring Matrix<span class="badge b-e" style="display:inline-block;font-size:0.65rem;font-weight:700;padding:1px 5px;border-radius:3px;background:#e65100;color:#fff;margin-left:6px;">EST</span></div>
+  <div class="matrix">
+    <table>
+      <thead>
+        <tr><th>Control Area</th><th>Best Practice</th><th>Adequate</th><th>Deficient</th><th>Rating Impact</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Site-Specific Risk Assessment</td>
+          <td><span class="score sc-high">SSRA + NatCat analysis</span></td>
+          <td><span class="score sc-med">Generic H&amp;S plan</span></td>
+          <td><span class="score sc-low">None provided</span></td>
+          <td>Up to −12% credit / +15% loading</td>
+        </tr>
+        <tr>
+          <td>Temporary Works Design</td>
+          <td><span class="score sc-high">Independent design check</span></td>
+          <td><span class="score sc-med">Internal review only</span></td>
+          <td><span class="score sc-low">No formal review</span></td>
+          <td>Up to −8% credit / +20% loading</td>
+        </tr>
+        <tr>
+          <td>Hot Work Permit System</td>
+          <td><span class="score sc-high">Formal permit + fire watch</span></td>
+          <td><span class="score sc-med">Informal supervisor approval</span></td>
+          <td><span class="score sc-low">No system in place</span></td>
+          <td>Up to −6% credit / +12% loading</td>
+        </tr>
+        <tr>
+          <td>Subcontractor Prequalification</td>
+          <td><span class="score sc-high">Formal register + audit</span></td>
+          <td><span class="score sc-med">Basic financial check</span></td>
+          <td><span class="score sc-low">Open tendering, no checks</span></td>
+          <td>Up to −10% credit / +18% loading</td>
+        </tr>
+        <tr>
+          <td>T&amp;C Plan (EAR only)</td>
+          <td><span class="score sc-high">Detailed plan + hold points</span></td>
+          <td><span class="score sc-med">Programme only, no hold points</span></td>
+          <td><span class="score sc-low">No formal T&C plan</span></td>
+          <td>Up to −15% credit / +30% loading on T&C section</td>
+        </tr>
+        <tr>
+          <td>Progress Monitoring to Underwriter</td>
+          <td><span class="score sc-high">Quarterly reports + IPM</span></td>
+          <td><span class="score sc-med">Annual update only</span></td>
+          <td><span class="score sc-low">No reporting</span></td>
+          <td>Material for DSU warranty compliance</td>
+        </tr>
+        <tr>
+          <td>NatCat Pre-Loss Planning</td>
+          <td><span class="score sc-high">Documented protocol + drills</span></td>
+          <td><span class="score sc-med">General awareness</span></td>
+          <td><span class="score sc-low">No planning</span></td>
+          <td>Up to −8% credit / +25% loading in NatCat zones</td>
+        </tr>
+        <tr>
+          <td>PI Interface Management</td>
+          <td><span class="score sc-high">Coordinated PI/CAR protocol</span></td>
+          <td><span class="score sc-med">Separate management of each</span></td>
+          <td><span class="score sc-low">No PI coordination</span></td>
+          <td>Affects subrogation recovery potential</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DSU warning -->
+  <div class="warn-box">
+    <strong>DSU / ALOP — Notification Obligations and the Project Monitor:</strong> DSU coverage contains strict notification requirements. The insured must notify the underwriter of any physical damage event likely to cause a delay <em>as soon as practicable</em> — typically within 30 days. Failure to notify can void DSU coverage even where the underlying physical damage claim is valid. The Project Monitor's role is critical: delay certification (confirmation of the period of delay attributable to the insured event) is the primary quantum document for DSU claims. Underwriters should require IPM appointment as a condition of DSU coverage on projects exceeding £50m contract value. <sup>[I6]</sup>
+  </div>
+
+  <!-- 7 top actions -->
+  <div class="actions">
+    <h3>7 Top Actions for Insureds</h3>
+    <ol>
+      <li><strong>Commission a site-specific NatCat exposure assessment</strong> before programme start — flood zone, earthquake zone, wind/typhoon track. Build this into the programme contingency.</li>
+      <li><strong>Appoint an independent temporary works design checker</strong> for all major falsework, formwork and excavation support — the majority of catastrophic collapses trace to temporary works failures.</li>
+      <li><strong>Implement a hot work permit system from day one</strong> — fire is the highest frequency cause of major CAR losses on building projects.</li>
+      <li><strong>Prequalify all specialist subcontractors</strong> before award — financial health, technical track record, HSE record, and adequate CAR/TPL/PI insurance.</li>
+      <li><strong>Appoint an Independent Project Monitor (IPM)</strong> for all projects with DSU coverage — certify delays promptly, co-ordinate with underwriters on notification.</li>
+      <li><strong>Review the LEG clause selected</strong> against the actual design complexity and innovation risk. If the design involves novel techniques or untested materials, LEG 3 is appropriate — do not accept LEG 1 as a default cost-saving measure.</li>
+      <li><strong>Notify underwriters at practical completion</strong> — trigger the maintenance period, confirm revised sums insured, and ensure PI interface documentation (notification to design team's PI insurer) is complete if any defect concerns exist.</li>
+    </ol>
+  </div>
+
+</main>
+
+<footer>
+  <p>Risk Code Hub — Engineering &amp; Construction (CB/CC) &nbsp;|&nbsp; <a href="../index.html">← Hub Index</a> &nbsp;|&nbsp; <a href="global-program.html">Next: Global Programme →</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+{
+  "riskCode": "V",
+  "label": "Marine Cargo — Open Cover",
+  "modelType": "rate-on-value",
+  "currency": "USD",
+  "exposureMeasure": {
+    "key": "cargoValue",
+    "label": "Annual Cargo Value ($)",
+    "defaultValue": 45000000,
+    "hint": "Estimated annual shipment value"
+  },
+  "baseRate": {
+    "key": "baseRate",
+    "label": "Base Rate",
+    "value": 0.0025
+  },
+  "ratingFactors": [
+    {
+      "key": "commodity",
+      "label": "Commodity Type",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "general",
+      "options": {
+        "electronics": {
+          "label": "Electronics",
+          "factor": 1.4
+        },
+        "vehicles": {
+          "label": "Vehicles",
+          "factor": 1.2
+        },
+        "machinery": {
+          "label": "Machinery/Equipment",
+          "factor": 1
+        },
+        "steel": {
+          "label": "Steel/Metals",
+          "factor": 0.65
+        },
+        "bulk": {
+          "label": "Bulk Commodities",
+          "factor": 0.5
+        },
+        "general": {
+          "label": "General Cargo",
+          "factor": 1
+        },
+        "pharma": {
+          "label": "Pharmaceuticals",
+          "factor": 1.3
+        },
+        "perishable": {
+          "label": "Perishables",
+          "factor": 1.25
+        },
+        "project_cargo": {
+          "label": "Project Cargo",
+          "factor": 1.1
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "iccClause",
+      "label": "ICC Clause",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "A",
+      "options": {
+        "A": {
+          "label": "ICC (A) — All Risks",
+          "factor": 1
+        },
+        "B": {
+          "label": "ICC (B) — Named Perils",
+          "factor": 0.8
+        },
+        "C": {
+          "label": "ICC (C) — Major Perils",
+          "factor": 0.6
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "tradeLane",
+      "label": "Trade Route",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "transatlantic": {
+          "label": "Transatlantic",
+          "factor": 0.9
+        },
+        "standard": {
+          "label": "Standard International",
+          "factor": 1
+        },
+        "asia_europe": {
+          "label": "Asia-Europe",
+          "factor": 1.05
+        },
+        "red_sea": {
+          "label": "Red Sea Transit",
+          "factor": 1.3
+        },
+        "west_africa": {
+          "label": "West Africa",
+          "factor": 1.2
+        },
+        "high_risk": {
+          "label": "High Risk (piracy/war)",
+          "factor": 1.5
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "packing",
+      "label": "Packing Quality",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "standard",
+      "options": {
+        "professional": {
+          "label": "Professional (containerised)",
+          "factor": 0.85
+        },
+        "standard": {
+          "label": "Standard",
+          "factor": 1
+        },
+        "breakbulk": {
+          "label": "Break-Bulk",
+          "factor": 1.15
+        },
+        "open_deck": {
+          "label": "Open Deck/Project",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    },
+    {
+      "key": "lossHistory",
+      "label": "Loss History (5yr)",
+      "type": "categorical",
+      "appliesTo": "rate",
+      "defaultValue": "good",
+      "options": {
+        "excellent": {
+          "label": "Excellent (<30% LR)",
+          "factor": 0.8
+        },
+        "good": {
+          "label": "Good (30-50% LR)",
+          "factor": 0.9
+        },
+        "average": {
+          "label": "Average (50-65% LR)",
+          "factor": 1
+        },
+        "poor": {
+          "label": "Poor (>65% LR)",
+          "factor": 1.25
+        }
+      },
+      "hint": ""
+    }
+  ],
+  "fixedCosts": {
+    "policyAdminPerYear": 3000,
+    "claimsHandlingPerClaim": 15000,
+    "systemOverheadPerYear": 1500,
+    "fraudReservePerClaim": 0,
+    "expectedClaimsPerYear": 0.04,
+    "obsolescenceRate": 0
+  },
+  "variableCosts": {
+    "commissionRate": 0.22,
+    "reinsuranceRate": 0.05
+  },
+  "targetProfitMargin": 0.05
+}
