@@ -92,6 +92,38 @@
     var fields = buildFormFields(schema, idx);
     fields.forEach(function (f) { form.appendChild(f); });
 
+    // Loss ratio scaler
+    var scalerWrap = document.createElement('div');
+    scalerWrap.className = 'rater-field rater-scaler-field';
+    var scalerLabel = document.createElement('label');
+    scalerLabel.htmlFor = 'rf-' + idx + '-lrScaler';
+    scalerLabel.textContent = 'Loss Ratio Adjustment';
+    var scalerRow = document.createElement('div');
+    scalerRow.className = 'scaler-row';
+    var scalerRange = document.createElement('input');
+    scalerRange.type = 'range';
+    scalerRange.id = 'rf-' + idx + '-lrScaler';
+    scalerRange.min = '0.5';
+    scalerRange.max = '2.0';
+    scalerRange.step = '0.05';
+    scalerRange.value = '1.0';
+    scalerRange.className = 'scaler-range';
+    var scalerVal = document.createElement('span');
+    scalerVal.className = 'scaler-value';
+    scalerVal.textContent = '1.00x';
+    scalerRange.oninput = function () {
+      scalerVal.textContent = parseFloat(scalerRange.value).toFixed(2) + 'x';
+    };
+    scalerRow.appendChild(scalerRange);
+    scalerRow.appendChild(scalerVal);
+    var scalerHint = document.createElement('div');
+    scalerHint.className = 'field-hint';
+    scalerHint.textContent = '0.50x–2.00x scales expected losses up/down';
+    scalerWrap.appendChild(scalerLabel);
+    scalerWrap.appendChild(scalerRow);
+    scalerWrap.appendChild(scalerHint);
+    form.appendChild(scalerWrap);
+
     var calcBtn = document.createElement('button');
     calcBtn.className = 'rater-calc-btn';
     calcBtn.textContent = 'Calculate';
@@ -122,7 +154,12 @@
     var section = document.getElementById('rc-section-' + idx);
     var form = section.querySelector('.rater-form');
     var input = readInputs(schema, form, idx);
-    var result = _engine.rate(schema, input, {});
+    var scalerEl = form.querySelector('#rf-' + idx + '-lrScaler');
+    var overrides = {};
+    if (scalerEl) {
+      overrides.lossRatioScaler = parseFloat(scalerEl.value) || 1.0;
+    }
+    var result = _engine.rate(schema, input, overrides);
     _results[idx] = result;
     renderSectionResults(idx, schema, result);
     updateTotals();
@@ -149,9 +186,12 @@
       result.ratios.combinedRatio > 1 ? 'loss' : result.ratios.combinedRatio > 0.95 ? 'tight' : 'profit'));
     metrics.appendChild(miniMetric('UW Result', sym + fmt2(result.waterfall.underwritingResult),
       result.waterfall.underwritingResult >= 0 ? 'profit' : 'loss'));
-    metrics.appendChild(miniMetric('Loss Ratio', fmtPct1(result.ratios.lossRatio)));
+    var lrScaler = result.costInputs.lossRatioScaler || 1.0;
+    metrics.appendChild(miniMetric('Loss Ratio', fmtPct1(result.ratios.lossRatio),
+      lrScaler !== 1.0 ? 'scaled' : ''));
     metrics.appendChild(miniMetric('Net Premium', sym + fmt2(result.waterfall.netPremium)));
-    metrics.appendChild(miniMetric('Expected Claims', sym + fmt2(result.waterfall.expectedClaims)));
+    metrics.appendChild(miniMetric('Expected Claims',
+      sym + fmt2(result.waterfall.expectedClaims) + (lrScaler !== 1.0 ? ' (' + lrScaler.toFixed(2) + 'x)' : '')));
 
     container.appendChild(metrics);
 

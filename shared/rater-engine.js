@@ -122,6 +122,10 @@
     var exposureForObsolescence = lossModel.modelType === 'rate-on-value' ? lossModel.exposureBase : (input.assetValue || input[schema.exposureMeasure ? schema.exposureMeasure.key : ''] || 0);
     var totalObsolescence = exposureForObsolescence * obsolescenceRate * termYears;
 
+    // --- Loss ratio adjustment scaler ---
+    var lossRatioScaler = o.lossRatioScaler !== undefined ? o.lossRatioScaler : 1.0;
+    purePremium = purePremium * lossRatioScaler;
+
     var totalFixed = totalPolicyAdmin + totalClaimsHandling + totalSystemOverhead + totalFraudReserve + totalObsolescence;
     var totalCost = purePremium + totalFixed;
 
@@ -170,6 +174,7 @@
         systemOverheadPerYear: fixedCosts.systemOverheadPerYear || 0,
         fraudReservePerClaim: fraudReservePerClaim,
         obsolescenceRate: obsolescenceRate,
+        lossRatioScaler: lossRatioScaler,
         commissionRate: commissionRate,
         reinsuranceRate: reinsuranceRate,
         profitMargin: profitMargin
