@@ -17,6 +17,107 @@
   var _nextLineId = 1;
   var _nextLayerId = 1;
 
+  // ── Educational Guide ──────────────────────────────────────────────
+
+  function buildGuidePanel() {
+    var guide = document.createElement('div');
+    guide.className = 'prog-guide';
+
+    var toggle = document.createElement('button');
+    toggle.className = 'prog-guide-toggle';
+    var icon = document.createElement('span');
+    icon.className = 'prog-guide-icon';
+    icon.textContent = '▶';
+    toggle.appendChild(icon);
+    toggle.appendChild(document.createTextNode(' How to Use the Programme Builder'));
+
+    var body = document.createElement('div');
+    body.className = 'prog-guide-body';
+    body.innerHTML =
+      '<h4>Overview</h4>' +
+      '<p>This tool builds a multi-line insurance programme from the ground up. ' +
+      'Add individual risk codes (lines of business), stack them into a layer tower ' +
+      'with reinsurance protection, and allocate the retained premium across territories.</p>' +
+
+      '<h4>Risk Code Lines</h4>' +
+      '<p>Each line represents a single class of business — for example Aviation Hull (H2) or Marine Cargo (C3). ' +
+      'Select a hub and risk code from the dropdowns, enter the exposure details into the mini rater, ' +
+      'then click <strong>Calculate Line</strong> to generate a gross premium using the bottom-up loss-cost model.</p>' +
+
+      '<h4>Layer Tower</h4>' +
+      '<p>Insurance programmes are structured as a vertical tower of coverage layers. ' +
+      'Each layer has a <em>limit</em> (maximum payout) and an <em>attachment point</em> ' +
+      '(the loss amount at which the layer starts paying). ' +
+      'The primary layer typically attaches at ground level (0); excess layers stack above.</p>' +
+      '<dl>' +
+        '<dt>Limit</dt>' +
+        '<dd>The maximum amount this layer will pay for a single loss. For example, a $10M primary layer pays up to $10M per loss.</dd>' +
+        '<dt>Attachment (xs)</dt>' +
+        '<dd>The deductible or retention below this layer. A layer described as "$10M xs $10M" pays losses between $10M and $20M.</dd>' +
+        '<dt>Rate on Line (RoL)</dt>' +
+        '<dd>Premium expressed as a percentage of the limit. Enter as a decimal: 0.05 = 5%. A 5% RoL on a $10M limit produces $500,000 premium.</dd>' +
+        '<dt>Premium (manual)</dt>' +
+        '<dd>Alternatively, enter the layer premium directly. This overrides the RoL calculation.</dd>' +
+        '<dt>Exhaustion Point</dt>' +
+        '<dd>Attachment + Limit — the total loss at which the layer is fully used up. Shown automatically below each layer.</dd>' +
+      '</dl>' +
+
+      '<h4>Reinsurance (RI) Placements</h4>' +
+      '<p>Reinsurance transfers part of each layer\'s risk to a reinsurer. ' +
+      'Each placement has a type, a ceded share (% of premium passed to the reinsurer), ' +
+      'and a ceding commission (% the reinsurer pays back to cover acquisition costs).</p>' +
+      '<dl>' +
+        '<dt>Quota Share</dt>' +
+        '<dd>Proportional treaty — the reinsurer takes a fixed percentage of every risk on the layer. ' +
+        'Simple and predictable; both premium and losses are shared in the same proportion.</dd>' +
+        '<dt>Surplus Treaty</dt>' +
+        '<dd>Proportional treaty — the reinsurer takes the surplus above the insurer\'s retained line. ' +
+        'The ceded share varies by risk size; larger risks cede more.</dd>' +
+        '<dt>XoL Facultative</dt>' +
+        '<dd>Excess of Loss on a single risk (non-proportional). The reinsurer pays losses that exceed a per-risk retention, ' +
+        'placed on a case-by-case basis.</dd>' +
+        '<dt>XoL Treaty</dt>' +
+        '<dd>Excess of Loss across the portfolio (non-proportional). Covers aggregate or per-occurrence losses ' +
+        'exceeding a retention, under a standing treaty agreement.</dd>' +
+        '<dt>% Ceded</dt>' +
+        '<dd>The proportion of premium passed to the reinsurer. For quota share, this equals the risk share (e.g. 25% ceded = 25% of losses covered).</dd>' +
+        '<dt>% Commission</dt>' +
+        '<dd>Ceding commission — the percentage the reinsurer pays back to the cedant to cover business acquisition costs ' +
+        '(e.g. brokerage, administration). A 30% commission on $125,000 ceded returns $37,500.</dd>' +
+      '</dl>' +
+
+      '<h4>Territory Split</h4>' +
+      '<p>Allocates the retained premium (after reinsurance) across geographic territories. ' +
+      'This is used for regulatory capital allocation, solvency reporting, and performance tracking by region. ' +
+      'Shares should sum to 100%.</p>' +
+
+      '<h4>Summary Banner</h4>' +
+      '<dl>' +
+        '<dt>Total Line Premium</dt>' +
+        '<dd>Sum of all individual risk code gross premiums, calculated bottom-up from each line\'s rating model.</dd>' +
+        '<dt>Tower Premium</dt>' +
+        '<dd>Total premium across all layers in the tower. May differ from line premium if layers are priced separately using Rate on Line.</dd>' +
+        '<dt>Retained</dt>' +
+        '<dd>Premium kept by the insurer after ceding to reinsurers. Shown with retention rate as a percentage.</dd>' +
+        '<dt>Ceded</dt>' +
+        '<dd>Total premium passed to reinsurers across all placements.</dd>' +
+        '<dt>Commission Back</dt>' +
+        '<dd>Total ceding commission returned by reinsurers — offsets part of the cost of reinsurance.</dd>' +
+        '<dt>Net RI Cost</dt>' +
+        '<dd>Ceded minus Commission Back — the true net cost of buying reinsurance protection.</dd>' +
+      '</dl>';
+
+    toggle.onclick = function () {
+      var isOpen = body.classList.contains('open');
+      body.classList.toggle('open');
+      icon.classList.toggle('open');
+    };
+
+    guide.appendChild(toggle);
+    guide.appendChild(body);
+    return guide;
+  }
+
   // ── Init ───────────────────────────────────────────────────────────
 
   function init(containerEl, allSchemas, raterEngine, programmeEngine) {
@@ -35,6 +136,9 @@
     summary.className = 'prog-summary';
     containerEl.appendChild(summary);
 
+    // Educational guide panel
+    containerEl.appendChild(buildGuidePanel());
+
     // Main layout: 3 columns
     var main = document.createElement('div');
     main.className = 'prog-main';
@@ -42,7 +146,9 @@
     // Col 1: Lines (risk codes)
     var linesCol = document.createElement('div');
     linesCol.className = 'prog-col prog-lines-col';
-    linesCol.innerHTML = '<h2>Risk Code Lines</h2>';
+    linesCol.innerHTML = '<h2>Risk Code Lines</h2>' +
+      '<p class="prog-section-help">Each line represents an individual class of business (e.g. Aviation Hull, Marine Cargo). ' +
+      'Select a hub and risk code, fill in the exposure details, then click Calculate Line to price it.</p>';
     var addLineBtn = document.createElement('button');
     addLineBtn.className = 'prog-add-btn';
     addLineBtn.textContent = '+ Add Risk Code';
@@ -56,7 +162,9 @@
     // Col 2: Layer tower
     var towerCol = document.createElement('div');
     towerCol.className = 'prog-col prog-tower-col';
-    towerCol.innerHTML = '<h2>Layer Tower</h2>';
+    towerCol.innerHTML = '<h2>Layer Tower</h2>' +
+      '<p class="prog-section-help">A tower stacks layers of insurance cover. The primary layer pays first; ' +
+      'excess layers attach above it. Set a Rate on Line or manual premium for each layer, then add reinsurance placements to cede risk.</p>';
     var addLayerBtn = document.createElement('button');
     addLayerBtn.className = 'prog-add-btn';
     addLayerBtn.textContent = '+ Add Layer';
@@ -70,7 +178,9 @@
     // Col 3: Territories + results
     var rightCol = document.createElement('div');
     rightCol.className = 'prog-col prog-right-col';
-    rightCol.innerHTML = '<h2>Territory Split</h2>';
+    rightCol.innerHTML = '<h2>Territory Split</h2>' +
+      '<p class="prog-section-help">Allocates retained premium across geographic territories. ' +
+      'Shares should sum to 100%. Used for regulatory capital allocation and solvency reporting.</p>';
     var terrContainer = document.createElement('div');
     terrContainer.id = 'prog-territories';
     rightCol.appendChild(terrContainer);
@@ -78,6 +188,10 @@
     resultsHeader.textContent = 'Programme Results';
     resultsHeader.style.marginTop = '24px';
     rightCol.appendChild(resultsHeader);
+    var resultsHelp = document.createElement('p');
+    resultsHelp.className = 'prog-section-help';
+    resultsHelp.textContent = 'Shows each layer\'s gross premium, how much is retained vs. ceded to reinsurers, and how retained premium is split across territories.';
+    rightCol.appendChild(resultsHelp);
     var resultsContainer = document.createElement('div');
     resultsContainer.id = 'prog-results';
     rightCol.appendChild(resultsContainer);
@@ -385,10 +499,14 @@
       var fields = document.createElement('div');
       fields.className = 'prog-layer-fields';
 
-      fields.appendChild(layerField('Limit', layer.limit, function (v) { layer.limit = v; }));
-      fields.appendChild(layerField('Attachment (xs)', layer.attachment, function (v) { layer.attachment = v; }));
-      fields.appendChild(layerField('Rate on Line', layer.rateOnLine, function (v) { layer.rateOnLine = v; }, true));
-      fields.appendChild(layerField('Premium (manual)', layer.premium, function (v) { layer.premium = v; }));
+      fields.appendChild(layerField('Limit', layer.limit, function (v) { layer.limit = v; }, false,
+        'Maximum payout for a single loss on this layer'));
+      fields.appendChild(layerField('Attachment (xs)', layer.attachment, function (v) { layer.attachment = v; }, false,
+        'Loss amount at which this layer begins to pay'));
+      fields.appendChild(layerField('Rate on Line', layer.rateOnLine, function (v) { layer.rateOnLine = v; }, true,
+        'Premium as % of limit (e.g. 0.05 = 5%)'));
+      fields.appendChild(layerField('Premium (manual)', layer.premium, function (v) { layer.premium = v; }, false,
+        'Override: enter premium directly instead of using RoL'));
 
       card.appendChild(fields);
 
@@ -421,7 +539,7 @@
     });
   }
 
-  function layerField(label, value, onChange, isRate) {
+  function layerField(label, value, onChange, isRate, hint) {
     var wrap = document.createElement('div');
     wrap.className = 'prog-layer-field';
     var lbl = document.createElement('label');
@@ -433,6 +551,12 @@
     inp.onchange = function () { onChange(parseFloat(inp.value) || 0); };
     wrap.appendChild(lbl);
     wrap.appendChild(inp);
+    if (hint) {
+      var h = document.createElement('div');
+      h.className = 'prog-field-hint';
+      h.textContent = hint;
+      wrap.appendChild(h);
+    }
     return wrap;
   }
 
