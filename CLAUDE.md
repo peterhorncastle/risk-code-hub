@@ -1,153 +1,48 @@
-# Risk Code Hub — Build Instructions
+# Risk Code Hub — Status
 
-**MANDATORY: Read this file at the start of every session before building or editing any hub.**
+Build/style/template instructions (shared stylesheet, HTML skeleton, confidence badges, rater system, module spec, index-update checklist) now live in the `build-hub` skill — it loads automatically when building or editing a hub.
 
----
-
-## Shared Stylesheet & Template
-
-All hub pages use a **shared stylesheet** and a **canonical template**. These are the ground truth for design — not memory, not previous hub files.
-
-| File | Purpose |
-|------|---------|
-| `hub-styles.css` | Shared stylesheet — ALL structural CSS lives here |
-| `_template.html` | Blank canonical page — copy this for every new module |
-| `shared/` | Shared JS/CSS engine library for raters & programme builder (rater-engine.js, rater-ui.js, rater-styles.css, programme-engine.js, programme-ui.js, programme-styles.css) |
-| `programme-builder.html` | Global Programme Builder — cross-hub multi-line programme tool |
-| `methodology.html` | Research Methodology & Sources page |
-| `generate-raters.js` | Node.js script — auto-generates rater.html files from hub-index.json + theme map |
-
-**Before starting a new hub:** Read `_template.html` in full. It contains full instructions and all available CSS class names.
-
----
-
-## Hub Structure (every hub, every page)
-
-```
-<link rel="stylesheet" href="../hub-styles.css">
-<style>
-  :root {
-    --hub-primary:   #XXXXXX;
-    --hub-dark:      #XXXXXX;
-    --hub-light:     #XXXXXX;
-    --hub-accent:    #c8a84b;   /* gold — standard unless hub genuinely differs */
-    --header-gradient: linear-gradient(135deg, ... );
-    --header-sub:    #XXXXXX;
-  }
-</style>
-```
-
-**No other inline CSS.** If a pattern isn't in `hub-styles.css`, add it there first, then use it.
-
-### HTML skeleton — every page
-
-```html
-<header>
-  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">[Hub]</a> › [Page]</div>
-  <div class="tag">Module NN — [Name]</div>
-  <h1>[Hub] — [Module Title]</h1>
-  <p>[Description]</p>
-</header>
-<nav>
-  <a href="overview.html">Overview</a>
-  <a href="history.html">History</a>
-  <a href="timeline.html">Timeline</a>
-  <a href="database.html">Loss Database</a>
-  <a href="underwriting.html">Underwriting</a>
-  <a href="rates-analysis.html">Rates &amp; ROE</a>
-  <a href="risk-mitigation.html">Risk Mitigation</a>
-  <a href="global-program.html">Global Programme</a>
-  <a href="references.html">References</a>
-</nav>
-<main>...</main>
-<footer><a href="../index.html">← Risk Code Hub</a> | [Hub] ([Code]) — [Module] | Version X.X · Month Year</footer>
-```
-
-- Nav: `class="active"` on the current page tab only
-- No bottom nav-strips, no breadcrumb-only navigation
-- `<nav>` always immediately follows `</header>`
-
----
-
-## Confidence Badges — Lightweight Citations Standard
-
-Every factual claim must carry one badge:
-
-| Badge | Class | Meaning |
-|-------|-------|---------|
-| VER | `.b-v` | Verified — primary public source |
-| EST | `.b-e` | Estimated — broker/market consensus |
-| ILLUS | `.b-i` | Illustrative — constructed composite |
-| GAP | `.b-g` | Data gap — publicly unavailable |
-
-Usage: `<span class="badge b-v">VER</span>`
-
----
-
-## Rater System (added May 2026)
-
-Every hub now has an interactive rater. Each hub folder contains:
-- `rater.html` — interactive rating tool, references `../shared/rater-engine.js` and `../shared/rater-styles.css`
-- `rate-tables/<CODE>.json` — one JSON file per Lloyd's risk code (195 files total across all hubs)
-
-**Rate table JSON schema:**
-```json
-{
-  "riskCode": "PB",
-  "label": "Product Recall",
-  "modelType": "rate-on-value",
-  "currency": "GBP",
-  "exposureMeasure": { "key": "annualRevenue", "label": "...", "defaultValue": 50000000 },
-  "baseRate": { "key": "baseRate", "label": "Base Rate", "value": 0.0015 },
-  "ratingFactors": [ { "key": "...", "label": "...", "type": "categorical|band|numeric", ... } ],
-  "minimumPremium": 5000
-}
-```
-
-When building a new hub, also create `rater.html` + one `rate-tables/<CODE>.json` per risk code. Use `generate-raters.js` as reference for the hub theme colour map.
-
-The nav does **not** include a Rater tab — rater.html is accessible from overview.html or directly, not via the standard 9-page nav.
-
----
-
-## Standard Module Content (9 modules per hub)
-
-| Module | File | Key content |
-|--------|------|-------------|
-| Overview | `overview.html` | Stats row (5–6 stats), risk code table, coverage taxonomy (6 cards), market participants, module nav grid |
-| History | `history.html` | 5 eras, key figures, regulatory evolution |
-| Timeline | `timeline.html` | 20 events, coloured dots/tags, legend |
-| Loss Database | `database.html` | 35 events, JS filters (type + severity), expandable rows |
-| Underwriting | `underwriting.html` | Rating formula box, factor cards, 2 worked examples, pre-bind checklist |
-| Rates & ROE | `rates-analysis.html` | 3 Chart.js charts (Chart.js 4.4.1 from cdnjs), 4-era cycle, rate benchmark table, Bull/Base/Bear ROE |
-| Risk Mitigation | `risk-mitigation.html` | Control cards, regulatory standards table (8 rows), before/during guidance |
-| Global Programme | `global-program.html` | Coverage tower, admitted matrix, placement workflow, case study |
-| References | `references.html` | 6 source category cards, 6 landmark cases, 20-row confidence audit, 5 data gaps |
-
----
-
-## Index Files — Update After Each Hub
-
-When a hub is complete, update ALL of these:
-1. `hub-index.json` — status `"planned"` → `"complete"`, expanded description + keywords
-2. `index.html` — HUB_DATA entry status + footer version/hub count
-3. `build-tracker.html` — status + version
-4. `CHANGELOG.md` — prepend new version entry
-5. `project_recall_hub.md` (auto-memory) — version + hub status table
-6. `MEMORY.md` (auto-memory) — version + hub list
-7. `rater.html` + `rate-tables/<CODE>.json` — create rater for each risk code in the hub
-
----
-
-## Version Numbering
-
-Format: `v[major].[minor]` — minor increments by 1 per completed hub.
-Current: **v5.2 — May 2026 — 52 hubs complete**
+Version format: `v[major].[minor]` — minor increments by 1 per completed hub.
+Current: **v6.4 — July 2026 — 62 hubs complete** (Reinsurance group COMPLETE; **inline-confidence rollout COMPLETE** — all 62 hubs on the VER/EST/ILLUS/GAP standard with a References/Confidence-Audit page; 0 `<sup>` footnotes remain platform-wide)
 
 ---
 
 ## Current Hub Status
 
-52 hubs complete. See `project_recall_hub.md` in auto-memory for full status table. ~8 hubs remaining to ~60 total.
+62 hubs complete. The **Reinsurance group** is complete: `reinsurance-general/` (gateway), `reinsurance-cat-xol/` (Catastrophe XoL), `reinsurance-quota-share/` (Quota Share), `reinsurance-surplus/` (Surplus Treaty), `reinsurance-per-risk-xol/` (Per-Risk XoL), `reinsurance-stop-loss/` (Stop-Loss / Aggregate), `reinsurance-facultative/` (Facultative), `reinsurance-retrocession/` (Retrocession), `reinsurance-structured/` (Structured / Finite) and `reinsurance-ils/` (ILS / Alternative Capital) are complete — **the 10-hub Reinsurance group is finished**. Facultative uses purple (`#6a3a7a`) and a two-panel single-risk rater; Retrocession uses deep-maroon (`#7a2f3a`) and a two-panel retro rater (indemnity cat layer + binary ILW with the RoL÷prob multiple); Structured/Finite uses charcoal (`#4a4f57`) and a two-panel LPT + ADC rater (discounted-reserve LPT + normal reserve-stop-loss ADC); ILS uses cyan (`#0f8a9c`) and a two-panel cat-bond + collateralised-sidecar rater (expected-loss/multiple + collateralised cession). Cat XoL uses storm-blue (`#264b7a`) and a cat layer rater; Quota Share uses emerald (`#2f6b4a`) and a proportional-cession rater; Surplus uses teal (`#1f6f78`) and a two-panel surplus-cession rater; Per-Risk XoL uses slate-indigo (`#3b4a8a`) and a burning-cost/rate-on-line rater; Stop-Loss uses amber (`#9a6a1e`) and a normal-model aggregate stop-loss rater (E[(L−a)⁺]−E[(L−b)⁺], erf/Φ/φ in-browser, flagged as a teaching approximation). Reinsurance hubs repurpose the standard 9 modules and use a bespoke **layer-pricing** rater (proportional cession economics + XoL rate-on-line/burning-cost + aggregate stop-loss) rather than the shared rate-on-value engine. See `project_recall_hub.md` in auto-memory for full status table.
 
-See `project_recall_hub.md` in auto-memory for full status table.
+---
+
+## Developer setup — working in Claude Code
+
+**What this repo is.** A static site (GitHub Pages) of 62 insurance "hubs" (each a folder of 9 HTML modules + a rater) plus shared tooling. It has grown a real software core: a **tested pricing engine** and a **flexible-rater workbench**.
+
+**Repo layout (key paths):**
+- `index.html` — search landing (Fuse.js) with an inline `HUB_DATA` array (must be updated per hub) + footer hub count.
+- `hub-index.json` — master search index (id, group, keywords, url, status per hub).
+- `<class>/` — one folder per hub: `overview/history/timeline/database/underwriting/rates-analysis/risk-mitigation/global-program/references.html` + `rater.html` + `rate-tables/*.json`.
+- `shared/` — `rater-engine.js` (pricing engine — **single source of truth**), `rater-engine.test.js`, `rater-styles.css`, `programme-*.js`.
+- `hub-styles.css` — shared stylesheet; confidence-badge palette `.b-v/.b-e/.b-i/.b-g` = VER/EST/ILLUS/GAP.
+- Docs: `CONFIDENCE-BADGE-ROLLOUT.md`, `CHANGELOG.md`, `build-tracker.html`, `methodology.html`.
+
+**Flexible Rater tool has moved out.** The rater workbench, its design doc, the rating-factor catalogue and the client-loss-model concept now live in the sibling project `../flexible-rater/` (its own repo for Claude Code). This hub keeps its **own copy** of `shared/rater-engine.js` because 60 hub raters load it at runtime — but `../flexible-rater/shared/rater-engine.js` is the **canonical / development** copy. If the engine changes there, copy it back here so the hub raters stay in sync.
+
+**Run the tests** (before and after touching anything pricing-related):
+```
+node shared/rater-engine.test.js      # expect: "26 passed, 0 failed"
+```
+Pure Node, no dependencies. Add a golden-master assertion for any new preset or behaviour.
+
+**Local preview:** it's static — `python3 -m http.server` in the repo root, then browse `http://localhost:8000` (some `fetch()` needs a server, not `file://`).
+
+**Deployment:** push to `main` → GitHub Pages via Actions → https://peterhorncastle.github.io/risk-code-hub/
+
+**Per-hub change checklist:** update the hub's 9 modules + rater, then wire `hub-index.json`, the `HUB_DATA` array + footer count in `index.html`, `build-tracker.html`, and prepend a `CHANGELOG.md` entry. Every module needs ≥1 confidence badge; the references page carries the badge legend + audit table + data gaps. QA with a grep sweep (0 `<sup>[`, 0 orphan `LEGAL/INDUSTRY` badges).
+
+## Quality standards
+- **Pricing logic lives only in `shared/rater-engine.js` (ADR-001).** The workbench and any tool must call it, never re-implement pricing maths. Extend the engine *with tests*; don't fork it.
+- Every engine change ships with a test; keep `rater-engine.test.js` green.
+- **No `eval()` / `new Function()`** — whitelisted operations only. Parse imported JSON defensively (`try/catch`, validate, clamp) and render user-supplied text via `textContent`, never `innerHTML`.
+- Guard-rails must be **loud** — the engine returns a `warnings[]` array (divisor ≥ 1 ⇒ premium undefined, negative exposure, base rate > 1); surface them, don't silently clamp.
+- **Git:** feature branches + small focused commits + a PR as the review checkpoint before merging to `main` (the deploy branch). No secrets in code or git.
+- New confidence claims use the VER/EST/ILLUS/GAP inline badges.
