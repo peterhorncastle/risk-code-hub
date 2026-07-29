@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stop-Loss — Underwriting &amp; Pricing | Risk Code Hub</title>
+  <link rel="stylesheet" href="../hub-styles.css">
+  <style>
+    :root { --hub-primary:#9a6a1e; --hub-dark:#6a4712; --hub-light:#f6ecd8; --hub-accent:#3a5a7a; --hub-secondary:#7a2f2f; --header-gradient:linear-gradient(135deg,#6a4712 0%,#9a6a1e 55%,#7c5518 100%); --header-sub:#e0c48a; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Stop-Loss</a> › Underwriting</div>
+  <div class="tag">Module 05 — Underwriting &amp; Pricing</div>
+  <h1>Stop-Loss — Underwriting &amp; Pricing</h1>
+  <p>A stop-loss is priced from the distribution of the <em>whole-year</em> loss ratio: how likely it is to breach the attachment, and how much of the layer it fills when it does.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a><a href="history.html">History</a><a href="timeline.html">Timeline</a><a href="database.html">Loss Database</a><a href="underwriting.html" class="active">Underwriting</a><a href="rates-analysis.html">Rates &amp; ROE</a><a href="risk-mitigation.html">Risk Mitigation</a><a href="global-program.html">Global Programme</a><a href="references.html">References</a><a href="rater.html">Rater</a>
+</nav>
+<main>
+  <p>Because a stop-loss responds to the sum of a year's losses, it cannot be priced from individual losses. The underwriter needs a view of the <strong>aggregate loss-ratio distribution</strong> — its mean, its spread and its shape — and then integrates the layer against it. <span class="badge b-v">VER</span></p>
+
+  <div class="formula-box">
+    <h3>The Stop-Loss Expected Cost</h3>
+    <p><strong>Expected loss to layer</strong> = E[(L − a)⁺] − E[(L − b)⁺]&nbsp; (as loss-ratio points)</p>
+    <p>where L is the whole-year loss ratio, a the attachment and b the exhaustion.</p>
+    <p><strong>Expected recovery</strong> = Expected loss to layer × (1 − co-participation) × Subject premium</p>
+    <p><strong>Technical premium</strong> = Expected recovery × (1 + risk load) ÷ (1 − expenses − brokerage)</p>
+    <p><strong>Rate-on-line</strong> = Premium ÷ Layer £ &nbsp;·&nbsp; <strong>Payback</strong> = 1 ÷ Rate-on-line</p>
+  </div>
+
+  <h2>Modelling the Aggregate</h2>
+  <div class="card-grid">
+    <div class="card"><h4>Empirical / historical</h4><p>Use the cedant's own loss-ratio history, trended and on-levelled, and read the layer cost directly off the years that breached it. Needs a long, stable history.</p></div>
+    <div class="card"><h4>Fitted distribution</h4><p>Fit a distribution to the loss ratio — normal for a first cut, but usually lognormal or a compound frequency-severity model because aggregate losses are right-skewed.</p></div>
+    <div class="card"><h4>Frequency × severity</h4><p>Simulate the number and size of losses and sum them, repeating many times, to build the aggregate distribution from the ground up — the most rigorous approach.</p></div>
+  </div>
+
+  <div class="info-box hub">
+    <strong>Why the normal model is only a teaching tool</strong>
+    The rater on this hub models the loss ratio as a <em>normal</em> distribution because it is transparent and computes in the browser. Real aggregate losses are skewed — big years are further from the mean than small years — so production pricing uses a lognormal or a simulated compound distribution. Treat the rater's numbers as illustrative of the mechanics, not as a market quote.
+  </div>
+
+  <h2>Worked Example — A Loss-Ratio Stop-Loss</h2>
+  <div class="example-box">
+    <p><strong>Setup:</strong> Subject premium £50m; cover 90%–110% loss ratio; expected loss ratio 80%; volatility (σ) 12 points; 5% cedant co-participation; risk load 25%; expenses 5%; brokerage 10%. <span class="badge b-i">ILLUS</span></p>
+    <ul>
+      <li>Probability the loss ratio breaches 90% ≈ <strong>20%</strong> (about a 1-in-5 year).</li>
+      <li>Expected loss to the 90%–110% layer ≈ <strong>1.34 points</strong> of loss ratio.</li>
+      <li>Expected recovery = 1.34% × (1 − 5%) × £50m ≈ <strong>£0.64m</strong>.</li>
+      <li>Technical premium ≈ £0.64m × 1.25 ÷ 0.85 ≈ <strong>£0.94m</strong>.</li>
+      <li>Layer £ = 20 points × £50m = £10m; rate-on-line ≈ <strong>9.4%</strong>; payback ≈ <strong>11 years</strong>.</li>
+    </ul>
+    <p>A low rate-on-line and long payback are typical of a genuine tail stop-loss — it rarely pays, but caps a disaster year.</p>
+  </div>
+
+  <h2>The Moral-Hazard Problem</h2>
+  <p>Because a stop-loss covers the whole account, it can dull the cedant's incentive to underwrite well once a bad year is already breaching the layer. Co-participation, a sensible attachment above the expected loss ratio, an annual cap and alignment features are how the reinsurer keeps the cedant's skin in the game. <span class="badge b-v">VER</span></p>
+
+  <h2>Pre-Bind Checklist</h2>
+  <div class="checklist">
+    <div class="check-item">Build the aggregate loss-ratio distribution from a long, on-levelled history.</div>
+    <div class="check-item">Set the attachment clearly above the expected loss ratio to avoid pricing attrition.</div>
+    <div class="check-item">Agree the co-participation and the annual aggregate cap (exhaustion).</div>
+    <div class="check-item">Check that the stop-loss does not simply duplicate the per-risk and cat towers below it.</div>
+    <div class="check-item">Stress the moral-hazard exposure and confirm alignment features.</div>
+  </div>
+</main>
+<footer><a href="../index.html">← Risk Code Hub</a> &nbsp;|&nbsp; Reinsurance — Stop-Loss — Module 05 Underwriting &nbsp;|&nbsp; Version 5.9 · July 2026</footer>
+</body>
+</html>

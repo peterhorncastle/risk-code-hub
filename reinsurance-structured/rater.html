@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Structured / Finite — Rater | Risk Code Hub</title>
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <style>
+    :root {
+      --hub-primary:#4a4f57; --hub-dark:#2c2f35; --hub-light:#eceef0; --hub-accent:#c8a84b;
+      --hub-secondary:#3a5a7a; --header-gradient:linear-gradient(135deg,#2c2f35 0%,#4a4f57 55%,#3a3e45 100%); --header-sub:#b8bcc4;
+    }
+    .rater-intro { max-width:1500px; margin:0 auto; padding:0 24px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Structured / Finite</a> › Rater</div>
+  <div class="tag">Structured / Finite — Rater</div>
+  <h1>Structured / Finite — Rater</h1>
+  <p>Two of the workhorses of the legacy market. Panel A prices a loss portfolio transfer (LPT) — the present value plus margins a reinsurer charges to take over a block of reserves. Panel B prices an adverse development cover (ADC) — a layer protecting reserves above the carried level. Inputs update live — indicative for training.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div class="rater-intro">
+  <div class="info-box hub" style="margin-top:24px;">
+    <strong>How it prices</strong>
+    An LPT premium is the present value of the transferred reserves (the reinsurer keeps the investment income) plus a risk margin for reserve uncertainty and a profit margin — capped by an aggregate limit. An ADC prices the reserve deterioration in a layer above the carried level, modelling the ultimate reserve outcome as a normal distribution and integrating the layer — a teaching approximation to a skewed reserve run-off.
+  </div>
+</div>
+
+<div class="rater-container">
+
+  <div class="rc-section">
+    <div class="rc-header">
+      <span class="rc-title">Panel A — Loss Portfolio Transfer (LPT)</span>
+      <span class="rc-model-tag">model: discounted reserves + margins</span>
+    </div>
+    <div class="rc-body">
+      <div class="rc-form-col">
+        <div class="rater-form">
+          <div class="rater-field"><label>Nominal reserves transferred (£)</label><input type="number" id="a_res" value="100000000" step="5000000"><div class="field-hint">Undiscounted booked reserves</div></div>
+          <div class="rater-field"><label>Mean term (years)</label><input type="number" id="a_term" value="6" step="1"><div class="field-hint">Average payout duration</div></div>
+          <div class="rater-field"><label>Discount rate %</label><input type="number" id="a_disc" value="4" step="0.25"><div class="field-hint">Investment yield assumption</div></div>
+          <div class="rater-field"><label>Risk margin % (of reserves)</label><input type="number" id="a_rm" value="6" step="0.5"><div class="field-hint">For reserve uncertainty</div></div>
+          <div class="rater-field"><label>Reinsurer profit margin % (of premium)</label><input type="number" id="a_pm" value="8" step="0.5"><div class="field-hint">Target profit load</div></div>
+          <div class="rater-field"><label>Aggregate limit % (of reserves)</label><input type="number" id="a_cap" value="130" step="5"><div class="field-hint">Cap on the reinsurer's payout</div></div>
+        </div>
+      </div>
+      <div class="rc-results-col">
+        <div class="rc-metrics">
+          <div class="rc-metric"><span class="rc-metric-label">LPT premium</span><span class="rc-metric-value" id="a_prem">—</span></div>
+          <div class="rc-metric"><span class="rc-metric-label">Reserve relief</span><span class="rc-metric-value" id="a_relief">—</span></div>
+          <div class="rc-metric"><span class="rc-metric-label">Aggregate cap</span><span class="rc-metric-value" id="a_capv">—</span></div>
+        </div>
+        <div class="rc-waterfall">
+          <div class="wf-row wf-header"><span class="wf-label">LPT economics</span><span class="wf-value">£</span></div>
+          <div class="wf-row"><span class="wf-label">Nominal reserves</span><span class="wf-value" id="a_w_res">—</span></div>
+          <div class="wf-row"><span class="wf-label">Discounted reserves (PV)</span><span class="wf-value" id="a_w_pv">—</span></div>
+          <div class="wf-row"><span class="wf-label">Investment margin (reinsurer)</span><span class="wf-value" id="a_w_inv">—</span></div>
+          <div class="wf-row"><span class="wf-label">Risk margin</span><span class="wf-value" id="a_w_rm">—</span></div>
+          <div class="wf-row"><span class="wf-label">Reinsurer profit margin</span><span class="wf-value" id="a_w_pm">—</span></div>
+          <div class="wf-row wf-result"><span class="wf-label">LPT premium payable</span><span class="wf-value" id="a_w_prem">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rc-section">
+    <div class="rc-header">
+      <span class="rc-title">Panel B — Adverse Development Cover (ADC)</span>
+      <span class="rc-model-tag">model: normal reserve stop-loss</span>
+    </div>
+    <div class="rc-body">
+      <div class="rc-form-col">
+        <div class="rater-form">
+          <div class="rater-field"><label>Attachment — carried reserves (£)</label><input type="number" id="b_att" value="100000000" step="5000000"><div class="field-hint">Cover starts above this level</div></div>
+          <div class="rater-field"><label>Layer limit (£)</label><input type="number" id="b_lim" value="40000000" step="5000000"><div class="field-hint">Width of the ADC cover</div></div>
+          <div class="rater-field"><label>Expected ultimate reserves (£)</label><input type="number" id="b_mean" value="105000000" step="5000000"><div class="field-hint">Mean of the outcome</div></div>
+          <div class="rater-field"><label>Reserve volatility (σ, £)</label><input type="number" id="b_sd" value="18000000" step="1000000"><div class="field-hint">Std deviation of the ultimate</div></div>
+          <div class="rater-field"><label>Risk load %</label><input type="number" id="b_rl" value="30" step="5"><div class="field-hint">Load over expected loss</div></div>
+          <div class="rater-field"><label>Internal expenses %</label><input type="number" id="b_exp" value="5" step="0.5"><div class="field-hint">Reinsurer expense</div></div>
+          <div class="rater-field"><label>Brokerage %</label><input type="number" id="b_brok" value="7" step="0.5"><div class="field-hint">On premium</div></div>
+        </div>
+      </div>
+      <div class="rc-results-col">
+        <div class="rc-metrics">
+          <div class="rc-metric"><span class="rc-metric-label">Prob. of attaching</span><span class="rc-metric-value" id="b_prob">—</span></div>
+          <div class="rc-metric rc-metric-tight"><span class="rc-metric-label">Rate on line</span><span class="rc-metric-value" id="b_rol">—</span></div>
+          <div class="rc-metric" id="b_marg_card"><span class="rc-metric-label">Margin</span><span class="rc-metric-value" id="b_marg">—</span></div>
+        </div>
+        <div class="rc-waterfall">
+          <div class="wf-row wf-header"><span class="wf-label">ADC pricing</span><span class="wf-value">£ / %</span></div>
+          <div class="wf-row"><span class="wf-label">Layer <span id="b_desc" class="wf-driver"></span></span><span class="wf-value" id="b_w_layer">—</span></div>
+          <div class="wf-row"><span class="wf-label">Expected loss to layer</span><span class="wf-value" id="b_w_el">—</span></div>
+          <div class="wf-row"><span class="wf-label">Loaded for risk</span><span class="wf-value" id="b_w_loaded">—</span></div>
+          <div class="wf-row wf-subtotal"><span class="wf-label">ADC premium (gross)</span><span class="wf-value" id="b_w_prem">—</span></div>
+          <div class="wf-row wf-result"><span class="wf-label">Margin over expected loss</span><span class="wf-value" id="b_w_marg">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="../index.html">← Risk Code Hub</a>
+  &nbsp;|&nbsp;
+  Reinsurance — Structured / Finite — Rater
+  &nbsp;|&nbsp;
+  Version 6.2 · July 2026
+</footer>
+
+<script>
+(function () {
+  function num(id){ var v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; }
+  function gbp(n){ return (n<0?'−£':'£') + Math.abs(Math.round(n)).toLocaleString('en-GB'); }
+  function pct(n){ return (n*100).toFixed(1) + '%'; }
+
+  function phi(x){ return Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI); }
+  function erf(x){ var s=x<0?-1:1; x=Math.abs(x); var t=1/(1+0.3275911*x);
+    var y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x); return s*y; }
+  function Phi(x){ return 0.5*(1+erf(x/Math.SQRT2)); }
+  function stopLoss(mu,sigma,k){ if(sigma<=0) return Math.max(0,mu-k); var z=(mu-k)/sigma; return (mu-k)*Phi(z)+sigma*phi(z); }
+
+  function calcA(){
+    var res=num('a_res'), term=num('a_term'), disc=num('a_disc')/100, rm=num('a_rm')/100,
+        pm=num('a_pm')/100, cap=num('a_cap')/100;
+    var pv = res / Math.pow(1+disc, term>0?term:0);
+    var invMargin = res - pv;
+    var riskMargin = res*rm;
+    var base = pv + riskMargin;
+    var pmDivisor = 1-pm; if(pmDivisor<=0) pmDivisor=0.01;
+    var premium = base / pmDivisor;
+    var profitMargin = premium - base;
+    var relief = res - premium;
+    var capAmt = res*cap;
+    document.getElementById('a_prem').textContent = gbp(premium);
+    document.getElementById('a_relief').textContent = gbp(relief);
+    document.getElementById('a_capv').textContent = gbp(capAmt);
+    document.getElementById('a_w_res').textContent = gbp(res);
+    document.getElementById('a_w_pv').textContent = gbp(pv);
+    document.getElementById('a_w_inv').textContent = '−'+gbp(invMargin);
+    document.getElementById('a_w_rm').textContent = '+'+gbp(riskMargin);
+    document.getElementById('a_w_pm').textContent = '+'+gbp(profitMargin);
+    document.getElementById('a_w_prem').textContent = gbp(premium);
+  }
+
+  function calcB(){
+    var att=num('b_att'), lim=num('b_lim'), mean=num('b_mean'), sd=num('b_sd'),
+        rl=num('b_rl')/100, exp=num('b_exp')/100, brok=num('b_brok')/100;
+    var b = att+lim;
+    var el = stopLoss(mean, sd, att) - stopLoss(mean, sd, b);
+    if(el<0) el=0;
+    var loaded = el*(1+rl);
+    var divisor = 1-exp-brok; if(divisor<=0) divisor=0.01;
+    var prem = loaded/divisor;
+    var rol = lim>0 ? prem/lim : 0;
+    var prob = sd>0 ? Phi((mean-att)/sd) : (mean>att?1:0);
+    var margin = prem-el;
+    document.getElementById('b_prob').textContent = pct(prob);
+    document.getElementById('b_rol').textContent = pct(rol);
+    document.getElementById('b_marg').textContent = gbp(margin);
+    document.getElementById('b_desc').textContent = '(' + gbp(lim) + ' xs ' + gbp(att) + ')';
+    document.getElementById('b_w_layer').textContent = gbp(lim);
+    document.getElementById('b_w_el').textContent = gbp(el);
+    document.getElementById('b_w_loaded').textContent = gbp(loaded);
+    document.getElementById('b_w_prem').textContent = gbp(prem);
+    document.getElementById('b_w_marg').textContent = gbp(margin);
+    var card=document.getElementById('b_marg_card'), wm=document.getElementById('b_w_marg');
+    card.classList.remove('rc-metric-profit','rc-metric-loss'); wm.classList.remove('positive','negative');
+    if(margin>=0){ card.classList.add('rc-metric-profit'); wm.classList.add('positive'); }
+    else { card.classList.add('rc-metric-loss'); wm.classList.add('negative'); }
+  }
+
+  function calc(){ calcA(); calcB(); }
+  document.querySelectorAll('input[type=number]').forEach(function(el){ el.addEventListener('input', calc); });
+  calc();
+})();
+</script>
+
+</body>
+</html>

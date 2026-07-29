@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reinsurance — Cycle Modeller | Risk Code Hub</title>
+  <link rel="stylesheet" href="../hub-styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --hub-primary:#0e5c6b; --hub-dark:#08323a; --hub-light:#e4f2f4; --hub-accent:#c8a84b;
+      --hub-secondary:#3a5a7a; --header-gradient:linear-gradient(135deg,#08323a 0%,#0e5c6b 55%,#12414d 100%);
+      --header-sub:#a9d4da; --good:#1a5c28; --warn:#7a4500; --bad:#8b0000;
+    }
+    .cl-controls { display:grid; grid-template-columns:1fr 1fr; gap:12px 16px; margin:12px 0 0; }
+    @media (max-width:440px){ .cl-controls { grid-template-columns:1fr; } }
+    .cl-control label { display:block; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:#556; margin-bottom:5px; }
+    .cl-control label .value { color:var(--hub-primary); }
+    .cl-control input[type=range] { width:100%; accent-color:var(--hub-primary); }
+    .cl-control select, .cl-control input[type=number] { width:100%; padding:6px 9px; font-size:0.85rem; border:1px solid #ccc; border-radius:5px; background:#fff; }
+    .cl-control .note { font-size:0.66rem; color:#8a94a0; margin-top:3px; }
+    .cl-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:20px 24px; margin:18px 0; }
+    .cl-card.accent { background:var(--hub-light); border-color:var(--hub-primary); }
+    .cl-card.warn { background:#fef6ec; border-color:#e0a94b; }
+    .cl-card h3 { margin-top:0; }
+    .tbl-ts { width:100%; border-collapse:collapse; font-size:0.8rem; }
+    .tbl-ts th, .tbl-ts td { padding:5px 8px; border-bottom:1px solid var(--border); text-align:right; white-space:nowrap; }
+    .tbl-ts th:first-child, .tbl-ts td.lbl { text-align:left; }
+    .tbl-ts thead th { background:var(--hub-primary); color:#fff; position:sticky; top:0; }
+    .tbl-ts .best { color:var(--good); font-weight:700; } .tbl-ts .worst { color:var(--bad); font-weight:700; }
+    .tbl-scroll { overflow-x:auto; }
+    .sum-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; }
+    .sum-grid .k { font-size:0.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.4px; }
+    .sum-grid .v { font-size:1.5rem; font-weight:800; color:var(--hub-primary); }
+    .chart-wrap.tall2 { height:250px; }
+    .chart-wrap.tall2 canvas { max-height:230px; }
+    .cm-cap { font-size:0.75rem; color:var(--muted); margin-top:8px; margin-bottom:0; }
+    /* charts row — sticky top, equal-sized; hidden charts drop out and the rest fill the row */
+    .cm-charts { position:sticky; top:0; z-index:5; background:var(--bg); display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; padding:10px 0 14px; margin-bottom:8px;
+      box-shadow:0 8px 10px -9px rgba(0,0,0,0.30); }
+    .cm-charts > .cl-card { margin:0; }
+    /* control cards — uniform grid, equal-size boxes (per-row equal height via stretch) */
+    .cm-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; align-items:stretch; margin:0 0 18px; }
+    .cm-cards > .cl-card { margin:0; }
+    .cm-cards > .cl-card h3 { font-size:1rem; }
+    .cm-cards .cl-card p { font-size:0.8rem; }
+    @media (max-width:1080px){ .cm-cards{ grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:680px){ .cm-cards{ grid-template-columns:1fr; } }
+    /* tabs */
+    .cm-tabs { display:flex; gap:4px; margin:6px 0 20px; border-bottom:2px solid var(--border); flex-wrap:wrap; }
+    .cm-tab { padding:11px 18px; font-size:0.88rem; font-weight:700; border:none; background:none; color:var(--muted); border-bottom:3px solid transparent; cursor:pointer; }
+    .cm-tab:hover { color:var(--hub-primary); }
+    .cm-tab.active { color:var(--hub-primary); border-bottom-color:var(--hub-accent); }
+    .cm-tab .step { display:inline-block; width:20px; height:20px; line-height:20px; text-align:center; border-radius:50%; background:var(--border); color:#fff; font-size:0.72rem; margin-right:7px; }
+    .cm-tab.active .step { background:var(--hub-primary); }
+    /* progressive visibility: a .tabbed element shows only in the tabs listed on it */
+    main.t-sine .tabbed:not(.in-sine){ display:none !important; }
+    main.t-uw   .tabbed:not(.in-uw){ display:none !important; }
+    main.t-cap  .tabbed:not(.in-cap){ display:none !important; }
+    main.t-ret  .tabbed:not(.in-ret){ display:none !important; }
+    /* table rows build up by tab */
+    main.t-uw .r-cap, main.t-uw .r-ret, main.t-cap .r-ret { display:none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Reinsurance</a> › Cycle Modeller</div>
+  <div class="tag">Reinsurance — Cycle Modeller</div>
+  <h1>Reinsurance — Cycle Modeller</h1>
+  <p>A 10-year underwriting-cycle projection, ported from the Insurance Valuation course's Cycle Lab. Work left-to-right through the tabs: <strong>1 · Sine</strong> sets the cycle shape, starting market and cat event, and illustrates the raw wave; <strong>2 · Underwriting</strong> drives the combined ratio endogenously from rate adequacy; <strong>3 · Capital</strong> adds required capital (SCR) and reserving; <strong>4 · Returns</strong> layers in investments, dividends and tax to complete the P&amp;L and ROE. Each tab's charts and table show only what's been defined so far. Stylised — not for capital planning.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html">Rater</a>
+  <a href="cycle-modeller.html" class="active">Cycle Modeller</a>
+</nav>
+
+<main class="t-sine">
+
+  <div class="cm-tabs">
+    <button class="cm-tab active" data-tab="sine" data-mode="exo" type="button"><span class="step">1</span>Sine illustration</button>
+    <button class="cm-tab" data-tab="uw" data-mode="endo" type="button"><span class="step">2</span>Underwriting cycle</button>
+    <button class="cm-tab" data-tab="cap" data-mode="endo" type="button"><span class="step">3</span>Capital &amp; reserving</button>
+    <button class="cm-tab" data-tab="ret" data-mode="endo" type="button"><span class="step">4</span>Returns (P&amp;L)</button>
+  </div>
+
+  <div class="cm-charts">
+    <div class="cl-card tabbed in-sine in-uw in-cap in-ret">
+      <h3>Combined ratio</h3>
+      <div class="chart-wrap tall2"><canvas id="cl-chart-cor"></canvas></div>
+      <p class="cm-cap">Booked COR (blue). Dashed orange = best-estimate COR when reserving stance ≠ 0. Dashed grey = COR without the cat. <span class="badge b-i">ILLUS</span></p>
+    </div>
+    <div class="cl-card tabbed in-uw in-cap in-ret">
+      <h3>Rate index (cumulative)</h3>
+      <div class="chart-wrap tall2"><canvas id="cl-chart-rr"></canvas></div>
+      <p class="cm-cap">Rate index, Year 1 = 100 (broker RoL style). Purple = <strong>nominal</strong>; dashed red = <strong>real</strong> (net of loss-cost inflation). Red below 100 = rates behind claims inflation. <span class="badge b-i">ILLUS</span></p>
+    </div>
+    <div class="cl-card tabbed in-cap in-ret">
+      <h3 id="cap-title">Capital coverage</h3>
+      <div class="chart-wrap tall2"><canvas id="cl-chart-cap"></canvas></div>
+      <p class="cm-cap">Gold = SCR coverage (left). <span class="in-ret tabbed">Green = ROE (right).</span> A book fine at the peak can breach 100% in the trough. <span class="badge b-i">ILLUS</span></p>
+    </div>
+  </div>
+
+  <div class="cm-cards">
+
+    <!-- Market entry: shown in sine AND underwriting (the mini market-setup card) -->
+    <div class="cl-card cm-full tabbed in-sine in-uw">
+      <h3>Market entry</h3>
+      <p style="font-size:0.86rem;color:var(--muted);">Where the decade begins. Starting COR is the cycle centre; Starting market is the entry point — 0 = hard (fat margins, low COR), 0.5 = neutral, 1 = soft (thin margins, high COR). In the endogenous tabs a soft entry means a lower 10-year ROE. <span class="badge b-e">EST</span></p>
+      <div class="cl-controls">
+        <div class="cl-control"><label>Starting COR: <span class="value" id="v-cor">90.0</span>%</label><input type="range" id="cl-cor" min="0.70" max="1.10" step="0.005" value="0.90"></div>
+        <div class="cl-control"><label>Starting market: <span class="value" id="v-phase">0.50</span> <span style="font-weight:400;color:#8a94a0;">(0=hard·1=soft)</span></label><input type="range" id="cl-phase" min="0" max="1" step="0.05" value="0.5"></div>
+      </div>
+    </div>
+
+    <!-- Cycle shape: sine tab only -->
+    <div class="cl-card cm-full tabbed in-sine">
+      <h3>Cycle shape</h3>
+      <p style="font-size:0.86rem;color:var(--muted);">Amplitude is the peak-to-trough swing of the sine wave; cycle length is its period. Pick an anchor preset to load a reinsurer's ~5-year averages (also sets premium, equity and growth on later tabs). <span class="badge b-e">EST</span></p>
+      <div class="cl-controls">
+        <div class="cl-control"><label>Anchor preset</label><select id="cl-anchor"></select><div class="note">Loads COR, premium, equity, growth</div></div>
+        <div class="cl-control"><label>Cycle amplitude: <span class="value" id="v-amp">10.0</span>pp</label><input type="range" id="cl-amp" min="0" max="25" step="0.5" value="10"></div>
+        <div class="cl-control"><label>Cycle length: <span class="value" id="v-len">7</span> yrs <span style="font-weight:400;color:#8a94a0;">(sine only)</span></label><input type="range" id="cl-len" min="3" max="12" step="1" value="7"></div>
+      </div>
+    </div>
+
+    <!-- Book & expense (underwriting) -->
+    <div class="cl-card tabbed in-uw">
+      <h3>Book &amp; expense</h3>
+      <div class="cl-controls">
+        <div class="cl-control"><label>Starting net premium: <span class="value" id="v-npe">200</span> m</label><input type="range" id="cl-npe" min="50" max="60000" step="50" value="200"></div>
+        <div class="cl-control"><label>Premium growth: <span class="value" id="v-growth">5.0</span>%/yr</label><input type="range" id="cl-growth" min="-0.02" max="0.15" step="0.005" value="0.05"><div class="note">Exposure growth (rate change adds on top)</div></div>
+        <div class="cl-control"><label>Expense ratio: <span class="value" id="v-er">30.0</span>%</label><input type="range" id="cl-er" min="0.15" max="0.45" step="0.005" value="0.30"></div>
+      </div>
+    </div>
+
+    <!-- Cycle engine (underwriting) -->
+    <div class="cl-card accent tabbed in-uw">
+      <h3>Cycle engine — rate adequacy</h3>
+      <p style="font-size:0.86rem;">The combined ratio is built from <strong>rate adequacy</strong>. At equilibrium nominal rates track loss-cost inflation (flat COR); rates soften below inflation only when over-capitalised, and snap up hard once margins erode or a cat destroys capital. Each lever does one job — no double-counting. <span class="badge b-v">VER</span></p>
+      <div class="cl-controls">
+        <div class="cl-control"><label>Loss-cost trend: <span class="value" id="v-lt">4.0</span>%/yr</label><input type="range" id="cl-losstrend" min="0" max="0.12" step="0.005" value="0.04"><div class="note">Claims inflation on losses</div></div>
+        <div class="cl-control"><label>Structural rate drift: <span class="value" id="v-drift">−1.0</span>%/yr</label><input type="range" id="cl-ratedrift" min="-0.08" max="0.02" step="0.005" value="-0.01"><div class="note">Competitive drift vs the loss trend</div></div>
+        <div class="cl-control"><label>Softening sensitivity: <span class="value" id="v-ssens">0.06</span></label><input type="range" id="cl-softsens" min="0" max="0.40" step="0.01" value="0.06"><div class="note">Extra decay per 100% excess coverage</div></div>
+        <div class="cl-control"><label>Hardening aggressiveness: <span class="value" id="v-hsens">2.0</span>×</label><input type="range" id="cl-hardsens" min="0.5" max="6.0" step="0.1" value="2.0"><div class="note">Snap-back per pp of COR above the profitable level</div></div>
+        <div class="cl-control"><label>Rate response speed: <span class="value" id="v-resp">0.55</span></label><input type="range" id="cl-respspeed" min="0.3" max="1.0" step="0.05" value="0.55"><div class="note">Renewal lag: 1.0 = full re-rate the next year; lower phases the move in over ~18–24 months</div></div>
+      </div>
+    </div>
+
+    <!-- Catastrophe (sine + underwriting) -->
+    <div class="cl-card warn tabbed in-sine">
+      <h3>Catastrophe overlay</h3>
+      <p style="font-size:0.86rem;">A major cat is the classic cycle trigger. Losses develop 60% in the event year, 25% next, 15% the third. Severity: +5pp mild · +10–15pp Helene/Milton · +25–40pp Andrew / 9-11 / Katrina. <span class="badge b-v">VER</span></p>
+      <div class="cl-controls">
+        <div class="cl-control"><label>Cat event</label><select id="cl-caton"><option value="on" selected>ON — apply overlay</option><option value="off">OFF</option></select></div>
+        <div class="cl-control"><label>Severity: <span class="value" id="v-catsev">15</span>pp</label><input type="range" id="cl-catsev" min="2" max="40" step="0.5" value="15"></div>
+        <div class="cl-control"><label>Event year: <span class="value" id="v-catyr">5</span></label><input type="range" id="cl-catyr" min="1" max="10" step="1" value="5"></div>
+        <div class="cl-control"><label>&nbsp;</label><button id="cl-catrand" style="width:100%;padding:7px 12px;border:1px solid var(--hub-primary);background:#fff;color:var(--hub-primary);border-radius:6px;font-weight:700;cursor:pointer;">🎲 Random year</button></div>
+      </div>
+    </div>
+
+    <!-- Capital / SCR (capital tab) -->
+    <div class="cl-card accent tabbed in-cap">
+      <h3>Required capital (SCR)</h3>
+      <p style="font-size:0.86rem;">Solvency II sets the SCR at the 99.5% one-year VaR (a 1-in-200 year). Coverage = equity ÷ SCR; supervisors act below ~130%. Premium-risk basis scales with premium; exposure/cat basis is held fixed. <span class="badge b-v">VER</span></p>
+      <div class="cl-controls">
+        <div class="cl-control"><label>Starting equity: <span class="value" id="v-eq">150</span> m</label><input type="range" id="cl-eq" min="30" max="70000" step="10" value="150"></div>
+        <div class="cl-control"><label>Capital basis</label><select id="cl-capbasis"><option value="premium">Premium risk (scales)</option><option value="fixed">Exposure / cat (fixed)</option></select></div>
+        <div class="cl-control"><label>SCR factor (× premium): <span class="value" id="v-capf">45</span>%</label><input type="range" id="cl-capf" min="20" max="90" step="1" value="45"></div>
+        <div class="cl-control"><label>Target SCR coverage: <span class="value" id="v-tcov">150</span>%</label><input type="range" id="cl-targetcov" min="1.0" max="2.5" step="0.05" value="1.5"><div class="note">Coverage where discipline holds (feeds the engine)</div></div>
+      </div>
+    </div>
+
+    <!-- Reserving (capital tab) -->
+    <div class="cl-card accent tabbed in-cap">
+      <h3>Reserving prudence</h3>
+      <p style="font-size:0.86rem;">A constant stance adds pp to booked LR, building a cushion (over-reserve) or deficit that unwinds through the P&amp;L as prior-year development. Over a cycle additions ≈ releases; the <em>path</em> is the management lever. <span class="badge b-v">VER</span></p>
+      <div class="cl-controls">
+        <div class="cl-control"><label>Reserving stance: <span class="value" id="v-stance">Neutral (0)</span></label><input type="range" id="cl-stance" min="-5" max="5" step="0.5" value="0"><div class="note">−5 aggressive · 0 neutral · +5 conservative</div></div>
+        <div class="cl-control"><label>Stance factor: <span class="value" id="v-sf">0.5</span> pp/unit</label><input type="range" id="cl-sf" min="0.2" max="1.5" step="0.05" value="0.5"></div>
+        <div class="cl-control"><label>Cushion release: <span class="value" id="v-rr">30</span>%/yr</label><input type="range" id="cl-rr" min="5" max="60" step="5" value="30"></div>
+      </div>
+    </div>
+
+    <!-- Returns / non-underwriting (returns tab) -->
+    <div class="cl-card cm-full tabbed in-ret">
+      <h3>Non-underwriting — investments, dividends &amp; tax</h3>
+      <p style="font-size:0.86rem;color:var(--muted);">These complete the P&amp;L. Investment income on the asset book floors ROE in soft markets; dividends and tax determine how much capital is retained to compound. With these in, the full net-income and ROE picture appears. <span class="badge b-v">VER</span></p>
+      <div class="cl-controls">
+        <div class="cl-control"><label>Investments-to-equity (×): <span class="value" id="v-mult">3.0</span></label><input type="range" id="cl-mult" min="1" max="8" step="0.1" value="3.0"><div class="note">Asset leverage</div></div>
+        <div class="cl-control"><label>Investment yield: <span class="value" id="v-yld">4.0</span>%</label><input type="range" id="cl-yld" min="0" max="0.08" step="0.001" value="0.040"></div>
+        <div class="cl-control"><label>Dividend payout: <span class="value" id="v-pay">40.0</span>%</label><input type="range" id="cl-pay" min="0" max="1" step="0.05" value="0.40"></div>
+        <div class="cl-control"><label>Tax rate: <span class="value" id="v-tax">22.0</span>%</label><input type="range" id="cl-tax" min="0" max="0.40" step="0.01" value="0.22"></div>
+      </div>
+    </div>
+
+  </div><!-- /cm-cards -->
+
+  <div class="cl-card tabbed in-uw in-cap in-ret">
+    <h3>Year-by-year output</h3>
+    <div class="tbl-scroll" id="cl-table"></div>
+  </div>
+
+  <div class="cl-card accent tabbed in-ret">
+    <h3>Cycle summary</h3>
+    <div id="cl-summary"></div>
+  </div>
+
+  <div class="cl-card warn tabbed in-uw in-cap in-ret">
+    <h3>Calibration caveat</h3>
+    <p style="margin:0;font-size:0.84rem;">Rate change is modelled from rate adequacy, excess-capital softening and underwriting-loss hardening — a stylised feedback loop, damped and clamped, not a market simulator. Real cycles are bumpier (COVID-style shocks, capital-market swings). Investment yield is held constant. Required capital is a simplified factor/exposure proxy for the SCR. Anchor presets are ~5-year reported averages. For real capital planning use the firm's internal model. <span class="badge b-i">ILLUS</span> · framework per Insurance Valuation course Modules 2 &amp; 6 (Solvency II Directive 2009/138/EC). <span class="badge b-v">VER</span></p>
+  </div>
+
+</main>
+
+<footer>
+  <a href="../index.html">← Risk Code Hub</a>
+  &nbsp;|&nbsp;
+  Reinsurance (General) — Cycle Modeller (ported from Valuation Cycle Lab)
+  &nbsp;|&nbsp;
+  Version 5.3 · July 2026
+</footer>
+
+<script>
+(function () {
+  var ANCHORS = {
+    "rater":       { name:"Rater baseline (cat book)", cor:0.90, npe:200,  eq:150,  growth:0.05 },
+    "custom":      { name:"Custom",        cor:0.95, npe:1000,  eq:800,   growth:0.04 },
+    "munich_re":   { name:"Munich Re",     cor:0.86, npe:56000, eq:32000, growth:0.075 },
+    "hannover_re": { name:"Hannover Re",   cor:0.87, npe:26000, eq:11500, growth:0.090 },
+    "beazley":     { name:"Beazley",       cor:0.85, npe:4800,  eq:2900,  growth:0.130 },
+    "hiscox":      { name:"Hiscox",        cor:0.88, npe:4400,  eq:2400,  growth:0.055 },
+    "lloyds":      { name:"Lloyd's market",cor:0.92, npe:45000, eq:47000, growth:0.090 }
+  };
+  var CAT_DECAY = [0.60, 0.25, 0.15];
+  var PAY_PATTERN = [0.40, 0.30, 0.20, 0.10];
+
+  function $(id){ return document.getElementById(id); }
+  function val(id){ return parseFloat($(id).value); }
+  function fmt(x, dp){ dp = dp||0; return (x<0?'−':'') + Math.abs(x).toLocaleString('en-GB',{minimumFractionDigits:dp,maximumFractionDigits:dp}); }
+
+  var sel = $('cl-anchor');
+  Object.keys(ANCHORS).forEach(function(k){ var o=document.createElement('option'); o.value=k; o.textContent=ANCHORS[k].name; sel.appendChild(o); });
+  sel.value = 'rater';
+  sel.addEventListener('change', function(){
+    var p = ANCHORS[this.value]; if(!p) return;
+    $('cl-cor').value = p.cor; $('cl-npe').value = p.npe; $('cl-eq').value = p.eq; $('cl-growth').value = p.growth;
+    recompute();
+  });
+  $('cl-catrand').addEventListener('click', function(){ $('cl-catyr').value = 1+Math.floor(Math.random()*10); recompute(); });
+
+  ['cl-cor','cl-amp','cl-len','cl-phase','cl-npe','cl-growth','cl-er','cl-eq','cl-mult','cl-yld','cl-pay','cl-tax',
+   'cl-capbasis','cl-capf','cl-stance','cl-sf','cl-rr','cl-caton','cl-catsev','cl-catyr',
+   'cl-losstrend','cl-ratedrift','cl-targetcov','cl-softsens','cl-hardsens','cl-respspeed']
+    .forEach(function(id){ $(id).addEventListener('input', recompute); $(id).addEventListener('change', recompute); });
+
+  var chartCor=null, chartRR=null, chartCap=null;
+
+  // Tabs — progressive disclosure
+  var TAB='sine', MODE='exo';
+  var mainEl = document.querySelector('main');
+  document.querySelectorAll('.cm-tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.cm-tab').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      TAB = btn.getAttribute('data-tab'); MODE = btn.getAttribute('data-mode');
+      mainEl.classList.remove('t-sine','t-uw','t-cap','t-ret');
+      mainEl.classList.add('t-'+TAB);
+      recompute();
+    });
+  });
+
+  function recompute(){
+    var cor0=val('cl-cor'), amp=val('cl-amp')/100, len=val('cl-len'), phase=val('cl-phase');
+    var npe0=val('cl-npe'), grow=val('cl-growth'), er=val('cl-er'), eq0=val('cl-eq');
+    var mult=val('cl-mult'), yld=val('cl-yld'), pay=val('cl-pay'), tax=val('cl-tax');
+    var capBasis=$('cl-capbasis').value, capF=val('cl-capf')/100;
+    var stance=val('cl-stance'), sf=val('cl-sf')/100, rr=val('cl-rr')/100;
+    var catOn=$('cl-caton').value==='on', catSev=val('cl-catsev')/100, catYr=val('cl-catyr');
+    var mode=MODE, lossTrend=val('cl-losstrend'), rateDrift=val('cl-ratedrift'), targetCov=val('cl-targetcov'), softSens=val('cl-softsens'), hardSens=val('cl-hardsens'), respSpeed=val('cl-respspeed');
+
+    // labels
+    $('v-cor').textContent=(cor0*100).toFixed(1); $('v-amp').textContent=(amp*100).toFixed(1); $('v-len').textContent=len;
+    $('v-phase').textContent=phase.toFixed(2); $('v-npe').textContent=fmt(npe0); $('v-growth').textContent=(grow*100).toFixed(1);
+    $('v-er').textContent=(er*100).toFixed(1); $('v-eq').textContent=fmt(eq0); $('v-mult').textContent=mult.toFixed(1);
+    $('v-yld').textContent=(yld*100).toFixed(1); $('v-pay').textContent=(pay*100).toFixed(1); $('v-tax').textContent=(tax*100).toFixed(1);
+    $('v-capf').textContent=(capF*100).toFixed(0);
+    $('v-stance').textContent = stance===0?'Neutral (0)':(stance>0?'Conservative (+'+stance+')':'Aggressive ('+stance+')');
+    $('v-sf').textContent=(sf*100).toFixed(1); $('v-rr').textContent=(rr*100).toFixed(0);
+    $('v-catsev').textContent=(catSev*100).toFixed(1); $('v-catyr').textContent=catYr;
+    $('v-lt').textContent=(lossTrend*100).toFixed(1); $('v-drift').textContent=(rateDrift*100).toFixed(1);
+    $('v-tcov').textContent=(targetCov*100).toFixed(0); $('v-ssens').textContent=softSens.toFixed(2); $('v-hsens').textContent=hardSens.toFixed(1);
+    $('v-resp').textContent=respSpeed.toFixed(2);
+
+    function catOverlay(y){ if(!catOn) return 0; var o=y-catYr; return (o<0||o>=CAT_DECAY.length)?0:catSev*CAT_DECAY[o]; }
+    var stancePp = stance*sf;
+
+    var years=[], npe=npe0, eq=eq0, outstanding=npe0*1.5, lossesByYear=[], investments=eq0*mult, cushion=0;
+    var scrFixed = npe0*capF;
+    var baseLR0 = cor0 - er;
+    var startOffset = (mode==='endo') ? (phase - 0.5) * amp : 0;
+    var rateIdx = (mode==='endo') ? (baseLR0 / Math.max(0.05, baseLR0 + startOffset)) : 1;
+    var lossIdx = 1;
+    var prevCov = scrFixed>0 ? eq0/scrFixed : 2;
+    var prevCor = cor0 + startOffset;
+    var indicatedPrev = 0;   // prior-year indicated rate change, for the renewal phase-in
+
+    for(var y=1;y<=10;y++){
+      var phasePos = ((phase + (y-1)/len)%1 + 1)%1;
+      var rateChange = 0, baseCor;
+      if(mode==='endo'){
+        if(y>1){
+          var corTarget = cor0;
+          var capGap = targetCov - prevCov;
+          var indicated;
+          if(prevCor > 1.0 || capGap > 0){
+            indicated = hardSens*Math.max(0, prevCor - corTarget) + 0.5*hardSens*Math.max(0, capGap);
+          } else {
+            indicated = lossTrend + rateDrift - softSens*(prevCov - targetCov);
+          }
+          indicated = Math.max(-0.30, Math.min(0.60, indicated));
+          // Renewal lag / phase-in: the market re-rates only at the next renewal and takes ~18-24 months
+          // to fully price a shock, so blend this year's indicated move with last year's — the increase
+          // builds over two years rather than snapping in fully the first year after the event.
+          rateChange = respSpeed*indicated + (1-respSpeed)*indicatedPrev;
+          indicatedPrev = indicated;
+          rateIdx *= (1 + rateChange);
+          lossIdx *= (1 + lossTrend);
+        }
+        baseCor = baseLR0 * (lossIdx / rateIdx) + er;
+      } else {
+        baseCor = cor0 + (amp/2)*Math.sin(2*Math.PI*phasePos);
+      }
+      var trueCor = baseCor + catOverlay(y);
+      var trueLR = trueCor - er;
+      var npeGrow = (mode==='endo') ? ((y===1)?0:(rateChange + grow)) : (grow - (amp/2)*Math.sin(2*Math.PI*phasePos)*0.6);
+      var eqOpen = eq;
+      var npeYear = (y===1)?npe0:npe*(1+npeGrow);
+
+      var cushionAdded = stancePp*npeYear;
+      var cushionReleased = cushion*rr;
+      var pydPp = -cushionReleased/npeYear;
+      var bookedLR = trueLR + stancePp + pydPp;
+      var bookedCor = bookedLR + er;
+      var cushionClose = cushion + cushionAdded - cushionReleased;
+
+      var lossesIncurred = npeYear*bookedLR; lossesByYear.push(lossesIncurred);
+      var paid=0; for(var i=0;i<PAY_PATTERN.length && (y-1-i)>=0;i++){ paid += (lossesByYear[y-1-i]||0)*PAY_PATTERN[i]; }
+      var reservesClose = Math.max(0, outstanding + lossesIncurred - paid);
+
+      var uw = npeYear*(1-bookedCor);
+      var nii = investments*yld;
+      var pretax = uw+nii;
+      var taxAmt = Math.max(0,pretax)*tax;
+      var ni = pretax-taxAmt;
+      var div = Math.max(0,ni)*pay;
+      var eqClose = eqOpen+ni-div;
+
+      var opCF = npeYear - paid - npeYear*er;
+      var invClose = investments*(1+yld) + opCF - taxAmt - div + (lossesIncurred-paid);
+      invClose = Math.max(reservesClose + eqClose*0.7, invClose);
+
+      var scr = (capBasis==='fixed') ? scrFixed : npeYear*capF;
+      var coverage = scr>0 ? eqClose/scr : 0;
+      var avgEq=(eqOpen+eqClose)/2, roe = avgEq>0?ni/avgEq:0;
+
+      years.push({y:y,baseCor:baseCor,catBump:catOverlay(y),trueCor:trueCor,bookedCor:bookedCor,bookedLR:bookedLR,
+        pydPp:pydPp,npe:npeYear,uw:uw,nii:nii,ni:ni,div:div,eqClose:eqClose,roe:roe,
+        rateChange:rateChange, realRate:(y>1?rateChange-lossTrend:0),
+        reservesClose:reservesClose,investments:invClose,cushionClose:cushionClose,scr:scr,coverage:coverage});
+
+      npe=npeYear; eq=eqClose; investments=invClose; outstanding=reservesClose; cushion=cushionClose;
+      prevCov = coverage; prevCor = bookedCor;
+    }
+
+    var labels = years.map(function(r){return 'Y'+r.y;});
+    var baseOpts = { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top'}} };
+
+    // Chart 1 — combined ratio
+    var corDs = [ {label:'Booked COR %', data:years.map(function(r){return +(r.bookedCor*100).toFixed(2);}), borderColor:'#1f4ba8', backgroundColor:'rgba(31,75,168,0.08)', tension:0.3, fill:true} ];
+    if(Math.abs(stance)>0.01) corDs.push({label:'Best-estimate COR %', data:years.map(function(r){return +(r.trueCor*100).toFixed(2);}), borderColor:'#c47200', borderDash:[3,3], tension:0.3, pointRadius:2, fill:false});
+    if(catOn) corDs.push({label:'Baseline COR (no cat) %', data:years.map(function(r){return +(r.baseCor*100).toFixed(2);}), borderColor:'#9aa0aa', borderDash:[4,4], tension:0.3, pointRadius:2, fill:false});
+    if(chartCor) chartCor.destroy();
+    chartCor = new Chart($('cl-chart-cor').getContext('2d'), { type:'line', data:{labels:labels, datasets:corDs},
+      options:Object.assign({}, baseOpts, { scales:{ y:{title:{display:true,text:'COR (%)'}}, x:{title:{display:true,text:'Projection year'}} } }) });
+
+    // Chart 2 — cumulative rate index (Year 1 = 100), the standard broker RoL-index view
+    var nIdx=100, rIdx=100, nominalIndex=[], realIndex=[];
+    for(var k=0;k<years.length;k++){ if(k>0){ nIdx*=(1+years[k].rateChange); rIdx*=(1+years[k].realRate); } nominalIndex.push(+nIdx.toFixed(1)); realIndex.push(+rIdx.toFixed(1)); }
+    var rrDs = [
+      {label:'Nominal rate index', data:nominalIndex, borderColor:'#6a1b9a', tension:0.3, borderWidth:2, fill:false},
+      {label:'Real rate index (net of inflation)', data:realIndex, borderColor:'#c0392b', borderDash:[6,3], tension:0.3, borderWidth:2, fill:false},
+      {label:'Base = 100', data:years.map(function(){return 100;}), borderColor:'#cfcfcf', borderWidth:1, borderDash:[2,2], pointRadius:0, fill:false}
+    ];
+    if(chartRR) chartRR.destroy();
+    chartRR = new Chart($('cl-chart-rr').getContext('2d'), { type:'line', data:{labels:labels, datasets:rrDs},
+      options:Object.assign({}, baseOpts, { scales:{ y:{title:{display:true,text:'Rate index (Year 1 = 100)'}}, x:{title:{display:true,text:'Projection year'}} } }) });
+
+    // Chart 3 — capital coverage (+ ROE on the returns tab)
+    var capDs = [ {label:'SCR coverage %', data:years.map(function(r){return +(r.coverage*100).toFixed(0);}), borderColor:'#c8a84b', tension:0.3, borderWidth:2, fill:false, yAxisID:'yCov'} ];
+    var capScales = { yCov:{position:'left', title:{display:true,text:'SCR coverage (%)'}}, x:{title:{display:true,text:'Projection year'}} };
+    if(TAB==='ret'){
+      capDs.push({label:'ROE %', data:years.map(function(r){return +(r.roe*100).toFixed(2);}), borderColor:'#1a8a4d', tension:0.3, borderWidth:2, fill:false, yAxisID:'yRoe2'});
+      capScales.yRoe2 = {position:'right', title:{display:true,text:'ROE (%)'}, grid:{drawOnChartArea:false}};
+    }
+    $('cap-title').textContent = (TAB==='ret') ? 'Capital coverage & ROE' : 'Capital coverage';
+    if(chartCap) chartCap.destroy();
+    chartCap = new Chart($('cl-chart-cap').getContext('2d'), { type:'line', data:{labels:labels, datasets:capDs},
+      options:Object.assign({}, baseOpts, { scales:capScales }) });
+
+    // table (rows tagged by disclosure layer)
+    var avg = function(f){ return years.reduce(function(a,b){return a+f(b);},0)/10; };
+    var html = '<table class="tbl-ts"><thead><tr><th>Metric</th>'+labels.map(function(l){return '<th>'+l+'</th>';}).join('')+'<th>Avg / Σ</th></tr></thead><tbody>';
+    function rowA(cls, lbl, fn, avgtxt, strong){ return '<tr class="'+cls+'"><td class="lbl">'+(strong?'<strong>':'')+lbl+(strong?'</strong>':'')+'</td>'+years.map(function(r){return '<td>'+fn(r)+'</td>';}).join('')+'<td>'+(strong?'<strong>':'')+avgtxt+(strong?'</strong>':'')+'</td></tr>'; }
+    html += rowA('r-uw','Nominal rate change', function(r){return '<span class="'+(r.rateChange<0?'worst':'best')+'">'+(r.rateChange>0?'+':'')+(r.rateChange*100).toFixed(1)+'%</span>';}, ((rateIdx-1)*100).toFixed(0)+'% cum');
+    html += rowA('r-uw','Real rate chg (vs infl.)', function(r){return '<span class="'+(r.realRate<0?'worst':'best')+'">'+(r.realRate>0?'+':'')+(r.realRate*100).toFixed(1)+'%</span>';}, 'net of loss trend');
+    html += rowA('r-uw','Baseline COR', function(r){return (r.baseCor*100).toFixed(1)+'%';}, (avg(function(r){return r.baseCor;})*100).toFixed(1)+'%');
+    html += rowA('r-uw','+ Cat (pp)', function(r){return r.catBump>0?'<span class="worst">+'+(r.catBump*100).toFixed(1)+'</span>':'—';}, catOn?'+'+(years.reduce(function(a,b){return a+b.catBump;},0)*100).toFixed(1):'—');
+    html += rowA('r-cap','± PYD (cushion)', function(r){return Math.abs(r.pydPp)<0.0005?'—':'<span class="'+(r.pydPp<0?'best':'worst')+'">'+(r.pydPp>0?'+':'')+(r.pydPp*100).toFixed(2)+'</span>';}, (avg(function(r){return r.pydPp;})*100).toFixed(2));
+    html += rowA('r-uw','Booked COR', function(r){return (r.bookedCor*100).toFixed(1)+'%';}, (avg(function(r){return r.bookedCor;})*100).toFixed(1)+'%', true);
+    html += rowA('r-uw','Net premium (m)', function(r){return fmt(r.npe);}, '—');
+    html += rowA('r-uw','UW result (m)', function(r){return fmt(r.uw);}, fmt(years.reduce(function(a,b){return a+b.uw;},0)), true);
+    html += rowA('r-cap','Required capital SCR (m)', function(r){return fmt(r.scr);}, '—');
+    html += rowA('r-cap','SCR coverage', function(r){return '<span class="'+(r.coverage>=1.5?'best':(r.coverage<1.0?'worst':''))+'">'+(r.coverage*100).toFixed(0)+'%</span>';}, (avg(function(r){return r.coverage;})*100).toFixed(0)+'%', true);
+    html += rowA('r-cap','Equity close (m)', function(r){return fmt(r.eqClose);}, '—');
+    html += rowA('r-ret','Net inv. income (m)', function(r){return fmt(r.nii);}, fmt(years.reduce(function(a,b){return a+b.nii;},0)), true);
+    html += rowA('r-ret','Net income (m)', function(r){return fmt(r.ni);}, fmt(years.reduce(function(a,b){return a+b.ni;},0)), true);
+    html += rowA('r-ret','Dividends (m)', function(r){return fmt(r.div);}, fmt(years.reduce(function(a,b){return a+b.div;},0)), true);
+    html += rowA('r-ret','ROE', function(r){return (r.roe*100).toFixed(1)+'%';}, (avg(function(r){return r.roe;})*100).toFixed(1)+'%', true);
+    html += '</tbody></table>';
+    $('cl-table').innerHTML = html;
+
+    // summary (returns tab)
+    var avgCOR=avg(function(r){return r.bookedCor;}), avgROE=avg(function(r){return r.roe;});
+    var totalNI=years.reduce(function(a,b){return a+b.ni;},0), totalDiv=years.reduce(function(a,b){return a+b.div;},0);
+    var eqGrowth=years[9].eqClose-eq0;
+    var niMean=totalNI/10, niStd=Math.sqrt(years.reduce(function(a,b){return a+(b.ni-niMean)*(b.ni-niMean);},0)/10);
+    var niCV = niMean>0?niStd/niMean:0;
+    var minCov = Math.min.apply(null, years.map(function(r){return r.coverage;}));
+    var covClass = minCov>=1.3?'good':(minCov>=1.0?'warn':'bad');
+    $('cl-summary').innerHTML =
+      '<div class="sum-grid">'+
+      '<div><div class="k">Cycle-avg booked COR</div><div class="v">'+(avgCOR*100).toFixed(1)+'%</div></div>'+
+      '<div><div class="k">Cycle-avg ROE</div><div class="v" style="color:'+(avgROE>=0.10?'var(--good)':(avgROE>=0.05?'var(--warn)':'var(--bad)'))+'">'+(avgROE*100).toFixed(1)+'%</div></div>'+
+      '<div><div class="k">Trough SCR coverage</div><div class="v" style="color:var(--'+covClass+')">'+(minCov*100).toFixed(0)+'%</div></div>'+
+      '<div><div class="k">Earnings volatility (CV)</div><div class="v">'+(niCV*100).toFixed(0)+'%</div></div>'+
+      '<div><div class="k">Total 10y net income (m)</div><div class="v">'+fmt(totalNI)+'</div></div>'+
+      '<div><div class="k">Total shareholder return (m)</div><div class="v" style="color:var(--good)">'+fmt(totalDiv+eqGrowth)+'</div></div>'+
+      '</div>'+
+      (minCov<1.0 ? '<p style="margin-top:12px;font-size:0.86rem;color:var(--bad);"><strong>⚠️ Solvency breach in the trough.</strong> SCR coverage falls below 100% at the cycle low — the book would breach its capital requirement and need capital action before the market turns.</p>' : '');
+  }
+
+  recompute();
+})();
+</script>
+
+</body>
+</html>

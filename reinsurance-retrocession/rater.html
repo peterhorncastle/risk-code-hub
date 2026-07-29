@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retrocession — Retro Rater | Risk Code Hub</title>
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <style>
+    :root {
+      --hub-primary:#7a2f3a; --hub-dark:#4e1c24; --hub-light:#f4e6e8; --hub-accent:#c8a84b;
+      --hub-secondary:#3a5a7a; --header-gradient:linear-gradient(135deg,#4e1c24 0%,#7a2f3a 55%,#63242e 100%); --header-sub:#d8a9b0;
+    }
+    .rater-intro { max-width:1500px; margin:0 auto; padding:0 24px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Retrocession</a> › Rater</div>
+  <div class="tag">Retrocession — Retro Rater</div>
+  <h1>Retrocession — Retro Rater</h1>
+  <p>Retrocession protects a reinsurer's own book. Two calculators: Panel A prices a retro catastrophe layer on the reinsurer's net accumulation; Panel B prices an industry loss warranty (ILW) — a binary cover that pays if a market-wide industry loss exceeds a trigger. Inputs update live — indicative for training.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div class="rater-intro">
+  <div class="info-box hub" style="margin-top:24px;">
+    <strong>How it prices</strong>
+    Retro cat XoL is priced like any cat layer — from the modelled expected loss to the layer, loaded and grossed up. An ILW is a binary parametric cover: expected loss = limit × probability the industry loss exceeds the trigger; premium loads that expected loss. The multiple (rate-on-line ÷ probability) is the reward per unit of modelled risk — the number the retro and ILS markets watch.
+  </div>
+</div>
+
+<div class="rater-container">
+
+  <div class="rc-section">
+    <div class="rc-header">
+      <span class="rc-title">Panel A — Retrocession Catastrophe Layer</span>
+      <span class="rc-model-tag">model: expected-loss / rate-on-line</span>
+    </div>
+    <div class="rc-body">
+      <div class="rc-form-col">
+        <div class="rater-form">
+          <div class="rater-field"><label>Layer limit (£)</label><input type="number" id="x_limit" value="50000000" step="5000000"><div class="field-hint">The "xs" amount of retro cover</div></div>
+          <div class="rater-field"><label>Attachment (£)</label><input type="number" id="x_att" value="150000000" step="5000000"><div class="field-hint">Reinsurer's net retention below</div></div>
+          <div class="rater-field"><label>Modelled AAL to layer (£)</label><input type="number" id="x_el" value="3500000" step="100000"><div class="field-hint">Expected loss to the retro layer</div></div>
+          <div class="rater-field"><label>Risk load %</label><input type="number" id="x_rl" value="45" step="5"><div class="field-hint">Load over expected loss</div></div>
+          <div class="rater-field"><label>Internal expenses %</label><input type="number" id="x_exp" value="5" step="0.5"><div class="field-hint">Retrocessionaire expense</div></div>
+          <div class="rater-field"><label>Brokerage %</label><input type="number" id="x_brok" value="10" step="0.5"><div class="field-hint">On layer premium</div></div>
+          <div class="rater-field"><label>Reinstatements</label><input type="number" id="x_reinst" value="1" step="1"><div class="field-hint">Number at 100%</div></div>
+        </div>
+      </div>
+      <div class="rc-results-col">
+        <div class="rc-metrics">
+          <div class="rc-metric"><span class="rc-metric-label">Loss on line</span><span class="rc-metric-value" id="x_lol">—</span></div>
+          <div class="rc-metric rc-metric-tight"><span class="rc-metric-label">Rate on line</span><span class="rc-metric-value" id="x_rol">—</span></div>
+          <div class="rc-metric"><span class="rc-metric-label">Payback (yrs)</span><span class="rc-metric-value" id="x_pay">—</span></div>
+        </div>
+        <div class="rc-waterfall">
+          <div class="wf-row wf-header"><span class="wf-label">Layer pricing</span><span class="wf-value">£ / %</span></div>
+          <div class="wf-row"><span class="wf-label">Layer <span id="x_desc" class="wf-driver"></span></span><span class="wf-value" id="x_w_layer">—</span></div>
+          <div class="wf-row"><span class="wf-label">Expected loss to layer</span><span class="wf-value" id="x_w_el">—</span></div>
+          <div class="wf-row"><span class="wf-label">Loaded for risk</span><span class="wf-value" id="x_w_loaded">—</span></div>
+          <div class="wf-row wf-subtotal"><span class="wf-label">Layer premium (gross)</span><span class="wf-value" id="x_w_prem">—</span></div>
+          <div class="wf-row"><span class="wf-label">Max annual exposure (incl. reinst.)</span><span class="wf-value" id="x_w_maxexp">—</span></div>
+          <div class="wf-row wf-result"><span class="wf-label">Margin over expected loss</span><span class="wf-value" id="x_w_margin">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rc-section">
+    <div class="rc-header">
+      <span class="rc-title">Panel B — Industry Loss Warranty (ILW)</span>
+      <span class="rc-model-tag">model: binary industry trigger</span>
+    </div>
+    <div class="rc-body">
+      <div class="rc-form-col">
+        <div class="rater-form">
+          <div class="rater-field"><label>ILW limit (£)</label><input type="number" id="w_limit" value="25000000" step="5000000"><div class="field-hint">Paid in full if triggered</div></div>
+          <div class="rater-field"><label>Industry loss trigger ($bn)</label><input type="number" id="w_trig" value="30" step="5"><div class="field-hint">Market-wide index level</div></div>
+          <div class="rater-field"><label>Prob. of trigger exceeded %</label><input type="number" id="w_prob" value="4" step="0.5"><div class="field-hint">Annual, from a cat model</div></div>
+          <div class="rater-field"><label>Risk load %</label><input type="number" id="w_rl" value="80" step="5"><div class="field-hint">Load over expected loss</div></div>
+          <div class="rater-field"><label>Internal expenses %</label><input type="number" id="w_exp" value="4" step="0.5"><div class="field-hint">Provider expense</div></div>
+          <div class="rater-field"><label>Brokerage %</label><input type="number" id="w_brok" value="8" step="0.5"><div class="field-hint">On premium</div></div>
+        </div>
+      </div>
+      <div class="rc-results-col">
+        <div class="rc-metrics">
+          <div class="rc-metric"><span class="rc-metric-label">Rate on line</span><span class="rc-metric-value" id="w_rol">—</span></div>
+          <div class="rc-metric"><span class="rc-metric-label">Multiple (RoL÷prob)</span><span class="rc-metric-value" id="w_mult">—</span></div>
+          <div class="rc-metric" id="w_marg_card"><span class="rc-metric-label">Margin</span><span class="rc-metric-value" id="w_marg">—</span></div>
+        </div>
+        <div class="rc-waterfall">
+          <div class="wf-row wf-header"><span class="wf-label">ILW pricing</span><span class="wf-value">£ / %</span></div>
+          <div class="wf-row"><span class="wf-label">Limit (binary payout)</span><span class="wf-value" id="w_w_limit">—</span></div>
+          <div class="wf-row"><span class="wf-label">Expected loss (limit × prob)</span><span class="wf-value" id="w_w_el">—</span></div>
+          <div class="wf-row"><span class="wf-label">Loaded for risk</span><span class="wf-value" id="w_w_loaded">—</span></div>
+          <div class="wf-row wf-subtotal"><span class="wf-label">ILW premium (gross)</span><span class="wf-value" id="w_w_prem">—</span></div>
+          <div class="wf-row wf-result"><span class="wf-label">Margin over expected loss</span><span class="wf-value" id="w_w_marg">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="../index.html">← Risk Code Hub</a>
+  &nbsp;|&nbsp;
+  Reinsurance — Retrocession — Retro Rater
+  &nbsp;|&nbsp;
+  Version 6.1 · July 2026
+</footer>
+
+<script>
+(function () {
+  function num(id){ var v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; }
+  function gbp(n){ return (n<0?'−£':'£') + Math.abs(Math.round(n)).toLocaleString('en-GB'); }
+  function pct(n){ return (n*100).toFixed(1) + '%'; }
+
+  function calcX(){
+    var limit=num('x_limit'), att=num('x_att'), el=num('x_el'), rl=num('x_rl')/100,
+        exp=num('x_exp')/100, brok=num('x_brok')/100, reinst=num('x_reinst');
+    var lol = limit>0 ? el/limit : 0;
+    var loaded = el*(1+rl);
+    var divisor = 1-exp-brok; if(divisor<=0) divisor=0.01;
+    var prem = loaded/divisor;
+    var rol = limit>0 ? prem/limit : 0;
+    var payback = rol>0 ? 1/rol : 0;
+    var margin = prem-el;
+    var maxExp = limit*(1+Math.max(0,reinst));
+    document.getElementById('x_lol').textContent = pct(lol);
+    document.getElementById('x_rol').textContent = pct(rol);
+    document.getElementById('x_pay').textContent = payback.toFixed(1);
+    document.getElementById('x_desc').textContent = '(' + gbp(limit) + ' xs ' + gbp(att) + ')';
+    document.getElementById('x_w_layer').textContent = gbp(limit);
+    document.getElementById('x_w_el').textContent = gbp(el);
+    document.getElementById('x_w_loaded').textContent = gbp(loaded);
+    document.getElementById('x_w_prem').textContent = gbp(prem);
+    document.getElementById('x_w_maxexp').textContent = gbp(maxExp);
+    document.getElementById('x_w_margin').textContent = gbp(margin);
+    var wm=document.getElementById('x_w_margin'); wm.classList.remove('positive','negative');
+    wm.classList.add(margin>=0?'positive':'negative');
+  }
+
+  function calcW(){
+    var limit=num('w_limit'), prob=num('w_prob')/100, rl=num('w_rl')/100, exp=num('w_exp')/100, brok=num('w_brok')/100;
+    var el = limit*prob;
+    var loaded = el*(1+rl);
+    var divisor = 1-exp-brok; if(divisor<=0) divisor=0.01;
+    var prem = loaded/divisor;
+    var rol = limit>0 ? prem/limit : 0;
+    var mult = prob>0 ? rol/prob : 0;
+    var margin = prem-el;
+    document.getElementById('w_rol').textContent = pct(rol);
+    document.getElementById('w_mult').textContent = mult.toFixed(1)+'×';
+    document.getElementById('w_marg').textContent = gbp(margin);
+    document.getElementById('w_w_limit').textContent = gbp(limit);
+    document.getElementById('w_w_el').textContent = gbp(el);
+    document.getElementById('w_w_loaded').textContent = gbp(loaded);
+    document.getElementById('w_w_prem').textContent = gbp(prem);
+    document.getElementById('w_w_marg').textContent = gbp(margin);
+    var card=document.getElementById('w_marg_card'), wm=document.getElementById('w_w_marg');
+    card.classList.remove('rc-metric-profit','rc-metric-loss'); wm.classList.remove('positive','negative');
+    if(margin>=0){ card.classList.add('rc-metric-profit'); wm.classList.add('positive'); }
+    else { card.classList.add('rc-metric-loss'); wm.classList.add('negative'); }
+  }
+
+  function calc(){ calcX(); calcW(); }
+  document.querySelectorAll('input[type=number]').forEach(function(el){ el.addEventListener('input', calc); });
+  calc();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stop-Loss — Aggregate Rater | Risk Code Hub</title>
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <style>
+    :root {
+      --hub-primary:#9a6a1e; --hub-dark:#6a4712; --hub-light:#f6ecd8; --hub-accent:#3a5a7a;
+      --hub-secondary:#7a2f2f; --header-gradient:linear-gradient(135deg,#6a4712 0%,#9a6a1e 55%,#7c5518 100%); --header-sub:#e0c48a;
+    }
+    .rater-intro { max-width:1500px; margin:0 auto; padding:0 24px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Stop-Loss</a> › Rater</div>
+  <div class="tag">Stop-Loss — Aggregate Loss-Ratio Rater</div>
+  <h1>Stop-Loss — Aggregate Loss-Ratio Rater</h1>
+  <p>Price an aggregate stop-loss on the whole-year loss ratio. Enter the layer as loss-ratio points, the expected loss ratio and its volatility, and the loadings; the rater models the loss ratio as a normal distribution and returns the expected recovery, rate-on-line and the probability of attaching. Inputs update live — indicative for training.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div class="rater-intro">
+  <div class="info-box hub" style="margin-top:24px;">
+    <strong>How it prices</strong>
+    The whole-account loss ratio is modelled as a normal distribution with the expected loss ratio as its mean and the volatility as its standard deviation. The expected recovery into the layer [attachment, exhaustion] uses the stop-loss formula E[(L−a)⁺] − E[(L−b)⁺], net of any cedant co-participation, times subject premium. That expected cost is loaded for risk and grossed up for expenses and brokerage. The normal model is a transparent teaching approximation — real stop-loss pricing uses the empirical or a skewed aggregate distribution.
+  </div>
+</div>
+
+<div class="rater-container">
+
+  <div class="rc-section">
+    <div class="rc-header">
+      <span class="rc-title">Aggregate Stop-Loss — Loss-Ratio Layer</span>
+      <span class="rc-model-tag">model: normal aggregate stop-loss</span>
+    </div>
+    <div class="rc-body">
+      <div class="rc-form-col">
+        <div class="rater-form">
+          <div class="rater-field"><label>Subject premium (£)</label><input type="number" id="s_sp" value="50000000" step="1000000"><div class="field-hint">Base the loss ratio applies to</div></div>
+          <div class="rater-field"><label>Attachment loss ratio %</label><input type="number" id="s_att" value="90" step="1"><div class="field-hint">Cover starts above this LR</div></div>
+          <div class="rater-field"><label>Exhaustion loss ratio %</label><input type="number" id="s_exh" value="110" step="1"><div class="field-hint">Top of cover</div></div>
+          <div class="rater-field"><label>Expected loss ratio %</label><input type="number" id="s_elr" value="80" step="1"><div class="field-hint">Mean of the distribution</div></div>
+          <div class="rater-field"><label>Loss-ratio volatility (σ, %)</label><input type="number" id="s_sd" value="12" step="1"><div class="field-hint">Standard deviation of the LR</div></div>
+          <div class="rater-field"><label>Cedant co-participation %</label><input type="number" id="s_co" value="5" step="1"><div class="field-hint">Share cedant keeps in the layer</div></div>
+          <div class="rater-field"><label>Risk load %</label><input type="number" id="s_rl" value="25" step="5"><div class="field-hint">Load over expected cost</div></div>
+          <div class="rater-field"><label>Internal expenses %</label><input type="number" id="s_exp" value="5" step="0.5"><div class="field-hint">Reinsurer expense</div></div>
+          <div class="rater-field"><label>Brokerage %</label><input type="number" id="s_brok" value="10" step="0.5"><div class="field-hint">On layer premium</div></div>
+        </div>
+      </div>
+      <div class="rc-results-col">
+        <div class="rc-metrics">
+          <div class="rc-metric"><span class="rc-metric-label">Prob. of attaching</span><span class="rc-metric-value" id="s_prob">—</span></div>
+          <div class="rc-metric rc-metric-tight"><span class="rc-metric-label">Rate on line</span><span class="rc-metric-value" id="s_rol">—</span></div>
+          <div class="rc-metric"><span class="rc-metric-label">Payback (yrs)</span><span class="rc-metric-value" id="s_pay">—</span></div>
+        </div>
+        <div class="rc-waterfall">
+          <div class="wf-row wf-header"><span class="wf-label">Layer pricing</span><span class="wf-value">£ / %</span></div>
+          <div class="wf-row"><span class="wf-label">Layer width <span id="s_desc" class="wf-driver"></span></span><span class="wf-value" id="s_w_layer">—</span></div>
+          <div class="wf-row"><span class="wf-label">Expected loss cost (% of SP)</span><span class="wf-value" id="s_w_pct">—</span></div>
+          <div class="wf-row"><span class="wf-label">Expected recovery (net of co-part.)</span><span class="wf-value" id="s_w_rec">—</span></div>
+          <div class="wf-row"><span class="wf-label">Loaded for risk</span><span class="wf-value" id="s_w_loaded">—</span></div>
+          <div class="wf-row wf-subtotal"><span class="wf-label">Layer premium (gross)</span><span class="wf-value" id="s_w_prem">—</span></div>
+          <div class="wf-row wf-result"><span class="wf-label">Margin over expected recovery</span><span class="wf-value" id="s_w_margin">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="../index.html">← Risk Code Hub</a>
+  &nbsp;|&nbsp;
+  Reinsurance — Stop-Loss — Aggregate Rater
+  &nbsp;|&nbsp;
+  Version 5.9 · July 2026
+</footer>
+
+<script>
+(function () {
+  function num(id){ var v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; }
+  function gbp(n){ return (n<0?'−£':'£') + Math.abs(Math.round(n)).toLocaleString('en-GB'); }
+  function pct1(n){ return (n*100).toFixed(1) + '%'; }
+  function pct2(n){ return (n*100).toFixed(2) + '%'; }
+
+  // standard normal pdf and cdf (erf via Abramowitz-Stegun 7.1.26)
+  function phi(x){ return Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI); }
+  function erf(x){
+    var s = x<0 ? -1 : 1; x = Math.abs(x);
+    var t = 1/(1+0.3275911*x);
+    var y = 1 - (((((1.061405429*t - 1.453152027)*t) + 1.421413741)*t - 0.284496736)*t + 0.254829592)*t*Math.exp(-x*x);
+    return s*y;
+  }
+  function Phi(x){ return 0.5*(1+erf(x/Math.SQRT2)); }
+  // E[(L-k)+] for L~N(mu,sigma)
+  function stopLoss(mu, sigma, k){
+    if (sigma <= 0) return Math.max(0, mu-k);
+    var z = (mu-k)/sigma;
+    return (mu-k)*Phi(z) + sigma*phi(z);
+  }
+
+  function calc(){
+    var sp=num('s_sp'), a=num('s_att')/100, b=num('s_exh')/100, mu=num('s_elr')/100,
+        sigma=num('s_sd')/100, co=num('s_co')/100, rl=num('s_rl')/100, exp=num('s_exp')/100, brok=num('s_brok')/100;
+    if (b < a) { var tmp=a; a=b; b=tmp; }
+    var layerFrac = stopLoss(mu, sigma, a) - stopLoss(mu, sigma, b); // expected LR points in layer
+    if (layerFrac < 0) layerFrac = 0;
+    var expPctOfSP = layerFrac * (1 - co);
+    var expRecovery = expPctOfSP * sp;
+    var loaded = expRecovery * (1 + rl);
+    var divisor = 1 - exp - brok; if (divisor <= 0) divisor = 0.01;
+    var prem = loaded / divisor;
+    var layerWidthPct = (b - a);
+    var layerPounds = layerWidthPct * sp;
+    var rol = layerPounds > 0 ? prem / layerPounds : 0;
+    var payback = rol > 0 ? 1/rol : 0;
+    var probAttach = sigma > 0 ? Phi((mu - a)/sigma) : (mu > a ? 1 : 0);
+    var margin = prem - expRecovery;
+
+    document.getElementById('s_prob').textContent = pct1(probAttach);
+    document.getElementById('s_rol').textContent = pct1(rol);
+    document.getElementById('s_pay').textContent = payback.toFixed(1);
+    document.getElementById('s_desc').textContent = '(' + (b*100).toFixed(0) + '% xs ' + (a*100).toFixed(0) + '% LR)';
+    document.getElementById('s_w_layer').textContent = gbp(layerPounds) + '  (' + (layerWidthPct*100).toFixed(0) + ' pts)';
+    document.getElementById('s_w_pct').textContent = pct2(expPctOfSP);
+    document.getElementById('s_w_rec').textContent = gbp(expRecovery);
+    document.getElementById('s_w_loaded').textContent = gbp(loaded);
+    document.getElementById('s_w_prem').textContent = gbp(prem);
+    document.getElementById('s_w_margin').textContent = gbp(margin);
+    var wm = document.getElementById('s_w_margin');
+    wm.classList.remove('positive','negative');
+    wm.classList.add(margin >= 0 ? 'positive' : 'negative');
+  }
+
+  document.querySelectorAll('input[type=number]').forEach(function(el){ el.addEventListener('input', calc); });
+  calc();
+})();
+</script>
+
+</body>
+</html>

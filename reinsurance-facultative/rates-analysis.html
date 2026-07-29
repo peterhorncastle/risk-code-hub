@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facultative — Rates &amp; ROE | Risk Code Hub</title>
+  <link rel="stylesheet" href="../hub-styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root { --hub-primary:#6a3a7a; --hub-dark:#452452; --hub-light:#f0e8f4; --hub-accent:#c8a84b; --hub-secondary:#3a5a7a; --header-gradient:linear-gradient(135deg,#452452 0%,#6a3a7a 55%,#553063 100%); --header-sub:#d0b8dc; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Facultative</a> › Rates &amp; ROE</div>
+  <div class="tag">Module 05 — Rates &amp; ROE</div>
+  <h1>Facultative — Rates &amp; ROE</h1>
+  <p>Facultative pricing tracks the direct market it sits above — and, for excess, the same exposure curve that governs per-risk XoL. Its economics turn on winning good individual risks at an adequate rate.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a><a href="history.html">History</a><a href="timeline.html">Timeline</a><a href="database.html">Loss Database</a><a href="underwriting.html">Underwriting</a><a href="rates-analysis.html" class="active">Rates &amp; ROE</a><a href="risk-mitigation.html">Risk Mitigation</a><a href="global-program.html">Global Programme</a><a href="references.html">References</a><a href="rater.html">Rater</a>
+</nav>
+<main>
+  <p>Facultative rates move with the underlying direct market — when primary property rates harden, facultative follows. For fac-excess, the share of a risk that falls in a layer is governed by the exposure curve, so higher attachments cost far less. The charts show an illustrative fac rate cycle and how the exposure factor falls with attachment. <span class="badge b-e">EST</span></p>
+
+  <div class="chart-wrap">
+    <h3>Illustrative Facultative Property Rate Index</h3>
+    <p class="sub">Facultative rates track the direct market through the cycle — hardening into 2023, easing in 2025–26. <span class="badge b-i">ILLUS</span></p>
+    <canvas id="rateChart"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Exposure Factor by Attachment (share of a risk's expected loss in the layer)</h3>
+    <p class="sub">The higher the layer attaches on the risk, the smaller its share of the expected loss — and the lower the fac-excess premium. <span class="badge b-i">ILLUS</span></p>
+    <canvas id="efChart"></canvas>
+  </div>
+
+  <h2>The Facultative Economics in Words</h2>
+  <div class="cycle-block soft"><div class="cy-date">Proportional fac</div><h4>Follows the original</h4><p>The reinsurer inherits the direct rate and terms, so its result depends on how well the original risk was priced — selection and rate adequacy are everything.</p></div>
+  <div class="cycle-block reform"><div class="cy-date">Excess fac — low layer</div><h4>Exposed, higher rate</h4><p>A working facultative layer near the EML carries a real exposure factor and a meaningful rate-on-line.</p></div>
+  <div class="cycle-block hard"><div class="cy-date">Excess fac — high layer</div><h4>Thin, cheap tail</h4><p>A layer well above the EML has a tiny exposure factor and a very low rate — genuine catastrophe-of-the-risk cover.</p></div>
+
+  <h2>Reinsurer Return — What Drives It</h2>
+  <p>Facultative return is won risk by risk: adequate rates, good selection and disciplined EML judgement, against the higher per-risk transaction cost. <span class="badge b-i">ILLUS</span></p>
+  <div class="roe-grid">
+    <div class="roe-card bull"><div class="roe-label">Good selection</div><div class="roe-val">Adequate rates</div><div class="roe-note">Well-chosen risks at firm rates in a hard market deliver strong single-risk margins.</div></div>
+    <div class="roe-card base"><div class="roe-label">Typical</div><div class="roe-val">Follows the market</div><div class="roe-note">Rates adequate on average; the reinsurer earns a margin net of the higher fac admin cost.</div></div>
+    <div class="roe-card bear"><div class="roe-label">Soft &amp; adverse</div><div class="roe-val">Thin rates, a loss</div><div class="roe-note">Soft-market rates plus a single large loss on a poorly-selected risk erode the account.</div></div>
+  </div>
+</main>
+<footer><a href="../index.html">← Risk Code Hub</a> &nbsp;|&nbsp; Reinsurance — Facultative — Module 05 Rates &amp; ROE &nbsp;|&nbsp; Version 6.0 · July 2026</footer>
+<script>
+new Chart(document.getElementById('rateChart'), {
+  type:'line',
+  data:{ labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'],
+    datasets:[{ label:'Facultative property rate index (2015=100)', data:[100,96,94,96,101,110,120,132,148,150,145,138],
+      borderColor:'#6a3a7a', backgroundColor:'rgba(106,58,122,0.12)', fill:true, tension:0.3, pointRadius:3 }] },
+  options:{ responsive:true, plugins:{legend:{position:'bottom'}}, scales:{ y:{ title:{display:true,text:'Rate index'} } } }
+});
+new Chart(document.getElementById('efChart'), {
+  type:'line',
+  data:{ labels:['0%','10%','25%','50%','75%','100%'],
+    datasets:[{ label:'Exposure factor — share of loss above attachment (%)', data:[100,58,35,17,7,2],
+      borderColor:'#452452', backgroundColor:'rgba(69,36,82,0.12)', fill:true, tension:0.3, pointRadius:3 }] },
+  options:{ responsive:true, plugins:{legend:{position:'bottom'}}, scales:{ y:{ title:{display:true,text:'Exposure factor (%)'} }, x:{ title:{display:true,text:'Attachment as % of sum insured / EML'} } } }
+});
+</script>
+</body>
+</html>

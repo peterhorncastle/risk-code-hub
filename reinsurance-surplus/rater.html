@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surplus Treaty — Rater | Risk Code Hub</title>
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <style>
+    :root {
+      --hub-primary:#1f6f78; --hub-dark:#124a50; --hub-light:#e2f1f2; --hub-accent:#c8a84b;
+      --hub-secondary:#3a5a7a; --header-gradient:linear-gradient(135deg,#124a50 0%,#1f6f78 55%,#166069 100%); --header-sub:#9fd3d8;
+    }
+    .rater-intro { max-width:1500px; margin:0 auto; padding:0 24px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Surplus Treaty</a> › Rater</div>
+  <div class="tag">Surplus Treaty — Proportional Rater</div>
+  <h1>Surplus Treaty — Proportional Rater</h1>
+  <p>Two calculators: the first computes the surplus cession for a single risk from its sum insured, the retention and the number of lines; the second prices the treaty result across the ceded portfolio. Inputs update live — indicative for training.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div class="rater-intro">
+  <div class="info-box hub" style="margin-top:24px;">
+    <strong>How it prices</strong>
+    Ceded SI = min(SI − retention, lines × retention), floored at 0. Cession ratio = ceded SI ÷ SI, and premium and losses cede pro-rata. The treaty panel then applies ceding commission, brokerage and profit commission to the ceded premium exactly as a quota share.
+  </div>
+</div>
+
+<div class="rater-container">
+
+  <div class="rc-section">
+    <div class="rc-header">
+      <span class="rc-title">Panel A — Single-Risk Surplus Cession</span>
+      <span class="rc-model-tag">model: surplus-cession</span>
+    </div>
+    <div class="rc-body">
+      <div class="rc-form-col">
+        <div class="rater-form">
+          <div class="rater-field"><label>Sum insured (£)</label><input type="number" id="a_si" value="6000000" step="500000"><div class="field-hint">Total value at risk</div></div>
+          <div class="rater-field"><label>Retention / line (£)</label><input type="number" id="a_ret" value="1000000" step="250000"><div class="field-hint">Amount the cedant keeps</div></div>
+          <div class="rater-field"><label>Number of lines</label><input type="number" id="a_lines" value="9" step="1"><div class="field-hint">Surplus capacity = lines × retention</div></div>
+          <div class="rater-field"><label>Risk premium (£)</label><input type="number" id="a_prem" value="30000" step="1000"><div class="field-hint">100% premium for the risk</div></div>
+          <div class="rater-field"><label>Loss on risk (£)</label><input type="number" id="a_loss" value="3000000" step="250000"><div class="field-hint">Test a claim (0 for none)</div></div>
+        </div>
+      </div>
+      <div class="rc-results-col">
+        <div class="rc-metrics">
+          <div class="rc-metric"><span class="rc-metric-label">Cession ratio</span><span class="rc-metric-value" id="a_cr">—</span></div>
+          <div class="rc-metric"><span class="rc-metric-label">Ceded SI</span><span class="rc-metric-value" id="a_csi">—</span></div>
+          <div class="rc-metric"><span class="rc-metric-label">Above capacity</span><span class="rc-metric-value" id="a_over">—</span></div>
+        </div>
+        <div class="rc-waterfall">
+          <div class="wf-row wf-header"><span class="wf-label">Split of the risk</span><span class="wf-value">£</span></div>
+          <div class="wf-row"><span class="wf-label">Cedant retention (net)</span><span class="wf-value" id="a_w_ret">—</span></div>
+          <div class="wf-row"><span class="wf-label">Ceded to treaty</span><span class="wf-value" id="a_w_ced">—</span></div>
+          <div class="wf-row"><span class="wf-label">Above treaty (fac / gap)</span><span class="wf-value" id="a_w_over">—</span></div>
+          <div class="wf-row wf-subtotal"><span class="wf-label">Ceded premium</span><span class="wf-value" id="a_w_prem">—</span></div>
+          <div class="wf-row wf-result"><span class="wf-label">Reinsurer share of loss</span><span class="wf-value" id="a_w_loss">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rc-section">
+    <div class="rc-header">
+      <span class="rc-title">Panel B — Treaty Result</span>
+      <span class="rc-model-tag">model: proportional-cession</span>
+    </div>
+    <div class="rc-body">
+      <div class="rc-form-col">
+        <div class="rater-form">
+          <div class="rater-field"><label>Ceded premium to treaty (£)</label><input type="number" id="b_cp" value="20000000" step="1000000"><div class="field-hint">Aggregate surplus cession</div></div>
+          <div class="rater-field"><label>Expected loss ratio %</label><input type="number" id="b_elr" value="60" step="1"><div class="field-hint">On ceded premium</div></div>
+          <div class="rater-field"><label>Ceding commission %</label><input type="number" id="b_cc" value="30" step="0.5"><div class="field-hint">Paid back to cedant</div></div>
+          <div class="rater-field"><label>Brokerage %</label><input type="number" id="b_brok" value="2.5" step="0.25"><div class="field-hint">On ceded premium</div></div>
+          <div class="rater-field"><label>Reinsurer expense %</label><input type="number" id="b_exp" value="5" step="0.5"><div class="field-hint">For the profit-commission calc</div></div>
+          <div class="rater-field"><label>Profit commission %</label><input type="number" id="b_pc" value="20" step="1"><div class="field-hint">Share of profit to cedant</div></div>
+        </div>
+      </div>
+      <div class="rc-results-col">
+        <div class="rc-metrics">
+          <div class="rc-metric"><span class="rc-metric-label">Combined ratio</span><span class="rc-metric-value" id="b_crr">—</span></div>
+          <div class="rc-metric" id="b_res_card"><span class="rc-metric-label">Result after PC</span><span class="rc-metric-value" id="b_res">—</span></div>
+          <div class="rc-metric"><span class="rc-metric-label">Profit comm.</span><span class="rc-metric-value" id="b_pcv">—</span></div>
+        </div>
+        <div class="rc-waterfall">
+          <div class="wf-row wf-header"><span class="wf-label">Reinsurer P&amp;L</span><span class="wf-value">£</span></div>
+          <div class="wf-row"><span class="wf-label">Ceded premium</span><span class="wf-value" id="b_w_cp">—</span></div>
+          <div class="wf-row"><span class="wf-label">Ceded losses</span><span class="wf-value" id="b_w_loss">—</span></div>
+          <div class="wf-row"><span class="wf-label">Ceding commission</span><span class="wf-value" id="b_w_cc">—</span></div>
+          <div class="wf-row"><span class="wf-label">Brokerage</span><span class="wf-value" id="b_w_brok">—</span></div>
+          <div class="wf-row wf-subtotal"><span class="wf-label">Technical result (before PC)</span><span class="wf-value" id="b_w_tech">—</span></div>
+          <div class="wf-row"><span class="wf-label">Profit commission to cedant</span><span class="wf-value" id="b_w_pc">—</span></div>
+          <div class="wf-row wf-result"><span class="wf-label">Result after profit commission</span><span class="wf-value" id="b_w_res">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="../index.html">← Risk Code Hub</a>
+  &nbsp;|&nbsp;
+  Reinsurance — Surplus Treaty — Proportional Rater
+  &nbsp;|&nbsp;
+  Version 5.7 · July 2026
+</footer>
+
+<script>
+(function () {
+  function num(id){ var v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; }
+  function gbp(n){ return (n<0?'−£':'£') + Math.abs(Math.round(n)).toLocaleString('en-GB'); }
+  function pct(n){ return (n*100).toFixed(1) + '%'; }
+
+  function calcA(){
+    var si=num('a_si'), ret=num('a_ret'), lines=num('a_lines'), prem=num('a_prem'), loss=num('a_loss');
+    var capacity = lines*ret;
+    var surplus = Math.max(0, si - ret);
+    var ceded = Math.min(surplus, capacity);
+    var over = Math.max(0, surplus - capacity);
+    var netRet = si - ceded - over;
+    var ratio = si>0 ? ceded/si : 0;
+    var cededPrem = ratio*prem;
+    var reLoss = ratio*loss;
+
+    document.getElementById('a_cr').textContent = pct(ratio);
+    document.getElementById('a_csi').textContent = gbp(ceded);
+    document.getElementById('a_over').textContent = over>0 ? gbp(over) : '—';
+    document.getElementById('a_w_ret').textContent = gbp(netRet);
+    document.getElementById('a_w_ced').textContent = gbp(ceded);
+    document.getElementById('a_w_over').textContent = over>0 ? gbp(over) : '£0';
+    document.getElementById('a_w_prem').textContent = gbp(cededPrem);
+    document.getElementById('a_w_loss').textContent = gbp(reLoss);
+  }
+
+  function calcB(){
+    var cp=num('b_cp'), elr=num('b_elr')/100, cc=num('b_cc')/100, brok=num('b_brok')/100,
+        exp=num('b_exp')/100, pc=num('b_pc')/100;
+    var loss=cp*elr, comm=cp*cc, brokAmt=cp*brok, expAmt=cp*exp;
+    var tech = cp - loss - comm - brokAmt;
+    var treatyProfit = tech - expAmt;
+    var profitComm = Math.max(0, treatyProfit)*pc;
+    var result = tech - profitComm;
+    var cr = cp>0 ? (loss+comm+brokAmt)/cp : 0;
+
+    document.getElementById('b_crr').textContent = pct(cr);
+    document.getElementById('b_res').textContent = gbp(result);
+    document.getElementById('b_pcv').textContent = gbp(profitComm);
+    document.getElementById('b_w_cp').textContent = gbp(cp);
+    document.getElementById('b_w_loss').textContent = '−'+gbp(loss);
+    document.getElementById('b_w_cc').textContent = '−'+gbp(comm);
+    document.getElementById('b_w_brok').textContent = '−'+gbp(brokAmt);
+    document.getElementById('b_w_tech').textContent = gbp(tech);
+    document.getElementById('b_w_pc').textContent = '−'+gbp(profitComm);
+    document.getElementById('b_w_res').textContent = gbp(result);
+
+    var card=document.getElementById('b_res_card'), wres=document.getElementById('b_w_res');
+    card.classList.remove('rc-metric-profit','rc-metric-loss'); wres.classList.remove('positive','negative');
+    if(result>=0){ card.classList.add('rc-metric-profit'); wres.classList.add('positive'); }
+    else { card.classList.add('rc-metric-loss'); wres.classList.add('negative'); }
+  }
+
+  function calc(){ calcA(); calcB(); }
+  document.querySelectorAll('input[type=number]').forEach(function(el){ el.addEventListener('input', calc); });
+  calc();
+})();
+</script>
+
+</body>
+</html>

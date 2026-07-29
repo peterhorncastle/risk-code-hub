@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surplus Treaty — Rates &amp; ROE | Risk Code Hub</title>
+  <link rel="stylesheet" href="../hub-styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root { --hub-primary:#1f6f78; --hub-dark:#124a50; --hub-light:#e2f1f2; --hub-accent:#c8a84b; --hub-secondary:#3a5a7a; --header-gradient:linear-gradient(135deg,#124a50 0%,#1f6f78 55%,#166069 100%); --header-sub:#9fd3d8; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Surplus Treaty</a> › Rates &amp; ROE</div>
+  <div class="tag">Module 05 — Rates &amp; ROE</div>
+  <h1>Surplus Treaty — Rates &amp; ROE</h1>
+  <p>Like quota share, surplus has no rate-on-line — its cycle runs through the <strong>ceding commission</strong> and the <strong>retention</strong>. Higher retentions and lower commissions widen reinsurer margins; the reverse compresses them.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a><a href="history.html">History</a><a href="timeline.html">Timeline</a><a href="database.html">Loss Database</a><a href="underwriting.html">Underwriting</a><a href="rates-analysis.html" class="active">Rates &amp; ROE</a><a href="risk-mitigation.html">Risk Mitigation</a><a href="global-program.html">Global Programme</a><a href="references.html">References</a><a href="rater.html">Rater</a>
+</nav>
+<main>
+  <p>The proportional cycle runs through commission and retention: in soft markets reinsurers pay more ceding commission and accept lower retentions to win premium; in hard markets they cut commission, push retentions up and add event limits. The charts reconstruct a typical path for training. <span class="badge b-e">EST</span></p>
+
+  <div class="chart-wrap">
+    <h3>Typical Ceding Commission Through the Cycle (indicative)</h3>
+    <p class="sub">Higher commission = softer market for the reinsurer; troughs after cat losses and the 2023 reset. <span class="badge b-i">ILLUS</span></p>
+    <canvas id="ccChart"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Retention vs Cession Ratio (a £6m risk, surplus fully placed)</h3>
+    <p class="sub">Raising the retention (line) sharply cuts the cession — the cedant keeps more risk and reward. Assumes enough lines to place the whole surplus. <span class="badge b-i">ILLUS</span></p>
+    <canvas id="retChart"></canvas>
+  </div>
+
+  <h2>The Surplus Cycle in Words</h2>
+  <div class="cycle-block soft"><div class="cy-date">Soft market</div><h4>Commissions rise, retentions ease</h4><p>Abundant capacity lets cedants negotiate higher ceding commissions and lower retentions — cheap capacity, thin reinsurer margins.</p></div>
+  <div class="cycle-block hard"><div class="cy-date">Hard market (2023)</div><h4>Commissions cut, retentions up</h4><p>After losses, reinsurers cut ceding commission, push the retention line up and add event limits — restoring proportional margins.</p></div>
+  <div class="cycle-block reform"><div class="cy-date">Sliding scale</div><h4>The aligned middle</h4><p>A sliding-scale commission moves with the actual loss ratio, dampening the cycle for both parties automatically.</p></div>
+
+  <h2>Reinsurer Return — Scenarios</h2>
+  <p>Surplus return is driven by the ceded loss ratio against the (100% − commission − brokerage) break-even, plus the mix of risks the variable cession delivers. <span class="badge b-i">ILLUS</span></p>
+  <div class="roe-grid">
+    <div class="roe-card bull"><div class="roe-label">Good book</div><div class="roe-val">55% LR</div><div class="roe-note">Well below break-even; sliding scale pays more commission but the treaty is still profitable.</div></div>
+    <div class="roe-card base"><div class="roe-label">Priced book</div><div class="roe-val">60% LR</div><div class="roe-note">Comfortable margin at a flat 30% commission and 2.5% brokerage (67.5% break-even).</div></div>
+    <div class="roe-card bear"><div class="roe-label">Cat-hit year</div><div class="roe-val">80%+ LR</div><div class="roe-note">Accumulation across many ceded risks; the event limit and loss carry-forward are what protect the result.</div></div>
+  </div>
+</main>
+<footer><a href="../index.html">← Risk Code Hub</a> &nbsp;|&nbsp; Reinsurance — Surplus Treaty — Module 05 Rates &amp; ROE &nbsp;|&nbsp; Version 5.7 · July 2026</footer>
+<script>
+new Chart(document.getElementById('ccChart'), {
+  type:'line',
+  data:{ labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'],
+    datasets:[{ label:'Typical ceding commission (%)', data:[33,33,32,30,29,29,30,29,25,26,28,30],
+      borderColor:'#1f6f78', backgroundColor:'rgba(31,111,120,0.12)', fill:true, tension:0.3, pointRadius:3 }] },
+  options:{ responsive:true, plugins:{legend:{position:'bottom'}}, scales:{ y:{ title:{display:true,text:'Ceding commission (%)'} } } }
+});
+new Chart(document.getElementById('retChart'), {
+  type:'line',
+  data:{ labels:['£0.5m','£1.0m','£1.5m','£2.0m','£3.0m','£4.0m','£6.0m'],
+    datasets:[{ label:'Cession ratio on a £6m risk (%)', data:[91.7,83.3,75.0,66.7,50.0,33.3,0],
+      borderColor:'#124a50', backgroundColor:'rgba(18,74,80,0.10)', fill:true, tension:0.2, pointRadius:3 }] },
+  options:{ responsive:true, plugins:{legend:{position:'bottom'}}, scales:{ y:{ title:{display:true,text:'Cession ratio (%)'} }, x:{ title:{display:true,text:'Retention (line)'} } } }
+});
+</script>
+</body>
+</html>

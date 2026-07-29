@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quota Share — Rater | Risk Code Hub</title>
+  <link rel="stylesheet" href="../hub-styles.css">
+  <link rel="stylesheet" href="../shared/rater-styles.css">
+  <style>
+    :root {
+      --hub-primary:#2f6b4a; --hub-dark:#1c4530; --hub-light:#e8f3ed; --hub-accent:#c8a84b;
+      --hub-secondary:#3a5a7a; --header-gradient:linear-gradient(135deg,#1c4530 0%,#2f6b4a 55%,#245539 100%); --header-sub:#a9d0ba;
+    }
+    .rater-intro { max-width:1500px; margin:0 auto; padding:0 24px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Quota Share</a> › Rater</div>
+  <div class="tag">Quota Share — Proportional Rater</div>
+  <h1>Quota Share — Proportional Rater</h1>
+  <p>Price a quota share treaty by cession economics. Enter the book, the loss-ratio view and the commissions; the rater returns the reinsurer's technical result, combined ratio, the profit commission and the result after it. Inputs update live — indicative for training.</p>
+</header>
+
+<nav>
+  <a href="overview.html">Overview</a>
+  <a href="history.html">History</a>
+  <a href="timeline.html">Timeline</a>
+  <a href="database.html">Loss Database</a>
+  <a href="underwriting.html">Underwriting</a>
+  <a href="rates-analysis.html">Rates &amp; ROE</a>
+  <a href="risk-mitigation.html">Risk Mitigation</a>
+  <a href="global-program.html">Global Programme</a>
+  <a href="references.html">References</a>
+  <a href="rater.html" class="active">Rater</a>
+</nav>
+
+<div class="rater-intro">
+  <div class="info-box hub" style="margin-top:24px;">
+    <strong>How it prices</strong>
+    Ceded premium = GNPI × cession. Result = ceded premium − ceded losses − ceding commission − brokerage. A profit commission then returns a share of the treaty profit (after a reinsurer expense allowance) to the cedant. The combined ratio is (losses + ceding commission + brokerage) ÷ ceded premium.
+  </div>
+</div>
+
+<div class="rater-container">
+
+  <div class="rc-section">
+    <div class="rc-header">
+      <span class="rc-title">Proportional Treaty — Quota Share</span>
+      <span class="rc-model-tag">model: proportional-cession</span>
+    </div>
+    <div class="rc-body">
+      <div class="rc-form-col">
+        <div class="rater-form">
+          <div class="rater-field"><label>Cedant GNPI (£)</label><input type="number" id="p_gnpi" value="50000000" step="1000000"><div class="field-hint">Gross net premium income (100%)</div></div>
+          <div class="rater-field"><label>Cession %</label><input type="number" id="p_cession" value="40" step="1"><div class="field-hint">Share ceded to reinsurer</div></div>
+          <div class="rater-field"><label>Expected loss ratio %</label><input type="number" id="p_elr" value="62" step="1"><div class="field-hint">On ceded premium</div></div>
+          <div class="rater-field"><label>Ceding commission %</label><input type="number" id="p_cc" value="30" step="0.5"><div class="field-hint">Paid back to cedant</div></div>
+          <div class="rater-field"><label>Brokerage %</label><input type="number" id="p_brok" value="2.5" step="0.25"><div class="field-hint">On ceded premium</div></div>
+          <div class="rater-field"><label>Reinsurer expense %</label><input type="number" id="p_exp" value="5" step="0.5"><div class="field-hint">For the profit-commission calc</div></div>
+          <div class="rater-field"><label>Profit commission %</label><input type="number" id="p_pc" value="20" step="1"><div class="field-hint">Share of profit to cedant</div></div>
+        </div>
+      </div>
+      <div class="rc-results-col">
+        <div class="rc-metrics">
+          <div class="rc-metric"><span class="rc-metric-label">Ceded premium</span><span class="rc-metric-value" id="p_cp">—</span></div>
+          <div class="rc-metric"><span class="rc-metric-label">Combined ratio</span><span class="rc-metric-value" id="p_cr">—</span></div>
+          <div class="rc-metric" id="p_res_card"><span class="rc-metric-label">Result after PC</span><span class="rc-metric-value" id="p_res">—</span></div>
+        </div>
+        <div class="rc-waterfall">
+          <div class="wf-row wf-header"><span class="wf-label">Reinsurer P&amp;L</span><span class="wf-value">£</span></div>
+          <div class="wf-row"><span class="wf-label">Ceded premium</span><span class="wf-value" id="p_w_cp">—</span></div>
+          <div class="wf-row"><span class="wf-label">Ceded losses</span><span class="wf-value" id="p_w_loss">—</span></div>
+          <div class="wf-row"><span class="wf-label">Ceding commission</span><span class="wf-value" id="p_w_cc">—</span></div>
+          <div class="wf-row"><span class="wf-label">Brokerage</span><span class="wf-value" id="p_w_brok">—</span></div>
+          <div class="wf-row wf-subtotal"><span class="wf-label">Technical result (before PC)</span><span class="wf-value" id="p_w_tech">—</span></div>
+          <div class="wf-row"><span class="wf-label">Profit commission to cedant</span><span class="wf-value" id="p_w_pc">—</span></div>
+          <div class="wf-row wf-result"><span class="wf-label">Result after profit commission</span><span class="wf-value" id="p_w_res">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="../index.html">← Risk Code Hub</a>
+  &nbsp;|&nbsp;
+  Reinsurance — Quota Share — Proportional Rater
+  &nbsp;|&nbsp;
+  Version 5.6 · July 2026
+</footer>
+
+<script>
+(function () {
+  function num(id){ var v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; }
+  function gbp(n){ return (n<0?'−£':'£') + Math.abs(Math.round(n)).toLocaleString('en-GB'); }
+  function pct(n){ return (n*100).toFixed(1) + '%'; }
+
+  function calc(){
+    var gnpi=num('p_gnpi'), cession=num('p_cession')/100, elr=num('p_elr')/100,
+        cc=num('p_cc')/100, brok=num('p_brok')/100, exp=num('p_exp')/100, pc=num('p_pc')/100;
+    var cp = gnpi*cession;
+    var loss = cp*elr, comm = cp*cc, brokAmt = cp*brok, expAmt = cp*exp;
+    var tech = cp - loss - comm - brokAmt;
+    var treatyProfit = cp - loss - comm - brokAmt - expAmt;
+    var profitComm = Math.max(0, treatyProfit) * pc;
+    var result = tech - profitComm;
+    var cr = cp>0 ? (loss + comm + brokAmt)/cp : 0;
+
+    document.getElementById('p_cp').textContent = gbp(cp);
+    document.getElementById('p_cr').textContent = pct(cr);
+    document.getElementById('p_res').textContent = gbp(result);
+    document.getElementById('p_w_cp').textContent = gbp(cp);
+    document.getElementById('p_w_loss').textContent = '−'+gbp(loss);
+    document.getElementById('p_w_cc').textContent = '−'+gbp(comm);
+    document.getElementById('p_w_brok').textContent = '−'+gbp(brokAmt);
+    document.getElementById('p_w_tech').textContent = gbp(tech);
+    document.getElementById('p_w_pc').textContent = '−'+gbp(profitComm);
+    document.getElementById('p_w_res').textContent = gbp(result);
+
+    var card=document.getElementById('p_res_card'), wres=document.getElementById('p_w_res');
+    card.classList.remove('rc-metric-profit','rc-metric-loss'); wres.classList.remove('positive','negative');
+    if(result>=0){ card.classList.add('rc-metric-profit'); wres.classList.add('positive'); }
+    else { card.classList.add('rc-metric-loss'); wres.classList.add('negative'); }
+  }
+  document.querySelectorAll('input[type=number]').forEach(function(el){ el.addEventListener('input', calc); });
+  calc();
+})();
+</script>
+
+</body>
+</html>

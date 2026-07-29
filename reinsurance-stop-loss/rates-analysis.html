@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stop-Loss — Rates &amp; ROE | Risk Code Hub</title>
+  <link rel="stylesheet" href="../hub-styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root { --hub-primary:#9a6a1e; --hub-dark:#6a4712; --hub-light:#f6ecd8; --hub-accent:#3a5a7a; --hub-secondary:#7a2f2f; --header-gradient:linear-gradient(135deg,#6a4712 0%,#9a6a1e 55%,#7c5518 100%); --header-sub:#e0c48a; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="breadcrumb"><a href="../index.html">Risk Code Hub</a> › <a href="overview.html">Stop-Loss</a> › Rates &amp; ROE</div>
+  <div class="tag">Module 05 — Rates &amp; ROE</div>
+  <h1>Stop-Loss — Rates &amp; ROE</h1>
+  <p>Stop-loss pricing turns on the <strong>aggregate loss-ratio distribution</strong>: where you attach on that distribution sets how often the layer pays and what it costs.</p>
+</header>
+<nav>
+  <a href="overview.html">Overview</a><a href="history.html">History</a><a href="timeline.html">Timeline</a><a href="database.html">Loss Database</a><a href="underwriting.html">Underwriting</a><a href="rates-analysis.html" class="active">Rates &amp; ROE</a><a href="risk-mitigation.html">Risk Mitigation</a><a href="global-program.html">Global Programme</a><a href="references.html">References</a><a href="rater.html">Rater</a>
+</nav>
+<main>
+  <p>The whole-year loss ratio has a distribution; the stop-loss layer is a slice of its right tail. The first chart shows an illustrative loss-ratio distribution with a 90%–110% layer marked; the second shows how the attachment probability — and so the rate-on-line — falls as you attach higher. <span class="badge b-e">EST</span></p>
+
+  <div class="chart-wrap">
+    <h3>Illustrative Whole-Year Loss-Ratio Distribution</h3>
+    <p class="sub">Expected loss ratio 80%, volatility 12 points. The shaded right tail beyond 90% is where a 90%–110% stop-loss pays. <span class="badge b-i">ILLUS</span></p>
+    <canvas id="distChart"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h3>Attachment Probability vs Attachment Loss Ratio</h3>
+    <p class="sub">The higher you attach, the rarer the payout — and the lower the rate-on-line. <span class="badge b-i">ILLUS</span></p>
+    <canvas id="probChart"></canvas>
+  </div>
+
+  <h2>The Attachment Trade-Off in Words</h2>
+  <div class="cycle-block soft"><div class="cy-date">Low attachment</div><h4>Frequent, expensive</h4><p>Attach near the expected loss ratio and the layer pays most years; high rate-on-line, short payback, and real moral-hazard risk. Rarely good value.</p></div>
+  <div class="cycle-block reform"><div class="cy-date">Mid attachment</div><h4>Balanced backstop</h4><p>Attach a comfortable margin above expected (e.g. 90% when expected is 80%); pays roughly a 1-in-5 to 1-in-10 year — genuine bad-year protection.</p></div>
+  <div class="cycle-block hard"><div class="cy-date">High attachment</div><h4>Rare, cheap tail</h4><p>Attach well into the tail; pays only in a disaster year; low rate-on-line and long payback for pure catastrophe-of-the-account cover.</p></div>
+
+  <h2>Reinsurer Return — What Drives It</h2>
+  <p>Stop-loss return is the load over the expected recovery, set against the heavy capital a whole-account tail demands. <span class="badge b-i">ILLUS</span></p>
+  <div class="roe-grid">
+    <div class="roe-card bull"><div class="roe-label">Normal year</div><div class="roe-val">LR below attach</div><div class="roe-note">The layer does not pay; the reinsurer keeps the premium net of expenses — most years look like this.</div></div>
+    <div class="roe-card base"><div class="roe-label">Expected</div><div class="roe-val">Occasional breach</div><div class="roe-note">Over many years the load over expected recovery earns the margin for the capital held against the tail.</div></div>
+    <div class="roe-card bear"><div class="roe-label">Disaster year</div><div class="roe-val">Layer exhausted</div><div class="roe-note">A crop failure, systemic event or run of cats fills the layer to exhaustion — the year the cover exists for.</div></div>
+  </div>
+</main>
+<footer><a href="../index.html">← Risk Code Hub</a> &nbsp;|&nbsp; Reinsurance — Stop-Loss — Module 05 Rates &amp; ROE &nbsp;|&nbsp; Version 5.9 · July 2026</footer>
+<script>
+// Illustrative normal-ish loss-ratio distribution, mean 80, sd 12
+function phi(x){ return Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI); }
+var labels=[], dens=[], mu=80, sd=12;
+for(var lr=40; lr<=130; lr+=5){ labels.push(lr+'%'); dens.push(+(phi((lr-mu)/sd)).toFixed(4)); }
+var barColors = labels.map(function(l){ var v=parseInt(l); return (v>=90 && v<=110) ? '#7a2f2f' : '#9a6a1e'; });
+new Chart(document.getElementById('distChart'), {
+  type:'bar',
+  data:{ labels:labels, datasets:[{ label:'Relative likelihood', data:dens, backgroundColor:barColors }] },
+  options:{ responsive:true, plugins:{legend:{display:false}}, scales:{ y:{ title:{display:true,text:'Relative likelihood'} }, x:{ title:{display:true,text:'Whole-year loss ratio'} } } }
+});
+// Attachment probability: P(LR > a) for a from 80 to 115
+function erf(x){ var s=x<0?-1:1; x=Math.abs(x); var t=1/(1+0.3275911*x);
+  var y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x); return s*y; }
+function Phi(x){ return 0.5*(1+erf(x/Math.SQRT2)); }
+var al=[], ap=[];
+for(var a=80; a<=115; a+=5){ al.push(a+'%'); ap.push(+(100*(1-Phi((a-mu)/sd))).toFixed(1)); }
+new Chart(document.getElementById('probChart'), {
+  type:'line',
+  data:{ labels:al, datasets:[{ label:'Probability of attaching (%)', data:ap, borderColor:'#6a4712', backgroundColor:'rgba(154,106,30,0.12)', fill:true, tension:0.3, pointRadius:3 }] },
+  options:{ responsive:true, plugins:{legend:{position:'bottom'}}, scales:{ y:{ title:{display:true,text:'Probability of attaching (%)'} }, x:{ title:{display:true,text:'Attachment loss ratio'} } } }
+});
+</script>
+</body>
+</html>
