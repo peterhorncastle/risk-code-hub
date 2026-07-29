@@ -4,12 +4,32 @@
 
   var fmt2 = function (n) { return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
   var fmtPct1 = function (n) { return (n * 100).toFixed(1) + '%'; };
+  var fmtInt = function (n) { return Math.ceil(n).toLocaleString(); };
 
   var _engine;
   var _schemas;
   var _results = {};
   var _included = {};
   var _containerEl;
+  var _gwpTarget = 10000000; // default £10m — updated by GWP target input
+
+  function gwpBookType(count) {
+    if (count > 100000) return { label: 'Ultra High Volume', cls: 'ultra-volume' };
+    if (count > 10000)  return { label: 'High Volume',       cls: 'high-volume' };
+    if (count > 1000)   return { label: 'Volume',            cls: 'volume' };
+    if (count > 100)    return { label: 'Mid-Market',        cls: 'mid-market' };
+    return                     { label: 'Large Risk',        cls: 'large-risk' };
+  }
+
+  function policyCountForGWP(grossPremium) {
+    if (!grossPremium || grossPremium <= 0) return null;
+    return Math.ceil(_gwpTarget / grossPremium);
+  }
+
+  function gwpTargetLabel(sym) {
+    var m = _gwpTarget / 1000000;
+    return sym + (Number.isInteger(m) ? m : m.toFixed(1)) + 'm GWP';
+  }
 
   function init(containerEl, schemas, engine) {
     if (!schemas || schemas.length === 0) return;
@@ -18,6 +38,40 @@
     _containerEl = containerEl;
     containerEl.innerHTML = '';
     containerEl.className = 'rater-container';
+
+    // GWP target control
+    var gwpBar = document.createElement('div');
+    gwpBar.className = 'gwp-target-bar';
+    var gwpBarLabel = document.createElement('label');
+    gwpBarLabel.htmlFor = 'gwp-target-input';
+    gwpBarLabel.className = 'gwp-target-label';
+    gwpBarLabel.textContent = 'GWP Target';
+    var gwpSym = document.createElement('span');
+    gwpSym.className = 'gwp-target-sym';
+    gwpSym.textContent = '£';
+    var gwpInput = document.createElement('input');
+    gwpInput.type = 'number';
+    gwpInput.id = 'gwp-target-input';
+    gwpInput.className = 'gwp-target-input';
+    gwpInput.value = _gwpTarget;
+    gwpInput.min = '1';
+    gwpInput.step = '1000000';
+    var gwpHint = document.createElement('span');
+    gwpHint.className = 'gwp-target-hint';
+    gwpHint.textContent = 'Policies needed to reach this GWP at the calculated premium';
+    gwpInput.oninput = function () {
+      var v = parseFloat(gwpInput.value);
+      if (v > 0) {
+        _gwpTarget = v;
+        updateAllPolicyCounts();
+        updateTotals();
+      }
+    };
+    gwpBar.appendChild(gwpBarLabel);
+    gwpBar.appendChild(gwpSym);
+    gwpBar.appendChild(gwpInput);
+    gwpBar.appendChild(gwpHint);
+    containerEl.appendChild(gwpBar);
 
     // Combined totals banner (top)
     var totals = document.createElement('div');
@@ -193,10 +247,46 @@
     metrics.appendChild(miniMetric('Expected Claims',
       sym + fmt2(result.waterfall.expectedClaims) + (lrScaler !== 1.0 ? ' (' + lrScaler.toFixed(2) + 'x)' : '')));
 
+    // Policy count card
+    var pcCard = buildPolicyCountCard(idx, result.grossPremium, sym);
+    metrics.appendChild(pcCard);
+
     container.appendChild(metrics);
 
     // Mini waterfall
     container.appendChild(buildMiniWaterfall(result, sym));
+  }
+
+  function buildPolicyCountCard(idx, grossPremium, sym) {
+    var card = document.createElement('div');
+    card.className = 'rc-metric rc-metric-policy';
+    card.id = 'pc-card-' + idx;
+    card.setAttribute('data-gp', grossPremium);
+    card.setAttribute('data-sym', sym || '£');
+    renderPolicyCountCard(card, grossPremium, sym || '£');
+    return card;
+  }
+
+  function renderPolicyCountCard(card, grossPremium, sym) {
+    var count = policyCountForGWP(grossPremium);
+    if (!count) { card.innerHTML = ''; return; }
+    var bt = gwpBookType(count);
+    var targetLbl = gwpTargetLabel(sym);
+    card.innerHTML =
+      '<span class="rc-metric-label">Policies to ' + targetLbl + '</span>' +
+      '<span class="rc-metric-value pc-count">' + fmtInt(count) + '</span>' +
+      '<span class="policy-badge policy-badge-' + bt.cls + '">' + bt.label + '</span>';
+  }
+
+  function updateAllPolicyCounts() {
+    _schemas.forEach(function (schema, idx) {
+      if (!_results[idx]) return;
+      var card = document.getElementById('pc-card-' + idx);
+      if (!card) return;
+      var sym = card.getAttribute('data-sym') || '£';
+      var gp = parseFloat(card.getAttribute('data-gp')) || 0;
+      renderPolicyCountCard(card, gp, sym);
+    });
   }
 
   function miniMetric(label, value, status) {
@@ -272,6 +362,10 @@
     var lossRatio = totalGross > 0 ? totalClaims / totalGross : 0;
     var uwPct = totalGross > 0 ? totalUW / totalGross : 0;
 
+    var pcCount = policyCountForGWP(totalGross);
+    var pcBt = pcCount ? gwpBookType(pcCount) : null;
+    var targetLbl = gwpTargetLabel(sym);
+
     el.innerHTML =
       '<div class="totals-grid">' +
         '<div class="totals-item totals-main">' +
@@ -290,6 +384,13 @@
           '<span class="totals-label">Loss Ratio</span>' +
           '<span class="totals-value">' + fmtPct1(lossRatio) + '</span>' +
         '</div>' +
+        (pcCount ? (
+        '<div class="totals-item totals-policy">' +
+          '<span class="totals-label">Policies to ' + targetLbl + '</span>' +
+          '<span class="totals-value">' + fmtInt(pcCount) +
+            ' <span class="policy-badge policy-badge-' + pcBt.cls + ' policy-badge-sm">' + pcBt.label + '</span>' +
+          '</span>' +
+        '</div>') : '') +
         '<div class="totals-item">' +
           '<span class="totals-label">Risk Codes Included</span>' +
           '<span class="totals-value">' + count + ' / ' + _schemas.length + '</span>' +

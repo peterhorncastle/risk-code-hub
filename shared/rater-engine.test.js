@@ -155,5 +155,50 @@ assert('Waterfall sums to UW result', wfCheck, h2Result.waterfall.underwritingRe
 assert('CR = LR + ER', ewResult.ratios.combinedRatio, ewResult.ratios.lossRatio + ewResult.ratios.expenseRatio, 0.001);
 
 
+// --- Tax stage: backward compatibility (no tax => customer == gross) ---
+assert('No tax: customer premium == gross', h2Result.customerPremium, h2Result.grossPremium, 1);
+assert('No tax: tax is zero', h2Result.waterfall.tax, 0, 0.01);
+
+// --- Golden master: Cyber SME rate-on-value (workbench Phase-1 preset) ---
+var cyberSchema = {
+  riskCode: 'CY-WB', label: 'Cyber SME (workbench preset)', modelType: 'rate-on-value', currency: 'GBP',
+  exposureMeasure: { key: 'policyLimit', label: 'Policy limit (£)' },
+  baseRate: { key: 'baseRate', value: 0.015 },
+  ratingFactors: [
+    { key: 'sector', label: 'Sector', type: 'categorical', appliesTo: 'rate', defaultValue: 'healthcare',
+      options: { healthcare: { label: 'Healthcare', factor: 1.5 }, manufacturing: { label: 'Manufacturing', factor: 1.0 } } },
+    { key: 'mfa', label: 'MFA', type: 'categorical', appliesTo: 'rate', defaultValue: 'emailRA',
+      options: { emailRA: { label: 'Email + remote access', factor: 0.9 }, none: { label: 'None', factor: 1.6 } } }
+  ],
+  fixedCosts: { policyAdminPerYear: 250, claimsHandlingPerClaim: 0, systemOverheadPerYear: 0, fraudReservePerClaim: 0, expectedClaimsPerYear: 0.05, obsolescenceRate: 0 },
+  variableCosts: { commissionRate: 0.20, reinsuranceRate: 0 },
+  targetProfitMargin: 0.08
+};
+var cy = engine.rate(cyberSchema,
+  { policyLimit: 1000000, termYears: 1, sector: 'healthcare', mfa: 'emailRA' },
+  { lossRatioScaler: 1.10, taxRate: 0.12 });
+// base 0.015 * 1.5 * 0.9 = 0.02025 ; pure (unscaled) = 20,250
+assert('Cyber unscaled pure premium', cy.lossModel.totalPurePremium, 20250, 1);
+// loadings x1.10 => expected claims 22,275
+assert('Cyber loaded expected claims', cy.waterfall.expectedClaims, 22275, 1);
+// gross = (22275 + 250) / (1 - 0.20 - 0.08) = 22525 / 0.72 = 31,284.72
+assert('Cyber gross premium', cy.grossPremium, 31284.72, 1);
+// customer = gross * 1.12 (12% IPT) = 35,038.89
+assert('Cyber customer premium (12% IPT)', cy.customerPremium, 35038.89, 1);
+assert('Cyber tax amount', cy.waterfall.tax, 3754.17, 1);
+assert('Cyber no guard-rail warnings', cy.warnings.length, 0, 0.5);
+
+// --- Guard-rails (S5A) ---
+var divBad = engine.rate(cyberSchema,
+  { policyLimit: 1000000, termYears: 1, sector: 'healthcare', mfa: 'emailRA' },
+  { commissionRate: 0.6, reinsuranceRate: 0.3, profitMargin: 0.2 });
+assert('Guard-rail: divisor<=0 raises a warning', divBad.warnings.length > 0 ? 1 : 0, 1);
+
+var negExp = engine.rate(cyberSchema,
+  { policyLimit: -5000, termYears: 1, sector: 'healthcare', mfa: 'emailRA' });
+assert('Guard-rail: negative exposure raises a warning',
+  negExp.warnings.some(function (w) { return /negative/i.test(w); }) ? 1 : 0, 1);
+
+
 console.log('\n' + passed + ' passed, ' + failed + ' failed');
 process.exit(failed > 0 ? 1 : 0);
