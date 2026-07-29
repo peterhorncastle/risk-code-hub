@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marine Insurance Intelligence — Risk Code Hub | Peter Horncastle</title>
+<style>
+/* ── Reset & Base ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: #f4f6fa;
+  color: #1a2840;
+  line-height: 1.6;
+}
+
+/* ── Colour tokens ────────────────────────────────────────────── */
+:root {
+  --navy:   #0a1628;
+  --deep:   #0f2040;
+  --ocean:  #1a3a6a;
+  --mid:    #1e5799;
+  --teal:   #0d5c63;
+  --gold:   #c8a84b;
+  --gold-l: #e8c87a;
+  --war:    #8b1a1a;
+  --cargo:  #1a5c1a;
+  --liab:   #4a1a7a;
+  --light:  #e8f0fa;
+  --border: #d0daea;
+  --muted:  #6a7a9a;
+  --white:  #ffffff;
+}
+
+/* ── Hero ─────────────────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(150deg, var(--navy) 0%, var(--deep) 40%, #0a2d4a 70%, #0d3d5a 100%);
+  color: #fff;
+  padding: 64px 40px 56px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(200,168,75,0.2); border: 1px solid rgba(200,168,75,0.4);
+  color: var(--gold-l); font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 20px; margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800;
+  line-height: 1.1; letter-spacing: -0.5px; margin-bottom: 10px;
+}
+.hero h1 span { color: var(--gold); }
+.hero-sub {
+  font-size: 1.05rem; color: rgba(255,255,255,0.75);
+  max-width: 640px; margin-bottom: 28px;
+}
+.hero-author {
+  display: flex; align-items: center; gap: 14px;
+}
+.hero-author-pill {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; font-size: 0.82rem; font-weight: 600;
+  padding: 6px 16px; border-radius: 20px;
+}
+.hero-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+.hero-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 20px; border-radius: 8px;
+  font-size: 0.82rem; font-weight: 700; text-decoration: none;
+  transition: all 0.2s;
+}
+.hero-link-primary { background: var(--gold); color: var(--navy); }
+.hero-link-primary:hover { background: var(--gold-l); }
+.hero-link-ghost { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #fff; }
+.hero-link-ghost:hover { background: rgba(255,255,255,0.18); }
+
+/* ── Platform Stats Bar ───────────────────────────────────────── */
+.platform-bar {
+  background: var(--ocean);
+  color: #fff;
+  padding: 0 40px;
+}
+.platform-bar-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; flex-wrap: wrap;
+}
+.pbar-stat {
+  flex: 1; min-width: 120px;
+  padding: 20px 16px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.12);
+}
+.pbar-stat:last-child { border-right: none; }
+.pbar-num {
+  font-size: 1.8rem; font-weight: 800; color: var(--gold);
+  letter-spacing: -0.5px; display: block;
+}
+.pbar-lbl { font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.3; }
+
+/* ── Section wrapper ──────────────────────────────────────────── */
+.section { padding: 56px 40px; position: relative; isolation: isolate; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-alt { background: #fff; }
+.section-dark { background: var(--deep); color: #fff; }
+
+.section-label {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 6px;
+}
+.section-title {
+  font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 800;
+  letter-spacing: -0.3px; margin-bottom: 10px;
+}
+.section-lead { font-size: 0.95rem; color: var(--muted); max-width: 680px; margin-bottom: 36px; }
+.section-dark .section-lead { color: rgba(255,255,255,0.6); }
+
+/* ── Platform Feature Cards ───────────────────────────────────── */
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+.feat-card {
+  background: var(--light); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px 22px;
+  border-top: 3px solid var(--ocean);
+}
+.feat-icon { font-size: 1.8rem; margin-bottom: 12px; }
+.feat-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; color: var(--ocean); }
+.feat-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+.feat-badge {
+  display: inline-block; margin-top: 10px;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 8px;
+  background: var(--ocean); color: #fff;
+}
+
+/* ── Marine Tabs ──────────────────────────────────────────────── */
+.tab-bar {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 28px;
+}
+.tab-btn {
+  padding: 9px 20px; border-radius: 8px; border: 2px solid transparent;
+  font-size: 0.82rem; font-weight: 700; cursor: pointer;
+  background: var(--light); color: var(--muted);
+  transition: all 0.2s;
+}
+.tab-btn:hover { border-color: var(--ocean); color: var(--ocean); }
+.tab-btn.active { background: var(--ocean); color: #fff; border-color: var(--ocean); }
+.tab-btn.hull.active   { background: var(--ocean); border-color: var(--ocean); }
+.tab-btn.war.active    { background: var(--war);   border-color: var(--war); }
+.tab-btn.cargo.active  { background: var(--cargo); border-color: var(--cargo); }
+.tab-btn.liab.active   { background: var(--liab);  border-color: var(--liab); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.tab-panel.active > div { min-width: 0; }
+
+/* ── Panel content ────────────────────────────────────────────── */
+.panel-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px;
+}
+.panel-card-title {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 14px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+.hull   .panel-card-title { color: var(--ocean); border-color: var(--ocean); }
+.war    .panel-card-title { color: var(--war);   border-color: var(--war); }
+.cargo  .panel-card-title { color: var(--cargo); border-color: var(--cargo); }
+.liab   .panel-card-title { color: var(--liab);  border-color: var(--liab); }
+
+/* Stats mini-grid inside panels */
+.mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.mini-stat {
+  background: var(--light); border-radius: 8px; padding: 12px 12px 10px;
+}
+.mini-stat-num { font-size: 1.1rem; font-weight: 800; color: var(--ocean); word-break: break-word; }
+.war  .mini-stat-num { color: var(--war); }
+.cargo .mini-stat-num { color: var(--cargo); }
+.liab  .mini-stat-num { color: var(--liab); }
+.mini-stat-lbl { font-size: 0.66rem; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+
+/* Risk codes pills */
+.codes-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.code-pill {
+  font-size: 0.7rem; font-weight: 700; padding: 3px 10px;
+  border-radius: 10px; border: 1px solid;
+}
+.hull  .code-pill { background: rgba(26,58,106,0.08); color: var(--ocean); border-color: rgba(26,58,106,0.25); }
+.war   .code-pill { background: rgba(139,26,26,0.08); color: var(--war);   border-color: rgba(139,26,26,0.25); }
+.cargo .code-pill { background: rgba(26,92,26,0.08);  color: var(--cargo); border-color: rgba(26,92,26,0.25); }
+.liab  .code-pill { background: rgba(74,26,122,0.08); color: var(--liab);  border-color: rgba(74,26,122,0.25); }
+
+/* Coverage list */
+.cov-list { list-style: none; }
+.cov-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 0.82rem; padding: 5px 0; border-bottom: 1px solid #f0f0f0;
+  color: #2a3a5a;
+}
+.cov-list li:last-child { border-bottom: none; }
+.cov-list li::before { content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+
+/* Rating factors */
+.factor-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.8rem; padding: 5px 0; border-bottom: 1px solid #f4f4f4;
+}
+.factor-row:last-child { border-bottom: none; }
+.factor-name { color: #2a3a5a; flex: 1; min-width: 0; margin-right: 10px; }
+.factor-range {
+  font-size: 0.72rem; font-weight: 600; font-family: monospace;
+  background: var(--light); padding: 1px 7px; border-radius: 4px;
+  color: var(--ocean); flex-shrink: 0; white-space: nowrap;
+}
+
+/* ── Notable Losses ───────────────────────────────────────────── */
+.losses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.loss-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px 20px 36px; border-left: 4px solid var(--gold); position: relative; overflow: hidden;
+}
+.loss-card::after {
+  content: attr(data-type);
+  position: absolute; bottom: 12px; right: 14px;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 8px;
+  background: var(--light); color: var(--muted);
+}
+.loss-year { font-size: 0.72rem; font-weight: 600; color: var(--muted); margin-bottom: 2px; }
+.loss-event { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; line-height: 1.3; }
+.loss-amount { font-size: 1.1rem; font-weight: 800; color: var(--war); margin-bottom: 6px; }
+.loss-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+
+/* ── Architecture Section ─────────────────────────────────────── */
+.arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.arch-card {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px; padding: 22px;
+}
+.arch-label {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 8px;
+}
+.arch-title { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.arch-desc { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.55; }
+.arch-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.arch-tag {
+  font-size: 0.65rem; font-weight: 600; padding: 2px 8px; border-radius: 6px;
+  background: rgba(200,168,75,0.15); color: var(--gold-l); border: 1px solid rgba(200,168,75,0.2);
+}
+
+/* ── Panel description text ───────────────────────────────────── */
+.panel-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+
+/* ── Badge (confidence) ───────────────────────────────────────── */
+.conf { font-size: 0.58rem; font-weight: 700; padding: 1px 5px; border-radius: 3px; vertical-align: middle; }
+.ver { background: #e8f5e9; color: #1b5e20; }
+.est { background: #fff8e1; color: #f57f17; }
+
+/* ── Footer ───────────────────────────────────────────────────── */
+footer {
+  background: var(--navy); color: rgba(255,255,255,0.5);
+  padding: 32px 40px; text-align: center; font-size: 0.78rem;
+}
+footer a { color: var(--gold); text-decoration: none; }
+footer a:hover { color: var(--gold-l); }
+.footer-inner { max-width: 1100px; margin: 0 auto; }
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 800px) {
+  .tab-panel.active { grid-template-columns: 1fr; }
+  .arch-grid { grid-template-columns: 1fr; }
+  .hero { padding: 40px 20px; }
+  .section { padding: 40px 20px; }
+  .platform-bar { padding: 0 20px; }
+  .pbar-stat { padding: 16px 10px; }
+  .pbar-num { font-size: 1.4rem; }
+}
+@media (max-width: 500px) {
+  .platform-bar-inner { display: grid; grid-template-columns: 1fr 1fr; }
+  .pbar-stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.12); }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">⚓ Portfolio Project · Insurance Technology</div>
+    <h1>Risk Code <span>Hub</span><br>Marine Intelligence Platform</h1>
+    <p class="hero-sub">A comprehensive Lloyd's market intelligence platform covering all active Lloyd's risk codes — 52 insurance class hubs, each with 9 analytical modules, an interactive rating engine, and a global programme builder.</p>
+    <div class="hero-author">
+      <div class="hero-author-pill">Built by Peter Horncastle · Finance and Accounting Engineer</div>
+    </div>
+    <div class="hero-links">
+      <a class="hero-link hero-link-primary" href="https://peterhorncastle.github.io/risk-code-hub/" target="_blank">↗ View Live Platform</a>
+      <a class="hero-link hero-link-ghost" href="https://peterhorncastle.github.io/risk-code-hub/marine-hull/overview.html" target="_blank">Marine Hull Hub</a>
+      <a class="hero-link hero-link-ghost" href="https://peterhorncastle.github.io/risk-code-hub/marine-cargo/overview.html" target="_blank">Marine Cargo Hub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PLATFORM STATS BAR ════════════════════════════════════════ -->
+<div class="platform-bar">
+  <div class="platform-bar-inner">
+    <div class="pbar-stat"><span class="pbar-num">52</span><span class="pbar-lbl">Insurance Class Hubs</span></div>
+    <div class="pbar-stat"><span class="pbar-num">195</span><span class="pbar-lbl">Rate Table JSON Files</span></div>
+    <div class="pbar-stat"><span class="pbar-num">9</span><span class="pbar-lbl">Modules per Hub</span></div>
+    <div class="pbar-stat"><span class="pbar-num">460+</span><span class="pbar-lbl">HTML Pages</span></div>
+    <div class="pbar-stat"><span class="pbar-num">1,750+</span><span class="pbar-lbl">Modelled Loss Events</span></div>
+    <div class="pbar-stat"><span class="pbar-num">100%</span><span class="pbar-lbl">Static · No Backend</span></div>
+  </div>
+</div>
+
+<!-- ══ PLATFORM OVERVIEW ══════════════════════════════════════════ -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <p class="section-label">The Platform</p>
+    <h2 class="section-title">Built to understand every class in the Lloyd's market</h2>
+    <p class="section-lead">Risk Code Hub is a self-built research and learning tool covering every active Lloyd's risk code. Each hub provides market history, a 20-year events timeline, a searchable claims database, underwriting methodology, rates & ROE analysis, risk mitigation guidance, global programme structuring — and an interactive rating engine.</p>
+    <div class="feature-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🏗️</div>
+        <div class="feat-title">Factor-Based Rating Engine</div>
+        <div class="feat-desc">Every hub has an interactive rater backed by a shared JS engine (rater-engine.js). Supports rate-on-value and frequency×severity models, loss ratio adjustment, P&L waterfall, and combined multi-code totals.</div>
+        <span class="feat-badge">JavaScript · JSON Schemas</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌍</div>
+        <div class="feat-title">Global Programme Builder</div>
+        <div class="feat-desc">Cross-hub multi-line programme tool. Models layer towers, reinsurance structures, territory splits, and quota share arrangements across any combination of Lloyd's risk codes.</div>
+        <span class="feat-badge">Programme Engine · UI</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <div class="feat-title">1,750+ Modelled Loss Events</div>
+        <div class="feat-desc">Every hub contains a filterable claims database of real historic losses with confidence badges (VER / EST / ILLUS / GAP), expandable detail rows, and severity classifications.</div>
+        <span class="feat-badge">Research · Citations</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-title">Pure Static · GitHub Pages</div>
+        <div class="feat-desc">Zero backend, zero framework. Pure HTML/CSS/JavaScript deployed to GitHub Pages via Actions CI. Runs from file:// locally and https:// in production identically.</div>
+        <span class="feat-badge">GitHub Actions · CI/CD</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARINE DEEP DIVE ═══════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <p class="section-label">Marine Insurance — In Depth</p>
+    <h2 class="section-title">Four product lines. Real market data.</h2>
+    <p class="section-lead">The marine cluster covers four distinct Lloyd's product lines across eleven risk codes. Each hub below represents one of the nine-module analytical packages built for this platform.</p>
+
+    <div class="tab-bar">
+      <button class="tab-btn hull active" onclick="showTab('hull')">⚓ Marine Hull</button>
+      <button class="tab-btn war"  onclick="showTab('war')">🛡️ Hull War</button>
+      <button class="tab-btn cargo" onclick="showTab('cargo')">📦 Marine Cargo</button>
+      <button class="tab-btn liab" onclick="showTab('liab')">⚖️ Marine Liability</button>
+    </div>
+
+    <!-- HULL -->
+    <div class="tab-panel hull active" id="panel-hull">
+      <div>
+        <div class="panel-card hull">
+          <div class="panel-card-title">Overview &amp; Market Stats</div>
+          <div class="codes-row">
+            <span class="code-pill">B — Builders' Risk</span>
+            <span class="code-pill">T — Hull Time</span>
+            <span class="code-pill">TS — Total Loss Only</span>
+            <span class="code-pill">TX — Loss of Hire</span>
+          </div>
+          <p class="panel-desc">Physical damage cover for oceangoing vessels — tankers, bulk carriers, containerships and passenger ships, plus their machinery. The oldest actively traded Lloyd's class, tracing directly to Edward Lloyd's Coffee House (1688).</p>
+          <div class="mini-stats">
+            <div class="mini-stat hull">
+              <div class="mini-stat-num">~$8bn</div>
+              <div class="mini-stat-lbl">Global marine hull GWP (2023) <span class="conf est">EST</span></div>
+            </div>
+            <div class="mini-stat hull">
+              <div class="mini-stat-num">100,000</div>
+              <div class="mini-stat-lbl">Vessels in global commercial fleet (IMO) <span class="conf ver">VER</span></div>
+            </div>
+            <div class="mini-stat hull">
+              <div class="mini-stat-num">0.25%</div>
+              <div class="mini-stat-lbl">Typical rate on line — VLCC / large bulk carrier <span class="conf est">EST</span></div>
+            </div>
+            <div class="mini-stat hull">
+              <div class="mini-stat-num">1688</div>
+              <div class="mini-stat-lbl">Edward Lloyd's Coffee House — origins of market</div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-card hull" style="margin-top:16px;">
+          <div class="panel-card-title">Key Rating Factors</div>
+          <div class="factor-row"><span class="factor-name">Vessel Age</span><span class="factor-range">0.85× – 1.50×</span></div>
+          <div class="factor-row"><span class="factor-name">Vessel Type (VLCC vs. container vs. passenger)</span><span class="factor-range">0.80× – 1.80×</span></div>
+          <div class="factor-row"><span class="factor-name">Classification Society (LR / DNV / ABS vs. non-IACS)</span><span class="factor-range">0.85× – 1.60×</span></div>
+          <div class="factor-row"><span class="factor-name">Trading Area (IWL ocean vs. restricted)</span><span class="factor-range">1.00× – 1.80×</span></div>
+          <div class="factor-row"><span class="factor-name">PSC / ISM Management Quality</span><span class="factor-range">0.85× – 1.40×</span></div>
+          <div class="factor-row"><span class="factor-name">5-Year Claims Record</span><span class="factor-range">0.85× – 1.80×</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel-card hull">
+          <div class="panel-card-title">Coverage Scope</div>
+          <ul class="cov-list">
+            <li>Total loss (actual and constructive)</li>
+            <li>Partial loss — collision, grounding, weather, fire</li>
+            <li>Machinery breakdown / latent defect (IHC)</li>
+            <li>Salvage, general average and sue &amp; labour</li>
+            <li>Running-down clause (¾ collision liability)</li>
+            <li>Builders' Risk — construction / launch / sea trials</li>
+            <li>Total Loss Only (TLO) strip — lower-cost alternative</li>
+            <li>Loss of Hire — delayed income after insured peril</li>
+          </ul>
+        </div>
+        <div class="panel-card hull" style="margin-top:16px;">
+          <div class="panel-card-title">Key Market Participants</div>
+          <p class="panel-desc">Lloyd's remains the global benchmark for hull insurance. Leading syndicates include Atrium (1221), MS Amlin (2001), Beazley (623), Chaucer (1084), and Tokio Marine Kiln. The ILU (Institute of London Underwriters) wordings — notably the Institute Time Clauses — remain the industry standard. The Norwegian and Scandinavian markets are the main non-Lloyd's hull competitors.</p>
+          <div class="factor-row"><span class="factor-name">Minimum premium (time)</span><span class="factor-range">£15,000–£50,000</span></div>
+          <div class="factor-row"><span class="factor-name">Deductible — VLCC</span><span class="factor-range">$250,000–$1m</span></div>
+          <div class="factor-row"><span class="factor-name">Typical RI structure</span><span class="factor-range">Fac + XL treaty</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAR -->
+    <div class="tab-panel war" id="panel-war">
+      <div>
+        <div class="panel-card war">
+          <div class="panel-card-title">Overview &amp; Market Stats</div>
+          <div class="codes-row">
+            <span class="code-pill">W — Hull War (direct)</span>
+            <span class="code-pill">WB — War Binder</span>
+            <span class="code-pill">AW — Aviation War</span>
+            <span class="code-pill">WX — War (other)</span>
+          </div>
+          <p class="panel-desc">Specialist war risk cover for vessel hulls — excluded from standard hull policies under the standard ITC War Exclusion. Covers war, mines, piracy, terrorism, capture, seizure and confiscation. The JWC Listed Areas system allows rapid rating adjustment when geopolitical risk escalates.</p>
+          <div class="mini-stats">
+            <div class="mini-stat war">
+              <div class="mini-stat-num">~$600m</div>
+              <div class="mini-stat-lbl">Lloyd's marine war GWP (est.) <span class="conf est">EST</span></div>
+            </div>
+            <div class="mini-stat war">
+              <div class="mini-stat-num">0.5–1.0%</div>
+              <div class="mini-stat-lbl">Red Sea per-transit war rate (peak 2024) <span class="conf est">EST</span></div>
+            </div>
+            <div class="mini-stat war">
+              <div class="mini-stat-num">~$1bn+</div>
+              <div class="mini-stat-lbl">Ukraine Black Sea war losses (est. 2022–24) <span class="conf est">EST</span></div>
+            </div>
+            <div class="mini-stat war">
+              <div class="mini-stat-num">48 hrs</div>
+              <div class="mini-stat-lbl">Standard war cancellation notice period <span class="conf ver">VER</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-card war" style="margin-top:16px;">
+          <div class="panel-card-title">JWC Listed Areas (Active 2024)</div>
+          <div class="factor-row"><span class="factor-name">Red Sea / Gulf of Aden</span><span class="factor-range">Listed Dec 2023</span></div>
+          <div class="factor-row"><span class="factor-name">Black Sea (all)</span><span class="factor-range">Listed Feb 2022</span></div>
+          <div class="factor-row"><span class="factor-name">Gulf of Guinea / West Africa</span><span class="factor-range">Piracy elevated</span></div>
+          <div class="factor-row"><span class="factor-name">Strait of Hormuz</span><span class="factor-range">Periodic escalation</span></div>
+          <div class="factor-row"><span class="factor-name">South China Sea</span><span class="factor-range">Elevated monitoring</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel-card war">
+          <div class="panel-card-title">Coverage — W-Series</div>
+          <ul class="cov-list">
+            <li>War, warlike operations and civil war</li>
+            <li>Mines, torpedoes and derelict weapons</li>
+            <li>Piracy (ITLB definition)</li>
+            <li>Terrorism (vessels targeted)</li>
+            <li>Capture, seizure, arrest, restraint</li>
+            <li>Confiscation and expropriation</li>
+            <li>Detainment exceeding 12 months (constructive total loss)</li>
+            <li>Blocking &amp; Trapping endorsements</li>
+          </ul>
+        </div>
+        <div class="panel-card war" style="margin-top:16px;">
+          <div class="panel-card-title">Market &amp; Key Wordings</div>
+          <p class="panel-desc">Marine war is highly concentrated — a small group of Lloyd's specialist syndicates write the majority of global capacity. The market operates on short-notice cancellation (48–72 hours) allowing rapid withdrawal from escalating zones. JWC (Joint War Committee) Listed Area notices trigger additional premium through voyage endorsements.</p>
+          <div class="factor-row"><span class="factor-name">Standard wording</span><span class="factor-range">ITC Hulls War 1/10/83</span></div>
+          <div class="factor-row"><span class="factor-name">Rating basis</span><span class="factor-range">Rate on Insured Value</span></div>
+          <div class="factor-row"><span class="factor-name">Policy period</span><span class="factor-range">Annual + voyage tops</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARGO -->
+    <div class="tab-panel cargo" id="panel-cargo">
+      <div>
+        <div class="panel-card cargo">
+          <div class="panel-card-title">Overview &amp; Market Stats</div>
+          <div class="codes-row">
+            <span class="code-pill">V — Marine Cargo (direct)</span>
+            <span class="code-pill">Q — Cargo Binder</span>
+            <span class="code-pill">VL — Cargo (Lloyd's)</span>
+            <span class="code-pill">VX — Cargo (other)</span>
+          </div>
+          <p class="panel-desc">The oldest insured peril in commercial history — from Lloyd's Coffee House in 1688 to the Red Sea crisis of 2024. Marine cargo covers physical loss and damage to goods in transit by sea, air, road and rail, with ICC (A), (B) and (C) clauses as the primary wording architecture.</p>
+          <div class="mini-stats">
+            <div class="mini-stat cargo">
+              <div class="mini-stat-num">~$25bn</div>
+              <div class="mini-stat-lbl">Global marine cargo GWP (2023) <span class="conf ver">VER</span></div>
+            </div>
+            <div class="mini-stat cargo">
+              <div class="mini-stat-num">~$5bn</div>
+              <div class="mini-stat-lbl">Lloyd's marine cargo GWP (est.) <span class="conf est">EST</span></div>
+            </div>
+            <div class="mini-stat cargo">
+              <div class="mini-stat-num">24,116</div>
+              <div class="mini-stat-lbl">TEU — world's largest container vessel (MSC Irina) <span class="conf ver">VER</span></div>
+            </div>
+            <div class="mini-stat cargo">
+              <div class="mini-stat-num">~$1bn+</div>
+              <div class="mini-stat-lbl">Max cargo value exposure per mega-vessel <span class="conf est">EST</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-card cargo" style="margin-top:16px;">
+          <div class="panel-card-title">ICC Clause Comparison</div>
+          <div class="factor-row"><span class="factor-name">ICC (A) — All Risks</span><span class="factor-range">Broadest — write-back excl.</span></div>
+          <div class="factor-row"><span class="factor-name">ICC (B) — Named Perils +</span><span class="factor-range">Fire / explosion / weather</span></div>
+          <div class="factor-row"><span class="factor-name">ICC (C) — Basic Named Perils</span><span class="factor-range">Fire / sinking / collision</span></div>
+          <div class="factor-row"><span class="factor-name">War &amp; Strikes Clauses</span><span class="factor-range">Always separate policy</span></div>
+          <div class="factor-row"><span class="factor-name">Open Cover</span><span class="factor-range">Blanket facility — annual dec.</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel-card cargo">
+          <div class="panel-card-title">Commodity Risk Spectrum</div>
+          <ul class="cov-list">
+            <li>Containerised general cargo (FCL / LCL)</li>
+            <li>Bulk commodities — grain, coal, ore, fertiliser</li>
+            <li>Liquid bulk — oil, LNG, chemicals</li>
+            <li>High-value cargo — electronics, luxury goods, pharmaceuticals</li>
+            <li>Refrigerated / perishable cargo (reefer)</li>
+            <li>Project cargo — machinery, infrastructure components</li>
+            <li>Fine art and museum loans (transit)</li>
+            <li>Airfreight / multimodal open covers</li>
+          </ul>
+        </div>
+        <div class="panel-card cargo" style="margin-top:16px;">
+          <div class="panel-card-title">Key Rating Factors</div>
+          <div class="factor-row"><span class="factor-name">Commodity type</span><span class="factor-range">0.50× – 3.00×</span></div>
+          <div class="factor-row"><span class="factor-name">Packing / stowage quality</span><span class="factor-range">0.80× – 1.40×</span></div>
+          <div class="factor-row"><span class="factor-name">Trade route (Red Sea surcharge)</span><span class="factor-range">+25% – +200%</span></div>
+          <div class="factor-row"><span class="factor-name">ICC clause grade (A / B / C)</span><span class="factor-range">Rating multiplier</span></div>
+          <div class="factor-row"><span class="factor-name">Accumulation / per-location limit</span><span class="factor-range">Critical aggregation</span></div>
+          <div class="factor-row"><span class="factor-name">5-year claims experience</span><span class="factor-range">0.70× – 1.60×</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIABILITY -->
+    <div class="tab-panel liab" id="panel-liab">
+      <div>
+        <div class="panel-card liab">
+          <div class="panel-card-title">Overview &amp; Market Stats</div>
+          <div class="codes-row">
+            <span class="code-pill">G — General Liability</span>
+            <span class="code-pill">GC — Charterers' Liability</span>
+            <span class="code-pill">GX — Fixed &amp; Floating Objects</span>
+          </div>
+          <p class="panel-desc">Third-party liability arising from vessel ownership, operation and chartering — the most complex marine class. Sits at the intersection of maritime law (MLC, MARPOL, SOLAS), P&I Club coverage and Lloyd's SRL / charterers' market. Catastrophic tail risk drives mandatory pooling structures.</p>
+          <div class="mini-stats">
+            <div class="mini-stat liab">
+              <div class="mini-stat-num">90%</div>
+              <div class="mini-stat-lbl">World ocean-going tonnage covered by IG P&amp;I Clubs <span class="conf ver">VER</span></div>
+            </div>
+            <div class="mini-stat liab">
+              <div class="mini-stat-num">$3.1bn</div>
+              <div class="mini-stat-lbl">IG Pool limit per vessel per incident (2024) <span class="conf ver">VER</span></div>
+            </div>
+            <div class="mini-stat liab">
+              <div class="mini-stat-num">$7–9bn</div>
+              <div class="mini-stat-lbl">Est. total Lloyd's marine liability GWP <span class="conf est">EST</span></div>
+            </div>
+            <div class="mini-stat liab">
+              <div class="mini-stat-num">13</div>
+              <div class="mini-stat-lbl">IG P&amp;I Clubs — non-profit mutuals (tonnage basis)</div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-card liab" style="margin-top:16px;">
+          <div class="panel-card-title">Key Regulatory Framework</div>
+          <div class="factor-row"><span class="factor-name">CLC / Fund Convention</span><span class="factor-range">Oil pollution limits</span></div>
+          <div class="factor-row"><span class="factor-name">Bunker Convention (2001)</span><span class="factor-range">Bunker oil spills</span></div>
+          <div class="factor-row"><span class="factor-name">MLC (2006 / in force 2013)</span><span class="factor-range">Crew welfare / repatriation</span></div>
+          <div class="factor-row"><span class="factor-name">MARPOL</span><span class="factor-range">Pollution prevention</span></div>
+          <div class="factor-row"><span class="factor-name">Nairobi Wreck Convention</span><span class="factor-range">Wreck removal liability</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel-card liab">
+          <div class="panel-card-title">Coverage — G / GC / GX</div>
+          <ul class="cov-list">
+            <li>Collision liability — ¼ excess from hull (G)</li>
+            <li>Charterers' liability — damage to vessel, cargo, third parties (GC)</li>
+            <li>Wreck removal and obstruction of navigation</li>
+            <li>Crew injury, illness and repatriation (non-club)</li>
+            <li>Pollution — fuel oil and cargo spills</li>
+            <li>Fixed &amp; floating objects (jetties, platforms, cables) (GX)</li>
+            <li>Ship repairer's liability (SRL) — damage to vessels in care</li>
+            <li>Freight forwarder / port &amp; terminal operator liability</li>
+          </ul>
+        </div>
+        <div class="panel-card liab" style="margin-top:16px;">
+          <div class="panel-card-title">P&I vs. Lloyd's Split</div>
+          <p class="panel-desc">The IG P&I Clubs cover the vast majority of liability arising from vessel ownership on a mutual basis (crewing, cargo claims, collision ¾, pollution). Lloyd's fills the gaps: charterers' liability, non-club operators, top-up limits beyond club coverage, fixed &amp; floating objects, and SRL. The two markets are complementary, not competitive, for most large-tonnage risks.</p>
+          <div class="factor-row"><span class="factor-name">IG Club entry limit (est.)</span><span class="factor-range">$3.1bn per occurrence</span></div>
+          <div class="factor-row"><span class="factor-name">Lloyd's SRL typical line</span><span class="factor-range">$25m–$500m</span></div>
+          <div class="factor-row"><span class="factor-name">Charterers' min premium</span><span class="factor-range">$15,000–$100,000</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NOTABLE LOSSES ══════════════════════════════════════════════ -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <p class="section-label">Loss Intelligence Database</p>
+    <h2 class="section-title">Landmark marine losses driving today's market</h2>
+    <p class="section-lead">Every hub contains a filterable database of real historic losses. These four events — drawn from the platform's 1,750+ event dataset — shaped modern marine insurance structurally, legally and technically.</p>
+    <div class="losses-grid">
+      <div class="loss-card" data-type="Hull">
+        <div class="loss-year">2012 — Marine Hull</div>
+        <div class="loss-event">Costa Concordia — Grounding, Giglio Island</div>
+        <div class="loss-amount">$2.4bn</div>
+        <div class="loss-desc">Largest single marine hull loss. 32 fatalities. Capt. Schettino convicted. Redefined wreck removal requirements; Nairobi Convention now mandates financial security for wreck removal globally. Total salvage operation took 3.5 years.</div>
+      </div>
+      <div class="loss-card" data-type="Hull War">
+        <div class="loss-year">2022–ongoing — War Risks</div>
+        <div class="loss-event">Ukraine Black Sea — Fleet War Losses</div>
+        <div class="loss-amount">~$1bn+ est.</div>
+        <div class="loss-desc">JWC Listed Area (Feb 2022). Numerous vessel total losses in Odessa and port approaches. Triggered complete repricing of Black Sea hull war — rates rose from 0.025% to 5%+ overnight. Largest war risk event since the Iran-Iraq Tanker War of the 1980s.</div>
+      </div>
+      <div class="loss-card" data-type="Cargo">
+        <div class="loss-year">2021 — Marine Cargo</div>
+        <div class="loss-event">Ever Given — Suez Canal Blockage</div>
+        <div class="loss-amount">~$1bn+ total (cargo + delay)</div>
+        <div class="loss-desc">Container vessel grounded for 6 days, blocking the Suez Canal entirely. ~400 vessels delayed. General average declared. Exposed cargo aggregation risk on ultra-large container vessels and supply-chain business interruption. Prompted ICC review of delay coverage.</div>
+      </div>
+      <div class="loss-card" data-type="Liability">
+        <div class="loss-year">2024 — Marine Liability</div>
+        <div class="loss-event">Dali — Francis Scott Key Bridge, Baltimore</div>
+        <div class="loss-amount">$2–4bn est.</div>
+        <div class="loss-desc">Container vessel lost propulsion and struck the Francis Scott Key Bridge; bridge collapsed killing 6 workers and closing the Port of Baltimore for weeks. Most complex US maritime liability event in decades — touching G (hull collision liability), GX (infrastructure), cargo delay, and wreck removal simultaneously.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TECHNICAL ARCHITECTURE ════════════════════════════════════ -->
+<section class="section section-dark">
+  <div class="section-inner">
+    <p class="section-label">Technical Architecture</p>
+    <h2 class="section-title" style="color:#fff;">How the platform is built</h2>
+    <p class="section-lead">Designed for zero operational cost and maximum portability — fully static, no CMS, no database, no server.</p>
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="arch-label">Rating Engine</div>
+        <div class="arch-title">rater-engine.js + 195 JSON schemas</div>
+        <div class="arch-desc">A shared pure-JS rating engine supports two model types: rate-on-value (property, marine) and frequency×severity (warranty, liability). Each risk code has its own JSON schema defining exposure measure, base rate, rating factors (categorical / band / numeric), fixed costs and variable loads. Output: gross premium, P&L waterfall, combined ratio.</div>
+        <div class="arch-tags">
+          <span class="arch-tag">Vanilla JS</span><span class="arch-tag">JSON Schemas</span><span class="arch-tag">No dependencies</span>
+        </div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-label">Programme Builder</div>
+        <div class="arch-title">programme-engine.js — multi-line tool</div>
+        <div class="arch-desc">Cross-hub programme modelling: layer towers, reinsurance cessions (quota share, surplus, XL fac, XL treaty), territory splits, and net retention calculation. Designed to mirror how a Lloyd's broker structures a cross-class programme for a multinational insured.</div>
+        <div class="arch-tags">
+          <span class="arch-tag">Layer Modelling</span><span class="arch-tag">RI Structures</span><span class="arch-tag">Multi-class</span>
+        </div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-label">Content Standard</div>
+        <div class="arch-title">9 modules × 52 hubs = 460+ pages</div>
+        <div class="arch-desc">Every hub follows a strict template: Overview → History → Timeline (20 events) → Loss Database (35 events) → Underwriting → Rates &amp; ROE (3 Chart.js charts) → Risk Mitigation → Global Programme → References. Confidence badges (VER / EST / ILLUS / GAP) on every factual claim.</div>
+        <div class="arch-tags">
+          <span class="arch-tag">Chart.js 4.4</span><span class="arch-tag">Fuse.js search</span><span class="arch-tag">Citation standard</span>
+        </div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-label">Deployment</div>
+        <div class="arch-title">GitHub Actions → GitHub Pages</div>
+        <div class="arch-desc">Automated CI/CD: every push to main triggers a GitHub Actions workflow that uploads the static site to GitHub Pages. No build step required — the source files are the deployment artifacts. Site is live at peterhorncastle.github.io/risk-code-hub within 60 seconds of any commit.</div>
+        <div class="arch-tags">
+          <span class="arch-tag">GitHub Actions</span><span class="arch-tag">CI/CD</span><span class="arch-tag">Zero infrastructure cost</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <p style="font-size:0.9rem; color:rgba(255,255,255,0.8); font-weight:600; margin-bottom:8px;">Risk Code Hub — Marine Intelligence Platform</p>
+    <p style="margin-bottom:12px;">Built by <strong style="color:rgba(255,255,255,0.9)">Peter Horncastle</strong>, Finance and Accounting Engineer · 2025–2026</p>
+    <p>
+      <a href="https://peterhorncastle.github.io/risk-code-hub/" target="_blank">↗ Live Platform</a>
+      &nbsp;·&nbsp;
+      <a href="https://peterhorncastle.github.io/risk-code-hub/marine-hull/overview.html" target="_blank">Marine Hull Hub</a>
+      &nbsp;·&nbsp;
+      <a href="https://peterhorncastle.github.io/risk-code-hub/marine-cargo/overview.html" target="_blank">Marine Cargo Hub</a>
+      &nbsp;·&nbsp;
+      <a href="https://peterhorncastle.github.io/risk-code-hub/marine-liability/overview.html" target="_blank">Marine Liability Hub</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/peterhorncastle/risk-code-hub" target="_blank">GitHub</a>
+    </p>
+    <p style="margin-top:14px; font-size:0.7rem;">Loss estimates marked EST are broker/market consensus. All VER figures cite primary public sources. This document is for portfolio demonstration only.</p>
+  </div>
+</footer>
+
+<script>
+function showTab(id) {
+  // Deactivate all panels and buttons
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  // Activate selected
+  document.getElementById('panel-' + id).classList.add('active');
+  document.querySelector('.tab-btn.' + id).classList.add('active');
+}
+</script>
+</body>
+</html>
