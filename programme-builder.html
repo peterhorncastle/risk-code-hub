@@ -32079,6 +32079,56 @@ var allSchemas = {
   ],
 };
 ProgrammeUI.init(document.getElementById("programme-root"), allSchemas, RaterEngine, ProgrammeEngine);
+
+/* ---- Pre-populate from URL: programme-builder.html?code=CY  (or ?codes=CY,CZ,CG) ----
+   Added for Risk Code Hub integration. Reuses the existing hub/code dropdowns so no
+   engine changes are needed. Safe no-op when no ?code / ?codes param is present. ---- */
+(function preselectFromURL(){
+  try {
+    var params = new URLSearchParams(location.search);
+    var raw = params.get('code') || params.get('codes');
+    if (!raw) return;
+    var wanted = raw.split(',').map(function(s){return s.trim().toUpperCase();}).filter(Boolean);
+    function hubFor(code){
+      var found=null;
+      Object.keys(allSchemas).some(function(hn){
+        if((allSchemas[hn]||[]).some(function(sc){return String(sc.riskCode).toUpperCase()===code;})){found=hn;return true;}
+        return false;
+      });
+      return found;
+    }
+    var root=document.getElementById('programme-root');
+    function fire(el,type){ el.dispatchEvent(new Event(type,{bubbles:true})); }
+    var loaded=[];
+    wanted.forEach(function(code){
+      var hub=hubFor(code);
+      if(!hub) return;
+      var addBtn=root.querySelector('.prog-lines-col .prog-add-btn');
+      if(!addBtn) return;
+      addBtn.click();  // new empty line becomes the last card
+      var cards=root.querySelectorAll('#prog-lines .prog-line-card');
+      var card=cards[cards.length-1];
+      if(!card) return;
+      var hubSel=card.querySelector('select');            // 1st select = hub
+      if(!hubSel) return;
+      hubSel.value=hub; fire(hubSel,'change');            // re-renders; code select now present
+      cards=root.querySelectorAll('#prog-lines .prog-line-card');
+      card=cards[cards.length-1];
+      var codeSel=card.querySelectorAll('select')[1];     // 2nd select = risk code
+      if(!codeSel) return;
+      codeSel.value=code; fire(codeSel,'change');
+      loaded.push(code);
+    });
+    var sum=document.getElementById('prog-summary');
+    if(sum && loaded.length){
+      sum.insertAdjacentHTML('afterbegin',
+        '<div style="background:#e6f4f4;border:1px solid #0e8f8f;color:#0a6d6d;'
+        +'padding:9px 13px;border-radius:8px;margin-bottom:12px;font:13px/1.4 system-ui,-apple-system,sans-serif;">'
+        +'Pre-loaded from the Risk Code Hub: <b>'+loaded.join(', ')+'</b>'
+        +' — add layers, reinsurance and territories to build the programme.</div>');
+    }
+  } catch(e){ if(window.console) console.warn('preselect skipped:', e); }
+})();
 </script>
 </body>
 </html>
