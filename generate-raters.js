@@ -1,18 +1,14 @@
 'use strict';
 /*
- * ⚠️  DO NOT RUN THIS GENERATOR AS-IS — IT IS SUPERSEDED AND WILL REGRESS THE LIVE RATERS.
+ * generate-raters.js — regenerates each hub's rate-tables/*.json and a self-contained
+ * rater.html for every hub in hub-index.json that has risk_codes.
  *
- * This script emits fetch()-based rater.html pages (they load rate-tables/*.json at
- * runtime). The live, committed rater.html pages instead embed the schema INLINE
- * (var schemas = [...]) so they work when opened via file:// (e.g. the Insurance Portal).
- * Re-running this would rewrite all rater pages back to the fetch() form and break them
- * off a server. No committed code currently reproduces the inline form.
+ * Each rater.html embeds its schema(s) INLINE (var schemas = [...]) so the page works
+ * when opened via file:// (e.g. the Insurance Portal) with no server. The nav includes
+ * the Programme Builder tab and the ← Risk Code Hub footer back-link.
  *
- * The nav template below is already up to date: it includes the Programme Builder tab
- * and the "← Risk Code Hub" footer back-link, so those are correct FOR THE DAY the
- * inline-schema embedding is ported into this generator. Until that port is done and
- * verified (regenerate → `git diff` must be empty), treat this file as reference only.
- * See insurance-integrations/tracking/rollout-status.md.
+ * Safe to run: `node generate-raters.js`. It is byte-reproducing — regenerating with no
+ * upstream data change leaves `git diff` empty. Always review `git diff` after running.
  */
 var fs = require('fs');
 var path = require('path');
@@ -621,14 +617,17 @@ hubs.forEach(function(hub) {
   if (!fs.existsSync(rtDir)) fs.mkdirSync(rtDir, { recursive: true });
 
   var hubSchemas = [];
+  var hubSchemaJson = [];
   hub.risk_codes.forEach(function(code) {
     var s = schemas[code];
     if (!s) {
       console.warn('No schema for ' + code + ' in hub ' + hub.id);
       return;
     }
-    fs.writeFileSync(path.join(rtDir, code + '.json'), JSON.stringify(s, null, 2));
+    var schemaJson = JSON.stringify(s, null, 2);
+    fs.writeFileSync(path.join(rtDir, code + '.json'), schemaJson);
     hubSchemas.push(code);
+    hubSchemaJson.push(schemaJson);
   });
 
   if (hubSchemas.length === 0) return;
@@ -636,11 +635,11 @@ hubs.forEach(function(hub) {
   var theme = themes[hub.id] || { primary:'#1a4a7a', dark:'#0d2d5a', light:'#eef3fa', accent:'#c8a84b', gradient:'linear-gradient(135deg,#0d2240 0%,#1a4a7a 55%,#003070 100%)', sub:'#b8cce0' };
 
   var codeList = hubSchemas.join(' · ');
-  var fetchList = hubSchemas.map(function(c) { return "'rate-tables/" + c + ".json'"; }).join(',\n    ');
+  var inlineSchemas = hubSchemaJson.join(',\n');
 
   var hasReferences = fs.existsSync(path.join(hubDir, 'references.html'));
 
-  var html = '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <link rel="stylesheet" href="../hub-styles.css">\n  <link rel="stylesheet" href="../shared/rater-styles.css">\n  <title>' + hub.name + ' — Rater | Risk Code Hub</title>\n  <style>\n    :root {\n      --hub-primary:   ' + theme.primary + ';\n      --hub-dark:      ' + theme.dark + ';\n      --hub-light:     ' + theme.light + ';\n      --hub-accent:    ' + theme.accent + ';\n' + (theme.secondary ? '      --hub-secondary: ' + theme.secondary + ';\n' : '') + '      --header-gradient: ' + theme.gradient + ';\n      --header-sub:    ' + theme.sub + ';\n    }\n  </style>\n</head>\n<body>\n\n<header>\n  <div class="breadcrumb">\n    <a href="../index.html">Risk Code Hub</a> ›\n    <a href="overview.html">' + hub.name + '</a> ›\n    Rater\n  </div>\n  <div class="tag">Lloyd\'s Risk Code' + (hubSchemas.length > 1 ? 's' : '') + ' ' + codeList + '</div>\n  <h1>' + hub.name + ' — Rating Tool</h1>\n  <p>Factor-based rating engine for ' + hub.name.toLowerCase() + ' insurance products. Base vs proposed comparison with P&amp;L waterfall analysis.</p>\n</header>\n\n<nav>\n  <a href="overview.html">Overview</a>\n  <a href="history.html">History</a>\n  <a href="timeline.html">Timeline</a>\n  <a href="database.html">Loss Database</a>\n  <a href="underwriting.html">Underwriting</a>\n  <a href="rates-analysis.html">Rates &amp; ROE</a>\n  <a href="risk-mitigation.html">Risk Mitigation</a>\n  <a href="global-program.html">Global Programmes</a>\n' + (hasReferences ? '  <a href="references.html">References</a>\n' : '') + '  <a href="rater.html" class="active">Rater</a>\n  <a href=\"../programme-builder.html?code=' + hub.risk_codes[0] + '\">Programme Builder</a>\n</nav>\n\n<div id="rater-root"></div>\n\n<footer>\n  <p>' + hub.name + ' <a href="../index.html" style="color:#c8a84b;text-decoration:none;font-weight:600;">&larr; Risk Code Hub</a> — Rating Tool &copy; 2026</p>\n</footer>\n\n<script src="../shared/rater-engine.js"></script>\n<script src="../shared/rater-ui.js"></script>\n<script>\n(function () {\n  var schemaFiles = [\n    ' + fetchList + '\n  ];\n  Promise.all(schemaFiles.map(function (f) {\n    return fetch(f).then(function (r) { return r.json(); });\n  })).then(function (schemas) {\n    RaterUI.init(document.getElementById(\'rater-root\'), schemas, RaterEngine);\n  });\n})();\n</script>\n</body>\n</html>';
+  var html = '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <link rel="stylesheet" href="../hub-styles.css">\n  <link rel="stylesheet" href="../shared/rater-styles.css">\n  <title>' + hub.name + ' — Rater | Risk Code Hub</title>\n  <style>\n    :root {\n      --hub-primary:   ' + theme.primary + ';\n      --hub-dark:      ' + theme.dark + ';\n      --hub-light:     ' + theme.light + ';\n      --hub-accent:    ' + theme.accent + ';\n' + (theme.secondary ? '      --hub-secondary: ' + theme.secondary + ';\n' : '') + '      --header-gradient: ' + theme.gradient + ';\n      --header-sub:    ' + theme.sub + ';\n    }\n  </style>\n</head>\n<body>\n\n<header>\n  <div class="breadcrumb">\n    <a href="../index.html">Risk Code Hub</a> ›\n    <a href="overview.html">' + hub.name + '</a> ›\n    Rater\n  </div>\n  <div class="tag">Lloyd\'s Risk Code' + (hubSchemas.length > 1 ? 's' : '') + ' ' + codeList + '</div>\n  <h1>' + hub.name + ' — Rating Tool</h1>\n  <p>Factor-based rating engine for ' + hub.name.toLowerCase() + ' insurance products. Base vs proposed comparison with P&amp;L waterfall analysis.</p>\n</header>\n\n<nav>\n  <a href="overview.html">Overview</a>\n  <a href="history.html">History</a>\n  <a href="timeline.html">Timeline</a>\n  <a href="database.html">Loss Database</a>\n  <a href="underwriting.html">Underwriting</a>\n  <a href="rates-analysis.html">Rates &amp; ROE</a>\n  <a href="risk-mitigation.html">Risk Mitigation</a>\n  <a href="global-program.html">Global Programmes</a>\n' + (hasReferences ? '  <a href="references.html">References</a>\n' : '') + '  <a href="rater.html" class="active">Rater</a>\n  <a href=\"../programme-builder.html?code=' + hub.risk_codes[0] + '\">Programme Builder</a>\n</nav>\n\n<div id="rater-root"></div>\n\n<footer>\n  <p>' + hub.name + ' <a href="../index.html" style="color:#c8a84b;text-decoration:none;font-weight:600;">&larr; Risk Code Hub</a> — Rating Tool &copy; 2026</p>\n</footer>\n\n<script src="../shared/rater-engine.js"></script>\n<script src="../shared/rater-ui.js"></script>\n<script>\n(function () {\n  var schemas = [\n' + inlineSchemas + '\n  ];\n  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);\n})();\n</script>\n</body>\n</html>';
 
   fs.writeFileSync(path.join(hubDir, 'rater.html'), html);
   console.log('Generated: ' + hub.id + ' (' + hubSchemas.length + ' codes)');
