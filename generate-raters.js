@@ -67,7 +67,20 @@ var themes = {
   'temp-life-health':         { primary:'#00838f', dark:'#006064', light:'#e0f7fa', accent:'#c8a84b', gradient:'linear-gradient(135deg,#006064 0%,#00838f 55%,#0097a7 100%)', sub:'#80deea' },
   'dic':                      { primary:'#bf360c', dark:'#7f1d00', light:'#fbe9e7', accent:'#c8a84b', gradient:'linear-gradient(135deg,#3e1a00 0%,#bf360c 55%,#e64a19 100%)', sub:'#ffccbc' },
   'aviation-war':             { primary:'#1a4a7a', dark:'#0d2d5a', light:'#eef3fa', accent:'#c8a84b', gradient:'linear-gradient(135deg,#0d2240 0%,#1a4a7a 55%,#8b1a1a 100%)', sub:'#b8cce0' },
-  'financial-lines-misc':     { primary:'#1a237e', dark:'#0d1642', light:'#e8eaf6', accent:'#c8a84b', gradient:'linear-gradient(135deg,#0d1642 0%,#1a237e 55%,#283593 100%)', sub:'#c5cae9' }
+  'financial-lines-misc':     { primary:'#1a237e', dark:'#0d1642', light:'#e8eaf6', accent:'#c8a84b', gradient:'linear-gradient(135deg,#0d1642 0%,#1a237e 55%,#283593 100%)', sub:'#c5cae9' },
+
+  // Folder-keyed palettes. themes[] is otherwise keyed on a hub's id, which
+  // for these folders is the STUB's identity, not the real hub's - regenerating
+  // against the id palette would repaint each rater in the wrong hub's colours
+  // (downstream-energy orange -> generic navy). Values below are taken from the
+  // live rater pages and match each hub's own overview.html.
+  'agricultural-crop-forestry': { primary:'#2d6a2d', dark:'#1a3d1a', light:'#e8f5e3', accent:'#c8a84b', gradient:'linear-gradient(135deg,#1a3d1a 0%,#2d6a2d 50%,#3d7a3d 100%)', sub:'#b8d4b8' },
+  'credit-contract-frustration': { primary:'#1a4a7a', dark:'#0d2b4a', light:'#e8f0f8', accent:'#c8a84b', gradient:'linear-gradient(135deg,#0d2b4a 0%,#1a4a7a 50%,#2a5a8a 100%)', sub:'#9ab8d8' },
+  'downstream-energy': { primary:'#c45c00', dark:'#8b3800', light:'#fff4e8', accent:'#c8a84b', gradient:'linear-gradient(135deg,#0d2240 0%,#c45c00 60%,#8b3800 100%)', sub:'#f0cca0' },
+  'general-liability-usa': { primary:'#7b1a1a', dark:'#4a0d0d', light:'#fdf0f0', accent:'#c8a84b', gradient:'linear-gradient(135deg,#4a0d0d 0%,#7b1a1a 50%,#8b2020 100%)', sub:'#e8b0a0' },
+  'pi-eo': { primary:'#2c4a7a', dark:'#1a2d4a', light:'#f0f4f8', accent:'#c8a84b', gradient:'linear-gradient(135deg,#1a2d4a 0%,#2c4a7a 55%,#1a3d5a 100%)', sub:'#b0c4de' },
+  'pi-eo-misc': { primary:'#5d4a7a', dark:'#3a2d50', light:'#f0ecf8', accent:'#c8a84b', gradient:'linear-gradient(135deg,#3a2d50 0%,#5d4a7a 50%,#4a3860 100%)', sub:'#c0b0d8' },
+  'pi-tech': { primary:'#0f4c75', dark:'#0a2d45', light:'#f0f6fb', accent:'#c8a84b', gradient:'linear-gradient(135deg,#0a2d45 0%,#0f4c75 55%,#0d3d5a 100%)', sub:'#a0c4d8' },
 };
 
 function makeROVSchema(code, label, currency, exposureKey, exposureLabel, exposureHint, baseRateValue, factors, fixedCosts, varCosts, profit) {
@@ -609,21 +622,45 @@ schemas.RX = makeROVSchema('RX','Aviation War & Confiscation','USD','fleetValue'
 
 var skipHubs = ['aviation','extended-warranty'];
 
-hubs.forEach(function(hub) {
-  if (skipHubs.indexOf(hub.id) !== -1) return;
+// A hub's real folder is the first segment of its "url", not its id. For 9 hubs
+// these differ (id "pi-legal" -> url "pi-eo/overview.html"), so keying on id
+// wrote each rater into an orphan stub folder nothing links to, while the real
+// hub kept a rater this generator never refreshed.
+//
+// Folders are therefore grouped, not iterated one entry at a time: pi-eo is
+// served by TWO entries (pi-legal E2,E3 and pi-accountants E4,E5) whose codes
+// must merge into a single rater. Writing per entry would have the second
+// overwrite the first and drop E2/E3.
+var folderNames = {
+  // Folders serving more than one hub-index entry need a name covering both,
+  // since neither entry's own name does. Matches the existing pi-eo pages.
+  'pi-eo': 'Professional Indemnity E&O'
+};
 
-  // KNOWN BUG - do not "fix" by switching to hub.url without also merging.
-  // A hub's real folder is the first segment of its "url", not its id; for 9
-  // hubs these differ, so this line writes the rater into an orphan stub folder
-  // (agriculture/, credit/, pi-legal/ ...) that nothing links to, while the real
-  // hub keeps a rater this generator never refreshes.
-  //
-  // Switching to the url folder alone is NOT safe: pi-legal (E2,E3) and
-  // pi-accountants (E4,E5) both resolve to pi-eo/, so the second write would
-  // overwrite the first and drop E2/E3 from a rater whose rate-tables hold all
-  // four. The correct fix groups hub-index entries by folder and generates one
-  // merged rater per folder. Left as-is until that is done deliberately.
-  var hubDir = path.join(__dirname, hub.id);
+var groups = [];
+var byFolder = {};
+hubs.forEach(function (entry) {
+  if (skipHubs.indexOf(entry.id) !== -1) return;
+  var folder = (entry.url || (entry.id + '/')).split('/')[0];
+  if (!byFolder[folder]) {
+    byFolder[folder] = {
+      id: entry.id,            // first entry's id: drives themes[] lookup
+      folder: folder,
+      name: folderNames[folder] || entry.name,
+      risk_codes: []
+    };
+    groups.push(byFolder[folder]);
+  }
+  entry.risk_codes.forEach(function (code) {
+    if (byFolder[folder].risk_codes.indexOf(code) === -1) {
+      byFolder[folder].risk_codes.push(code);
+    }
+  });
+});
+
+groups.forEach(function(hub) {
+
+  var hubDir = path.join(__dirname, hub.folder);
   var rtDir = path.join(hubDir, 'rate-tables');
   if (!fs.existsSync(rtDir)) fs.mkdirSync(rtDir, { recursive: true });
 
@@ -643,7 +680,7 @@ hubs.forEach(function(hub) {
 
   if (hubSchemas.length === 0) return;
 
-  var theme = themes[hub.id] || { primary:'#1a4a7a', dark:'#0d2d5a', light:'#eef3fa', accent:'#c8a84b', gradient:'linear-gradient(135deg,#0d2240 0%,#1a4a7a 55%,#003070 100%)', sub:'#b8cce0' };
+  var theme = themes[hub.folder] || themes[hub.id] || { primary:'#1a4a7a', dark:'#0d2d5a', light:'#eef3fa', accent:'#c8a84b', gradient:'linear-gradient(135deg,#0d2240 0%,#1a4a7a 55%,#003070 100%)', sub:'#b8cce0' };
 
   var codeList = hubSchemas.join(' · ');
   var inlineSchemas = hubSchemaJson.join(',\n');
@@ -653,7 +690,7 @@ hubs.forEach(function(hub) {
   var html = '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <link rel="stylesheet" href="../hub-styles.css">\n  <link rel="stylesheet" href="../shared/rater-styles.css">\n  <title>' + hub.name + ' — Rater | Risk Code Hub</title>\n  <style>\n    :root {\n      --hub-primary:   ' + theme.primary + ';\n      --hub-dark:      ' + theme.dark + ';\n      --hub-light:     ' + theme.light + ';\n      --hub-accent:    ' + theme.accent + ';\n' + (theme.secondary ? '      --hub-secondary: ' + theme.secondary + ';\n' : '') + '      --header-gradient: ' + theme.gradient + ';\n      --header-sub:    ' + theme.sub + ';\n    }\n  </style>\n</head>\n<body>\n\n<header>\n  <div class="breadcrumb">\n    <a href="../index.html">Risk Code Hub</a> ›\n    <a href="overview.html">' + hub.name + '</a> ›\n    Rater\n  </div>\n  <div class="tag">Lloyd\'s Risk Code' + (hubSchemas.length > 1 ? 's' : '') + ' ' + codeList + '</div>\n  <h1>' + hub.name + ' — Rating Tool</h1>\n  <p>Factor-based rating engine for ' + hub.name.toLowerCase() + ' insurance products. Base vs proposed comparison with P&amp;L waterfall analysis.</p>\n</header>\n\n<nav>\n  <a href="overview.html">Overview</a>\n  <a href="history.html">History</a>\n  <a href="timeline.html">Timeline</a>\n  <a href="database.html">Loss Database</a>\n  <a href="underwriting.html">Underwriting</a>\n  <a href="rates-analysis.html">Rates &amp; ROE</a>\n  <a href="risk-mitigation.html">Risk Mitigation</a>\n  <a href="global-program.html">Global Programme</a>\n' + (hasReferences ? '  <a href="references.html">References</a>\n' : '') + '  <a href="rater.html" class="active">Rater</a>\n  <a href=\"../programme-builder.html?code=' + hub.risk_codes[0] + '\">Programme Builder</a>\n</nav>\n\n<div id="rater-root"></div>\n\n<footer>\n  <p>' + hub.name + ' <a href="../index.html" style="color:#c8a84b;text-decoration:none;font-weight:600;">&larr; Risk Code Hub</a> — Rating Tool &copy; 2026</p>\n</footer>\n\n<script src="../shared/rater-engine.js"></script>\n<script src="../shared/rater-ui.js"></script>\n<script>\n(function () {\n  var schemas = [\n' + inlineSchemas + '\n  ];\n  RaterUI.init(document.getElementById("rater-root"), schemas, RaterEngine);\n})();\n</script>\n</body>\n</html>';
 
   fs.writeFileSync(path.join(hubDir, 'rater.html'), html);
-  console.log('Generated: ' + hub.id + ' (' + hubSchemas.length + ' codes)');
+  console.log('Generated: ' + hub.folder + '/rater.html (' + hubSchemas.join(' ') + ')');
 });
 
 console.log('\nDone!');
