@@ -30,6 +30,7 @@ SEVERITY = {
     'HUB_MISSING':               'BREAKS',
     'PAGE_MISSING':              'BREAKS',
     'NO_NAV':                    'BREAKS',
+    'NO_TAB_NAV':                'BREAKS',
     'NAV_USES_UL':               'BREAKS',
     'LINKS_ORPHANED_OUTSIDE_UL': 'BREAKS',
     'NO_SHARED_CSS':             'BREAKS',
@@ -75,11 +76,30 @@ def norm(s):
     return re.sub(r'\s+', ' ', s).strip()
 
 
+def pick_nav(html):
+    """
+    Return the module tab bar, not the breadcrumb.
+
+    Some pages carry two <nav> elements - <nav class="breadcrumb"> followed by
+    the real <nav class="tabs">. Taking the first one misreads the page (and is
+    how the original rollout injected Rater/Programme Builder into breadcrumbs).
+    Prefer whichever <nav> links to the sibling modules.
+    """
+    navs = list(re.finditer(r'<nav\b[^>]*>(.*?)</nav>', html, re.S))
+    if not navs:
+        return None
+    for m in navs:
+        if re.search(r'href=["\'](overview|history|timeline|underwriting)\.html["\']', m.group(1)):
+            return m
+    return navs[0]
+
+
 def parse(path):
     html = open(path, encoding='utf8', errors='ignore').read()
-    nav = re.search(r'<nav\b[^>]*>(.*?)</nav>', html, re.S)
+    nav = pick_nav(html)
     out = {
         'has_nav': nav is not None,
+        'is_breadcrumb_only': False,
         'has_ul': False,
         'links_outside_ul': 0,
         'links': [],
@@ -100,6 +120,9 @@ def parse(path):
 
     if not nav:
         return out
+    open_tag = re.match(r'<nav[^>]*>', nav.group(0), re.S | re.I)
+    if open_tag and 'breadcrumb' in open_tag.group(0).lower():
+        out['is_breadcrumb_only'] = True
     inner = nav.group(1)
     out['has_ul'] = '<ul' in inner.lower()
 
@@ -127,6 +150,11 @@ def audit():
     # ids can share one folder (pi-legal + pi-accountants -> pi-eo).
     idx = json.load(open(os.path.join(ROOT, 'hub-index.json'), encoding='utf8'))
     hubs = sorted({h['url'].split('/')[0] for h in idx})
+
+    # The Programme Builder is keyed on Lloyd's risk codes. The reinsurance hubs
+    # carry no risk codes and use a bespoke layer-pricing rater, so the tab does
+    # not apply to them - requiring it would mean linking to "?code=".
+    no_codes = {h['url'].split('/')[0] for h in idx if not h.get('risk_codes')}
     findings = []   # (hub, page, code, detail)
     scanned = 0
 
@@ -146,6 +174,9 @@ def audit():
             if not r['has_nav']:
                 findings.append((hub, page, 'NO_NAV', 'no <nav> element'))
                 continue
+            if r['is_breadcrumb_only']:
+                findings.append((hub, page, 'NO_TAB_NAV',
+                                 'only a <nav class="breadcrumb"> - page has no module tab bar'))
             if r['has_ul']:
                 findings.append((hub, page, 'NAV_USES_UL',
                                  'nav wraps links in <ul>/<li>; hub-styles.css only styles "nav a"'))
@@ -162,7 +193,9 @@ def audit():
                 findings.append((hub, page, 'NO_FOOTER_BACKLINK', 'no index.html link in <footer>'))
 
             got_hrefs = [k for k, _, _ in r['links']]
-            missing = [h for h in CANON_HREFS if h not in got_hrefs]
+            required = [h for h in CANON_HREFS
+                        if not (h == 'PROGRAMME_BUILDER' and hub in no_codes)]
+            missing = [h for h in required if h not in got_hrefs]
             if missing:
                 findings.append((hub, page, 'TABS_MISSING', ', '.join(missing)))
             extra = [h for h in got_hrefs if h not in CANON_HREFS]
