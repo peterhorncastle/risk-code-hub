@@ -83,15 +83,21 @@ def pick_nav(html):
     Some pages carry two <nav> elements - <nav class="breadcrumb"> followed by
     the real <nav class="tabs">. Taking the first one misreads the page (and is
     how the original rollout injected Rater/Programme Builder into breadcrumbs).
-    Prefer whichever <nav> links to the sibling modules.
+
+    A breadcrumb legitimately links back to overview.html, so "links to a module"
+    is not enough to tell them apart. Score each nav by how many DISTINCT module
+    pages it links and take the richest; a breadcrumb reaches at most one or two.
     """
     navs = list(re.finditer(r'<nav\b[^>]*>(.*?)</nav>', html, re.S))
     if not navs:
         return None
-    for m in navs:
-        if re.search(r'href=["\'](overview|history|timeline|underwriting)\.html["\']', m.group(1)):
-            return m
-    return navs[0]
+
+    def score(m):
+        return len({h for h in re.findall(r'href=["\']([a-z-]+\.html)["\']', m.group(1))
+                    if h in PAGES})
+
+    best = max(navs, key=score)
+    return best if score(best) >= 3 else navs[0]
 
 
 def parse(path):
