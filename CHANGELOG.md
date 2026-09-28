@@ -1,5 +1,9 @@
 # Risk Code Hub — Changelog
 
+## v6.5.8 — 28 September 2026 — Correction: battery storage coding (R1–R4)
+
+Content-only correction to the Renewable Energy Offshore and Onshore hubs. Lloyd's Risk Code Guidance and Mapping Notes (July 2026, §4.11.1) defines Renewable Energy as "Onshore and Offshore Wind, Tidal, Solar and Battery Energy Storage Solutions (BESS) risks only", with construction coded R3/R4 and operational R1/R2; §4.11.2 excludes those risks from PG. The v6.5.7 rows that read stand-alone BESS as "an R code or PG, depending on how the risk is read" (EST) are replaced with the documented R1–R4 treatment (VER), and the onshore "Code-Coverage Gap — Battery Storage" heading now reads as pooled coding rather than a gap. No storage-specific code exists, so BESS losses are pooled with wind, tidal and solar. Files: renewable-energy-offshore/overview.html, renewable-energy-offshore/references.html, renewable-energy-onshore/overview.html, renewable-energy-onshore/references.html.
+
 ## v6.5.7 — 27 September 2026 — Research update: Renewable Energy Offshore (R1/R3) and Onshore (R2/R4), Extended Warranty (WA), UK Household (HP)
 
 Content-only update to four hubs from verified September 2026 research. No raters, `rate-tables/*.json`, `shared/rater-engine.js` or pricing logic changed; hub count unchanged (62). Patch version bumped, following the v6.5.x convention for non-hub updates. Every addition carries a VER/EST/GAP badge and each source is listed on the hub's References page with confidence-audit rows.
