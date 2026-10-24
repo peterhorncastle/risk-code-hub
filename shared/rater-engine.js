@@ -2,6 +2,11 @@
 
 (function (exports) {
 
+  // Canonical copy lives in flexible-rater (ADR-001). Consumers receive this
+  // file via sync-engine.js; the version lets any copy be identified at a
+  // glance instead of being diffed. Bump it whenever this file changes.
+  var ENGINE_VERSION = '1.1.0';
+
   function loadSchema(json) {
     if (typeof json === 'string') json = JSON.parse(json);
     return json;
@@ -483,5 +488,6 @@
   exports.solveProfitMargin = solveProfitMargin;
   exports.credibilityZ = credibilityZ;
   exports.credibilityBlend = credibilityBlend;
+  exports.VERSION = ENGINE_VERSION;
 
 })(typeof module !== 'undefined' && module.exports ? module.exports : (window.RaterEngine = {}));
