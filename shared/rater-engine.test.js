@@ -200,5 +200,154 @@ assert('Guard-rail: negative exposure raises a warning',
   negExp.warnings.some(function (w) { return /negative/i.test(w); }) ? 1 : 0, 1);
 
 
+// --- Commercial flex / rate adequacy (rung 6a) ---
+// Backward compatibility: no flex => charged == technical, adequacy 100%
+assert('No flex: rate adequacy 100%', cy.ratios.rateAdequacy, 1.0, 0.001);
+assert('No flex: gross == technical', cy.grossPremium, cy.technicalPremium, 1);
+
+// Flex +10% loading (technical premium held at 31,284.72)
+var flexUp = engine.rate(cyberSchema,
+  { policyLimit: 1000000, termYears: 1, sector: 'healthcare', mfa: 'emailRA' },
+  { lossRatioScaler: 1.10, taxRate: 0.12, flexRate: 0.10 });
+assert('Flex: technical premium unchanged by flex', flexUp.technicalPremium, 31284.72, 1);
+assert('Flex +10%: charged gross premium', flexUp.grossPremium, 34413.19, 1);
+assert('Flex +10%: rate adequacy 110%', flexUp.ratios.rateAdequacy, 1.10, 0.001);
+assert('Flex +10%: customer premium (then 12% IPT)', flexUp.customerPremium, 38542.78, 1);
+assert('Flex +10% (a loading) raises no deficiency warning', flexUp.warnings.length, 0, 0.5);
+
+// Flex −15% discount => rate adequacy 85%, deficiency guard-rail fires
+var flexDown = engine.rate(cyberSchema,
+  { policyLimit: 1000000, termYears: 1, sector: 'healthcare', mfa: 'emailRA' },
+  { lossRatioScaler: 1.10, taxRate: 0.12, flexRate: -0.15 });
+assert('Flex −15%: rate adequacy 85%', flexDown.ratios.rateAdequacy, 0.85, 0.001);
+assert('Flex −15%: charged gross premium', flexDown.grossPremium, 26592.01, 1);
+assert('Flex −15%: rate adequacy = 1 + flexRate identity',
+  flexDown.ratios.rateAdequacy, 1 + flexDown.costInputs.flexRate, 0.0001);
+assert('Flex −15%: deficiency warning fires',
+  flexDown.warnings.some(function (w) { return /below technical|rate adequacy/i.test(w); }) ? 1 : 0, 1);
+assert('Flex: commercialFlex waterfall row = gross − technical',
+  flexDown.waterfall.commercialFlex, flexDown.grossPremium - flexDown.technicalPremium, 1);
+
+
+// ================= Phase 2b — Reinsurance =================
+
+// --- normCdf against textbook values ---
+assert('normCdf(0) = 0.5', engine.normCdf(0), 0.5, 0.0001);
+assert('normCdf(1) = 0.8413', engine.normCdf(1), 0.8413, 0.0005);
+assert('normCdf(1.96) = 0.975', engine.normCdf(1.96), 0.975, 0.0005);
+assert('normCdf(-1) = 0.1587', engine.normCdf(-1), 0.1587, 0.0005);
+
+// --- lognormalExcess: E[(L−0)+] = mean; decreasing in attachment ---
+assert('lognormalExcess at d=0 equals mean', engine.lognormalExcess(6500000, 0.15, 0), 6500000, 1);
+assert('lognormalExcess decreasing in attachment',
+  engine.lognormalExcess(6500000, 0.15, 7000000) > engine.lognormalExcess(6500000, 0.15, 8000000) ? 1 : 0, 1);
+
+// --- XoL layer (worked example C: £40m xs £35m, AAL £2.4m) ---
+var xolSchema = { riskCode: 'XOL', label: 'Property Cat XoL', modelType: 'xol', currency: 'GBP', ratingFactors: [],
+  fixedCosts: {}, variableCosts: { commissionRate: 0.10, reinsuranceRate: 0 }, targetProfitMargin: 0.05 };
+var xol = engine.rate(xolSchema,
+  { attachment: 35000000, limit: 40000000, expectedLossToLayer: 2400000, termYears: 1 },
+  { lossRatioScaler: 1.35 });
+assert('XoL pure premium = EL to layer', xol.lossModel.totalPurePremium, 2400000, 1);
+assert('XoL loss-on-line 6%', xol.layer.lossOnLine, 0.06, 0.0001);
+assert('XoL technical premium (risk load 1.35 + 15% gross-up)', xol.technicalPremium, 3811764.71, 1);
+assert('XoL rate-on-line', xol.layer.rateOnLine, 0.0953, 0.0005);
+assert('XoL payback years', xol.layer.payback, 10.49, 0.05);
+var xolBad = engine.rate(xolSchema, { attachment: 35000000, limit: 40000000, expectedLossToLayer: 45000000, termYears: 1 });
+assert('XoL guard-rail: EL exceeds limit warns',
+  xolBad.warnings.some(function (w) { return /exceeds the limit/i.test(w); }) ? 1 : 0, 1);
+
+// --- Aggregate stop-loss (lognormal): 75%–90% loss-ratio layer, ELR 65%, CV 15% ---
+var slSchema = { riskCode: 'SL', label: 'Agg Stop-Loss', modelType: 'stop-loss', currency: 'GBP', ratingFactors: [],
+  fixedCosts: {}, variableCosts: { commissionRate: 0.10, reinsuranceRate: 0 }, targetProfitMargin: 0.05 };
+var sl = engine.rate(slSchema,
+  { subjectPremium: 10000000, expectedLossRatio: 0.65, lossRatioCV: 0.15, attachmentLR: 0.75, limitLR: 0.15, termYears: 1 },
+  { lossRatioScaler: 1.0 });
+assert('Stop-loss expected aggregate loss', sl.lossModel.expectedAggregateLoss, 6500000, 1);
+assert('Stop-loss geometry: attachment + limit = exit', sl.lossModel.attachment + sl.lossModel.limit, sl.lossModel.exit, 1);
+assert('Stop-loss expected loss to layer (E[(L−a)+]−E[(L−b)+])', sl.lossModel.expectedLossToLayer, 87678.60, 5);
+assert('Stop-loss rate-on-line', sl.layer.rateOnLine, 0.0688, 0.0005);
+var slBad = engine.rate(slSchema, { subjectPremium: 0, expectedLossRatio: 0.65, lossRatioCV: 0.15, attachmentLR: 0.75, limitLR: 0.15 });
+assert('Stop-loss guard-rail: zero subject premium warns', slBad.warnings.length > 0 ? 1 : 0, 1);
+
+// --- Cat bond: multiple × EL = spread (profit override 0 for a clean multiple) ---
+var cbSchema = { riskCode: 'CB', label: 'Cat Bond', modelType: 'cat-bond', currency: 'USD', ratingFactors: [],
+  fixedCosts: {}, variableCosts: { commissionRate: 0, reinsuranceRate: 0 }, targetProfitMargin: 0 };
+var cb = engine.rate(cbSchema,
+  { principal: 100000000, expectedLossPct: 0.02, termYears: 1 },
+  { lossRatioScaler: 2.5, profitMargin: 0, commissionRate: 0 });
+assert('Cat-bond spread premium = multiple × EL', cb.grossPremium, 5000000, 1);
+assert('Cat-bond spread % of principal', cb.layer.spread, 0.05, 0.0001);
+assert('Cat-bond multiple = spread ÷ EL', cb.layer.multiple, 2.5, 0.01);
+assert('Cat-bond investor expected profit %', cb.layer.expectedProfitPct, 0.03, 0.0001);
+
+// --- Quota share (proportional cession): 30% of £20m, 60% LR, 25% ceding + 2% broke + 20% PC ---
+var qs = engine.rate({ riskCode: 'QS', label: 'Quota Share', modelType: 'quota-share', currency: 'GBP' },
+  { subjectPremium: 20000000, cededShare: 0.30, expectedLossRatio: 0.60, cedingCommission: 0.25, brokerage: 0.02, profitCommission: 0.20, reinsurerExpenseRate: 0.03, termYears: 1 });
+assert('QS ceded premium', qs.grossPremium, 6000000, 1);
+assert('QS expected losses', qs.cession.expectedLosses, 3600000, 1);
+assert('QS profit commission (20% of profit after mgmt allowance)', qs.cession.profitCommission, 144000, 1);
+assert('QS reinsurer result', qs.cession.reinsurerResult, 456000, 1);
+assert('QS combined ratio', qs.ratios.combinedRatio, 0.924, 0.001);
+assert('QS margin %', qs.ratios.marginPct, 0.076, 0.001);
+var qsBad = engine.rate({ riskCode: 'QS', label: 'QS', modelType: 'quota-share', currency: 'GBP' },
+  { subjectPremium: 20000000, cededShare: 0.30, expectedLossRatio: 0.85, cedingCommission: 0.30, brokerage: 0.02, profitCommission: 0, reinsurerExpenseRate: 0.03, termYears: 1 });
+assert('QS guard-rail: unprofitable cession (combined > 100%) warns',
+  qsBad.warnings.some(function (w) { return /lose money|exceeds 100/i.test(w); }) ? 1 : 0, 1);
+var qsShare = engine.rate({ riskCode: 'QS', label: 'QS', modelType: 'quota-share', currency: 'GBP' },
+  { subjectPremium: 20000000, cededShare: 1.5, expectedLossRatio: 0.60 });
+assert('QS guard-rail: share outside 0–100% warns',
+  qsShare.warnings.some(function (w) { return /share/i.test(w); }) ? 1 : 0, 1);
+
+
+// --- Guard-rails: unrealistic reinsurance layers ---
+var xolNegAtt = engine.rate(xolSchema, { attachment: -1000000, limit: 40000000, expectedLossToLayer: 2400000, termYears: 1 });
+assert('XoL guard-rail: negative attachment warns',
+  xolNegAtt.warnings.some(function (w) { return /attachment cannot be negative/i.test(w); }) ? 1 : 0, 1);
+
+var xolZeroEL = engine.rate(xolSchema, { attachment: 35000000, limit: 40000000, expectedLossToLayer: 0, termYears: 1 });
+assert('XoL guard-rail: zero expected loss to layer warns',
+  xolZeroEL.warnings.some(function (w) { return /priced on risk load/i.test(w); }) ? 1 : 0, 1);
+
+// EL (900k) < limit (1m) so the EL>limit rail stays silent — this isolates the rate-on-line rail
+var xolHotRoL = engine.rate(xolSchema, { attachment: 5000000, limit: 1000000, expectedLossToLayer: 900000, termYears: 1 });
+assert('XoL guard-rail: rate-on-line > 100% warns',
+  xolHotRoL.warnings.some(function (w) { return /rate-on-line exceeds 100/i.test(w); }) ? 1 : 0, 1);
+// regression: the clean worked example (C) trips none of the new rails
+assert('XoL clean layer: no new guard-rail warnings', xol.warnings.length, 0, 0.5);
+
+var slNegAtt = engine.rate(slSchema, { subjectPremium: 10000000, expectedLossRatio: 0.65, lossRatioCV: 0.15, attachmentLR: -0.1, limitLR: 0.15, termYears: 1 });
+assert('Stop-loss guard-rail: negative attachment LR warns',
+  slNegAtt.warnings.some(function (w) { return /attachment.*negative/i.test(w); }) ? 1 : 0, 1);
+
+var cbLowMult = engine.rate(cbSchema, { principal: 100000000, expectedLossPct: 0.02, termYears: 1 },
+  { lossRatioScaler: 0.8, profitMargin: 0, commissionRate: 0 });
+assert('Cat-bond guard-rail: multiple below 1x warns',
+  cbLowMult.warnings.some(function (w) { return /multiple is below 1/i.test(w); }) ? 1 : 0, 1);
+// regression: the clean cat bond (multiple 2.5) does not trip the rail
+assert('Cat-bond clean: multiple >= 1 raises no warning',
+  cb.warnings.some(function (w) { return /multiple is below 1/i.test(w); }) ? 1 : 0, 0);
+
+// --- Phase 3: catastrophe load ---
+var catCy = engine.rate(cyberSchema,
+  { policyLimit: 1000000, termYears: 1, sector: 'healthcare', mfa: 'emailRA' },
+  { lossRatioScaler: 1.10, catLoadRate: 0.20 });
+// attritional 20,250 × 1.10 = 22,275 ; + 20% cat = 26,730 (cat portion 4,455)
+assert('Cat load: expected claims include the 20% cat uplift', catCy.waterfall.expectedClaims, 26730, 1);
+assert('Cat load: cat portion recorded', catCy.waterfall.catLoad, 4455, 1);
+assert('Cat load: backward-compatible (default 0, no cat line)', cy.waterfall.catLoad, 0, 0.01);
+
+// --- Phase 3: capital / ROE solver (profit% = targetROE × capitalRatio) ---
+assert('ROE solver: 15% ROE on 60%-of-premium capital → 9% profit', engine.solveProfitMargin(0.15, 0.60), 0.09, 1e-9);
+assert('ROE solver: zero capital → zero profit', engine.solveProfitMargin(0.15, 0), 0, 1e-9);
+
+// --- Phase 3: credibility (square-root rule + blend) ---
+assert('Credibility Z at the full standard = 1', engine.credibilityZ(1082, 1082), 1, 1e-9);
+assert('Credibility Z at zero exposure = 0', engine.credibilityZ(0, 1082), 0, 1e-9);
+assert('Credibility Z square-root rule (¼ of full → 0.5)', engine.credibilityZ(270.5, 1082), 0.5, 1e-6);
+assert('Credibility Z caps at 1 above the full standard', engine.credibilityZ(5000, 1082), 1, 1e-9);
+assert('Credibility blend = Z·experience + (1−Z)·complement', engine.credibilityBlend(100, 80, 0.7), 94, 1e-9);
+assert('Credibility blend clamps Z to [0,1]', engine.credibilityBlend(100, 80, 1.5), 100, 1e-9);
+
 console.log('\n' + passed + ' passed, ' + failed + ' failed');
 process.exit(failed > 0 ? 1 : 0);

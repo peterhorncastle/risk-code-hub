@@ -56,13 +56,17 @@
     .tag-fire { background:#ffe8d6; color:var(--orange); font-size:0.7rem; font-weight:700; padding:2px 7px; border-radius:4px; display:inline-block; }
 
     .conf-badge { font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:8px; margin-left:3px; }
-    .b-v { background:#e6f4ea; color:#1a5c28; }
-    .b-e { background:#fef3e2; color:#7a4500; }
 
     .notice-box { background:var(--house-light); border:1px solid var(--house); border-radius:8px; padding:14px 18px; margin:16px 0; font-size:0.84rem; color:var(--house-dark); }
 
     footer { background:var(--navy); color:#8899aa; text-align:center; padding:24px; font-size:0.82rem; margin-top:60px; }
   </style>
+
+
+
+
+
+<!-- GLOSSARY:SPINE --><link rel="stylesheet" href="../shared/glossary-styles.css"><script src="../shared/glossary-data.js" defer></script><script src="../shared/glossary-ui.js" data-glossary-page="../glossary.html" defer></script><!-- /GLOSSARY:SPINE -->
 </head>
 <body>
 <header>
@@ -78,7 +82,7 @@
 </nav>
 <main>
   <div class="notice-box">
-    <strong>Data note:</strong> Insured loss figures are ABI estimates or Swiss Re sigma/Munich Re NatCat data unless individually cited. Where figures are market estimates, they are tagged <span class="conf-badge b-e">EST</span>. Verified published figures are tagged <span class="conf-badge b-v">VER</span>. All values in £ sterling at time of event (not inflation-adjusted) unless noted.
+    <strong>Data note:</strong> Insured loss figures are ABI estimates or Swiss Re sigma/Munich Re NatCat data unless individually cited. Where figures are market estimates, they are tagged <span class="badge conf-badge b-e">EST</span>. Verified published figures are tagged <span class="badge conf-badge b-v">VER</span>. All values in £ sterling at time of event (not inflation-adjusted) unless noted.
   </div>
 
   <div class="filter-bar">
@@ -108,7 +112,7 @@
       <option value="1987">1987–1999</option>
       <option value="2000">2000–2009</option>
       <option value="2010">2010–2019</option>
-      <option value="2020">2020–2024</option>
+      <option value="2020">2020–2026</option>
     </select>
     <label>Min loss</label>
     <select id="f-min">
@@ -176,7 +180,8 @@ const DB = [
   {year:2023,name:"Storm Ciaran — South Coast",type:"storm",region:"south",desc:"1–2 Nov 2023; 100mph+ gusts IoW and south coast; significant structural damage Hampshire, West Sussex, Kent.",loss:350,conf:"EST"},
   {year:2023,name:"Storm Debi",type:"storm",region:"national",desc:"Nov 2023; further named storm; Ireland and western UK most affected; widespread wind damage.",loss:100,conf:"EST"},
   {year:2024,name:"Storm Henk & Winter Floods",type:"flood",region:"national",desc:"Jan 2024; Storm Henk brought severe flooding to Midlands; River Trent, Severn, and Thames all at or near record levels.",loss:300,conf:"EST"},
-  {year:2024,name:"Net Zero Retrofit — EV & Heat Pump Claims",type:"regulatory",region:"national",desc:"Emerging: heat pump compressor fires, solar panel storm damage, EV overnight charging fires entering household claims mix. New sub-peril monitoring begun by specialist underwriters.",loss:30,conf:"EST"}
+  {year:2024,name:"Net Zero Retrofit — EV & Heat Pump Claims",type:"regulatory",region:"national",desc:"Emerging: heat pump compressor fires, solar panel storm damage, EV overnight charging fires entering household claims mix. New sub-peril monitoring begun by specialist underwriters.",loss:30,conf:"EST"},
+  {year:2025,name:"UK Lithium-Ion Battery Fires — 4.8 per Day",type:"fire",region:"national",desc:"QBE (May 2026): 4.8 lithium-ion fires a day in 2025, up 147% since 2022 (42 of 49 fire services); 46% at home; e-bikes 520, EVs 279. Covers all lithium-ion fires, not home battery storage specifically; insured loss not published.",loss:0,conf:"VER"}
 ];
 
 let sorted = [...DB], sortCol = 0, sortAsc = false;
@@ -189,7 +194,7 @@ function typeTag(t){
   return`<span class="${m[t]||'tag-storm'}">${l[t]||t}</span>`;
 }
 function fmtLoss(v){ return v===0?'—':v>=1000?`£${(v/1000).toFixed(1)}bn`:`£${v}m`; }
-function confBadge(c){ return c==='VER'?'<span class="conf-badge b-v">VER</span>':'<span class="conf-badge b-e">EST</span>'; }
+function confBadge(c){ return c==='VER'?'<span class="badge conf-badge b-v">VER</span>':'<span class="badge conf-badge b-e">EST</span>'; }
 
 function applyFilters(){
   const type=document.getElementById('f-type').value;

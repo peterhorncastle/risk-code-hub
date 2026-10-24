@@ -2,6 +2,11 @@
 
 (function (exports) {
 
+  // Canonical copy lives in flexible-rater (ADR-001). Consumers receive this
+  // file via sync-engine.js; the version lets any copy be identified at a
+  // glance instead of being diffed. Bump it whenever this file changes.
+  var ENGINE_VERSION = '1.1.0';
+
   function loadSchema(json) {
     if (typeof json === 'string') json = JSON.parse(json);
     return json;
@@ -78,7 +83,9 @@
         : (input.expectedLossToLayer !== undefined ? input.expectedLossToLayer : (schema.expectedLossToLayer || 0));
       if (xLimit <= 0) warnings.push('Layer limit must be positive.');
       if (xEL < 0) warnings.push('Expected loss to layer is negative.');
+      if (xAttach < 0) warnings.push('Attachment cannot be negative.');
       if (xLimit > 0 && xEL > xLimit) warnings.push('Expected loss to layer exceeds the limit — check inputs.');
+      if (xLimit > 0 && xEL === 0) warnings.push('Expected loss to layer is zero — the layer is priced on risk load and expenses only.');
       purePremium = xEL * termYears;
 
       lossModel = {
@@ -101,6 +108,7 @@
       var slLimitLR = input.limitLR !== undefined ? input.limitLR : (schema.limitLR || 0);
       if (slP <= 0) warnings.push('Subject premium must be positive.');
       if (slLimitLR <= 0) warnings.push('Stop-loss layer width (limitLR) must be positive.');
+      if (slAttachLR < 0) warnings.push('Stop-loss attachment (loss ratio) cannot be negative.');
       var slMeanLoss = slP * slELR;
       var slA = slP * slAttachLR;
       var slB = slP * (slAttachLR + slLimitLR);
@@ -203,6 +211,12 @@
     var lossRatioScaler = o.lossRatioScaler !== undefined ? o.lossRatioScaler : 1.0;
     purePremium = purePremium * lossRatioScaler;
 
+    // --- Catastrophe load (Phase 3): an uplift on the attritional loss cost for large/cat losses ---
+    var catLoadRate = o.catLoadRate !== undefined ? o.catLoadRate : 0;
+    if (catLoadRate < 0) warnings.push('Cat load is negative.');
+    var catLoad = purePremium * catLoadRate;
+    purePremium = purePremium + catLoad;
+
     var totalFixed = totalPolicyAdmin + totalClaimsHandling + totalSystemOverhead + totalFraudReserve + totalObsolescence;
     var totalCost = purePremium + totalFixed;
 
@@ -258,6 +272,7 @@
         rateOnLine: round4(rol),
         payback: rol > 0 ? round2(1 / rol) : 0
       };
+      if (layer.rateOnLine > 1) warnings.push('Rate-on-line exceeds 100% — the layer premium is more than its limit; check inputs.');
     } else if (lossModel.modelType === 'cat-bond') {
       var prin = lossModel.principal;
       var elA = lossModel.expectedLoss;
@@ -270,6 +285,7 @@
         multiple: elA > 0 ? round2(annualPremium / elA) : 0,
         expectedProfitPct: round4(spreadPct - lossModel.expectedLossPct)
       };
+      if (layer.multiple > 0 && layer.multiple < 1) warnings.push('Cat-bond multiple is below 1× — the spread is less than the expected loss.');
     }
 
     return {
@@ -296,6 +312,7 @@
         fraudReservePerClaim: fraudReservePerClaim,
         obsolescenceRate: obsolescenceRate,
         lossRatioScaler: lossRatioScaler,
+        catLoadRate: catLoadRate,
         commissionRate: commissionRate,
         reinsuranceRate: reinsuranceRate,
         profitMargin: profitMargin,
@@ -318,6 +335,7 @@
         reinsurance: round2(reinsurance),
         netPremium: round2(netPremium),
         expectedClaims: round2(purePremium),
+        catLoad: round2(catLoad),
         claimsHandling: round2(totalClaimsHandling),
         policyAdmin: round2(totalPolicyAdmin),
         systemOverhead: round2(totalSystemOverhead),
@@ -442,11 +460,34 @@
   function round4(n) { return Math.round(n * 10000) / 10000; }
   function round6(n) { return Math.round(n * 1000000) / 1000000; }
 
+  // --- Capital / ROE solver (Phase 3): profit margin (% of premium) needed to earn a target
+  //     return on the capital allocated to the risk, where capital = capitalRatio × premium.
+  //     profit% × premium = targetROE × (capitalRatio × premium)  ⇒  profit% = targetROE × capitalRatio ---
+  function solveProfitMargin(targetROE, capitalRatio) {
+    return (targetROE || 0) * (capitalRatio || 0);
+  }
+
+  // --- Credibility (Phase 3): square-root partial credibility Z = min(1, √(n / fullCredN)),
+  //     and the credibility-weighted blend Z·experience + (1−Z)·complement (the manual/book value). ---
+  function credibilityZ(n, fullCredN) {
+    if (!fullCredN || fullCredN <= 0) return 1;
+    var z = Math.sqrt((n || 0) / fullCredN);
+    return z < 0 ? 0 : (z > 1 ? 1 : z);
+  }
+  function credibilityBlend(experience, complement, Z) {
+    var z = Z < 0 ? 0 : (Z > 1 ? 1 : Z);
+    return z * experience + (1 - z) * complement;
+  }
+
   exports.loadSchema = loadSchema;
   exports.rate = rate;
   exports.lookupBand = lookupBand;
   exports.getFactorValue = getFactorValue;
   exports.normCdf = normCdf;
   exports.lognormalExcess = lognormalExcess;
+  exports.solveProfitMargin = solveProfitMargin;
+  exports.credibilityZ = credibilityZ;
+  exports.credibilityBlend = credibilityBlend;
+  exports.VERSION = ENGINE_VERSION;
 
 })(typeof module !== 'undefined' && module.exports ? module.exports : (window.RaterEngine = {}));
